@@ -15986,25 +15986,17 @@ Public Class frm_Perakende_Satis
             If ex.Response IsNot Nothing Then
                 responseContent = New StreamReader(ex.Response.GetResponseStream()).ReadToEnd()
             End If
-            LogYaz("SatisiKolaysoftaGonder", "Hata: " & ex.Message & vbCrLf & "Yan�t: " & responseContent)
-<<<<<<< Updated upstream
-            
-=======
+            LogYaz("SatisiKolaysoftaGonder", "Hata: " & ex.Message & vbCrLf & "Yanıt: " & responseContent)
 
->>>>>>> Stashed changes
-            ' Kullan�c� dostu hata mesaj� olu�tur
+            ' Kullanıcı dostu hata mesajı oluıtur
             Dim kullaniciMesaji As String = KolaysoftHataCevir(responseContent, ex.Message)
-            MessageBox.Show(kullaniciMesaji, "Kolaysoft Fatura Hatas�", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(kullaniciMesaji, "Kolaysoft Fatura Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
         Catch ex As Exception
-            LogYaz("SatisiKolaysoftaGonder", "Hata: " & ex.Message & vbCrLf & "Yan�t: " & responseContent)
-<<<<<<< Updated upstream
-            
-=======
+            LogYaz("SatisiKolaysoftaGonder", "Hata: " & ex.Message & vbCrLf & "Yanıt: " & responseContent)
 
->>>>>>> Stashed changes
             Dim kullaniciMesaji As String = KolaysoftHataCevir(responseContent, ex.Message)
-            MessageBox.Show(kullaniciMesaji, "Kolaysoft Fatura Hatas�", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(kullaniciMesaji, "Kolaysoft Fatura Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
