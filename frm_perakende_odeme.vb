@@ -3265,8 +3265,8 @@ Public Class frm_perakende_odeme
             Dim posOnay As Boolean = PosOdemeOnayBekle()
             If Not posOnay Then
                 ' POS RED verdi - odeme kaydetme
-                MessageBox.Show("POS odemesi reddedildi veya iptal edildi." & vbCrLf & vbCrLf & _
-                    "Odeme kaydedilmedi. Lutfen tekrar deneyin.", _
+                MessageBox.Show("POS odemesi reddedildi veya iptal edildi." & vbCrLf & vbCrLf &
+                    "Odeme kaydedilmedi. Lutfen tekrar deneyin.",
                     "POS Hatasi", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 SimpleButton1.Enabled = True
                 SimpleButton2.Enabled = True
@@ -4328,11 +4328,11 @@ Public Class frm_perakende_odeme
                 End If
             Next
             If kkTutar <= 0D Then Return True
-            
+
             Dim posOnay As Boolean = False
             Dim maxBekleme As Integer = 120
             Dim gecenSure As Integer = 0
-            
+
             Using frmBekle As New Form()
                 frmBekle.Text = "POS Odeme Bekleniyor"
                 frmBekle.Size = New Size(420, 220)
@@ -4340,7 +4340,7 @@ Public Class frm_perakende_odeme
                 frmBekle.FormBorderStyle = FormBorderStyle.FixedDialog
                 frmBekle.MaximizeBox = False
                 frmBekle.MinimizeBox = False
-                
+
                 Dim lblMesaj As New Label()
                 lblMesaj.Text = "POS cihazindan odeme bekleniyor..." & vbCrLf & vbCrLf & "Tutar: " & FormatNumber(kkTutar, 2) & " TL"
                 lblMesaj.AutoSize = False
@@ -4349,7 +4349,7 @@ Public Class frm_perakende_odeme
                 lblMesaj.TextAlign = ContentAlignment.MiddleCenter
                 lblMesaj.Font = New Font("Tahoma", 11, FontStyle.Bold)
                 frmBekle.Controls.Add(lblMesaj)
-                
+
                 Dim lblDurum As New Label()
                 lblDurum.Text = "Durum: Bekleniyor..."
                 lblDurum.AutoSize = False
@@ -4357,65 +4357,65 @@ Public Class frm_perakende_odeme
                 lblDurum.Location = New Point(20, 100)
                 lblDurum.TextAlign = ContentAlignment.MiddleCenter
                 frmBekle.Controls.Add(lblDurum)
-                
+
                 Dim btnIptal As New Button()
                 btnIptal.Text = "IPTAL"
                 btnIptal.Size = New Size(120, 40)
                 btnIptal.Location = New Point(150, 135)
                 AddHandler btnIptal.Click, Sub(s, ev) frmBekle.DialogResult = DialogResult.Cancel
                 frmBekle.Controls.Add(btnIptal)
-                
+
                 Dim timer As New Windows.Forms.Timer()
                 timer.Interval = 3000
                 AddHandler timer.Tick, Sub(s, ev)
-                    gecenSure += 3
-                    lblDurum.Text = "Durum: Kontrol ediliyor... (" & gecenSure & " sn)"
-                    Application.DoEvents()
-                    
-                    Dim durum As String = KolaysoftPosDurumKontrol()
-                    
-                    If durum = "SUCCESS" Then
-                        posOnay = True
-                        timer.Stop()
-                        frmBekle.DialogResult = DialogResult.OK
-                    ElseIf durum = "FAILED" Then
-                        lblDurum.Text = "HATA: Odeme basarisiz!"
-                        posOnay = False
-                        timer.Stop()
-                        Threading.Thread.Sleep(2000)
-                        frmBekle.DialogResult = DialogResult.Abort
-                    ElseIf durum = "CANCELLED" OrElse durum = "ABORTED" Then
-                        lblDurum.Text = "Odeme iptal edildi."
-                        posOnay = False
-                        timer.Stop()
-                        Threading.Thread.Sleep(2000)
-                        frmBekle.DialogResult = DialogResult.Cancel
-                    ElseIf durum = "ON_TERMINAL" OrElse durum = "IN_PROGRESS" Then
-                        lblDurum.Text = "Durum: POS islem yapiyor..."
-                    ElseIf gecenSure >= maxBekleme Then
-                        lblDurum.Text = "Zaman asimi!"
-                        posOnay = False
-                        timer.Stop()
-                        frmBekle.DialogResult = DialogResult.Abort
-                    End If
-                End Sub
-                
+                                           gecenSure += 3
+                                           lblDurum.Text = "Durum: Kontrol ediliyor... (" & gecenSure & " sn)"
+                                           Application.DoEvents()
+
+                                           Dim durum As String = KolaysoftPosDurumKontrol()
+
+                                           If durum = "SUCCESS" Then
+                                               posOnay = True
+                                               timer.Stop()
+                                               frmBekle.DialogResult = DialogResult.OK
+                                           ElseIf durum = "FAILED" Then
+                                               lblDurum.Text = "HATA: Odeme basarisiz!"
+                                               posOnay = False
+                                               timer.Stop()
+                                               Threading.Thread.Sleep(2000)
+                                               frmBekle.DialogResult = DialogResult.Abort
+                                           ElseIf durum = "CANCELLED" OrElse durum = "ABORTED" Then
+                                               lblDurum.Text = "Odeme iptal edildi."
+                                               posOnay = False
+                                               timer.Stop()
+                                               Threading.Thread.Sleep(2000)
+                                               frmBekle.DialogResult = DialogResult.Cancel
+                                           ElseIf durum = "ON_TERMINAL" OrElse durum = "IN_PROGRESS" Then
+                                               lblDurum.Text = "Durum: POS islem yapiyor..."
+                                           ElseIf gecenSure >= maxBekleme Then
+                                               lblDurum.Text = "Zaman asimi!"
+                                               posOnay = False
+                                               timer.Stop()
+                                               frmBekle.DialogResult = DialogResult.Abort
+                                           End If
+                                       End Sub
+
                 timer.Start()
                 frmBekle.ShowDialog()
                 timer.Stop()
             End Using
-            
+
             Return posOnay
         Catch ex As Exception
             LogYaz("PosOdemeOnayBekle", "Hata: " & ex.Message)
             Return False
         End Try
     End Function
-    
+
     Private Function KolaysoftPosDurumKontrol() As String
         Try
             If String.IsNullOrEmpty(KolaysoftToken) OrElse String.IsNullOrEmpty(KolaysoftFirmaId) Then Return "PENDING"
-            
+
             Dim url As String = "https://service.kolaysoftpos.com/services/pos/api/erp/current-pos-payments?companyId.equals=" & Uri.EscapeDataString(KolaysoftFirmaId) & "&size=1&sort=id,desc"
             Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
             req.Method = "GET"
@@ -4423,7 +4423,7 @@ Public Class frm_perakende_odeme
             req.Accept = "application/json"
             req.Headers.Add("Authorization", "Bearer " & KolaysoftToken)
             req.Timeout = 8000
-            
+
             Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
                 Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
                     Dim jsonStr As String = reader.ReadToEnd()

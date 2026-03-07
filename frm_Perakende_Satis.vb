@@ -15723,20 +15723,20 @@ Public Class frm_Perakende_Satis
         If String.IsNullOrEmpty(vergiDairesi) Then
             vergiDairesi = "0"
         End If
-        
+
         ' *** 5000₺ ÜSTÜ SATIŞLARDA MÜŞTERİ BİLGİSİ ZORUNLU ***
         ' *** FIRMA UNVANI KONTROLU - Bos ise kullaniciyi uyar ***
         If String.IsNullOrEmpty(unvan) Then
-            Throw New Exception("MUSTERI BILGISI EKSIK!" & vbCrLf & vbCrLf & _
-                "Musteri kartinda Firma Unvani veya Ad-Soyad bilgisi bulunamiyor." & vbCrLf & vbCrLf & _
-                "Lutfen kontrol edin:" & vbCrLf & _
-                "- Cari hesap kartinda Firma Unvani veya Ad/Soyad alanlarini doldurun" & vbCrLf & _
+            Throw New Exception("MUSTERI BILGISI EKSIK!" & vbCrLf & vbCrLf &
+                "Musteri kartinda Firma Unvani veya Ad-Soyad bilgisi bulunamiyor." & vbCrLf & vbCrLf &
+                "Lutfen kontrol edin:" & vbCrLf &
+                "- Cari hesap kartinda Firma Unvani veya Ad/Soyad alanlarini doldurun" & vbCrLf &
                 "- Musteri seciminin dogru yapildigindan emin olun")
         End If
 
         ' *** 5000 TL USTU SATISLARDA MUSTERI BILGISI ZORUNLU ***
         If headerNet >= 5000 AndAlso String.IsNullOrEmpty(vkn) Then
-            Throw New Exception("5000₺ ve üzeri satışlarda müşteri VKN/TCKN bilgisi zorunludur!" & vbCrLf & vbCrLf & _
+            Throw New Exception("5000₺ ve üzeri satışlarda müşteri VKN/TCKN bilgisi zorunludur!" & vbCrLf & vbCrLf &
                 "Lütfen müşteri kartında Vergi No veya TC Kimlik No bilgisini giriniz.")
         End If
 
@@ -15987,14 +15987,22 @@ Public Class frm_Perakende_Satis
                 responseContent = New StreamReader(ex.Response.GetResponseStream()).ReadToEnd()
             End If
             LogYaz("SatisiKolaysoftaGonder", "Hata: " & ex.Message & vbCrLf & "Yan�t: " & responseContent)
+<<<<<<< Updated upstream
             
+=======
+
+>>>>>>> Stashed changes
             ' Kullan�c� dostu hata mesaj� olu�tur
             Dim kullaniciMesaji As String = KolaysoftHataCevir(responseContent, ex.Message)
             MessageBox.Show(kullaniciMesaji, "Kolaysoft Fatura Hatas�", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
         Catch ex As Exception
             LogYaz("SatisiKolaysoftaGonder", "Hata: " & ex.Message & vbCrLf & "Yan�t: " & responseContent)
+<<<<<<< Updated upstream
             
+=======
+
+>>>>>>> Stashed changes
             Dim kullaniciMesaji As String = KolaysoftHataCevir(responseContent, ex.Message)
             MessageBox.Show(kullaniciMesaji, "Kolaysoft Fatura Hatas�", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
