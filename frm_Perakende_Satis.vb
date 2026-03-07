@@ -15987,22 +15987,14 @@ Public Class frm_Perakende_Satis
                 responseContent = New StreamReader(ex.Response.GetResponseStream()).ReadToEnd()
             End If
             LogYaz("SatisiKolaysoftaGonder", "Hata: " & ex.Message & vbCrLf & "Yan�t: " & responseContent)
-<<<<<<< Updated upstream
-            
-=======
 
->>>>>>> Stashed changes
             ' Kullan�c� dostu hata mesaj� olu�tur
             Dim kullaniciMesaji As String = KolaysoftHataCevir(responseContent, ex.Message)
             MessageBox.Show(kullaniciMesaji, "Kolaysoft Fatura Hatas�", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
         Catch ex As Exception
             LogYaz("SatisiKolaysoftaGonder", "Hata: " & ex.Message & vbCrLf & "Yan�t: " & responseContent)
-<<<<<<< Updated upstream
-            
-=======
 
->>>>>>> Stashed changes
             Dim kullaniciMesaji As String = KolaysoftHataCevir(responseContent, ex.Message)
             MessageBox.Show(kullaniciMesaji, "Kolaysoft Fatura Hatas�", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
