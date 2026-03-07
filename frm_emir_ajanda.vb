@@ -1,0 +1,2429 @@
+﻿Imports FastReport
+Imports DevExpress.XtraScheduler
+Imports DevExpress.XtraEditors
+Imports System.IO
+Public Class frm_emir_ajanda
+    Inherits DevExpress.XtraEditors.XtraForm
+    
+#Region " Windows Form Designer generated code "
+    Public Sub New()
+        MyBase.New()
+        'This call is required by the Windows Form Designer.
+        InitializeComponent()
+        'Add any initialization after the InitializeComponent() call
+    End Sub
+    'Form overrides dispose to clean up the component list.
+    Protected Overloads Overrides Sub Dispose(ByVal disposing As Boolean)
+        If disposing Then
+            If Not (components Is Nothing) Then
+                components.Dispose()
+            End If
+        End If
+        MyBase.Dispose(disposing)
+    End Sub
+    'Required by the Windows Form Designer
+    Private components As System.ComponentModel.IContainer
+    'NOTE: The following procedure is required by the Windows Form Designer
+    'It can be modified using the Windows Form Designer.  
+    'Do not modify it using the code editor.
+    Friend WithEvents PanelControl1 As DevExpress.XtraEditors.PanelControl
+    Friend WithEvents PanelControl2 As DevExpress.XtraEditors.PanelControl
+    Friend WithEvents PanelControl3 As DevExpress.XtraEditors.PanelControl
+    Friend WithEvents SimpleButton2 As DevExpress.XtraEditors.SimpleButton
+    Friend WithEvents SimpleButton1 As DevExpress.XtraEditors.SimpleButton
+    Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
+    Friend WithEvents XtraTabControl1 As DevExpress.XtraTab.XtraTabControl
+    Friend WithEvents XtraTabPage1 As DevExpress.XtraTab.XtraTabPage
+    Friend WithEvents XtraTabPage2 As DevExpress.XtraTab.XtraTabPage
+    Friend WithEvents PanelControl4 As DevExpress.XtraEditors.PanelControl
+    Friend WithEvents GridControl1 As DevExpress.XtraGrid.GridControl
+    Friend WithEvents GridView1 As DevExpress.XtraGrid.Views.Grid.GridView
+    Friend WithEvents PanelControl5 As DevExpress.XtraEditors.PanelControl
+    Friend WithEvents adap1 As System.Data.OleDb.OleDbDataAdapter
+    Friend WithEvents OleDbSelectCommand1 As System.Data.OleDb.OleDbCommand
+    Friend WithEvents OleDbInsertCommand1 As System.Data.OleDb.OleDbCommand
+    Friend WithEvents OleDbUpdateCommand1 As System.Data.OleDb.OleDbCommand
+    Friend WithEvents OleDbDeleteCommand1 As System.Data.OleDb.OleDbCommand
+    Friend WithEvents con As System.Data.OleDb.OleDbConnection
+    Friend WithEvents DataSet11 As DataSet1
+    Friend WithEvents PanelControl6 As DevExpress.XtraEditors.PanelControl
+    Friend WithEvents SplitterControl1 As DevExpress.XtraEditors.SplitterControl
+    Friend WithEvents SchedulerControl1 As DevExpress.XtraScheduler.SchedulerControl
+    Friend WithEvents DateNavigator1 As DevExpress.XtraScheduler.DateNavigator
+    Friend WithEvents Label7 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_gorunum As DevExpress.XtraEditors.ComboBoxEdit
+    Friend WithEvents SimpleButton3 As DevExpress.XtraEditors.SimpleButton
+    Friend WithEvents SimpleButton4 As DevExpress.XtraEditors.SimpleButton
+    Friend WithEvents SimpleButton5 As DevExpress.XtraEditors.SimpleButton
+    Friend WithEvents SimpleButton6 As DevExpress.XtraEditors.SimpleButton
+    Friend WithEvents DataSet1 As System.Data.DataSet
+    Friend WithEvents DataTable1 As System.Data.DataTable
+    Friend WithEvents DataColumn1 As System.Data.DataColumn
+    Friend WithEvents DataColumn2 As System.Data.DataColumn
+    Friend WithEvents DataColumn3 As System.Data.DataColumn
+    Friend WithEvents DataColumn4 As System.Data.DataColumn
+    Friend WithEvents DataColumn5 As System.Data.DataColumn
+    Friend WithEvents DataColumn6 As System.Data.DataColumn
+    Friend WithEvents DataColumn7 As System.Data.DataColumn
+    Friend WithEvents DataColumn8 As System.Data.DataColumn
+    Friend WithEvents DataColumn9 As System.Data.DataColumn
+    Friend WithEvents DataColumn10 As System.Data.DataColumn
+    Friend WithEvents DataColumn11 As System.Data.DataColumn
+    Friend WithEvents DataColumn12 As System.Data.DataColumn
+    Friend WithEvents DataColumn13 As System.Data.DataColumn
+    Friend WithEvents DataColumn14 As System.Data.DataColumn
+    Friend WithEvents DataColumn15 As System.Data.DataColumn
+    Friend WithEvents DataColumn16 As System.Data.DataColumn
+    Friend WithEvents DataColumn17 As System.Data.DataColumn
+    Friend WithEvents DataColumn18 As System.Data.DataColumn
+    Friend WithEvents DataColumn19 As System.Data.DataColumn
+    Friend WithEvents colID As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colFirmaTipi As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colFirmaNo As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colPersonelNo As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colStatus As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colSubject As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colDescription As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colLabel As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colStartTime As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colEndTime As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colLocation As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colAllDay As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colEventType As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colRecurrenceInfo As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colReminderInfo As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colTutar As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colPb As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colOdendi As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colTamamlandi As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colPersonel As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colHesap As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents Label2 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents DateEdit1 As DevExpress.XtraEditors.DateEdit
+    Friend WithEvents Label3 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label4 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_personel As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents SimpleButton8 As DevExpress.XtraEditors.SimpleButton
+    Friend WithEvents ContextMenu1 As System.Windows.Forms.ContextMenu
+    Friend WithEvents MenuItem4 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem15 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem17 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem16 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem1 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem2 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem3 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem13 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem7 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem8 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem9 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem14 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem10 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem11 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem19 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem18 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem24 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem20 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem21 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem22 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem23 As System.Windows.Forms.MenuItem
+    Friend WithEvents colGelecekmi As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colEski As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents MenuItem5 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem6 As System.Windows.Forms.MenuItem
+    Friend WithEvents Panelstatus As DevExpress.XtraEditors.PanelControl
+    Friend WithEvents barlabel As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents bar As DevExpress.XtraEditors.ProgressBarControl
+    Friend WithEvents sec_gorev_personel As DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit
+    Friend WithEvents Label5 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_tamamlandi As DevExpress.XtraEditors.ComboBoxEdit
+    Friend WithEvents MenuItem12 As System.Windows.Forms.MenuItem
+    Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
+    Friend WithEvents MenuItem25 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem26 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem27 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem28 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem29 As System.Windows.Forms.MenuItem
+    Friend WithEvents LabelControl1 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents txt_kasiyer As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents txt_kod As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents Label6 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents SchedulerStorage1 As DevExpress.XtraScheduler.SchedulerStorage
+    Friend WithEvents ps As DevExpress.XtraPrinting.PrintingSystem
+    Friend WithEvents printlink1 As DevExpress.XtraPrinting.PrintableComponentLink
+    Friend WithEvents printlink2 As DevExpress.XtraPrinting.PrintableComponentLink
+    Friend WithEvents sec_durum As DevExpress.XtraEditors.ComboBoxEdit
+    Friend WithEvents SimpleButton7 As DevExpress.XtraEditors.SimpleButton
+    Friend WithEvents MenuItem30 As System.Windows.Forms.MenuItem
+    Friend WithEvents lbl_istihbarat As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents MenuItem31 As System.Windows.Forms.MenuItem
+    Friend WithEvents ds_kasiyer As System.Data.DataSet
+    Friend WithEvents tbKasiyer As System.Data.DataTable
+    Friend WithEvents DataColumn20 As System.Data.DataColumn
+    Friend WithEvents DataColumn21 As System.Data.DataColumn
+    Friend WithEvents DataColumn23 As System.Data.DataColumn
+    Friend WithEvents RibbonControl1 As DevExpress.XtraBars.Ribbon.RibbonControl
+    Friend WithEvents BarButtonItem1 As DevExpress.XtraBars.BarButtonItem
+    Friend WithEvents ViewNavigatorRibbonPage1 As DevExpress.XtraScheduler.UI.ViewNavigatorRibbonPage
+    Friend WithEvents ViewNavigatorRibbonPageGroup1 As DevExpress.XtraScheduler.UI.ViewNavigatorRibbonPageGroup
+    Friend WithEvents ViewNavigatorZoomOutItem1 As DevExpress.XtraScheduler.UI.ViewNavigatorZoomOutItem
+    Friend WithEvents ViewNavigatorZoomInItem1 As DevExpress.XtraScheduler.UI.ViewNavigatorZoomInItem
+    Friend WithEvents ViewNavigatorTodayItem1 As DevExpress.XtraScheduler.UI.ViewNavigatorTodayItem
+    Friend WithEvents ViewNavigatorForwardItem1 As DevExpress.XtraScheduler.UI.ViewNavigatorForwardItem
+    Friend WithEvents ViewNavigatorBackwardItem1 As DevExpress.XtraScheduler.UI.ViewNavigatorBackwardItem
+    Friend WithEvents ViewSelectorRibbonPage1 As DevExpress.XtraScheduler.UI.ViewSelectorRibbonPage
+    Friend WithEvents ViewSelectorRibbonPageGroup1 As DevExpress.XtraScheduler.UI.ViewSelectorRibbonPageGroup
+    Friend WithEvents ViewSelectorItem6 As DevExpress.XtraScheduler.UI.ViewSelectorItem
+    Friend WithEvents ViewSelectorItem5 As DevExpress.XtraScheduler.UI.ViewSelectorItem
+    Friend WithEvents ViewSelectorItem4 As DevExpress.XtraScheduler.UI.ViewSelectorItem
+    Friend WithEvents ViewSelectorItem3 As DevExpress.XtraScheduler.UI.ViewSelectorItem
+    Friend WithEvents ViewSelectorItem2 As DevExpress.XtraScheduler.UI.ViewSelectorItem
+    Friend WithEvents ViewSelectorItem1 As DevExpress.XtraScheduler.UI.ViewSelectorItem
+    Friend WithEvents Label1 As DevExpress.XtraEditors.LabelControl
+    <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frm_emir_ajanda))
+        Dim TimeRuler1 As DevExpress.XtraScheduler.TimeRuler = New DevExpress.XtraScheduler.TimeRuler()
+        Dim TimeRuler2 As DevExpress.XtraScheduler.TimeRuler = New DevExpress.XtraScheduler.TimeRuler()
+        Dim StyleFormatCondition1 As DevExpress.XtraGrid.StyleFormatCondition = New DevExpress.XtraGrid.StyleFormatCondition()
+        Dim StyleFormatCondition2 As DevExpress.XtraGrid.StyleFormatCondition = New DevExpress.XtraGrid.StyleFormatCondition()
+        Dim SuperToolTip1 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem1 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem1 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim SuperToolTip2 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem2 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem2 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim SuperToolTip3 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem3 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem3 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim SuperToolTip4 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem4 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem4 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim SuperToolTip5 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem5 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem5 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim SuperToolTip6 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem6 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem6 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim SuperToolTip7 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem7 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem7 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim SuperToolTip8 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem8 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem8 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim SuperToolTip9 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem9 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem9 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim SuperToolTip10 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem10 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem10 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim SuperToolTip11 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem11 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem11 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Me.colEski = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colTamamlandi = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.PanelControl1 = New DevExpress.XtraEditors.PanelControl()
+        Me.lbl_istihbarat = New DevExpress.XtraEditors.LabelControl()
+        Me.Label1 = New DevExpress.XtraEditors.LabelControl()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.PanelControl2 = New DevExpress.XtraEditors.PanelControl()
+        Me.SimpleButton6 = New DevExpress.XtraEditors.SimpleButton()
+        Me.SimpleButton5 = New DevExpress.XtraEditors.SimpleButton()
+        Me.SimpleButton4 = New DevExpress.XtraEditors.SimpleButton()
+        Me.SimpleButton3 = New DevExpress.XtraEditors.SimpleButton()
+        Me.SimpleButton2 = New DevExpress.XtraEditors.SimpleButton()
+        Me.SimpleButton1 = New DevExpress.XtraEditors.SimpleButton()
+        Me.PanelControl3 = New DevExpress.XtraEditors.PanelControl()
+        Me.XtraTabControl1 = New DevExpress.XtraTab.XtraTabControl()
+        Me.XtraTabPage1 = New DevExpress.XtraTab.XtraTabPage()
+        Me.SchedulerControl1 = New DevExpress.XtraScheduler.SchedulerControl()
+        Me.RibbonControl1 = New DevExpress.XtraBars.Ribbon.RibbonControl()
+        Me.BarButtonItem1 = New DevExpress.XtraBars.BarButtonItem()
+        Me.SchedulerStorage1 = New DevExpress.XtraScheduler.SchedulerStorage(Me.components)
+        Me.DataSet11 = New DataSet1()
+        Me.SplitterControl1 = New DevExpress.XtraEditors.SplitterControl()
+        Me.PanelControl6 = New DevExpress.XtraEditors.PanelControl()
+        Me.DateNavigator1 = New DevExpress.XtraScheduler.DateNavigator()
+        Me.PanelControl5 = New DevExpress.XtraEditors.PanelControl()
+        Me.SimpleButton8 = New DevExpress.XtraEditors.SimpleButton()
+        Me.sec_gorunum = New DevExpress.XtraEditors.ComboBoxEdit()
+        Me.Label7 = New DevExpress.XtraEditors.LabelControl()
+        Me.XtraTabPage2 = New DevExpress.XtraTab.XtraTabPage()
+        Me.Panelstatus = New DevExpress.XtraEditors.PanelControl()
+        Me.barlabel = New DevExpress.XtraEditors.LabelControl()
+        Me.bar = New DevExpress.XtraEditors.ProgressBarControl()
+        Me.GridControl1 = New DevExpress.XtraGrid.GridControl()
+        Me.ContextMenu1 = New System.Windows.Forms.ContextMenu()
+        Me.MenuItem4 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem15 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem17 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem16 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem30 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem5 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem12 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem6 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem1 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem2 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem3 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem13 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem25 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem26 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem27 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem28 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem29 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem7 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem8 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem9 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem14 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem31 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem10 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem11 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem19 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem18 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem24 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem20 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem21 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem22 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem23 = New System.Windows.Forms.MenuItem()
+        Me.DataSet1 = New System.Data.DataSet()
+        Me.DataTable1 = New System.Data.DataTable()
+        Me.DataColumn1 = New System.Data.DataColumn()
+        Me.DataColumn2 = New System.Data.DataColumn()
+        Me.DataColumn3 = New System.Data.DataColumn()
+        Me.DataColumn4 = New System.Data.DataColumn()
+        Me.DataColumn5 = New System.Data.DataColumn()
+        Me.DataColumn6 = New System.Data.DataColumn()
+        Me.DataColumn7 = New System.Data.DataColumn()
+        Me.DataColumn8 = New System.Data.DataColumn()
+        Me.DataColumn9 = New System.Data.DataColumn()
+        Me.DataColumn10 = New System.Data.DataColumn()
+        Me.DataColumn11 = New System.Data.DataColumn()
+        Me.DataColumn12 = New System.Data.DataColumn()
+        Me.DataColumn13 = New System.Data.DataColumn()
+        Me.DataColumn14 = New System.Data.DataColumn()
+        Me.DataColumn15 = New System.Data.DataColumn()
+        Me.DataColumn16 = New System.Data.DataColumn()
+        Me.DataColumn17 = New System.Data.DataColumn()
+        Me.DataColumn18 = New System.Data.DataColumn()
+        Me.DataColumn19 = New System.Data.DataColumn()
+        Me.GridView1 = New DevExpress.XtraGrid.Views.Grid.GridView()
+        Me.colID = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colFirmaTipi = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colFirmaNo = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colPersonelNo = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colStatus = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colSubject = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colDescription = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colLabel = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colStartTime = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colEndTime = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colLocation = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colAllDay = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colEventType = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colRecurrenceInfo = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colReminderInfo = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colTutar = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colPb = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colOdendi = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colPersonel = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.sec_gorev_personel = New DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit()
+        Me.colHesap = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colGelecekmi = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.PanelControl4 = New DevExpress.XtraEditors.PanelControl()
+        Me.SimpleButton7 = New DevExpress.XtraEditors.SimpleButton()
+        Me.sec_durum = New DevExpress.XtraEditors.ComboBoxEdit()
+        Me.Label6 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_kasiyer = New DevExpress.XtraEditors.TextEdit()
+        Me.txt_kod = New DevExpress.XtraEditors.TextEdit()
+        Me.Label5 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_tamamlandi = New DevExpress.XtraEditors.ComboBoxEdit()
+        Me.sec_personel = New DevExpress.XtraEditors.LookUpEdit()
+        Me.Label4 = New DevExpress.XtraEditors.LabelControl()
+        Me.Label3 = New DevExpress.XtraEditors.LabelControl()
+        Me.DateEdit1 = New DevExpress.XtraEditors.DateEdit()
+        Me.Label2 = New DevExpress.XtraEditors.LabelControl()
+        Me.ds_kasiyer = New System.Data.DataSet()
+        Me.tbKasiyer = New System.Data.DataTable()
+        Me.DataColumn20 = New System.Data.DataColumn()
+        Me.DataColumn21 = New System.Data.DataColumn()
+        Me.DataColumn23 = New System.Data.DataColumn()
+        Me.adap1 = New System.Data.OleDb.OleDbDataAdapter()
+        Me.OleDbDeleteCommand1 = New System.Data.OleDb.OleDbCommand()
+        Me.con = New System.Data.OleDb.OleDbConnection()
+        Me.OleDbInsertCommand1 = New System.Data.OleDb.OleDbCommand()
+        Me.OleDbSelectCommand1 = New System.Data.OleDb.OleDbCommand()
+        Me.OleDbUpdateCommand1 = New System.Data.OleDb.OleDbCommand()
+        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
+        Me.ps = New DevExpress.XtraPrinting.PrintingSystem(Me.components)
+        Me.printlink1 = New DevExpress.XtraPrinting.PrintableComponentLink(Me.components)
+        Me.printlink2 = New DevExpress.XtraPrinting.PrintableComponentLink(Me.components)
+        Me.ViewNavigatorRibbonPage1 = New DevExpress.XtraScheduler.UI.ViewNavigatorRibbonPage()
+        Me.ViewNavigatorRibbonPageGroup1 = New DevExpress.XtraScheduler.UI.ViewNavigatorRibbonPageGroup()
+        Me.ViewNavigatorZoomOutItem1 = New DevExpress.XtraScheduler.UI.ViewNavigatorZoomOutItem()
+        Me.ViewNavigatorZoomInItem1 = New DevExpress.XtraScheduler.UI.ViewNavigatorZoomInItem()
+        Me.ViewNavigatorTodayItem1 = New DevExpress.XtraScheduler.UI.ViewNavigatorTodayItem()
+        Me.ViewNavigatorForwardItem1 = New DevExpress.XtraScheduler.UI.ViewNavigatorForwardItem()
+        Me.ViewNavigatorBackwardItem1 = New DevExpress.XtraScheduler.UI.ViewNavigatorBackwardItem()
+        Me.ViewSelectorRibbonPage1 = New DevExpress.XtraScheduler.UI.ViewSelectorRibbonPage()
+        Me.ViewSelectorRibbonPageGroup1 = New DevExpress.XtraScheduler.UI.ViewSelectorRibbonPageGroup()
+        Me.ViewSelectorItem6 = New DevExpress.XtraScheduler.UI.ViewSelectorItem()
+        Me.ViewSelectorItem5 = New DevExpress.XtraScheduler.UI.ViewSelectorItem()
+        Me.ViewSelectorItem4 = New DevExpress.XtraScheduler.UI.ViewSelectorItem()
+        Me.ViewSelectorItem3 = New DevExpress.XtraScheduler.UI.ViewSelectorItem()
+        Me.ViewSelectorItem2 = New DevExpress.XtraScheduler.UI.ViewSelectorItem()
+        Me.ViewSelectorItem1 = New DevExpress.XtraScheduler.UI.ViewSelectorItem()
+        CType(Me.PanelControl1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PanelControl1.SuspendLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PanelControl2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PanelControl2.SuspendLayout()
+        CType(Me.PanelControl3, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PanelControl3.SuspendLayout()
+        CType(Me.XtraTabControl1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.XtraTabControl1.SuspendLayout()
+        Me.XtraTabPage1.SuspendLayout()
+        CType(Me.SchedulerControl1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.RibbonControl1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.SchedulerStorage1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DataSet11, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PanelControl6, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PanelControl6.SuspendLayout()
+        CType(Me.DateNavigator1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PanelControl5, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PanelControl5.SuspendLayout()
+        CType(Me.sec_gorunum.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.XtraTabPage2.SuspendLayout()
+        CType(Me.Panelstatus, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panelstatus.SuspendLayout()
+        CType(Me.bar.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.GridControl1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.GridView1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_gorev_personel, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PanelControl4, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PanelControl4.SuspendLayout()
+        CType(Me.sec_durum.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_kasiyer.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_kod.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_tamamlandi.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_personel.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DateEdit1.Properties.VistaTimeProperties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DateEdit1.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.ds_kasiyer, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.tbKasiyer, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.ps, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.printlink1.ImageCollection, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.printlink2.ImageCollection, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SuspendLayout()
+        '
+        'colEski
+        '
+        Me.colEski.Caption = "EskiGörev"
+        Me.colEski.FieldName = "Eski"
+        Me.colEski.Name = "colEski"
+        '
+        'colTamamlandi
+        '
+        Me.colTamamlandi.Caption = "Tamamlandi?"
+        Me.colTamamlandi.FieldName = "Tamamlandi"
+        Me.colTamamlandi.Name = "colTamamlandi"
+        Me.colTamamlandi.Visible = True
+        Me.colTamamlandi.VisibleIndex = 12
+        Me.colTamamlandi.Width = 58
+        '
+        'PanelControl1
+        '
+        Me.PanelControl1.Controls.Add(Me.lbl_istihbarat)
+        Me.PanelControl1.Controls.Add(Me.Label1)
+        Me.PanelControl1.Controls.Add(Me.PictureBox1)
+        Me.PanelControl1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.PanelControl1.Location = New System.Drawing.Point(0, 0)
+        Me.PanelControl1.Name = "PanelControl1"
+        Me.PanelControl1.Size = New System.Drawing.Size(824, 64)
+        Me.PanelControl1.TabIndex = 2
+        '
+        'lbl_istihbarat
+        '
+        Me.lbl_istihbarat.Appearance.ForeColor = System.Drawing.Color.Navy
+        Me.lbl_istihbarat.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical
+        Me.lbl_istihbarat.Dock = System.Windows.Forms.DockStyle.Right
+        Me.lbl_istihbarat.Location = New System.Drawing.Point(514, 2)
+        Me.lbl_istihbarat.Name = "lbl_istihbarat"
+        Me.lbl_istihbarat.Size = New System.Drawing.Size(308, 13)
+        Me.lbl_istihbarat.TabIndex = 37
+        Me.lbl_istihbarat.Text = "istihbarat"
+        '
+        'Label1
+        '
+        Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label1.Location = New System.Drawing.Point(96, 2)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(0, 13)
+        Me.Label1.TabIndex = 35
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.Dock = System.Windows.Forms.DockStyle.Left
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
+        Me.PictureBox1.Location = New System.Drawing.Point(2, 2)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(94, 60)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
+        Me.PictureBox1.TabIndex = 34
+        Me.PictureBox1.TabStop = False
+        '
+        'PanelControl2
+        '
+        Me.PanelControl2.Controls.Add(Me.SimpleButton6)
+        Me.PanelControl2.Controls.Add(Me.SimpleButton5)
+        Me.PanelControl2.Controls.Add(Me.SimpleButton4)
+        Me.PanelControl2.Controls.Add(Me.SimpleButton3)
+        Me.PanelControl2.Controls.Add(Me.SimpleButton2)
+        Me.PanelControl2.Controls.Add(Me.SimpleButton1)
+        Me.PanelControl2.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.PanelControl2.Location = New System.Drawing.Point(0, 702)
+        Me.PanelControl2.Name = "PanelControl2"
+        Me.PanelControl2.Size = New System.Drawing.Size(824, 48)
+        Me.PanelControl2.TabIndex = 1
+        '
+        'SimpleButton6
+        '
+        Me.SimpleButton6.Image = CType(resources.GetObject("SimpleButton6.Image"), System.Drawing.Image)
+        Me.SimpleButton6.Location = New System.Drawing.Point(288, 12)
+        Me.SimpleButton6.Name = "SimpleButton6"
+        Me.SimpleButton6.Size = New System.Drawing.Size(88, 23)
+        Me.SimpleButton6.TabIndex = 11
+        Me.SimpleButton6.Text = "&Yazdır"
+        '
+        'SimpleButton5
+        '
+        Me.SimpleButton5.Image = CType(resources.GetObject("SimpleButton5.Image"), System.Drawing.Image)
+        Me.SimpleButton5.Location = New System.Drawing.Point(200, 12)
+        Me.SimpleButton5.Name = "SimpleButton5"
+        Me.SimpleButton5.Size = New System.Drawing.Size(88, 23)
+        Me.SimpleButton5.TabIndex = 10
+        Me.SimpleButton5.Text = "&Fihrist"
+        '
+        'SimpleButton4
+        '
+        Me.SimpleButton4.Image = CType(resources.GetObject("SimpleButton4.Image"), System.Drawing.Image)
+        Me.SimpleButton4.Location = New System.Drawing.Point(104, 12)
+        Me.SimpleButton4.Name = "SimpleButton4"
+        Me.SimpleButton4.Size = New System.Drawing.Size(96, 23)
+        Me.SimpleButton4.TabIndex = 9
+        Me.SimpleButton4.Text = "&Görev Ekle"
+        '
+        'SimpleButton3
+        '
+        Me.SimpleButton3.Image = CType(resources.GetObject("SimpleButton3.Image"), System.Drawing.Image)
+        Me.SimpleButton3.Location = New System.Drawing.Point(8, 12)
+        Me.SimpleButton3.Name = "SimpleButton3"
+        Me.SimpleButton3.Size = New System.Drawing.Size(96, 23)
+        Me.SimpleButton3.TabIndex = 8
+        Me.SimpleButton3.Text = "&Ajanda Notu"
+        '
+        'SimpleButton2
+        '
+        Me.SimpleButton2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SimpleButton2.Image = CType(resources.GetObject("SimpleButton2.Image"), System.Drawing.Image)
+        Me.SimpleButton2.Location = New System.Drawing.Point(739, 12)
+        Me.SimpleButton2.Name = "SimpleButton2"
+        Me.SimpleButton2.Size = New System.Drawing.Size(75, 24)
+        Me.SimpleButton2.TabIndex = 7
+        Me.SimpleButton2.Text = "&Vazgec"
+        '
+        'SimpleButton1
+        '
+        Me.SimpleButton1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SimpleButton1.Image = CType(resources.GetObject("SimpleButton1.Image"), System.Drawing.Image)
+        Me.SimpleButton1.Location = New System.Drawing.Point(664, 12)
+        Me.SimpleButton1.Name = "SimpleButton1"
+        Me.SimpleButton1.Size = New System.Drawing.Size(75, 24)
+        Me.SimpleButton1.TabIndex = 6
+        Me.SimpleButton1.Text = "&Tamam"
+        '
+        'PanelControl3
+        '
+        Me.PanelControl3.Controls.Add(Me.XtraTabControl1)
+        Me.PanelControl3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PanelControl3.Location = New System.Drawing.Point(0, 64)
+        Me.PanelControl3.Name = "PanelControl3"
+        Me.PanelControl3.Size = New System.Drawing.Size(824, 638)
+        Me.PanelControl3.TabIndex = 0
+        '
+        'XtraTabControl1
+        '
+        Me.XtraTabControl1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.XtraTabControl1.Location = New System.Drawing.Point(2, 2)
+        Me.XtraTabControl1.Name = "XtraTabControl1"
+        Me.XtraTabControl1.SelectedTabPage = Me.XtraTabPage1
+        Me.XtraTabControl1.Size = New System.Drawing.Size(820, 634)
+        Me.XtraTabControl1.TabIndex = 0
+        Me.XtraTabControl1.TabPages.AddRange(New DevExpress.XtraTab.XtraTabPage() {Me.XtraTabPage1, Me.XtraTabPage2})
+        '
+        'XtraTabPage1
+        '
+        Me.XtraTabPage1.Controls.Add(Me.SchedulerControl1)
+        Me.XtraTabPage1.Controls.Add(Me.SplitterControl1)
+        Me.XtraTabPage1.Controls.Add(Me.PanelControl6)
+        Me.XtraTabPage1.Controls.Add(Me.PanelControl5)
+        Me.XtraTabPage1.Controls.Add(Me.RibbonControl1)
+        Me.XtraTabPage1.Name = "XtraTabPage1"
+        Me.XtraTabPage1.Size = New System.Drawing.Size(814, 606)
+        Me.XtraTabPage1.Text = "Ajanda"
+        '
+        'SchedulerControl1
+        '
+        Me.SchedulerControl1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SchedulerControl1.Location = New System.Drawing.Point(0, 86)
+        Me.SchedulerControl1.MenuManager = Me.RibbonControl1
+        Me.SchedulerControl1.Name = "SchedulerControl1"
+        Me.SchedulerControl1.Size = New System.Drawing.Size(633, 520)
+        Me.SchedulerControl1.Start = New Date(2007, 4, 14, 0, 0, 0, 0)
+        Me.SchedulerControl1.Storage = Me.SchedulerStorage1
+        Me.SchedulerControl1.TabIndex = 5
+        Me.SchedulerControl1.Text = "SchedulerControl1"
+        Me.SchedulerControl1.Views.DayView.MenuCaption = "&Günlük Görünüm"
+        Me.SchedulerControl1.Views.DayView.ShowWorkTimeOnly = True
+        Me.SchedulerControl1.Views.DayView.TimeRulers.Add(TimeRuler1)
+        Me.SchedulerControl1.Views.DayView.VisibleTime.End = System.TimeSpan.Parse("23:00:00")
+        Me.SchedulerControl1.Views.DayView.VisibleTime.Start = System.TimeSpan.Parse("07:00:00")
+        Me.SchedulerControl1.Views.DayView.WorkTime.End = System.TimeSpan.Parse("23:00:00")
+        Me.SchedulerControl1.Views.DayView.WorkTime.Start = System.TimeSpan.Parse("07:00:00")
+        Me.SchedulerControl1.Views.MonthView.MenuCaption = "&Aylık Görünüm"
+        Me.SchedulerControl1.Views.WeekView.MenuCaption = "&Haftalık Görünüm"
+        Me.SchedulerControl1.Views.WorkWeekView.MenuCaption = "& İş Günleri"
+        Me.SchedulerControl1.Views.WorkWeekView.TimeRulers.Add(TimeRuler2)
+        '
+        'RibbonControl1
+        '
+        Me.RibbonControl1.ExpandCollapseItem.Id = 0
+        Me.RibbonControl1.Items.AddRange(New DevExpress.XtraBars.BarItem() {Me.RibbonControl1.ExpandCollapseItem, Me.BarButtonItem1})
+        Me.RibbonControl1.Location = New System.Drawing.Point(0, 0)
+        Me.RibbonControl1.MaxItemId = 25
+        Me.RibbonControl1.Name = "RibbonControl1"
+        Me.RibbonControl1.PageHeaderItemLinks.Add(Me.BarButtonItem1)
+        Me.RibbonControl1.Size = New System.Drawing.Size(814, 47)
+        Me.RibbonControl1.ToolbarLocation = DevExpress.XtraBars.Ribbon.RibbonQuickAccessToolbarLocation.Above
+        '
+        'BarButtonItem1
+        '
+        Me.BarButtonItem1.Caption = "Yenile"
+        Me.BarButtonItem1.Glyph = Global.business_smart.My.Resources.Resources.replace2
+        Me.BarButtonItem1.Id = 12
+        Me.BarButtonItem1.Name = "BarButtonItem1"
+        '
+        'SchedulerStorage1
+        '
+        Me.SchedulerStorage1.Appointments.DataSource = Me.DataSet11.aEmirAjanda
+        Me.SchedulerStorage1.Appointments.Labels.Add(New DevExpress.XtraScheduler.AppointmentLabel(System.Drawing.SystemColors.Window, "Yok", "&Yok"))
+        Me.SchedulerStorage1.Appointments.Labels.Add(New DevExpress.XtraScheduler.AppointmentLabel(System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(194, Byte), Integer), CType(CType(190, Byte), Integer)), "Önemli", "&Önemli"))
+        Me.SchedulerStorage1.Appointments.Labels.Add(New DevExpress.XtraScheduler.AppointmentLabel(System.Drawing.Color.FromArgb(CType(CType(168, Byte), Integer), CType(CType(213, Byte), Integer), CType(CType(255, Byte), Integer)), "Diğer"))
+        Me.SchedulerStorage1.Appointments.Labels.Add(New DevExpress.XtraScheduler.AppointmentLabel(System.Drawing.Color.FromArgb(CType(CType(193, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(156, Byte), Integer)), "Personel", "&Personel"))
+        Me.SchedulerStorage1.Appointments.Labels.Add(New DevExpress.XtraScheduler.AppointmentLabel(System.Drawing.Color.FromArgb(CType(CType(243, Byte), Integer), CType(CType(228, Byte), Integer), CType(CType(199, Byte), Integer)), "Tatil", "&Tatil"))
+        Me.SchedulerStorage1.Appointments.Labels.Add(New DevExpress.XtraScheduler.AppointmentLabel(System.Drawing.Color.FromArgb(CType(CType(244, Byte), Integer), CType(CType(206, Byte), Integer), CType(CType(147, Byte), Integer)), "Çok nemli", "&Çok nemli"))
+        Me.SchedulerStorage1.Appointments.Labels.Add(New DevExpress.XtraScheduler.AppointmentLabel(System.Drawing.Color.FromArgb(CType(CType(199, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(255, Byte), Integer)), "Seyahat", "&Seyahat"))
+        Me.SchedulerStorage1.Appointments.Labels.Add(New DevExpress.XtraScheduler.AppointmentLabel(System.Drawing.Color.FromArgb(CType(CType(207, Byte), Integer), CType(CType(219, Byte), Integer), CType(CType(152, Byte), Integer)), "Hazırlık Yap", "&Hazırlık Yap"))
+        Me.SchedulerStorage1.Appointments.Labels.Add(New DevExpress.XtraScheduler.AppointmentLabel(System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(207, Byte), Integer), CType(CType(233, Byte), Integer)), "Doğum Günü", "&Doğum Günü"))
+        Me.SchedulerStorage1.Appointments.Labels.Add(New DevExpress.XtraScheduler.AppointmentLabel(System.Drawing.Color.FromArgb(CType(CType(141, Byte), Integer), CType(CType(233, Byte), Integer), CType(CType(223, Byte), Integer)), "Yıl Dönümü"))
+        Me.SchedulerStorage1.Appointments.Labels.Add(New DevExpress.XtraScheduler.AppointmentLabel(System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(247, Byte), Integer), CType(CType(165, Byte), Integer)), "Telefon Görüşmesi", "Telefon &Görüşmesi"))
+        Me.SchedulerStorage1.Appointments.Mappings.AllDay = "AllDay"
+        Me.SchedulerStorage1.Appointments.Mappings.Description = "Description"
+        Me.SchedulerStorage1.Appointments.Mappings.End = "EndTime"
+        Me.SchedulerStorage1.Appointments.Mappings.Label = "Label"
+        Me.SchedulerStorage1.Appointments.Mappings.Location = "Location"
+        Me.SchedulerStorage1.Appointments.Mappings.RecurrenceInfo = "RecurrenceInfo"
+        Me.SchedulerStorage1.Appointments.Mappings.ReminderInfo = "ReminderInfo"
+        Me.SchedulerStorage1.Appointments.Mappings.Start = "StartTime"
+        Me.SchedulerStorage1.Appointments.Mappings.Status = "Status"
+        Me.SchedulerStorage1.Appointments.Mappings.Subject = "Subject"
+        Me.SchedulerStorage1.Appointments.Mappings.Type = "EventType"
+        Me.SchedulerStorage1.Appointments.Statuses.Add(New DevExpress.XtraScheduler.AppointmentStatus(DevExpress.XtraScheduler.AppointmentStatusType.Free, "Boş", "&Boş"))
+        Me.SchedulerStorage1.Appointments.Statuses.Add(New DevExpress.XtraScheduler.AppointmentStatus(DevExpress.XtraScheduler.AppointmentStatusType.Tentative, System.Drawing.Color.FromArgb(CType(CType(74, Byte), Integer), CType(CType(135, Byte), Integer), CType(CType(226, Byte), Integer)), "Önemsiz", "&Önemsiz"))
+        Me.SchedulerStorage1.Appointments.Statuses.Add(New DevExpress.XtraScheduler.AppointmentStatus(DevExpress.XtraScheduler.AppointmentStatusType.Busy, System.Drawing.Color.FromArgb(CType(CType(74, Byte), Integer), CType(CType(135, Byte), Integer), CType(CType(226, Byte), Integer)), "Meşgul", "&Meşgul"))
+        Me.SchedulerStorage1.Appointments.Statuses.Add(New DevExpress.XtraScheduler.AppointmentStatus(DevExpress.XtraScheduler.AppointmentStatusType.OutOfOffice, System.Drawing.Color.FromArgb(CType(CType(217, Byte), Integer), CType(CType(83, Byte), Integer), CType(CType(83, Byte), Integer)), "Şirket"))
+        Me.SchedulerStorage1.Resources.DataMember = "Table1"
+        Me.SchedulerStorage1.Resources.Mappings.Caption = "ACIKLAMA"
+        Me.SchedulerStorage1.Resources.Mappings.Id = "IND"
+        '
+        'DataSet11
+        '
+        Me.DataSet11.DataSetName = "DataSet1"
+        Me.DataSet11.Locale = New System.Globalization.CultureInfo("tr-TR")
+        Me.DataSet11.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema
+        '
+        'SplitterControl1
+        '
+        Me.SplitterControl1.Dock = System.Windows.Forms.DockStyle.Right
+        Me.SplitterControl1.Location = New System.Drawing.Point(633, 86)
+        Me.SplitterControl1.Name = "SplitterControl1"
+        Me.SplitterControl1.Size = New System.Drawing.Size(5, 520)
+        Me.SplitterControl1.TabIndex = 4
+        Me.SplitterControl1.TabStop = False
+        '
+        'PanelControl6
+        '
+        Me.PanelControl6.Controls.Add(Me.DateNavigator1)
+        Me.PanelControl6.Dock = System.Windows.Forms.DockStyle.Right
+        Me.PanelControl6.Location = New System.Drawing.Point(638, 86)
+        Me.PanelControl6.Name = "PanelControl6"
+        Me.PanelControl6.Size = New System.Drawing.Size(176, 520)
+        Me.PanelControl6.TabIndex = 3
+        '
+        'DateNavigator1
+        '
+        Me.DateNavigator1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DateNavigator1.HotDate = Nothing
+        Me.DateNavigator1.Location = New System.Drawing.Point(2, 2)
+        Me.DateNavigator1.Name = "DateNavigator1"
+        Me.DateNavigator1.SchedulerControl = Me.SchedulerControl1
+        Me.DateNavigator1.Size = New System.Drawing.Size(172, 516)
+        Me.DateNavigator1.TabIndex = 0
+        '
+        'PanelControl5
+        '
+        Me.PanelControl5.Controls.Add(Me.SimpleButton8)
+        Me.PanelControl5.Controls.Add(Me.sec_gorunum)
+        Me.PanelControl5.Controls.Add(Me.Label7)
+        Me.PanelControl5.Dock = System.Windows.Forms.DockStyle.Top
+        Me.PanelControl5.Location = New System.Drawing.Point(0, 47)
+        Me.PanelControl5.Name = "PanelControl5"
+        Me.PanelControl5.Size = New System.Drawing.Size(814, 39)
+        Me.PanelControl5.TabIndex = 1
+        Me.PanelControl5.Visible = False
+        '
+        'SimpleButton8
+        '
+        Me.SimpleButton8.Image = CType(resources.GetObject("SimpleButton8.Image"), System.Drawing.Image)
+        Me.SimpleButton8.Location = New System.Drawing.Point(192, 8)
+        Me.SimpleButton8.Name = "SimpleButton8"
+        Me.SimpleButton8.Size = New System.Drawing.Size(88, 23)
+        Me.SimpleButton8.TabIndex = 43
+        Me.SimpleButton8.Text = "Ye&nile"
+        '
+        'sec_gorunum
+        '
+        Me.sec_gorunum.EditValue = "Günlük"
+        Me.sec_gorunum.Location = New System.Drawing.Point(80, 10)
+        Me.sec_gorunum.Name = "sec_gorunum"
+        Me.sec_gorunum.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_gorunum.Properties.Items.AddRange(New Object() {"Günlük", "Haftalık", "Aylık", "İşGünü", "Periyodik"})
+        Me.sec_gorunum.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor
+        Me.sec_gorunum.Size = New System.Drawing.Size(100, 20)
+        Me.sec_gorunum.TabIndex = 42
+        '
+        'Label7
+        '
+        Me.Label7.Appearance.ForeColor = System.Drawing.Color.Black
+        Me.Label7.Location = New System.Drawing.Point(8, 10)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(50, 13)
+        Me.Label7.TabIndex = 41
+        Me.Label7.Text = "Görünüm :"
+        '
+        'XtraTabPage2
+        '
+        Me.XtraTabPage2.Controls.Add(Me.Panelstatus)
+        Me.XtraTabPage2.Controls.Add(Me.GridControl1)
+        Me.XtraTabPage2.Controls.Add(Me.PanelControl4)
+        Me.XtraTabPage2.Name = "XtraTabPage2"
+        Me.XtraTabPage2.Size = New System.Drawing.Size(814, 606)
+        Me.XtraTabPage2.Text = "Görevler"
+        '
+        'Panelstatus
+        '
+        Me.Panelstatus.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panelstatus.Controls.Add(Me.barlabel)
+        Me.Panelstatus.Controls.Add(Me.bar)
+        Me.Panelstatus.Location = New System.Drawing.Point(169, 271)
+        Me.Panelstatus.Name = "Panelstatus"
+        Me.Panelstatus.Size = New System.Drawing.Size(475, 64)
+        Me.Panelstatus.TabIndex = 3
+        Me.Panelstatus.Visible = False
+        '
+        'barlabel
+        '
+        Me.barlabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.barlabel.Appearance.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
+        Me.barlabel.Appearance.ForeColor = System.Drawing.Color.Black
+        Me.barlabel.Location = New System.Drawing.Point(8, 14)
+        Me.barlabel.Name = "barlabel"
+        Me.barlabel.Size = New System.Drawing.Size(46, 13)
+        Me.barlabel.TabIndex = 3
+        Me.barlabel.Text = "barlabel"
+        '
+        'bar
+        '
+        Me.bar.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.bar.Location = New System.Drawing.Point(8, 33)
+        Me.bar.Name = "bar"
+        Me.bar.Properties.ShowTitle = True
+        Me.bar.Size = New System.Drawing.Size(459, 18)
+        Me.bar.TabIndex = 2
+        '
+        'GridControl1
+        '
+        Me.GridControl1.ContextMenu = Me.ContextMenu1
+        Me.GridControl1.DataMember = "Table1"
+        Me.GridControl1.DataSource = Me.DataSet1
+        Me.GridControl1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.GridControl1.Location = New System.Drawing.Point(0, 56)
+        Me.GridControl1.MainView = Me.GridView1
+        Me.GridControl1.Name = "GridControl1"
+        Me.GridControl1.RepositoryItems.AddRange(New DevExpress.XtraEditors.Repository.RepositoryItem() {Me.sec_gorev_personel})
+        Me.GridControl1.Size = New System.Drawing.Size(814, 550)
+        Me.GridControl1.TabIndex = 1
+        Me.GridControl1.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView1})
+        '
+        'ContextMenu1
+        '
+        Me.ContextMenu1.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuItem4, Me.MenuItem15, Me.MenuItem17, Me.MenuItem16, Me.MenuItem30, Me.MenuItem5, Me.MenuItem12, Me.MenuItem6, Me.MenuItem1, Me.MenuItem2, Me.MenuItem3, Me.MenuItem13, Me.MenuItem25, Me.MenuItem29, Me.MenuItem7, Me.MenuItem8, Me.MenuItem9, Me.MenuItem14, Me.MenuItem31, Me.MenuItem10, Me.MenuItem11, Me.MenuItem19, Me.MenuItem18, Me.MenuItem24, Me.MenuItem20})
+        '
+        'MenuItem4
+        '
+        Me.MenuItem4.Index = 0
+        Me.MenuItem4.Text = "Tamam"
+        '
+        'MenuItem15
+        '
+        Me.MenuItem15.Index = 1
+        Me.MenuItem15.Text = "Vazgeç"
+        '
+        'MenuItem17
+        '
+        Me.MenuItem17.Index = 2
+        Me.MenuItem17.Shortcut = System.Windows.Forms.Shortcut.F3
+        Me.MenuItem17.Text = "Ara"
+        '
+        'MenuItem16
+        '
+        Me.MenuItem16.Index = 3
+        Me.MenuItem16.Text = "-"
+        '
+        'MenuItem30
+        '
+        Me.MenuItem30.Index = 4
+        Me.MenuItem30.Text = "Tekrarları Kontrol Et"
+        '
+        'MenuItem5
+        '
+        Me.MenuItem5.Index = 5
+        Me.MenuItem5.Text = "Gelecekleri Kontrol Et"
+        '
+        'MenuItem12
+        '
+        Me.MenuItem12.Index = 6
+        Me.MenuItem12.Text = "Kullanıcı Görev Dağılımı"
+        '
+        'MenuItem6
+        '
+        Me.MenuItem6.Index = 7
+        Me.MenuItem6.Text = "-"
+        '
+        'MenuItem1
+        '
+        Me.MenuItem1.Index = 8
+        Me.MenuItem1.Shortcut = System.Windows.Forms.Shortcut.Ins
+        Me.MenuItem1.Text = "Ekle"
+        '
+        'MenuItem2
+        '
+        Me.MenuItem2.Index = 9
+        Me.MenuItem2.Shortcut = System.Windows.Forms.Shortcut.F4
+        Me.MenuItem2.Text = "Dzenle"
+        '
+        'MenuItem3
+        '
+        Me.MenuItem3.Index = 10
+        Me.MenuItem3.Shortcut = System.Windows.Forms.Shortcut.CtrlDel
+        Me.MenuItem3.Text = "Sil"
+        '
+        'MenuItem13
+        '
+        Me.MenuItem13.Index = 11
+        Me.MenuItem13.Text = "-"
+        '
+        'MenuItem25
+        '
+        Me.MenuItem25.Index = 12
+        Me.MenuItem25.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuItem26, Me.MenuItem27, Me.MenuItem28})
+        Me.MenuItem25.Text = "Raporla"
+        '
+        'MenuItem26
+        '
+        Me.MenuItem26.Index = 0
+        Me.MenuItem26.Shortcut = System.Windows.Forms.Shortcut.F2
+        Me.MenuItem26.Text = "nizle"
+        '
+        'MenuItem27
+        '
+        Me.MenuItem27.Index = 1
+        Me.MenuItem27.Text = "Dizayn"
+        '
+        'MenuItem28
+        '
+        Me.MenuItem28.Index = 2
+        Me.MenuItem28.Text = "Yazdr"
+        '
+        'MenuItem29
+        '
+        Me.MenuItem29.Index = 13
+        Me.MenuItem29.Text = "-"
+        '
+        'MenuItem7
+        '
+        Me.MenuItem7.Index = 14
+        Me.MenuItem7.Text = "Görünümü Düzenle"
+        '
+        'MenuItem8
+        '
+        Me.MenuItem8.Index = 15
+        Me.MenuItem8.Text = "Görünümü Kaydet"
+        '
+        'MenuItem9
+        '
+        Me.MenuItem9.Index = 16
+        Me.MenuItem9.Shortcut = System.Windows.Forms.Shortcut.CtrlP
+        Me.MenuItem9.Text = "Görünümü Yazdır"
+        '
+        'MenuItem14
+        '
+        Me.MenuItem14.Index = 17
+        Me.MenuItem14.Text = "-"
+        '
+        'MenuItem31
+        '
+        Me.MenuItem31.Index = 18
+        Me.MenuItem31.Text = "Hızlı Filtre"
+        '
+        'MenuItem10
+        '
+        Me.MenuItem10.Index = 19
+        Me.MenuItem10.Text = "Filtrele"
+        '
+        'MenuItem11
+        '
+        Me.MenuItem11.Index = 20
+        Me.MenuItem11.Text = "Gruplandır"
+        '
+        'MenuItem19
+        '
+        Me.MenuItem19.Index = 21
+        Me.MenuItem19.Text = "-"
+        '
+        'MenuItem18
+        '
+        Me.MenuItem18.Index = 22
+        Me.MenuItem18.Shortcut = System.Windows.Forms.Shortcut.F12
+        Me.MenuItem18.Text = "Tam Ekran"
+        '
+        'MenuItem24
+        '
+        Me.MenuItem24.Index = 23
+        Me.MenuItem24.Text = "-"
+        '
+        'MenuItem20
+        '
+        Me.MenuItem20.Index = 24
+        Me.MenuItem20.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuItem21, Me.MenuItem22, Me.MenuItem23})
+        Me.MenuItem20.Text = "Dil Değiştir"
+        '
+        'MenuItem21
+        '
+        Me.MenuItem21.Index = 0
+        Me.MenuItem21.Text = "Turkish"
+        '
+        'MenuItem22
+        '
+        Me.MenuItem22.Index = 1
+        Me.MenuItem22.Text = "English"
+        '
+        'MenuItem23
+        '
+        Me.MenuItem23.Index = 2
+        Me.MenuItem23.Text = "Arabic"
+        '
+        'DataSet1
+        '
+        Me.DataSet1.DataSetName = "NewDataSet"
+        Me.DataSet1.Locale = New System.Globalization.CultureInfo("tr-TR")
+        Me.DataSet1.Tables.AddRange(New System.Data.DataTable() {Me.DataTable1})
+        '
+        'DataTable1
+        '
+        Me.DataTable1.Columns.AddRange(New System.Data.DataColumn() {Me.DataColumn1, Me.DataColumn2, Me.DataColumn3, Me.DataColumn4, Me.DataColumn5, Me.DataColumn6, Me.DataColumn7, Me.DataColumn8, Me.DataColumn9, Me.DataColumn10, Me.DataColumn11, Me.DataColumn12, Me.DataColumn13, Me.DataColumn14, Me.DataColumn15, Me.DataColumn16, Me.DataColumn17, Me.DataColumn18, Me.DataColumn19})
+        Me.DataTable1.TableName = "Table1"
+        '
+        'DataColumn1
+        '
+        Me.DataColumn1.ColumnName = "ID"
+        '
+        'DataColumn2
+        '
+        Me.DataColumn2.ColumnName = "FirmaTipi"
+        Me.DataColumn2.DataType = GetType(Long)
+        '
+        'DataColumn3
+        '
+        Me.DataColumn3.ColumnName = "FirmaNo"
+        Me.DataColumn3.DataType = GetType(Long)
+        '
+        'DataColumn4
+        '
+        Me.DataColumn4.ColumnName = "PersonelNo"
+        Me.DataColumn4.DataType = GetType(Long)
+        '
+        'DataColumn5
+        '
+        Me.DataColumn5.ColumnName = "Status"
+        Me.DataColumn5.DataType = GetType(Long)
+        '
+        'DataColumn6
+        '
+        Me.DataColumn6.ColumnName = "Subject"
+        '
+        'DataColumn7
+        '
+        Me.DataColumn7.ColumnName = "Description"
+        '
+        'DataColumn8
+        '
+        Me.DataColumn8.ColumnName = "Label"
+        Me.DataColumn8.DataType = GetType(Long)
+        '
+        'DataColumn9
+        '
+        Me.DataColumn9.ColumnName = "StartTime"
+        Me.DataColumn9.DataType = GetType(Date)
+        '
+        'DataColumn10
+        '
+        Me.DataColumn10.ColumnName = "EndTime"
+        Me.DataColumn10.DataType = GetType(Date)
+        '
+        'DataColumn11
+        '
+        Me.DataColumn11.ColumnName = "Location"
+        '
+        'DataColumn12
+        '
+        Me.DataColumn12.ColumnName = "AllDay"
+        Me.DataColumn12.DataType = GetType(Boolean)
+        '
+        'DataColumn13
+        '
+        Me.DataColumn13.ColumnName = "EventType"
+        Me.DataColumn13.DataType = GetType(Long)
+        '
+        'DataColumn14
+        '
+        Me.DataColumn14.ColumnName = "RecurrenceInfo"
+        '
+        'DataColumn15
+        '
+        Me.DataColumn15.ColumnName = "ReminderInfo"
+        '
+        'DataColumn16
+        '
+        Me.DataColumn16.ColumnName = "Tutar"
+        Me.DataColumn16.DataType = GetType(Decimal)
+        '
+        'DataColumn17
+        '
+        Me.DataColumn17.ColumnName = "Pb"
+        '
+        'DataColumn18
+        '
+        Me.DataColumn18.ColumnName = "Odendi"
+        Me.DataColumn18.DataType = GetType(Boolean)
+        '
+        'DataColumn19
+        '
+        Me.DataColumn19.ColumnName = "Tamamlandi"
+        Me.DataColumn19.DataType = GetType(Boolean)
+        '
+        'GridView1
+        '
+        Me.GridView1.Appearance.FocusedCell.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.GridView1.Appearance.FocusedCell.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.GridView1.Appearance.FocusedCell.ForeColor = System.Drawing.Color.Black
+        Me.GridView1.Appearance.FocusedCell.Options.UseBackColor = True
+        Me.GridView1.Appearance.FocusedCell.Options.UseForeColor = True
+        Me.GridView1.Appearance.FocusedRow.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.GridView1.Appearance.FocusedRow.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.GridView1.Appearance.FocusedRow.ForeColor = System.Drawing.Color.Black
+        Me.GridView1.Appearance.FocusedRow.Options.UseBackColor = True
+        Me.GridView1.Appearance.FocusedRow.Options.UseForeColor = True
+        Me.GridView1.Columns.AddRange(New DevExpress.XtraGrid.Columns.GridColumn() {Me.colID, Me.colFirmaTipi, Me.colFirmaNo, Me.colPersonelNo, Me.colStatus, Me.colSubject, Me.colDescription, Me.colLabel, Me.colStartTime, Me.colEndTime, Me.colLocation, Me.colAllDay, Me.colEventType, Me.colRecurrenceInfo, Me.colReminderInfo, Me.colTutar, Me.colPb, Me.colOdendi, Me.colTamamlandi, Me.colPersonel, Me.colHesap, Me.colGelecekmi, Me.colEski})
+        Me.GridView1.DetailHeight = 160
+        Me.GridView1.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.RowFocus
+        StyleFormatCondition1.Appearance.ForeColor = System.Drawing.Color.Red
+        StyleFormatCondition1.Appearance.Options.UseForeColor = True
+        StyleFormatCondition1.ApplyToRow = True
+        StyleFormatCondition1.Column = Me.colEski
+        StyleFormatCondition1.Condition = DevExpress.XtraGrid.FormatConditionEnum.Equal
+        StyleFormatCondition1.Tag = True
+        StyleFormatCondition1.Value1 = True
+        StyleFormatCondition2.Appearance.Font = New System.Drawing.Font("Tahoma", 8.25!, CType((System.Drawing.FontStyle.Italic Or System.Drawing.FontStyle.Strikeout), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(162, Byte))
+        StyleFormatCondition2.Appearance.Options.UseFont = True
+        StyleFormatCondition2.ApplyToRow = True
+        StyleFormatCondition2.Column = Me.colTamamlandi
+        StyleFormatCondition2.Condition = DevExpress.XtraGrid.FormatConditionEnum.Equal
+        StyleFormatCondition2.Tag = True
+        StyleFormatCondition2.Value1 = True
+        Me.GridView1.FormatConditions.AddRange(New DevExpress.XtraGrid.StyleFormatCondition() {StyleFormatCondition1, StyleFormatCondition2})
+        Me.GridView1.GridControl = Me.GridControl1
+        Me.GridView1.GroupFormat = "{0}: {1} {2}"
+        Me.GridView1.GroupPanelText = "Gruplamak stediiniz Kolonu Buraya Srkleyiniz..."
+        Me.GridView1.IndicatorWidth = 35
+        Me.GridView1.Name = "GridView1"
+        Me.GridView1.OptionsBehavior.Editable = False
+        Me.GridView1.OptionsCustomization.AllowFilter = False
+        Me.GridView1.OptionsCustomization.AllowGroup = False
+        Me.GridView1.OptionsDetail.ShowDetailTabs = False
+        Me.GridView1.OptionsSelection.MultiSelect = True
+        Me.GridView1.OptionsView.ShowFooter = True
+        Me.GridView1.OptionsView.ShowGroupPanel = False
+        '
+        'colID
+        '
+        Me.colID.Caption = "Kayıt No"
+        Me.colID.FieldName = "ID"
+        Me.colID.Name = "colID"
+        Me.colID.Width = 69
+        '
+        'colFirmaTipi
+        '
+        Me.colFirmaTipi.Caption = "FirmaTipi"
+        Me.colFirmaTipi.FieldName = "FirmaTipi"
+        Me.colFirmaTipi.Name = "colFirmaTipi"
+        '
+        'colFirmaNo
+        '
+        Me.colFirmaNo.Caption = "Firma No"
+        Me.colFirmaNo.FieldName = "FirmaNo"
+        Me.colFirmaNo.Name = "colFirmaNo"
+        '
+        'colPersonelNo
+        '
+        Me.colPersonelNo.Caption = "PersonelNo"
+        Me.colPersonelNo.FieldName = "PersonelNo"
+        Me.colPersonelNo.Name = "colPersonelNo"
+        '
+        'colStatus
+        '
+        Me.colStatus.Caption = "Status"
+        Me.colStatus.FieldName = "Status"
+        Me.colStatus.Name = "colStatus"
+        '
+        'colSubject
+        '
+        Me.colSubject.Caption = "Konu"
+        Me.colSubject.FieldName = "Subject"
+        Me.colSubject.Name = "colSubject"
+        Me.colSubject.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Count, "Subject", "{0} Kayt")})
+        Me.colSubject.Visible = True
+        Me.colSubject.VisibleIndex = 1
+        Me.colSubject.Width = 61
+        '
+        'colDescription
+        '
+        Me.colDescription.Caption = "Açıklama"
+        Me.colDescription.FieldName = "Description"
+        Me.colDescription.Name = "colDescription"
+        Me.colDescription.Visible = True
+        Me.colDescription.VisibleIndex = 5
+        Me.colDescription.Width = 116
+        '
+        'colLabel
+        '
+        Me.colLabel.Caption = "Etiket"
+        Me.colLabel.FieldName = "Label"
+        Me.colLabel.Name = "colLabel"
+        Me.colLabel.Visible = True
+        Me.colLabel.VisibleIndex = 0
+        Me.colLabel.Width = 33
+        '
+        'colStartTime
+        '
+        Me.colStartTime.Caption = "Başlama"
+        Me.colStartTime.DisplayFormat.FormatString = "dd.MM.yyyy HH:mm"
+        Me.colStartTime.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime
+        Me.colStartTime.FieldName = "StartTime"
+        Me.colStartTime.Name = "colStartTime"
+        Me.colStartTime.Visible = True
+        Me.colStartTime.VisibleIndex = 6
+        Me.colStartTime.Width = 74
+        '
+        'colEndTime
+        '
+        Me.colEndTime.Caption = "Bitiş"
+        Me.colEndTime.DisplayFormat.FormatString = "dd.MM.yyyy HH:mm"
+        Me.colEndTime.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime
+        Me.colEndTime.FieldName = "EndTime"
+        Me.colEndTime.Name = "colEndTime"
+        Me.colEndTime.Visible = True
+        Me.colEndTime.VisibleIndex = 7
+        Me.colEndTime.Width = 87
+        '
+        'colLocation
+        '
+        Me.colLocation.Caption = "Yer"
+        Me.colLocation.FieldName = "Location"
+        Me.colLocation.Name = "colLocation"
+        Me.colLocation.Visible = True
+        Me.colLocation.VisibleIndex = 2
+        Me.colLocation.Width = 49
+        '
+        'colAllDay
+        '
+        Me.colAllDay.Caption = "HerGün?"
+        Me.colAllDay.FieldName = "AllDay"
+        Me.colAllDay.Name = "colAllDay"
+        Me.colAllDay.Width = 94
+        '
+        'colEventType
+        '
+        Me.colEventType.Caption = "EventType"
+        Me.colEventType.FieldName = "EventType"
+        Me.colEventType.Name = "colEventType"
+        '
+        'colRecurrenceInfo
+        '
+        Me.colRecurrenceInfo.Caption = "RecurrenceInfo"
+        Me.colRecurrenceInfo.FieldName = "RecurrenceInfo"
+        Me.colRecurrenceInfo.Name = "colRecurrenceInfo"
+        '
+        'colReminderInfo
+        '
+        Me.colReminderInfo.Caption = "ReminderInfo"
+        Me.colReminderInfo.FieldName = "ReminderInfo"
+        Me.colReminderInfo.Name = "colReminderInfo"
+        '
+        'colTutar
+        '
+        Me.colTutar.Caption = "Tutar"
+        Me.colTutar.DisplayFormat.FormatString = "#,0.00"
+        Me.colTutar.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
+        Me.colTutar.FieldName = "Tutar"
+        Me.colTutar.Name = "colTutar"
+        Me.colTutar.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Sum, "Tutar", "{0:#,0.00}")})
+        Me.colTutar.Visible = True
+        Me.colTutar.VisibleIndex = 8
+        Me.colTutar.Width = 39
+        '
+        'colPb
+        '
+        Me.colPb.Caption = "Pb"
+        Me.colPb.FieldName = "Pb"
+        Me.colPb.Name = "colPb"
+        Me.colPb.Visible = True
+        Me.colPb.VisibleIndex = 9
+        Me.colPb.Width = 32
+        '
+        'colOdendi
+        '
+        Me.colOdendi.Caption = "Odendi?"
+        Me.colOdendi.FieldName = "Odendi"
+        Me.colOdendi.Name = "colOdendi"
+        Me.colOdendi.Visible = True
+        Me.colOdendi.VisibleIndex = 10
+        Me.colOdendi.Width = 48
+        '
+        'colPersonel
+        '
+        Me.colPersonel.Caption = "Personel"
+        Me.colPersonel.ColumnEdit = Me.sec_gorev_personel
+        Me.colPersonel.FieldName = "PersonelNo"
+        Me.colPersonel.Name = "colPersonel"
+        Me.colPersonel.Visible = True
+        Me.colPersonel.VisibleIndex = 3
+        Me.colPersonel.Width = 66
+        '
+        'sec_gorev_personel
+        '
+        Me.sec_gorev_personel.AutoHeight = False
+        Me.sec_gorev_personel.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_gorev_personel.Columns.AddRange(New DevExpress.XtraEditors.Controls.LookUpColumnInfo() {New DevExpress.XtraEditors.Controls.LookUpColumnInfo("ACIKLAMA", "Personeller")})
+        Me.sec_gorev_personel.DisplayMember = "ACIKLAMA"
+        Me.sec_gorev_personel.Name = "sec_gorev_personel"
+        Me.sec_gorev_personel.NullText = "[Personeller...]"
+        Me.sec_gorev_personel.ValueMember = "IND"
+        '
+        'colHesap
+        '
+        Me.colHesap.Caption = "Hesap"
+        Me.colHesap.FieldName = "Firma"
+        Me.colHesap.Name = "colHesap"
+        Me.colHesap.Visible = True
+        Me.colHesap.VisibleIndex = 4
+        Me.colHesap.Width = 96
+        '
+        'colGelecekmi
+        '
+        Me.colGelecekmi.Caption = "Gelecekmi?"
+        Me.colGelecekmi.FieldName = "Gelecekmi"
+        Me.colGelecekmi.Name = "colGelecekmi"
+        Me.colGelecekmi.Visible = True
+        Me.colGelecekmi.VisibleIndex = 11
+        Me.colGelecekmi.Width = 48
+        '
+        'PanelControl4
+        '
+        Me.PanelControl4.Controls.Add(Me.SimpleButton7)
+        Me.PanelControl4.Controls.Add(Me.sec_durum)
+        Me.PanelControl4.Controls.Add(Me.Label6)
+        Me.PanelControl4.Controls.Add(Me.txt_kasiyer)
+        Me.PanelControl4.Controls.Add(Me.txt_kod)
+        Me.PanelControl4.Controls.Add(Me.Label5)
+        Me.PanelControl4.Controls.Add(Me.sec_tamamlandi)
+        Me.PanelControl4.Controls.Add(Me.sec_personel)
+        Me.PanelControl4.Controls.Add(Me.Label4)
+        Me.PanelControl4.Controls.Add(Me.Label3)
+        Me.PanelControl4.Controls.Add(Me.DateEdit1)
+        Me.PanelControl4.Controls.Add(Me.Label2)
+        Me.PanelControl4.Dock = System.Windows.Forms.DockStyle.Top
+        Me.PanelControl4.Location = New System.Drawing.Point(0, 0)
+        Me.PanelControl4.Name = "PanelControl4"
+        Me.PanelControl4.Size = New System.Drawing.Size(814, 56)
+        Me.PanelControl4.TabIndex = 0
+        '
+        'SimpleButton7
+        '
+        Me.SimpleButton7.Image = CType(resources.GetObject("SimpleButton7.Image"), System.Drawing.Image)
+        Me.SimpleButton7.Location = New System.Drawing.Point(664, 26)
+        Me.SimpleButton7.Name = "SimpleButton7"
+        Me.SimpleButton7.Size = New System.Drawing.Size(75, 20)
+        Me.SimpleButton7.TabIndex = 49
+        Me.SimpleButton7.Text = "&Listele"
+        '
+        'sec_durum
+        '
+        Me.sec_durum.EditValue = "[Tümü]"
+        Me.sec_durum.EnterMoveNextControl = True
+        Me.sec_durum.Location = New System.Drawing.Point(448, 26)
+        Me.sec_durum.Name = "sec_durum"
+        Me.sec_durum.Properties.Appearance.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_durum.Properties.Appearance.Options.UseBackColor = True
+        Me.sec_durum.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_durum.Properties.Items.AddRange(New Object() {"[Tümü]", "Bekliyor", "Tamamlandı", "Ertelendi", "Görülüyor", "Cevap Bekleniyor", "İşlem Yaplıyor", "Ulaşılamyor", "İptal"})
+        Me.sec_durum.Size = New System.Drawing.Size(100, 20)
+        Me.sec_durum.TabIndex = 47
+        '
+        'Label6
+        '
+        Me.Label6.Appearance.ForeColor = System.Drawing.Color.Black
+        Me.Label6.Location = New System.Drawing.Point(5, 5)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(27, 13)
+        Me.Label6.TabIndex = 53
+        Me.Label6.Text = "Yetki:"
+        '
+        'txt_kasiyer
+        '
+        Me.txt_kasiyer.Enabled = False
+        Me.txt_kasiyer.EnterMoveNextControl = True
+        Me.txt_kasiyer.Location = New System.Drawing.Point(151, 4)
+        Me.txt_kasiyer.Name = "txt_kasiyer"
+        Me.txt_kasiyer.Properties.MaxLength = 10
+        Me.txt_kasiyer.Size = New System.Drawing.Size(232, 20)
+        Me.txt_kasiyer.TabIndex = 52
+        '
+        'txt_kod
+        '
+        Me.txt_kod.Location = New System.Drawing.Point(56, 4)
+        Me.txt_kod.Name = "txt_kod"
+        Me.txt_kod.Properties.MaxLength = 10
+        Me.txt_kod.Properties.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
+        Me.txt_kod.Size = New System.Drawing.Size(95, 20)
+        Me.txt_kod.TabIndex = 51
+        '
+        'Label5
+        '
+        Me.Label5.Appearance.ForeColor = System.Drawing.Color.Black
+        Me.Label5.Location = New System.Drawing.Point(552, 26)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(23, 13)
+        Me.Label5.TabIndex = 50
+        Me.Label5.Text = "Bitti?"
+        '
+        'sec_tamamlandi
+        '
+        Me.sec_tamamlandi.EditValue = "Hayır"
+        Me.sec_tamamlandi.EnterMoveNextControl = True
+        Me.sec_tamamlandi.Location = New System.Drawing.Point(592, 26)
+        Me.sec_tamamlandi.Name = "sec_tamamlandi"
+        Me.sec_tamamlandi.Properties.Appearance.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_tamamlandi.Properties.Appearance.Options.UseBackColor = True
+        Me.sec_tamamlandi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_tamamlandi.Properties.Items.AddRange(New Object() {"[Tümü]", "Evet", "Hayır"})
+        Me.sec_tamamlandi.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor
+        Me.sec_tamamlandi.Size = New System.Drawing.Size(64, 20)
+        Me.sec_tamamlandi.TabIndex = 48
+        '
+        'sec_personel
+        '
+        Me.sec_personel.EnterMoveNextControl = True
+        Me.sec_personel.Location = New System.Drawing.Point(213, 26)
+        Me.sec_personel.Name = "sec_personel"
+        Me.sec_personel.Properties.Appearance.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_personel.Properties.Appearance.Options.UseBackColor = True
+        Me.sec_personel.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_personel.Properties.Columns.AddRange(New DevExpress.XtraEditors.Controls.LookUpColumnInfo() {New DevExpress.XtraEditors.Controls.LookUpColumnInfo("ACIKLAMA", "Personeller")})
+        Me.sec_personel.Properties.DisplayMember = "ACIKLAMA"
+        Me.sec_personel.Properties.NullText = "[Personeller]"
+        Me.sec_personel.Properties.ReadOnly = True
+        Me.sec_personel.Properties.ValueMember = "IND"
+        Me.sec_personel.Size = New System.Drawing.Size(171, 20)
+        Me.sec_personel.TabIndex = 46
+        '
+        'Label4
+        '
+        Me.Label4.Appearance.ForeColor = System.Drawing.Color.Black
+        Me.Label4.Location = New System.Drawing.Point(392, 26)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(35, 13)
+        Me.Label4.TabIndex = 46
+        Me.Label4.Text = "Durum:"
+        '
+        'Label3
+        '
+        Me.Label3.Appearance.ForeColor = System.Drawing.Color.Black
+        Me.Label3.Location = New System.Drawing.Point(157, 26)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(45, 13)
+        Me.Label3.TabIndex = 44
+        Me.Label3.Text = "Personel:"
+        '
+        'DateEdit1
+        '
+        Me.DateEdit1.EditValue = Nothing
+        Me.DateEdit1.EnterMoveNextControl = True
+        Me.DateEdit1.Location = New System.Drawing.Point(56, 26)
+        Me.DateEdit1.Name = "DateEdit1"
+        Me.DateEdit1.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.DateEdit1.Properties.VistaTimeProperties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
+        Me.DateEdit1.Size = New System.Drawing.Size(100, 20)
+        Me.DateEdit1.TabIndex = 43
+        '
+        'Label2
+        '
+        Me.Label2.Appearance.ForeColor = System.Drawing.Color.Black
+        Me.Label2.Location = New System.Drawing.Point(13, 26)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(28, 13)
+        Me.Label2.TabIndex = 42
+        Me.Label2.Text = "Tarih:"
+        '
+        'ds_kasiyer
+        '
+        Me.ds_kasiyer.DataSetName = "NewDataSet"
+        Me.ds_kasiyer.Tables.AddRange(New System.Data.DataTable() {Me.tbKasiyer})
+        '
+        'tbKasiyer
+        '
+        Me.tbKasiyer.Columns.AddRange(New System.Data.DataColumn() {Me.DataColumn20, Me.DataColumn21, Me.DataColumn23})
+        Me.tbKasiyer.TableName = "Table1"
+        '
+        'DataColumn20
+        '
+        Me.DataColumn20.ColumnName = "IND"
+        Me.DataColumn20.DataType = GetType(Long)
+        '
+        'DataColumn21
+        '
+        Me.DataColumn21.ColumnName = "ACIKLAMA"
+        '
+        'DataColumn23
+        '
+        Me.DataColumn23.ColumnName = "SIFRE"
+        '
+        'adap1
+        '
+        Me.adap1.DeleteCommand = Me.OleDbDeleteCommand1
+        Me.adap1.InsertCommand = Me.OleDbInsertCommand1
+        Me.adap1.SelectCommand = Me.OleDbSelectCommand1
+        Me.adap1.TableMappings.AddRange(New System.Data.Common.DataTableMapping() {New System.Data.Common.DataTableMapping("Table", "aEmirAjanda", New System.Data.Common.DataColumnMapping() {New System.Data.Common.DataColumnMapping("ID", "ID"), New System.Data.Common.DataColumnMapping("FirmaNo", "FirmaNo"), New System.Data.Common.DataColumnMapping("PersonelNo", "PersonelNo"), New System.Data.Common.DataColumnMapping("Status", "Status"), New System.Data.Common.DataColumnMapping("Subject", "Subject"), New System.Data.Common.DataColumnMapping("Description", "Description"), New System.Data.Common.DataColumnMapping("Label", "Label"), New System.Data.Common.DataColumnMapping("StartTime", "StartTime"), New System.Data.Common.DataColumnMapping("EndTime", "EndTime"), New System.Data.Common.DataColumnMapping("Location", "Location"), New System.Data.Common.DataColumnMapping("AllDay", "AllDay"), New System.Data.Common.DataColumnMapping("EventType", "EventType"), New System.Data.Common.DataColumnMapping("RecurrenceInfo", "RecurrenceInfo"), New System.Data.Common.DataColumnMapping("ReminderInfo", "ReminderInfo")})})
+        Me.adap1.UpdateCommand = Me.OleDbUpdateCommand1
+        '
+        'OleDbDeleteCommand1
+        '
+        Me.OleDbDeleteCommand1.CommandText = resources.GetString("OleDbDeleteCommand1.CommandText")
+        Me.OleDbDeleteCommand1.Connection = Me.con
+        Me.OleDbDeleteCommand1.Parameters.AddRange(New System.Data.OleDb.OleDbParameter() {New System.Data.OleDb.OleDbParameter("Original_ID", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "ID", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_AllDay", System.Data.OleDb.OleDbType.[Boolean], 1, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "AllDay", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_AllDay1", System.Data.OleDb.OleDbType.[Boolean], 1, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "AllDay", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_EndTime", System.Data.OleDb.OleDbType.[Date], 8, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "EndTime", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_EndTime1", System.Data.OleDb.OleDbType.[Date], 8, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "EndTime", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_EventType", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "EventType", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_EventType1", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "EventType", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_FirmaNo", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "FirmaNo", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_FirmaNo1", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "FirmaNo", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_Label", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "Label", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_Label1", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "Label", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_Location", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "Location", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_Location1", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "Location", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_PersonelNo", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "PersonelNo", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_PersonelNo1", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "PersonelNo", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_StartTime", System.Data.OleDb.OleDbType.[Date], 8, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "StartTime", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_StartTime1", System.Data.OleDb.OleDbType.[Date], 8, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "StartTime", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_Status", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "Status", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_Status1", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "Status", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_Subject", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "Subject", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_Subject1", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "Subject", System.Data.DataRowVersion.Original, Nothing)})
+        '
+        'con
+        '
+        Me.con.ConnectionString = resources.GetString("con.ConnectionString")
+        '
+        'OleDbInsertCommand1
+        '
+        Me.OleDbInsertCommand1.CommandText = resources.GetString("OleDbInsertCommand1.CommandText")
+        Me.OleDbInsertCommand1.Connection = Me.con
+        Me.OleDbInsertCommand1.Parameters.AddRange(New System.Data.OleDb.OleDbParameter() {New System.Data.OleDb.OleDbParameter("FirmaNo", System.Data.OleDb.OleDbType.[Integer], 4, "FirmaNo"), New System.Data.OleDb.OleDbParameter("Status", System.Data.OleDb.OleDbType.[Integer], 4, "Status"), New System.Data.OleDb.OleDbParameter("Subject", System.Data.OleDb.OleDbType.VarWChar, 50, "Subject"), New System.Data.OleDb.OleDbParameter("Description", System.Data.OleDb.OleDbType.VarWChar, 1073741823, "Description"), New System.Data.OleDb.OleDbParameter("Label", System.Data.OleDb.OleDbType.[Integer], 4, "Label"), New System.Data.OleDb.OleDbParameter("StartTime", System.Data.OleDb.OleDbType.[Date], 8, "StartTime"), New System.Data.OleDb.OleDbParameter("EndTime", System.Data.OleDb.OleDbType.[Date], 8, "EndTime"), New System.Data.OleDb.OleDbParameter("Location", System.Data.OleDb.OleDbType.VarWChar, 50, "Location"), New System.Data.OleDb.OleDbParameter("AllDay", System.Data.OleDb.OleDbType.[Boolean], 1, "AllDay"), New System.Data.OleDb.OleDbParameter("EventType", System.Data.OleDb.OleDbType.[Integer], 4, "EventType"), New System.Data.OleDb.OleDbParameter("RecurrenceInfo", System.Data.OleDb.OleDbType.VarWChar, 1073741823, "RecurrenceInfo"), New System.Data.OleDb.OleDbParameter("ReminderInfo", System.Data.OleDb.OleDbType.VarWChar, 1073741823, "ReminderInfo")})
+        '
+        'OleDbSelectCommand1
+        '
+        Me.OleDbSelectCommand1.CommandText = resources.GetString("OleDbSelectCommand1.CommandText")
+        Me.OleDbSelectCommand1.Connection = Me.con
+        '
+        'OleDbUpdateCommand1
+        '
+        Me.OleDbUpdateCommand1.CommandText = resources.GetString("OleDbUpdateCommand1.CommandText")
+        Me.OleDbUpdateCommand1.Connection = Me.con
+        Me.OleDbUpdateCommand1.Parameters.AddRange(New System.Data.OleDb.OleDbParameter() {New System.Data.OleDb.OleDbParameter("FirmaNo", System.Data.OleDb.OleDbType.[Integer], 4, "FirmaNo"), New System.Data.OleDb.OleDbParameter("PersonelNo", System.Data.OleDb.OleDbType.[Integer], 4, "PersonelNo"), New System.Data.OleDb.OleDbParameter("Status", System.Data.OleDb.OleDbType.[Integer], 4, "Status"), New System.Data.OleDb.OleDbParameter("Subject", System.Data.OleDb.OleDbType.VarWChar, 50, "Subject"), New System.Data.OleDb.OleDbParameter("Description", System.Data.OleDb.OleDbType.VarWChar, 1073741823, "Description"), New System.Data.OleDb.OleDbParameter("Label", System.Data.OleDb.OleDbType.[Integer], 4, "Label"), New System.Data.OleDb.OleDbParameter("StartTime", System.Data.OleDb.OleDbType.[Date], 8, "StartTime"), New System.Data.OleDb.OleDbParameter("EndTime", System.Data.OleDb.OleDbType.[Date], 8, "EndTime"), New System.Data.OleDb.OleDbParameter("Location", System.Data.OleDb.OleDbType.VarWChar, 50, "Location"), New System.Data.OleDb.OleDbParameter("AllDay", System.Data.OleDb.OleDbType.[Boolean], 1, "AllDay"), New System.Data.OleDb.OleDbParameter("EventType", System.Data.OleDb.OleDbType.[Integer], 4, "EventType"), New System.Data.OleDb.OleDbParameter("RecurrenceInfo", System.Data.OleDb.OleDbType.VarWChar, 1073741823, "RecurrenceInfo"), New System.Data.OleDb.OleDbParameter("ReminderInfo", System.Data.OleDb.OleDbType.VarWChar, 1073741823, "ReminderInfo"), New System.Data.OleDb.OleDbParameter("Original_ID", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "ID", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_AllDay", System.Data.OleDb.OleDbType.[Boolean], 1, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "AllDay", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_AllDay1", System.Data.OleDb.OleDbType.[Boolean], 1, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "AllDay", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_EndTime", System.Data.OleDb.OleDbType.[Date], 8, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "EndTime", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_EndTime1", System.Data.OleDb.OleDbType.[Date], 8, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "EndTime", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_EventType", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "EventType", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_EventType1", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "EventType", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_FirmaNo", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "FirmaNo", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_FirmaNo1", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "FirmaNo", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_Label", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "Label", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_Label1", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "Label", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_Location", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "Location", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_Location1", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "Location", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_PersonelNo", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "PersonelNo", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_PersonelNo1", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "PersonelNo", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_StartTime", System.Data.OleDb.OleDbType.[Date], 8, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "StartTime", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_StartTime1", System.Data.OleDb.OleDbType.[Date], 8, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "StartTime", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_Status", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "Status", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_Status1", System.Data.OleDb.OleDbType.[Integer], 4, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "Status", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_Subject", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "Subject", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Original_Subject1", System.Data.OleDb.OleDbType.VarWChar, 50, System.Data.ParameterDirection.Input, False, CType(0, Byte), CType(0, Byte), "Subject", System.Data.DataRowVersion.Original, Nothing), New System.Data.OleDb.OleDbParameter("Select_ID", System.Data.OleDb.OleDbType.[Integer], 4, "ID")})
+        '
+        'ps
+        '
+        Me.ps.Links.AddRange(New Object() {Me.printlink1, Me.printlink2})
+        '
+        'printlink1
+        '
+        Me.printlink1.Component = Me.SchedulerControl1
+        '
+        '
+        '
+        Me.printlink1.ImageCollection.ImageStream = CType(resources.GetObject("printlink1.ImageCollection.ImageStream"), DevExpress.Utils.ImageCollectionStreamer)
+        Me.printlink1.Margins = New System.Drawing.Printing.Margins(20, 20, 60, 60)
+        Me.printlink1.Owner = Nothing
+        Me.printlink1.PageHeaderFooter = New DevExpress.XtraPrinting.PageHeaderFooter(New DevExpress.XtraPrinting.PageHeaderArea(New String() {"[User Name]", "", "[Date Printed][Time Printed]"}, New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(162, Byte)), DevExpress.XtraPrinting.BrickAlignment.Far), New DevExpress.XtraPrinting.PageFooterArea(New String() {"Powered by www.barkodyazilimevi.com", "Ajanda", "[Page # of Pages #]"}, New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(162, Byte)), DevExpress.XtraPrinting.BrickAlignment.Near))
+        Me.printlink1.PaperKind = System.Drawing.Printing.PaperKind.A4
+        Me.printlink1.PrintingSystem = Me.ps
+        Me.printlink1.PrintingSystemBase = Me.ps
+        '
+        'printlink2
+        '
+        Me.printlink2.Component = Me.GridControl1
+        '
+        '
+        '
+        Me.printlink2.ImageCollection.ImageStream = CType(resources.GetObject("printlink2.ImageCollection.ImageStream"), DevExpress.Utils.ImageCollectionStreamer)
+        Me.printlink2.Margins = New System.Drawing.Printing.Margins(20, 20, 60, 60)
+        Me.printlink2.Owner = Nothing
+        Me.printlink2.PageHeaderFooter = New DevExpress.XtraPrinting.PageHeaderFooter(New DevExpress.XtraPrinting.PageHeaderArea(New String() {"[User Name]", "", "[Date Printed][Time Printed]"}, New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(162, Byte)), DevExpress.XtraPrinting.BrickAlignment.Far), New DevExpress.XtraPrinting.PageFooterArea(New String() {"Powered by www.barkodyazilimevi.com", "Ajanda Takip ve  Emirleri", "[Page # of Pages #]"}, New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(162, Byte)), DevExpress.XtraPrinting.BrickAlignment.Near))
+        Me.printlink2.PaperKind = System.Drawing.Printing.PaperKind.A4
+        Me.printlink2.PrintingSystem = Me.ps
+        Me.printlink2.PrintingSystemBase = Me.ps
+        '
+        'ViewNavigatorRibbonPage1
+        '
+        Me.ViewNavigatorRibbonPage1.Name = "ViewNavigatorRibbonPage1"
+        Me.ViewNavigatorRibbonPage1.Text = "Navigator"
+        '
+        'ViewNavigatorRibbonPageGroup1
+        '
+        Me.ViewNavigatorRibbonPageGroup1.Name = "ViewNavigatorRibbonPageGroup1"
+        Me.ViewNavigatorRibbonPageGroup1.Text = ""
+        '
+        'ViewNavigatorZoomOutItem1
+        '
+        Me.ViewNavigatorZoomOutItem1.Caption = "Uzaklaştır"
+        Me.ViewNavigatorZoomOutItem1.GroupIndex = 1
+        Me.ViewNavigatorZoomOutItem1.Id = 11
+        Me.ViewNavigatorZoomOutItem1.Name = "ViewNavigatorZoomOutItem1"
+        ToolTipTitleItem1.Text = "Uzaklaştır (Ctrl+Subtract)"
+        ToolTipItem1.Text = "Perform scaling down to display a broader look of the View."
+        SuperToolTip1.Items.Add(ToolTipTitleItem1)
+        SuperToolTip1.Items.Add(ToolTipItem1)
+        Me.ViewNavigatorZoomOutItem1.SuperTip = SuperToolTip1
+        '
+        'ViewNavigatorZoomInItem1
+        '
+        Me.ViewNavigatorZoomInItem1.Caption = "Yakınlaştır"
+        Me.ViewNavigatorZoomInItem1.GroupIndex = 1
+        Me.ViewNavigatorZoomInItem1.Id = 10
+        Me.ViewNavigatorZoomInItem1.Name = "ViewNavigatorZoomInItem1"
+        ToolTipTitleItem2.Text = "Yakınlaştır (Ctrl+Add)"
+        ToolTipItem2.Text = "Perform scaling up to display content in more detail."
+        SuperToolTip2.Items.Add(ToolTipTitleItem2)
+        SuperToolTip2.Items.Add(ToolTipItem2)
+        Me.ViewNavigatorZoomInItem1.SuperTip = SuperToolTip2
+        '
+        'ViewNavigatorTodayItem1
+        '
+        Me.ViewNavigatorTodayItem1.Caption = "Bugün"
+        Me.ViewNavigatorTodayItem1.GroupIndex = 1
+        Me.ViewNavigatorTodayItem1.Id = 9
+        Me.ViewNavigatorTodayItem1.Name = "ViewNavigatorTodayItem1"
+        ToolTipTitleItem3.Text = "Bugün"
+        ToolTipItem3.Text = "Change the date displayed in the current view to the current date."
+        SuperToolTip3.Items.Add(ToolTipTitleItem3)
+        SuperToolTip3.Items.Add(ToolTipItem3)
+        Me.ViewNavigatorTodayItem1.SuperTip = SuperToolTip3
+        '
+        'ViewNavigatorForwardItem1
+        '
+        Me.ViewNavigatorForwardItem1.Caption = "Sonraki"
+        Me.ViewNavigatorForwardItem1.GroupIndex = 1
+        Me.ViewNavigatorForwardItem1.Id = 8
+        Me.ViewNavigatorForwardItem1.Name = "ViewNavigatorForwardItem1"
+        ToolTipTitleItem4.Text = "Sonraki"
+        ToolTipItem4.Text = "Advance forward in time as suggested by the current view."
+        SuperToolTip4.Items.Add(ToolTipTitleItem4)
+        SuperToolTip4.Items.Add(ToolTipItem4)
+        Me.ViewNavigatorForwardItem1.SuperTip = SuperToolTip4
+        '
+        'ViewNavigatorBackwardItem1
+        '
+        Me.ViewNavigatorBackwardItem1.Caption = "Önceki"
+        Me.ViewNavigatorBackwardItem1.GroupIndex = 1
+        Me.ViewNavigatorBackwardItem1.Id = 7
+        Me.ViewNavigatorBackwardItem1.Name = "ViewNavigatorBackwardItem1"
+        ToolTipTitleItem5.Text = "Önceki"
+        ToolTipItem5.Text = "Step back in time as suggested by the current view."
+        SuperToolTip5.Items.Add(ToolTipTitleItem5)
+        SuperToolTip5.Items.Add(ToolTipItem5)
+        Me.ViewNavigatorBackwardItem1.SuperTip = SuperToolTip5
+        '
+        'ViewSelectorRibbonPage1
+        '
+        Me.ViewSelectorRibbonPage1.Name = "ViewSelectorRibbonPage1"
+        Me.ViewSelectorRibbonPage1.Text = "Görünüm"
+        '
+        'ViewSelectorRibbonPageGroup1
+        '
+        Me.ViewSelectorRibbonPageGroup1.Name = "ViewSelectorRibbonPageGroup1"
+        Me.ViewSelectorRibbonPageGroup1.Text = ""
+        '
+        'ViewSelectorItem6
+        '
+        Me.ViewSelectorItem6.Caption = "Hiyarşik"
+        Me.ViewSelectorItem6.Glyph = CType(resources.GetObject("ViewSelectorItem6.Glyph"), System.Drawing.Image)
+        Me.ViewSelectorItem6.GroupIndex = 1
+        Me.ViewSelectorItem6.Id = 6
+        Me.ViewSelectorItem6.ItemShortcut = New DevExpress.XtraBars.BarShortcut(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+                Or System.Windows.Forms.Keys.D5))
+        Me.ViewSelectorItem6.LargeGlyph = CType(resources.GetObject("ViewSelectorItem6.LargeGlyph"), System.Drawing.Image)
+        Me.ViewSelectorItem6.Name = "ViewSelectorItem6"
+        Me.ViewSelectorItem6.SchedulerViewType = DevExpress.XtraScheduler.SchedulerViewType.Gantt
+        ToolTipTitleItem6.Text = "Hiyarşik (Ctrl+Alt+5)"
+        ToolTipItem6.Text = "Switch to the Gantt View. Project management view that shows appointments and the" & _
+    "ir dependencies in relation to time."
+        SuperToolTip6.Items.Add(ToolTipTitleItem6)
+        SuperToolTip6.Items.Add(ToolTipItem6)
+        Me.ViewSelectorItem6.SuperTip = SuperToolTip6
+        '
+        'ViewSelectorItem5
+        '
+        Me.ViewSelectorItem5.Caption = "Saatlik"
+        Me.ViewSelectorItem5.Glyph = CType(resources.GetObject("ViewSelectorItem5.Glyph"), System.Drawing.Image)
+        Me.ViewSelectorItem5.GroupIndex = 1
+        Me.ViewSelectorItem5.Id = 5
+        Me.ViewSelectorItem5.ItemShortcut = New DevExpress.XtraBars.BarShortcut(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+                Or System.Windows.Forms.Keys.D5))
+        Me.ViewSelectorItem5.LargeGlyph = CType(resources.GetObject("ViewSelectorItem5.LargeGlyph"), System.Drawing.Image)
+        Me.ViewSelectorItem5.Name = "ViewSelectorItem5"
+        Me.ViewSelectorItem5.SchedulerViewType = DevExpress.XtraScheduler.SchedulerViewType.Timeline
+        ToolTipTitleItem7.Text = "Saatlik (Ctrl+Alt+5)"
+        ToolTipItem7.Text = "Switch to the Timeline view. Plots appointments in relation to time."
+        SuperToolTip7.Items.Add(ToolTipTitleItem7)
+        SuperToolTip7.Items.Add(ToolTipItem7)
+        Me.ViewSelectorItem5.SuperTip = SuperToolTip7
+        '
+        'ViewSelectorItem4
+        '
+        Me.ViewSelectorItem4.Caption = "Aylık"
+        Me.ViewSelectorItem4.Glyph = CType(resources.GetObject("ViewSelectorItem4.Glyph"), System.Drawing.Image)
+        Me.ViewSelectorItem4.GroupIndex = 1
+        Me.ViewSelectorItem4.Id = 4
+        Me.ViewSelectorItem4.ItemShortcut = New DevExpress.XtraBars.BarShortcut(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+                Or System.Windows.Forms.Keys.D4))
+        Me.ViewSelectorItem4.LargeGlyph = CType(resources.GetObject("ViewSelectorItem4.LargeGlyph"), System.Drawing.Image)
+        Me.ViewSelectorItem4.Name = "ViewSelectorItem4"
+        Me.ViewSelectorItem4.SchedulerViewType = DevExpress.XtraScheduler.SchedulerViewType.Month
+        ToolTipTitleItem8.Text = "Aylık (Ctrl+Alt+4)"
+        ToolTipItem8.Text = "Switch to the Month (Multi-Week) view. Calendar view useful for long-term plans."
+        SuperToolTip8.Items.Add(ToolTipTitleItem8)
+        SuperToolTip8.Items.Add(ToolTipItem8)
+        Me.ViewSelectorItem4.SuperTip = SuperToolTip8
+        '
+        'ViewSelectorItem3
+        '
+        Me.ViewSelectorItem3.Caption = "Haftalık"
+        Me.ViewSelectorItem3.Glyph = CType(resources.GetObject("ViewSelectorItem3.Glyph"), System.Drawing.Image)
+        Me.ViewSelectorItem3.GroupIndex = 1
+        Me.ViewSelectorItem3.Id = 3
+        Me.ViewSelectorItem3.ItemShortcut = New DevExpress.XtraBars.BarShortcut(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+                Or System.Windows.Forms.Keys.D3))
+        Me.ViewSelectorItem3.LargeGlyph = CType(resources.GetObject("ViewSelectorItem3.LargeGlyph"), System.Drawing.Image)
+        Me.ViewSelectorItem3.Name = "ViewSelectorItem3"
+        Me.ViewSelectorItem3.SchedulerViewType = DevExpress.XtraScheduler.SchedulerViewType.Week
+        ToolTipTitleItem9.Text = "Haftalık (Ctrl+Alt+3)"
+        ToolTipItem9.Text = "Switch to the Week view. Arranges appointments for a particular week in a compact" & _
+    " form."
+        SuperToolTip9.Items.Add(ToolTipTitleItem9)
+        SuperToolTip9.Items.Add(ToolTipItem9)
+        Me.ViewSelectorItem3.SuperTip = SuperToolTip9
+        '
+        'ViewSelectorItem2
+        '
+        Me.ViewSelectorItem2.Caption = "İş Günü"
+        Me.ViewSelectorItem2.Glyph = CType(resources.GetObject("ViewSelectorItem2.Glyph"), System.Drawing.Image)
+        Me.ViewSelectorItem2.GroupIndex = 1
+        Me.ViewSelectorItem2.Id = 2
+        Me.ViewSelectorItem2.ItemShortcut = New DevExpress.XtraBars.BarShortcut(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+                Or System.Windows.Forms.Keys.D2))
+        Me.ViewSelectorItem2.LargeGlyph = CType(resources.GetObject("ViewSelectorItem2.LargeGlyph"), System.Drawing.Image)
+        Me.ViewSelectorItem2.Name = "ViewSelectorItem2"
+        Me.ViewSelectorItem2.SchedulerViewType = DevExpress.XtraScheduler.SchedulerViewType.WorkWeek
+        ToolTipTitleItem10.Text = "İş Günü (Ctrl+Alt+2)"
+        ToolTipItem10.Text = "Switch to the Work Week view. Detailed view for the working days in a certain wee" & _
+    "k."
+        SuperToolTip10.Items.Add(ToolTipTitleItem10)
+        SuperToolTip10.Items.Add(ToolTipItem10)
+        Me.ViewSelectorItem2.SuperTip = SuperToolTip10
+        '
+        'ViewSelectorItem1
+        '
+        Me.ViewSelectorItem1.Caption = "Günlük"
+        Me.ViewSelectorItem1.Glyph = CType(resources.GetObject("ViewSelectorItem1.Glyph"), System.Drawing.Image)
+        Me.ViewSelectorItem1.GroupIndex = 1
+        Me.ViewSelectorItem1.Id = 1
+        Me.ViewSelectorItem1.ItemShortcut = New DevExpress.XtraBars.BarShortcut(((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Alt) _
+                Or System.Windows.Forms.Keys.D1))
+        Me.ViewSelectorItem1.LargeGlyph = CType(resources.GetObject("ViewSelectorItem1.LargeGlyph"), System.Drawing.Image)
+        Me.ViewSelectorItem1.Name = "ViewSelectorItem1"
+        Me.ViewSelectorItem1.SchedulerViewType = DevExpress.XtraScheduler.SchedulerViewType.Day
+        ToolTipTitleItem11.Text = "Günlük (Ctrl+Alt+1)"
+        ToolTipItem11.Text = "Switch to the Day view. The most detailed view of appointments for a specific day" & _
+    "(s)."
+        SuperToolTip11.Items.Add(ToolTipTitleItem11)
+        SuperToolTip11.Items.Add(ToolTipItem11)
+        Me.ViewSelectorItem1.SuperTip = SuperToolTip11
+        '
+        'frm_emir_ajanda
+        '
+        Me.AutoScaleBaseSize = New System.Drawing.Size(5, 14)
+        Me.ClientSize = New System.Drawing.Size(824, 750)
+        Me.Controls.Add(Me.PanelControl3)
+        Me.Controls.Add(Me.PanelControl2)
+        Me.Controls.Add(Me.PanelControl1)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.Name = "frm_emir_ajanda"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.Text = "Ajanda"
+        CType(Me.PanelControl1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.PanelControl1.ResumeLayout(False)
+        Me.PanelControl1.PerformLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PanelControl2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.PanelControl2.ResumeLayout(False)
+        CType(Me.PanelControl3, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.PanelControl3.ResumeLayout(False)
+        CType(Me.XtraTabControl1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.XtraTabControl1.ResumeLayout(False)
+        Me.XtraTabPage1.ResumeLayout(False)
+        CType(Me.SchedulerControl1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.RibbonControl1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.SchedulerStorage1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DataSet11, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PanelControl6, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.PanelControl6.ResumeLayout(False)
+        CType(Me.DateNavigator1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PanelControl5, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.PanelControl5.ResumeLayout(False)
+        Me.PanelControl5.PerformLayout()
+        CType(Me.sec_gorunum.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.XtraTabPage2.ResumeLayout(False)
+        CType(Me.Panelstatus, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panelstatus.ResumeLayout(False)
+        Me.Panelstatus.PerformLayout()
+        CType(Me.bar.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.GridControl1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.GridView1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_gorev_personel, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PanelControl4, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.PanelControl4.ResumeLayout(False)
+        Me.PanelControl4.PerformLayout()
+        CType(Me.sec_durum.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_kasiyer.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_kod.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_tamamlandi.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_personel.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DateEdit1.Properties.VistaTimeProperties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DateEdit1.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.ds_kasiyer, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.tbKasiyer, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.ps, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.printlink1.ImageCollection, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.printlink2.ImageCollection, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ResumeLayout(False)
+
+    End Sub
+#End Region
+    Public firmano
+    Public donemno
+    Public kasiyer
+    Public kasiyerno = 0
+    Public personel
+    Public personelno = 0
+    Public kullanici
+    Public connection As String = ""
+    'Dim ds_kasiyer As DataSet
+    Dim ds_personel As DataSet
+    Dim conn As New OleDb.OleDbConnection
+    Dim cmd As New OleDb.OleDbCommand
+    Dim adapter As New OleDb.OleDbDataAdapter
+    Public status As Boolean = False
+    'Dim qr_hareket As New TfrxADOQuery
+    'Dim qr_baslik As New TfrxADOQuery
+    Private Sub frm_emir_ajanda_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        'dataload()
+        dataload_kasiyer()
+        dataload_personel()
+        SchedulerControl1.Start = Today
+        DateEdit1.EditValue = dteSistemTarihi
+    End Sub
+    Public Sub dataload()
+        DataSet11.Tables(0).Clear()
+        Me.OleDbSelectCommand1.CommandText = "SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT ID, FirmaNo, PersonelNo, Status, Subject, Description, Label, StartTime, E" & _
+        "ndTime, Location, AllDay, EventType, RecurrenceInfo, ReminderInfo FROM aEmirAjan" & _
+        "da WHERE PersonelNo =" & kasiyerno & " and Tamamlandi = 0"
+        Me.OleDbInsertCommand1.CommandText = "SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO  aEmirAjanda(FirmaNo, PersonelNo, Status, Subject, Description, Label," & _
+       " StartTime, EndTime, Location, AllDay, EventType, RecurrenceInfo, ReminderInfo) " & _
+       "VALUES (?, " & kasiyerno & " , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); SELECT ID, FirmaNo, PersonelNo, " & _
+       "Status, Subject, Description, Label, StartTime, EndTime, Location, AllDay, Event" & _
+       "Type, RecurrenceInfo, ReminderInfo FROM aEmirAjanda WHERE (ID = @@IDENTITY)"
+        'Me.OleDbInsertCommand1.Parameters.Add(New System.Data.OleDb.OleDbParameter("PersonelNo", System.Data.OleDb.OleDbType.Integer, 4, kasiyerno))
+        con.ConnectionString = connection
+        adap1.Fill(DataSet11.Tables(0))
+
+    End Sub
+    Public Sub dataload_kasiyer()
+        ds_kasiyer = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT '0' AS IND, '[Tümü]' AS ACIKLAMA, '1111' AS SIFRE FROM APERSONEL UNION SELECT IND, PERSONELADI AS ACIKLAMA, SIFRE FROM APERSONEL "))
+        sec_personel.Properties.DataSource = ds_kasiyer.Tables(0)
+        sec_gorev_personel.DataSource = ds_kasiyer.Tables(0)
+        sec_personel.EditValue = kasiyerno
+        sec_personel.Text = kasiyer
+        'sec_personel.ItemIndex = 1
+        'sec_personel.Refresh()
+    End Sub
+    Private Sub dataload_personel()
+        ds_personel = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     sKasiyerRumuzu AS IND, sAdi + ' ' + sSoyadi AS KASIYER, sSifresi AS SIFRE, sDepo AS DEPO FROM         tbKasiyer WHERE     (sKasiyerRumuzu <> '')"))
+    End Sub
+    Private Sub gorev_ekle()
+        Dim frm As New frm_emir_ajanda_gorev
+        frm.firmano = firmano
+        frm.donemno = donemno
+        frm.connection = connection
+        frm.kasiyerno = kasiyerno
+        frm.kasiyer = kasiyer
+        frm.kullanici = kullanici
+        If yetki_kontrol(kullanici, frm.Name) = True Then
+            frm.ShowDialog()
+        End If
+        dataload()
+        dataload_gorev(DateEdit1.EditValue, sec_personel.EditValue, sec_durum.Text, sec_tamamlandi.Text)
+    End Sub
+    Private Sub gorev_duzelt()
+        If GridView1.RowCount > 0 Then
+            Dim frm As New frm_emir_ajanda_gorev
+            frm.firmano = firmano
+            frm.donemno = donemno
+            frm.kasiyer = kasiyer
+            frm.kasiyerno = kasiyerno
+            frm.connection = connection
+            Dim satir = GridView1.FocusedRowHandle
+            Dim dr As DataRow = GridView1.GetDataRow(GridView1.FocusedRowHandle)
+            frm.kayitno = dr("ID")
+            frm.status = True
+            frm.kullanici = kullanici
+            If yetki_kontrol(kullanici, frm.Name) = True Then
+                frm.ShowDialog()
+            End If
+            dataload()
+            dataload_gorev(DateEdit1.EditValue, sec_personel.EditValue, sec_durum.Text, sec_tamamlandi.Text)
+            GridView1.FocusedRowHandle = satir
+            satir = Nothing
+        End If
+    End Sub
+    Private Sub gorev_sil()
+        Dim s As String
+        Dim arr As Integer()
+        Dim i As Integer
+        Dim dr As DataRow
+        arr = GridView1.GetSelectedRows()
+        Dim satir = GridView1.FocusedRowHandle
+        If arr Is Nothing Then
+        Else
+            Array.Sort(arr)
+            For Each i In arr
+                s = i.ToString
+                dr = GridView1.GetDataRow(s)
+                Try
+                    gorev_kayit_sil(dr("ID"))
+                Catch ex As Exception
+                    XtraMessageBox.Show(Sorgu_sDil("Üzgünüm Hareket Görmüş Kaydı Silemezsiniz...!", sDil), Sorgu_sDil("Dikkat", sDil))
+                End Try
+            Next
+        End If
+        XtraMessageBox.Show(Sorgu_sDil("İşlem Tamamlandı...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information)
+        s = Nothing
+        arr = Nothing
+        i = Nothing
+        dr = Nothing
+        dataload()
+        dataload_gorev(DateEdit1.EditValue, sec_personel.EditValue, sec_durum.Text, sec_tamamlandi.Text)
+        GridView1.FocusedRowHandle = satir
+        satir = Nothing
+        GridControl1.Focus()
+        GridControl1.Select()
+    End Sub
+    Private Sub gorev_kayit_sil(ByVal ID As Int64)
+        conn.ConnectionString = connection
+        cmd.Connection = conn
+        If conn.State = ConnectionState.Closed Then
+            conn.Open()
+        End If
+        cmd.CommandText = sorgu_query("SET DATEFORMAT DMY DELETE FROM    aEmirAjanda  WHERE ID= '" & ID & "'")
+        cmd.ExecuteNonQuery()
+        conn.Close()
+    End Sub
+    Private Sub gorev_kayit_tamamla(ByVal ID As Int64, ByVal tamamlandi As Byte, ByVal aciklamaekle As String, ByVal MusteriTakipID As Int64)
+        conn.ConnectionString = connection
+        cmd.Connection = conn
+        If conn.State = ConnectionState.Closed Then
+            conn.Open()
+        End If
+        cmd.CommandText = sorgu_query("SET DATEFORMAT DMY UPDATE    aEmirAjanda SET              ReminderInfo='',Odendi= 1,Tamamlandi = " & tamamlandi & ",Description= '" & aciklamaekle & "' WHERE ID= '" & ID & "'")
+        cmd.ExecuteNonQuery()
+        If MusteriTakipID > 0 Then
+            cmd.CommandText = sorgu_query("SET DATEFORMAT DMY UPDATE    aEmirMusteriTakip SET              Aciklama4 = '" & Today & " Tarihinde Geldi...', Sonuc= 'Geldi...' ,Odendi = 1 WHERE IND = '" & MusteriTakipID & "'")
+            cmd.ExecuteNonQuery()
+        End If
+        conn.Close()
+    End Sub
+    Public Sub dataload_gorev(ByVal tarih As DateTime, ByVal personelno As Int64, ByVal durum As String, ByVal tamamlandi As String)
+        Dim kriter As String = ""
+        Dim kriter2 As String = ""
+        kriter += " WHERE StartTime between '" & Microsoft.VisualBasic.Left(tarih.ToString, 10) + " 00:00:00" & "' and '" & Microsoft.VisualBasic.Left(tarih.ToString, 10) + " 23:59:59" & "'  "
+        If personelno > 0 Then
+            kriter += " AND PersonelNo =" & personelno & " "
+            kriter2 += " AND PersonelNo =" & personelno & " "
+        End If
+        If tamamlandi = "[Tümü]" Then
+        ElseIf tamamlandi = "Hayır" Then
+            kriter += " AND Tamamlandi =0 "
+        ElseIf tamamlandi = "Evet" Then
+            kriter += " AND Tamamlandi =1 "
+        End If
+        DataSet1 = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SET DATEFORMAT DMY Select *,Cast ('1' as bit) as Eski From aEmirAjanda Where Tamamlandi=0 And StartTime < '" & tarih & "' " & kriter2 & "  UNION ALL Select *,Cast ('0' as bit) as Eski From aEmirAjanda" & kriter & " Order by ID DESC"))
+        kriter = Nothing
+        kriter2 = Nothing
+        GridControl1.DataSource = DataSet1.Tables(0)
+        GridControl1.DataMember = Nothing
+        If GridView1.RowCount > 0 Then
+            GridView1.FocusedRowHandle = 0
+            GridView1.SelectRow(GridView1.FocusedRowHandle)
+        End If
+    End Sub
+    Public Function sorgu_musteri_geldi(ByVal nMusteriID As String, ByVal tarih As DateTime) As Int64
+        Dim kriter
+        kriter = "WHERE     (tbOdeme.dteOdemeTarihi between '" & DateAdd(DateInterval.Day, -3, tarih) & "' and '" & tarih & "') and (tbAlisveris.nMusteriID = '" & nMusteriID & "') "
+        Dim conn As New OleDb.OleDbConnection
+        Dim cmd As New OleDb.OleDbCommand
+        Dim adapter As New OleDb.OleDbDataAdapter
+        conn.ConnectionString = connection
+        cmd.Connection = conn
+        conn.Open()
+        cmd.CommandText = sorgu_query("SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     ISNULL(COUNT(*),0) AS KAYIT FROM         tbOdeme INNER JOIN                       tbAlisVeris ON tbOdeme.nAlisverisID = tbAlisVeris.nAlisverisID " & kriter & "")
+        Dim kayitsayisi = cmd.ExecuteScalar
+        Return kayitsayisi
+    End Function
+    Private Function sorgu(ByVal query As String) As DataSet
+        Dim cmd As New OleDb.OleDbCommand
+        Dim conn As New OleDb.OleDbConnection
+        conn.ConnectionString = connection
+        adapter.SelectCommand = cmd
+        cmd.CommandText = query
+        cmd.Connection = conn
+        conn.Open()
+        Dim DS As New DataSet
+        Dim N As Integer = adapter.Fill(DS, "TABLE1")
+        conn.Close()
+        Return DS
+    End Function
+    Private Function sorgu_query(ByVal query As String) As String
+        query = Replace(query, "*!F", "F0" + firmano.ToString)
+        query = Replace(query, "!D", "D000" + donemno.ToString)
+        Return query
+    End Function
+    Private Sub raporla(ByVal rapor As Integer, ByVal islem As Integer)
+        Dim file As String = ""
+        Dim kriter As String
+        Dim dr As DataRow
+        dr = GridView1.GetDataRow(GridView1.FocusedRowHandle)
+        kriter = " WHERE aEmirAjanda.ID = " & dr("ID") & ""
+        If dr("FirmaTipi") = 0 Then
+            'OpenFileDialog1.Filter = "Rapor Dosyalar (*.fr3) |gorev_*.fr3"
+            'OpenFileDialog1.InitialDirectory = "C:\Formlar\Raporlar\Ajanda\gorev_diger.fr3"
+            'OpenFileDialog1.FileName = "gorev_diger.fr3"
+            file = "C:\Formlar\Raporlar\Ajanda\gorev_diger.fr3"
+        ElseIf dr("FirmaTipi") = 1 Then
+            'OpenFileDialog1.Filter = "Rapor Dosyalar (*.fr3) |gorev_*.fr3"
+            'OpenFileDialog1.InitialDirectory = "C:\Formlar\Raporlar\Ajanda\gorev_musteri.fr3"
+            'OpenFileDialog1.FileName = "gorev_musteri.fr3"
+            file = "C:\Formlar\Raporlar\Ajanda\gorev_musteri.fr3"
+        ElseIf dr("FirmaTipi") = 2 Then
+            'OpenFileDialog1.Filter = "Rapor Dosyalar (*.fr3) |gorev_*.fr3"
+            'OpenFileDialog1.InitialDirectory = "C:\Formlar\Raporlar\Ajanda\gorev_firma.fr3"
+            'OpenFileDialog1.FileName = "gorev_firma.fr3"
+            file = "C:\Formlar\Raporlar\Ajanda\gorev_firma.fr3"
+        End If
+        'If OpenFileDialog1.ShowDialog = DialogResult.OK Then
+        'file = OpenFileDialog1.FileName.ToString
+        report_create_stok(file, kriter, islem, dr("FirmaTipi"))
+        'End If
+        file = Nothing
+        kriter = Nothing
+        dr = Nothing
+    End Sub
+    Private Sub report_create_stok(ByVal dosya As String, ByVal kriter As String, ByVal status As Integer, ByVal firmatipi As Int64)
+        Dim stokno = 0
+        Dim satir_line = "100"
+        If IntPtr.Size = 4 Then
+            '32 Bit
+            Dim frx As New TfrxReportClass
+            frx.Resources.LoadLanguageResourcesFromFile("C:\Program Files\FastReports\FastReport Studio\bin\turkish.frc")
+            frx.LoadReportFromFile(dosya)
+            frx.SetVariable("FIRMANO", "" & firmano & "")
+            frx.SetVariable("DONEMNO", "" & donemno & "")
+            frx.SetVariable("STOKNO", "" & stokno & "")
+            frx.SetVariable("SATIRLINE", "'" & satir_line & "'")
+            Dim qr_hareket As New TfrxADOQuery
+            Dim qr_baslik As New TfrxADOQuery
+            If firmatipi = 0 Then
+                qr_hareket = frx.FindObject("qr_hareket")
+                qr_hareket.Query = sorgu_query("set transaction isolation level read uncommitted SELECT NEWID() AS Ref, aEmirAjanda.*, APERSONEL.PERSONELADI, APERSONEL.PERSONELKODU FROM APERSONEL INNER JOIN aEmirAjanda ON APERSONEL.IND = aEmirAjanda.PersonelNo " & kriter & "")
+            ElseIf firmatipi = 1 Then
+                qr_hareket = frx.FindObject("qr_hareket")
+                qr_hareket.Query = sorgu_query("set transaction isolation level read uncommitted SELECT NEWID() AS Ref, aEmirAjanda.*, Musteri.*, APERSONEL.PERSONELADI, APERSONEL.PERSONELKODU FROM APERSONEL INNER JOIN aEmirAjanda INNER JOIN (SELECT tbMusteri.nMusteriID , tbMusteri.sMagaza , tbMusteri.lKodu , tbMusteri.sAdi , tbMusteri.sSoyadi , tbMusteri.sAdi + ' ' + tbMusteri.sSoyadi AS Musteri , tbMusteri.nCinsiyet , tbMusteri.lAylikGelir , tbMusteri.dteKartAcilisTarihi , tbMusteri.nIskontoPesin , tbMusteri.nIskontoKredili , tbMusteri.sUnvan , tbMusteri.sVergiDairesi , tbMusteri.sVergiNo , tbMusteri.bYazismaEvAdresinemi , tbMusteri.sEmail , tbMusteri.sIsYeriAdi , tbMusteri.sIsAdresi1 + ' ' + tbMusteri.sIsAdresi2 + ' ' + tbMusteri.sIsSemt + ' ' + tbMusteri.sIsIl + ' ' + tbMusteri.sIsPostaKodu AS sIsAdresi , tbMusteri.sIsTelefonu , tbMusteri.sEvAdresi1 + ' ' + tbMusteri.sEvAdresi2 + ' ' + tbMusteri.sEvSemt + ' ' + tbMusteri.sEvPostaKodu + ' ' + tbMusteri.sEvIl AS sEvAdresi , tbMusteri.sEvTelefonu , tbMusteri.sSigortaNo , tbMusteri.bEvlimi , tbMusteri.dteEvlilikTarihi , tbMusteri.dteDogumTarihi , tbMusteri.sDogumYeri , tbMusteri.sEhliyetNo , tbMusteri.sKanGrubu , tbMusteri.dteKayitTarihi , tbMusteri.sAciklama1 + ' ' + tbMusteri.sAciklama2 + ' ' + tbMusteri.sAciklama3 + ' ' + tbMusteri.sAciklama4 + ' ' + tbMusteri.sAciklama5 AS ISTIHBARAT , tbMusteri.sGSM , tbMusteri.sFax , (SELECT TOP 1 nKartNo FROM tbMusteriKarti WHERE nMusteriID = tbMusteri.nMusteriID ORDER BY dteKayitTarihi DESC) AS SOZLESME , tbMSinif1.sAciklama AS Snf1 , tbMSinif2.sAciklama AS Snf2 , tbMSinif3.sAciklama AS Snf3 , tbMSinif4.sAciklama AS Snf4 , tbMSinif5.sAciklama AS Snf5 FROM tbMusteri INNER JOIN tbMusteriSinifi ON tbMusteri.nMusteriID = tbMusteriSinifi.nMusteriID INNER JOIN tbMSinif1 ON tbMusteriSinifi.sSinifKodu1 = tbMSinif1.sSinifKodu INNER JOIN tbMSinif2 ON tbMusteriSinifi.sSinifKodu2 = tbMSinif2.sSinifKodu INNER JOIN tbMSinif3 ON tbMusteriSinifi.sSinifKodu3 = tbMSinif3.sSinifKodu INNER JOIN tbMSinif4 ON tbMusteriSinifi.sSinifKodu4 = tbMSinif4.sSinifKodu INNER JOIN tbMSinif5 ON tbMusteriSinifi.sSinifKodu5 = tbMSinif5.sSinifKodu) Musteri ON aEmirAjanda.FirmaNo = Musteri.nMusteriID ON APERSONEL.IND = aEmirAjanda.PersonelNo " & kriter & "")
+            ElseIf firmatipi = 2 Then
+                qr_hareket = frx.FindObject("qr_hareket")
+                qr_hareket.Query = sorgu_query("set transaction isolation level read uncommitted SELECT NEWID() AS Ref, aEmirAjanda.*, APERSONEL.PERSONELADI, APERSONEL.PERSONELKODU, tbFirma.* FROM APERSONEL INNER JOIN aEmirAjanda ON APERSONEL.IND = aEmirAjanda.PersonelNo INNER JOIN tbFirma ON aEmirAjanda.FirmaNo = tbFirma.nFirmaID " & kriter & "")
+            End If
+            Dim qr_connection As New TfrxADODatabase
+            qr_connection.ConnectionString = connection.ToString
+            qr_connection.LoginPrompt = False
+            qr_connection.CommandTimeout = Nothing
+            qr_connection.Connected = True
+            qr_baslik.DataBase = qr_connection
+            qr_hareket.DataBase = qr_connection
+            frx.PrintOptions.Collate = False
+            If status = 0 Then
+                'frx.PrepareReport(True)
+                frx.PreviewOptions.ZoomMode = frxZoomMode.zm_PageWidth
+                frx.OldStyleProgress = True
+                frx.ShowReport()
+            ElseIf status = 1 Then
+                frx.PrepareReport(True)
+                frx.PrintOptions.Collate = False
+                frx.PrintOptions.Copies = 1
+                frx.PrintReport()
+            ElseIf status = 2 Then
+                frx.PrepareReport(True)
+                frx.DesignReport()
+            ElseIf status = 3 Then
+                frx.PrepareReport(True)
+                frx.PrintOptions.Collate = False
+                frx.PrintOptions.Copies = 1
+                frx.PrintOptions.ShowDialog = False
+                frx.PrintReport()
+            End If
+            qr_hareket = Nothing
+            qr_connection = Nothing
+        ElseIf IntPtr.Size = 8 Then
+            '64 Bit
+            Dim args(50) As String
+            Dim processYol As String
+            args(0) = "" & dosya & ""
+            args(1) = "" & connection.ToString() & ""
+            If firmatipi = 0 Then
+                args(2) = "" & sorgu_query("set transaction isolation level read uncommitted SELECT NEWID() AS Ref, aEmirAjanda.*, APERSONEL.PERSONELADI, APERSONEL.PERSONELKODU FROM APERSONEL INNER JOIN aEmirAjanda ON APERSONEL.IND = aEmirAjanda.PersonelNo " & kriter & "") & ""
+            ElseIf firmatipi = 1 Then
+                args(2) = "" & sorgu_query("set transaction isolation level read uncommitted SELECT NEWID() AS Ref, aEmirAjanda.*, Musteri.*, APERSONEL.PERSONELADI, APERSONEL.PERSONELKODU FROM APERSONEL INNER JOIN aEmirAjanda INNER JOIN (SELECT tbMusteri.nMusteriID , tbMusteri.sMagaza , tbMusteri.lKodu , tbMusteri.sAdi , tbMusteri.sSoyadi , tbMusteri.sAdi + ' ' + tbMusteri.sSoyadi AS Musteri , tbMusteri.nCinsiyet , tbMusteri.lAylikGelir , tbMusteri.dteKartAcilisTarihi , tbMusteri.nIskontoPesin , tbMusteri.nIskontoKredili , tbMusteri.sUnvan , tbMusteri.sVergiDairesi , tbMusteri.sVergiNo , tbMusteri.bYazismaEvAdresinemi , tbMusteri.sEmail , tbMusteri.sIsYeriAdi , tbMusteri.sIsAdresi1 + ' ' + tbMusteri.sIsAdresi2 + ' ' + tbMusteri.sIsSemt + ' ' + tbMusteri.sIsIl + ' ' + tbMusteri.sIsPostaKodu AS sIsAdresi , tbMusteri.sIsTelefonu , tbMusteri.sEvAdresi1 + ' ' + tbMusteri.sEvAdresi2 + ' ' + tbMusteri.sEvSemt + ' ' + tbMusteri.sEvPostaKodu + ' ' + tbMusteri.sEvIl AS sEvAdresi , tbMusteri.sEvTelefonu , tbMusteri.sSigortaNo , tbMusteri.bEvlimi , tbMusteri.dteEvlilikTarihi , tbMusteri.dteDogumTarihi , tbMusteri.sDogumYeri , tbMusteri.sEhliyetNo , tbMusteri.sKanGrubu , tbMusteri.dteKayitTarihi , tbMusteri.sAciklama1 + ' ' + tbMusteri.sAciklama2 + ' ' + tbMusteri.sAciklama3 + ' ' + tbMusteri.sAciklama4 + ' ' + tbMusteri.sAciklama5 AS ISTIHBARAT , tbMusteri.sGSM , tbMusteri.sFax , (SELECT TOP 1 nKartNo FROM tbMusteriKarti WHERE nMusteriID = tbMusteri.nMusteriID ORDER BY dteKayitTarihi DESC) AS SOZLESME , tbMSinif1.sAciklama AS Snf1 , tbMSinif2.sAciklama AS Snf2 , tbMSinif3.sAciklama AS Snf3 , tbMSinif4.sAciklama AS Snf4 , tbMSinif5.sAciklama AS Snf5 FROM tbMusteri INNER JOIN tbMusteriSinifi ON tbMusteri.nMusteriID = tbMusteriSinifi.nMusteriID INNER JOIN tbMSinif1 ON tbMusteriSinifi.sSinifKodu1 = tbMSinif1.sSinifKodu INNER JOIN tbMSinif2 ON tbMusteriSinifi.sSinifKodu2 = tbMSinif2.sSinifKodu INNER JOIN tbMSinif3 ON tbMusteriSinifi.sSinifKodu3 = tbMSinif3.sSinifKodu INNER JOIN tbMSinif4 ON tbMusteriSinifi.sSinifKodu4 = tbMSinif4.sSinifKodu INNER JOIN tbMSinif5 ON tbMusteriSinifi.sSinifKodu5 = tbMSinif5.sSinifKodu) Musteri ON aEmirAjanda.FirmaNo = Musteri.nMusteriID ON APERSONEL.IND = aEmirAjanda.PersonelNo " & kriter & "") & ""
+            ElseIf firmatipi = 2 Then
+                args(2) = "" & sorgu_query("set transaction isolation level read uncommitted SELECT NEWID() AS Ref, aEmirAjanda.*, APERSONEL.PERSONELADI, APERSONEL.PERSONELKODU, tbFirma.* FROM APERSONEL INNER JOIN aEmirAjanda ON APERSONEL.IND = aEmirAjanda.PersonelNo INNER JOIN tbFirma ON aEmirAjanda.FirmaNo = tbFirma.nFirmaID " & kriter & "") & ""
+            End If
+            args(3) = "qr_hareket"
+            args(4) = "" & status.ToString() & ""
+            args(5) = "4"
+            args(6) = "FIRMANO"
+            args(7) = "" & firmano.ToString() & ""
+            args(8) = "DONEMNO"
+            args(9) = "" & donemno.ToString() & ""
+            args(10) = "STOKNO"
+            args(11) = "" & stokno.ToString() & ""
+            args(12) = "SATIRLINE"
+            args(13) = "'" & satir_line.ToString() & "'"
+            processYol = args(0)
+            For i As Integer = 1 To 13
+                processYol += "|" & args(i)
+            Next
+            Dim objReader As StreamWriter
+            Dim yeniYol As String
+            Dim Generator As System.Random = New System.Random()
+            Try
+                yeniYol = Directory.GetCurrentDirectory() & "\" & Generator.Next().ToString() & "_veriler.txt"
+                objReader = New StreamWriter(yeniYol)
+                objReader.Write(processYol)
+                objReader.Close()
+            Catch Ex As Exception
+                MessageBox.Show("Raporlama İşlemi İçin LOG Oluşturulumadı!")
+            End Try
+            If File.Exists(Directory.GetCurrentDirectory() & "\RaporServis.exe") = True Then
+                Dim sInfo As New ProcessStartInfo(Directory.GetCurrentDirectory() & "\RaporServis.exe ", """" & yeniYol & """")
+                Process.Start(sInfo)
+            Else
+                MessageBox.Show("Lütfen 'RaporServis.exe' eklentisini uygulama dizinine kopyalayın.")
+            End If
+        End If
+        stokno = Nothing
+        satir_line = Nothing
+    End Sub
+    Private Sub SimpleButton5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SimpleButton5.Click
+        fihrist()
+    End Sub
+    Private Sub fihrist()
+        Dim frm As New frm_fihrist
+        frm.firmano = firmano
+        frm.donemno = donemno
+        frm.connection = connection
+        frm.ShowInTaskbar = True
+        frm.kullanici = kullanici
+        If yetki_kontrol(kullanici, frm.Name) = True Then
+            frm.Show()
+        End If
+    End Sub
+    Private Sub sec_gorunum_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles sec_gorunum.SelectedIndexChanged
+        If sec_gorunum.Text = "Günlük" Then
+            SchedulerControl1.ActiveViewType = SchedulerViewType.Day
+        ElseIf sec_gorunum.Text = "Haftalık" Then
+            SchedulerControl1.ActiveViewType = SchedulerViewType.Week
+        ElseIf sec_gorunum.Text = "Aylık" Then
+            SchedulerControl1.ActiveViewType = SchedulerViewType.Month
+        ElseIf sec_gorunum.Text = "İşGünü" Then
+            SchedulerControl1.ActiveViewType = SchedulerViewType.WorkWeek
+        ElseIf sec_gorunum.Text = "Periyodik" Then
+            SchedulerControl1.ActiveViewType = SchedulerViewType.Timeline
+        End If
+    End Sub
+    Private Sub SimpleButton6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SimpleButton6.Click
+        If XtraTabControl1.SelectedTabPageIndex.ToString = 0 Then
+            printlink1.CreateDocument(ps)
+            ps.PreviewRibbonFormEx.Show()
+        ElseIf XtraTabControl1.SelectedTabPageIndex.ToString = 1 Then
+            raporla(0, 0)
+        End If
+    End Sub
+    Private Sub frm_emir_ajanda_Closed(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Closed
+    End Sub
+    Private Sub frm_emir_ajanda_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
+        e.Cancel = True
+        Me.Hide()
+    End Sub
+    Private Sub XtraTabControl1_SelectedPageChanged(ByVal sender As Object, ByVal e As DevExpress.XtraTab.TabPageChangedEventArgs) Handles XtraTabControl1.SelectedPageChanged
+        Try
+            If XtraTabControl1.SelectedTabPageIndex.ToString = 0 Then
+            ElseIf XtraTabControl1.SelectedTabPageIndex.ToString = 1 Then
+                GridControl1.Focus()
+                GridControl1.Select()
+                If GridView1.RowCount > 0 Then
+                    GridView1.FocusedRowHandle = 0
+                    GridView1.SelectRow(GridView1.FocusedRowHandle)
+                End If
+            ElseIf XtraTabControl1.SelectedTabPageIndex.ToString = 2 Then
+            ElseIf XtraTabControl1.SelectedTabPageIndex.ToString = 3 Then
+            End If
+        Catch ex As Exception
+        End Try
+    End Sub
+    Private Sub SimpleButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SimpleButton3.Click
+        SchedulerControl1.CreateNewAppointment()
+    End Sub
+    Private Sub SimpleButton8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SimpleButton8.Click
+        dataload()
+    End Sub
+    Private Sub MenuItem7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem7.Click
+        GridView1.ColumnsCustomization()
+    End Sub
+    Private Sub MenuItem10_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem10.Click
+        GridView1.OptionsView.ShowFilterPanelMode = DevExpress.XtraGrid.Views.Base.ShowFilterPanelMode.Default
+        GridView1.OptionsCustomization.AllowFilter = True
+    End Sub
+    Private Sub MenuItem11_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem11.Click
+        GridView1.OptionsView.ShowGroupPanel = True
+        GridView1.OptionsCustomization.AllowGroup = True
+    End Sub
+    Private Sub MenuItem9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem9.Click
+        printlink2.CreateDocument(ps)
+        ps.PreviewRibbonFormEx.Show()
+    End Sub
+    Private Sub SimpleButton4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SimpleButton4.Click
+        gorev_ekle()
+    End Sub
+    Private Sub GridView1_CustomDrawRowIndicator(ByVal sender As Object, ByVal e As DevExpress.XtraGrid.Views.Grid.RowIndicatorCustomDrawEventArgs) Handles GridView1.CustomDrawRowIndicator
+        If e.RowHandle >= 0 Then
+            e.Info.DisplayText = e.RowHandle + 1
+        Else
+            e.Info.DisplayText = ""
+        End If
+    End Sub
+    Private Sub GridView1_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles GridView1.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            gorev_duzelt()
+        End If
+    End Sub
+    Private Sub GridView1_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles GridView1.DoubleClick
+        gorev_duzelt()
+    End Sub
+    Private Sub MenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem1.Click
+        gorev_ekle()
+    End Sub
+    Private Sub MenuItem2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem2.Click
+        gorev_duzelt()
+    End Sub
+    Private Sub MenuItem3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem3.Click
+        If XtraMessageBox.Show(Sorgu_sDil("Seçili Ajanda Görev Kaydını Silmek İstediğinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+            gorev_sil()
+        End If
+    End Sub
+    Private Sub MenuItem5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem5.Click
+        If XtraMessageBox.Show(Sorgu_sDil("Gelecek Kaydı Düşülmüş Müşteri Kayıtlarını Gelip Gelmediğini Kontrol Etmek İstediğinize Eminmisinz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+            GridView1.SelectAll()
+            Dim dr As DataRow
+            Dim s As String
+            Dim arr As Integer()
+            Dim i As Integer
+            Dim toplamsayi = GridView1.SelectedRowsCount
+            Dim kayitsayisi As Int64
+            Dim sayi = 0
+            arr = GridView1.GetSelectedRows()
+            If arr Is Nothing Then
+            Else
+                Array.Sort(arr)
+                Panelstatus.Visible = True
+                bar.Properties.Maximum = GridView1.SelectedRowsCount
+                barlabel.Text = "Toplam Satır Sayısı : " & GridView1.SelectedRowsCount
+                bar.Position = 0
+                For Each i In arr
+                    s = i.ToString
+                    dr = GridView1.GetDataRow(s)
+                    barlabel.Text = "MüşteriKodu:" & dr("FirmaNo").ToString & vbTab & "Ad:" & dr("Firma").ToString
+                    barlabel.Refresh()
+                    kayitsayisi = 0
+                    If dr("FirmaTipi") = 1 Then
+                        If dr("Tamamlandi") = 0 Then
+                            kayitsayisi = sorgu_musteri_geldi(dr("FirmaNo"), DateEdit1.EditValue)
+                            If kayitsayisi = 0 Then
+                            ElseIf kayitsayisi > 0 Then
+                                gorev_kayit_tamamla(dr("ID"), 1, dr("Description") & vbCrLf & "( " & DateEdit1.EditValue & " Tarihinde Kontrol Edildi...)", dr("MusteriTakipIND"))
+                                dr("Tamamlandi") = 1
+                            End If
+                        End If
+                    Else
+                    End If
+                    'If ajanda = False Then
+                    'takib_ekle(frm.txt_tarih.EditValue, frm.sec_takiptipi.Text, frm.txt_takip_aciklama.Text & " ( " & dr("IZAHAT") & " ) ", frm.sec_personel.EditValue, frm.sec_personel.Text, dr("nMusteriID"), dr("FIRMAKODU"), dr("ADI"), dr("SOYADI"), Microsoft.VisualBasic.Left(dr("ADI") + " " + dr("SOYADI"), 50), "Bekliyor", Microsoft.VisualBasic.Left(("01.01.1900").ToString, 10) + " " + "00:00:00", "", "", False, "01.01.1900", dr("TUTAR"), False, "", "", "", "", "", False)
+                    'ElseIf ajanda = True Then
+                    'gorev_ekle(1, dr("nMusteriID"), Microsoft.VisualBasic.Left(dr("ADI") + " " + dr("SOYADI"), 50), frm.sec_personel.EditValue, 2, "Mteri Takip Emri-lkTaksitdemesi", frm.txt_takip_aciklama.Text & vbCrLf & dr("FIRMAKODU") + "-" + Microsoft.VisualBasic.Left(dr("ADI") + " " + dr("SOYADI"), 50) & vbCrLf & "AlVeriTarihi : " & dr("TARIH") & " AlVeriBelgeTipi: " & dr("IZAHAT") & " Kasiyer: " & dr("KASIYER") & " Miktar: " & FormatNumber(dr("MIKTAR"), 2) & " Tutar: " & dr("TUTAR") & vbCrLf & "lkTaksitTarihi: " & dr("GECIKENILKTAKSITTARIHI") & " TaksitTutar: " & dr("GECIKENILKTAKSITTUTARI"), 0, Microsoft.VisualBasic.Left((dr("GECIKENILKTAKSITTARIHI")).ToString, 10) + " " + "17:00:00", Microsoft.VisualBasic.Left((dr("GECIKENILKTAKSITTARIHI")).ToString, 10) + " " + "21:00:00", "Kredi", False, 0, "", "", dr("GECIKENILKTAKSITTUTARI"), "", 0, True, False, 0)
+                    'End If
+                    bar.Position = bar.Position + 1
+                    bar.Refresh()
+                    Panelstatus.Refresh()
+                Next
+                bar.Position = 0
+                Panelstatus.Visible = False
+                dr = Nothing
+                'dataload_gorev(DateEdit1.EditValue, sec_personel.EditValue, sec_durum.Text)
+            End If
+        End If
+    End Sub
+    Private Function analiz_musteri_aciklamalar(ByVal kod As String) As String
+        Dim kriter
+        kriter = "WHERE (nMusteriID = '" & kod & "') "
+        Dim cmd As New OleDb.OleDbCommand
+        Dim con As New OleDb.OleDbConnection
+        cmd.Connection = con
+        con.ConnectionString = connection
+        cmd.CommandTimeout = Nothing
+        If con.State = ConnectionState.Closed Then
+            con.Open()
+        End If
+        Dim kayitsayisi As String
+        cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     ISNULL(sAciklama1 + ' ' + sAciklama2 + ' ' + sAciklama3 + ' ' + sAciklama4 + ' ' + sAciklama5,'') AS ISTIHBARAT FROM         tbMusteri " & kriter & "")
+        kayitsayisi = cmd.ExecuteScalar
+        con.Close()
+        Return kayitsayisi
+    End Function
+    Private Sub analiz_musteri_istihbarat()
+        Dim dr As DataRow = GridView1.GetDataRow(GridView1.FocusedRowHandle)
+        If dr("FirmaTipi").ToString = 1 And dr("FirmaNo") > 0 Then
+            lbl_istihbarat.Text = analiz_musteri_aciklamalar(Trim(dr("FirmaNo"))).ToString
+        Else
+            lbl_istihbarat.Text = ""
+        End If
+        dr = Nothing
+    End Sub
+    Private Sub analiz_gorev_dagilim()
+        Dim frm As New frm_emir_ajanda_dagilim
+        frm.firmano = firmano
+        frm.donemno = donemno
+        frm.connection = connection
+        frm.tarih1 = DateEdit1.EditValue
+        frm.kullanici = kullanici
+        If yetki_kontrol(kullanici, frm.Name) = True Then
+            frm.Show()
+        End If
+    End Sub
+    Private Sub kasiyer_kontrol()
+        Dim sonuc As Boolean = False
+        Dim dr As DataRow
+        For Each dr In ds_personel.Tables(0).Rows
+            If dr("SIFRE") = txt_kod.Text Then
+                personelno = dr("IND")
+                personel = dr("KASIYER")
+                sonuc = True
+            End If
+        Next
+        If sonuc = True Then
+            txt_kasiyer.EditValue = personel
+            txt_kod.Enabled = False
+            If Trim(personelno) = "VC" Then
+                DateEdit1.Properties.ReadOnly = False
+                sec_personel.Properties.ReadOnly = False
+            ElseIf Trim(personelno) = "YÖ" Then
+                DateEdit1.Properties.ReadOnly = False
+                sec_personel.Properties.ReadOnly = False
+            Else
+            End If
+            DateEdit1.Focus()
+            DateEdit1.SelectAll()
+            status = True
+        ElseIf sonuc = False Then
+            txt_kasiyer.EditValue = ""
+            txt_kod.Enabled = True
+            txt_kod.EditValue = ""
+            'GridControl1.Enabled = False
+            txt_kod.Focus()
+            txt_kod.SelectAll()
+            status = False
+            XtraMessageBox.Show(Sorgu_sDil("Şifre Hatalı Lütfen Tekrar Deneyiniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
+    End Sub
+    Private Sub kontrol_tekrar_musteri(ByVal tarih As DateTime)
+        Dim ds_liste As DataSet
+        Dim ds_kayit As DataSet
+        ds_liste = sorgu(sorgu_query("SET DATEFORMAT DMY SELECT DISTINCT FirmaNo, Firma, COUNT(FirmaNo) AS Sayi FROM         aEmirAjanda WHERE     (Tamamlandi = 0) AND (FirmaTipi = 1) AND (StartTime < '" & DateAdd(DateInterval.Day, 1, tarih) & "') GROUP BY FirmaNo, Firma HAVING      (COUNT(FirmaNo) > 1) ORDER BY COUNT(FirmaNo) DESC"))
+        Dim dr As DataRow
+        Panelstatus.Visible = True
+        bar.Properties.Maximum = ds_liste.Tables(0).Rows.Count
+        barlabel.Text = "Toplam Satır Saysı : " & ds_liste.Tables(0).Rows.Count
+        bar.Position = 0
+        For Each dr In ds_liste.Tables(0).Rows
+            barlabel.Text = "MüşteriKodu:" & dr("FirmaNo").ToString & vbTab & "Ad:" & dr("Firma").ToString
+            barlabel.Refresh()
+            kontrol_tekrar_sil(dr("FirmaNo"), dr("Sayi") - 1, tarih)
+            bar.Position = bar.Position + 1
+            bar.Refresh()
+            Panelstatus.Refresh()
+        Next
+        bar.Position = 0
+        Panelstatus.Visible = False
+        dr = Nothing
+        ds_liste = Nothing
+        ds_kayit = Nothing
+    End Sub
+    Private Sub kontrol_tekrar_sil(ByVal nMusteriID As Int64, ByVal kayit As Int64, ByVal tarih As DateTime)
+        conn.ConnectionString = connection
+        cmd.Connection = conn
+        If conn.State = ConnectionState.Closed Then
+            conn.Open()
+        End If
+        cmd.CommandText = sorgu_query("DELETE FROM aEmirAjanda WHERE     (Tamamlandi = 0) AND (FirmaTipi=1) and FirmaNo <> 0 AND MusteriTakipIND <> 0 AND  (FirmaNo = " & nMusteriID & ") AND (ID IN (SELECT     TOP " & kayit & " ID FROM          aEmirAjanda WHERE      Tamamlandi = 0 AND FirmaNo = " & nMusteriID & " AND (FirmaTipi = 1) AND FirmaNo <> 0 and MusteriTakipIND <> 0 (StartTime < '" & DateAdd(DateInterval.Day, 1, tarih) & "')  ORDER BY StartTime))")
+        cmd.ExecuteNonQuery()
+        conn.Close()
+    End Sub
+    Private Sub GridView1_SelectionChanged(ByVal sender As Object, ByVal e As DevExpress.Data.SelectionChangedEventArgs) Handles GridView1.SelectionChanged
+        If GridView1.RowCount > 0 Then
+            Try
+                analiz_musteri_istihbarat()
+            Catch ex As Exception
+                lbl_istihbarat.Text = ""
+            End Try
+        End If
+    End Sub
+    Private Sub MenuItem12_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem12.Click
+        analiz_gorev_dagilim()
+    End Sub
+    Private Sub MenuItem26_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem26.Click
+        raporla(0, 0)
+    End Sub
+    Private Sub MenuItem27_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem27.Click
+        raporla(0, 2)
+    End Sub
+    Private Sub MenuItem28_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem28.Click
+        raporla(0, 1)
+    End Sub
+    Private Sub txt_kod_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles txt_kod.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            kasiyer_kontrol()
+        End If
+    End Sub
+    Private Sub Timer1_Tick(ByVal sender As Object, ByVal e As System.EventArgs)
+        dataload()
+    End Sub
+    Private Sub SchedulerStorage1_AppointmentsChanged(ByVal sender As Object, ByVal e As DevExpress.XtraScheduler.PersistentObjectsEventArgs) Handles SchedulerStorage1.AppointmentsChanged
+        Try
+            adap1.Update(DataSet11.Tables(0))
+            DataSet11.Tables(0).AcceptChanges()
+        Catch ex As Exception
+        End Try
+    End Sub
+    Private Sub SchedulerStorage1_AppointmentsDeleted(ByVal sender As Object, ByVal e As DevExpress.XtraScheduler.PersistentObjectsEventArgs) Handles SchedulerStorage1.AppointmentsDeleted
+        Try
+            adap1.Update(DataSet11.Tables(0))
+            DataSet11.Tables(0).AcceptChanges()
+        Catch ex As Exception
+        End Try
+    End Sub
+    Private Sub SchedulerStorage1_AppointmentsInserted(ByVal sender As Object, ByVal e As DevExpress.XtraScheduler.PersistentObjectsEventArgs) Handles SchedulerStorage1.AppointmentsInserted
+        Try
+            adap1.Update(DataSet11.Tables(0))
+            DataSet11.Tables(0).AcceptChanges()
+        Catch ex As Exception
+        End Try
+    End Sub
+    Private Sub SimpleButton7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SimpleButton7.Click
+        dataload_gorev(DateEdit1.EditValue, sec_personel.EditValue, sec_durum.Text, sec_tamamlandi.Text)
+    End Sub
+    Private Sub MenuItem30_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem30.Click
+        If XtraMessageBox.Show(Sorgu_sDil("Müşteri Kayıt Tekrarlarını Kontrol Etmek İstediğinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+            kontrol_tekrar_musteri(DateEdit1.EditValue)
+        End If
+    End Sub
+    Private Sub MenuItem31_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem31.Click
+        If MenuItem31.Checked = False Then
+            GridView1.OptionsView.ShowAutoFilterRow = True
+            GridView1.OptionsView.ShowFilterPanelMode = DevExpress.XtraGrid.Views.Base.ShowFilterPanelMode.Default
+            GridView1.OptionsCustomization.AllowFilter = True
+            MenuItem31.Checked = True
+        ElseIf MenuItem31.Checked = True Then
+            GridView1.OptionsView.ShowAutoFilterRow = False
+            GridView1.OptionsView.ShowFilterPanelMode = DevExpress.XtraGrid.Views.Base.ShowFilterPanelMode.Never
+            GridView1.OptionsCustomization.AllowFilter = False
+            MenuItem31.Checked = True
+        End If
+    End Sub
+    Private Sub SimpleButton2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SimpleButton2.Click
+        Me.Close()
+    End Sub
+    Private Sub SimpleButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SimpleButton1.Click
+        Me.Close()
+    End Sub
+    Private Sub BarButtonItem1_ItemClick(ByVal sender As System.Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles BarButtonItem1.ItemClick
+        dataload()
+    End Sub
+End Class

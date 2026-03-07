@@ -1,0 +1,2040 @@
+<?xml version='1.0' encoding='UTF-8'?><definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:tns="http://invoiceservice.entegrator.com/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns="http://schemas.xmlsoap.org/wsdl/" name="InvoiceWS" targetNamespace="http://invoiceservice.entegrator.com/">
+  <types>
+<xs:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:tns="http://invoiceservice.entegrator.com/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://invoiceservice.entegrator.com/" version="1.0">
+
+      
+  <xs:element name="GetDraftDocumentPreview" type="tns:GetDraftDocumentPreview"/>
+
+      
+  <xs:element name="GetDraftDocumentPreviewResponse" type="tns:GetDraftDocumentPreviewResponse"/>
+
+      
+  <xs:element name="GetOutboxInvoiceStatusWithLogs" type="tns:GetOutboxInvoiceStatusWithLogs"/>
+
+      
+  <xs:element name="GetOutboxInvoiceStatusWithLogsResponse" type="tns:GetOutboxInvoiceStatusWithLogsResponse"/>
+
+      
+  <xs:element name="GetXsltList" type="tns:GetXsltList"/>
+
+      
+  <xs:element name="GetXsltListResponse" type="tns:GetXsltListResponse"/>
+
+      
+  <xs:element name="ResendDocument" type="tns:ResendDocument"/>
+
+      
+  <xs:element name="ResendDocumentResponse" type="tns:ResendDocumentResponse"/>
+
+      
+  <xs:element name="SetDefaultXslt" type="tns:SetDefaultXslt"/>
+
+      
+  <xs:element name="SetDefaultXsltResponse" type="tns:SetDefaultXsltResponse"/>
+
+      
+  <xs:element name="UploadXslt" type="tns:UploadXslt"/>
+
+      
+  <xs:element name="UploadXsltResponse" type="tns:UploadXsltResponse"/>
+
+      
+  <xs:element name="addPrefixList" type="tns:addPrefixList"/>
+
+      
+  <xs:element name="addPrefixListResponse" type="tns:addPrefixListResponse"/>
+
+      
+  <xs:element name="cancelInvoice" type="tns:cancelInvoice"/>
+
+      
+  <xs:element name="cancelInvoiceResponse" type="tns:cancelInvoiceResponse"/>
+
+      
+  <xs:element name="controlApplicationResponseXML" type="tns:controlApplicationResponseXML"/>
+
+      
+  <xs:element name="controlApplicationResponseXMLResponse" type="tns:controlApplicationResponseXMLResponse"/>
+
+      
+  <xs:element name="controlInvoiceXML" type="tns:controlInvoiceXML"/>
+
+      
+  <xs:element name="controlInvoiceXMLResponse" type="tns:controlInvoiceXMLResponse"/>
+
+      
+  <xs:element name="getCreditActionsforCustomer" type="tns:getCreditActionsforCustomer"/>
+
+      
+  <xs:element name="getCreditActionsforCustomerResponse" type="tns:getCreditActionsforCustomerResponse"/>
+
+      
+  <xs:element name="getCustomerCreditCount" type="tns:getCustomerCreditCount"/>
+
+      
+  <xs:element name="getCustomerCreditCountResponse" type="tns:getCustomerCreditCountResponse"/>
+
+      
+  <xs:element name="getCustomerCreditSpace" type="tns:getCustomerCreditSpace"/>
+
+      
+  <xs:element name="getCustomerCreditSpaceResponse" type="tns:getCustomerCreditSpaceResponse"/>
+
+      
+  <xs:element name="getCustomerGBList" type="tns:getCustomerGBList"/>
+
+      
+  <xs:element name="getCustomerGBListResponse" type="tns:getCustomerGBListResponse"/>
+
+      
+  <xs:element name="getCustomerPKList" type="tns:getCustomerPKList"/>
+
+      
+  <xs:element name="getCustomerPKListResponse" type="tns:getCustomerPKListResponse"/>
+
+      
+  <xs:element name="getNewUUID" type="tns:getNewUUID"/>
+
+      
+  <xs:element name="getNewUUIDResponse" type="tns:getNewUUIDResponse"/>
+
+      
+  <xs:element name="getPrefixList" type="tns:getPrefixList"/>
+
+      
+  <xs:element name="getPrefixListResponse" type="tns:getPrefixListResponse"/>
+
+      
+  <xs:element name="getUserAliases" type="tns:getUserAliases"/>
+
+      
+  <xs:element name="getUserAliasesResponse" type="tns:getUserAliasesResponse"/>
+
+      
+  <xs:element name="saveToTaslak" type="tns:saveToTaslak"/>
+
+      
+  <xs:element name="saveToTaslakResponse" type="tns:saveToTaslakResponse"/>
+
+      
+  <xs:element name="sendAppResponse" type="tns:sendAppResponse"/>
+
+      
+  <xs:element name="sendAppResponseList" type="tns:sendAppResponseList"/>
+
+      
+  <xs:element name="sendAppResponseListResponse" type="tns:sendAppResponseListResponse"/>
+
+      
+  <xs:element name="sendAppResponseResponse" type="tns:sendAppResponseResponse"/>
+
+      
+  <xs:element name="sendApplicationResponse" type="tns:sendApplicationResponse"/>
+
+      
+  <xs:element name="sendApplicationResponseResponse" type="tns:sendApplicationResponseResponse"/>
+
+      
+  <xs:element name="sendInvoice" type="tns:sendInvoice"/>
+
+      
+  <xs:element name="sendInvoiceResponse" type="tns:sendInvoiceResponse"/>
+
+      
+  <xs:element name="sendInvoiceWithoutDocumentId" type="tns:sendInvoiceWithoutDocumentId"/>
+
+      
+  <xs:element name="sendInvoiceWithoutDocumentIdResponse" type="tns:sendInvoiceWithoutDocumentIdResponse"/>
+
+      
+  <xs:element name="sendSignedInvoice" type="tns:sendSignedInvoice"/>
+
+      
+  <xs:element name="sendSignedInvoiceResponse" type="tns:sendSignedInvoiceResponse"/>
+
+      
+  <xs:element name="setDocumentFlag" type="tns:setDocumentFlag"/>
+
+      
+  <xs:element name="setDocumentFlagResponse" type="tns:setDocumentFlagResponse"/>
+
+      
+  <xs:element name="setPrefixStatusList" type="tns:setPrefixStatusList"/>
+
+      
+  <xs:element name="setPrefixStatusListResponse" type="tns:setPrefixStatusListResponse"/>
+
+      
+  <xs:element name="updateInvoice" type="tns:updateInvoice"/>
+
+      
+  <xs:element name="updateInvoiceResponse" type="tns:updateInvoiceResponse"/>
+
+      
+  <xs:element name="uploadInvoiceList" type="tns:uploadInvoiceList"/>
+
+      
+  <xs:element name="uploadInvoiceListResponse" type="tns:uploadInvoiceListResponse"/>
+
+      
+  <xs:complexType name="getCustomerCreditCount">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="vkn_tckn" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="getCustomerCreditCountResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="return" type="tns:CreditInfo"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="CreditInfo">
+        
+    <xs:sequence>
+          
+      <xs:element name="code" type="xs:string"/>
+          
+      <xs:element name="explanation" type="xs:string"/>
+          
+      <xs:element name="totalCredit" type="xs:decimal"/>
+          
+      <xs:element name="remainCredit" type="xs:decimal"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="sendAppResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="invoiceUUID" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="responseCode" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="responseExplanation" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="sendAppResponseResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="return" type="tns:EntResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="EntResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="documentUUID" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="documentID" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="code" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="explanation" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="cause" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="content" type="xs:base64Binary"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="getNewUUID">
+        
+    <xs:sequence/>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="getNewUUIDResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="sendAppResponseList">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="appResponseList" type="tns:AppResponseDocument"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="AppResponseDocument">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="invoiceUUID" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="responseCode" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="responseExplanation" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="sendAppResponseListResponse">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:EntResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="getCustomerCreditSpace">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="vkn_tckn" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="getCustomerCreditSpaceResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="return" type="tns:CreditInfo"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="getUserAliases">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="vknTcknList" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="getUserAliasesResponse">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:UserAddresInfo"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="UserAddresInfo">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="vkn_tckn" type="xs:string"/>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="gbList" type="xs:string"/>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="pkList" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="sendInvoice">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="inputDocumentList" type="tns:InputDocument"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="InputDocument">
+        
+    <xs:sequence>
+          
+      <xs:element name="documentUUID" type="xs:string"/>
+          
+      <xs:element name="xmlContent" type="xs:string"/>
+          
+      <xs:element name="sourceUrn" type="xs:string"/>
+          
+      <xs:element name="destinationUrn" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="documentNoPrefix" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="localId" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="documentId" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="submitForApproval" type="xs:boolean"/>
+          
+      <xs:element name="documentDate" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="note" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="sendInvoiceResponse">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:EntResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="cancelInvoice">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="invoiceUUID" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="cancelInvoiceResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="return" type="tns:EntResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="GetOutboxInvoiceStatusWithLogs">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="documentUuid" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="GetOutboxInvoiceStatusWithLogsResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="return" type="tns:logResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="logResponse">
+        
+    <xs:sequence/>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="getCreditActionsforCustomer">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="vkn_tckn" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="getCreditActionsforCustomerResponse">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:CreditAction"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="CreditAction">
+        
+    <xs:sequence>
+          
+      <xs:element name="purchase_date" type="xs:string"/>
+          
+      <xs:element name="expire_date" type="xs:string"/>
+          
+      <xs:element name="purchase_count" type="xs:decimal"/>
+          
+      <xs:element name="consideredCount" type="xs:decimal"/>
+          
+      <xs:element name="credit_unit" type="xs:int"/>
+          
+      <xs:element name="credit_pool_id" type="xs:string"/>
+          
+      <xs:element name="buyer_VKN_TCKN" type="xs:string"/>
+          
+      <xs:element name="action_type" type="tns:CreditActionTypes"/>
+          
+      <xs:element name="code" type="xs:string"/>
+          
+      <xs:element name="explanation" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="controlInvoiceXML">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="invoiceXML" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="controlInvoiceXMLResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="return" type="tns:EntResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="sendSignedInvoice">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="inputDocumentList" type="tns:InputDocument"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="sendSignedInvoiceResponse">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:EntResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="controlApplicationResponseXML">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="appResponseXML" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="controlApplicationResponseXMLResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="return" type="tns:EntResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="sendApplicationResponse">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="inputDocumentList" type="tns:InputDocument"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="sendApplicationResponseResponse">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:EntResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="SetDefaultXslt">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="xsltName" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="SetDefaultXsltResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="return" type="tns:EntResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="GetDraftDocumentPreview">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="xmlContent" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="previewType" type="xs:string"/>
+          
+      <xs:element name="addDraftWatermark" type="xs:boolean"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="GetDraftDocumentPreviewResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="return" type="tns:EntResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="updateInvoice">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="inputDocumentList" type="tns:InputDocument"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="updateInvoiceResponse">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:EntResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="setDocumentFlag">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="flagSetter" type="tns:flagSetter"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="flagSetter">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="document_direction" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="flag_name" type="xs:string"/>
+          
+      <xs:element name="flag_value" type="xs:int"/>
+          
+      <xs:element minOccurs="0" name="document_uuid" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="setDocumentFlagResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="return" type="tns:EntResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="getCustomerPKList">
+        
+    <xs:sequence/>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="getCustomerPKListResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="return" type="tns:UserQueryResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="UserQueryResponse">
+        
+    <xs:sequence>
+          
+      <xs:element name="queryState" type="xs:int"/>
+          
+      <xs:element minOccurs="0" name="stateExplanation" type="xs:string"/>
+          
+      <xs:element name="userCount" type="xs:int"/>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="users" type="tns:ResponseUser"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="ResponseUser">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="vkn_tckn" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="unvan_ad" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="etiket" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="tip" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="ilkKayitZamani" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="etiketKayitZamani" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="etiketKayitTuru" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="saveToTaslak">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="inputDocumentList" type="tns:InputDocument"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="saveToTaslakResponse">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:EntResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="getPrefixList">
+        
+    <xs:sequence/>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="getPrefixListResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="return" type="tns:DocumentQueryResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="DocumentQueryResponse">
+        
+    <xs:sequence>
+          
+      <xs:element name="queryState" type="xs:int"/>
+          
+      <xs:element minOccurs="0" name="stateExplanation" type="xs:string"/>
+          
+      <xs:element name="documentsCount" type="xs:int"/>
+          
+      <xs:element name="maxRecordIdinList" type="xs:int"/>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="documents" type="tns:ResponseDocument"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="ResponseDocument">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="document_uuid" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="document_id" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="envelope_uuid" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="document_profile" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="system_creation_time" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="document_issue_date" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="source_id" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="destination_id" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="source_urn" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="source_title" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="destination_urn" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="currency_code" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="invoice_total" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="state_code" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="state_explanation" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="cause" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="content_type" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="document_content" type="xs:base64Binary"/>
+          
+      <xs:element name="emailSent" type="xs:int"/>
+          
+      <xs:element minOccurs="0" name="emailSentDate" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="cancelled" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="cancel_date" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="reference_document_uuid" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="response_document_uuid" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="response_code" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="response_validation_state" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="response_received_date" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="gtb_reference_no" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="gtb_gcb_tescil_no" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="gtb_fiili_ihracat_tarihi" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="reserved1" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="reserved2" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="reserved3" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="document_type_code" type="xs:string"/>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="notes" type="xs:string"/>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="despatchInfo" type="tns:DocumentInfo"/>
+          
+      <xs:element minOccurs="0" name="orderInfo" type="tns:DocumentInfo"/>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="taxInfo" type="tns:TaxInfo"/>
+          
+      <xs:element minOccurs="0" name="taxInclusiveAmount" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="taxExlusiveAmount" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="allowanceTotalAmount" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="taxAmount0015" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="lineExtensionAmount" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="suplierPersonName" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="supplierPersonMiddleName" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="supplierPersonFamilyName" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="customerPersonName" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="customerPersonMiddleName" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="customerPersonFamilyName" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="destination_title" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="is_read" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="is_archieved" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="is_accounted" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="is_transferred" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="is_printed" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="local_id" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="sendingType" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="buyerCustomerPartyName" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="buyerCustomerPersonName" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="buyerCustomerPersonFamilyName" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="report_no" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="cancel_report_no" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="objected" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="objectionReason" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="objectionDate" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="objectionReportNo" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="objectionType" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="objectionDocumentNo" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="destinationEmail" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="destinationMobile" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="smsSentDate" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="cancelPortalStatus" type="xs:int"/>
+          
+      <xs:element minOccurs="0" name="cancelReason" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="chargeTotalAmount" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="DocumentInfo">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="documentDate" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="documentNo" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="TaxInfo">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="taxtTypeCode" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="taxtTypeName" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="taxAmount" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="taxPercentage" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="getCustomerGBList">
+        
+    <xs:sequence/>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="getCustomerGBListResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="return" type="tns:UserQueryResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="addPrefixList">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="prefixList" type="tns:PrefixCode"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="PrefixCode">
+        
+    <xs:sequence>
+          
+      <xs:element name="prefixType" type="tns:PrefixType"/>
+          
+      <xs:element name="prefixKey" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="addPrefixListResponse">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:PrefixCodeResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="PrefixCodeResponse">
+        
+    <xs:sequence>
+          
+      <xs:element name="prefixType" type="tns:PrefixType"/>
+          
+      <xs:element name="prefixKey" type="xs:string"/>
+          
+      <xs:element name="active" type="xs:boolean"/>
+          
+      <xs:element name="isOk" type="xs:boolean"/>
+          
+      <xs:element name="explanation" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="sendInvoiceWithoutDocumentId">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="inputDocumentList" type="tns:InputDocument"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="sendInvoiceWithoutDocumentIdResponse">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:EntResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="GetXsltList">
+        
+    <xs:sequence/>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="GetXsltListResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="return" type="tns:XsltListResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="XsltListResponse">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="xsltList" type="tns:XsltResponse"/>
+          
+      <xs:element minOccurs="0" name="documentsCount" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="isSuccess" type="xs:boolean"/>
+          
+      <xs:element minOccurs="0" name="code" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="explanation" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="cause" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="XsltResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="content" type="xs:base64Binary"/>
+          
+      <xs:element minOccurs="0" name="isDefault" type="xs:boolean"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="uploadInvoiceList">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="invoiceListXML" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="sourceUrn" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="documentPrefix" type="xs:string"/>
+          
+      <xs:element minOccurs="0" name="xsltPath" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="uploadInvoiceListResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="return" type="tns:EntResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="setPrefixStatusList">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="prefixCodeStatusList" type="tns:PrefixCodeStatus"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="PrefixCodeStatus">
+        
+    <xs:complexContent>
+          
+      <xs:extension base="tns:PrefixCode">
+            
+        <xs:sequence>
+              
+          <xs:element name="active" type="xs:boolean"/>
+            
+        </xs:sequence>
+          
+      </xs:extension>
+        
+    </xs:complexContent>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="setPrefixStatusListResponse">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:PrefixCodeResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="ResendDocument">
+        
+    <xs:sequence>
+          
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="uuidList" type="xs:string"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="ResendDocumentResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="return" type="tns:EntResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="UploadXslt">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="uploadXsltPayload" type="tns:UploadXsltPayload"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="UploadXsltPayload">
+        
+    <xs:sequence>
+          
+      <xs:element name="name" type="xs:string"/>
+          
+      <xs:element name="content" type="xs:base64Binary"/>
+          
+      <xs:element name="isDefault" type="xs:boolean"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:complexType name="UploadXsltResponse">
+        
+    <xs:sequence>
+          
+      <xs:element minOccurs="0" name="return" type="tns:EntResponse"/>
+        
+    </xs:sequence>
+      
+  </xs:complexType>
+
+      
+  <xs:simpleType name="CreditActionTypes">
+        
+    <xs:restriction base="xs:string">
+          
+      <xs:enumeration value="BASLAMA"/>
+          
+      <xs:enumeration value="SATINALMA"/>
+          
+      <xs:enumeration value="DEVIR_GIRIS"/>
+          
+      <xs:enumeration value="HEDIYE"/>
+          
+      <xs:enumeration value="DEVIR_CIKIS"/>
+          
+      <xs:enumeration value="TRANSFER"/>
+        
+    </xs:restriction>
+      
+  </xs:simpleType>
+
+      
+  <xs:simpleType name="PrefixType">
+        
+    <xs:restriction base="xs:string">
+          
+      <xs:enumeration value="PrefixCode"/>
+          
+      <xs:enumeration value="EArsivPrefixCode"/>
+          
+      <xs:enumeration value="DespatchPrefixCode"/>
+          
+      <xs:enumeration value="SVoucherPrefixCode"/>
+          
+      <xs:enumeration value="MVoucherPrefixCode"/>
+          
+      <xs:enumeration value="ReceiptAdvicePrefixCode"/>
+          
+      <xs:enumeration value="ExchangePrefixCode"/>
+          
+      <xs:enumeration value="ExpenseNotePrefixCode"/>
+          
+      <xs:enumeration value="ReceiptPrefixCode"/>
+          
+      <xs:enumeration value="SigortaPrefixCode"/>
+          
+      <xs:enumeration value="SigortaPolicePrefixCode"/>
+        
+    </xs:restriction>
+      
+  </xs:simpleType>
+
+</xs:schema>
+  </types>
+  <message name="getCustomerPKListResponse">
+    <part element="tns:getCustomerPKListResponse" name="parameters">
+    </part>
+  </message>
+  <message name="uploadInvoiceList">
+    <part element="tns:uploadInvoiceList" name="parameters">
+    </part>
+  </message>
+  <message name="sendAppResponseListResponse">
+    <part element="tns:sendAppResponseListResponse" name="parameters">
+    </part>
+  </message>
+  <message name="setDocumentFlagResponse">
+    <part element="tns:setDocumentFlagResponse" name="parameters">
+    </part>
+  </message>
+  <message name="getCustomerGBList">
+    <part element="tns:getCustomerGBList" name="parameters">
+    </part>
+  </message>
+  <message name="getPrefixList">
+    <part element="tns:getPrefixList" name="parameters">
+    </part>
+  </message>
+  <message name="getCustomerCreditSpaceResponse">
+    <part element="tns:getCustomerCreditSpaceResponse" name="parameters">
+    </part>
+  </message>
+  <message name="setPrefixStatusListResponse">
+    <part element="tns:setPrefixStatusListResponse" name="parameters">
+    </part>
+  </message>
+  <message name="updateInvoiceResponse">
+    <part element="tns:updateInvoiceResponse" name="parameters">
+    </part>
+  </message>
+  <message name="addPrefixList">
+    <part element="tns:addPrefixList" name="parameters">
+    </part>
+  </message>
+  <message name="cancelInvoiceResponse">
+    <part element="tns:cancelInvoiceResponse" name="parameters">
+    </part>
+  </message>
+  <message name="SetDefaultXsltResponse">
+    <part element="tns:SetDefaultXsltResponse" name="parameters">
+    </part>
+  </message>
+  <message name="updateInvoice">
+    <part element="tns:updateInvoice" name="parameters">
+    </part>
+  </message>
+  <message name="controlApplicationResponseXMLResponse">
+    <part element="tns:controlApplicationResponseXMLResponse" name="parameters">
+    </part>
+  </message>
+  <message name="getCustomerCreditCountResponse">
+    <part element="tns:getCustomerCreditCountResponse" name="parameters">
+    </part>
+  </message>
+  <message name="getUserAliasesResponse">
+    <part element="tns:getUserAliasesResponse" name="parameters">
+    </part>
+  </message>
+  <message name="sendSignedInvoiceResponse">
+    <part element="tns:sendSignedInvoiceResponse" name="parameters">
+    </part>
+  </message>
+  <message name="GetDraftDocumentPreview">
+    <part element="tns:GetDraftDocumentPreview" name="parameters">
+    </part>
+  </message>
+  <message name="GetXsltListResponse">
+    <part element="tns:GetXsltListResponse" name="parameters">
+    </part>
+  </message>
+  <message name="saveToTaslakResponse">
+    <part element="tns:saveToTaslakResponse" name="parameters">
+    </part>
+  </message>
+  <message name="uploadInvoiceListResponse">
+    <part element="tns:uploadInvoiceListResponse" name="parameters">
+    </part>
+  </message>
+  <message name="controlApplicationResponseXML">
+    <part element="tns:controlApplicationResponseXML" name="parameters">
+    </part>
+  </message>
+  <message name="controlInvoiceXML">
+    <part element="tns:controlInvoiceXML" name="parameters">
+    </part>
+  </message>
+  <message name="sendInvoice">
+    <part element="tns:sendInvoice" name="parameters">
+    </part>
+  </message>
+  <message name="getCreditActionsforCustomer">
+    <part element="tns:getCreditActionsforCustomer" name="parameters">
+    </part>
+  </message>
+  <message name="sendAppResponse">
+    <part element="tns:sendAppResponse" name="parameters">
+    </part>
+  </message>
+  <message name="getCustomerCreditSpace">
+    <part element="tns:getCustomerCreditSpace" name="parameters">
+    </part>
+  </message>
+  <message name="getUserAliases">
+    <part element="tns:getUserAliases" name="parameters">
+    </part>
+  </message>
+  <message name="sendAppResponseList">
+    <part element="tns:sendAppResponseList" name="parameters">
+    </part>
+  </message>
+  <message name="sendInvoiceWithoutDocumentIdResponse">
+    <part element="tns:sendInvoiceWithoutDocumentIdResponse" name="parameters">
+    </part>
+  </message>
+  <message name="getNewUUIDResponse">
+    <part element="tns:getNewUUIDResponse" name="parameters">
+    </part>
+  </message>
+  <message name="getCreditActionsforCustomerResponse">
+    <part element="tns:getCreditActionsforCustomerResponse" name="parameters">
+    </part>
+  </message>
+  <message name="GetDraftDocumentPreviewResponse">
+    <part element="tns:GetDraftDocumentPreviewResponse" name="parameters">
+    </part>
+  </message>
+  <message name="UploadXslt">
+    <part element="tns:UploadXslt" name="parameters">
+    </part>
+  </message>
+  <message name="setPrefixStatusList">
+    <part element="tns:setPrefixStatusList" name="parameters">
+    </part>
+  </message>
+  <message name="ResendDocument">
+    <part element="tns:ResendDocument" name="parameters">
+    </part>
+  </message>
+  <message name="getCustomerGBListResponse">
+    <part element="tns:getCustomerGBListResponse" name="parameters">
+    </part>
+  </message>
+  <message name="addPrefixListResponse">
+    <part element="tns:addPrefixListResponse" name="parameters">
+    </part>
+  </message>
+  <message name="sendInvoiceWithoutDocumentId">
+    <part element="tns:sendInvoiceWithoutDocumentId" name="parameters">
+    </part>
+  </message>
+  <message name="GetXsltList">
+    <part element="tns:GetXsltList" name="parameters">
+    </part>
+  </message>
+  <message name="sendApplicationResponseResponse">
+    <part element="tns:sendApplicationResponseResponse" name="parameters">
+    </part>
+  </message>
+  <message name="ResendDocumentResponse">
+    <part element="tns:ResendDocumentResponse" name="parameters">
+    </part>
+  </message>
+  <message name="sendAppResponseResponse">
+    <part element="tns:sendAppResponseResponse" name="parameters">
+    </part>
+  </message>
+  <message name="saveToTaslak">
+    <part element="tns:saveToTaslak" name="parameters">
+    </part>
+  </message>
+  <message name="getCustomerPKList">
+    <part element="tns:getCustomerPKList" name="parameters">
+    </part>
+  </message>
+  <message name="setDocumentFlag">
+    <part element="tns:setDocumentFlag" name="parameters">
+    </part>
+  </message>
+  <message name="controlInvoiceXMLResponse">
+    <part element="tns:controlInvoiceXMLResponse" name="parameters">
+    </part>
+  </message>
+  <message name="sendSignedInvoice">
+    <part element="tns:sendSignedInvoice" name="parameters">
+    </part>
+  </message>
+  <message name="sendInvoiceResponse">
+    <part element="tns:sendInvoiceResponse" name="parameters">
+    </part>
+  </message>
+  <message name="sendApplicationResponse">
+    <part element="tns:sendApplicationResponse" name="parameters">
+    </part>
+  </message>
+  <message name="SetDefaultXslt">
+    <part element="tns:SetDefaultXslt" name="parameters">
+    </part>
+  </message>
+  <message name="cancelInvoice">
+    <part element="tns:cancelInvoice" name="parameters">
+    </part>
+  </message>
+  <message name="UploadXsltResponse">
+    <part element="tns:UploadXsltResponse" name="parameters">
+    </part>
+  </message>
+  <message name="GetOutboxInvoiceStatusWithLogs">
+    <part element="tns:GetOutboxInvoiceStatusWithLogs" name="parameters">
+    </part>
+  </message>
+  <message name="getPrefixListResponse">
+    <part element="tns:getPrefixListResponse" name="parameters">
+    </part>
+  </message>
+  <message name="getNewUUID">
+    <part element="tns:getNewUUID" name="parameters">
+    </part>
+  </message>
+  <message name="getCustomerCreditCount">
+    <part element="tns:getCustomerCreditCount" name="parameters">
+    </part>
+  </message>
+  <message name="GetOutboxInvoiceStatusWithLogsResponse">
+    <part element="tns:GetOutboxInvoiceStatusWithLogsResponse" name="parameters">
+    </part>
+  </message>
+  <portType name="InvoiceWS">
+    <operation name="sendInvoice">
+      <input message="tns:sendInvoice" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/sendInvoiceRequest">
+    </input>
+      <output message="tns:sendInvoiceResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/sendInvoiceResponse">
+    </output>
+    </operation>
+    <operation name="sendSignedInvoice">
+      <input message="tns:sendSignedInvoice" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/sendSignedInvoiceRequest">
+    </input>
+      <output message="tns:sendSignedInvoiceResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/sendSignedInvoiceResponse">
+    </output>
+    </operation>
+    <operation name="sendInvoiceWithoutDocumentId">
+      <input message="tns:sendInvoiceWithoutDocumentId" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/sendInvoiceWithoutDocumentIdRequest">
+    </input>
+      <output message="tns:sendInvoiceWithoutDocumentIdResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/sendInvoiceWithoutDocumentIdResponse">
+    </output>
+    </operation>
+    <operation name="updateInvoice">
+      <input message="tns:updateInvoice" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/updateInvoiceRequest">
+    </input>
+      <output message="tns:updateInvoiceResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/updateInvoiceResponse">
+    </output>
+    </operation>
+    <operation name="sendApplicationResponse">
+      <input message="tns:sendApplicationResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/sendApplicationResponseRequest">
+    </input>
+      <output message="tns:sendApplicationResponseResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/sendApplicationResponseResponse">
+    </output>
+    </operation>
+    <operation name="controlInvoiceXML">
+      <input message="tns:controlInvoiceXML" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/controlInvoiceXMLRequest">
+    </input>
+      <output message="tns:controlInvoiceXMLResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/controlInvoiceXMLResponse">
+    </output>
+    </operation>
+    <operation name="controlApplicationResponseXML">
+      <input message="tns:controlApplicationResponseXML" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/controlApplicationResponseXMLRequest">
+    </input>
+      <output message="tns:controlApplicationResponseXMLResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/controlApplicationResponseXMLResponse">
+    </output>
+    </operation>
+    <operation name="getCustomerGBList">
+      <input message="tns:getCustomerGBList" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/getCustomerGBListRequest">
+    </input>
+      <output message="tns:getCustomerGBListResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/getCustomerGBListResponse">
+    </output>
+    </operation>
+    <operation name="getCustomerPKList">
+      <input message="tns:getCustomerPKList" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/getCustomerPKListRequest">
+    </input>
+      <output message="tns:getCustomerPKListResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/getCustomerPKListResponse">
+    </output>
+    </operation>
+    <operation name="cancelInvoice">
+      <input message="tns:cancelInvoice" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/cancelInvoiceRequest">
+    </input>
+      <output message="tns:cancelInvoiceResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/cancelInvoiceResponse">
+    </output>
+    </operation>
+    <operation name="getCustomerCreditCount">
+      <input message="tns:getCustomerCreditCount" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/getCustomerCreditCountRequest">
+    </input>
+      <output message="tns:getCustomerCreditCountResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/getCustomerCreditCountResponse">
+    </output>
+    </operation>
+    <operation name="getCustomerCreditSpace">
+      <input message="tns:getCustomerCreditSpace" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/getCustomerCreditSpaceRequest">
+    </input>
+      <output message="tns:getCustomerCreditSpaceResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/getCustomerCreditSpaceResponse">
+    </output>
+    </operation>
+    <operation name="uploadInvoiceList">
+      <input message="tns:uploadInvoiceList" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/uploadInvoiceListRequest">
+    </input>
+      <output message="tns:uploadInvoiceListResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/uploadInvoiceListResponse">
+    </output>
+    </operation>
+    <operation name="setDocumentFlag">
+      <input message="tns:setDocumentFlag" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/setDocumentFlagRequest">
+    </input>
+      <output message="tns:setDocumentFlagResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/setDocumentFlagResponse">
+    </output>
+    </operation>
+    <operation name="getCreditActionsforCustomer">
+      <input message="tns:getCreditActionsforCustomer" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/getCreditActionsforCustomerRequest">
+    </input>
+      <output message="tns:getCreditActionsforCustomerResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/getCreditActionsforCustomerResponse">
+    </output>
+    </operation>
+    <operation name="getPrefixList">
+      <input message="tns:getPrefixList" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/getPrefixListRequest">
+    </input>
+      <output message="tns:getPrefixListResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/getPrefixListResponse">
+    </output>
+    </operation>
+    <operation name="getUserAliases">
+      <input message="tns:getUserAliases" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/getUserAliasesRequest">
+    </input>
+      <output message="tns:getUserAliasesResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/getUserAliasesResponse">
+    </output>
+    </operation>
+    <operation name="sendAppResponse">
+      <input message="tns:sendAppResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/sendAppResponseRequest">
+    </input>
+      <output message="tns:sendAppResponseResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/sendAppResponseResponse">
+    </output>
+    </operation>
+    <operation name="sendAppResponseList">
+      <input message="tns:sendAppResponseList" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/sendAppResponseListRequest">
+    </input>
+      <output message="tns:sendAppResponseListResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/sendAppResponseListResponse">
+    </output>
+    </operation>
+    <operation name="getNewUUID">
+      <input message="tns:getNewUUID" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/getNewUUIDRequest">
+    </input>
+      <output message="tns:getNewUUIDResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/getNewUUIDResponse">
+    </output>
+    </operation>
+    <operation name="GetXsltList">
+      <input message="tns:GetXsltList" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/GetXsltListRequest">
+    </input>
+      <output message="tns:GetXsltListResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/GetXsltListResponse">
+    </output>
+    </operation>
+    <operation name="UploadXslt">
+      <input message="tns:UploadXslt" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/UploadXsltRequest">
+    </input>
+      <output message="tns:UploadXsltResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/UploadXsltResponse">
+    </output>
+    </operation>
+    <operation name="GetDraftDocumentPreview">
+      <input message="tns:GetDraftDocumentPreview" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/GetDraftDocumentPreviewRequest">
+    </input>
+      <output message="tns:GetDraftDocumentPreviewResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/GetDraftDocumentPreviewResponse">
+    </output>
+    </operation>
+    <operation name="saveToTaslak">
+      <input message="tns:saveToTaslak" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/saveToTaslakRequest">
+    </input>
+      <output message="tns:saveToTaslakResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/saveToTaslakResponse">
+    </output>
+    </operation>
+    <operation name="GetOutboxInvoiceStatusWithLogs">
+      <input message="tns:GetOutboxInvoiceStatusWithLogs" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/GetOutboxInvoiceStatusWithLogsRequest">
+    </input>
+      <output message="tns:GetOutboxInvoiceStatusWithLogsResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/GetOutboxInvoiceStatusWithLogsResponse">
+    </output>
+    </operation>
+    <operation name="addPrefixList">
+      <input message="tns:addPrefixList" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/addPrefixListRequest">
+    </input>
+      <output message="tns:addPrefixListResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/addPrefixListResponse">
+    </output>
+    </operation>
+    <operation name="setPrefixStatusList">
+      <input message="tns:setPrefixStatusList" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/setPrefixStatusListRequest">
+    </input>
+      <output message="tns:setPrefixStatusListResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/setPrefixStatusListResponse">
+    </output>
+    </operation>
+    <operation name="SetDefaultXslt">
+      <input message="tns:SetDefaultXslt" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/SetDefaultXsltRequest">
+    </input>
+      <output message="tns:SetDefaultXsltResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/SetDefaultXsltResponse">
+    </output>
+    </operation>
+    <operation name="ResendDocument">
+      <input message="tns:ResendDocument" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/ResendDocumentRequest">
+    </input>
+      <output message="tns:ResendDocumentResponse" wsam:Action="http://invoiceservice.entegrator.com/InvoiceWS/ResendDocumentResponse">
+    </output>
+    </operation>
+  </portType>
+  <binding name="InvoiceWSPortBinding" type="tns:InvoiceWS">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="sendInvoice">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="sendSignedInvoice">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="sendInvoiceWithoutDocumentId">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="updateInvoice">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="sendApplicationResponse">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="controlInvoiceXML">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="controlApplicationResponseXML">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getCustomerGBList">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getCustomerPKList">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="cancelInvoice">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getCustomerCreditCount">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getCustomerCreditSpace">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="uploadInvoiceList">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="setDocumentFlag">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getCreditActionsforCustomer">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getPrefixList">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getUserAliases">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="sendAppResponse">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="sendAppResponseList">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="getNewUUID">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="GetXsltList">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="UploadXslt">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="GetDraftDocumentPreview">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="saveToTaslak">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="GetOutboxInvoiceStatusWithLogs">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="addPrefixList">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="setPrefixStatusList">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="SetDefaultXslt">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="ResendDocument">
+      <soap12:operation soapAction=""/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="InvoiceWS">
+    <port binding="tns:InvoiceWSPortBinding" name="InvoiceWSPort">
+      <soap12:address location="https://servis.kolayentegrasyon.net/InvoiceService/InvoiceWS"/>
+    </port>
+  </service>
+</definitions>

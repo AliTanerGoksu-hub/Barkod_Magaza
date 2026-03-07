@@ -1,0 +1,5487 @@
+Imports FastReport
+Imports DevExpress.XtraEditors
+Imports System.IO
+Public Class frm_personel
+    Inherits DevExpress.XtraEditors.XtraForm
+#Region " Windows Form Designer generated code "
+    Public Sub New()
+        MyBase.New()
+        'This call is required by the Windows Form Designer.
+        InitializeComponent()
+        'Add any initialization after the InitializeComponent() call
+    End Sub
+    'Form overrides dispose to clean up the component list.
+    Protected Overloads Overrides Sub Dispose(ByVal disposing As Boolean)
+        If disposing Then
+            If Not (components Is Nothing) Then
+                components.Dispose()
+            End If
+        End If
+        MyBase.Dispose(disposing)
+    End Sub
+    'Required by the Windows Form Designer
+    Private components As System.ComponentModel.IContainer
+    'NOTE: The following procedure is required by the Windows Form Designer
+    'It can be modified using the Windows Form Designer.  
+    'Do not modify it using the code editor.
+    Friend WithEvents PanelControl1 As DevExpress.XtraEditors.PanelControl
+    Friend WithEvents PanelControl2 As DevExpress.XtraEditors.PanelControl
+    Friend WithEvents PanelControl3 As DevExpress.XtraEditors.PanelControl
+    Friend WithEvents XtraTabControl1 As DevExpress.XtraTab.XtraTabControl
+    Friend WithEvents XtraTabPage1 As DevExpress.XtraTab.XtraTabPage
+    Friend WithEvents SimpleButton3 As DevExpress.XtraEditors.SimpleButton
+    Friend WithEvents SimpleButton2 As DevExpress.XtraEditors.SimpleButton
+    Friend WithEvents SimpleButton1 As DevExpress.XtraEditors.SimpleButton
+    Friend WithEvents Label1 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
+    Friend WithEvents GridControl1 As DevExpress.XtraGrid.GridControl
+    Friend WithEvents GridView1 As DevExpress.XtraGrid.Views.Grid.GridView
+    Friend WithEvents colIND As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colPERSONELKODU As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colPERSONELADI As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colBABAADI As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colANNEADI As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colREFADI As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colADRES As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colTELEFON1 As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colTELEFON2 As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colTELEFON3 As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colDEPARTMAN As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colGOREV As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colRESIM As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents ContextMenu1 As System.Windows.Forms.ContextMenu
+    Friend WithEvents MenuItem1 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem2 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem3 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem4 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem5 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem6 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem7 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem8 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem9 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem10 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem11 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem12 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem13 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem14 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem15 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem16 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem17 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem18 As System.Windows.Forms.MenuItem
+    Friend WithEvents ps As DevExpress.XtraPrinting.PrintingSystem
+    Friend WithEvents printlink1 As DevExpress.XtraPrinting.PrintableComponentLink
+    Friend WithEvents XtraTabPage2 As DevExpress.XtraTab.XtraTabPage
+    Friend WithEvents PanelControl4 As DevExpress.XtraEditors.PanelControl
+    Friend WithEvents PanelControl5 As DevExpress.XtraEditors.PanelControl
+    Friend WithEvents XtraTabControl2 As DevExpress.XtraTab.XtraTabControl
+    Friend WithEvents XtraTabPage3 As DevExpress.XtraTab.XtraTabPage
+    Friend WithEvents GroupControl3 As DevExpress.XtraEditors.GroupControl
+    Friend WithEvents Label14 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_dept As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents Label13 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label12 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label11 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label10 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label9 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents GroupControl1 As DevExpress.XtraEditors.GroupControl
+    Friend WithEvents Label5 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label4 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label3 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label2 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents XtraTabPage4 As DevExpress.XtraTab.XtraTabPage
+    Friend WithEvents XtraTabPage5 As DevExpress.XtraTab.XtraTabPage
+    Friend WithEvents Label8 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label7 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label6 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents txt_onayla As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents txt_sifre As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents txt_ad As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents txt_kod As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents DataSet1 As System.Data.DataSet
+    Friend WithEvents DataTable1 As System.Data.DataTable
+    Friend WithEvents DataColumn1 As System.Data.DataColumn
+    Friend WithEvents DataColumn2 As System.Data.DataColumn
+    Friend WithEvents DataColumn3 As System.Data.DataColumn
+    Friend WithEvents DataColumn4 As System.Data.DataColumn
+    Friend WithEvents DataColumn5 As System.Data.DataColumn
+    Friend WithEvents DataColumn6 As System.Data.DataColumn
+    Friend WithEvents DataColumn7 As System.Data.DataColumn
+    Friend WithEvents DataColumn8 As System.Data.DataColumn
+    Friend WithEvents DataColumn9 As System.Data.DataColumn
+    Friend WithEvents DataColumn10 As System.Data.DataColumn
+    Friend WithEvents DataColumn11 As System.Data.DataColumn
+    Friend WithEvents DataColumn12 As System.Data.DataColumn
+    Friend WithEvents DataColumn13 As System.Data.DataColumn
+    Friend WithEvents DataColumn14 As System.Data.DataColumn
+    Friend WithEvents DataColumn15 As System.Data.DataColumn
+    Friend WithEvents txt_gorev As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents txt_gsm As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents txt_tel2 As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents txt_tel1 As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents txt_adres As DevExpress.XtraEditors.MemoEdit
+    Friend WithEvents txt_ref As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents txt_baba As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents txt_anne As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents btn_kaydet As DevExpress.XtraEditors.SimpleButton
+    Friend WithEvents btn_vazgec As DevExpress.XtraEditors.SimpleButton
+    Friend WithEvents sec_hareket_dept As DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit
+    Friend WithEvents Label15 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents DataColumn16 As System.Data.DataColumn
+    Friend WithEvents DataColumn17 As System.Data.DataColumn
+    Friend WithEvents txt_isegiris As DevExpress.XtraEditors.DateEdit
+    Friend WithEvents sec_aktif As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_resim As DevExpress.XtraEditors.PictureEdit
+    Friend WithEvents colBrutMaas As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colNetMaas As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colAktif As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colISEGIRIS As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colKesinti1 As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colKesinti2 As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colKesinti3 As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colKesinti4 As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colKesinti5 As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colEklenti1 As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colEklenti2 As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colEklenti3 As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colEklenti4 As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colEklenti5 As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents GroupControl2 As DevExpress.XtraEditors.GroupControl
+    Friend WithEvents GroupControl4 As DevExpress.XtraEditors.GroupControl
+    Friend WithEvents GroupControl5 As DevExpress.XtraEditors.GroupControl
+    Friend WithEvents Label16 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label17 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label18 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label19 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label20 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label21 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label22 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label23 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label24 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label25 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label26 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label27 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents txt_brutmaas As DevExpress.XtraEditors.CalcEdit
+    Friend WithEvents txt_netmaas As DevExpress.XtraEditors.CalcEdit
+    Friend WithEvents txt_eklenti1 As DevExpress.XtraEditors.CalcEdit
+    Friend WithEvents txt_eklenti2 As DevExpress.XtraEditors.CalcEdit
+    Friend WithEvents txt_eklenti3 As DevExpress.XtraEditors.CalcEdit
+    Friend WithEvents txt_eklenti4 As DevExpress.XtraEditors.CalcEdit
+    Friend WithEvents txt_eklenti5 As DevExpress.XtraEditors.CalcEdit
+    Friend WithEvents txt_kesinti1 As DevExpress.XtraEditors.CalcEdit
+    Friend WithEvents txt_kesinti2 As DevExpress.XtraEditors.CalcEdit
+    Friend WithEvents txt_kesinti3 As DevExpress.XtraEditors.CalcEdit
+    Friend WithEvents txt_kesinti4 As DevExpress.XtraEditors.CalcEdit
+    Friend WithEvents txt_kesinti5 As DevExpress.XtraEditors.CalcEdit
+    Friend WithEvents MenuItem19 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem20 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem21 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem22 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem23 As System.Windows.Forms.MenuItem
+    Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
+    Friend WithEvents sec_kullanici As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents colKULLANICI As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents SimpleButton4 As DevExpress.XtraEditors.SimpleButton
+    Friend WithEvents Label28 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label29 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents btn_hesap As DevExpress.XtraEditors.ButtonEdit
+    Friend WithEvents sec_satici As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents Label30 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label31 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_depo As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents sec_durum As DevExpress.XtraEditors.ComboBoxEdit
+    Friend WithEvents MenuItem24 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem25 As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem26 As System.Windows.Forms.MenuItem
+    Friend WithEvents BarManager1 As DevExpress.XtraBars.BarManager
+    Friend WithEvents MenuItem27 As System.Windows.Forms.MenuItem
+    Friend WithEvents Bar3 As DevExpress.XtraBars.Bar
+    Friend WithEvents BarButtonItem1 As DevExpress.XtraBars.BarButtonItem
+    Friend WithEvents BarButtonItem2 As DevExpress.XtraBars.BarButtonItem
+    Friend WithEvents BarButtonItem3 As DevExpress.XtraBars.BarButtonItem
+    Friend WithEvents BarButtonItem4 As DevExpress.XtraBars.BarButtonItem
+    Friend WithEvents BarButtonItem5 As DevExpress.XtraBars.BarButtonItem
+    Friend WithEvents BarButtonItem6 As DevExpress.XtraBars.BarButtonItem
+    Friend WithEvents BarButtonItem7 As DevExpress.XtraBars.BarButtonItem
+    Friend WithEvents BarButtonItem8 As DevExpress.XtraBars.BarButtonItem
+    Friend WithEvents BarButtonItem9 As DevExpress.XtraBars.BarButtonItem
+    Friend WithEvents barDockControlTop As DevExpress.XtraBars.BarDockControl
+    Friend WithEvents barDockControlBottom As DevExpress.XtraBars.BarDockControl
+    Friend WithEvents barDockControlLeft As DevExpress.XtraBars.BarDockControl
+    Friend WithEvents barDockControlRight As DevExpress.XtraBars.BarDockControl
+    Friend WithEvents GroupControl6 As DevExpress.XtraEditors.GroupControl
+    Friend WithEvents txt_sFihristSinirla As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents Label36 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents txt_sBankaSinirla As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents Label37 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents txt_sStokSinirla As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents Label38 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents txt_sCariSinirla As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents Label39 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents GroupControl7 As DevExpress.XtraEditors.GroupControl
+    Friend WithEvents LabelControl17 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_sSubeMagaza As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents sec_sDepo As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents LabelControl14 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label32 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_sFiyatTipi As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents DataColumn18 As System.Data.DataColumn
+    Friend WithEvents LabelControl5 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_sSinifKodu As DevExpress.XtraEditors.PopupContainerEdit
+    Friend WithEvents sec_grid As DevExpress.XtraEditors.PopupContainerControl
+    Friend WithEvents GridControl2 As DevExpress.XtraGrid.GridControl
+    Friend WithEvents GridView2 As DevExpress.XtraGrid.Views.Grid.GridView
+    Friend WithEvents colSEC As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colKOD As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents colACIKLAMA As DevExpress.XtraGrid.Columns.GridColumn
+    Friend WithEvents XtraTabPage6 As DevExpress.XtraTab.XtraTabPage
+    Friend WithEvents GroupControl8 As DevExpress.XtraEditors.GroupControl
+    Friend WithEvents LabelControl15 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_sFiyatTipi4 As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents LabelControl1 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents LabelControl4 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents LabelControl3 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents LabelControl2 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents LabelControl6 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_sFiyatTipiM As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents sec_sFiyatTipiA As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents sec_sFiyatTipi3 As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents sec_sFiyatTipi2 As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents sec_sFiyatTipi1 As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents GroupControl9 As DevExpress.XtraEditors.GroupControl
+    Friend WithEvents LabelControl16 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_sEFiyatTipi4 As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents LabelControl7 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents LabelControl8 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents LabelControl9 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents LabelControl10 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents LabelControl11 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_sEFiyatTipiM As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents sec_sEFiyatTipiA As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents sec_sEFiyatTipi3 As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents sec_sEFiyatTipi2 As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents sec_sEFiyatTipi1 As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents GroupControl10 As DevExpress.XtraEditors.GroupControl
+    Friend WithEvents LabelControl13 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_sSaticiRumuzu As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents sec_bCalcVadeDagilim As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents GroupControl11 As DevExpress.XtraEditors.GroupControl
+    Friend WithEvents LabelControl12 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents LabelControl18 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_sPesinFiyatTipi As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents sec_sKrediliFiyatTipi As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents Label33 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents txt_sBacodeStd As DevExpress.XtraEditors.SpinEdit
+    Friend WithEvents Label34 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents txt_PrinterDepo As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents Label35 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents txt_PrinterTermal As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents Label40 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_FontSize As DevExpress.XtraEditors.SpinEdit
+    Friend WithEvents sec_bOtomatikPesinatDuzelt As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents txt_nTaksitSayi As DevExpress.XtraEditors.SpinEdit
+    Friend WithEvents txt_nTaksitBaslangic As DevExpress.XtraEditors.SpinEdit
+    Friend WithEvents Label41 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label42 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label43 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents txt_nTaksitGun As DevExpress.XtraEditors.SpinEdit
+    Friend WithEvents sec_bOtomatikTaksit As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents XtraTabPage7 As DevExpress.XtraTab.XtraTabPage
+    Friend WithEvents Label50 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents Label44 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_bNamazVaktiGosterme As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents Label45 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_nFirmaGrupKodUzunlugu As DevExpress.XtraEditors.SpinEdit
+    Friend WithEvents Label46 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_dteSonNakitKasaTarihi As DevExpress.XtraEditors.DateEdit
+    Friend WithEvents sec_dteSonStokFisiTarihi As DevExpress.XtraEditors.DateEdit
+    Friend WithEvents sec_dteSonIrsaliyeTarihi As DevExpress.XtraEditors.DateEdit
+    Friend WithEvents Label47 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_dteSonFaturaTarihi As DevExpress.XtraEditors.DateEdit
+    Friend WithEvents Label48 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_sRaporUzanti As DevExpress.XtraEditors.ComboBoxEdit
+    Friend WithEvents sec_bAlisFiyatiUyar As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents Label49 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents txt_nStokFisiCiktiSatirSayisi As DevExpress.XtraEditors.SpinEdit
+    Friend WithEvents txt_nIrsaliyeCiktiSatirSayisi As DevExpress.XtraEditors.SpinEdit
+    Friend WithEvents txt_nFaturaCiktiSatirSayisi As DevExpress.XtraEditors.SpinEdit
+    Friend WithEvents sec_bTransferEnvanterKontrol As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bStokFisiIskontosuz As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bIrsaliyeIskontosuz As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bFaturaIskontosuz As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bStokFisiKdvSiz As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bIrsaliyeKdvSiz As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bFaturaKdvSiz As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bFiyatKdvHaric As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bMessageCheck As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bSatirKontrol As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bOtomatikMaliyetFiyati As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bOtomatikAlisFiyati As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bKdvKontrolluMaliyet As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bKendiFisNo As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents DataColumn19 As System.Data.DataColumn
+    Friend WithEvents DataColumn20 As System.Data.DataColumn
+    Friend WithEvents DataColumn21 As System.Data.DataColumn
+    Friend WithEvents DataColumn22 As System.Data.DataColumn
+    Friend WithEvents DataColumn23 As System.Data.DataColumn
+    Friend WithEvents DataColumn24 As System.Data.DataColumn
+    Friend WithEvents DataColumn25 As System.Data.DataColumn
+    Friend WithEvents DataColumn26 As System.Data.DataColumn
+    Friend WithEvents DataColumn27 As System.Data.DataColumn
+    Friend WithEvents DataColumn28 As System.Data.DataColumn
+    Friend WithEvents DataColumn29 As System.Data.DataColumn
+    Friend WithEvents DataColumn30 As System.Data.DataColumn
+    Friend WithEvents DataColumn31 As System.Data.DataColumn
+    Friend WithEvents DataColumn32 As System.Data.DataColumn
+    Friend WithEvents DataColumn33 As System.Data.DataColumn
+    Friend WithEvents DataColumn34 As System.Data.DataColumn
+    Friend WithEvents DataColumn35 As System.Data.DataColumn
+    Friend WithEvents DataColumn36 As System.Data.DataColumn
+    Friend WithEvents DataColumn37 As System.Data.DataColumn
+    Friend WithEvents DataColumn38 As System.Data.DataColumn
+    Friend WithEvents DataColumn39 As System.Data.DataColumn
+    Friend WithEvents DataColumn40 As System.Data.DataColumn
+    Friend WithEvents DataColumn41 As System.Data.DataColumn
+    Friend WithEvents DataColumn42 As System.Data.DataColumn
+    Friend WithEvents DataColumn43 As System.Data.DataColumn
+    Friend WithEvents DataColumn44 As System.Data.DataColumn
+    Friend WithEvents DataColumn45 As System.Data.DataColumn
+    Friend WithEvents DataColumn46 As System.Data.DataColumn
+    Friend WithEvents DataColumn47 As System.Data.DataColumn
+    Friend WithEvents DataColumn48 As System.Data.DataColumn
+    Friend WithEvents DataColumn49 As System.Data.DataColumn
+    Friend WithEvents DataColumn50 As System.Data.DataColumn
+    Friend WithEvents DataColumn51 As System.Data.DataColumn
+    Friend WithEvents DataColumn52 As System.Data.DataColumn
+    Friend WithEvents DataColumn53 As System.Data.DataColumn
+    Friend WithEvents DataColumn54 As System.Data.DataColumn
+    Friend WithEvents DataColumn55 As System.Data.DataColumn
+    Friend WithEvents DataColumn56 As System.Data.DataColumn
+    Friend WithEvents DataColumn57 As System.Data.DataColumn
+    Friend WithEvents DataColumn58 As System.Data.DataColumn
+    Friend WithEvents DataColumn59 As System.Data.DataColumn
+    Friend WithEvents DataColumn60 As System.Data.DataColumn
+    Friend WithEvents DataColumn61 As System.Data.DataColumn
+    Friend WithEvents DataColumn62 As System.Data.DataColumn
+    Friend WithEvents DataColumn63 As System.Data.DataColumn
+    Friend WithEvents DataColumn64 As System.Data.DataColumn
+    Friend WithEvents DataColumn65 As System.Data.DataColumn
+    Friend WithEvents DataColumn66 As System.Data.DataColumn
+    Friend WithEvents DataColumn67 As System.Data.DataColumn
+    Friend WithEvents DataColumn68 As System.Data.DataColumn
+    Friend WithEvents DataColumn69 As System.Data.DataColumn
+    Friend WithEvents DataColumn70 As System.Data.DataColumn
+    Friend WithEvents DataColumn71 As System.Data.DataColumn
+    Friend WithEvents sec_bFaturaKdvDahil As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents txt_sGiderSinirla As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents Label51 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_sYaziIle As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents sec_sDil As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents LabelControl19 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_sHareketTipi As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents LabelControl20 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_bDovizliFatura As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents TextEdit1 As DevExpress.XtraEditors.TextEdit
+    Friend WithEvents LabelControl21 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents LabelControl23 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_sEFiyatTipi5 As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents LabelControl22 As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents sec_sFiyatTipi5 As DevExpress.XtraEditors.LookUpEdit
+    Friend WithEvents sec_bMagazalarChart As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bPerYerelMuh As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bPerOtoMuh As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bSatFatOtoMuh As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bAlisFatOtoMuh As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_sMobileKullan As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bSatirKendiEnvanteri As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_sAktifFiyatTipi As DevExpress.XtraEditors.LookUpEdit
+    <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frm_personel))
+        Me.PanelControl1 = New DevExpress.XtraEditors.PanelControl()
+        Me.Label1 = New DevExpress.XtraEditors.LabelControl()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.PanelControl2 = New DevExpress.XtraEditors.PanelControl()
+        Me.SimpleButton3 = New DevExpress.XtraEditors.SimpleButton()
+        Me.SimpleButton2 = New DevExpress.XtraEditors.SimpleButton()
+        Me.SimpleButton1 = New DevExpress.XtraEditors.SimpleButton()
+        Me.PanelControl3 = New DevExpress.XtraEditors.PanelControl()
+        Me.XtraTabControl1 = New DevExpress.XtraTab.XtraTabControl()
+        Me.XtraTabPage1 = New DevExpress.XtraTab.XtraTabPage()
+        Me.GridControl1 = New DevExpress.XtraGrid.GridControl()
+        Me.ContextMenu1 = New System.Windows.Forms.ContextMenu()
+        Me.MenuItem1 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem14 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem2 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem3 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem4 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem26 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem24 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem25 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem20 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem27 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem19 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem21 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem22 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem23 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem15 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem5 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem6 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem7 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem8 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem16 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem9 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem10 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem17 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem11 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem12 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem18 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem13 = New System.Windows.Forms.MenuItem()
+        Me.DataSet1 = New System.Data.DataSet()
+        Me.DataTable1 = New System.Data.DataTable()
+        Me.DataColumn1 = New System.Data.DataColumn()
+        Me.DataColumn2 = New System.Data.DataColumn()
+        Me.DataColumn3 = New System.Data.DataColumn()
+        Me.DataColumn4 = New System.Data.DataColumn()
+        Me.DataColumn5 = New System.Data.DataColumn()
+        Me.DataColumn6 = New System.Data.DataColumn()
+        Me.DataColumn7 = New System.Data.DataColumn()
+        Me.DataColumn8 = New System.Data.DataColumn()
+        Me.DataColumn9 = New System.Data.DataColumn()
+        Me.DataColumn10 = New System.Data.DataColumn()
+        Me.DataColumn11 = New System.Data.DataColumn()
+        Me.DataColumn12 = New System.Data.DataColumn()
+        Me.DataColumn13 = New System.Data.DataColumn()
+        Me.DataColumn14 = New System.Data.DataColumn()
+        Me.DataColumn15 = New System.Data.DataColumn()
+        Me.DataColumn16 = New System.Data.DataColumn()
+        Me.DataColumn17 = New System.Data.DataColumn()
+        Me.DataColumn18 = New System.Data.DataColumn()
+        Me.DataColumn19 = New System.Data.DataColumn()
+        Me.DataColumn20 = New System.Data.DataColumn()
+        Me.DataColumn21 = New System.Data.DataColumn()
+        Me.DataColumn22 = New System.Data.DataColumn()
+        Me.DataColumn23 = New System.Data.DataColumn()
+        Me.DataColumn24 = New System.Data.DataColumn()
+        Me.DataColumn25 = New System.Data.DataColumn()
+        Me.DataColumn26 = New System.Data.DataColumn()
+        Me.DataColumn27 = New System.Data.DataColumn()
+        Me.DataColumn28 = New System.Data.DataColumn()
+        Me.DataColumn29 = New System.Data.DataColumn()
+        Me.DataColumn30 = New System.Data.DataColumn()
+        Me.DataColumn31 = New System.Data.DataColumn()
+        Me.DataColumn32 = New System.Data.DataColumn()
+        Me.DataColumn33 = New System.Data.DataColumn()
+        Me.DataColumn34 = New System.Data.DataColumn()
+        Me.DataColumn35 = New System.Data.DataColumn()
+        Me.DataColumn36 = New System.Data.DataColumn()
+        Me.DataColumn37 = New System.Data.DataColumn()
+        Me.DataColumn38 = New System.Data.DataColumn()
+        Me.DataColumn39 = New System.Data.DataColumn()
+        Me.DataColumn40 = New System.Data.DataColumn()
+        Me.DataColumn41 = New System.Data.DataColumn()
+        Me.DataColumn42 = New System.Data.DataColumn()
+        Me.DataColumn43 = New System.Data.DataColumn()
+        Me.DataColumn44 = New System.Data.DataColumn()
+        Me.DataColumn45 = New System.Data.DataColumn()
+        Me.DataColumn46 = New System.Data.DataColumn()
+        Me.DataColumn47 = New System.Data.DataColumn()
+        Me.DataColumn48 = New System.Data.DataColumn()
+        Me.DataColumn49 = New System.Data.DataColumn()
+        Me.DataColumn50 = New System.Data.DataColumn()
+        Me.DataColumn51 = New System.Data.DataColumn()
+        Me.DataColumn52 = New System.Data.DataColumn()
+        Me.DataColumn53 = New System.Data.DataColumn()
+        Me.DataColumn54 = New System.Data.DataColumn()
+        Me.DataColumn55 = New System.Data.DataColumn()
+        Me.DataColumn56 = New System.Data.DataColumn()
+        Me.DataColumn57 = New System.Data.DataColumn()
+        Me.DataColumn58 = New System.Data.DataColumn()
+        Me.DataColumn59 = New System.Data.DataColumn()
+        Me.DataColumn60 = New System.Data.DataColumn()
+        Me.DataColumn61 = New System.Data.DataColumn()
+        Me.DataColumn62 = New System.Data.DataColumn()
+        Me.DataColumn63 = New System.Data.DataColumn()
+        Me.DataColumn64 = New System.Data.DataColumn()
+        Me.DataColumn65 = New System.Data.DataColumn()
+        Me.DataColumn66 = New System.Data.DataColumn()
+        Me.DataColumn67 = New System.Data.DataColumn()
+        Me.DataColumn68 = New System.Data.DataColumn()
+        Me.DataColumn69 = New System.Data.DataColumn()
+        Me.DataColumn70 = New System.Data.DataColumn()
+        Me.DataColumn71 = New System.Data.DataColumn()
+        Me.GridView1 = New DevExpress.XtraGrid.Views.Grid.GridView()
+        Me.colIND = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colPERSONELKODU = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colPERSONELADI = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colBABAADI = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colANNEADI = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colREFADI = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colADRES = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colTELEFON1 = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colTELEFON2 = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colTELEFON3 = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colDEPARTMAN = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.sec_hareket_dept = New DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit()
+        Me.colGOREV = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colRESIM = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colBrutMaas = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colNetMaas = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colAktif = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colISEGIRIS = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colKesinti1 = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colKesinti2 = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colKesinti3 = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colKesinti4 = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colKesinti5 = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colEklenti1 = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colEklenti2 = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colEklenti3 = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colEklenti4 = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colEklenti5 = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colKULLANICI = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.XtraTabPage2 = New DevExpress.XtraTab.XtraTabPage()
+        Me.PanelControl5 = New DevExpress.XtraEditors.PanelControl()
+        Me.XtraTabControl2 = New DevExpress.XtraTab.XtraTabControl()
+        Me.XtraTabPage3 = New DevExpress.XtraTab.XtraTabPage()
+        Me.GroupControl3 = New DevExpress.XtraEditors.GroupControl()
+        Me.sec_sMobileKullan = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_kullanici = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_aktif = New DevExpress.XtraEditors.CheckEdit()
+        Me.txt_gorev = New DevExpress.XtraEditors.TextEdit()
+        Me.Label14 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_dept = New DevExpress.XtraEditors.LookUpEdit()
+        Me.Label13 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_gsm = New DevExpress.XtraEditors.TextEdit()
+        Me.Label12 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_tel2 = New DevExpress.XtraEditors.TextEdit()
+        Me.Label11 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_tel1 = New DevExpress.XtraEditors.TextEdit()
+        Me.Label10 = New DevExpress.XtraEditors.LabelControl()
+        Me.Label9 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_adres = New DevExpress.XtraEditors.MemoEdit()
+        Me.GroupControl1 = New DevExpress.XtraEditors.GroupControl()
+        Me.TextEdit1 = New DevExpress.XtraEditors.TextEdit()
+        Me.LabelControl21 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_resim = New DevExpress.XtraEditors.PictureEdit()
+        Me.txt_isegiris = New DevExpress.XtraEditors.DateEdit()
+        Me.Label15 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_ref = New DevExpress.XtraEditors.TextEdit()
+        Me.Label8 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_baba = New DevExpress.XtraEditors.TextEdit()
+        Me.Label7 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_anne = New DevExpress.XtraEditors.TextEdit()
+        Me.Label6 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_onayla = New DevExpress.XtraEditors.TextEdit()
+        Me.Label5 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_sifre = New DevExpress.XtraEditors.TextEdit()
+        Me.Label4 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_ad = New DevExpress.XtraEditors.TextEdit()
+        Me.Label3 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_kod = New DevExpress.XtraEditors.TextEdit()
+        Me.Label2 = New DevExpress.XtraEditors.LabelControl()
+        Me.XtraTabPage4 = New DevExpress.XtraTab.XtraTabPage()
+        Me.GroupControl5 = New DevExpress.XtraEditors.GroupControl()
+        Me.txt_kesinti5 = New DevExpress.XtraEditors.CalcEdit()
+        Me.Label27 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_kesinti4 = New DevExpress.XtraEditors.CalcEdit()
+        Me.Label26 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_kesinti3 = New DevExpress.XtraEditors.CalcEdit()
+        Me.Label25 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_kesinti2 = New DevExpress.XtraEditors.CalcEdit()
+        Me.Label24 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_kesinti1 = New DevExpress.XtraEditors.CalcEdit()
+        Me.Label23 = New DevExpress.XtraEditors.LabelControl()
+        Me.GroupControl2 = New DevExpress.XtraEditors.GroupControl()
+        Me.txt_eklenti5 = New DevExpress.XtraEditors.CalcEdit()
+        Me.Label22 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_eklenti4 = New DevExpress.XtraEditors.CalcEdit()
+        Me.Label21 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_eklenti3 = New DevExpress.XtraEditors.CalcEdit()
+        Me.Label20 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_eklenti2 = New DevExpress.XtraEditors.CalcEdit()
+        Me.Label19 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_eklenti1 = New DevExpress.XtraEditors.CalcEdit()
+        Me.Label18 = New DevExpress.XtraEditors.LabelControl()
+        Me.GroupControl4 = New DevExpress.XtraEditors.GroupControl()
+        Me.sec_durum = New DevExpress.XtraEditors.ComboBoxEdit()
+        Me.Label31 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_depo = New DevExpress.XtraEditors.LookUpEdit()
+        Me.Label30 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_satici = New DevExpress.XtraEditors.LookUpEdit()
+        Me.btn_hesap = New DevExpress.XtraEditors.ButtonEdit()
+        Me.Label29 = New DevExpress.XtraEditors.LabelControl()
+        Me.Label28 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_netmaas = New DevExpress.XtraEditors.CalcEdit()
+        Me.Label17 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_brutmaas = New DevExpress.XtraEditors.CalcEdit()
+        Me.Label16 = New DevExpress.XtraEditors.LabelControl()
+        Me.XtraTabPage5 = New DevExpress.XtraTab.XtraTabPage()
+        Me.sec_grid = New DevExpress.XtraEditors.PopupContainerControl()
+        Me.GridControl2 = New DevExpress.XtraGrid.GridControl()
+        Me.GridView2 = New DevExpress.XtraGrid.Views.Grid.GridView()
+        Me.colSEC = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colKOD = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.colACIKLAMA = New DevExpress.XtraGrid.Columns.GridColumn()
+        Me.GroupControl7 = New DevExpress.XtraEditors.GroupControl()
+        Me.LabelControl19 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_sHareketTipi = New DevExpress.XtraEditors.LookUpEdit()
+        Me.LabelControl17 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_sSubeMagaza = New DevExpress.XtraEditors.LookUpEdit()
+        Me.sec_sDepo = New DevExpress.XtraEditors.LookUpEdit()
+        Me.LabelControl14 = New DevExpress.XtraEditors.LabelControl()
+        Me.GroupControl6 = New DevExpress.XtraEditors.GroupControl()
+        Me.txt_sGiderSinirla = New DevExpress.XtraEditors.TextEdit()
+        Me.Label51 = New DevExpress.XtraEditors.LabelControl()
+        Me.LabelControl5 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_sSinifKodu = New DevExpress.XtraEditors.PopupContainerEdit()
+        Me.Label32 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_sFiyatTipi = New DevExpress.XtraEditors.LookUpEdit()
+        Me.txt_sFihristSinirla = New DevExpress.XtraEditors.TextEdit()
+        Me.Label36 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_sBankaSinirla = New DevExpress.XtraEditors.TextEdit()
+        Me.Label37 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_sStokSinirla = New DevExpress.XtraEditors.TextEdit()
+        Me.Label38 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_sCariSinirla = New DevExpress.XtraEditors.TextEdit()
+        Me.Label39 = New DevExpress.XtraEditors.LabelControl()
+        Me.XtraTabPage6 = New DevExpress.XtraTab.XtraTabPage()
+        Me.sec_bOtomatikPesinatDuzelt = New DevExpress.XtraEditors.CheckEdit()
+        Me.txt_nTaksitSayi = New DevExpress.XtraEditors.SpinEdit()
+        Me.txt_nTaksitBaslangic = New DevExpress.XtraEditors.SpinEdit()
+        Me.Label41 = New DevExpress.XtraEditors.LabelControl()
+        Me.Label42 = New DevExpress.XtraEditors.LabelControl()
+        Me.Label43 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_nTaksitGun = New DevExpress.XtraEditors.SpinEdit()
+        Me.sec_bOtomatikTaksit = New DevExpress.XtraEditors.CheckEdit()
+        Me.Label33 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_sBacodeStd = New DevExpress.XtraEditors.SpinEdit()
+        Me.Label34 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_PrinterDepo = New DevExpress.XtraEditors.TextEdit()
+        Me.Label35 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_PrinterTermal = New DevExpress.XtraEditors.TextEdit()
+        Me.Label40 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_FontSize = New DevExpress.XtraEditors.SpinEdit()
+        Me.GroupControl9 = New DevExpress.XtraEditors.GroupControl()
+        Me.LabelControl23 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_sEFiyatTipi5 = New DevExpress.XtraEditors.LookUpEdit()
+        Me.LabelControl16 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_sEFiyatTipi4 = New DevExpress.XtraEditors.LookUpEdit()
+        Me.LabelControl7 = New DevExpress.XtraEditors.LabelControl()
+        Me.LabelControl8 = New DevExpress.XtraEditors.LabelControl()
+        Me.LabelControl9 = New DevExpress.XtraEditors.LabelControl()
+        Me.LabelControl10 = New DevExpress.XtraEditors.LabelControl()
+        Me.LabelControl11 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_sEFiyatTipiM = New DevExpress.XtraEditors.LookUpEdit()
+        Me.sec_sEFiyatTipiA = New DevExpress.XtraEditors.LookUpEdit()
+        Me.sec_sEFiyatTipi3 = New DevExpress.XtraEditors.LookUpEdit()
+        Me.sec_sEFiyatTipi2 = New DevExpress.XtraEditors.LookUpEdit()
+        Me.sec_sEFiyatTipi1 = New DevExpress.XtraEditors.LookUpEdit()
+        Me.GroupControl8 = New DevExpress.XtraEditors.GroupControl()
+        Me.LabelControl22 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_sFiyatTipi5 = New DevExpress.XtraEditors.LookUpEdit()
+        Me.LabelControl20 = New DevExpress.XtraEditors.LabelControl()
+        Me.LabelControl15 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_sFiyatTipi4 = New DevExpress.XtraEditors.LookUpEdit()
+        Me.sec_sAktifFiyatTipi = New DevExpress.XtraEditors.LookUpEdit()
+        Me.LabelControl1 = New DevExpress.XtraEditors.LabelControl()
+        Me.LabelControl4 = New DevExpress.XtraEditors.LabelControl()
+        Me.LabelControl3 = New DevExpress.XtraEditors.LabelControl()
+        Me.LabelControl2 = New DevExpress.XtraEditors.LabelControl()
+        Me.LabelControl6 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_sFiyatTipiM = New DevExpress.XtraEditors.LookUpEdit()
+        Me.sec_sFiyatTipiA = New DevExpress.XtraEditors.LookUpEdit()
+        Me.sec_sFiyatTipi3 = New DevExpress.XtraEditors.LookUpEdit()
+        Me.sec_sFiyatTipi2 = New DevExpress.XtraEditors.LookUpEdit()
+        Me.sec_sFiyatTipi1 = New DevExpress.XtraEditors.LookUpEdit()
+        Me.GroupControl11 = New DevExpress.XtraEditors.GroupControl()
+        Me.LabelControl12 = New DevExpress.XtraEditors.LabelControl()
+        Me.LabelControl18 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_sPesinFiyatTipi = New DevExpress.XtraEditors.LookUpEdit()
+        Me.sec_sKrediliFiyatTipi = New DevExpress.XtraEditors.LookUpEdit()
+        Me.GroupControl10 = New DevExpress.XtraEditors.GroupControl()
+        Me.LabelControl13 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_sSaticiRumuzu = New DevExpress.XtraEditors.LookUpEdit()
+        Me.sec_bCalcVadeDagilim = New DevExpress.XtraEditors.CheckEdit()
+        Me.XtraTabPage7 = New DevExpress.XtraTab.XtraTabPage()
+        Me.sec_bSatirKendiEnvanteri = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bPerYerelMuh = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bPerOtoMuh = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bSatFatOtoMuh = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bAlisFatOtoMuh = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bMagazalarChart = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bDovizliFatura = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_sYaziIle = New DevExpress.XtraEditors.LookUpEdit()
+        Me.sec_sDil = New DevExpress.XtraEditors.LookUpEdit()
+        Me.sec_bFaturaKdvDahil = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bKendiFisNo = New DevExpress.XtraEditors.CheckEdit()
+        Me.Label50 = New DevExpress.XtraEditors.LabelControl()
+        Me.Label44 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_bNamazVaktiGosterme = New DevExpress.XtraEditors.CheckEdit()
+        Me.Label45 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_nFirmaGrupKodUzunlugu = New DevExpress.XtraEditors.SpinEdit()
+        Me.Label46 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_dteSonNakitKasaTarihi = New DevExpress.XtraEditors.DateEdit()
+        Me.sec_dteSonStokFisiTarihi = New DevExpress.XtraEditors.DateEdit()
+        Me.sec_dteSonIrsaliyeTarihi = New DevExpress.XtraEditors.DateEdit()
+        Me.Label47 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_dteSonFaturaTarihi = New DevExpress.XtraEditors.DateEdit()
+        Me.Label48 = New DevExpress.XtraEditors.LabelControl()
+        Me.sec_sRaporUzanti = New DevExpress.XtraEditors.ComboBoxEdit()
+        Me.sec_bAlisFiyatiUyar = New DevExpress.XtraEditors.CheckEdit()
+        Me.Label49 = New DevExpress.XtraEditors.LabelControl()
+        Me.txt_nStokFisiCiktiSatirSayisi = New DevExpress.XtraEditors.SpinEdit()
+        Me.txt_nIrsaliyeCiktiSatirSayisi = New DevExpress.XtraEditors.SpinEdit()
+        Me.txt_nFaturaCiktiSatirSayisi = New DevExpress.XtraEditors.SpinEdit()
+        Me.sec_bTransferEnvanterKontrol = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bStokFisiIskontosuz = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bIrsaliyeIskontosuz = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bFaturaIskontosuz = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bStokFisiKdvSiz = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bIrsaliyeKdvSiz = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bFaturaKdvSiz = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bFiyatKdvHaric = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bMessageCheck = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bSatirKontrol = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bOtomatikMaliyetFiyati = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bOtomatikAlisFiyati = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bKdvKontrolluMaliyet = New DevExpress.XtraEditors.CheckEdit()
+        Me.PanelControl4 = New DevExpress.XtraEditors.PanelControl()
+        Me.SimpleButton4 = New DevExpress.XtraEditors.SimpleButton()
+        Me.btn_vazgec = New DevExpress.XtraEditors.SimpleButton()
+        Me.btn_kaydet = New DevExpress.XtraEditors.SimpleButton()
+        Me.ps = New DevExpress.XtraPrinting.PrintingSystem(Me.components)
+        Me.printlink1 = New DevExpress.XtraPrinting.PrintableComponentLink(Me.components)
+        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
+        Me.BarManager1 = New DevExpress.XtraBars.BarManager(Me.components)
+        Me.Bar3 = New DevExpress.XtraBars.Bar()
+        Me.BarButtonItem1 = New DevExpress.XtraBars.BarButtonItem()
+        Me.BarButtonItem2 = New DevExpress.XtraBars.BarButtonItem()
+        Me.BarButtonItem3 = New DevExpress.XtraBars.BarButtonItem()
+        Me.BarButtonItem4 = New DevExpress.XtraBars.BarButtonItem()
+        Me.BarButtonItem5 = New DevExpress.XtraBars.BarButtonItem()
+        Me.BarButtonItem6 = New DevExpress.XtraBars.BarButtonItem()
+        Me.BarButtonItem7 = New DevExpress.XtraBars.BarButtonItem()
+        Me.BarButtonItem8 = New DevExpress.XtraBars.BarButtonItem()
+        Me.BarButtonItem9 = New DevExpress.XtraBars.BarButtonItem()
+        Me.barDockControlTop = New DevExpress.XtraBars.BarDockControl()
+        Me.barDockControlBottom = New DevExpress.XtraBars.BarDockControl()
+        Me.barDockControlLeft = New DevExpress.XtraBars.BarDockControl()
+        Me.barDockControlRight = New DevExpress.XtraBars.BarDockControl()
+        CType(Me.PanelControl1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PanelControl1.SuspendLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PanelControl2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PanelControl2.SuspendLayout()
+        CType(Me.PanelControl3, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PanelControl3.SuspendLayout()
+        CType(Me.XtraTabControl1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.XtraTabControl1.SuspendLayout()
+        Me.XtraTabPage1.SuspendLayout()
+        CType(Me.GridControl1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.GridView1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_hareket_dept, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.XtraTabPage2.SuspendLayout()
+        CType(Me.PanelControl5, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PanelControl5.SuspendLayout()
+        CType(Me.XtraTabControl2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.XtraTabControl2.SuspendLayout()
+        Me.XtraTabPage3.SuspendLayout()
+        CType(Me.GroupControl3, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupControl3.SuspendLayout()
+        CType(Me.sec_sMobileKullan.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_kullanici.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_aktif.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_gorev.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_dept.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_gsm.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_tel2.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_tel1.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_adres.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.GroupControl1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupControl1.SuspendLayout()
+        CType(Me.TextEdit1.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_resim.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_isegiris.Properties.VistaTimeProperties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_isegiris.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_ref.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_baba.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_anne.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_onayla.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_sifre.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_ad.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_kod.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.XtraTabPage4.SuspendLayout()
+        CType(Me.GroupControl5, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupControl5.SuspendLayout()
+        CType(Me.txt_kesinti5.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_kesinti4.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_kesinti3.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_kesinti2.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_kesinti1.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.GroupControl2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupControl2.SuspendLayout()
+        CType(Me.txt_eklenti5.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_eklenti4.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_eklenti3.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_eklenti2.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_eklenti1.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.GroupControl4, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupControl4.SuspendLayout()
+        CType(Me.sec_durum.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_depo.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_satici.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.btn_hesap.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_netmaas.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_brutmaas.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.XtraTabPage5.SuspendLayout()
+        CType(Me.sec_grid, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.sec_grid.SuspendLayout()
+        CType(Me.GridControl2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.GridView2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.GroupControl7, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupControl7.SuspendLayout()
+        CType(Me.sec_sHareketTipi.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sSubeMagaza.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sDepo.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.GroupControl6, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupControl6.SuspendLayout()
+        CType(Me.txt_sGiderSinirla.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sSinifKodu.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sFiyatTipi.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_sFihristSinirla.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_sBankaSinirla.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_sStokSinirla.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_sCariSinirla.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.XtraTabPage6.SuspendLayout()
+        CType(Me.sec_bOtomatikPesinatDuzelt.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_nTaksitSayi.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_nTaksitBaslangic.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_nTaksitGun.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bOtomatikTaksit.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_sBacodeStd.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_PrinterDepo.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_PrinterTermal.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_FontSize.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.GroupControl9, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupControl9.SuspendLayout()
+        CType(Me.sec_sEFiyatTipi5.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sEFiyatTipi4.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sEFiyatTipiM.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sEFiyatTipiA.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sEFiyatTipi3.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sEFiyatTipi2.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sEFiyatTipi1.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.GroupControl8, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupControl8.SuspendLayout()
+        CType(Me.sec_sFiyatTipi5.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sFiyatTipi4.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sAktifFiyatTipi.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sFiyatTipiM.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sFiyatTipiA.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sFiyatTipi3.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sFiyatTipi2.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sFiyatTipi1.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.GroupControl11, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupControl11.SuspendLayout()
+        CType(Me.sec_sPesinFiyatTipi.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sKrediliFiyatTipi.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.GroupControl10, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupControl10.SuspendLayout()
+        CType(Me.sec_sSaticiRumuzu.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bCalcVadeDagilim.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.XtraTabPage7.SuspendLayout()
+        CType(Me.sec_bSatirKendiEnvanteri.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bPerYerelMuh.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bPerOtoMuh.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bSatFatOtoMuh.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bAlisFatOtoMuh.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bMagazalarChart.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bDovizliFatura.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sYaziIle.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sDil.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bFaturaKdvDahil.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bKendiFisNo.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bNamazVaktiGosterme.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_nFirmaGrupKodUzunlugu.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_dteSonNakitKasaTarihi.Properties.VistaTimeProperties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_dteSonNakitKasaTarihi.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_dteSonStokFisiTarihi.Properties.VistaTimeProperties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_dteSonStokFisiTarihi.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_dteSonIrsaliyeTarihi.Properties.VistaTimeProperties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_dteSonIrsaliyeTarihi.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_dteSonFaturaTarihi.Properties.VistaTimeProperties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_dteSonFaturaTarihi.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_sRaporUzanti.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bAlisFiyatiUyar.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_nStokFisiCiktiSatirSayisi.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_nIrsaliyeCiktiSatirSayisi.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.txt_nFaturaCiktiSatirSayisi.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bTransferEnvanterKontrol.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bStokFisiIskontosuz.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bIrsaliyeIskontosuz.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bFaturaIskontosuz.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bStokFisiKdvSiz.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bIrsaliyeKdvSiz.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bFaturaKdvSiz.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bFiyatKdvHaric.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bMessageCheck.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bSatirKontrol.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bOtomatikMaliyetFiyati.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bOtomatikAlisFiyati.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.sec_bKdvKontrolluMaliyet.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PanelControl4, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PanelControl4.SuspendLayout()
+        CType(Me.ps, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.printlink1.ImageCollection, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.BarManager1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SuspendLayout()
+        '
+        'PanelControl1
+        '
+        Me.PanelControl1.Controls.Add(Me.Label1)
+        Me.PanelControl1.Controls.Add(Me.PictureBox1)
+        Me.PanelControl1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.PanelControl1.Location = New System.Drawing.Point(0, 0)
+        Me.PanelControl1.Name = "PanelControl1"
+        Me.PanelControl1.Size = New System.Drawing.Size(916, 64)
+        Me.PanelControl1.TabIndex = 2
+        '
+        'Label1
+        '
+        Me.Label1.Appearance.BackColor = System.Drawing.Color.Transparent
+        Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label1.Location = New System.Drawing.Point(110, 2)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(918, 13)
+        Me.Label1.TabIndex = 4
+        Me.Label1.Text = "Aþaðýda Personel Hesaplarýn Listesini Görmektesiniz.Ýþlem Yapmak istediðiniz Pers" &
+    "onel hesabýný seçmek için [Tamam] butonuna týklayýnýz, yeniden Arama yapmak için" &
+    " ise [Ara] butonuna týklayýnýz."
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox1.Dock = System.Windows.Forms.DockStyle.Left
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
+        Me.PictureBox1.Location = New System.Drawing.Point(2, 2)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(108, 60)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
+        Me.PictureBox1.TabIndex = 3
+        Me.PictureBox1.TabStop = False
+        '
+        'PanelControl2
+        '
+        Me.PanelControl2.Controls.Add(Me.SimpleButton3)
+        Me.PanelControl2.Controls.Add(Me.SimpleButton2)
+        Me.PanelControl2.Controls.Add(Me.SimpleButton1)
+        Me.PanelControl2.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.PanelControl2.Location = New System.Drawing.Point(0, 427)
+        Me.PanelControl2.Name = "PanelControl2"
+        Me.PanelControl2.Size = New System.Drawing.Size(916, 48)
+        Me.PanelControl2.TabIndex = 1
+        '
+        'SimpleButton3
+        '
+        Me.SimpleButton3.Image = CType(resources.GetObject("SimpleButton3.Image"), System.Drawing.Image)
+        Me.SimpleButton3.Location = New System.Drawing.Point(12, 12)
+        Me.SimpleButton3.Name = "SimpleButton3"
+        Me.SimpleButton3.Size = New System.Drawing.Size(75, 24)
+        Me.SimpleButton3.TabIndex = 5
+        Me.SimpleButton3.Text = "&Ara F3"
+        '
+        'SimpleButton2
+        '
+        Me.SimpleButton2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SimpleButton2.Image = CType(resources.GetObject("SimpleButton2.Image"), System.Drawing.Image)
+        Me.SimpleButton2.Location = New System.Drawing.Point(822, 12)
+        Me.SimpleButton2.Name = "SimpleButton2"
+        Me.SimpleButton2.Size = New System.Drawing.Size(80, 24)
+        Me.SimpleButton2.TabIndex = 4
+        Me.SimpleButton2.Text = "&Vazgeç"
+        '
+        'SimpleButton1
+        '
+        Me.SimpleButton1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SimpleButton1.Image = CType(resources.GetObject("SimpleButton1.Image"), System.Drawing.Image)
+        Me.SimpleButton1.Location = New System.Drawing.Point(742, 12)
+        Me.SimpleButton1.Name = "SimpleButton1"
+        Me.SimpleButton1.Size = New System.Drawing.Size(80, 24)
+        Me.SimpleButton1.TabIndex = 3
+        Me.SimpleButton1.Text = "&Tamam"
+        '
+        'PanelControl3
+        '
+        Me.PanelControl3.Controls.Add(Me.XtraTabControl1)
+        Me.PanelControl3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PanelControl3.Location = New System.Drawing.Point(0, 64)
+        Me.PanelControl3.Name = "PanelControl3"
+        Me.PanelControl3.Size = New System.Drawing.Size(916, 363)
+        Me.PanelControl3.TabIndex = 0
+        '
+        'XtraTabControl1
+        '
+        Me.XtraTabControl1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.XtraTabControl1.Location = New System.Drawing.Point(2, 2)
+        Me.XtraTabControl1.Name = "XtraTabControl1"
+        Me.XtraTabControl1.SelectedTabPage = Me.XtraTabPage1
+        Me.XtraTabControl1.Size = New System.Drawing.Size(912, 359)
+        Me.XtraTabControl1.TabIndex = 0
+        Me.XtraTabControl1.TabPages.AddRange(New DevExpress.XtraTab.XtraTabPage() {Me.XtraTabPage1, Me.XtraTabPage2})
+        '
+        'XtraTabPage1
+        '
+        Me.XtraTabPage1.Controls.Add(Me.GridControl1)
+        Me.XtraTabPage1.Name = "XtraTabPage1"
+        Me.XtraTabPage1.Size = New System.Drawing.Size(910, 326)
+        Me.XtraTabPage1.Text = "Personeller..."
+        '
+        'GridControl1
+        '
+        Me.GridControl1.ContextMenu = Me.ContextMenu1
+        Me.GridControl1.DataMember = "Table1"
+        Me.GridControl1.DataSource = Me.DataSet1
+        Me.GridControl1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.GridControl1.Location = New System.Drawing.Point(0, 0)
+        Me.GridControl1.MainView = Me.GridView1
+        Me.GridControl1.Name = "GridControl1"
+        Me.GridControl1.RepositoryItems.AddRange(New DevExpress.XtraEditors.Repository.RepositoryItem() {Me.sec_hareket_dept})
+        Me.GridControl1.Size = New System.Drawing.Size(910, 326)
+        Me.GridControl1.TabIndex = 0
+        Me.GridControl1.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView1})
+        '
+        'ContextMenu1
+        '
+        Me.ContextMenu1.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuItem1, Me.MenuItem14, Me.MenuItem2, Me.MenuItem3, Me.MenuItem4, Me.MenuItem26, Me.MenuItem24, Me.MenuItem25, Me.MenuItem20, Me.MenuItem19, Me.MenuItem15, Me.MenuItem5, Me.MenuItem6, Me.MenuItem7, Me.MenuItem8, Me.MenuItem16, Me.MenuItem9, Me.MenuItem10, Me.MenuItem17, Me.MenuItem11, Me.MenuItem12, Me.MenuItem18, Me.MenuItem27, Me.MenuItem13})
+        '
+        'MenuItem1
+        '
+        Me.MenuItem1.Index = 0
+        Me.MenuItem1.Shortcut = System.Windows.Forms.Shortcut.F3
+        Me.MenuItem1.Text = "Ara"
+        '
+        'MenuItem14
+        '
+        Me.MenuItem14.Index = 1
+        Me.MenuItem14.Text = "-"
+        '
+        'MenuItem2
+        '
+        Me.MenuItem2.Index = 2
+        Me.MenuItem2.Shortcut = System.Windows.Forms.Shortcut.Ins
+        Me.MenuItem2.Text = "Ekle"
+        '
+        'MenuItem3
+        '
+        Me.MenuItem3.Index = 3
+        Me.MenuItem3.Shortcut = System.Windows.Forms.Shortcut.F4
+        Me.MenuItem3.Text = "Düzelt"
+        '
+        'MenuItem4
+        '
+        Me.MenuItem4.Index = 4
+        Me.MenuItem4.Shortcut = System.Windows.Forms.Shortcut.CtrlDel
+        Me.MenuItem4.Text = "Sil"
+        '
+        'MenuItem26
+        '
+        Me.MenuItem26.Index = 5
+        Me.MenuItem26.Text = "-"
+        '
+        'MenuItem24
+        '
+        Me.MenuItem24.Index = 6
+        Me.MenuItem24.Shortcut = System.Windows.Forms.Shortcut.F8
+        Me.MenuItem24.Text = "Yetkiler"
+        '
+        'MenuItem25
+        '
+        Me.MenuItem25.Index = 7
+        Me.MenuItem25.Shortcut = System.Windows.Forms.Shortcut.CtrlV
+        Me.MenuItem25.Text = "Yetki Kopyala"
+        '
+        'MenuItem20
+        '
+        Me.MenuItem20.Index = 8
+        Me.MenuItem20.Text = "-"
+        '
+        'MenuItem19
+        '
+        Me.MenuItem19.Index = 9
+        Me.MenuItem19.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuItem21, Me.MenuItem22, Me.MenuItem23})
+        Me.MenuItem19.Text = "Raporla"
+        '
+        'MenuItem21
+        '
+        Me.MenuItem21.Index = 0
+        Me.MenuItem21.Text = "Önizle"
+        '
+        'MenuItem22
+        '
+        Me.MenuItem22.Index = 1
+        Me.MenuItem22.Text = "Dizayn"
+        '
+        'MenuItem23
+        '
+        Me.MenuItem23.Index = 2
+        Me.MenuItem23.Text = "Yazdýr"
+        '
+        'MenuItem15
+        '
+        Me.MenuItem15.Index = 10
+        Me.MenuItem15.Text = "-"
+        '
+        'MenuItem5
+        '
+        Me.MenuItem5.Index = 11
+        Me.MenuItem5.Text = "Görünümü Düzenle"
+        '
+        'MenuItem6
+        '
+        Me.MenuItem6.Index = 12
+        Me.MenuItem6.Text = "Baþlýk Deðiþtir"
+        '
+        'MenuItem7
+        '
+        Me.MenuItem7.Index = 13
+        Me.MenuItem7.Text = "Görünümü Kaydet"
+        '
+        'MenuItem8
+        '
+        Me.MenuItem8.Index = 14
+        Me.MenuItem8.Shortcut = System.Windows.Forms.Shortcut.CtrlP
+        Me.MenuItem8.Text = "Görünümü Yazdýr"
+        '
+        'MenuItem16
+        '
+        Me.MenuItem16.Index = 15
+        Me.MenuItem16.Text = "-"
+        '
+        'MenuItem9
+        '
+        Me.MenuItem9.Index = 16
+        Me.MenuItem9.Text = "Filtrele"
+        '
+        'MenuItem10
+        '
+        Me.MenuItem10.Index = 17
+        Me.MenuItem10.Text = "Gruplandýr"
+        '
+        'MenuItem17
+        '
+        Me.MenuItem17.Index = 18
+        Me.MenuItem17.Text = "-"
+        '
+        'MenuItem11
+        '
+        Me.MenuItem11.Index = 19
+        Me.MenuItem11.Text = "Satýrlarý Aç"
+        '
+        'MenuItem12
+        '
+        Me.MenuItem12.Index = 20
+        Me.MenuItem12.Text = "Satýrlarý Kapat"
+        '
+        'MenuItem18
+        '
+        Me.MenuItem18.Index = 21
+        Me.MenuItem18.Text = "-"
+        '
+        'MenuItem27 - Bildirim Tercihleri
+        '
+        Me.MenuItem27.Index = 22
+        Me.MenuItem27.Text = "Bildirim Tercihleri"
+        '
+        'MenuItem13
+        '
+        Me.MenuItem13.Index = 22
+        Me.MenuItem13.Shortcut = System.Windows.Forms.Shortcut.F12
+        Me.MenuItem13.Text = "Ekraný Kapla"
+        '
+        'DataSet1
+        '
+        Me.DataSet1.DataSetName = "NewDataSet"
+        Me.DataSet1.Locale = New System.Globalization.CultureInfo("tr-TR")
+        Me.DataSet1.Tables.AddRange(New System.Data.DataTable() {Me.DataTable1})
+        '
+        'DataTable1
+        '
+        Me.DataTable1.Columns.AddRange(New System.Data.DataColumn() {Me.DataColumn1, Me.DataColumn2, Me.DataColumn3, Me.DataColumn4, Me.DataColumn5, Me.DataColumn6, Me.DataColumn7, Me.DataColumn8, Me.DataColumn9, Me.DataColumn10, Me.DataColumn11, Me.DataColumn12, Me.DataColumn13, Me.DataColumn14, Me.DataColumn15, Me.DataColumn16, Me.DataColumn17, Me.DataColumn18, Me.DataColumn19, Me.DataColumn20, Me.DataColumn21, Me.DataColumn22, Me.DataColumn23, Me.DataColumn24, Me.DataColumn25, Me.DataColumn26, Me.DataColumn27, Me.DataColumn28, Me.DataColumn29, Me.DataColumn30, Me.DataColumn31, Me.DataColumn32, Me.DataColumn33, Me.DataColumn34, Me.DataColumn35, Me.DataColumn36, Me.DataColumn37, Me.DataColumn38, Me.DataColumn39, Me.DataColumn40, Me.DataColumn41, Me.DataColumn42, Me.DataColumn43, Me.DataColumn44, Me.DataColumn45, Me.DataColumn46, Me.DataColumn47, Me.DataColumn48, Me.DataColumn49, Me.DataColumn50, Me.DataColumn51, Me.DataColumn52, Me.DataColumn53, Me.DataColumn54, Me.DataColumn55, Me.DataColumn56, Me.DataColumn57, Me.DataColumn58, Me.DataColumn59, Me.DataColumn60, Me.DataColumn61, Me.DataColumn62, Me.DataColumn63, Me.DataColumn64, Me.DataColumn65, Me.DataColumn66, Me.DataColumn67, Me.DataColumn68, Me.DataColumn69, Me.DataColumn70, Me.DataColumn71})
+        Me.DataTable1.TableName = "Table1"
+        '
+        'DataColumn1
+        '
+        Me.DataColumn1.ColumnName = "IND"
+        Me.DataColumn1.DataType = GetType(Long)
+        '
+        'DataColumn2
+        '
+        Me.DataColumn2.ColumnName = "PERSONELKODU"
+        '
+        'DataColumn3
+        '
+        Me.DataColumn3.ColumnName = "PERSONELADI"
+        '
+        'DataColumn4
+        '
+        Me.DataColumn4.ColumnName = "SIFRE"
+        '
+        'DataColumn5
+        '
+        Me.DataColumn5.ColumnName = "ONAY"
+        '
+        'DataColumn6
+        '
+        Me.DataColumn6.ColumnName = "BABAADI"
+        '
+        'DataColumn7
+        '
+        Me.DataColumn7.ColumnName = "ANNEADI"
+        '
+        'DataColumn8
+        '
+        Me.DataColumn8.ColumnName = "REFADI"
+        '
+        'DataColumn9
+        '
+        Me.DataColumn9.ColumnName = "ADRES"
+        '
+        'DataColumn10
+        '
+        Me.DataColumn10.ColumnName = "TELEFON1"
+        '
+        'DataColumn11
+        '
+        Me.DataColumn11.ColumnName = "TELEFON2"
+        '
+        'DataColumn12
+        '
+        Me.DataColumn12.ColumnName = "TELEFON3"
+        '
+        'DataColumn13
+        '
+        Me.DataColumn13.ColumnName = "DEPARTMAN"
+        Me.DataColumn13.DataType = GetType(Long)
+        '
+        'DataColumn14
+        '
+        Me.DataColumn14.ColumnName = "GOREV"
+        '
+        'DataColumn15
+        '
+        Me.DataColumn15.ColumnName = "RESIM"
+        Me.DataColumn15.DataType = GetType(Byte())
+        '
+        'DataColumn16
+        '
+        Me.DataColumn16.ColumnName = "ISEGIRIS"
+        Me.DataColumn16.DataType = GetType(Date)
+        '
+        'DataColumn17
+        '
+        Me.DataColumn17.ColumnName = "AKTIF"
+        Me.DataColumn17.DataType = GetType(Boolean)
+        '
+        'DataColumn18
+        '
+        Me.DataColumn18.ColumnName = "sCariSinifKoduSinirla"
+        '
+        'DataColumn19
+        '
+        Me.DataColumn19.ColumnName = "sFiyat1"
+        '
+        'DataColumn20
+        '
+        Me.DataColumn20.ColumnName = "sFiyat2"
+        '
+        'DataColumn21
+        '
+        Me.DataColumn21.ColumnName = "sFiyat3"
+        '
+        'DataColumn22
+        '
+        Me.DataColumn22.ColumnName = "sFiyat4"
+        '
+        'DataColumn23
+        '
+        Me.DataColumn23.ColumnName = "sFiyatA"
+        '
+        'DataColumn24
+        '
+        Me.DataColumn24.ColumnName = "sFiyatM"
+        '
+        'DataColumn25
+        '
+        Me.DataColumn25.ColumnName = "EsFiyat1"
+        '
+        'DataColumn26
+        '
+        Me.DataColumn26.ColumnName = "EsFiyat2"
+        '
+        'DataColumn27
+        '
+        Me.DataColumn27.ColumnName = "EsFiyat3"
+        '
+        'DataColumn28
+        '
+        Me.DataColumn28.ColumnName = "EsFiyat4"
+        '
+        'DataColumn29
+        '
+        Me.DataColumn29.ColumnName = "EsFiyatA"
+        '
+        'DataColumn30
+        '
+        Me.DataColumn30.ColumnName = "EsFiyatM"
+        '
+        'DataColumn31
+        '
+        Me.DataColumn31.ColumnName = "bCalcVadeDagilim"
+        Me.DataColumn31.DataType = GetType(Boolean)
+        '
+        'DataColumn32
+        '
+        Me.DataColumn32.ColumnName = "bOtomatikTaksit"
+        Me.DataColumn32.DataType = GetType(Boolean)
+        '
+        'DataColumn33
+        '
+        Me.DataColumn33.ColumnName = "bOtomatikPesinatDuzelt"
+        Me.DataColumn33.DataType = GetType(Boolean)
+        '
+        'DataColumn34
+        '
+        Me.DataColumn34.ColumnName = "bKdvKontrolluMaliyet"
+        Me.DataColumn34.DataType = GetType(Boolean)
+        '
+        'DataColumn35
+        '
+        Me.DataColumn35.ColumnName = "bSatirKontrol"
+        Me.DataColumn35.DataType = GetType(Boolean)
+        '
+        'DataColumn36
+        '
+        Me.DataColumn36.ColumnName = "bOtomatikMaliyetFiyati"
+        Me.DataColumn36.DataType = GetType(Boolean)
+        '
+        'DataColumn37
+        '
+        Me.DataColumn37.ColumnName = "bOtomatikAlisFiyati"
+        Me.DataColumn37.DataType = GetType(Boolean)
+        '
+        'DataColumn38
+        '
+        Me.DataColumn38.ColumnName = "bAlisFiyatiUyar"
+        '
+        'DataColumn39
+        '
+        Me.DataColumn39.ColumnName = "dteSonFaturaTarihi"
+        Me.DataColumn39.DataType = GetType(Date)
+        '
+        'DataColumn40
+        '
+        Me.DataColumn40.ColumnName = "dteSonIrsaliyeTarihi"
+        Me.DataColumn40.DataType = GetType(Date)
+        '
+        'DataColumn41
+        '
+        Me.DataColumn41.ColumnName = "dteSonStokFisiTarihi"
+        Me.DataColumn41.DataType = GetType(Date)
+        '
+        'DataColumn42
+        '
+        Me.DataColumn42.ColumnName = "dteSonNakitKasaTarihi"
+        Me.DataColumn42.DataType = GetType(Date)
+        '
+        'DataColumn43
+        '
+        Me.DataColumn43.ColumnName = "nFirmaGrupKodUzunlugu"
+        Me.DataColumn43.DataType = GetType(Long)
+        '
+        'DataColumn44
+        '
+        Me.DataColumn44.ColumnName = "nTaksitGun"
+        Me.DataColumn44.DataType = GetType(Long)
+        '
+        'DataColumn45
+        '
+        Me.DataColumn45.ColumnName = "nTaksitBaslangic"
+        Me.DataColumn45.DataType = GetType(Long)
+        '
+        'DataColumn46
+        '
+        Me.DataColumn46.ColumnName = "nTaksitSayi"
+        Me.DataColumn46.DataType = GetType(Long)
+        '
+        'DataColumn47
+        '
+        Me.DataColumn47.ColumnName = "sKrediliFiyatTipi"
+        '
+        'DataColumn48
+        '
+        Me.DataColumn48.ColumnName = "sPesinFiyatTipi"
+        '
+        'DataColumn49
+        '
+        Me.DataColumn49.ColumnName = "bMessageCheck"
+        Me.DataColumn49.DataType = GetType(Boolean)
+        '
+        'DataColumn50
+        '
+        Me.DataColumn50.ColumnName = "bNamazVaktiGosterme"
+        Me.DataColumn50.DataType = GetType(Boolean)
+        '
+        'DataColumn51
+        '
+        Me.DataColumn51.ColumnName = "sSaticiRumuzu"
+        '
+        'DataColumn52
+        '
+        Me.DataColumn52.ColumnName = "PrinterTermal"
+        '
+        'DataColumn53
+        '
+        Me.DataColumn53.ColumnName = "PrinterDepo"
+        '
+        'DataColumn54
+        '
+        Me.DataColumn54.ColumnName = "FontSize"
+        Me.DataColumn54.DataType = GetType(Decimal)
+        '
+        'DataColumn55
+        '
+        Me.DataColumn55.ColumnName = "bFiyatKdvHaric"
+        Me.DataColumn55.DataType = GetType(Boolean)
+        '
+        'DataColumn56
+        '
+        Me.DataColumn56.ColumnName = "bFaturaKdvDahil"
+        Me.DataColumn56.DataType = GetType(Boolean)
+        '
+        'DataColumn57
+        '
+        Me.DataColumn57.ColumnName = "bFaturaKdvSiz"
+        Me.DataColumn57.DataType = GetType(Boolean)
+        '
+        'DataColumn58
+        '
+        Me.DataColumn58.ColumnName = "bFaturaIskontosuz"
+        Me.DataColumn58.DataType = GetType(Boolean)
+        '
+        'DataColumn59
+        '
+        Me.DataColumn59.ColumnName = "nFaturaCiktiSatirSayisi"
+        Me.DataColumn59.DataType = GetType(Long)
+        '
+        'DataColumn60
+        '
+        Me.DataColumn60.ColumnName = "bIrsaliyeKdvSiz"
+        Me.DataColumn60.DataType = GetType(Boolean)
+        '
+        'DataColumn61
+        '
+        Me.DataColumn61.ColumnName = "bIrsaliyeIskontosuz"
+        Me.DataColumn61.DataType = GetType(Boolean)
+        '
+        'DataColumn62
+        '
+        Me.DataColumn62.ColumnName = "nIrsaliyeCiktiSatirSayisi"
+        Me.DataColumn62.DataType = GetType(Long)
+        '
+        'DataColumn63
+        '
+        Me.DataColumn63.ColumnName = "bStokFisiKdvSiz"
+        Me.DataColumn63.DataType = GetType(Boolean)
+        '
+        'DataColumn64
+        '
+        Me.DataColumn64.ColumnName = "bStokFisiIskontosuz"
+        Me.DataColumn64.DataType = GetType(Boolean)
+        '
+        'DataColumn65
+        '
+        Me.DataColumn65.ColumnName = "nStokFisiCiktiSatirSayisi"
+        Me.DataColumn65.DataType = GetType(Long)
+        '
+        'DataColumn66
+        '
+        Me.DataColumn66.ColumnName = "bTransferEnvanterKontrol"
+        Me.DataColumn66.DataType = GetType(Boolean)
+        '
+        'DataColumn67
+        '
+        Me.DataColumn67.ColumnName = "sRaporUzanti"
+        '
+        'DataColumn68
+        '
+        Me.DataColumn68.ColumnName = "sYaziIle"
+        '
+        'DataColumn69
+        '
+        Me.DataColumn69.ColumnName = "sBacodeStd"
+        '
+        'DataColumn70
+        '
+        Me.DataColumn70.ColumnName = "sDil"
+        '
+        'DataColumn71
+        '
+        Me.DataColumn71.ColumnName = "bKendiFisNo"
+        Me.DataColumn71.DataType = GetType(Boolean)
+        '
+        'GridView1
+        '
+        Me.GridView1.Appearance.FocusedCell.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.GridView1.Appearance.FocusedCell.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.GridView1.Appearance.FocusedCell.ForeColor = System.Drawing.Color.Black
+        Me.GridView1.Appearance.FocusedCell.Options.UseBackColor = True
+        Me.GridView1.Appearance.FocusedCell.Options.UseForeColor = True
+        Me.GridView1.Appearance.FocusedRow.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.GridView1.Appearance.FocusedRow.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.GridView1.Appearance.FocusedRow.ForeColor = System.Drawing.Color.Black
+        Me.GridView1.Appearance.FocusedRow.Options.UseBackColor = True
+        Me.GridView1.Appearance.FocusedRow.Options.UseForeColor = True
+        Me.GridView1.Columns.AddRange(New DevExpress.XtraGrid.Columns.GridColumn() {Me.colIND, Me.colPERSONELKODU, Me.colPERSONELADI, Me.colBABAADI, Me.colANNEADI, Me.colREFADI, Me.colADRES, Me.colTELEFON1, Me.colTELEFON2, Me.colTELEFON3, Me.colDEPARTMAN, Me.colGOREV, Me.colRESIM, Me.colBrutMaas, Me.colNetMaas, Me.colAktif, Me.colISEGIRIS, Me.colKesinti1, Me.colKesinti2, Me.colKesinti3, Me.colKesinti4, Me.colKesinti5, Me.colEklenti1, Me.colEklenti2, Me.colEklenti3, Me.colEklenti4, Me.colEklenti5, Me.colKULLANICI})
+        Me.GridView1.CustomizationFormBounds = New System.Drawing.Rectangle(391, 282, 208, 170)
+        Me.GridView1.DetailHeight = 160
+        Me.GridView1.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.RowFocus
+        Me.GridView1.GridControl = Me.GridControl1
+        Me.GridView1.GroupFormat = "{0}: {1} {2}"
+        Me.GridView1.GroupPanelText = "Gruplamak Ýstediðiniz Kolonu Buraya Sürükleyiniz..."
+        Me.GridView1.GroupSummary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridGroupSummaryItem(DevExpress.Data.SummaryItemType.Count, "PERSONELKODU", Me.colPERSONELKODU, "{0} Kayýt")})
+        Me.GridView1.IndicatorWidth = 12
+        Me.GridView1.Name = "GridView1"
+        Me.GridView1.OptionsBehavior.Editable = False
+        Me.GridView1.OptionsCustomization.AllowGroup = False
+        Me.GridView1.OptionsDetail.ShowDetailTabs = False
+        Me.GridView1.OptionsFilter.UseNewCustomFilterDialog = True
+        Me.GridView1.OptionsSelection.MultiSelect = True
+        Me.GridView1.OptionsView.ShowAutoFilterRow = True
+        Me.GridView1.OptionsView.ShowFooter = True
+        Me.GridView1.OptionsView.ShowGroupPanel = False
+        Me.GridView1.OptionsView.ShowIndicator = False
+        '
+        'colIND
+        '
+        Me.colIND.Caption = "Kayýt No"
+        Me.colIND.FieldName = "IND"
+        Me.colIND.Name = "colIND"
+        '
+        'colPERSONELKODU
+        '
+        Me.colPERSONELKODU.Caption = "Kodu"
+        Me.colPERSONELKODU.FieldName = "PERSONELKODU"
+        Me.colPERSONELKODU.Name = "colPERSONELKODU"
+        Me.colPERSONELKODU.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Count, "PERSONELKODU", "{0} Kayýt")})
+        Me.colPERSONELKODU.Visible = True
+        Me.colPERSONELKODU.VisibleIndex = 0
+        Me.colPERSONELKODU.Width = 88
+        '
+        'colPERSONELADI
+        '
+        Me.colPERSONELADI.Caption = "Adý"
+        Me.colPERSONELADI.FieldName = "PERSONELADI"
+        Me.colPERSONELADI.Name = "colPERSONELADI"
+        Me.colPERSONELADI.Visible = True
+        Me.colPERSONELADI.VisibleIndex = 1
+        Me.colPERSONELADI.Width = 90
+        '
+        'colBABAADI
+        '
+        Me.colBABAADI.Caption = "BabaAdý"
+        Me.colBABAADI.FieldName = "BABAADI"
+        Me.colBABAADI.Name = "colBABAADI"
+        '
+        'colANNEADI
+        '
+        Me.colANNEADI.Caption = "AnneAdý"
+        Me.colANNEADI.FieldName = "ANNEADI"
+        Me.colANNEADI.Name = "colANNEADI"
+        '
+        'colREFADI
+        '
+        Me.colREFADI.Caption = "Referans"
+        Me.colREFADI.FieldName = "REFADI"
+        Me.colREFADI.Name = "colREFADI"
+        Me.colREFADI.Width = 82
+        '
+        'colADRES
+        '
+        Me.colADRES.Caption = "Adres"
+        Me.colADRES.FieldName = "ADRES"
+        Me.colADRES.Name = "colADRES"
+        Me.colADRES.Visible = True
+        Me.colADRES.VisibleIndex = 2
+        Me.colADRES.Width = 133
+        '
+        'colTELEFON1
+        '
+        Me.colTELEFON1.Caption = "Telefon 1"
+        Me.colTELEFON1.FieldName = "TELEFON1"
+        Me.colTELEFON1.Name = "colTELEFON1"
+        Me.colTELEFON1.Visible = True
+        Me.colTELEFON1.VisibleIndex = 3
+        Me.colTELEFON1.Width = 80
+        '
+        'colTELEFON2
+        '
+        Me.colTELEFON2.Caption = "Telefon 2"
+        Me.colTELEFON2.FieldName = "TELEFON2"
+        Me.colTELEFON2.Name = "colTELEFON2"
+        '
+        'colTELEFON3
+        '
+        Me.colTELEFON3.Caption = "Gsm"
+        Me.colTELEFON3.FieldName = "TELEFON3"
+        Me.colTELEFON3.Name = "colTELEFON3"
+        Me.colTELEFON3.Visible = True
+        Me.colTELEFON3.VisibleIndex = 4
+        Me.colTELEFON3.Width = 80
+        '
+        'colDEPARTMAN
+        '
+        Me.colDEPARTMAN.Caption = "Dept."
+        Me.colDEPARTMAN.ColumnEdit = Me.sec_hareket_dept
+        Me.colDEPARTMAN.FieldName = "DEPARTMAN"
+        Me.colDEPARTMAN.Name = "colDEPARTMAN"
+        Me.colDEPARTMAN.Visible = True
+        Me.colDEPARTMAN.VisibleIndex = 5
+        Me.colDEPARTMAN.Width = 80
+        '
+        'sec_hareket_dept
+        '
+        Me.sec_hareket_dept.AutoHeight = False
+        Me.sec_hareket_dept.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_hareket_dept.Columns.AddRange(New DevExpress.XtraEditors.Controls.LookUpColumnInfo() {New DevExpress.XtraEditors.Controls.LookUpColumnInfo("ACIKLAMA", "ACIKLAMA")})
+        Me.sec_hareket_dept.DisplayMember = "ACIKLAMA"
+        Me.sec_hareket_dept.Name = "sec_hareket_dept"
+        Me.sec_hareket_dept.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_hareket_dept.ValueMember = "IND"
+        '
+        'colGOREV
+        '
+        Me.colGOREV.Caption = "Görevi"
+        Me.colGOREV.FieldName = "GOREV"
+        Me.colGOREV.Name = "colGOREV"
+        Me.colGOREV.Visible = True
+        Me.colGOREV.VisibleIndex = 6
+        Me.colGOREV.Width = 101
+        '
+        'colRESIM
+        '
+        Me.colRESIM.Caption = "RESIM"
+        Me.colRESIM.FieldName = "RESIM"
+        Me.colRESIM.Name = "colRESIM"
+        '
+        'colBrutMaas
+        '
+        Me.colBrutMaas.Caption = "BrutMaaþ"
+        Me.colBrutMaas.DisplayFormat.FormatString = "#,0.00"
+        Me.colBrutMaas.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
+        Me.colBrutMaas.FieldName = "BrutMaas"
+        Me.colBrutMaas.Name = "colBrutMaas"
+        Me.colBrutMaas.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Sum, "BrutMaas", "{0:#,0.00}")})
+        '
+        'colNetMaas
+        '
+        Me.colNetMaas.Caption = "NetMaaþ"
+        Me.colNetMaas.DisplayFormat.FormatString = "#,0.00"
+        Me.colNetMaas.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
+        Me.colNetMaas.FieldName = "NetMaas"
+        Me.colNetMaas.Name = "colNetMaas"
+        Me.colNetMaas.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Sum, "NetMaas", "{0:#,0.00}")})
+        '
+        'colAktif
+        '
+        Me.colAktif.Caption = "Çalýþýyor"
+        Me.colAktif.FieldName = "AKTIF"
+        Me.colAktif.Name = "colAktif"
+        Me.colAktif.Visible = True
+        Me.colAktif.VisibleIndex = 7
+        Me.colAktif.Width = 73
+        '
+        'colISEGIRIS
+        '
+        Me.colISEGIRIS.Caption = "ÝþeGiriþTarihi"
+        Me.colISEGIRIS.FieldName = "ISEGIRIS"
+        Me.colISEGIRIS.Name = "colISEGIRIS"
+        '
+        'colKesinti1
+        '
+        Me.colKesinti1.Caption = "Kesinti 1"
+        Me.colKesinti1.DisplayFormat.FormatString = "#,0.00"
+        Me.colKesinti1.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
+        Me.colKesinti1.FieldName = "Kesinti1"
+        Me.colKesinti1.Name = "colKesinti1"
+        Me.colKesinti1.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Sum, "Kesinti1", "{0:#,0.00}")})
+        '
+        'colKesinti2
+        '
+        Me.colKesinti2.Caption = "Kesinti 2"
+        Me.colKesinti2.DisplayFormat.FormatString = "#,0.00"
+        Me.colKesinti2.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
+        Me.colKesinti2.FieldName = "Kesinti2"
+        Me.colKesinti2.Name = "colKesinti2"
+        Me.colKesinti2.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Sum, "Kesinti2", "{0:#,0.00}")})
+        '
+        'colKesinti3
+        '
+        Me.colKesinti3.Caption = "Kesinti 3"
+        Me.colKesinti3.DisplayFormat.FormatString = "#,0.00"
+        Me.colKesinti3.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
+        Me.colKesinti3.FieldName = "Kesinti3"
+        Me.colKesinti3.Name = "colKesinti3"
+        Me.colKesinti3.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Sum, "Kesinti3", "{0:#,0.00}")})
+        '
+        'colKesinti4
+        '
+        Me.colKesinti4.Caption = "Kesinti 4"
+        Me.colKesinti4.DisplayFormat.FormatString = "#,0.00"
+        Me.colKesinti4.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
+        Me.colKesinti4.FieldName = "Kesinti4"
+        Me.colKesinti4.Name = "colKesinti4"
+        Me.colKesinti4.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Sum, "Kesinti4", "{0:#,0.00}")})
+        '
+        'colKesinti5
+        '
+        Me.colKesinti5.Caption = "Kesinti 5"
+        Me.colKesinti5.DisplayFormat.FormatString = "#,0.00"
+        Me.colKesinti5.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
+        Me.colKesinti5.FieldName = "Kesinti5"
+        Me.colKesinti5.Name = "colKesinti5"
+        Me.colKesinti5.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Sum, "Kesinti5", "{0:#,0.00}")})
+        '
+        'colEklenti1
+        '
+        Me.colEklenti1.Caption = "Eklenti 1"
+        Me.colEklenti1.DisplayFormat.FormatString = "#,0.00"
+        Me.colEklenti1.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
+        Me.colEklenti1.FieldName = "Eklenti1"
+        Me.colEklenti1.Name = "colEklenti1"
+        Me.colEklenti1.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Sum, "Eklenti1", "{0:#,0.00}")})
+        '
+        'colEklenti2
+        '
+        Me.colEklenti2.Caption = "Eklenti 2"
+        Me.colEklenti2.DisplayFormat.FormatString = "#,0.00"
+        Me.colEklenti2.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
+        Me.colEklenti2.FieldName = "Eklenti2"
+        Me.colEklenti2.Name = "colEklenti2"
+        Me.colEklenti2.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Sum, "Eklenti2", "{0:#,0.00}")})
+        '
+        'colEklenti3
+        '
+        Me.colEklenti3.Caption = "Eklenti 3"
+        Me.colEklenti3.DisplayFormat.FormatString = "#,0.00"
+        Me.colEklenti3.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
+        Me.colEklenti3.FieldName = "Eklenti3"
+        Me.colEklenti3.Name = "colEklenti3"
+        Me.colEklenti3.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Sum, "Eklenti3", "{0:#,0.00}")})
+        '
+        'colEklenti4
+        '
+        Me.colEklenti4.Caption = "Eklenti 4"
+        Me.colEklenti4.DisplayFormat.FormatString = "#,0.00"
+        Me.colEklenti4.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
+        Me.colEklenti4.FieldName = "Eklenti4"
+        Me.colEklenti4.Name = "colEklenti4"
+        Me.colEklenti4.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Sum, "Eklenti4", "{0:#,0.00}")})
+        '
+        'colEklenti5
+        '
+        Me.colEklenti5.Caption = "Eklenti 5"
+        Me.colEklenti5.DisplayFormat.FormatString = "#,0.00"
+        Me.colEklenti5.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
+        Me.colEklenti5.FieldName = "Eklenti5"
+        Me.colEklenti5.Name = "colEklenti5"
+        Me.colEklenti5.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Sum, "Eklenti5", "{0:#,0.00}")})
+        '
+        'colKULLANICI
+        '
+        Me.colKULLANICI.Caption = "Kullanici"
+        Me.colKULLANICI.FieldName = "KULLANICI"
+        Me.colKULLANICI.Name = "colKULLANICI"
+        Me.colKULLANICI.Visible = True
+        Me.colKULLANICI.VisibleIndex = 8
+        Me.colKULLANICI.Width = 80
+        '
+        'XtraTabPage2
+        '
+        Me.XtraTabPage2.Controls.Add(Me.PanelControl5)
+        Me.XtraTabPage2.Controls.Add(Me.PanelControl4)
+        Me.XtraTabPage2.Name = "XtraTabPage2"
+        Me.XtraTabPage2.PageVisible = False
+        Me.XtraTabPage2.Size = New System.Drawing.Size(910, 326)
+        Me.XtraTabPage2.Text = "Taným..."
+        '
+        'PanelControl5
+        '
+        Me.PanelControl5.Controls.Add(Me.XtraTabControl2)
+        Me.PanelControl5.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PanelControl5.Location = New System.Drawing.Point(0, 0)
+        Me.PanelControl5.Name = "PanelControl5"
+        Me.PanelControl5.Size = New System.Drawing.Size(910, 286)
+        Me.PanelControl5.TabIndex = 0
+        '
+        'XtraTabControl2
+        '
+        Me.XtraTabControl2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.XtraTabControl2.Location = New System.Drawing.Point(2, 2)
+        Me.XtraTabControl2.Name = "XtraTabControl2"
+        Me.XtraTabControl2.SelectedTabPage = Me.XtraTabPage3
+        Me.XtraTabControl2.Size = New System.Drawing.Size(906, 282)
+        Me.XtraTabControl2.TabIndex = 1
+        Me.XtraTabControl2.TabPages.AddRange(New DevExpress.XtraTab.XtraTabPage() {Me.XtraTabPage3, Me.XtraTabPage4, Me.XtraTabPage5, Me.XtraTabPage6, Me.XtraTabPage7})
+        '
+        'XtraTabPage3
+        '
+        Me.XtraTabPage3.Controls.Add(Me.GroupControl3)
+        Me.XtraTabPage3.Controls.Add(Me.GroupControl1)
+        Me.XtraTabPage3.Name = "XtraTabPage3"
+        Me.XtraTabPage3.Size = New System.Drawing.Size(904, 249)
+        Me.XtraTabPage3.Text = "PersonelBilgileri"
+        '
+        'GroupControl3
+        '
+        Me.GroupControl3.Controls.Add(Me.sec_sMobileKullan)
+        Me.GroupControl3.Controls.Add(Me.sec_kullanici)
+        Me.GroupControl3.Controls.Add(Me.sec_aktif)
+        Me.GroupControl3.Controls.Add(Me.txt_gorev)
+        Me.GroupControl3.Controls.Add(Me.Label14)
+        Me.GroupControl3.Controls.Add(Me.sec_dept)
+        Me.GroupControl3.Controls.Add(Me.Label13)
+        Me.GroupControl3.Controls.Add(Me.txt_gsm)
+        Me.GroupControl3.Controls.Add(Me.Label12)
+        Me.GroupControl3.Controls.Add(Me.txt_tel2)
+        Me.GroupControl3.Controls.Add(Me.Label11)
+        Me.GroupControl3.Controls.Add(Me.txt_tel1)
+        Me.GroupControl3.Controls.Add(Me.Label10)
+        Me.GroupControl3.Controls.Add(Me.Label9)
+        Me.GroupControl3.Controls.Add(Me.txt_adres)
+        Me.GroupControl3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.GroupControl3.Location = New System.Drawing.Point(0, 132)
+        Me.GroupControl3.Name = "GroupControl3"
+        Me.GroupControl3.Size = New System.Drawing.Size(904, 117)
+        Me.GroupControl3.TabIndex = 5
+        Me.GroupControl3.Text = "Ýleþitim Bilgileri"
+        '
+        'sec_sMobileKullan
+        '
+        Me.sec_sMobileKullan.EditValue = True
+        Me.sec_sMobileKullan.Location = New System.Drawing.Point(459, 89)
+        Me.sec_sMobileKullan.Name = "sec_sMobileKullan"
+        Me.sec_sMobileKullan.Properties.Caption = "Mobile Uygulama Kullansýn"
+        Me.sec_sMobileKullan.Size = New System.Drawing.Size(153, 19)
+        Me.sec_sMobileKullan.TabIndex = 25
+        '
+        'sec_kullanici
+        '
+        Me.sec_kullanici.EditValue = True
+        Me.sec_kullanici.Location = New System.Drawing.Point(540, 64)
+        Me.sec_kullanici.Name = "sec_kullanici"
+        Me.sec_kullanici.Properties.Caption = "Kullanici"
+        Me.sec_kullanici.Size = New System.Drawing.Size(72, 19)
+        Me.sec_kullanici.TabIndex = 24
+        '
+        'sec_aktif
+        '
+        Me.sec_aktif.EditValue = True
+        Me.sec_aktif.Location = New System.Drawing.Point(459, 64)
+        Me.sec_aktif.Name = "sec_aktif"
+        Me.sec_aktif.Properties.Caption = "Çalýþýyor"
+        Me.sec_aktif.Size = New System.Drawing.Size(62, 19)
+        Me.sec_aktif.TabIndex = 23
+        '
+        'txt_gorev
+        '
+        Me.txt_gorev.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.GOREV", True))
+        Me.txt_gorev.EnterMoveNextControl = True
+        Me.txt_gorev.Location = New System.Drawing.Point(461, 44)
+        Me.txt_gorev.Name = "txt_gorev"
+        Me.txt_gorev.Properties.MaxLength = 20
+        Me.txt_gorev.Size = New System.Drawing.Size(155, 20)
+        Me.txt_gorev.TabIndex = 21
+        '
+        'Label14
+        '
+        Me.Label14.Location = New System.Drawing.Point(416, 48)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(33, 13)
+        Me.Label14.TabIndex = 20
+        Me.Label14.Text = "Görev:"
+        '
+        'sec_dept
+        '
+        Me.sec_dept.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.sec_dept.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.DEPARTMAN", True))
+        Me.sec_dept.EnterMoveNextControl = True
+        Me.sec_dept.Location = New System.Drawing.Point(461, 24)
+        Me.sec_dept.Name = "sec_dept"
+        Me.sec_dept.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_dept.Properties.Columns.AddRange(New DevExpress.XtraEditors.Controls.LookUpColumnInfo() {New DevExpress.XtraEditors.Controls.LookUpColumnInfo("KOD", 10, "Kod"), New DevExpress.XtraEditors.Controls.LookUpColumnInfo("ACIKLAMA", 35, "Açýklama")})
+        Me.sec_dept.Properties.DisplayMember = "ACIKLAMA"
+        Me.sec_dept.Properties.NullText = "[Departman]"
+        Me.sec_dept.Properties.ValueMember = "IND"
+        Me.sec_dept.Size = New System.Drawing.Size(155, 20)
+        Me.sec_dept.TabIndex = 19
+        '
+        'Label13
+        '
+        Me.Label13.Location = New System.Drawing.Point(422, 28)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(27, 13)
+        Me.Label13.TabIndex = 18
+        Me.Label13.Text = "Dept."
+        '
+        'txt_gsm
+        '
+        Me.txt_gsm.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.TELEFON3", True))
+        Me.txt_gsm.EnterMoveNextControl = True
+        Me.txt_gsm.Location = New System.Drawing.Point(280, 64)
+        Me.txt_gsm.Name = "txt_gsm"
+        Me.txt_gsm.Properties.MaxLength = 20
+        Me.txt_gsm.Size = New System.Drawing.Size(128, 20)
+        Me.txt_gsm.TabIndex = 17
+        '
+        'Label12
+        '
+        Me.Label12.Location = New System.Drawing.Point(224, 68)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(24, 13)
+        Me.Label12.TabIndex = 16
+        Me.Label12.Text = "Gsm:"
+        '
+        'txt_tel2
+        '
+        Me.txt_tel2.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.TELEFON2", True))
+        Me.txt_tel2.EnterMoveNextControl = True
+        Me.txt_tel2.Location = New System.Drawing.Point(280, 44)
+        Me.txt_tel2.Name = "txt_tel2"
+        Me.txt_tel2.Properties.MaxLength = 20
+        Me.txt_tel2.Size = New System.Drawing.Size(128, 20)
+        Me.txt_tel2.TabIndex = 15
+        '
+        'Label11
+        '
+        Me.Label11.Location = New System.Drawing.Point(224, 48)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(24, 13)
+        Me.Label11.TabIndex = 14
+        Me.Label11.Text = "Tel2:"
+        '
+        'txt_tel1
+        '
+        Me.txt_tel1.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.TELEFON1", True))
+        Me.txt_tel1.EnterMoveNextControl = True
+        Me.txt_tel1.Location = New System.Drawing.Point(280, 24)
+        Me.txt_tel1.Name = "txt_tel1"
+        Me.txt_tel1.Properties.MaxLength = 20
+        Me.txt_tel1.Size = New System.Drawing.Size(128, 20)
+        Me.txt_tel1.TabIndex = 13
+        '
+        'Label10
+        '
+        Me.Label10.Location = New System.Drawing.Point(224, 28)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(24, 13)
+        Me.Label10.TabIndex = 12
+        Me.Label10.Text = "Tel1:"
+        '
+        'Label9
+        '
+        Me.Label9.Location = New System.Drawing.Point(7, 27)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(32, 13)
+        Me.Label9.TabIndex = 11
+        Me.Label9.Text = "Adres:"
+        '
+        'txt_adres
+        '
+        Me.txt_adres.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.ADRES", True))
+        Me.txt_adres.EnterMoveNextControl = True
+        Me.txt_adres.Location = New System.Drawing.Point(63, 24)
+        Me.txt_adres.Name = "txt_adres"
+        Me.txt_adres.Properties.ScrollBars = System.Windows.Forms.ScrollBars.None
+        Me.txt_adres.Size = New System.Drawing.Size(155, 59)
+        Me.txt_adres.TabIndex = 10
+        '
+        'GroupControl1
+        '
+        Me.GroupControl1.Controls.Add(Me.TextEdit1)
+        Me.GroupControl1.Controls.Add(Me.LabelControl21)
+        Me.GroupControl1.Controls.Add(Me.sec_resim)
+        Me.GroupControl1.Controls.Add(Me.txt_isegiris)
+        Me.GroupControl1.Controls.Add(Me.Label15)
+        Me.GroupControl1.Controls.Add(Me.txt_ref)
+        Me.GroupControl1.Controls.Add(Me.Label8)
+        Me.GroupControl1.Controls.Add(Me.txt_baba)
+        Me.GroupControl1.Controls.Add(Me.Label7)
+        Me.GroupControl1.Controls.Add(Me.txt_anne)
+        Me.GroupControl1.Controls.Add(Me.Label6)
+        Me.GroupControl1.Controls.Add(Me.txt_onayla)
+        Me.GroupControl1.Controls.Add(Me.Label5)
+        Me.GroupControl1.Controls.Add(Me.txt_sifre)
+        Me.GroupControl1.Controls.Add(Me.Label4)
+        Me.GroupControl1.Controls.Add(Me.txt_ad)
+        Me.GroupControl1.Controls.Add(Me.Label3)
+        Me.GroupControl1.Controls.Add(Me.txt_kod)
+        Me.GroupControl1.Controls.Add(Me.Label2)
+        Me.GroupControl1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.GroupControl1.Location = New System.Drawing.Point(0, 0)
+        Me.GroupControl1.Name = "GroupControl1"
+        Me.GroupControl1.Size = New System.Drawing.Size(904, 132)
+        Me.GroupControl1.TabIndex = 4
+        Me.GroupControl1.Text = "Personel Bilgileri"
+        '
+        'TextEdit1
+        '
+        Me.TextEdit1.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.ANNEADI", True))
+        Me.TextEdit1.EnterMoveNextControl = True
+        Me.TextEdit1.Location = New System.Drawing.Point(523, 24)
+        Me.TextEdit1.Name = "TextEdit1"
+        Me.TextEdit1.Properties.MaxLength = 50
+        Me.TextEdit1.Size = New System.Drawing.Size(189, 20)
+        Me.TextEdit1.TabIndex = 19
+        '
+        'LabelControl21
+        '
+        Me.LabelControl21.Location = New System.Drawing.Point(470, 27)
+        Me.LabelControl21.Name = "LabelControl21"
+        Me.LabelControl21.Size = New System.Drawing.Size(22, 13)
+        Me.LabelControl21.TabIndex = 18
+        Me.LabelControl21.Text = "Mail:"
+        '
+        'sec_resim
+        '
+        Me.sec_resim.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.RESIM", True))
+        Me.sec_resim.Enabled = False
+        Me.sec_resim.Location = New System.Drawing.Point(735, 24)
+        Me.sec_resim.Name = "sec_resim"
+        Me.sec_resim.Properties.NullText = "[Yüklü Resim Bulunamadý]"
+        Me.sec_resim.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Stretch
+        Me.sec_resim.Size = New System.Drawing.Size(144, 102)
+        Me.sec_resim.TabIndex = 6
+        '
+        'txt_isegiris
+        '
+        Me.txt_isegiris.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.ISEGIRIS", True))
+        Me.txt_isegiris.EditValue = Nothing
+        Me.txt_isegiris.EnterMoveNextControl = True
+        Me.txt_isegiris.Location = New System.Drawing.Point(275, 84)
+        Me.txt_isegiris.Name = "txt_isegiris"
+        Me.txt_isegiris.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.txt_isegiris.Properties.DisplayFormat.FormatString = "D"
+        Me.txt_isegiris.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime
+        Me.txt_isegiris.Properties.VistaTimeProperties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
+        Me.txt_isegiris.Size = New System.Drawing.Size(189, 20)
+        Me.txt_isegiris.TabIndex = 17
+        '
+        'Label15
+        '
+        Me.Label15.Location = New System.Drawing.Point(222, 88)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(39, 13)
+        Me.Label15.TabIndex = 16
+        Me.Label15.Text = "ÝþeGiriþ:"
+        '
+        'txt_ref
+        '
+        Me.txt_ref.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.REFADI", True))
+        Me.txt_ref.EnterMoveNextControl = True
+        Me.txt_ref.Location = New System.Drawing.Point(275, 64)
+        Me.txt_ref.Name = "txt_ref"
+        Me.txt_ref.Properties.MaxLength = 50
+        Me.txt_ref.Size = New System.Drawing.Size(189, 20)
+        Me.txt_ref.TabIndex = 15
+        '
+        'Label8
+        '
+        Me.Label8.Location = New System.Drawing.Point(239, 68)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(22, 13)
+        Me.Label8.TabIndex = 14
+        Me.Label8.Text = "Mail:"
+        '
+        'txt_baba
+        '
+        Me.txt_baba.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.BABAADI", True))
+        Me.txt_baba.EnterMoveNextControl = True
+        Me.txt_baba.Location = New System.Drawing.Point(275, 44)
+        Me.txt_baba.Name = "txt_baba"
+        Me.txt_baba.Properties.MaxLength = 50
+        Me.txt_baba.Size = New System.Drawing.Size(189, 20)
+        Me.txt_baba.TabIndex = 13
+        '
+        'Label7
+        '
+        Me.Label7.Location = New System.Drawing.Point(222, 48)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(43, 13)
+        Me.Label7.TabIndex = 12
+        Me.Label7.Text = "BabaAdý:"
+        '
+        'txt_anne
+        '
+        Me.txt_anne.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.ANNEADI", True))
+        Me.txt_anne.EnterMoveNextControl = True
+        Me.txt_anne.Location = New System.Drawing.Point(275, 24)
+        Me.txt_anne.Name = "txt_anne"
+        Me.txt_anne.Properties.MaxLength = 50
+        Me.txt_anne.Size = New System.Drawing.Size(189, 20)
+        Me.txt_anne.TabIndex = 11
+        '
+        'Label6
+        '
+        Me.Label6.Location = New System.Drawing.Point(222, 28)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(44, 13)
+        Me.Label6.TabIndex = 10
+        Me.Label6.Text = "AnneAdý:"
+        '
+        'txt_onayla
+        '
+        Me.txt_onayla.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.ONAY", True))
+        Me.txt_onayla.EnterMoveNextControl = True
+        Me.txt_onayla.Location = New System.Drawing.Point(64, 84)
+        Me.txt_onayla.Name = "txt_onayla"
+        Me.txt_onayla.Properties.MaxLength = 10
+        Me.txt_onayla.Properties.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
+        Me.txt_onayla.Size = New System.Drawing.Size(155, 20)
+        Me.txt_onayla.TabIndex = 9
+        '
+        'Label5
+        '
+        Me.Label5.Location = New System.Drawing.Point(9, 87)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(38, 13)
+        Me.Label5.TabIndex = 8
+        Me.Label5.Text = "Onayla:"
+        '
+        'txt_sifre
+        '
+        Me.txt_sifre.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.SIFRE", True))
+        Me.txt_sifre.EnterMoveNextControl = True
+        Me.txt_sifre.Location = New System.Drawing.Point(64, 64)
+        Me.txt_sifre.Name = "txt_sifre"
+        Me.txt_sifre.Properties.MaxLength = 10
+        Me.txt_sifre.Properties.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
+        Me.txt_sifre.Size = New System.Drawing.Size(155, 20)
+        Me.txt_sifre.TabIndex = 7
+        '
+        'Label4
+        '
+        Me.Label4.Location = New System.Drawing.Point(9, 67)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(26, 13)
+        Me.Label4.TabIndex = 6
+        Me.Label4.Text = "Þifre:"
+        '
+        'txt_ad
+        '
+        Me.txt_ad.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.PERSONELADI", True))
+        Me.txt_ad.EnterMoveNextControl = True
+        Me.txt_ad.Location = New System.Drawing.Point(64, 44)
+        Me.txt_ad.Name = "txt_ad"
+        Me.txt_ad.Properties.MaxLength = 50
+        Me.txt_ad.Size = New System.Drawing.Size(155, 20)
+        Me.txt_ad.TabIndex = 5
+        '
+        'Label3
+        '
+        Me.Label3.Location = New System.Drawing.Point(9, 47)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(19, 13)
+        Me.Label3.TabIndex = 4
+        Me.Label3.Text = "Adý:"
+        '
+        'txt_kod
+        '
+        Me.txt_kod.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.PERSONELKODU", True))
+        Me.txt_kod.EnterMoveNextControl = True
+        Me.txt_kod.Location = New System.Drawing.Point(64, 24)
+        Me.txt_kod.Name = "txt_kod"
+        Me.txt_kod.Properties.MaxLength = 8
+        Me.txt_kod.Size = New System.Drawing.Size(155, 20)
+        Me.txt_kod.TabIndex = 3
+        '
+        'Label2
+        '
+        Me.Label2.Location = New System.Drawing.Point(9, 27)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(28, 13)
+        Me.Label2.TabIndex = 2
+        Me.Label2.Text = "Kodu:"
+        '
+        'XtraTabPage4
+        '
+        Me.XtraTabPage4.Controls.Add(Me.GroupControl5)
+        Me.XtraTabPage4.Controls.Add(Me.GroupControl2)
+        Me.XtraTabPage4.Controls.Add(Me.GroupControl4)
+        Me.XtraTabPage4.Name = "XtraTabPage4"
+        Me.XtraTabPage4.Size = New System.Drawing.Size(565, 114)
+        Me.XtraTabPage4.Text = "ÖzelBilgiler"
+        '
+        'GroupControl5
+        '
+        Me.GroupControl5.Controls.Add(Me.txt_kesinti5)
+        Me.GroupControl5.Controls.Add(Me.Label27)
+        Me.GroupControl5.Controls.Add(Me.txt_kesinti4)
+        Me.GroupControl5.Controls.Add(Me.Label26)
+        Me.GroupControl5.Controls.Add(Me.txt_kesinti3)
+        Me.GroupControl5.Controls.Add(Me.Label25)
+        Me.GroupControl5.Controls.Add(Me.txt_kesinti2)
+        Me.GroupControl5.Controls.Add(Me.Label24)
+        Me.GroupControl5.Controls.Add(Me.txt_kesinti1)
+        Me.GroupControl5.Controls.Add(Me.Label23)
+        Me.GroupControl5.Dock = System.Windows.Forms.DockStyle.Right
+        Me.GroupControl5.Location = New System.Drawing.Point(261, 80)
+        Me.GroupControl5.Name = "GroupControl5"
+        Me.GroupControl5.Size = New System.Drawing.Size(304, 34)
+        Me.GroupControl5.TabIndex = 2
+        Me.GroupControl5.Text = "Kesintiler"
+        '
+        'txt_kesinti5
+        '
+        Me.txt_kesinti5.EnterMoveNextControl = True
+        Me.txt_kesinti5.Location = New System.Drawing.Point(80, 112)
+        Me.txt_kesinti5.Name = "txt_kesinti5"
+        Me.txt_kesinti5.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.txt_kesinti5.Properties.NullText = "0.00"
+        Me.txt_kesinti5.Size = New System.Drawing.Size(216, 20)
+        Me.txt_kesinti5.TabIndex = 14
+        '
+        'Label27
+        '
+        Me.Label27.Location = New System.Drawing.Point(8, 115)
+        Me.Label27.Name = "Label27"
+        Me.Label27.Size = New System.Drawing.Size(37, 13)
+        Me.Label27.TabIndex = 13
+        Me.Label27.Text = "Kesinti5"
+        '
+        'txt_kesinti4
+        '
+        Me.txt_kesinti4.EnterMoveNextControl = True
+        Me.txt_kesinti4.Location = New System.Drawing.Point(80, 90)
+        Me.txt_kesinti4.Name = "txt_kesinti4"
+        Me.txt_kesinti4.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.txt_kesinti4.Properties.NullText = "0.00"
+        Me.txt_kesinti4.Size = New System.Drawing.Size(216, 20)
+        Me.txt_kesinti4.TabIndex = 12
+        '
+        'Label26
+        '
+        Me.Label26.Location = New System.Drawing.Point(8, 93)
+        Me.Label26.Name = "Label26"
+        Me.Label26.Size = New System.Drawing.Size(37, 13)
+        Me.Label26.TabIndex = 11
+        Me.Label26.Text = "Kesinti4"
+        '
+        'txt_kesinti3
+        '
+        Me.txt_kesinti3.EnterMoveNextControl = True
+        Me.txt_kesinti3.Location = New System.Drawing.Point(80, 68)
+        Me.txt_kesinti3.Name = "txt_kesinti3"
+        Me.txt_kesinti3.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.txt_kesinti3.Properties.NullText = "0.00"
+        Me.txt_kesinti3.Size = New System.Drawing.Size(216, 20)
+        Me.txt_kesinti3.TabIndex = 10
+        '
+        'Label25
+        '
+        Me.Label25.Location = New System.Drawing.Point(8, 71)
+        Me.Label25.Name = "Label25"
+        Me.Label25.Size = New System.Drawing.Size(37, 13)
+        Me.Label25.TabIndex = 9
+        Me.Label25.Text = "Kesinti3"
+        '
+        'txt_kesinti2
+        '
+        Me.txt_kesinti2.EnterMoveNextControl = True
+        Me.txt_kesinti2.Location = New System.Drawing.Point(80, 46)
+        Me.txt_kesinti2.Name = "txt_kesinti2"
+        Me.txt_kesinti2.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.txt_kesinti2.Properties.NullText = "0.00"
+        Me.txt_kesinti2.Size = New System.Drawing.Size(216, 20)
+        Me.txt_kesinti2.TabIndex = 8
+        '
+        'Label24
+        '
+        Me.Label24.Location = New System.Drawing.Point(8, 49)
+        Me.Label24.Name = "Label24"
+        Me.Label24.Size = New System.Drawing.Size(37, 13)
+        Me.Label24.TabIndex = 7
+        Me.Label24.Text = "Kesinti2"
+        '
+        'txt_kesinti1
+        '
+        Me.txt_kesinti1.EnterMoveNextControl = True
+        Me.txt_kesinti1.Location = New System.Drawing.Point(80, 24)
+        Me.txt_kesinti1.Name = "txt_kesinti1"
+        Me.txt_kesinti1.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.txt_kesinti1.Properties.NullText = "0.00"
+        Me.txt_kesinti1.Size = New System.Drawing.Size(216, 20)
+        Me.txt_kesinti1.TabIndex = 6
+        '
+        'Label23
+        '
+        Me.Label23.Location = New System.Drawing.Point(8, 27)
+        Me.Label23.Name = "Label23"
+        Me.Label23.Size = New System.Drawing.Size(37, 13)
+        Me.Label23.TabIndex = 5
+        Me.Label23.Text = "Kesinti1"
+        '
+        'GroupControl2
+        '
+        Me.GroupControl2.Controls.Add(Me.txt_eklenti5)
+        Me.GroupControl2.Controls.Add(Me.Label22)
+        Me.GroupControl2.Controls.Add(Me.txt_eklenti4)
+        Me.GroupControl2.Controls.Add(Me.Label21)
+        Me.GroupControl2.Controls.Add(Me.txt_eklenti3)
+        Me.GroupControl2.Controls.Add(Me.Label20)
+        Me.GroupControl2.Controls.Add(Me.txt_eklenti2)
+        Me.GroupControl2.Controls.Add(Me.Label19)
+        Me.GroupControl2.Controls.Add(Me.txt_eklenti1)
+        Me.GroupControl2.Controls.Add(Me.Label18)
+        Me.GroupControl2.Dock = System.Windows.Forms.DockStyle.Left
+        Me.GroupControl2.Location = New System.Drawing.Point(0, 80)
+        Me.GroupControl2.Name = "GroupControl2"
+        Me.GroupControl2.Size = New System.Drawing.Size(296, 34)
+        Me.GroupControl2.TabIndex = 1
+        Me.GroupControl2.Text = "Eklentiler"
+        '
+        'txt_eklenti5
+        '
+        Me.txt_eklenti5.EnterMoveNextControl = True
+        Me.txt_eklenti5.Location = New System.Drawing.Point(76, 112)
+        Me.txt_eklenti5.Name = "txt_eklenti5"
+        Me.txt_eklenti5.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.txt_eklenti5.Properties.NullText = "0.00"
+        Me.txt_eklenti5.Size = New System.Drawing.Size(216, 20)
+        Me.txt_eklenti5.TabIndex = 14
+        '
+        'Label22
+        '
+        Me.Label22.Location = New System.Drawing.Point(4, 116)
+        Me.Label22.Name = "Label22"
+        Me.Label22.Size = New System.Drawing.Size(37, 13)
+        Me.Label22.TabIndex = 13
+        Me.Label22.Text = "Eklenti5"
+        '
+        'txt_eklenti4
+        '
+        Me.txt_eklenti4.EnterMoveNextControl = True
+        Me.txt_eklenti4.Location = New System.Drawing.Point(76, 90)
+        Me.txt_eklenti4.Name = "txt_eklenti4"
+        Me.txt_eklenti4.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.txt_eklenti4.Properties.NullText = "0.00"
+        Me.txt_eklenti4.Size = New System.Drawing.Size(216, 20)
+        Me.txt_eklenti4.TabIndex = 12
+        '
+        'Label21
+        '
+        Me.Label21.Location = New System.Drawing.Point(4, 94)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(37, 13)
+        Me.Label21.TabIndex = 11
+        Me.Label21.Text = "Eklenti4"
+        '
+        'txt_eklenti3
+        '
+        Me.txt_eklenti3.EnterMoveNextControl = True
+        Me.txt_eklenti3.Location = New System.Drawing.Point(76, 68)
+        Me.txt_eklenti3.Name = "txt_eklenti3"
+        Me.txt_eklenti3.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.txt_eklenti3.Properties.NullText = "0.00"
+        Me.txt_eklenti3.Size = New System.Drawing.Size(216, 20)
+        Me.txt_eklenti3.TabIndex = 10
+        '
+        'Label20
+        '
+        Me.Label20.Location = New System.Drawing.Point(4, 72)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(37, 13)
+        Me.Label20.TabIndex = 9
+        Me.Label20.Text = "Eklenti3"
+        '
+        'txt_eklenti2
+        '
+        Me.txt_eklenti2.EnterMoveNextControl = True
+        Me.txt_eklenti2.Location = New System.Drawing.Point(76, 46)
+        Me.txt_eklenti2.Name = "txt_eklenti2"
+        Me.txt_eklenti2.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.txt_eklenti2.Properties.NullText = "0.00"
+        Me.txt_eklenti2.Size = New System.Drawing.Size(216, 20)
+        Me.txt_eklenti2.TabIndex = 8
+        '
+        'Label19
+        '
+        Me.Label19.Location = New System.Drawing.Point(4, 50)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(37, 13)
+        Me.Label19.TabIndex = 7
+        Me.Label19.Text = "Eklenti2"
+        '
+        'txt_eklenti1
+        '
+        Me.txt_eklenti1.EnterMoveNextControl = True
+        Me.txt_eklenti1.Location = New System.Drawing.Point(76, 24)
+        Me.txt_eklenti1.Name = "txt_eklenti1"
+        Me.txt_eklenti1.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.txt_eklenti1.Properties.NullText = "0.00"
+        Me.txt_eklenti1.Size = New System.Drawing.Size(216, 20)
+        Me.txt_eklenti1.TabIndex = 6
+        '
+        'Label18
+        '
+        Me.Label18.Location = New System.Drawing.Point(4, 28)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(37, 13)
+        Me.Label18.TabIndex = 5
+        Me.Label18.Text = "Eklenti1"
+        '
+        'GroupControl4
+        '
+        Me.GroupControl4.AppearanceCaption.Options.UseTextOptions = True
+        Me.GroupControl4.AppearanceCaption.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center
+        Me.GroupControl4.Controls.Add(Me.sec_durum)
+        Me.GroupControl4.Controls.Add(Me.Label31)
+        Me.GroupControl4.Controls.Add(Me.sec_depo)
+        Me.GroupControl4.Controls.Add(Me.Label30)
+        Me.GroupControl4.Controls.Add(Me.sec_satici)
+        Me.GroupControl4.Controls.Add(Me.btn_hesap)
+        Me.GroupControl4.Controls.Add(Me.Label29)
+        Me.GroupControl4.Controls.Add(Me.Label28)
+        Me.GroupControl4.Controls.Add(Me.txt_netmaas)
+        Me.GroupControl4.Controls.Add(Me.Label17)
+        Me.GroupControl4.Controls.Add(Me.txt_brutmaas)
+        Me.GroupControl4.Controls.Add(Me.Label16)
+        Me.GroupControl4.Dock = System.Windows.Forms.DockStyle.Top
+        Me.GroupControl4.Location = New System.Drawing.Point(0, 0)
+        Me.GroupControl4.Name = "GroupControl4"
+        Me.GroupControl4.Size = New System.Drawing.Size(565, 80)
+        Me.GroupControl4.TabIndex = 0
+        Me.GroupControl4.Text = "Maaþ Bilgileri"
+        '
+        'sec_durum
+        '
+        Me.sec_durum.EditValue = "Personel"
+        Me.sec_durum.Location = New System.Drawing.Point(384, 29)
+        Me.sec_durum.Name = "sec_durum"
+        Me.sec_durum.Properties.Appearance.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_durum.Properties.Appearance.Options.UseBackColor = True
+        Me.sec_durum.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_durum.Properties.Items.AddRange(New Object() {"Personel", "SatýþPersoneli", "FirmaPersoneli", "KatÞefi"})
+        Me.sec_durum.Size = New System.Drawing.Size(216, 20)
+        Me.sec_durum.TabIndex = 15
+        '
+        'Label31
+        '
+        Me.Label31.Location = New System.Drawing.Point(312, 32)
+        Me.Label31.Name = "Label31"
+        Me.Label31.Size = New System.Drawing.Size(41, 13)
+        Me.Label31.TabIndex = 14
+        Me.Label31.Text = "Durumu:"
+        '
+        'sec_depo
+        '
+        Me.sec_depo.Location = New System.Drawing.Point(200, 28)
+        Me.sec_depo.Name = "sec_depo"
+        Me.sec_depo.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_depo.Properties.Columns.AddRange(New DevExpress.XtraEditors.Controls.LookUpColumnInfo() {New DevExpress.XtraEditors.Controls.LookUpColumnInfo("sDepo", "Kod"), New DevExpress.XtraEditors.Controls.LookUpColumnInfo("sAciklama", "Açýklama")})
+        Me.sec_depo.Properties.DisplayMember = "sDepo"
+        Me.sec_depo.Properties.NullText = "[Maðaza]"
+        Me.sec_depo.Properties.ValueMember = "sDepo"
+        Me.sec_depo.Size = New System.Drawing.Size(104, 20)
+        Me.sec_depo.TabIndex = 13
+        '
+        'Label30
+        '
+        Me.Label30.Location = New System.Drawing.Point(144, 31)
+        Me.Label30.Name = "Label30"
+        Me.Label30.Size = New System.Drawing.Size(41, 13)
+        Me.Label30.TabIndex = 12
+        Me.Label30.Text = "Maðaza:"
+        '
+        'sec_satici
+        '
+        Me.sec_satici.Location = New System.Drawing.Point(200, 50)
+        Me.sec_satici.Name = "sec_satici"
+        Me.sec_satici.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_satici.Properties.Columns.AddRange(New DevExpress.XtraEditors.Controls.LookUpColumnInfo() {New DevExpress.XtraEditors.Controls.LookUpColumnInfo("sSaticiRumuzu", "Rumuz"), New DevExpress.XtraEditors.Controls.LookUpColumnInfo("SATICI", "Satýcý")})
+        Me.sec_satici.Properties.DisplayMember = "sSaticiRumuzu"
+        Me.sec_satici.Properties.NullText = "[Rumuz]"
+        Me.sec_satici.Properties.ValueMember = "sSaticiRumuzu"
+        Me.sec_satici.Size = New System.Drawing.Size(104, 20)
+        Me.sec_satici.TabIndex = 11
+        '
+        'btn_hesap
+        '
+        Me.btn_hesap.Location = New System.Drawing.Point(384, 51)
+        Me.btn_hesap.Name = "btn_hesap"
+        Me.btn_hesap.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
+        Me.btn_hesap.Size = New System.Drawing.Size(216, 20)
+        Me.btn_hesap.TabIndex = 10
+        '
+        'Label29
+        '
+        Me.Label29.Location = New System.Drawing.Point(312, 54)
+        Me.Label29.Name = "Label29"
+        Me.Label29.Size = New System.Drawing.Size(53, 13)
+        Me.Label29.TabIndex = 9
+        Me.Label29.Text = "CariHesap:"
+        '
+        'Label28
+        '
+        Me.Label28.Location = New System.Drawing.Point(145, 53)
+        Me.Label28.Name = "Label28"
+        Me.Label28.Size = New System.Drawing.Size(36, 13)
+        Me.Label28.TabIndex = 7
+        Me.Label28.Text = "Rumuz:"
+        '
+        'txt_netmaas
+        '
+        Me.txt_netmaas.Enabled = False
+        Me.txt_netmaas.Location = New System.Drawing.Point(60, 51)
+        Me.txt_netmaas.Name = "txt_netmaas"
+        Me.txt_netmaas.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.txt_netmaas.Properties.NullText = "0.00"
+        Me.txt_netmaas.Size = New System.Drawing.Size(76, 20)
+        Me.txt_netmaas.TabIndex = 6
+        '
+        'Label17
+        '
+        Me.Label17.Location = New System.Drawing.Point(8, 54)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(46, 13)
+        Me.Label17.TabIndex = 5
+        Me.Label17.Text = "NetMaaþ:"
+        '
+        'txt_brutmaas
+        '
+        Me.txt_brutmaas.EnterMoveNextControl = True
+        Me.txt_brutmaas.Location = New System.Drawing.Point(60, 29)
+        Me.txt_brutmaas.Name = "txt_brutmaas"
+        Me.txt_brutmaas.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.txt_brutmaas.Properties.NullText = "0.00"
+        Me.txt_brutmaas.Size = New System.Drawing.Size(76, 20)
+        Me.txt_brutmaas.TabIndex = 4
+        '
+        'Label16
+        '
+        Me.Label16.Location = New System.Drawing.Point(4, 32)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(49, 13)
+        Me.Label16.TabIndex = 3
+        Me.Label16.Text = "BrütMaaþ:"
+        '
+        'XtraTabPage5
+        '
+        Me.XtraTabPage5.Controls.Add(Me.sec_grid)
+        Me.XtraTabPage5.Controls.Add(Me.GroupControl7)
+        Me.XtraTabPage5.Controls.Add(Me.GroupControl6)
+        Me.XtraTabPage5.Name = "XtraTabPage5"
+        Me.XtraTabPage5.Size = New System.Drawing.Size(565, 114)
+        Me.XtraTabPage5.Text = "Analiz"
+        '
+        'sec_grid
+        '
+        Me.sec_grid.Controls.Add(Me.GridControl2)
+        Me.sec_grid.Location = New System.Drawing.Point(476, 50)
+        Me.sec_grid.Name = "sec_grid"
+        Me.sec_grid.Size = New System.Drawing.Size(256, 128)
+        Me.sec_grid.TabIndex = 149
+        '
+        'GridControl2
+        '
+        Me.GridControl2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.GridControl2.Location = New System.Drawing.Point(0, 0)
+        Me.GridControl2.MainView = Me.GridView2
+        Me.GridControl2.Name = "GridControl2"
+        Me.GridControl2.Size = New System.Drawing.Size(256, 128)
+        Me.GridControl2.TabIndex = 0
+        Me.GridControl2.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView2})
+        '
+        'GridView2
+        '
+        Me.GridView2.Columns.AddRange(New DevExpress.XtraGrid.Columns.GridColumn() {Me.colSEC, Me.colKOD, Me.colACIKLAMA})
+        Me.GridView2.DetailHeight = 160
+        Me.GridView2.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.RowFocus
+        Me.GridView2.GridControl = Me.GridControl2
+        Me.GridView2.GroupFormat = "{0}: {1} {2}"
+        Me.GridView2.GroupPanelText = "Gruplamak Ýstediðiniz Kolonu Buraya Sürükleyiniz..."
+        Me.GridView2.IndicatorWidth = 12
+        Me.GridView2.Name = "GridView2"
+        Me.GridView2.OptionsCustomization.AllowFilter = False
+        Me.GridView2.OptionsCustomization.AllowGroup = False
+        Me.GridView2.OptionsDetail.ShowDetailTabs = False
+        Me.GridView2.OptionsView.ShowGroupPanel = False
+        Me.GridView2.OptionsView.ShowIndicator = False
+        '
+        'colSEC
+        '
+        Me.colSEC.Caption = "Seçim"
+        Me.colSEC.FieldName = "SEC"
+        Me.colSEC.Name = "colSEC"
+        Me.colSEC.Visible = True
+        Me.colSEC.VisibleIndex = 0
+        Me.colSEC.Width = 48
+        '
+        'colKOD
+        '
+        Me.colKOD.Caption = "Kod"
+        Me.colKOD.FieldName = "KOD"
+        Me.colKOD.Name = "colKOD"
+        Me.colKOD.OptionsColumn.AllowFocus = False
+        Me.colKOD.Visible = True
+        Me.colKOD.VisibleIndex = 1
+        Me.colKOD.Width = 52
+        '
+        'colACIKLAMA
+        '
+        Me.colACIKLAMA.Caption = "Açýklama"
+        Me.colACIKLAMA.FieldName = "ACIKLAMA"
+        Me.colACIKLAMA.Name = "colACIKLAMA"
+        Me.colACIKLAMA.OptionsColumn.AllowFocus = False
+        Me.colACIKLAMA.Visible = True
+        Me.colACIKLAMA.VisibleIndex = 2
+        Me.colACIKLAMA.Width = 128
+        '
+        'GroupControl7
+        '
+        Me.GroupControl7.Controls.Add(Me.LabelControl19)
+        Me.GroupControl7.Controls.Add(Me.sec_sHareketTipi)
+        Me.GroupControl7.Controls.Add(Me.LabelControl17)
+        Me.GroupControl7.Controls.Add(Me.sec_sSubeMagaza)
+        Me.GroupControl7.Controls.Add(Me.sec_sDepo)
+        Me.GroupControl7.Controls.Add(Me.LabelControl14)
+        Me.GroupControl7.Location = New System.Drawing.Point(3, 120)
+        Me.GroupControl7.Name = "GroupControl7"
+        Me.GroupControl7.Size = New System.Drawing.Size(467, 92)
+        Me.GroupControl7.TabIndex = 6
+        Me.GroupControl7.Text = "Sýnýrlamalar"
+        '
+        'LabelControl19
+        '
+        Me.LabelControl19.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl19.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl19.Location = New System.Drawing.Point(233, 53)
+        Me.LabelControl19.Name = "LabelControl19"
+        Me.LabelControl19.Size = New System.Drawing.Size(17, 13)
+        Me.LabelControl19.TabIndex = 150
+        Me.LabelControl19.Text = "HT:"
+        '
+        'sec_sHareketTipi
+        '
+        Me.sec_sHareketTipi.EnterMoveNextControl = True
+        Me.sec_sHareketTipi.Location = New System.Drawing.Point(293, 49)
+        Me.sec_sHareketTipi.Name = "sec_sHareketTipi"
+        Me.sec_sHareketTipi.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sHareketTipi.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sHareketTipi.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sHareketTipi.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sHareketTipi.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sHareketTipi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sHareketTipi.Properties.DisplayMember = "sHareketTipi"
+        Me.sec_sHareketTipi.Properties.NullText = "[HareketTipi]"
+        Me.sec_sHareketTipi.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sHareketTipi.Properties.ValueMember = "sHareketTipi"
+        Me.sec_sHareketTipi.Size = New System.Drawing.Size(155, 20)
+        Me.sec_sHareketTipi.TabIndex = 149
+        '
+        'LabelControl17
+        '
+        Me.LabelControl17.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl17.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl17.Location = New System.Drawing.Point(32, 48)
+        Me.LabelControl17.Name = "LabelControl17"
+        Me.LabelControl17.Size = New System.Drawing.Size(27, 13)
+        Me.LabelControl17.TabIndex = 148
+        Me.LabelControl17.Text = "Kasa:"
+        '
+        'sec_sSubeMagaza
+        '
+        Me.sec_sSubeMagaza.EnterMoveNextControl = True
+        Me.sec_sSubeMagaza.Location = New System.Drawing.Point(64, 44)
+        Me.sec_sSubeMagaza.Name = "sec_sSubeMagaza"
+        Me.sec_sSubeMagaza.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sSubeMagaza.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sSubeMagaza.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sSubeMagaza.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sSubeMagaza.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sSubeMagaza.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sSubeMagaza.Properties.DisplayMember = "sSubeMagaza"
+        Me.sec_sSubeMagaza.Properties.NullText = "[Kasa]"
+        Me.sec_sSubeMagaza.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sSubeMagaza.Properties.ValueMember = "sSubeMagaza"
+        Me.sec_sSubeMagaza.Size = New System.Drawing.Size(155, 20)
+        Me.sec_sSubeMagaza.TabIndex = 147
+        '
+        'sec_sDepo
+        '
+        Me.sec_sDepo.EnterMoveNextControl = True
+        Me.sec_sDepo.Location = New System.Drawing.Point(64, 22)
+        Me.sec_sDepo.Name = "sec_sDepo"
+        Me.sec_sDepo.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sDepo.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sDepo.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sDepo.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sDepo.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sDepo.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sDepo.Properties.DisplayMember = "sDepo"
+        Me.sec_sDepo.Properties.NullText = "[Depo]"
+        Me.sec_sDepo.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sDepo.Properties.ValueMember = "sDepo"
+        Me.sec_sDepo.Size = New System.Drawing.Size(155, 20)
+        Me.sec_sDepo.TabIndex = 146
+        '
+        'LabelControl14
+        '
+        Me.LabelControl14.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl14.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl14.Location = New System.Drawing.Point(32, 26)
+        Me.LabelControl14.Name = "LabelControl14"
+        Me.LabelControl14.Size = New System.Drawing.Size(29, 13)
+        Me.LabelControl14.TabIndex = 145
+        Me.LabelControl14.Text = "Depo:"
+        '
+        'GroupControl6
+        '
+        Me.GroupControl6.Controls.Add(Me.txt_sGiderSinirla)
+        Me.GroupControl6.Controls.Add(Me.Label51)
+        Me.GroupControl6.Controls.Add(Me.LabelControl5)
+        Me.GroupControl6.Controls.Add(Me.sec_sSinifKodu)
+        Me.GroupControl6.Controls.Add(Me.Label32)
+        Me.GroupControl6.Controls.Add(Me.sec_sFiyatTipi)
+        Me.GroupControl6.Controls.Add(Me.txt_sFihristSinirla)
+        Me.GroupControl6.Controls.Add(Me.Label36)
+        Me.GroupControl6.Controls.Add(Me.txt_sBankaSinirla)
+        Me.GroupControl6.Controls.Add(Me.Label37)
+        Me.GroupControl6.Controls.Add(Me.txt_sStokSinirla)
+        Me.GroupControl6.Controls.Add(Me.Label38)
+        Me.GroupControl6.Controls.Add(Me.txt_sCariSinirla)
+        Me.GroupControl6.Controls.Add(Me.Label39)
+        Me.GroupControl6.Location = New System.Drawing.Point(3, 3)
+        Me.GroupControl6.Name = "GroupControl6"
+        Me.GroupControl6.Size = New System.Drawing.Size(467, 115)
+        Me.GroupControl6.TabIndex = 5
+        Me.GroupControl6.Text = "Modül Kart Sýnýrlama"
+        '
+        'txt_sGiderSinirla
+        '
+        Me.txt_sGiderSinirla.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.SIFRE", True))
+        Me.txt_sGiderSinirla.EnterMoveNextControl = True
+        Me.txt_sGiderSinirla.Location = New System.Drawing.Point(293, 43)
+        Me.txt_sGiderSinirla.Name = "txt_sGiderSinirla"
+        Me.txt_sGiderSinirla.Properties.MaxLength = 10
+        Me.txt_sGiderSinirla.Size = New System.Drawing.Size(155, 20)
+        Me.txt_sGiderSinirla.TabIndex = 153
+        '
+        'Label51
+        '
+        Me.Label51.Location = New System.Drawing.Point(225, 47)
+        Me.Label51.Name = "Label51"
+        Me.Label51.Size = New System.Drawing.Size(29, 13)
+        Me.Label51.TabIndex = 152
+        Me.Label51.Text = "Gider:"
+        '
+        'LabelControl5
+        '
+        Me.LabelControl5.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl5.Location = New System.Drawing.Point(226, 25)
+        Me.LabelControl5.Name = "LabelControl5"
+        Me.LabelControl5.Size = New System.Drawing.Size(48, 13)
+        Me.LabelControl5.TabIndex = 151
+        Me.LabelControl5.Text = "SinifKodu:"
+        '
+        'sec_sSinifKodu
+        '
+        Me.sec_sSinifKodu.EditValue = ""
+        Me.sec_sSinifKodu.EnterMoveNextControl = True
+        Me.sec_sSinifKodu.Location = New System.Drawing.Point(293, 20)
+        Me.sec_sSinifKodu.Name = "sec_sSinifKodu"
+        Me.sec_sSinifKodu.Properties.Appearance.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sSinifKodu.Properties.Appearance.Options.UseBackColor = True
+        Me.sec_sSinifKodu.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sSinifKodu.Properties.NullText = "[SinifKodu]"
+        Me.sec_sSinifKodu.Properties.ShowPopupCloseButton = False
+        Me.sec_sSinifKodu.Size = New System.Drawing.Size(155, 20)
+        Me.sec_sSinifKodu.TabIndex = 150
+        '
+        'Label32
+        '
+        Me.Label32.Location = New System.Drawing.Point(223, 84)
+        Me.Label32.Name = "Label32"
+        Me.Label32.Size = New System.Drawing.Size(57, 13)
+        Me.Label32.TabIndex = 149
+        Me.Label32.Text = "AltFiyatTipi:"
+        '
+        'sec_sFiyatTipi
+        '
+        Me.sec_sFiyatTipi.EnterMoveNextControl = True
+        Me.sec_sFiyatTipi.Location = New System.Drawing.Point(293, 80)
+        Me.sec_sFiyatTipi.Name = "sec_sFiyatTipi"
+        Me.sec_sFiyatTipi.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sFiyatTipi.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sFiyatTipi.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sFiyatTipi.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sFiyatTipi.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sFiyatTipi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sFiyatTipi.Properties.DisplayMember = "sFiyatTipi"
+        Me.sec_sFiyatTipi.Properties.NullText = "[FiyatTipi]"
+        Me.sec_sFiyatTipi.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sFiyatTipi.Properties.ValueMember = "sFiyatTipi"
+        Me.sec_sFiyatTipi.Size = New System.Drawing.Size(155, 20)
+        Me.sec_sFiyatTipi.TabIndex = 148
+        '
+        'txt_sFihristSinirla
+        '
+        Me.txt_sFihristSinirla.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.ONAY", True))
+        Me.txt_sFihristSinirla.EnterMoveNextControl = True
+        Me.txt_sFihristSinirla.Location = New System.Drawing.Point(64, 90)
+        Me.txt_sFihristSinirla.Name = "txt_sFihristSinirla"
+        Me.txt_sFihristSinirla.Properties.MaxLength = 10
+        Me.txt_sFihristSinirla.Size = New System.Drawing.Size(155, 20)
+        Me.txt_sFihristSinirla.TabIndex = 9
+        '
+        'Label36
+        '
+        Me.Label36.Location = New System.Drawing.Point(9, 92)
+        Me.Label36.Name = "Label36"
+        Me.Label36.Size = New System.Drawing.Size(33, 13)
+        Me.Label36.TabIndex = 8
+        Me.Label36.Text = "Fihrist:"
+        '
+        'txt_sBankaSinirla
+        '
+        Me.txt_sBankaSinirla.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.SIFRE", True))
+        Me.txt_sBankaSinirla.EnterMoveNextControl = True
+        Me.txt_sBankaSinirla.Location = New System.Drawing.Point(64, 68)
+        Me.txt_sBankaSinirla.Name = "txt_sBankaSinirla"
+        Me.txt_sBankaSinirla.Properties.MaxLength = 10
+        Me.txt_sBankaSinirla.Size = New System.Drawing.Size(155, 20)
+        Me.txt_sBankaSinirla.TabIndex = 7
+        '
+        'Label37
+        '
+        Me.Label37.Location = New System.Drawing.Point(9, 70)
+        Me.Label37.Name = "Label37"
+        Me.Label37.Size = New System.Drawing.Size(33, 13)
+        Me.Label37.TabIndex = 6
+        Me.Label37.Text = "Banka:"
+        '
+        'txt_sStokSinirla
+        '
+        Me.txt_sStokSinirla.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.PERSONELADI", True))
+        Me.txt_sStokSinirla.EnterMoveNextControl = True
+        Me.txt_sStokSinirla.Location = New System.Drawing.Point(64, 46)
+        Me.txt_sStokSinirla.Name = "txt_sStokSinirla"
+        Me.txt_sStokSinirla.Properties.MaxLength = 50
+        Me.txt_sStokSinirla.Size = New System.Drawing.Size(155, 20)
+        Me.txt_sStokSinirla.TabIndex = 5
+        '
+        'Label38
+        '
+        Me.Label38.Location = New System.Drawing.Point(9, 48)
+        Me.Label38.Name = "Label38"
+        Me.Label38.Size = New System.Drawing.Size(25, 13)
+        Me.Label38.TabIndex = 4
+        Me.Label38.Text = "Stok:"
+        '
+        'txt_sCariSinirla
+        '
+        Me.txt_sCariSinirla.DataBindings.Add(New System.Windows.Forms.Binding("EditValue", Me.DataSet1, "Table1.PERSONELKODU", True))
+        Me.txt_sCariSinirla.EnterMoveNextControl = True
+        Me.txt_sCariSinirla.Location = New System.Drawing.Point(64, 24)
+        Me.txt_sCariSinirla.Name = "txt_sCariSinirla"
+        Me.txt_sCariSinirla.Properties.MaxLength = 8
+        Me.txt_sCariSinirla.Size = New System.Drawing.Size(155, 20)
+        Me.txt_sCariSinirla.TabIndex = 3
+        '
+        'Label39
+        '
+        Me.Label39.Location = New System.Drawing.Point(9, 26)
+        Me.Label39.Name = "Label39"
+        Me.Label39.Size = New System.Drawing.Size(23, 13)
+        Me.Label39.TabIndex = 2
+        Me.Label39.Text = "Cari:"
+        '
+        'XtraTabPage6
+        '
+        Me.XtraTabPage6.Controls.Add(Me.sec_bOtomatikPesinatDuzelt)
+        Me.XtraTabPage6.Controls.Add(Me.txt_nTaksitSayi)
+        Me.XtraTabPage6.Controls.Add(Me.txt_nTaksitBaslangic)
+        Me.XtraTabPage6.Controls.Add(Me.Label41)
+        Me.XtraTabPage6.Controls.Add(Me.Label42)
+        Me.XtraTabPage6.Controls.Add(Me.Label43)
+        Me.XtraTabPage6.Controls.Add(Me.txt_nTaksitGun)
+        Me.XtraTabPage6.Controls.Add(Me.sec_bOtomatikTaksit)
+        Me.XtraTabPage6.Controls.Add(Me.Label33)
+        Me.XtraTabPage6.Controls.Add(Me.txt_sBacodeStd)
+        Me.XtraTabPage6.Controls.Add(Me.Label34)
+        Me.XtraTabPage6.Controls.Add(Me.txt_PrinterDepo)
+        Me.XtraTabPage6.Controls.Add(Me.Label35)
+        Me.XtraTabPage6.Controls.Add(Me.txt_PrinterTermal)
+        Me.XtraTabPage6.Controls.Add(Me.Label40)
+        Me.XtraTabPage6.Controls.Add(Me.sec_FontSize)
+        Me.XtraTabPage6.Controls.Add(Me.GroupControl9)
+        Me.XtraTabPage6.Controls.Add(Me.GroupControl8)
+        Me.XtraTabPage6.Controls.Add(Me.GroupControl11)
+        Me.XtraTabPage6.Controls.Add(Me.GroupControl10)
+        Me.XtraTabPage6.Name = "XtraTabPage6"
+        Me.XtraTabPage6.Size = New System.Drawing.Size(565, 114)
+        Me.XtraTabPage6.Text = "Varsayýlan Tanýmlar"
+        '
+        'sec_bOtomatikPesinatDuzelt
+        '
+        Me.sec_bOtomatikPesinatDuzelt.Location = New System.Drawing.Point(742, 104)
+        Me.sec_bOtomatikPesinatDuzelt.Name = "sec_bOtomatikPesinatDuzelt"
+        Me.sec_bOtomatikPesinatDuzelt.Properties.Caption = "Otomatik PeþinatDüzelt"
+        Me.sec_bOtomatikPesinatDuzelt.Size = New System.Drawing.Size(143, 19)
+        Me.sec_bOtomatikPesinatDuzelt.TabIndex = 5
+        '
+        'txt_nTaksitSayi
+        '
+        Me.txt_nTaksitSayi.EditValue = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.txt_nTaksitSayi.Location = New System.Drawing.Point(828, 126)
+        Me.txt_nTaksitSayi.Name = "txt_nTaksitSayi"
+        Me.txt_nTaksitSayi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
+        Me.txt_nTaksitSayi.Size = New System.Drawing.Size(55, 20)
+        Me.txt_nTaksitSayi.TabIndex = 8
+        '
+        'txt_nTaksitBaslangic
+        '
+        Me.txt_nTaksitBaslangic.EditValue = New Decimal(New Integer() {0, 0, 0, 0})
+        Me.txt_nTaksitBaslangic.Location = New System.Drawing.Point(735, 126)
+        Me.txt_nTaksitBaslangic.Name = "txt_nTaksitBaslangic"
+        Me.txt_nTaksitBaslangic.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
+        Me.txt_nTaksitBaslangic.Size = New System.Drawing.Size(55, 20)
+        Me.txt_nTaksitBaslangic.TabIndex = 7
+        '
+        'Label41
+        '
+        Me.Label41.Location = New System.Drawing.Point(680, 130)
+        Me.Label41.Name = "Label41"
+        Me.Label41.Size = New System.Drawing.Size(48, 13)
+        Me.Label41.TabIndex = 161
+        Me.Label41.Text = "Baslangic:"
+        '
+        'Label42
+        '
+        Me.Label42.Location = New System.Drawing.Point(797, 129)
+        Me.Label42.Name = "Label42"
+        Me.Label42.Size = New System.Drawing.Size(24, 13)
+        Me.Label42.TabIndex = 163
+        Me.Label42.Text = "Sayi:"
+        '
+        'Label43
+        '
+        Me.Label43.Location = New System.Drawing.Point(587, 130)
+        Me.Label43.Name = "Label43"
+        Me.Label43.Size = New System.Drawing.Size(23, 13)
+        Me.Label43.TabIndex = 159
+        Me.Label43.Text = "Gün:"
+        '
+        'txt_nTaksitGun
+        '
+        Me.txt_nTaksitGun.EditValue = New Decimal(New Integer() {0, 0, 0, 0})
+        Me.txt_nTaksitGun.Enabled = False
+        Me.txt_nTaksitGun.Location = New System.Drawing.Point(617, 126)
+        Me.txt_nTaksitGun.Name = "txt_nTaksitGun"
+        Me.txt_nTaksitGun.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
+        Me.txt_nTaksitGun.Size = New System.Drawing.Size(55, 20)
+        Me.txt_nTaksitGun.TabIndex = 6
+        '
+        'sec_bOtomatikTaksit
+        '
+        Me.sec_bOtomatikTaksit.Location = New System.Drawing.Point(620, 104)
+        Me.sec_bOtomatikTaksit.Name = "sec_bOtomatikTaksit"
+        Me.sec_bOtomatikTaksit.Properties.Caption = "OtamatikTaksit At"
+        Me.sec_bOtomatikTaksit.Size = New System.Drawing.Size(116, 19)
+        Me.sec_bOtomatikTaksit.TabIndex = 4
+        '
+        'Label33
+        '
+        Me.Label33.Location = New System.Drawing.Point(613, 76)
+        Me.Label33.Name = "Label33"
+        Me.Label33.Size = New System.Drawing.Size(58, 13)
+        Me.Label33.TabIndex = 154
+        Me.Label33.Text = "GramajFlag:"
+        '
+        'txt_sBacodeStd
+        '
+        Me.txt_sBacodeStd.EditValue = New Decimal(New Integer() {0, 0, 0, 0})
+        Me.txt_sBacodeStd.Location = New System.Drawing.Point(690, 73)
+        Me.txt_sBacodeStd.Name = "txt_sBacodeStd"
+        Me.txt_sBacodeStd.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
+        Me.txt_sBacodeStd.Size = New System.Drawing.Size(55, 20)
+        Me.txt_sBacodeStd.TabIndex = 3
+        '
+        'Label34
+        '
+        Me.Label34.Location = New System.Drawing.Point(610, 54)
+        Me.Label34.Name = "Label34"
+        Me.Label34.Size = New System.Drawing.Size(58, 13)
+        Me.Label34.TabIndex = 152
+        Me.Label34.Text = "Depo Yazýcý:"
+        '
+        'txt_PrinterDepo
+        '
+        Me.txt_PrinterDepo.Location = New System.Drawing.Point(690, 51)
+        Me.txt_PrinterDepo.Name = "txt_PrinterDepo"
+        Me.txt_PrinterDepo.Size = New System.Drawing.Size(193, 20)
+        Me.txt_PrinterDepo.TabIndex = 2
+        '
+        'Label35
+        '
+        Me.Label35.Location = New System.Drawing.Point(610, 34)
+        Me.Label35.Name = "Label35"
+        Me.Label35.Size = New System.Drawing.Size(66, 13)
+        Me.Label35.TabIndex = 150
+        Me.Label35.Text = "Mutfak Yazýcý:"
+        '
+        'txt_PrinterTermal
+        '
+        Me.txt_PrinterTermal.Location = New System.Drawing.Point(690, 29)
+        Me.txt_PrinterTermal.Name = "txt_PrinterTermal"
+        Me.txt_PrinterTermal.Size = New System.Drawing.Size(193, 20)
+        Me.txt_PrinterTermal.TabIndex = 1
+        '
+        'Label40
+        '
+        Me.Label40.Location = New System.Drawing.Point(628, 11)
+        Me.Label40.Name = "Label40"
+        Me.Label40.Size = New System.Drawing.Size(26, 13)
+        Me.Label40.TabIndex = 146
+        Me.Label40.Text = "Font:"
+        '
+        'sec_FontSize
+        '
+        Me.sec_FontSize.EditValue = New Decimal(New Integer() {0, 0, 0, 0})
+        Me.sec_FontSize.Location = New System.Drawing.Point(690, 7)
+        Me.sec_FontSize.Name = "sec_FontSize"
+        Me.sec_FontSize.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
+        Me.sec_FontSize.Size = New System.Drawing.Size(55, 20)
+        Me.sec_FontSize.TabIndex = 0
+        '
+        'GroupControl9
+        '
+        Me.GroupControl9.Controls.Add(Me.LabelControl23)
+        Me.GroupControl9.Controls.Add(Me.sec_sEFiyatTipi5)
+        Me.GroupControl9.Controls.Add(Me.LabelControl16)
+        Me.GroupControl9.Controls.Add(Me.sec_sEFiyatTipi4)
+        Me.GroupControl9.Controls.Add(Me.LabelControl7)
+        Me.GroupControl9.Controls.Add(Me.LabelControl8)
+        Me.GroupControl9.Controls.Add(Me.LabelControl9)
+        Me.GroupControl9.Controls.Add(Me.LabelControl10)
+        Me.GroupControl9.Controls.Add(Me.LabelControl11)
+        Me.GroupControl9.Controls.Add(Me.sec_sEFiyatTipiM)
+        Me.GroupControl9.Controls.Add(Me.sec_sEFiyatTipiA)
+        Me.GroupControl9.Controls.Add(Me.sec_sEFiyatTipi3)
+        Me.GroupControl9.Controls.Add(Me.sec_sEFiyatTipi2)
+        Me.GroupControl9.Controls.Add(Me.sec_sEFiyatTipi1)
+        Me.GroupControl9.Location = New System.Drawing.Point(295, 2)
+        Me.GroupControl9.Name = "GroupControl9"
+        Me.GroupControl9.Size = New System.Drawing.Size(286, 170)
+        Me.GroupControl9.TabIndex = 2
+        Me.GroupControl9.Text = "Eski Fiyatlar"
+        '
+        'LabelControl23
+        '
+        Me.LabelControl23.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl23.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl23.Location = New System.Drawing.Point(25, 104)
+        Me.LabelControl23.Name = "LabelControl23"
+        Me.LabelControl23.Size = New System.Drawing.Size(41, 13)
+        Me.LabelControl23.TabIndex = 92
+        Me.LabelControl23.Text = "5. Fiyat:"
+        '
+        'sec_sEFiyatTipi5
+        '
+        Me.sec_sEFiyatTipi5.EnterMoveNextControl = True
+        Me.sec_sEFiyatTipi5.Location = New System.Drawing.Point(72, 101)
+        Me.sec_sEFiyatTipi5.Name = "sec_sEFiyatTipi5"
+        Me.sec_sEFiyatTipi5.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sEFiyatTipi5.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sEFiyatTipi5.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sEFiyatTipi5.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sEFiyatTipi5.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sEFiyatTipi5.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sEFiyatTipi5.Properties.DisplayMember = "sFiyatTipi"
+        Me.sec_sEFiyatTipi5.Properties.NullText = "[FiyatTipi]"
+        Me.sec_sEFiyatTipi5.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sEFiyatTipi5.Properties.ValueMember = "sFiyatTipi"
+        Me.sec_sEFiyatTipi5.Size = New System.Drawing.Size(193, 20)
+        Me.sec_sEFiyatTipi5.TabIndex = 91
+        '
+        'LabelControl16
+        '
+        Me.LabelControl16.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl16.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl16.Location = New System.Drawing.Point(25, 82)
+        Me.LabelControl16.Name = "LabelControl16"
+        Me.LabelControl16.Size = New System.Drawing.Size(41, 13)
+        Me.LabelControl16.TabIndex = 90
+        Me.LabelControl16.Text = "4. Fiyat:"
+        '
+        'sec_sEFiyatTipi4
+        '
+        Me.sec_sEFiyatTipi4.EnterMoveNextControl = True
+        Me.sec_sEFiyatTipi4.Location = New System.Drawing.Point(72, 79)
+        Me.sec_sEFiyatTipi4.Name = "sec_sEFiyatTipi4"
+        Me.sec_sEFiyatTipi4.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sEFiyatTipi4.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sEFiyatTipi4.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sEFiyatTipi4.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sEFiyatTipi4.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sEFiyatTipi4.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sEFiyatTipi4.Properties.DisplayMember = "sFiyatTipi"
+        Me.sec_sEFiyatTipi4.Properties.NullText = "[FiyatTipi]"
+        Me.sec_sEFiyatTipi4.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sEFiyatTipi4.Properties.ValueMember = "sFiyatTipi"
+        Me.sec_sEFiyatTipi4.Size = New System.Drawing.Size(193, 20)
+        Me.sec_sEFiyatTipi4.TabIndex = 3
+        '
+        'LabelControl7
+        '
+        Me.LabelControl7.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl7.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl7.Location = New System.Drawing.Point(28, 148)
+        Me.LabelControl7.Name = "LabelControl7"
+        Me.LabelControl7.Size = New System.Drawing.Size(38, 13)
+        Me.LabelControl7.TabIndex = 88
+        Me.LabelControl7.Text = "Maliyet:"
+        '
+        'LabelControl8
+        '
+        Me.LabelControl8.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl8.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl8.Location = New System.Drawing.Point(46, 126)
+        Me.LabelControl8.Name = "LabelControl8"
+        Me.LabelControl8.Size = New System.Drawing.Size(20, 13)
+        Me.LabelControl8.TabIndex = 87
+        Me.LabelControl8.Text = "Alýþ:"
+        '
+        'LabelControl9
+        '
+        Me.LabelControl9.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl9.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl9.Location = New System.Drawing.Point(25, 60)
+        Me.LabelControl9.Name = "LabelControl9"
+        Me.LabelControl9.Size = New System.Drawing.Size(41, 13)
+        Me.LabelControl9.TabIndex = 86
+        Me.LabelControl9.Text = "3. Fiyat:"
+        '
+        'LabelControl10
+        '
+        Me.LabelControl10.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl10.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl10.Location = New System.Drawing.Point(25, 38)
+        Me.LabelControl10.Name = "LabelControl10"
+        Me.LabelControl10.Size = New System.Drawing.Size(41, 13)
+        Me.LabelControl10.TabIndex = 85
+        Me.LabelControl10.Text = "2. Fiyat:"
+        '
+        'LabelControl11
+        '
+        Me.LabelControl11.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl11.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl11.Location = New System.Drawing.Point(25, 16)
+        Me.LabelControl11.Name = "LabelControl11"
+        Me.LabelControl11.Size = New System.Drawing.Size(41, 13)
+        Me.LabelControl11.TabIndex = 84
+        Me.LabelControl11.Text = "1. Fiyat:"
+        '
+        'sec_sEFiyatTipiM
+        '
+        Me.sec_sEFiyatTipiM.EnterMoveNextControl = True
+        Me.sec_sEFiyatTipiM.Location = New System.Drawing.Point(72, 145)
+        Me.sec_sEFiyatTipiM.Name = "sec_sEFiyatTipiM"
+        Me.sec_sEFiyatTipiM.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sEFiyatTipiM.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sEFiyatTipiM.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sEFiyatTipiM.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sEFiyatTipiM.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sEFiyatTipiM.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sEFiyatTipiM.Properties.DisplayMember = "sFiyatTipi"
+        Me.sec_sEFiyatTipiM.Properties.NullText = "[FiyatTipi]"
+        Me.sec_sEFiyatTipiM.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sEFiyatTipiM.Properties.ValueMember = "sFiyatTipi"
+        Me.sec_sEFiyatTipiM.Size = New System.Drawing.Size(193, 20)
+        Me.sec_sEFiyatTipiM.TabIndex = 5
+        '
+        'sec_sEFiyatTipiA
+        '
+        Me.sec_sEFiyatTipiA.EnterMoveNextControl = True
+        Me.sec_sEFiyatTipiA.Location = New System.Drawing.Point(72, 123)
+        Me.sec_sEFiyatTipiA.Name = "sec_sEFiyatTipiA"
+        Me.sec_sEFiyatTipiA.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sEFiyatTipiA.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sEFiyatTipiA.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sEFiyatTipiA.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sEFiyatTipiA.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sEFiyatTipiA.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sEFiyatTipiA.Properties.DisplayMember = "sFiyatTipi"
+        Me.sec_sEFiyatTipiA.Properties.NullText = "[FiyatTipi]"
+        Me.sec_sEFiyatTipiA.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sEFiyatTipiA.Properties.ValueMember = "sFiyatTipi"
+        Me.sec_sEFiyatTipiA.Size = New System.Drawing.Size(193, 20)
+        Me.sec_sEFiyatTipiA.TabIndex = 4
+        '
+        'sec_sEFiyatTipi3
+        '
+        Me.sec_sEFiyatTipi3.EnterMoveNextControl = True
+        Me.sec_sEFiyatTipi3.Location = New System.Drawing.Point(72, 57)
+        Me.sec_sEFiyatTipi3.Name = "sec_sEFiyatTipi3"
+        Me.sec_sEFiyatTipi3.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sEFiyatTipi3.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sEFiyatTipi3.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sEFiyatTipi3.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sEFiyatTipi3.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sEFiyatTipi3.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sEFiyatTipi3.Properties.DisplayMember = "sFiyatTipi"
+        Me.sec_sEFiyatTipi3.Properties.NullText = "[FiyatTipi]"
+        Me.sec_sEFiyatTipi3.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sEFiyatTipi3.Properties.ValueMember = "sFiyatTipi"
+        Me.sec_sEFiyatTipi3.Size = New System.Drawing.Size(193, 20)
+        Me.sec_sEFiyatTipi3.TabIndex = 2
+        '
+        'sec_sEFiyatTipi2
+        '
+        Me.sec_sEFiyatTipi2.EnterMoveNextControl = True
+        Me.sec_sEFiyatTipi2.Location = New System.Drawing.Point(72, 35)
+        Me.sec_sEFiyatTipi2.Name = "sec_sEFiyatTipi2"
+        Me.sec_sEFiyatTipi2.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sEFiyatTipi2.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sEFiyatTipi2.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sEFiyatTipi2.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sEFiyatTipi2.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sEFiyatTipi2.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sEFiyatTipi2.Properties.DisplayMember = "sFiyatTipi"
+        Me.sec_sEFiyatTipi2.Properties.NullText = "[FiyatTipi]"
+        Me.sec_sEFiyatTipi2.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sEFiyatTipi2.Properties.ValueMember = "sFiyatTipi"
+        Me.sec_sEFiyatTipi2.Size = New System.Drawing.Size(193, 20)
+        Me.sec_sEFiyatTipi2.TabIndex = 1
+        '
+        'sec_sEFiyatTipi1
+        '
+        Me.sec_sEFiyatTipi1.EnterMoveNextControl = True
+        Me.sec_sEFiyatTipi1.Location = New System.Drawing.Point(72, 13)
+        Me.sec_sEFiyatTipi1.Name = "sec_sEFiyatTipi1"
+        Me.sec_sEFiyatTipi1.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sEFiyatTipi1.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sEFiyatTipi1.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sEFiyatTipi1.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sEFiyatTipi1.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sEFiyatTipi1.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sEFiyatTipi1.Properties.DisplayMember = "sFiyatTipi"
+        Me.sec_sEFiyatTipi1.Properties.NullText = "[FiyatTipi]"
+        Me.sec_sEFiyatTipi1.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sEFiyatTipi1.Properties.ValueMember = "sFiyatTipi"
+        Me.sec_sEFiyatTipi1.Size = New System.Drawing.Size(193, 20)
+        Me.sec_sEFiyatTipi1.TabIndex = 0
+        '
+        'GroupControl8
+        '
+        Me.GroupControl8.Controls.Add(Me.LabelControl22)
+        Me.GroupControl8.Controls.Add(Me.sec_sFiyatTipi5)
+        Me.GroupControl8.Controls.Add(Me.LabelControl20)
+        Me.GroupControl8.Controls.Add(Me.LabelControl15)
+        Me.GroupControl8.Controls.Add(Me.sec_sFiyatTipi4)
+        Me.GroupControl8.Controls.Add(Me.sec_sAktifFiyatTipi)
+        Me.GroupControl8.Controls.Add(Me.LabelControl1)
+        Me.GroupControl8.Controls.Add(Me.LabelControl4)
+        Me.GroupControl8.Controls.Add(Me.LabelControl3)
+        Me.GroupControl8.Controls.Add(Me.LabelControl2)
+        Me.GroupControl8.Controls.Add(Me.LabelControl6)
+        Me.GroupControl8.Controls.Add(Me.sec_sFiyatTipiM)
+        Me.GroupControl8.Controls.Add(Me.sec_sFiyatTipiA)
+        Me.GroupControl8.Controls.Add(Me.sec_sFiyatTipi3)
+        Me.GroupControl8.Controls.Add(Me.sec_sFiyatTipi2)
+        Me.GroupControl8.Controls.Add(Me.sec_sFiyatTipi1)
+        Me.GroupControl8.Location = New System.Drawing.Point(3, 3)
+        Me.GroupControl8.Name = "GroupControl8"
+        Me.GroupControl8.Size = New System.Drawing.Size(286, 169)
+        Me.GroupControl8.TabIndex = 1
+        Me.GroupControl8.Text = "Normal Fiyat"
+        '
+        'LabelControl22
+        '
+        Me.LabelControl22.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl22.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl22.Location = New System.Drawing.Point(25, 91)
+        Me.LabelControl22.Name = "LabelControl22"
+        Me.LabelControl22.Size = New System.Drawing.Size(41, 13)
+        Me.LabelControl22.TabIndex = 94
+        Me.LabelControl22.Text = "5. Fiyat:"
+        '
+        'sec_sFiyatTipi5
+        '
+        Me.sec_sFiyatTipi5.EnterMoveNextControl = True
+        Me.sec_sFiyatTipi5.Location = New System.Drawing.Point(72, 88)
+        Me.sec_sFiyatTipi5.Name = "sec_sFiyatTipi5"
+        Me.sec_sFiyatTipi5.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sFiyatTipi5.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sFiyatTipi5.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sFiyatTipi5.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sFiyatTipi5.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sFiyatTipi5.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sFiyatTipi5.Properties.DisplayMember = "sFiyatTipi"
+        Me.sec_sFiyatTipi5.Properties.NullText = "[FiyatTipi]"
+        Me.sec_sFiyatTipi5.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sFiyatTipi5.Properties.ValueMember = "sFiyatTipi"
+        Me.sec_sFiyatTipi5.Size = New System.Drawing.Size(193, 20)
+        Me.sec_sFiyatTipi5.TabIndex = 93
+        '
+        'LabelControl20
+        '
+        Me.LabelControl20.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl20.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl20.Location = New System.Drawing.Point(16, 149)
+        Me.LabelControl20.Name = "LabelControl20"
+        Me.LabelControl20.Size = New System.Drawing.Size(50, 13)
+        Me.LabelControl20.TabIndex = 92
+        Me.LabelControl20.Text = "AktifFiyat:"
+        '
+        'LabelControl15
+        '
+        Me.LabelControl15.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl15.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl15.Location = New System.Drawing.Point(25, 72)
+        Me.LabelControl15.Name = "LabelControl15"
+        Me.LabelControl15.Size = New System.Drawing.Size(41, 13)
+        Me.LabelControl15.TabIndex = 90
+        Me.LabelControl15.Text = "4. Fiyat:"
+        '
+        'sec_sFiyatTipi4
+        '
+        Me.sec_sFiyatTipi4.EnterMoveNextControl = True
+        Me.sec_sFiyatTipi4.Location = New System.Drawing.Point(72, 69)
+        Me.sec_sFiyatTipi4.Name = "sec_sFiyatTipi4"
+        Me.sec_sFiyatTipi4.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sFiyatTipi4.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sFiyatTipi4.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sFiyatTipi4.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sFiyatTipi4.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sFiyatTipi4.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sFiyatTipi4.Properties.DisplayMember = "sFiyatTipi"
+        Me.sec_sFiyatTipi4.Properties.NullText = "[FiyatTipi]"
+        Me.sec_sFiyatTipi4.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sFiyatTipi4.Properties.ValueMember = "sFiyatTipi"
+        Me.sec_sFiyatTipi4.Size = New System.Drawing.Size(193, 20)
+        Me.sec_sFiyatTipi4.TabIndex = 3
+        '
+        'sec_sAktifFiyatTipi
+        '
+        Me.sec_sAktifFiyatTipi.EnterMoveNextControl = True
+        Me.sec_sAktifFiyatTipi.Location = New System.Drawing.Point(72, 145)
+        Me.sec_sAktifFiyatTipi.Name = "sec_sAktifFiyatTipi"
+        Me.sec_sAktifFiyatTipi.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sAktifFiyatTipi.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sAktifFiyatTipi.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sAktifFiyatTipi.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sAktifFiyatTipi.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sAktifFiyatTipi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sAktifFiyatTipi.Properties.DisplayMember = "sFiyatTipi"
+        Me.sec_sAktifFiyatTipi.Properties.NullText = "[FiyatTipi]"
+        Me.sec_sAktifFiyatTipi.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sAktifFiyatTipi.Properties.ValueMember = "sFiyatTipi"
+        Me.sec_sAktifFiyatTipi.Size = New System.Drawing.Size(193, 20)
+        Me.sec_sAktifFiyatTipi.TabIndex = 6
+        '
+        'LabelControl1
+        '
+        Me.LabelControl1.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl1.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl1.Location = New System.Drawing.Point(28, 130)
+        Me.LabelControl1.Name = "LabelControl1"
+        Me.LabelControl1.Size = New System.Drawing.Size(38, 13)
+        Me.LabelControl1.TabIndex = 88
+        Me.LabelControl1.Text = "Maliyet:"
+        '
+        'LabelControl4
+        '
+        Me.LabelControl4.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl4.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl4.Location = New System.Drawing.Point(46, 111)
+        Me.LabelControl4.Name = "LabelControl4"
+        Me.LabelControl4.Size = New System.Drawing.Size(20, 13)
+        Me.LabelControl4.TabIndex = 87
+        Me.LabelControl4.Text = "Alýþ:"
+        '
+        'LabelControl3
+        '
+        Me.LabelControl3.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl3.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl3.Location = New System.Drawing.Point(25, 53)
+        Me.LabelControl3.Name = "LabelControl3"
+        Me.LabelControl3.Size = New System.Drawing.Size(41, 13)
+        Me.LabelControl3.TabIndex = 86
+        Me.LabelControl3.Text = "3. Fiyat:"
+        '
+        'LabelControl2
+        '
+        Me.LabelControl2.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl2.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl2.Location = New System.Drawing.Point(25, 34)
+        Me.LabelControl2.Name = "LabelControl2"
+        Me.LabelControl2.Size = New System.Drawing.Size(41, 13)
+        Me.LabelControl2.TabIndex = 85
+        Me.LabelControl2.Text = "2. Fiyat:"
+        '
+        'LabelControl6
+        '
+        Me.LabelControl6.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl6.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl6.Location = New System.Drawing.Point(25, 15)
+        Me.LabelControl6.Name = "LabelControl6"
+        Me.LabelControl6.Size = New System.Drawing.Size(41, 13)
+        Me.LabelControl6.TabIndex = 84
+        Me.LabelControl6.Text = "1. Fiyat:"
+        '
+        'sec_sFiyatTipiM
+        '
+        Me.sec_sFiyatTipiM.EnterMoveNextControl = True
+        Me.sec_sFiyatTipiM.Location = New System.Drawing.Point(72, 126)
+        Me.sec_sFiyatTipiM.Name = "sec_sFiyatTipiM"
+        Me.sec_sFiyatTipiM.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sFiyatTipiM.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sFiyatTipiM.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sFiyatTipiM.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sFiyatTipiM.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sFiyatTipiM.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sFiyatTipiM.Properties.DisplayMember = "sFiyatTipi"
+        Me.sec_sFiyatTipiM.Properties.NullText = "[FiyatTipi]"
+        Me.sec_sFiyatTipiM.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sFiyatTipiM.Properties.ValueMember = "sFiyatTipi"
+        Me.sec_sFiyatTipiM.Size = New System.Drawing.Size(193, 20)
+        Me.sec_sFiyatTipiM.TabIndex = 5
+        '
+        'sec_sFiyatTipiA
+        '
+        Me.sec_sFiyatTipiA.EnterMoveNextControl = True
+        Me.sec_sFiyatTipiA.Location = New System.Drawing.Point(72, 107)
+        Me.sec_sFiyatTipiA.Name = "sec_sFiyatTipiA"
+        Me.sec_sFiyatTipiA.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sFiyatTipiA.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sFiyatTipiA.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sFiyatTipiA.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sFiyatTipiA.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sFiyatTipiA.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sFiyatTipiA.Properties.DisplayMember = "sFiyatTipi"
+        Me.sec_sFiyatTipiA.Properties.NullText = "[FiyatTipi]"
+        Me.sec_sFiyatTipiA.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sFiyatTipiA.Properties.ValueMember = "sFiyatTipi"
+        Me.sec_sFiyatTipiA.Size = New System.Drawing.Size(193, 20)
+        Me.sec_sFiyatTipiA.TabIndex = 4
+        '
+        'sec_sFiyatTipi3
+        '
+        Me.sec_sFiyatTipi3.EnterMoveNextControl = True
+        Me.sec_sFiyatTipi3.Location = New System.Drawing.Point(72, 50)
+        Me.sec_sFiyatTipi3.Name = "sec_sFiyatTipi3"
+        Me.sec_sFiyatTipi3.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sFiyatTipi3.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sFiyatTipi3.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sFiyatTipi3.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sFiyatTipi3.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sFiyatTipi3.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sFiyatTipi3.Properties.DisplayMember = "sFiyatTipi"
+        Me.sec_sFiyatTipi3.Properties.NullText = "[FiyatTipi]"
+        Me.sec_sFiyatTipi3.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sFiyatTipi3.Properties.ValueMember = "sFiyatTipi"
+        Me.sec_sFiyatTipi3.Size = New System.Drawing.Size(193, 20)
+        Me.sec_sFiyatTipi3.TabIndex = 2
+        '
+        'sec_sFiyatTipi2
+        '
+        Me.sec_sFiyatTipi2.EnterMoveNextControl = True
+        Me.sec_sFiyatTipi2.Location = New System.Drawing.Point(72, 31)
+        Me.sec_sFiyatTipi2.Name = "sec_sFiyatTipi2"
+        Me.sec_sFiyatTipi2.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sFiyatTipi2.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sFiyatTipi2.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sFiyatTipi2.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sFiyatTipi2.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sFiyatTipi2.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sFiyatTipi2.Properties.DisplayMember = "sFiyatTipi"
+        Me.sec_sFiyatTipi2.Properties.NullText = "[FiyatTipi]"
+        Me.sec_sFiyatTipi2.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sFiyatTipi2.Properties.ValueMember = "sFiyatTipi"
+        Me.sec_sFiyatTipi2.Size = New System.Drawing.Size(193, 20)
+        Me.sec_sFiyatTipi2.TabIndex = 1
+        '
+        'sec_sFiyatTipi1
+        '
+        Me.sec_sFiyatTipi1.EnterMoveNextControl = True
+        Me.sec_sFiyatTipi1.Location = New System.Drawing.Point(72, 12)
+        Me.sec_sFiyatTipi1.Name = "sec_sFiyatTipi1"
+        Me.sec_sFiyatTipi1.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sFiyatTipi1.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sFiyatTipi1.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sFiyatTipi1.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sFiyatTipi1.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sFiyatTipi1.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sFiyatTipi1.Properties.DisplayMember = "sFiyatTipi"
+        Me.sec_sFiyatTipi1.Properties.NullText = "[FiyatTipi]"
+        Me.sec_sFiyatTipi1.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sFiyatTipi1.Properties.ValueMember = "sFiyatTipi"
+        Me.sec_sFiyatTipi1.Size = New System.Drawing.Size(193, 20)
+        Me.sec_sFiyatTipi1.TabIndex = 0
+        '
+        'GroupControl11
+        '
+        Me.GroupControl11.Controls.Add(Me.LabelControl12)
+        Me.GroupControl11.Controls.Add(Me.LabelControl18)
+        Me.GroupControl11.Controls.Add(Me.sec_sPesinFiyatTipi)
+        Me.GroupControl11.Controls.Add(Me.sec_sKrediliFiyatTipi)
+        Me.GroupControl11.Location = New System.Drawing.Point(295, 178)
+        Me.GroupControl11.Name = "GroupControl11"
+        Me.GroupControl11.Size = New System.Drawing.Size(286, 66)
+        Me.GroupControl11.TabIndex = 4
+        Me.GroupControl11.Text = "Perekande Alýþveriþ"
+        '
+        'LabelControl12
+        '
+        Me.LabelControl12.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl12.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl12.Location = New System.Drawing.Point(28, 43)
+        Me.LabelControl12.Name = "LabelControl12"
+        Me.LabelControl12.Size = New System.Drawing.Size(29, 13)
+        Me.LabelControl12.TabIndex = 89
+        Me.LabelControl12.Text = "Peþin:"
+        '
+        'LabelControl18
+        '
+        Me.LabelControl18.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl18.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl18.Location = New System.Drawing.Point(28, 21)
+        Me.LabelControl18.Name = "LabelControl18"
+        Me.LabelControl18.Size = New System.Drawing.Size(32, 13)
+        Me.LabelControl18.TabIndex = 88
+        Me.LabelControl18.Text = "Kredili:"
+        '
+        'sec_sPesinFiyatTipi
+        '
+        Me.sec_sPesinFiyatTipi.EnterMoveNextControl = True
+        Me.sec_sPesinFiyatTipi.Location = New System.Drawing.Point(72, 40)
+        Me.sec_sPesinFiyatTipi.Name = "sec_sPesinFiyatTipi"
+        Me.sec_sPesinFiyatTipi.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sPesinFiyatTipi.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sPesinFiyatTipi.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sPesinFiyatTipi.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sPesinFiyatTipi.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sPesinFiyatTipi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sPesinFiyatTipi.Properties.DisplayMember = "sFiyatTipi"
+        Me.sec_sPesinFiyatTipi.Properties.NullText = "[FiyatTipi]"
+        Me.sec_sPesinFiyatTipi.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sPesinFiyatTipi.Properties.ValueMember = "sFiyatTipi"
+        Me.sec_sPesinFiyatTipi.Size = New System.Drawing.Size(193, 20)
+        Me.sec_sPesinFiyatTipi.TabIndex = 1
+        '
+        'sec_sKrediliFiyatTipi
+        '
+        Me.sec_sKrediliFiyatTipi.EnterMoveNextControl = True
+        Me.sec_sKrediliFiyatTipi.Location = New System.Drawing.Point(72, 18)
+        Me.sec_sKrediliFiyatTipi.Name = "sec_sKrediliFiyatTipi"
+        Me.sec_sKrediliFiyatTipi.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sKrediliFiyatTipi.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sKrediliFiyatTipi.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sKrediliFiyatTipi.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sKrediliFiyatTipi.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sKrediliFiyatTipi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sKrediliFiyatTipi.Properties.DisplayMember = "sFiyatTipi"
+        Me.sec_sKrediliFiyatTipi.Properties.NullText = "[FiyatTipi]"
+        Me.sec_sKrediliFiyatTipi.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sKrediliFiyatTipi.Properties.ValueMember = "sFiyatTipi"
+        Me.sec_sKrediliFiyatTipi.Size = New System.Drawing.Size(193, 20)
+        Me.sec_sKrediliFiyatTipi.TabIndex = 0
+        '
+        'GroupControl10
+        '
+        Me.GroupControl10.Controls.Add(Me.LabelControl13)
+        Me.GroupControl10.Controls.Add(Me.sec_sSaticiRumuzu)
+        Me.GroupControl10.Controls.Add(Me.sec_bCalcVadeDagilim)
+        Me.GroupControl10.Location = New System.Drawing.Point(3, 178)
+        Me.GroupControl10.Name = "GroupControl10"
+        Me.GroupControl10.Size = New System.Drawing.Size(286, 66)
+        Me.GroupControl10.TabIndex = 3
+        Me.GroupControl10.Text = "Perekande Alýþveriþ"
+        '
+        'LabelControl13
+        '
+        Me.LabelControl13.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far
+        Me.LabelControl13.Appearance.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center
+        Me.LabelControl13.Location = New System.Drawing.Point(25, 40)
+        Me.LabelControl13.Name = "LabelControl13"
+        Me.LabelControl13.Size = New System.Drawing.Size(29, 13)
+        Me.LabelControl13.TabIndex = 91
+        Me.LabelControl13.Text = "Satýcý:"
+        '
+        'sec_sSaticiRumuzu
+        '
+        Me.sec_sSaticiRumuzu.EnterMoveNextControl = True
+        Me.sec_sSaticiRumuzu.Location = New System.Drawing.Point(72, 37)
+        Me.sec_sSaticiRumuzu.Name = "sec_sSaticiRumuzu"
+        Me.sec_sSaticiRumuzu.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sSaticiRumuzu.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sSaticiRumuzu.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sSaticiRumuzu.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sSaticiRumuzu.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sSaticiRumuzu.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sSaticiRumuzu.Properties.DisplayMember = "sAdi"
+        Me.sec_sSaticiRumuzu.Properties.NullText = "[Satici]"
+        Me.sec_sSaticiRumuzu.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sSaticiRumuzu.Properties.ValueMember = "sSaticiRumuzu"
+        Me.sec_sSaticiRumuzu.Size = New System.Drawing.Size(193, 20)
+        Me.sec_sSaticiRumuzu.TabIndex = 0
+        '
+        'sec_bCalcVadeDagilim
+        '
+        Me.sec_bCalcVadeDagilim.Location = New System.Drawing.Point(70, 19)
+        Me.sec_bCalcVadeDagilim.Name = "sec_bCalcVadeDagilim"
+        Me.sec_bCalcVadeDagilim.Properties.Caption = "Vade Daðýlýmý Hesapla"
+        Me.sec_bCalcVadeDagilim.Size = New System.Drawing.Size(211, 19)
+        Me.sec_bCalcVadeDagilim.TabIndex = 0
+        '
+        'XtraTabPage7
+        '
+        Me.XtraTabPage7.Controls.Add(Me.sec_bSatirKendiEnvanteri)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bPerYerelMuh)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bPerOtoMuh)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bSatFatOtoMuh)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bAlisFatOtoMuh)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bMagazalarChart)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bDovizliFatura)
+        Me.XtraTabPage7.Controls.Add(Me.sec_sYaziIle)
+        Me.XtraTabPage7.Controls.Add(Me.sec_sDil)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bFaturaKdvDahil)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bKendiFisNo)
+        Me.XtraTabPage7.Controls.Add(Me.Label50)
+        Me.XtraTabPage7.Controls.Add(Me.Label44)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bNamazVaktiGosterme)
+        Me.XtraTabPage7.Controls.Add(Me.Label45)
+        Me.XtraTabPage7.Controls.Add(Me.sec_nFirmaGrupKodUzunlugu)
+        Me.XtraTabPage7.Controls.Add(Me.Label46)
+        Me.XtraTabPage7.Controls.Add(Me.sec_dteSonNakitKasaTarihi)
+        Me.XtraTabPage7.Controls.Add(Me.sec_dteSonStokFisiTarihi)
+        Me.XtraTabPage7.Controls.Add(Me.sec_dteSonIrsaliyeTarihi)
+        Me.XtraTabPage7.Controls.Add(Me.Label47)
+        Me.XtraTabPage7.Controls.Add(Me.sec_dteSonFaturaTarihi)
+        Me.XtraTabPage7.Controls.Add(Me.Label48)
+        Me.XtraTabPage7.Controls.Add(Me.sec_sRaporUzanti)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bAlisFiyatiUyar)
+        Me.XtraTabPage7.Controls.Add(Me.Label49)
+        Me.XtraTabPage7.Controls.Add(Me.txt_nStokFisiCiktiSatirSayisi)
+        Me.XtraTabPage7.Controls.Add(Me.txt_nIrsaliyeCiktiSatirSayisi)
+        Me.XtraTabPage7.Controls.Add(Me.txt_nFaturaCiktiSatirSayisi)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bTransferEnvanterKontrol)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bStokFisiIskontosuz)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bIrsaliyeIskontosuz)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bFaturaIskontosuz)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bStokFisiKdvSiz)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bIrsaliyeKdvSiz)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bFaturaKdvSiz)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bFiyatKdvHaric)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bMessageCheck)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bSatirKontrol)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bOtomatikMaliyetFiyati)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bOtomatikAlisFiyati)
+        Me.XtraTabPage7.Controls.Add(Me.sec_bKdvKontrolluMaliyet)
+        Me.XtraTabPage7.Name = "XtraTabPage7"
+        Me.XtraTabPage7.Size = New System.Drawing.Size(565, 114)
+        Me.XtraTabPage7.Text = "GenelTanýmlar"
+        '
+        'sec_bSatirKendiEnvanteri
+        '
+        Me.sec_bSatirKendiEnvanteri.Location = New System.Drawing.Point(6, 219)
+        Me.sec_bSatirKendiEnvanteri.Name = "sec_bSatirKendiEnvanteri"
+        Me.sec_bSatirKendiEnvanteri.Properties.Caption = "Fatura-Satýrda Sadece Kendi Envanterini Görsün"
+        Me.sec_bSatirKendiEnvanteri.Size = New System.Drawing.Size(260, 19)
+        Me.sec_bSatirKendiEnvanteri.TabIndex = 190
+        '
+        'sec_bPerYerelMuh
+        '
+        Me.sec_bPerYerelMuh.Location = New System.Drawing.Point(6, 194)
+        Me.sec_bPerYerelMuh.Name = "sec_bPerYerelMuh"
+        Me.sec_bPerYerelMuh.Properties.Caption = "Perakende Yerel Muhasebe Kullan"
+        Me.sec_bPerYerelMuh.Size = New System.Drawing.Size(213, 19)
+        Me.sec_bPerYerelMuh.TabIndex = 189
+        Me.sec_bPerYerelMuh.ToolTip = "Bu seçenek iþaretli ise, Perakende Entegrasyonu" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ekranýnda, faturasý kesilen kayý" &
+    "tlar program içerisine" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "kayýt edilir(Ayrý bir Resmi veritabanýna kayýt edilmez)." &
+    ""
+        '
+        'sec_bPerOtoMuh
+        '
+        Me.sec_bPerOtoMuh.Location = New System.Drawing.Point(6, 169)
+        Me.sec_bPerOtoMuh.Name = "sec_bPerOtoMuh"
+        Me.sec_bPerOtoMuh.Properties.Caption = "Perakende Otomatik Muhasebeleþtir"
+        Me.sec_bPerOtoMuh.Size = New System.Drawing.Size(213, 19)
+        Me.sec_bPerOtoMuh.TabIndex = 188
+        Me.sec_bPerOtoMuh.ToolTip = "Perakende Entegrasyonu ekranýnda, bu seçenek " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "aktif ise, Seçili Perakende kaydý " &
+    "faturasý kesildiðinde" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "açýlan Fatura ekraný kapatýlýrken Muhasebeleþtirme " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "iþle" &
+    "mi otomatik olarak gerçekleþir."
+        '
+        'sec_bSatFatOtoMuh
+        '
+        Me.sec_bSatFatOtoMuh.Location = New System.Drawing.Point(6, 144)
+        Me.sec_bSatFatOtoMuh.Name = "sec_bSatFatOtoMuh"
+        Me.sec_bSatFatOtoMuh.Properties.Caption = "Satýþ Faturasý Otomatik Muhasebeleþtir"
+        Me.sec_bSatFatOtoMuh.Size = New System.Drawing.Size(213, 19)
+        Me.sec_bSatFatOtoMuh.TabIndex = 187
+        Me.sec_bSatFatOtoMuh.ToolTip = "Satýþ Faturasý ekranýna fiþ kapatýlýrken, bu seçenek " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "aktif ise Muhasebeleþtirme" &
+    " iþlemi otomatik olarak " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "gerçekleþir."
+        '
+        'sec_bAlisFatOtoMuh
+        '
+        Me.sec_bAlisFatOtoMuh.Location = New System.Drawing.Point(6, 119)
+        Me.sec_bAlisFatOtoMuh.Name = "sec_bAlisFatOtoMuh"
+        Me.sec_bAlisFatOtoMuh.Properties.Caption = "Alýþ Faturasý Otomatik Muhasebeleþtir"
+        Me.sec_bAlisFatOtoMuh.Size = New System.Drawing.Size(206, 19)
+        Me.sec_bAlisFatOtoMuh.TabIndex = 186
+        Me.sec_bAlisFatOtoMuh.ToolTip = "Alýþ Faturasý ekranýna fiþ kapatýlýrken, bu seçenek " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "aktif ise Muhasebeleþtirme " &
+    "iþlemi otomatik olarak " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "gerçekleþir."
+        '
+        'sec_bMagazalarChart
+        '
+        Me.sec_bMagazalarChart.Location = New System.Drawing.Point(588, 131)
+        Me.sec_bMagazalarChart.Name = "sec_bMagazalarChart"
+        Me.sec_bMagazalarChart.Properties.Caption = "Maðazalar Grafik Göster"
+        Me.sec_bMagazalarChart.Size = New System.Drawing.Size(182, 19)
+        Me.sec_bMagazalarChart.TabIndex = 185
+        '
+        'sec_bDovizliFatura
+        '
+        Me.sec_bDovizliFatura.Location = New System.Drawing.Point(6, 94)
+        Me.sec_bDovizliFatura.Name = "sec_bDovizliFatura"
+        Me.sec_bDovizliFatura.Properties.Caption = "Faturalar Çoklu Dövizli"
+        Me.sec_bDovizliFatura.Size = New System.Drawing.Size(144, 19)
+        Me.sec_bDovizliFatura.TabIndex = 184
+        '
+        'sec_sYaziIle
+        '
+        Me.sec_sYaziIle.EnterMoveNextControl = True
+        Me.sec_sYaziIle.Location = New System.Drawing.Point(676, 181)
+        Me.sec_sYaziIle.Name = "sec_sYaziIle"
+        Me.sec_sYaziIle.Properties.Appearance.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sYaziIle.Properties.Appearance.Options.UseBackColor = True
+        Me.sec_sYaziIle.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sYaziIle.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sYaziIle.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sYaziIle.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sYaziIle.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sYaziIle.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sYaziIle.Properties.DisplayMember = "sDil"
+        Me.sec_sYaziIle.Properties.NullText = "[Dil]"
+        Me.sec_sYaziIle.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sYaziIle.Properties.ValueMember = "sDil"
+        Me.sec_sYaziIle.Size = New System.Drawing.Size(198, 20)
+        Me.sec_sYaziIle.TabIndex = 183
+        '
+        'sec_sDil
+        '
+        Me.sec_sDil.EnterMoveNextControl = True
+        Me.sec_sDil.Location = New System.Drawing.Point(676, 203)
+        Me.sec_sDil.Name = "sec_sDil"
+        Me.sec_sDil.Properties.Appearance.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sDil.Properties.Appearance.Options.UseBackColor = True
+        Me.sec_sDil.Properties.AppearanceFocused.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sDil.Properties.AppearanceFocused.BackColor2 = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sDil.Properties.AppearanceFocused.ForeColor = System.Drawing.Color.Black
+        Me.sec_sDil.Properties.AppearanceFocused.Options.UseBackColor = True
+        Me.sec_sDil.Properties.AppearanceFocused.Options.UseForeColor = True
+        Me.sec_sDil.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sDil.Properties.DisplayMember = "sDil"
+        Me.sec_sDil.Properties.NullText = "[Dil]"
+        Me.sec_sDil.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
+        Me.sec_sDil.Properties.ValueMember = "sDil"
+        Me.sec_sDil.Size = New System.Drawing.Size(198, 20)
+        Me.sec_sDil.TabIndex = 182
+        '
+        'sec_bFaturaKdvDahil
+        '
+        Me.sec_bFaturaKdvDahil.Location = New System.Drawing.Point(6, 70)
+        Me.sec_bFaturaKdvDahil.Name = "sec_bFaturaKdvDahil"
+        Me.sec_bFaturaKdvDahil.Properties.Caption = "Faturalar KDV Dahil"
+        Me.sec_bFaturaKdvDahil.Size = New System.Drawing.Size(144, 19)
+        Me.sec_bFaturaKdvDahil.TabIndex = 181
+        '
+        'sec_bKendiFisNo
+        '
+        Me.sec_bKendiFisNo.Location = New System.Drawing.Point(588, 113)
+        Me.sec_bKendiFisNo.Name = "sec_bKendiFisNo"
+        Me.sec_bKendiFisNo.Properties.Caption = "Fislerde Kullanici Bazli Numaralandir"
+        Me.sec_bKendiFisNo.Size = New System.Drawing.Size(216, 19)
+        Me.sec_bKendiFisNo.TabIndex = 180
+        '
+        'Label50
+        '
+        Me.Label50.Location = New System.Drawing.Point(568, 207)
+        Me.Label50.Name = "Label50"
+        Me.Label50.Size = New System.Drawing.Size(60, 13)
+        Me.Label50.TabIndex = 179
+        Me.Label50.Text = "Program Dili:"
+        '
+        'Label44
+        '
+        Me.Label44.Location = New System.Drawing.Point(562, 186)
+        Me.Label44.Name = "Label44"
+        Me.Label44.Size = New System.Drawing.Size(94, 13)
+        Me.Label44.TabIndex = 177
+        Me.Label44.Text = "GenelToplam Yazýsý:"
+        '
+        'sec_bNamazVaktiGosterme
+        '
+        Me.sec_bNamazVaktiGosterme.Location = New System.Drawing.Point(588, 95)
+        Me.sec_bNamazVaktiGosterme.Name = "sec_bNamazVaktiGosterme"
+        Me.sec_bNamazVaktiGosterme.Properties.Caption = "NamazVakitleriniGosterme"
+        Me.sec_bNamazVaktiGosterme.Size = New System.Drawing.Size(182, 19)
+        Me.sec_bNamazVaktiGosterme.TabIndex = 175
+        '
+        'Label45
+        '
+        Me.Label45.Location = New System.Drawing.Point(243, 118)
+        Me.Label45.Name = "Label45"
+        Me.Label45.Size = New System.Drawing.Size(115, 13)
+        Me.Label45.TabIndex = 174
+        Me.Label45.Text = "FirmaGrupKodUzunluðu:"
+        '
+        'sec_nFirmaGrupKodUzunlugu
+        '
+        Me.sec_nFirmaGrupKodUzunlugu.EditValue = New Decimal(New Integer() {0, 0, 0, 0})
+        Me.sec_nFirmaGrupKodUzunlugu.Location = New System.Drawing.Point(363, 114)
+        Me.sec_nFirmaGrupKodUzunlugu.Name = "sec_nFirmaGrupKodUzunlugu"
+        Me.sec_nFirmaGrupKodUzunlugu.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
+        Me.sec_nFirmaGrupKodUzunlugu.Size = New System.Drawing.Size(100, 20)
+        Me.sec_nFirmaGrupKodUzunlugu.TabIndex = 173
+        '
+        'Label46
+        '
+        Me.Label46.Location = New System.Drawing.Point(288, 97)
+        Me.Label46.Name = "Label46"
+        Me.Label46.Size = New System.Drawing.Size(69, 13)
+        Me.Label46.TabIndex = 172
+        Me.Label46.Text = "SonNakitKasa:"
+        '
+        'sec_dteSonNakitKasaTarihi
+        '
+        Me.sec_dteSonNakitKasaTarihi.EditValue = New Date(1900, 1, 1, 0, 0, 0, 0)
+        Me.sec_dteSonNakitKasaTarihi.Location = New System.Drawing.Point(363, 92)
+        Me.sec_dteSonNakitKasaTarihi.Name = "sec_dteSonNakitKasaTarihi"
+        Me.sec_dteSonNakitKasaTarihi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_dteSonNakitKasaTarihi.Properties.VistaTimeProperties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
+        Me.sec_dteSonNakitKasaTarihi.Size = New System.Drawing.Size(100, 20)
+        Me.sec_dteSonNakitKasaTarihi.TabIndex = 171
+        '
+        'sec_dteSonStokFisiTarihi
+        '
+        Me.sec_dteSonStokFisiTarihi.EditValue = New Date(1900, 1, 1, 0, 0, 0, 0)
+        Me.sec_dteSonStokFisiTarihi.Location = New System.Drawing.Point(363, 69)
+        Me.sec_dteSonStokFisiTarihi.Name = "sec_dteSonStokFisiTarihi"
+        Me.sec_dteSonStokFisiTarihi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_dteSonStokFisiTarihi.Properties.VistaTimeProperties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
+        Me.sec_dteSonStokFisiTarihi.Size = New System.Drawing.Size(100, 20)
+        Me.sec_dteSonStokFisiTarihi.TabIndex = 170
+        '
+        'sec_dteSonIrsaliyeTarihi
+        '
+        Me.sec_dteSonIrsaliyeTarihi.EditValue = New Date(1900, 1, 1, 0, 0, 0, 0)
+        Me.sec_dteSonIrsaliyeTarihi.Location = New System.Drawing.Point(363, 47)
+        Me.sec_dteSonIrsaliyeTarihi.Name = "sec_dteSonIrsaliyeTarihi"
+        Me.sec_dteSonIrsaliyeTarihi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_dteSonIrsaliyeTarihi.Properties.VistaTimeProperties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
+        Me.sec_dteSonIrsaliyeTarihi.Size = New System.Drawing.Size(100, 20)
+        Me.sec_dteSonIrsaliyeTarihi.TabIndex = 169
+        '
+        'Label47
+        '
+        Me.Label47.Appearance.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
+        Me.Label47.Location = New System.Drawing.Point(378, 3)
+        Me.Label47.Name = "Label47"
+        Me.Label47.Size = New System.Drawing.Size(42, 13)
+        Me.Label47.TabIndex = 168
+        Me.Label47.Text = "SonTarih"
+        '
+        'sec_dteSonFaturaTarihi
+        '
+        Me.sec_dteSonFaturaTarihi.EditValue = New Date(1900, 1, 1, 0, 0, 0, 0)
+        Me.sec_dteSonFaturaTarihi.Location = New System.Drawing.Point(363, 26)
+        Me.sec_dteSonFaturaTarihi.Name = "sec_dteSonFaturaTarihi"
+        Me.sec_dteSonFaturaTarihi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_dteSonFaturaTarihi.Properties.VistaTimeProperties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
+        Me.sec_dteSonFaturaTarihi.Size = New System.Drawing.Size(100, 20)
+        Me.sec_dteSonFaturaTarihi.TabIndex = 167
+        '
+        'Label48
+        '
+        Me.Label48.Location = New System.Drawing.Point(565, 161)
+        Me.Label48.Name = "Label48"
+        Me.Label48.Size = New System.Drawing.Size(77, 13)
+        Me.Label48.TabIndex = 166
+        Me.Label48.Text = "Aktif Rapor Tipi:"
+        '
+        'sec_sRaporUzanti
+        '
+        Me.sec_sRaporUzanti.EditValue = ".frx"
+        Me.sec_sRaporUzanti.Location = New System.Drawing.Point(676, 158)
+        Me.sec_sRaporUzanti.Name = "sec_sRaporUzanti"
+        Me.sec_sRaporUzanti.Properties.Appearance.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.sec_sRaporUzanti.Properties.Appearance.Options.UseBackColor = True
+        Me.sec_sRaporUzanti.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_sRaporUzanti.Properties.Items.AddRange(New Object() {".fr3", ".frx"})
+        Me.sec_sRaporUzanti.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor
+        Me.sec_sRaporUzanti.Size = New System.Drawing.Size(198, 20)
+        Me.sec_sRaporUzanti.TabIndex = 165
+        '
+        'sec_bAlisFiyatiUyar
+        '
+        Me.sec_bAlisFiyatiUyar.Location = New System.Drawing.Point(588, 77)
+        Me.sec_bAlisFiyatiUyar.Name = "sec_bAlisFiyatiUyar"
+        Me.sec_bAlisFiyatiUyar.Properties.Caption = "AlýþFiyatý Deðiþtiðinde Uyar?"
+        Me.sec_bAlisFiyatiUyar.Size = New System.Drawing.Size(182, 19)
+        Me.sec_bAlisFiyatiUyar.TabIndex = 164
+        '
+        'Label49
+        '
+        Me.Label49.Appearance.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
+        Me.Label49.Location = New System.Drawing.Point(292, 4)
+        Me.Label49.Name = "Label49"
+        Me.Label49.Size = New System.Drawing.Size(69, 13)
+        Me.Label49.TabIndex = 163
+        Me.Label49.Text = "ÇýktýSatýrSayýsý"
+        '
+        'txt_nStokFisiCiktiSatirSayisi
+        '
+        Me.txt_nStokFisiCiktiSatirSayisi.EditValue = New Decimal(New Integer() {0, 0, 0, 0})
+        Me.txt_nStokFisiCiktiSatirSayisi.Location = New System.Drawing.Point(306, 69)
+        Me.txt_nStokFisiCiktiSatirSayisi.Name = "txt_nStokFisiCiktiSatirSayisi"
+        Me.txt_nStokFisiCiktiSatirSayisi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
+        Me.txt_nStokFisiCiktiSatirSayisi.Size = New System.Drawing.Size(55, 20)
+        Me.txt_nStokFisiCiktiSatirSayisi.TabIndex = 162
+        '
+        'txt_nIrsaliyeCiktiSatirSayisi
+        '
+        Me.txt_nIrsaliyeCiktiSatirSayisi.EditValue = New Decimal(New Integer() {0, 0, 0, 0})
+        Me.txt_nIrsaliyeCiktiSatirSayisi.Location = New System.Drawing.Point(306, 48)
+        Me.txt_nIrsaliyeCiktiSatirSayisi.Name = "txt_nIrsaliyeCiktiSatirSayisi"
+        Me.txt_nIrsaliyeCiktiSatirSayisi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
+        Me.txt_nIrsaliyeCiktiSatirSayisi.Size = New System.Drawing.Size(55, 20)
+        Me.txt_nIrsaliyeCiktiSatirSayisi.TabIndex = 161
+        '
+        'txt_nFaturaCiktiSatirSayisi
+        '
+        Me.txt_nFaturaCiktiSatirSayisi.EditValue = New Decimal(New Integer() {0, 0, 0, 0})
+        Me.txt_nFaturaCiktiSatirSayisi.Location = New System.Drawing.Point(306, 27)
+        Me.txt_nFaturaCiktiSatirSayisi.Name = "txt_nFaturaCiktiSatirSayisi"
+        Me.txt_nFaturaCiktiSatirSayisi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
+        Me.txt_nFaturaCiktiSatirSayisi.Size = New System.Drawing.Size(55, 20)
+        Me.txt_nFaturaCiktiSatirSayisi.TabIndex = 160
+        '
+        'sec_bTransferEnvanterKontrol
+        '
+        Me.sec_bTransferEnvanterKontrol.Location = New System.Drawing.Point(588, 59)
+        Me.sec_bTransferEnvanterKontrol.Name = "sec_bTransferEnvanterKontrol"
+        Me.sec_bTransferEnvanterKontrol.Properties.Caption = "Transferde Envanter Kontrol Yok"
+        Me.sec_bTransferEnvanterKontrol.Size = New System.Drawing.Size(189, 19)
+        Me.sec_bTransferEnvanterKontrol.TabIndex = 159
+        '
+        'sec_bStokFisiIskontosuz
+        '
+        Me.sec_bStokFisiIskontosuz.Location = New System.Drawing.Point(114, 45)
+        Me.sec_bStokFisiIskontosuz.Name = "sec_bStokFisiIskontosuz"
+        Me.sec_bStokFisiIskontosuz.Properties.Caption = "StokFisleri Iskontosuz"
+        Me.sec_bStokFisiIskontosuz.Size = New System.Drawing.Size(128, 19)
+        Me.sec_bStokFisiIskontosuz.TabIndex = 158
+        '
+        'sec_bIrsaliyeIskontosuz
+        '
+        Me.sec_bIrsaliyeIskontosuz.Location = New System.Drawing.Point(114, 25)
+        Me.sec_bIrsaliyeIskontosuz.Name = "sec_bIrsaliyeIskontosuz"
+        Me.sec_bIrsaliyeIskontosuz.Properties.Caption = "Irsaliyeler Iskontosuz"
+        Me.sec_bIrsaliyeIskontosuz.Size = New System.Drawing.Size(128, 19)
+        Me.sec_bIrsaliyeIskontosuz.TabIndex = 157
+        '
+        'sec_bFaturaIskontosuz
+        '
+        Me.sec_bFaturaIskontosuz.Location = New System.Drawing.Point(114, 4)
+        Me.sec_bFaturaIskontosuz.Name = "sec_bFaturaIskontosuz"
+        Me.sec_bFaturaIskontosuz.Properties.Caption = "Faturalar Iskontosuz"
+        Me.sec_bFaturaIskontosuz.Size = New System.Drawing.Size(128, 19)
+        Me.sec_bFaturaIskontosuz.TabIndex = 156
+        '
+        'sec_bStokFisiKdvSiz
+        '
+        Me.sec_bStokFisiKdvSiz.Location = New System.Drawing.Point(6, 45)
+        Me.sec_bStokFisiKdvSiz.Name = "sec_bStokFisiKdvSiz"
+        Me.sec_bStokFisiKdvSiz.Properties.Caption = "StokFisleri Kdv siz"
+        Me.sec_bStokFisiKdvSiz.Size = New System.Drawing.Size(121, 19)
+        Me.sec_bStokFisiKdvSiz.TabIndex = 155
+        '
+        'sec_bIrsaliyeKdvSiz
+        '
+        Me.sec_bIrsaliyeKdvSiz.Location = New System.Drawing.Point(6, 23)
+        Me.sec_bIrsaliyeKdvSiz.Name = "sec_bIrsaliyeKdvSiz"
+        Me.sec_bIrsaliyeKdvSiz.Properties.Caption = "Ýrsaliyeler Kdv siz"
+        Me.sec_bIrsaliyeKdvSiz.Size = New System.Drawing.Size(115, 19)
+        Me.sec_bIrsaliyeKdvSiz.TabIndex = 154
+        '
+        'sec_bFaturaKdvSiz
+        '
+        Me.sec_bFaturaKdvSiz.Location = New System.Drawing.Point(6, 2)
+        Me.sec_bFaturaKdvSiz.Name = "sec_bFaturaKdvSiz"
+        Me.sec_bFaturaKdvSiz.Properties.Caption = "Faturalar Kdv siz"
+        Me.sec_bFaturaKdvSiz.Size = New System.Drawing.Size(115, 19)
+        Me.sec_bFaturaKdvSiz.TabIndex = 153
+        '
+        'sec_bFiyatKdvHaric
+        '
+        Me.sec_bFiyatKdvHaric.Location = New System.Drawing.Point(716, 41)
+        Me.sec_bFiyatKdvHaric.Name = "sec_bFiyatKdvHaric"
+        Me.sec_bFiyatKdvHaric.Properties.Caption = "Fiyatlar Kdv Haric"
+        Me.sec_bFiyatKdvHaric.Size = New System.Drawing.Size(144, 19)
+        Me.sec_bFiyatKdvHaric.TabIndex = 152
+        '
+        'sec_bMessageCheck
+        '
+        Me.sec_bMessageCheck.Location = New System.Drawing.Point(588, 42)
+        Me.sec_bMessageCheck.Name = "sec_bMessageCheck"
+        Me.sec_bMessageCheck.Properties.Caption = "Mesaj Kontrol"
+        Me.sec_bMessageCheck.Size = New System.Drawing.Size(144, 19)
+        Me.sec_bMessageCheck.TabIndex = 151
+        '
+        'sec_bSatirKontrol
+        '
+        Me.sec_bSatirKontrol.Location = New System.Drawing.Point(588, 25)
+        Me.sec_bSatirKontrol.Name = "sec_bSatirKontrol"
+        Me.sec_bSatirKontrol.Properties.Caption = "SatirKontrol"
+        Me.sec_bSatirKontrol.Size = New System.Drawing.Size(116, 19)
+        Me.sec_bSatirKontrol.TabIndex = 150
+        '
+        'sec_bOtomatikMaliyetFiyati
+        '
+        Me.sec_bOtomatikMaliyetFiyati.Location = New System.Drawing.Point(588, 8)
+        Me.sec_bOtomatikMaliyetFiyati.Name = "sec_bOtomatikMaliyetFiyati"
+        Me.sec_bOtomatikMaliyetFiyati.Properties.Caption = "OtomatikMaliyetFiyati"
+        Me.sec_bOtomatikMaliyetFiyati.Size = New System.Drawing.Size(130, 19)
+        Me.sec_bOtomatikMaliyetFiyati.TabIndex = 149
+        '
+        'sec_bOtomatikAlisFiyati
+        '
+        Me.sec_bOtomatikAlisFiyati.Location = New System.Drawing.Point(716, 7)
+        Me.sec_bOtomatikAlisFiyati.Name = "sec_bOtomatikAlisFiyati"
+        Me.sec_bOtomatikAlisFiyati.Properties.Caption = "OtomatikAlisFiyati"
+        Me.sec_bOtomatikAlisFiyati.Size = New System.Drawing.Size(116, 19)
+        Me.sec_bOtomatikAlisFiyati.TabIndex = 148
+        '
+        'sec_bKdvKontrolluMaliyet
+        '
+        Me.sec_bKdvKontrolluMaliyet.Location = New System.Drawing.Point(716, 24)
+        Me.sec_bKdvKontrolluMaliyet.Name = "sec_bKdvKontrolluMaliyet"
+        Me.sec_bKdvKontrolluMaliyet.Properties.Caption = "KdvOraniKontrollüMaliyet"
+        Me.sec_bKdvKontrolluMaliyet.Size = New System.Drawing.Size(144, 19)
+        Me.sec_bKdvKontrolluMaliyet.TabIndex = 147
+        '
+        'PanelControl4
+        '
+        Me.PanelControl4.Controls.Add(Me.SimpleButton4)
+        Me.PanelControl4.Controls.Add(Me.btn_vazgec)
+        Me.PanelControl4.Controls.Add(Me.btn_kaydet)
+        Me.PanelControl4.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.PanelControl4.Location = New System.Drawing.Point(0, 286)
+        Me.PanelControl4.Name = "PanelControl4"
+        Me.PanelControl4.Size = New System.Drawing.Size(910, 40)
+        Me.PanelControl4.TabIndex = 1
+        '
+        'SimpleButton4
+        '
+        Me.SimpleButton4.Image = CType(resources.GetObject("SimpleButton4.Image"), System.Drawing.Image)
+        Me.SimpleButton4.Location = New System.Drawing.Point(296, 9)
+        Me.SimpleButton4.Name = "SimpleButton4"
+        Me.SimpleButton4.Size = New System.Drawing.Size(128, 23)
+        Me.SimpleButton4.TabIndex = 2
+        Me.SimpleButton4.Text = "&Þifre Ver"
+        '
+        'btn_vazgec
+        '
+        Me.btn_vazgec.Image = CType(resources.GetObject("btn_vazgec.Image"), System.Drawing.Image)
+        Me.btn_vazgec.Location = New System.Drawing.Point(160, 8)
+        Me.btn_vazgec.Name = "btn_vazgec"
+        Me.btn_vazgec.Size = New System.Drawing.Size(136, 23)
+        Me.btn_vazgec.TabIndex = 1
+        Me.btn_vazgec.Text = "&Vazgeç"
+        '
+        'btn_kaydet
+        '
+        Me.btn_kaydet.Image = CType(resources.GetObject("btn_kaydet.Image"), System.Drawing.Image)
+        Me.btn_kaydet.Location = New System.Drawing.Point(32, 8)
+        Me.btn_kaydet.Name = "btn_kaydet"
+        Me.btn_kaydet.Size = New System.Drawing.Size(128, 23)
+        Me.btn_kaydet.TabIndex = 0
+        Me.btn_kaydet.Text = "&Kaydet"
+        '
+        'ps
+        '
+        Me.ps.Links.AddRange(New Object() {Me.printlink1})
+        '
+        'printlink1
+        '
+        Me.printlink1.Component = Me.GridControl1
+        '
+        '
+        '
+        Me.printlink1.ImageCollection.ImageStream = CType(resources.GetObject("printlink1.ImageCollection.ImageStream"), DevExpress.Utils.ImageCollectionStreamer)
+        Me.printlink1.Margins = New System.Drawing.Printing.Margins(20, 20, 60, 60)
+        Me.printlink1.Owner = Nothing
+        Me.printlink1.PageHeaderFooter = New DevExpress.XtraPrinting.PageHeaderFooter(New DevExpress.XtraPrinting.PageHeaderArea(New String() {"", "Personel Listesi", "[Date Printed][Time Printed]"}, New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(162, Byte)), DevExpress.XtraPrinting.BrickAlignment.Far), New DevExpress.XtraPrinting.PageFooterArea(New String() {"Powered by www.barkodyazilimevi.com", "Personel Yönetimi", "[Page # of Pages #]"}, New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(162, Byte)), DevExpress.XtraPrinting.BrickAlignment.Near))
+        Me.printlink1.PaperKind = System.Drawing.Printing.PaperKind.A4
+        Me.printlink1.PrintingSystem = Me.ps
+        Me.printlink1.PrintingSystemBase = Me.ps
+        '
+        'BarManager1
+        '
+        Me.BarManager1.Bars.AddRange(New DevExpress.XtraBars.Bar() {Me.Bar3})
+        Me.BarManager1.DockControls.Add(Me.barDockControlTop)
+        Me.BarManager1.DockControls.Add(Me.barDockControlBottom)
+        Me.BarManager1.DockControls.Add(Me.barDockControlLeft)
+        Me.BarManager1.DockControls.Add(Me.barDockControlRight)
+        Me.BarManager1.Form = Me
+        Me.BarManager1.Items.AddRange(New DevExpress.XtraBars.BarItem() {Me.BarButtonItem1, Me.BarButtonItem2, Me.BarButtonItem3, Me.BarButtonItem4, Me.BarButtonItem5, Me.BarButtonItem6, Me.BarButtonItem7, Me.BarButtonItem8, Me.BarButtonItem9})
+        Me.BarManager1.MaxItemId = 9
+        Me.BarManager1.StatusBar = Me.Bar3
+        '
+        'Bar3
+        '
+        Me.Bar3.BarName = "Status bar"
+        Me.Bar3.CanDockStyle = DevExpress.XtraBars.BarCanDockStyle.Bottom
+        Me.Bar3.DockCol = 0
+        Me.Bar3.DockRow = 0
+        Me.Bar3.DockStyle = DevExpress.XtraBars.BarDockStyle.Bottom
+        Me.Bar3.LinksPersistInfo.AddRange(New DevExpress.XtraBars.LinkPersistInfo() {New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem1), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem2, True), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem3, True), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem4, True), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem5, True), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem6, True), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem7, True), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem8, True), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem9, True)})
+        Me.Bar3.OptionsBar.AllowQuickCustomization = False
+        Me.Bar3.OptionsBar.DrawDragBorder = False
+        Me.Bar3.OptionsBar.UseWholeRow = True
+        Me.Bar3.Text = "Status bar"
+        '
+        'BarButtonItem1
+        '
+        Me.BarButtonItem1.Caption = "Ekle,Insert"
+        Me.BarButtonItem1.Id = 0
+        Me.BarButtonItem1.ItemAppearance.Normal.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
+        Me.BarButtonItem1.ItemAppearance.Normal.Options.UseFont = True
+        Me.BarButtonItem1.Name = "BarButtonItem1"
+        '
+        'BarButtonItem2
+        '
+        Me.BarButtonItem2.Caption = "Düzelt,F4"
+        Me.BarButtonItem2.Id = 1
+        Me.BarButtonItem2.ItemAppearance.Normal.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
+        Me.BarButtonItem2.ItemAppearance.Normal.Options.UseFont = True
+        Me.BarButtonItem2.Name = "BarButtonItem2"
+        '
+        'BarButtonItem3
+        '
+        Me.BarButtonItem3.Caption = "Sil,Ctrl+Del"
+        Me.BarButtonItem3.Id = 2
+        Me.BarButtonItem3.ItemAppearance.Normal.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
+        Me.BarButtonItem3.ItemAppearance.Normal.Options.UseFont = True
+        Me.BarButtonItem3.Name = "BarButtonItem3"
+        '
+        'BarButtonItem4
+        '
+        Me.BarButtonItem4.Caption = "Yetkiler,F8"
+        Me.BarButtonItem4.Id = 3
+        Me.BarButtonItem4.ItemAppearance.Normal.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
+        Me.BarButtonItem4.ItemAppearance.Normal.Options.UseFont = True
+        Me.BarButtonItem4.Name = "BarButtonItem4"
+        '
+        'BarButtonItem5
+        '
+        Me.BarButtonItem5.Caption = "Yetki Kopyala"
+        Me.BarButtonItem5.Id = 4
+        Me.BarButtonItem5.ItemAppearance.Normal.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
+        Me.BarButtonItem5.ItemAppearance.Normal.Options.UseFont = True
+        Me.BarButtonItem5.Name = "BarButtonItem5"
+        '
+        'BarButtonItem6
+        '
+        Me.BarButtonItem6.Caption = "Yazdýr,Ctrl+P"
+        Me.BarButtonItem6.Id = 5
+        Me.BarButtonItem6.ItemAppearance.Normal.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
+        Me.BarButtonItem6.ItemAppearance.Normal.Options.UseFont = True
+        Me.BarButtonItem6.Name = "BarButtonItem6"
+        '
+        'BarButtonItem7
+        '
+        Me.BarButtonItem7.Caption = "Excel"
+        Me.BarButtonItem7.Id = 6
+        Me.BarButtonItem7.ItemAppearance.Normal.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
+        Me.BarButtonItem7.ItemAppearance.Normal.Options.UseFont = True
+        Me.BarButtonItem7.Name = "BarButtonItem7"
+        '
+        'BarButtonItem8
+        '
+        Me.BarButtonItem8.Caption = "Text"
+        Me.BarButtonItem8.Id = 7
+        Me.BarButtonItem8.ItemAppearance.Normal.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
+        Me.BarButtonItem8.ItemAppearance.Normal.Options.UseFont = True
+        Me.BarButtonItem8.Name = "BarButtonItem8"
+        '
+        'BarButtonItem9
+        '
+        Me.BarButtonItem9.Caption = "Mail"
+        Me.BarButtonItem9.Id = 8
+        Me.BarButtonItem9.ItemAppearance.Normal.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
+        Me.BarButtonItem9.ItemAppearance.Normal.Options.UseFont = True
+        Me.BarButtonItem9.Name = "BarButtonItem9"
+        '
+        'barDockControlTop
+        '
+        Me.barDockControlTop.CausesValidation = False
+        Me.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top
+        Me.barDockControlTop.Location = New System.Drawing.Point(0, 0)
+        Me.barDockControlTop.Size = New System.Drawing.Size(916, 0)
+        '
+        'barDockControlBottom
+        '
+        Me.barDockControlBottom.CausesValidation = False
+        Me.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.barDockControlBottom.Location = New System.Drawing.Point(0, 475)
+        Me.barDockControlBottom.Size = New System.Drawing.Size(916, 22)
+        '
+        'barDockControlLeft
+        '
+        Me.barDockControlLeft.CausesValidation = False
+        Me.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left
+        Me.barDockControlLeft.Location = New System.Drawing.Point(0, 0)
+        Me.barDockControlLeft.Size = New System.Drawing.Size(0, 475)
+        '
+        'barDockControlRight
+        '
+        Me.barDockControlRight.CausesValidation = False
+        Me.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right
+        Me.barDockControlRight.Location = New System.Drawing.Point(916, 0)
+        Me.barDockControlRight.Size = New System.Drawing.Size(0, 475)
+        '
+        'frm_personel
+        '
+        Me.AutoScaleBaseSize = New System.Drawing.Size(5, 14)
+        Me.ClientSize = New System.Drawing.Size(916, 497)
+        Me.Controls.Add(Me.PanelControl3)
+        Me.Controls.Add(Me.PanelControl2)
+        Me.Controls.Add(Me.PanelControl1)
+        Me.Controls.Add(Me.barDockControlLeft)
+        Me.Controls.Add(Me.barDockControlRight)
+        Me.Controls.Add(Me.barDockControlBottom)
+        Me.Controls.Add(Me.barDockControlTop)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MaximumSize = New System.Drawing.Size(938, 553)
+        Me.MinimumSize = New System.Drawing.Size(932, 535)
+        Me.Name = "frm_personel"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.Text = "Personel Listesi"
+        CType(Me.PanelControl1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.PanelControl1.ResumeLayout(False)
+        Me.PanelControl1.PerformLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PanelControl2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.PanelControl2.ResumeLayout(False)
+        CType(Me.PanelControl3, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.PanelControl3.ResumeLayout(False)
+        CType(Me.XtraTabControl1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.XtraTabControl1.ResumeLayout(False)
+        Me.XtraTabPage1.ResumeLayout(False)
+        CType(Me.GridControl1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DataSet1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DataTable1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.GridView1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_hareket_dept, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.XtraTabPage2.ResumeLayout(False)
+        CType(Me.PanelControl5, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.PanelControl5.ResumeLayout(False)
+        CType(Me.XtraTabControl2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.XtraTabControl2.ResumeLayout(False)
+        Me.XtraTabPage3.ResumeLayout(False)
+        CType(Me.GroupControl3, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupControl3.ResumeLayout(False)
+        Me.GroupControl3.PerformLayout()
+        CType(Me.sec_sMobileKullan.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_kullanici.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_aktif.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_gorev.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_dept.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_gsm.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_tel2.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_tel1.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_adres.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.GroupControl1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupControl1.ResumeLayout(False)
+        Me.GroupControl1.PerformLayout()
+        CType(Me.TextEdit1.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_resim.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_isegiris.Properties.VistaTimeProperties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_isegiris.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_ref.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_baba.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_anne.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_onayla.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_sifre.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_ad.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_kod.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.XtraTabPage4.ResumeLayout(False)
+        CType(Me.GroupControl5, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupControl5.ResumeLayout(False)
+        Me.GroupControl5.PerformLayout()
+        CType(Me.txt_kesinti5.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_kesinti4.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_kesinti3.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_kesinti2.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_kesinti1.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.GroupControl2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupControl2.ResumeLayout(False)
+        Me.GroupControl2.PerformLayout()
+        CType(Me.txt_eklenti5.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_eklenti4.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_eklenti3.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_eklenti2.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_eklenti1.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.GroupControl4, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupControl4.ResumeLayout(False)
+        Me.GroupControl4.PerformLayout()
+        CType(Me.sec_durum.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_depo.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_satici.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.btn_hesap.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_netmaas.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_brutmaas.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.XtraTabPage5.ResumeLayout(False)
+        CType(Me.sec_grid, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.sec_grid.ResumeLayout(False)
+        CType(Me.GridControl2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.GridView2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.GroupControl7, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupControl7.ResumeLayout(False)
+        Me.GroupControl7.PerformLayout()
+        CType(Me.sec_sHareketTipi.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sSubeMagaza.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sDepo.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.GroupControl6, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupControl6.ResumeLayout(False)
+        Me.GroupControl6.PerformLayout()
+        CType(Me.txt_sGiderSinirla.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sSinifKodu.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sFiyatTipi.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_sFihristSinirla.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_sBankaSinirla.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_sStokSinirla.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_sCariSinirla.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.XtraTabPage6.ResumeLayout(False)
+        Me.XtraTabPage6.PerformLayout()
+        CType(Me.sec_bOtomatikPesinatDuzelt.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_nTaksitSayi.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_nTaksitBaslangic.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_nTaksitGun.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bOtomatikTaksit.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_sBacodeStd.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_PrinterDepo.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_PrinterTermal.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_FontSize.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.GroupControl9, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupControl9.ResumeLayout(False)
+        Me.GroupControl9.PerformLayout()
+        CType(Me.sec_sEFiyatTipi5.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sEFiyatTipi4.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sEFiyatTipiM.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sEFiyatTipiA.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sEFiyatTipi3.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sEFiyatTipi2.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sEFiyatTipi1.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.GroupControl8, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupControl8.ResumeLayout(False)
+        Me.GroupControl8.PerformLayout()
+        CType(Me.sec_sFiyatTipi5.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sFiyatTipi4.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sAktifFiyatTipi.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sFiyatTipiM.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sFiyatTipiA.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sFiyatTipi3.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sFiyatTipi2.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sFiyatTipi1.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.GroupControl11, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupControl11.ResumeLayout(False)
+        Me.GroupControl11.PerformLayout()
+        CType(Me.sec_sPesinFiyatTipi.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sKrediliFiyatTipi.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.GroupControl10, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupControl10.ResumeLayout(False)
+        Me.GroupControl10.PerformLayout()
+        CType(Me.sec_sSaticiRumuzu.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bCalcVadeDagilim.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.XtraTabPage7.ResumeLayout(False)
+        Me.XtraTabPage7.PerformLayout()
+        CType(Me.sec_bSatirKendiEnvanteri.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bPerYerelMuh.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bPerOtoMuh.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bSatFatOtoMuh.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bAlisFatOtoMuh.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bMagazalarChart.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bDovizliFatura.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sYaziIle.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sDil.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bFaturaKdvDahil.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bKendiFisNo.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bNamazVaktiGosterme.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_nFirmaGrupKodUzunlugu.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_dteSonNakitKasaTarihi.Properties.VistaTimeProperties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_dteSonNakitKasaTarihi.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_dteSonStokFisiTarihi.Properties.VistaTimeProperties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_dteSonStokFisiTarihi.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_dteSonIrsaliyeTarihi.Properties.VistaTimeProperties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_dteSonIrsaliyeTarihi.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_dteSonFaturaTarihi.Properties.VistaTimeProperties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_dteSonFaturaTarihi.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_sRaporUzanti.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bAlisFiyatiUyar.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_nStokFisiCiktiSatirSayisi.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_nIrsaliyeCiktiSatirSayisi.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.txt_nFaturaCiktiSatirSayisi.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bTransferEnvanterKontrol.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bStokFisiIskontosuz.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bIrsaliyeIskontosuz.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bFaturaIskontosuz.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bStokFisiKdvSiz.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bIrsaliyeKdvSiz.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bFaturaKdvSiz.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bFiyatKdvHaric.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bMessageCheck.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bSatirKontrol.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bOtomatikMaliyetFiyati.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bOtomatikAlisFiyati.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.sec_bKdvKontrolluMaliyet.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PanelControl4, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.PanelControl4.ResumeLayout(False)
+        CType(Me.ps, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.printlink1.ImageCollection, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.BarManager1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ResumeLayout(False)
+
+    End Sub
+#End Region
+    Public connection
+    Public firmano
+    Public donemno
+    Public kasiyerno As Int64
+    Public kullanici
+    Dim islem As String
+    Public status As Boolean = False
+    Public islemstatus As Boolean = False
+    Public takip As Boolean = False
+    Public kayitno As Int64 = 0
+    Dim dr As DataRow
+    Dim satir
+    Dim conn As New OleDb.OleDbConnection
+    Dim con As New OleDb.OleDbConnection
+    Dim cmd As New OleDb.OleDbCommand
+    Dim adapter As New OleDb.OleDbDataAdapter
+    Dim DS As New DataSet
+    Dim ds_yetkiler As DataSet
+    Dim ds_tbDepo As DataSet
+    Dim ds_tbsube As DataSet
+    Dim ds_tbHareketTipi As DataSet
+    Dim ds_tbFSinif1 As DataSet
+    Dim ds_tbFiyatlandirma As DataSet
+    Dim ds_tbFiyatTipi As DataSet
+    Dim ds_tbSatici As DataSet
+    Dim ds_tbDil As DataSet
+    Public frf_islem As String = "mektup"
+    Public kriter As String = ""
+    Private Sub SimpleButton2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SimpleButton2.Click
+        Me.Close()
+    End Sub
+    Private Sub SimpleButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SimpleButton1.Click
+        If status = True Then
+            Me.DialogResult = Windows.Forms.DialogResult.OK
+        Else
+            Me.Close()
+        End If
+    End Sub
+    Private Sub frm_personel_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        dataload()
+        dataload_dept()
+        dataload_tbFiyatTipi()
+        Try
+            gorunum_yukle()
+        Catch ex As Exception
+        End Try
+    End Sub
+    Private Sub MenuItem10_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem10.Click
+        If MenuItem10.Checked = False Then
+            GridView1.OptionsView.ShowGroupPanel = True
+            GridView1.OptionsCustomization.AllowGroup = True
+            MenuItem10.Checked = True
+        ElseIf MenuItem10.Checked = True Then
+            GridView1.OptionsView.ShowGroupPanel = False
+            GridView1.OptionsCustomization.AllowGroup = False
+            MenuItem10.Checked = False
+        End If
+    End Sub
+    Private Sub MenuItem13_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem13.Click
+        If Me.WindowState = FormWindowState.Normal Then
+            Me.WindowState = FormWindowState.Maximized
+        ElseIf Me.WindowState = FormWindowState.Maximized Then
+            Me.WindowState = FormWindowState.Normal
+        End If
+    End Sub
+    Private Sub MenuItem9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem9.Click
+        If MenuItem9.Checked = False Then
+            GridView1.OptionsView.ShowFilterPanelMode = DevExpress.XtraGrid.Views.Base.ShowFilterPanelMode.Default
+            GridView1.OptionsCustomization.AllowFilter = True
+            MenuItem9.Checked = True
+        ElseIf MenuItem9.Checked = True Then
+            GridView1.OptionsView.ShowFilterPanelMode = DevExpress.XtraGrid.Views.Base.ShowFilterPanelMode.Never
+            GridView1.OptionsCustomization.AllowFilter = False
+            MenuItem9.Checked = False
+        End If
+    End Sub
+    Private Sub MenuItem5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem5.Click
+        GridView1.ColumnsCustomization()
+    End Sub
+    Private Sub MenuItem8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem8.Click
+        gorunum_yazdir()
+    End Sub
+    Private Sub gorunum_yazdir()
+        printlink1.CreateDocument(ps)
+        ps.PreviewRibbonFormEx.Show()
+    End Sub
+    Private Sub MenuItem2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem2.Click
+        kayit_ekle()
+    End Sub
+    Private Sub kayit_ekle()
+        XtraTabPage1.PageVisible = False
+        XtraTabPage2.PageVisible = True
+        XtraTabControl1.SelectedTabPageIndex = 1
+        txt_kod.Focus()
+        txt_kod.Select()
+        islem = "ekle"
+        kayitno = 0
+        txt_kod.Text = ""
+        txt_ad.Text = ""
+        txt_sifre.Text = ""
+        txt_onayla.Text = ""
+        txt_baba.EditValue = ""
+        txt_anne.EditValue = ""
+        txt_ref.EditValue = ""
+        txt_adres.EditValue = ""
+        txt_tel1.EditValue = ""
+        txt_tel2.EditValue = ""
+        txt_gsm.EditValue = ""
+        sec_dept.EditValue = ""
+        txt_gorev.EditValue = ""
+        txt_brutmaas.EditValue = 0
+        txt_eklenti1.EditValue = 0
+        txt_eklenti2.EditValue = 0
+        txt_eklenti3.EditValue = 0
+        txt_eklenti4.EditValue = 0
+        txt_eklenti5.EditValue = 0
+        txt_kesinti1.EditValue = 0
+        txt_kesinti2.EditValue = 0
+        txt_kesinti3.EditValue = 0
+        txt_kesinti4.EditValue = 0
+        txt_kesinti5.EditValue = 0
+        txt_netmaas.EditValue = 0
+        txt_isegiris.EditValue = dteSistemTarihi
+        sec_resim.EditValue = Nothing
+        sec_aktif.EditValue = -1
+        sec_sMobileKullan.EditValue = -1
+        sec_kullanici.EditValue = -1
+        txt_sCariSinirla.Text = ""
+        txt_sStokSinirla.Text = ""
+        txt_sBankaSinirla.Text = ""
+        txt_sFihristSinirla.Text = ""
+        txt_sGiderSinirla.Text = ""
+        sec_sDepo.EditValue = "D001"
+        sec_sSubeMagaza.EditValue = "001"
+        sec_sHareketTipi.EditValue = "001"
+        sec_sFiyatTipi.EditValue = ""
+        sec_sSinifKodu.Text = ""
+        sec_sFiyatTipi1.EditValue = "1"
+        sec_sFiyatTipi2.EditValue = "2"
+        sec_sFiyatTipi3.EditValue = "3"
+        sec_sFiyatTipi4.EditValue = "4"
+        sec_sFiyatTipi5.EditValue = "5"
+        sec_sFiyatTipiA.EditValue = "A"
+        sec_sFiyatTipiM.EditValue = "M"
+        sec_sAktifFiyatTipi.EditValue = "1"
+        sec_sEFiyatTipi1.EditValue = ""
+        sec_sEFiyatTipi2.EditValue = ""
+        sec_sEFiyatTipi3.EditValue = ""
+        sec_sEFiyatTipi4.EditValue = ""
+        sec_sEFiyatTipi5.EditValue = ""
+        sec_sEFiyatTipiA.EditValue = ""
+        sec_sEFiyatTipiM.EditValue = ""
+        sec_bCalcVadeDagilim.EditValue = 1
+        sec_bOtomatikTaksit.EditValue = 0
+        sec_bOtomatikPesinatDuzelt.EditValue = 0
+        sec_bKdvKontrolluMaliyet.EditValue = 0
+        sec_bSatirKontrol.EditValue = 0
+        sec_bOtomatikMaliyetFiyati.EditValue = 0
+        sec_bAlisFatOtoMuh.EditValue = 0
+        sec_bSatFatOtoMuh.EditValue = 0
+        sec_bPerOtoMuh.EditValue = 0
+        sec_bPerYerelMuh.EditValue = 0
+        sec_bSatirKendiEnvanteri.EditValue = 0
+        sec_bOtomatikAlisFiyati.EditValue = 0
+        sec_bAlisFiyatiUyar.EditValue = 0
+        sec_dteSonFaturaTarihi.EditValue = "01/01/1900"
+        sec_dteSonIrsaliyeTarihi.EditValue = "01/01/1900"
+        sec_dteSonStokFisiTarihi.EditValue = "01/01/1900"
+        sec_dteSonNakitKasaTarihi.EditValue = "01/01/1900"
+        sec_nFirmaGrupKodUzunlugu.EditValue = 0
+        txt_nTaksitGun.EditValue = 0
+        txt_nTaksitBaslangic.EditValue = 0
+        txt_nTaksitSayi.EditValue = 1
+        sec_sKrediliFiyatTipi.EditValue = "1"
+        sec_sPesinFiyatTipi.EditValue = "2"
+        sec_bMessageCheck.EditValue = 1
+        sec_bNamazVaktiGosterme.EditValue = 1
+        sec_bMagazalarChart.EditValue = 1
+        sec_sSaticiRumuzu.EditValue = ""
+        txt_PrinterTermal.EditValue = ""
+        txt_PrinterDepo.EditValue = ""
+        sec_FontSize.EditValue = 8.25
+        sec_bFiyatKdvHaric.EditValue = 0
+        sec_bFaturaKdvDahil.EditValue = 0
+        sec_bFaturaKdvSiz.EditValue = 0
+        sec_bFaturaIskontosuz.EditValue = 0
+        txt_nFaturaCiktiSatirSayisi.EditValue = 25
+        sec_bIrsaliyeKdvSiz.EditValue = 0
+        sec_bIrsaliyeIskontosuz.EditValue = 0
+        txt_nIrsaliyeCiktiSatirSayisi.EditValue = 25
+        sec_bStokFisiKdvSiz.EditValue = 0
+        sec_bStokFisiIskontosuz.EditValue = 0
+        txt_nStokFisiCiktiSatirSayisi.EditValue = 25
+        sec_bTransferEnvanterKontrol.EditValue = 0
+        sec_sRaporUzanti.EditValue = ".frx"
+        sec_sYaziIle.EditValue = "TR"
+        txt_sBacodeStd.EditValue = "27"
+        sec_sDil.EditValue = "TR"
+        sec_bKendiFisNo.EditValue = 0
+        sec_bDovizliFatura.EditValue = 0
+    End Sub
+    Private Sub ekle(ByVal PERSONELKODU As String, ByVal PERSONELADI As String, ByVal SIFRE As String, ByVal ONAY As String, ByVal BABAADI As String, ByVal ANNEADI As String, ByVal REFADI As String, ByVal ADRES As String, ByVal TELEFON1 As String, ByVal TELEFON2 As String, ByVal TELEFON3 As String, ByVal DEPARTMAN As String, ByVal GOREV As String, ByVal isegiris As DateTime, ByVal aktif As Integer, ByVal MobileAktif As Integer, ByVal brutmaas As Decimal, ByVal eklenti1 As Decimal, ByVal eklenti2 As Decimal, ByVal eklenti3 As Decimal, ByVal eklenti4 As Decimal, ByVal eklenti5 As Decimal, ByVal kesinti1 As Decimal, ByVal kesinti2 As Decimal, ByVal kesinti3 As Decimal, ByVal kesinti4 As Decimal, ByVal kesinti5 As Decimal, ByVal netmaas As Decimal, ByVal kullanici As Integer, ByVal saticirumuzu As String, ByVal magaza As String, ByVal hesapkodu As String, ByVal durum As String, ByVal sCariSinirla As String, ByVal sStokSinirla As String, ByVal sBankaSinirla As String, ByVal sFihristSinirla As String, ByVal sGiderSinirla As String, ByVal sDepo As String, ByVal sSubeMagaza As String, ByVal sHareketTipi As String, ByVal sCariSinifKoduSinirla As String, ByVal sAltFiyatTipi As String, ByVal sFiyat1 As String, ByVal sFiyat2 As String, ByVal sFiyat3 As String, ByVal sFiyat4 As String, ByVal sFiyat5 As String, ByVal sFiyatA As String, ByVal sFiyatM As String, ByVal sAktifFiyatTipi As String, ByVal EsFiyat1 As String, ByVal EsFiyat2 As String, ByVal EsFiyat3 As String, ByVal EsFiyat4 As String, ByVal EsFiyat5 As String, ByVal EsFiyatA As String, ByVal EsFiyatM As String, ByVal bCalcVadeDagilim As Integer, ByVal bOtomatikTaksit As Integer, ByVal bOtomatikPesinatDuzelt As Integer, ByVal bKdvKontrolluMaliyet As Integer, ByVal bSatirKontrol As Integer, ByVal bOtomatikMaliyetFiyati As Integer, ByVal bOtomatikAlisFiyati As Integer, ByVal bAlisFiyatiUyar As Integer, ByVal dteSonFaturaTarihi As DateTime, ByVal dteSonIrsaliyeTarihi As DateTime, ByVal dteSonStokFisiTarihi As DateTime, ByVal dteSonNakitKasaTarihi As DateTime, ByVal nFirmaGrupKodUzunlugu As Int64, ByVal nTaksitGun As Int64, ByVal nTaksitBaslangic As Int64, ByVal nTaksitSayi As Int64, ByVal sKrediliFiyatTipi As String, ByVal sPesinFiyatTipi As String, ByVal bMessageCheck As Integer, ByVal bNamazVaktiGosterme As Integer, ByVal bMagazalarChart As Integer, ByVal sSaticiRumuzu As String, ByVal PrinterTermal As String, ByVal PrinterDepo As String, ByVal FontSize As Decimal, ByVal bFiyatKdvHaric As Integer, ByVal bFaturaKdvDahil As Integer, ByVal bFaturaKdvSiz As Integer, ByVal bFaturaIskontosuz As Integer, ByVal nFaturaCiktiSatirSayisi As Int64, ByVal bIrsaliyeKdvSiz As Integer, ByVal bIrsaliyeIskontosuz As Integer, ByVal nIrsaliyeCiktiSatirSayisi As Int64, ByVal bStokFisiKdvSiz As Integer, ByVal bStokFisiIskontosuz As Integer, ByVal nStokFisiCiktiSatirSayisi As Integer, ByVal bTransferEnvanterKontrol As Integer, ByVal sRaporUzanti As String, ByVal sYaziIle As String, ByVal sBacodeStd As Integer, ByVal sDil As String, ByVal bKendiFisNo As Integer, ByVal bDovizliFatura As Integer, ByVal bAlisFatOtoMuh As Integer, ByVal bSatFatOtoMuh As Integer, ByVal bPerOtoMuh As Integer, ByVal bPerYerelMuh As Integer, ByVal bSatirKendiEnvanteri As Byte)
+        Dim cmd As New OleDb.OleDbCommand
+        Dim con As New OleDb.OleDbConnection
+        cmd.Connection = con
+        con.ConnectionString = connection
+        If con.State = ConnectionState.Closed = True Then
+            con.Open()
+        End If
+        If sHareketTipi = "" Then
+            sHareketTipi = sSubeMagaza
+        End If
+        cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO APERSONEL (PERSONELKODU, PERSONELADI, SIFRE, ONAY, BABAADI, ANNEADI, REFADI, ADRES, TELEFON1, TELEFON2, TELEFON3, DEPARTMAN, GOREV, ISEGIRIS, AKTIF, MobileAktif, BrutMaas, Eklenti1, Eklenti2, Eklenti3, Eklenti4, Eklenti5, Kesinti1, Kesinti2, Kesinti3, Kesinti4, Kesinti5, NetMaas, KULLANICI, SATICIRUMUZU, MAGAZA, HESAPKODU, DURUM, sCariSinirla, sStokSinirla, sBankaSinirla, sFihristSinirla, sGiderSinirla, sDepo, sSubeMagaza, sHareketTipi, sCariSinifKoduSinirla, sAltFiyatTipi, sFiyat1, sFiyat2, sFiyat3, sFiyat4, sFiyat5, sFiyatA, sFiyatM, sAktifFiyatTipi, EsFiyat1, EsFiyat2, EsFiyat3, EsFiyat4, EsFiyat5, EsFiyatA, EsFiyatM, bCalcVadeDagilim, bOtomatikTaksit, bOtomatikPesinatDuzelt, bKdvKontrolluMaliyet, bSatirKontrol, bOtomatikMaliyetFiyati, bOtomatikAlisFiyati, bAlisFiyatiUyar, dteSonFaturaTarihi, dteSonIrsaliyeTarihi, dteSonStokFisiTarihi, dteSonNakitKasaTarihi, nFirmaGrupKodUzunlugu, nTaksitGun, nTaksitBaslangic, nTaksitSayi, sKrediliFiyatTipi, sPesinFiyatTipi, bMessageCheck, bNamazVaktiGosterme, bMagazalarChart, sSaticiRumuzu, PrinterTermal, PrinterDepo, FontSize, bFiyatKdvHaric, bFaturaKdvDahil, bFaturaKdvSiz, bFaturaIskontosuz, nFaturaCiktiSatirSayisi, bIrsaliyeKdvSiz, bIrsaliyeIskontosuz, nIrsaliyeCiktiSatirSayisi, bStokFisiKdvSiz, bStokFisiIskontosuz, nStokFisiCiktiSatirSayisi, bTransferEnvanterKontrol, sRaporUzanti, sYaziIle, sBacodeStd, sDil, bKendiFisNo, bDovizliFatura, bAlisFatOtoMuh, bSatFatOtoMuh, bPerOtoMuh, bPerYerelMuh, bSatirKendiEnvanteri) VALUES('" & PERSONELKODU & "', '" & PERSONELADI & "', '" & SIFRE & "', '" & ONAY & "', '" & BABAADI & "', '" & ANNEADI & "', '" & REFADI & "', '" & ADRES & "', '" & TELEFON1 & "', '" & TELEFON2 & "', '" & TELEFON3 & "', '" & DEPARTMAN & "', '" & GOREV & "', '" & isegiris & "', " & aktif & ", " & MobileAktif & ", " & brutmaas & ", " & eklenti1 & ", " & eklenti2 & ", " & eklenti3 & ", " & eklenti4 & ", " & eklenti5 & ", " & kesinti1 & ", " & kesinti2 & ", " & kesinti3 & ", " & kesinti4 & ", " & kesinti5 & ", " & netmaas & ", " & kullanici & ", '" & saticirumuzu & "', '" & magaza & "', '" & hesapkodu & "', '" & durum & "', '" & sCariSinirla & "', '" & sStokSinirla & "', '" & sBankaSinirla & "', '" & sFihristSinirla & "', '" & sGiderSinirla & "', '" & sDepo & "', '" & sSubeMagaza & "', '" & sHareketTipi & "', '" & sCariSinifKoduSinirla & "', '" & sAltFiyatTipi & "', '" & sFiyat1 & "', '" & sFiyat2 & "', '" & sFiyat3 & "', '" & sFiyat4 & "', '" & sFiyat5 & "', '" & sFiyatA & "', '" & sFiyatM & "', '" & sAktifFiyatTipi & "', '" & EsFiyat1 & "', '" & EsFiyat2 & "', '" & EsFiyat3 & "', '" & EsFiyat4 & "', '" & EsFiyat5 & "', '" & EsFiyatA & "', '" & EsFiyatM & "', " & bCalcVadeDagilim & ", " & bOtomatikTaksit & ", " & bOtomatikPesinatDuzelt & ", " & bKdvKontrolluMaliyet & ", " & bSatirKontrol & ", " & bOtomatikMaliyetFiyati & ", " & bOtomatikAlisFiyati & ", " & bAlisFiyatiUyar & ", '" & dteSonFaturaTarihi & "', '" & dteSonIrsaliyeTarihi & "', '" & dteSonStokFisiTarihi & "', '" & dteSonNakitKasaTarihi & "', " & nFirmaGrupKodUzunlugu & ", " & nTaksitGun & ", " & nTaksitBaslangic & ", " & nTaksitSayi & ", '" & sKrediliFiyatTipi & "', '" & sPesinFiyatTipi & "', " & bMessageCheck & ", " & bNamazVaktiGosterme & ", " & bMagazalarChart & ", '" & sSaticiRumuzu & "', '" & PrinterTermal & "', '" & PrinterDepo & "', " & FontSize & ", " & bFiyatKdvHaric & ", " & bFaturaKdvDahil & ", " & bFaturaKdvSiz & ", " & bFaturaIskontosuz & ", " & nFaturaCiktiSatirSayisi & ", " & bIrsaliyeKdvSiz & ", " & bIrsaliyeIskontosuz & ", " & nIrsaliyeCiktiSatirSayisi & ", " & bStokFisiKdvSiz & ", " & bStokFisiIskontosuz & ", " & nStokFisiCiktiSatirSayisi & ", " & bTransferEnvanterKontrol & ", '" & sRaporUzanti & "', '" & sYaziIle & "', '" & sBacodeStd & "', '" & sDil & "', " & bKendiFisNo & "," & bDovizliFatura & ", " & bAlisFatOtoMuh & ", " & bSatFatOtoMuh & ", " & bPerOtoMuh & ", " & bPerYerelMuh & ", " & bSatirKendiEnvanteri & ")")
+        cmd.ExecuteNonQuery()
+        con.Close()
+    End Sub
+    Private Sub duzelt(ByVal ind As Int64, ByVal PERSONELKODU As String, ByVal PERSONELADI As String, ByVal SIFRE As String, ByVal ONAY As String, ByVal BABAADI As String, ByVal ANNEADI As String, ByVal REFADI As String, ByVal ADRES As String, ByVal TELEFON1 As String, ByVal TELEFON2 As String, ByVal TELEFON3 As String, ByVal DEPARTMAN As String, ByVal GOREV As String, ByVal isegiris As DateTime, ByVal aktif As Integer, ByVal MobileAktif As Integer, ByVal brutmaas As Decimal, ByVal eklenti1 As Decimal, ByVal eklenti2 As Decimal, ByVal eklenti3 As Decimal, ByVal eklenti4 As Decimal, ByVal eklenti5 As Decimal, ByVal kesinti1 As Decimal, ByVal kesinti2 As Decimal, ByVal kesinti3 As Decimal, ByVal kesinti4 As Decimal, ByVal kesinti5 As Decimal, ByVal netmaas As Decimal, ByVal kullanici As Integer, ByVal saticirumuzu As String, ByVal magaza As String, ByVal hesapkodu As String, ByVal durum As String, ByVal sCariSinirla As String, ByVal sStokSinirla As String, ByVal sBankaSinirla As String, ByVal sFihristSinirla As String, ByVal sGiderSinirla As String, ByVal sDepo As String, ByVal sSubeMagaza As String, ByVal sHareketTipi As String, ByVal sCariSinifKoduSinirla As String, ByVal sAltFiyatTipi As String, ByVal sFiyat1 As String, ByVal sFiyat2 As String, ByVal sFiyat3 As String, ByVal sFiyat4 As String, ByVal sFiyat5 As String, ByVal sFiyatA As String, ByVal sFiyatM As String, ByVal sAktifFiyatTipi As String, ByVal EsFiyat1 As String, ByVal EsFiyat2 As String, ByVal EsFiyat3 As String, ByVal EsFiyat4 As String, ByVal EsFiyat5 As String, ByVal EsFiyatA As String, ByVal EsFiyatM As String, ByVal bCalcVadeDagilim As Integer, ByVal bOtomatikTaksit As Integer, ByVal bOtomatikPesinatDuzelt As Integer, ByVal bKdvKontrolluMaliyet As Integer, ByVal bSatirKontrol As Integer, ByVal bOtomatikMaliyetFiyati As Integer, ByVal bOtomatikAlisFiyati As Integer, ByVal bAlisFiyatiUyar As Integer, ByVal dteSonFaturaTarihi As DateTime, ByVal dteSonIrsaliyeTarihi As DateTime, ByVal dteSonStokFisiTarihi As DateTime, ByVal dteSonNakitKasaTarihi As DateTime, ByVal nFirmaGrupKodUzunlugu As Int64, ByVal nTaksitGun As Int64, ByVal nTaksitBaslangic As Int64, ByVal nTaksitSayi As Int64, ByVal sKrediliFiyatTipi As String, ByVal sPesinFiyatTipi As String, ByVal bMessageCheck As Integer, ByVal bNamazVaktiGosterme As Integer, ByVal bMagazalarChart As Integer, ByVal sSaticiRumuzu As String, ByVal PrinterTermal As String, ByVal PrinterDepo As String, ByVal FontSize As Decimal, ByVal bFiyatKdvHaric As Integer, ByVal bFaturaKdvDahil As Integer, ByVal bFaturaKdvSiz As Integer, ByVal bFaturaIskontosuz As Integer, ByVal nFaturaCiktiSatirSayisi As Int64, ByVal bIrsaliyeKdvSiz As Integer, ByVal bIrsaliyeIskontosuz As Integer, ByVal nIrsaliyeCiktiSatirSayisi As Int64, ByVal bStokFisiKdvSiz As Integer, ByVal bStokFisiIskontosuz As Integer, ByVal nStokFisiCiktiSatirSayisi As Integer, ByVal bTransferEnvanterKontrol As Integer, ByVal sRaporUzanti As String, ByVal sYaziIle As String, ByVal sBacodeStd As Integer, ByVal sDil As String, ByVal bKendiFisNo As Integer, ByVal bDovizliFatura As Integer, ByVal bAlisFatOtoMuh As Integer, ByVal bSatFatOtoMuh As Integer, ByVal bPerOtoMuh As Integer, ByVal bPerYerelMuh As Integer, ByVal bSatirKendiEnvanteri As Byte)
+        Dim cmd As New OleDb.OleDbCommand
+        Dim con As New OleDb.OleDbConnection
+        cmd.Connection = con
+        con.ConnectionString = connection
+        If con.State = ConnectionState.Closed = True Then
+            con.Open()
+        End If
+        'If sCariSinifKoduSinirla <> "" Then
+        '    sCariSinifKoduSinirla = "'[''001,003'']"
+        'End If
+        If sHareketTipi = "" Then
+            sHareketTipi = sSubeMagaza
+        End If
+        cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED UPDATE APERSONEL SET PERSONELKODU = '" & PERSONELKODU & "', PERSONELADI = '" & PERSONELADI & "', SIFRE = '" & SIFRE & "', ONAY = '" & ONAY & "', BABAADI = '" & BABAADI & "', ANNEADI = '" & ANNEADI & "', REFADI = '" & REFADI & "', ADRES = '" & ADRES & "', TELEFON1 = '" & TELEFON1 & "', TELEFON2 = '" & TELEFON2 & "', TELEFON3 = '" & TELEFON3 & "', DEPARTMAN = '" & DEPARTMAN & "',GOREV = '" & GOREV & "',ISEGIRIS ='" & isegiris & "',AKTIF =" & aktif & ", MobileAktif = " & MobileAktif & ", BrutMaas = " & brutmaas & " , Eklenti1 = " & eklenti1 & " , Eklenti2 = " & eklenti2 & " , Eklenti3 = " & eklenti3 & " , Eklenti4 = " & eklenti4 & " , Eklenti5 = " & eklenti5 & " , Kesinti1 = " & kesinti1 & " , Kesinti2 = " & kesinti2 & " , Kesinti3 = " & kesinti3 & " , Kesinti4 = " & kesinti4 & " , Kesinti5 = " & kesinti5 & " , NetMaas = " & netmaas & ",KULLANICI = " & kullanici & ",SATICIRUMUZU = '" & saticirumuzu & "',MAGAZA = '" & magaza & "',HESAPKODU = '" & hesapkodu & "',DURUM = '" & durum & "',sCariSinirla ='" & sCariSinirla & "',sStokSinirla='" & sStokSinirla & "',sBankaSinirla ='" & sBankaSinirla & "',sFihristSinirla ='" & sFihristSinirla & "',sGiderSinirla ='" & sGiderSinirla & "',sDepo ='" & sDepo & "',sSubeMagaza ='" & sSubeMagaza & "',sHareketTipi ='" & sHareketTipi & "',sAltFiyatTipi ='" & sAltFiyatTipi & "',sCariSinifKoduSinirla='" & sCariSinifKoduSinirla & "', sFiyat1 = '" & sFiyat1 & "', sFiyat2 = '" & sFiyat2 & "', sFiyat3 = '" & sFiyat3 & "', sFiyat4 = '" & sFiyat4 & "', sFiyat5 = '" & sFiyat5 & "', sFiyatA = '" & sFiyatA & "', sFiyatM = '" & sFiyatM & "', sAktifFiyatTipi='" & sAktifFiyatTipi & "',EsFiyat1 = '" & EsFiyat1 & "', EsFiyat2 = '" & EsFiyat2 & "', EsFiyat3 = '" & EsFiyat3 & "', EsFiyat4 = '" & EsFiyat4 & "', EsFiyat5 = '" & EsFiyat5 & "', EsFiyatA = '" & EsFiyatA & "', EsFiyatM = '" & EsFiyatM & "', bCalcVadeDagilim = " & bCalcVadeDagilim & ", bOtomatikTaksit = " & bOtomatikTaksit & ", bOtomatikPesinatDuzelt = " & bOtomatikPesinatDuzelt & ", bKdvKontrolluMaliyet = " & bKdvKontrolluMaliyet & ", bSatirKontrol = " & bSatirKontrol & ", bOtomatikMaliyetFiyati = " & bOtomatikMaliyetFiyati & ", bOtomatikAlisFiyati = " & bOtomatikAlisFiyati & ", bAlisFiyatiUyar = " & bAlisFiyatiUyar & ", dteSonFaturaTarihi = '" & dteSonFaturaTarihi & "', dteSonIrsaliyeTarihi = '" & dteSonIrsaliyeTarihi & "', dteSonStokFisiTarihi = '" & dteSonStokFisiTarihi & "', dteSonNakitKasaTarihi = '" & dteSonNakitKasaTarihi & "', nFirmaGrupKodUzunlugu = " & nFirmaGrupKodUzunlugu & ", nTaksitGun = " & nTaksitGun & ", nTaksitBaslangic = " & nTaksitBaslangic & ", nTaksitSayi = " & nTaksitSayi & ", sKrediliFiyatTipi = '" & sKrediliFiyatTipi & "', sPesinFiyatTipi = '" & sPesinFiyatTipi & "', bMessageCheck = " & bMessageCheck & ", bNamazVaktiGosterme = " & bNamazVaktiGosterme & ", bMagazalarChart = " & bMagazalarChart & ", sSaticiRumuzu = '" & sSaticiRumuzu & "', PrinterTermal = '" & PrinterTermal & "', PrinterDepo = '" & PrinterDepo & "', FontSize = " & FontSize & ", bFiyatKdvHaric = " & bFiyatKdvHaric & ", bFaturaKdvDahil = " & bFaturaKdvDahil & ", bFaturaKdvSiz = " & bFaturaKdvSiz & ", bFaturaIskontosuz = " & bFaturaIskontosuz & ", nFaturaCiktiSatirSayisi = " & nFaturaCiktiSatirSayisi & ", bIrsaliyeKdvSiz = " & bIrsaliyeKdvSiz & ", bIrsaliyeIskontosuz = " & bIrsaliyeIskontosuz & ", nIrsaliyeCiktiSatirSayisi = " & nIrsaliyeCiktiSatirSayisi & ", bStokFisiKdvSiz = " & bStokFisiKdvSiz & ", bStokFisiIskontosuz = " & bStokFisiIskontosuz & ", nStokFisiCiktiSatirSayisi = " & nStokFisiCiktiSatirSayisi & ", bTransferEnvanterKontrol = " & bTransferEnvanterKontrol & ", sRaporUzanti = '" & sRaporUzanti & "', sYaziIle = '" & sYaziIle & "', sBacodeStd = '" & sBacodeStd & "', sDil = '" & sDil & "', bKendiFisNo = " & bKendiFisNo & ",bDovizliFatura = " & bDovizliFatura & ", bAlisFatOtoMuh = " & bAlisFatOtoMuh & ", bSatFatOtoMuh = " & bSatFatOtoMuh & ", bPerOtoMuh = " & bPerOtoMuh & ", bPerYerelMuh = " & bPerYerelMuh & ", bSatirKendiEnvanteri = " & bSatirKendiEnvanteri & " WHERE IND =" & ind & "")
+        cmd.ExecuteNonQuery()
+        con.Close()
+        Try
+            Dim da As New OleDb.OleDbDataAdapter
+            da.UpdateCommand = cmd
+            cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED UPDATE APERSONEL SET RESIM = ? WHERE (IND = " & kayitno & ")")
+            cmd.Parameters.Add(New System.Data.OleDb.OleDbParameter("RESIM", System.Data.OleDb.OleDbType.VarBinary, 2147483647, "RESIM"))
+            da.Update(DataSet1.Tables(0))
+            da = Nothing
+        Catch ex As Exception
+            XtraMessageBox.Show(ex.Message.ToString)
+        End Try
+    End Sub
+    Private Sub sil(ByVal ind As Int64)
+        Dim cmd As New OleDb.OleDbCommand
+        Dim con As New OleDb.OleDbConnection
+        cmd.Connection = con
+        con.ConnectionString = connection
+        If con.State = ConnectionState.Closed = True Then
+            con.Open()
+        End If
+        cmd.CommandText = sorgu_query("DELETE FROM APERSONEL WHERE IND = " & ind & "")
+        cmd.ExecuteNonQuery()
+        con.Close()
+    End Sub
+    Private Sub dataload_dept()
+        sec_dept.Properties.DataSource = sorgu(sorgu_query("SELECT * FROM APERSONELDEPT")).Tables(0) 'DataSet2.Tables(0)
+        sec_hareket_dept.DataSource = sorgu(sorgu_query("SELECT * FROM APERSONELDEPT")).Tables(0) 'DataSet2.Tables(0)
+        sec_satici.Properties.DataSource = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     sSaticiRumuzu , sAdi + ' ' + sSoyadi AS SATICI  FROM         tbSatici where bAktif =1")).Tables(0)
+        sec_depo.Properties.DataSource = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     sDepo,sAciklama  FROM         tbDepo ")).Tables(0)
+        ds_tbDepo = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     sDepo,sAciklama FROM         tbDepo "))
+        sec_sDepo.Properties.DataSource = ds_tbDepo.Tables(0)
+        ds_tbsube = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     sSubeMagaza,sAciklama FROM         tbSubeMagaza"))
+        sec_sSubeMagaza.Properties.DataSource = ds_tbsube.Tables(0)
+        ds_tbHareketTipi = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     CAST(sHareketTipi AS CHAR(4)) AS sHareketTipi, sAciklama FROM         tbHareketTipi where aktif = 1"))
+        sec_sHareketTipi.Properties.DataSource = ds_tbHareketTipi.Tables(0)
+        'sec_sSinifKodu.Properties.DataSource = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     sSinifKodu, sAciklama FROM         tbFSinif1")).Tables(0)
+        ds_tbFSinif1 = sorgu(sorgu_query("SELECT     CAST('0' as bit) AS SEC, sSinifKodu AS KOD, sAciklama AS ACIKLAMA FROM         tbFSinif1 WHERE sSinifKodu <> '' ORDER BY sSinifKodu"))
+        sec_sFiyatTipi.Properties.DataSource = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     sFiyatTipi, sAciklama FROM         tbFiyatTipi where (aktif = 1) and (aktifDepo like '%" & Trim(sDepo) & "%')")).Tables(0)
+        sec_sDil.Properties.DataSource = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     sDil, sAciklama FROM         tbDil ")).Tables(0)
+        sec_sYaziIle.Properties.DataSource = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     sDil, sAciklama FROM         tbDil ")).Tables(0)
+    End Sub
+    Private Sub dataload_tbFiyatTipi()
+        ds_tbFiyatTipi = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     sFiyatTipi,sAciklama FROM         tbFiyatTipi where (aktif = 1) and (aktifDepo like '%" & Trim(sDepo) & "%') "))
+        ds_tbSatici = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     sSaticiRumuzu,sAdi FROM         tbSatici where bAktif =1"))
+        ds_tbDepo = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     sDepo,sAciklama FROM         tbDepo "))
+        'sec_sDepo.Properties.DataSource = ds_tbDepo.Tables(0)
+        'ds_tbsube = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     sSubeMagaza,sAciklama FROM         tbSubeMagaza"))
+        'sec_sSubeMagaza.Properties.DataSource = ds_tbsube.Tables(0)
+        sec_sFiyatTipi1.Properties.DataSource = ds_tbFiyatTipi.Tables(0)
+        sec_sFiyatTipi2.Properties.DataSource = ds_tbFiyatTipi.Tables(0)
+        sec_sFiyatTipi3.Properties.DataSource = ds_tbFiyatTipi.Tables(0)
+        sec_sFiyatTipiA.Properties.DataSource = ds_tbFiyatTipi.Tables(0)
+        sec_sFiyatTipiM.Properties.DataSource = ds_tbFiyatTipi.Tables(0)
+        sec_sAktifFiyatTipi.Properties.DataSource = ds_tbFiyatTipi.Tables(0)
+        sec_sFiyatTipi4.Properties.DataSource = ds_tbFiyatTipi.Tables(0)
+        sec_sFiyatTipi5.Properties.DataSource = ds_tbFiyatTipi.Tables(0)
+        sec_sEFiyatTipi1.Properties.DataSource = ds_tbFiyatTipi.Tables(0)
+        sec_sEFiyatTipi2.Properties.DataSource = ds_tbFiyatTipi.Tables(0)
+        sec_sEFiyatTipi3.Properties.DataSource = ds_tbFiyatTipi.Tables(0)
+        sec_sEFiyatTipiA.Properties.DataSource = ds_tbFiyatTipi.Tables(0)
+        sec_sEFiyatTipiM.Properties.DataSource = ds_tbFiyatTipi.Tables(0)
+        sec_sEFiyatTipi4.Properties.DataSource = ds_tbFiyatTipi.Tables(0)
+        sec_sEFiyatTipi5.Properties.DataSource = ds_tbFiyatTipi.Tables(0)
+        sec_sKrediliFiyatTipi.Properties.DataSource = ds_tbFiyatTipi.Tables(0)
+        sec_sPesinFiyatTipi.Properties.DataSource = ds_tbFiyatTipi.Tables(0)
+        sec_sSaticiRumuzu.Properties.DataSource = ds_tbSatici.Tables(0)
+    End Sub
+    Private Function sorgu(ByVal query As String) As DataSet
+        conn.ConnectionString = connection
+        adapter.SelectCommand = cmd
+        cmd.CommandText = query
+        cmd.Connection = conn
+        conn.Open()
+        Dim DS As New DataSet
+        Dim N As Integer = adapter.Fill(DS, "TABLE1")
+        conn.Close()
+        Return DS
+    End Function
+    Private Function sorgu_query(ByVal query As String) As String
+        query = Replace(query, "*!F", "F0" + firmano.ToString)
+        query = Replace(query, "!D", "D000" + donemno.ToString)
+        Return query
+    End Function
+    Private Sub dataload()
+        'MsgBox(kriter)
+        If kayitno > 0 Then
+            kriter += " WHERE Personel.IND = " & kayitno & ""
+        Else
+            If takip = False Then
+                kriter = ""
+            End If
+        End If
+        DataSet1 = sorgu(sorgu_query("SELECT     Personel.*, Dept.ACIKLAMA AS DEPARTMANADI FROM         APERSONEL Personel LEFT OUTER JOIN                       APERSONELDEPT Dept ON Personel.DEPARTMAN = Dept.IND " & kriter & ""))
+        GridControl1.DataSource = DataSet1.Tables(0)
+        GridControl1.DataMember = Nothing
+        GridControl1.Select()
+        GridControl1.Focus()
+        If islemstatus = True Then
+            kayit_duzelt()
+        End If
+    End Sub
+    Private Sub sil()
+        XtraMessageBox.Show(Sorgu_sDil("Hatalý Ýþlem", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
+    End Sub
+    Private Sub MenuItem3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem3.Click
+        kayit_duzelt()
+    End Sub
+    Private Sub MenuItem4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem4.Click
+        kayit_sil()
+    End Sub
+    Private Sub kayit_sil()
+        If GridView1.RowCount > 0 Then
+            dr = GridView1.GetDataRow(GridView1.FocusedRowHandle)
+            satir = GridView1.FocusedRowHandle
+            kayitno = dr("IND")
+            If kayitno > 0 Then
+                If XtraMessageBox.Show(kayitno & vbTab & Sorgu_sDil("Nolu Personel Kaydýný Silmek istediðinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+                    sil(kayitno)
+                End If
+            End If
+            dataload()
+        End If
+    End Sub
+    Private Sub gorunum_kaydet()
+        GridView1.SaveLayoutToRegistry("SOFTWARE\BusinessSmart\VIEW\MAGAZA\PERSONEL\" & Me.Name.ToString & "")
+        XtraMessageBox.Show(Sorgu_sDil("Görünüm Kaydedildi", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+    Private Sub gorunum_yukle()
+        For Each btn As DevExpress.XtraBars.BarItem In BarManager1.Items
+            btn.Caption = Sorgu_sDil(btn.Caption, sDil)
+        Next
+        For Each clmn As DevExpress.XtraGrid.Columns.GridColumn In GridView1.Columns
+            clmn.Caption = Sorgu_sDil(clmn.Caption, sDil)
+        Next
+        Dim tab As Object
+        For Each tab In XtraTabControl1.TabPages
+            tab.text = Sorgu_sDil(tab.text, sDil)
+        Next
+        For Each tab In XtraTabControl2.TabPages
+            tab.text = Sorgu_sDil(tab.text, sDil)
+        Next
+        Dim itm
+        For Each itm In ContextMenu1.MenuItems
+            itm.text = Sorgu_sDil(itm.text, sDil)
+        Next
+        SimpleButton1.Text = Sorgu_sDil(SimpleButton1.Text, sDil)
+        SimpleButton2.Text = Sorgu_sDil(SimpleButton2.Text, sDil)
+        SimpleButton3.Text = Sorgu_sDil(SimpleButton3.Text, sDil)
+        SimpleButton4.Text = Sorgu_sDil(SimpleButton4.Text, sDil)
+        GridView1.RestoreLayoutFromRegistry("SOFTWARE\BusinessSmart\VIEW\MAGAZA\PERSONEL\" & Me.Name.ToString & "")
+    End Sub
+    Private Sub btn_kaydet_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_kaydet.Click
+        If sec_sMobileKullan.Checked = True Then
+            If Trim(sec_sDepo.EditValue.ToString()) <> "" Then
+                If Trim(sec_sHareketTipi.EditValue.ToString()) <> "" Then
+                    If Trim(sec_sFiyatTipi1.EditValue.ToString()) <> "" Then
+                        If Trim(sec_sSaticiRumuzu.EditValue.ToString()) <> "" Then
+                            If Trim(sec_sSubeMagaza.EditValue.ToString()) <> "" Then
+                                XtraTabPage1.PageVisible = True
+                                XtraTabPage2.PageVisible = False
+                                XtraTabControl1.SelectedTabPageIndex = 0
+                                XtraTabControl2.SelectedTabPageIndex = 0
+                                GridControl1.Focus()
+                                GridControl1.Select()
+                                kaydet()
+                                kayitno = 0
+                                If islemstatus = True Then
+                                    Me.Close()
+                                Else
+                                    dataload()
+                                End If
+                                If islem = "duzelt" Then
+                                    GridView1.FocusedRowHandle = satir
+                                End If
+                            Else
+                                XtraMessageBox.Show(Sorgu_sDil("Lütfen " & txt_ad.EditValue & " kullanýcýsý için bir Kasa belirleyiniz", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                            End If
+                        Else
+                            XtraMessageBox.Show(Sorgu_sDil("Lütfen " & txt_ad.EditValue & " kullanýcýsý için bir Satýcý belirleyiniz", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                        End If
+                    Else
+                        XtraMessageBox.Show(Sorgu_sDil("Lütfen " & txt_ad.EditValue & " kullanýcýsý için en az 1 adet Fiyat Tipi belirleyiniz", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    End If
+                Else
+                    XtraMessageBox.Show(Sorgu_sDil("Lütfen " & txt_ad.EditValue & " kullanýcýsý için bir Hareket Tipi belirleyiniz", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                End If
+            Else
+                XtraMessageBox.Show(Sorgu_sDil("Lütfen " & txt_ad.EditValue & " kullanýcýsý için bir Depo belirleyiniz", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            End If
+        Else
+            XtraTabPage1.PageVisible = True
+            XtraTabPage2.PageVisible = False
+            XtraTabControl1.SelectedTabPageIndex = 0
+            XtraTabControl2.SelectedTabPageIndex = 0
+            GridControl1.Focus()
+            GridControl1.Select()
+            kaydet()
+            kayitno = 0
+            If islemstatus = True Then
+                Me.Close()
+            Else
+                dataload()
+            End If
+            If islem = "duzelt" Then
+                GridView1.FocusedRowHandle = satir
+            End If
+        End If
+    End Sub
+    Private Sub kaydet()
+        If islem = "ekle" Then
+            ekle(txt_kod.EditValue, txt_ad.EditValue, txt_sifre.EditValue, txt_onayla.EditValue, txt_baba.EditValue, txt_anne.EditValue, txt_ref.EditValue, txt_adres.EditValue, txt_tel1.EditValue, txt_tel2.EditValue, txt_gsm.EditValue, sec_dept.EditValue, txt_gorev.EditValue, txt_isegiris.EditValue, sec_aktif.EditValue, sec_sMobileKullan.EditValue, txt_brutmaas.EditValue, txt_eklenti1.EditValue, txt_eklenti2.EditValue, txt_eklenti3.EditValue, txt_eklenti4.EditValue, txt_eklenti5.EditValue, txt_kesinti1.EditValue, txt_kesinti2.EditValue, txt_kesinti3.EditValue, txt_kesinti4.EditValue, txt_kesinti5.EditValue, txt_netmaas.EditValue, sec_kullanici.EditValue, sec_satici.EditValue, sec_depo.EditValue, btn_hesap.EditValue, sec_durum.Text, txt_sCariSinirla.Text, txt_sStokSinirla.Text, txt_sBankaSinirla.Text, txt_sFihristSinirla.Text, txt_sGiderSinirla.Text, sec_sDepo.EditValue, sec_sSubeMagaza.EditValue, sec_sHareketTipi.EditValue, sec_sSinifKodu.EditValue, sec_sFiyatTipi.EditValue, sec_sFiyatTipi1.EditValue, sec_sFiyatTipi2.EditValue, sec_sFiyatTipi3.EditValue, sec_sFiyatTipi4.EditValue, sec_sFiyatTipi5.EditValue, sec_sFiyatTipiA.EditValue, sec_sFiyatTipiM.EditValue, sec_sAktifFiyatTipi.EditValue, sec_sEFiyatTipi1.EditValue, sec_sEFiyatTipi2.EditValue, sec_sEFiyatTipi3.EditValue, sec_sEFiyatTipi4.EditValue, sec_sEFiyatTipi5.EditValue, sec_sEFiyatTipiA.EditValue, sec_sEFiyatTipiM.EditValue, sec_bCalcVadeDagilim.EditValue, sec_bOtomatikTaksit.EditValue, sec_bOtomatikPesinatDuzelt.EditValue, sec_bKdvKontrolluMaliyet.EditValue, sec_bSatirKontrol.EditValue, sec_bOtomatikMaliyetFiyati.EditValue, sec_bOtomatikAlisFiyati.EditValue, sec_bAlisFiyatiUyar.EditValue, sec_dteSonFaturaTarihi.EditValue, sec_dteSonIrsaliyeTarihi.EditValue, sec_dteSonStokFisiTarihi.EditValue, sec_dteSonNakitKasaTarihi.EditValue, sec_nFirmaGrupKodUzunlugu.EditValue, txt_nTaksitGun.EditValue, txt_nTaksitBaslangic.EditValue, txt_nTaksitSayi.EditValue, sec_sKrediliFiyatTipi.EditValue, sec_sPesinFiyatTipi.EditValue, sec_bMessageCheck.EditValue, sec_bNamazVaktiGosterme.EditValue, sec_bMagazalarChart.EditValue, sec_sSaticiRumuzu.EditValue, txt_PrinterTermal.EditValue, txt_PrinterDepo.EditValue, sec_FontSize.EditValue, sec_bFiyatKdvHaric.EditValue, sec_bFaturaKdvDahil.EditValue, sec_bFaturaKdvSiz.EditValue, sec_bFaturaIskontosuz.EditValue, txt_nFaturaCiktiSatirSayisi.EditValue, sec_bIrsaliyeKdvSiz.EditValue, sec_bIrsaliyeIskontosuz.EditValue, txt_nIrsaliyeCiktiSatirSayisi.EditValue, sec_bStokFisiKdvSiz.EditValue, sec_bStokFisiIskontosuz.EditValue, txt_nStokFisiCiktiSatirSayisi.EditValue, sec_bTransferEnvanterKontrol.EditValue, sec_sRaporUzanti.EditValue, sec_sYaziIle.EditValue, txt_sBacodeStd.EditValue, sec_sDil.EditValue, sec_bKendiFisNo.EditValue, sec_bDovizliFatura.EditValue, sec_bAlisFatOtoMuh.EditValue, sec_bSatFatOtoMuh.EditValue, sec_bPerOtoMuh.EditValue, sec_bPerYerelMuh.EditValue, CType(sec_bSatirKendiEnvanteri.EditValue, Byte))
+            'ekle(txt_kullanici.Text, txt_sifre.Text, txt_ad.Text, txt_soyad.Text, sec_firma.EditValue, sec_donem.EditValue, sec_depo.EditValue)
+        ElseIf islem = "duzelt" Then
+            duzelt(kayitno, txt_kod.EditValue, txt_ad.EditValue, txt_sifre.EditValue, txt_onayla.EditValue, txt_baba.EditValue, txt_anne.EditValue, txt_ref.EditValue, txt_adres.EditValue, txt_tel1.EditValue, txt_tel2.EditValue, txt_gsm.EditValue, sec_dept.EditValue, txt_gorev.EditValue, txt_isegiris.EditValue, sec_aktif.EditValue, sec_sMobileKullan.EditValue, txt_brutmaas.EditValue, txt_eklenti1.EditValue, txt_eklenti2.EditValue, txt_eklenti3.EditValue, txt_eklenti4.EditValue, txt_eklenti5.EditValue, txt_kesinti1.EditValue, txt_kesinti2.EditValue, txt_kesinti3.EditValue, txt_kesinti4.EditValue, txt_kesinti5.EditValue, txt_netmaas.EditValue, sec_kullanici.EditValue, sec_satici.EditValue, sec_depo.EditValue, btn_hesap.EditValue, sec_durum.Text, txt_sCariSinirla.Text, txt_sStokSinirla.Text, txt_sBankaSinirla.Text, txt_sFihristSinirla.Text, txt_sGiderSinirla.Text, sec_sDepo.EditValue, sec_sSubeMagaza.EditValue, sec_sHareketTipi.EditValue, sec_sSinifKodu.EditValue, sec_sFiyatTipi.EditValue, sec_sFiyatTipi1.EditValue, sec_sFiyatTipi2.EditValue, sec_sFiyatTipi3.EditValue, sec_sFiyatTipi4.EditValue, sec_sFiyatTipi5.EditValue, sec_sFiyatTipiA.EditValue, sec_sFiyatTipiM.EditValue, sec_sAktifFiyatTipi.EditValue, sec_sEFiyatTipi1.EditValue, sec_sEFiyatTipi2.EditValue, sec_sEFiyatTipi3.EditValue, sec_sEFiyatTipi4.EditValue, sec_sEFiyatTipi5.EditValue, sec_sEFiyatTipiA.EditValue, sec_sEFiyatTipiM.EditValue, sec_bCalcVadeDagilim.EditValue, sec_bOtomatikTaksit.EditValue, sec_bOtomatikPesinatDuzelt.EditValue, sec_bKdvKontrolluMaliyet.EditValue, sec_bSatirKontrol.EditValue, sec_bOtomatikMaliyetFiyati.EditValue, sec_bOtomatikAlisFiyati.EditValue, sec_bAlisFiyatiUyar.EditValue, sec_dteSonFaturaTarihi.EditValue, sec_dteSonIrsaliyeTarihi.EditValue, sec_dteSonStokFisiTarihi.EditValue, sec_dteSonNakitKasaTarihi.EditValue, sec_nFirmaGrupKodUzunlugu.EditValue, txt_nTaksitGun.EditValue, txt_nTaksitBaslangic.EditValue, txt_nTaksitSayi.EditValue, sec_sKrediliFiyatTipi.EditValue, sec_sPesinFiyatTipi.EditValue, sec_bMessageCheck.EditValue, sec_bNamazVaktiGosterme.EditValue, sec_bMagazalarChart.EditValue, sec_sSaticiRumuzu.EditValue, txt_PrinterTermal.EditValue, txt_PrinterDepo.EditValue, sec_FontSize.EditValue, sec_bFiyatKdvHaric.EditValue, sec_bFaturaKdvDahil.EditValue, sec_bFaturaKdvSiz.EditValue, sec_bFaturaIskontosuz.EditValue, txt_nFaturaCiktiSatirSayisi.EditValue, sec_bIrsaliyeKdvSiz.EditValue, sec_bIrsaliyeIskontosuz.EditValue, txt_nIrsaliyeCiktiSatirSayisi.EditValue, sec_bStokFisiKdvSiz.EditValue, sec_bStokFisiIskontosuz.EditValue, txt_nStokFisiCiktiSatirSayisi.EditValue, sec_bTransferEnvanterKontrol.EditValue, sec_sRaporUzanti.EditValue, sec_sYaziIle.EditValue, txt_sBacodeStd.EditValue, sec_sDil.EditValue, sec_bKendiFisNo.EditValue, sec_bDovizliFatura.EditValue, sec_bAlisFatOtoMuh.EditValue, sec_bSatFatOtoMuh.EditValue, sec_bPerOtoMuh.EditValue, sec_bPerYerelMuh.EditValue, CType(sec_bSatirKendiEnvanteri.EditValue, Byte))
+            'duzelt(txt_kullanici.Text, txt_sifre.Text, txt_ad.Text, txt_soyad.Text, sec_firma.EditValue, sec_donem.EditValue, sec_depo.EditValue, kayitno)
+        End If
+    End Sub
+    Private Sub kayit_duzelt()
+        If GridView1.RowCount > 0 Then
+            'dataload_dept()
+            dr = GridView1.GetDataRow(GridView1.FocusedRowHandle)
+            satir = GridView1.FocusedRowHandle
+            kayitno = dr("IND")
+            txt_kod.Text = dr("PERSONELKODU").ToString
+            txt_ad.Text = dr("PERSONELADI").ToString
+            txt_sifre.Text = dr("SIFRE").ToString
+            txt_onayla.Text = dr("ONAY").ToString
+            txt_baba.EditValue = dr("BABAADI").ToString
+            txt_anne.EditValue = dr("ANNEADI").ToString
+            txt_ref.EditValue = dr("REFADI").ToString
+            txt_adres.EditValue = dr("ADRES").ToString
+            txt_tel1.EditValue = dr("TELEFON1").ToString
+            txt_tel2.EditValue = dr("TELEFON2").ToString
+            txt_gsm.EditValue = dr("TELEFON3").ToString
+            sec_dept.EditValue = dr("DEPARTMAN").ToString
+            sec_dept.Text = dr("DEPARTMANADI").ToString
+            txt_gorev.EditValue = dr("GOREV").ToString
+            txt_isegiris.EditValue = dr("ISEGIRIS")
+            sec_aktif.EditValue = dr("AKTIF")
+            sec_sMobileKullan.EditValue = dr("MobileAktif")
+            sec_resim.EditValue = dr("RESIM")
+            txt_brutmaas.EditValue = sorgu_sayi(dr("BrutMaas"), 0)
+            txt_eklenti1.EditValue = sorgu_sayi(dr("Eklenti1"), 0)
+            txt_eklenti2.EditValue = sorgu_sayi(dr("Eklenti2"), 0)
+            txt_eklenti3.EditValue = sorgu_sayi(dr("Eklenti3"), 0)
+            txt_eklenti4.EditValue = sorgu_sayi(dr("Eklenti4"), 0)
+            txt_eklenti5.EditValue = sorgu_sayi(dr("Eklenti5"), 0)
+            txt_kesinti1.EditValue = sorgu_sayi(dr("Kesinti1"), 0)
+            txt_kesinti2.EditValue = sorgu_sayi(dr("Kesinti2"), 0)
+            txt_kesinti3.EditValue = sorgu_sayi(dr("Kesinti3"), 0)
+            txt_kesinti4.EditValue = sorgu_sayi(dr("Kesinti4"), 0)
+            txt_kesinti5.EditValue = sorgu_sayi(dr("Kesinti5"), 0)
+            txt_netmaas.EditValue = sorgu_sayi(dr("NetMaas"), 0)
+            sec_kullanici.EditValue = dr("KULLANICI")
+            sec_satici.EditValue = dr("SATICIRUMUZU").ToString
+            sec_satici.Text = dr("SATICIRUMUZU").ToString
+            sec_depo.EditValue = dr("MAGAZA").ToString
+            sec_depo.Text = dr("MAGAZA").ToString
+            sec_durum.Text = dr("DURUM").ToString
+            btn_hesap.Text = dr("HESAPKODU").ToString
+            txt_sCariSinirla.Text = dr("sCariSinirla").ToString
+            txt_sStokSinirla.Text = dr("sStokSinirla").ToString
+            txt_sBankaSinirla.Text = dr("sBankaSinirla").ToString
+            txt_sFihristSinirla.Text = dr("sFihristSinirla").ToString
+            txt_sGiderSinirla.Text = dr("sGiderSinirla").ToString
+            sec_sDepo.EditValue = dr("sDepo").ToString
+            sec_sSubeMagaza.EditValue = dr("sSubeMagaza")
+            sec_sHareketTipi.EditValue = dr("sHareketTipi")
+            sec_sSinifKodu.EditValue = ""
+            sec_sSinifKodu.Text = ""
+            sec_sFiyatTipi1.EditValue = dr("sFiyat1")
+            sec_sFiyatTipi2.EditValue = dr("sFiyat2")
+            sec_sFiyatTipi3.EditValue = dr("sFiyat3")
+            sec_sFiyatTipi4.EditValue = dr("sFiyat4")
+            sec_sFiyatTipi5.EditValue = dr("sFiyat5")
+            sec_sFiyatTipiA.EditValue = dr("sFiyatA")
+            sec_sFiyatTipiM.EditValue = dr("sFiyatM")
+            sec_sAktifFiyatTipi.EditValue = dr("sAktifFiyatTipi")
+            sec_sEFiyatTipi1.EditValue = dr("EsFiyat1")
+            sec_sEFiyatTipi2.EditValue = dr("EsFiyat2")
+            sec_sEFiyatTipi3.EditValue = dr("EsFiyat3")
+            sec_sEFiyatTipi4.EditValue = dr("EsFiyat4")
+            sec_sEFiyatTipi5.EditValue = dr("EsFiyat5")
+            sec_sEFiyatTipiA.EditValue = dr("EsFiyatA")
+            sec_sEFiyatTipiM.EditValue = dr("EsFiyatM")
+            sec_bCalcVadeDagilim.EditValue = dr("bCalcVadeDagilim")
+            sec_bOtomatikTaksit.EditValue = dr("bOtomatikTaksit")
+            sec_bOtomatikPesinatDuzelt.EditValue = dr("bOtomatikPesinatDuzelt")
+            sec_bKdvKontrolluMaliyet.EditValue = dr("bKdvKontrolluMaliyet")
+            sec_bSatirKontrol.EditValue = dr("bSatirKontrol")
+            sec_bOtomatikMaliyetFiyati.EditValue = dr("bOtomatikMaliyetFiyati")
+            sec_bAlisFatOtoMuh.EditValue = dr("bAlisFatOtoMuh")
+            sec_bSatFatOtoMuh.EditValue = dr("bSatFatOtoMuh")
+            sec_bPerOtoMuh.EditValue = dr("bPerOtoMuh")
+            sec_bPerYerelMuh.EditValue = dr("bPerYerelMuh")
+            sec_bSatirKendiEnvanteri.EditValue = dr("bSatirKendiEnvanteri")
+            sec_bOtomatikAlisFiyati.EditValue = dr("bOtomatikAlisFiyati")
+            sec_bAlisFiyatiUyar.EditValue = dr("bAlisFiyatiUyar")
+            sec_dteSonFaturaTarihi.EditValue = dr("dteSonFaturaTarihi")
+            sec_dteSonIrsaliyeTarihi.EditValue = dr("dteSonIrsaliyeTarihi")
+            sec_dteSonStokFisiTarihi.EditValue = dr("dteSonStokFisiTarihi")
+            sec_dteSonNakitKasaTarihi.EditValue = dr("dteSonNakitKasaTarihi")
+            sec_nFirmaGrupKodUzunlugu.EditValue = dr("nFirmaGrupKodUzunlugu")
+            txt_nTaksitGun.EditValue = dr("nTaksitGun")
+            txt_nTaksitBaslangic.EditValue = dr("nTaksitBaslangic")
+            txt_nTaksitSayi.EditValue = dr("nTaksitSayi")
+            sec_sKrediliFiyatTipi.EditValue = dr("sKrediliFiyatTipi")
+            sec_sPesinFiyatTipi.EditValue = dr("sPesinFiyatTipi")
+            sec_bMessageCheck.EditValue = dr("bMessageCheck")
+            sec_bNamazVaktiGosterme.EditValue = dr("bNamazVaktiGosterme")
+            sec_bMagazalarChart.EditValue = dr("bMagazalarChart")
+            sec_sSaticiRumuzu.EditValue = dr("sSaticiRumuzu")
+            txt_PrinterTermal.EditValue = dr("PrinterTermal")
+            txt_PrinterDepo.EditValue = dr("PrinterDepo")
+            sec_FontSize.EditValue = dr("FontSize")
+            sec_bFiyatKdvHaric.EditValue = dr("bFiyatKdvHaric")
+            sec_bFaturaKdvDahil.EditValue = dr("bFaturaKdvDahil")
+            sec_bFaturaKdvSiz.EditValue = dr("bFaturaKdvSiz")
+            sec_bFaturaIskontosuz.EditValue = dr("bFaturaIskontosuz")
+            txt_nFaturaCiktiSatirSayisi.EditValue = dr("nFaturaCiktiSatirSayisi")
+            sec_bIrsaliyeKdvSiz.EditValue = dr("bIrsaliyeKdvSiz")
+            sec_bIrsaliyeIskontosuz.EditValue = dr("bIrsaliyeIskontosuz")
+            txt_nIrsaliyeCiktiSatirSayisi.EditValue = dr("nIrsaliyeCiktiSatirSayisi")
+            sec_bStokFisiKdvSiz.EditValue = dr("bStokFisiKdvSiz")
+            sec_bStokFisiIskontosuz.EditValue = dr("bStokFisiIskontosuz")
+            txt_nStokFisiCiktiSatirSayisi.EditValue = dr("nStokFisiCiktiSatirSayisi")
+            sec_bTransferEnvanterKontrol.EditValue = dr("bTransferEnvanterKontrol")
+            sec_sRaporUzanti.EditValue = dr("sRaporUzanti")
+            sec_sYaziIle.EditValue = dr("sYaziIle")
+            txt_sBacodeStd.EditValue = dr("sBacodeStd")
+            sec_sDil.EditValue = dr("sDil")
+            sec_bKendiFisNo.EditValue = dr("bKendiFisNo")
+            sec_bDovizliFatura.EditValue = dr("bDovizliFatura")
+            Dim dr1 As DataRow
+            For Each dr1 In ds_tbFSinif1.Tables(0).Rows
+                dr1("SEC") = False
+            Next
+            sec_sSinifKodu.Text = Replace(dr("sCariSinifKoduSinirla").ToString, "'", "''")
+            sec_sFiyatTipi.EditValue = dr("sAltFiyatTipi").ToString
+            XtraTabPage1.PageVisible = False
+            XtraTabPage2.PageVisible = True
+            XtraTabControl1.SelectedTabPageIndex = 1
+            txt_kod.Focus()
+            txt_kod.Select()
+            islem = "duzelt"
+        End If
+    End Sub
+    Private Function sorgu_sayi(ByVal deger As Object, ByVal sonuc As Int64) As Decimal
+        If deger.ToString = "" Then
+            deger = sonuc
+        End If
+        Return deger
+    End Function
+    Private Function satir_kontrol()
+        Dim satir As String = "WHERE IND IN ("
+        Dim s As String
+        Dim arr As Integer()
+        Dim i As Integer
+        Dim toplamsayi = GridView1.SelectedRowsCount
+        Dim sayi = 0
+        arr = GridView1.GetSelectedRows()
+        Dim dr1 As DataRow
+        If arr Is Nothing Then
+        Else
+            Array.Sort(arr)
+            For Each i In arr
+                s = i.ToString
+                dr = DataSet1.Tables(0).NewRow
+                dr1 = GridView1.GetDataRow(s)
+                satir += dr1("IND").ToString
+                sayi += 1
+                If sayi < toplamsayi Then
+                    satir += ","
+                ElseIf sayi = toplamsayi Then
+                    satir += ")"
+                End If
+            Next
+        End If
+        Return satir
+    End Function
+    Private Sub report_create_stok(ByVal dosya As String, ByVal kriter As String, ByVal status As Integer)
+        Dim stokno = 0
+        Dim satir_line = "100"
+        If IntPtr.Size = 4 Then
+            '32 Bit
+            Dim frx As New TfrxReportClass
+            Dim qr_hareket As New TfrxADOQuery
+            frx.Resources.LoadLanguageResourcesFromFile("C:\Program Files\FastReports\FastReport Studio\bin\turkish.frc")
+            frx.LoadReportFromFile(dosya)
+            frx.SetVariable("FIRMANO", "" & firmano & "")
+            frx.SetVariable("DONEMNO", "" & donemno & "")
+            frx.SetVariable("STOKNO", "" & stokno & "")
+            frx.SetVariable("SATIRLINE", "'" & satir_line & "'")
+            qr_hareket = frx.FindObject("qr_personel")
+            qr_hareket.Query = sorgu_query("set transaction isolation level read uncommitted SELECT * FROM APERSONEL " & kriter & " ORDER BY PERSONELKODU")
+            Dim qr_connection As New TfrxADODatabase
+            qr_connection.ConnectionString = connection.ToString
+            qr_connection.LoginPrompt = False
+            qr_connection.CommandTimeout = Nothing
+            qr_connection.Connected = True
+            qr_hareket.DataBase = qr_connection
+            If status = 0 Then
+                frx.PrepareReport(True)
+                frx.ShowReport()
+            ElseIf status = 1 Then
+                frx.PrepareReport(True)
+                frx.PrintOptions.Collate = False
+                frx.PrintReport()
+            ElseIf status = 2 Then
+                frx.PrepareReport(True)
+                frx.DesignReport()
+            End If
+            qr_hareket = Nothing
+            qr_connection = Nothing
+        ElseIf IntPtr.Size = 8 Then
+            '64 Bit
+            Dim args(50) As String
+            Dim processYol As String
+            args(0) = "" & dosya & ""
+            args(1) = "" & connection.ToString() & ""
+            args(2) = "" & sorgu_query("set transaction isolation level read uncommitted SELECT * FROM APERSONEL " & kriter & " ORDER BY PERSONELKODU") & ""
+            args(3) = "qr_personel"
+            args(4) = "" & status.ToString() & ""
+            args(5) = "4"
+            args(6) = "FIRMANO"
+            args(7) = "" & firmano.ToString() & ""
+            args(8) = "DONEMNO"
+            args(9) = "" & donemno.ToString() & ""
+            args(10) = "STOKNO"
+            args(11) = "" & stokno.ToString() & ""
+            args(12) = "SATIRLINE"
+            args(13) = "'" & satir_line.ToString() & "'"
+            processYol = args(0)
+            For i As Integer = 1 To 13
+                processYol += "|" & args(i)
+            Next
+            Dim objReader As StreamWriter
+            Dim yeniYol As String
+            Dim Generator As System.Random = New System.Random()
+            Try
+                yeniYol = Directory.GetCurrentDirectory() & "\" & Generator.Next().ToString() & "_veriler.txt"
+                objReader = New StreamWriter(yeniYol)
+                objReader.Write(processYol)
+                objReader.Close()
+            Catch Ex As Exception
+                MessageBox.Show("Raporlama Ýþlemi Ýçin LOG Oluþturulumadý!")
+            End Try
+            If File.Exists(Directory.GetCurrentDirectory() & "\RaporServis.exe") = True Then
+                Dim sInfo As New ProcessStartInfo(Directory.GetCurrentDirectory() & "\RaporServis.exe ", """" & yeniYol & """")
+                Process.Start(sInfo)
+            Else
+                MessageBox.Show("Lütfen 'RaporServis.exe' eklentisini uygulama dizinine kopyalayýn.")
+            End If
+        End If
+        stokno = Nothing
+        satir_line = Nothing
+    End Sub
+    Private Sub btn_vazgec_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_vazgec.Click
+        XtraTabPage1.PageVisible = True
+        XtraTabPage2.PageVisible = False
+        XtraTabControl1.SelectedTabPageIndex = 0
+    End Sub
+    Private Sub sec_aktif_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles sec_aktif.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            btn_kaydet.Focus()
+            btn_kaydet.Select()
+        End If
+    End Sub
+    Private Sub MenuItem7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem7.Click
+        gorunum_kaydet()
+    End Sub
+    Private Sub MenuItem11_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem11.Click
+        GridView1.ExpandAllGroups()
+    End Sub
+    Private Sub MenuItem12_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem12.Click
+        GridView1.CollapseAllGroups()
+    End Sub
+    Private Sub MenuItem21_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem21.Click
+        raporla(0)
+    End Sub
+    Private Sub raporla(ByVal islem As Integer)
+        Dim file As String
+        OpenFileDialog1.Filter = "Rapor Dosyalarý (*.fr3) |*.fr3"
+        OpenFileDialog1.InitialDirectory = "c:\Formlar\Raporlar\Personel\"
+        If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
+            file = OpenFileDialog1.FileName.ToString
+            report_create_stok(file, satir_kontrol, islem)
+        End If
+        file = Nothing
+    End Sub
+    Private Sub txt_onayla_Validated(ByVal sender As Object, ByVal e As System.EventArgs) Handles txt_onayla.Validated
+        If txt_onayla.EditValue <> txt_sifre.EditValue Then
+            XtraMessageBox.Show(Sorgu_sDil("Girmiþ Olduðunuz Onay Þifreniz [Master] Þifre ile Uyuþmamaktadýr...Lütfen Þifre Bilgilerinizi Kontrol Ediniz.!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            txt_sifre.Focus()
+            txt_sifre.Select()
+        End If
+    End Sub
+    Private Sub MenuItem22_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem22.Click
+        raporla(2)
+    End Sub
+    Private Sub MenuItem23_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem23.Click
+        raporla(1)
+    End Sub
+    Private Sub SimpleButton4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SimpleButton4.Click
+        Dim MyValue As Integer
+        MyValue = CInt(Int((10000 * Rnd()) + 1)) ' Generate random value between 1 and 6.
+        XtraMessageBox.Show(MyValue)
+        If XtraMessageBox.Show(Sorgu_sDil("Þifreyi Deðiþtirmek Ýstediðinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+            txt_sifre.EditValue = MyValue
+            txt_onayla.EditValue = MyValue
+        End If
+    End Sub
+    Private Sub firma_sec()
+        Dim frm As New frm_firma_liste
+        frm.firmano = firmano
+        frm.donemno = donemno
+        frm.connection = connection
+        'frm.musterino = dr_baslik("FIRMAKODU")
+        frm.islemstatus = True
+        frm.kullanici = kullanici
+        If frm.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            Dim dr1 As DataRow
+            dr1 = frm.GridView1.GetDataRow(frm.GridView1.FocusedRowHandle)
+            btn_hesap.EditValue = dr1("sKodu")
+            dr1 = Nothing
+        End If
+    End Sub
+    Private Sub yetkiler()
+        Dim dr As DataRow
+        dr = GridView1.GetDataRow(GridView1.FocusedRowHandle)
+        Dim frm As New frm_emir_personel_yetki
+        frm.firmano = firmano
+        frm.donemno = donemno
+        frm.connection = connection
+        frm.kasiyerno = dr("IND")
+        frm.kullanici = kullanici
+        If yetki_kontrol(kullanici, "Personel_Yetki_Listesi") = True Then
+            frm.ShowDialog()
+        End If
+        dr = Nothing
+    End Sub
+    Private Sub yetkiler_kopyala()
+        Dim frm As New frm_personel
+        frm.firmano = firmano
+        frm.donemno = donemno
+        frm.status = True
+        frm.connection = connection
+        frm.kullanici = kullanici
+        If yetki_kontrol(kullanici, "Personel_Yetki_Kopyalama") = True Then
+            If frm.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+                Dim dr As DataRow = GridView1.GetDataRow(GridView1.FocusedRowHandle)
+                Dim dr1 As DataRow = frm.GridView1.GetDataRow(frm.GridView1.FocusedRowHandle)
+                Dim dr2 As DataRow
+                If XtraMessageBox.Show(dr1("PERSONELKODU") & vbTab & dr1("PERSONELADI") & "' Personeline Ait Yetkileri" & vbCrLf & dr("PERSONELADI") & Sorgu_sDil(" Personeline Atamak Ýstediðinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+                    personel_yetki_kaydet_sil(dr("IND"))
+                    ds_yetkiler = personel_yetkiler(dr1("IND"))
+                    For Each dr2 In ds_yetkiler.Tables(0).Rows
+                        Try
+                            personel_yetki_kaydet_yeni(dr("IND"), dr2("Form"), dr2("Yetki"))
+                            'personel_yetki_kaydet_yeni(dr1("IND"), dr("IND"))
+                        Catch ex As Exception
+                        End Try
+                    Next
+                    XtraMessageBox.Show(Sorgu_sDil("Tamamlandý", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information)
+                End If
+                dr = Nothing
+                dr1 = Nothing
+                dr2 = Nothing
+                frm.Close()
+                frm.Dispose()
+            End If
+        End If
+    End Sub
+    Public Function personel_yetkiler(ByVal kasiyerno As Int64) As DataSet
+        Dim kriter As String = ""
+        'kriter = "WHERE tbMusteri.dteKayitTarihi between '" & Microsoft.VisualBasic.Left(tarih1.ToString, 10) + " 00:00:00" & "' and '" & Microsoft.VisualBasic.Left(tarih1.ToString, 10) + " 23:59:59" & "' "
+        Dim conn As New OleDb.OleDbConnection
+        Dim cmd As New OleDb.OleDbCommand
+        Dim adapter As New OleDb.OleDbDataAdapter
+        conn.ConnectionString = connection
+        cmd.CommandTimeout = False
+        adapter.SelectCommand = cmd
+        cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT Personel.PersonelNo, Forms.Modul, Forms.Form, Forms.Aciklama, Personel.Yetki FROM aPersonelYetki Personel INNER JOIN aEmirForms Forms ON Personel.Form = Forms.Form WHERE (Personel.PersonelNo = " & kasiyerno & ") ")
+        cmd.Connection = conn
+        conn.Open()
+        Dim Datastoklar1 As New DataSet
+        Dim N As Integer = adapter.Fill(Datastoklar1, "TABLE1")
+        conn.Close()
+        Return Datastoklar1
+    End Function
+    Private Sub personel_yetki_kaydet_yeni(ByVal PersonelNo As Int64, ByVal Form As String, ByVal Yetki As Byte)
+        Dim con As New OleDb.OleDbConnection
+        Dim cmd As New OleDb.OleDbCommand
+        cmd.Connection = con
+        con.ConnectionString = connection
+        If con.State = ConnectionState.Closed = True Then
+            con.Open()
+        End If
+        Try
+            cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO aPersonelYetki (PersonelNo, Form, Yetki) VALUES (" & PersonelNo & ", '" & Form & "', " & Yetki & ")")
+            cmd.ExecuteNonQuery()
+        Catch ex As Exception
+        End Try
+        con.Close()
+    End Sub
+    'Private Sub personel_yetki_kaydet_yeni(ByVal kaynakkasiyerno As Int64, ByVal hedefkasiyerno As Int64)
+    '    Dim con As New OleDb.OleDbConnection
+    '    Dim cmd As New OleDb.OleDbCommand
+    '    cmd.Connection = con
+    '    con.ConnectionString = connection
+    '    If con.State = ConnectionState.Closed = True Then
+    '        con.Open()
+    '    End If
+    '    cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO aPersonelYetki SELECT " & hedefkasiyerno & " as hedef, Forms.Form, Personel.Yetki FROM aPersonelYetki Personel INNER JOIN aEmirForms Forms ON Personel.Form = Forms.Form WHERE (Personel.PersonelNo = " & kaynakkasiyerno & ")")
+    '    cmd.ExecuteNonQuery()
+    '    con.Close()
+    'End Sub
+    Private Sub personel_yetki_kaydet_sil(ByVal PersonelNo As Int64)
+        Dim con As New OleDb.OleDbConnection
+        Dim cmd As New OleDb.OleDbCommand
+        cmd.Connection = con
+        con.ConnectionString = connection
+        If con.State = ConnectionState.Closed = True Then
+            con.Open()
+        End If
+        cmd.CommandText = sorgu_query("DELETE FROM aPersonelYetki Where PersonelNo = " & PersonelNo & "")
+        cmd.ExecuteNonQuery()
+        con.Close()
+    End Sub
+    Private Sub raporla_excel()
+        If XtraMessageBox.Show(Sorgu_sDil("Sonuçlarý Excel Dosyasý Oluþturmak Ýstediðinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+            Dim SaveFileDialog1 As New Windows.Forms.SaveFileDialog
+            SaveFileDialog1.Filter = "Excel Dosyalarý(*.xls) |*.xls"
+            SaveFileDialog1.InitialDirectory = "c:\"
+            SaveFileDialog1.FileName = "Ekstre.xls"
+            If SaveFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
+                GridView1.ExportToXls(SaveFileDialog1.FileName.ToString)
+                If XtraMessageBox.Show(Sorgu_sDil("Kaydý Açmak Ýster misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+                    Process.Start(SaveFileDialog1.FileName.ToString)
+                End If
+            End If
+            SaveFileDialog1 = Nothing
+        End If
+    End Sub
+    Private Sub raporla_text()
+        If XtraMessageBox.Show(Sorgu_sDil("Sonuçlarý Text Dosyasý Oluþturmak Ýstediðinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+            Dim SaveFileDialog1 As New Windows.Forms.SaveFileDialog
+            SaveFileDialog1.Filter = "Text Dosyalarý(*.txt) |*.txt"
+            SaveFileDialog1.InitialDirectory = "c:\"
+            SaveFileDialog1.FileName = "Ekstre.txt"
+            If SaveFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
+                GridView1.ExportToText(SaveFileDialog1.FileName.ToString)
+                If XtraMessageBox.Show(Sorgu_sDil("Kaydý Açmak Ýster misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+                    Process.Start(SaveFileDialog1.FileName.ToString)
+                End If
+            End If
+            SaveFileDialog1 = Nothing
+        End If
+    End Sub
+    Private Sub raporla_pdf()
+        If XtraMessageBox.Show(Sorgu_sDil("Sonuçlarý Metin Dosyasý Oluþturmak Ýstediðinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+            Dim SaveFileDialog1 As New Windows.Forms.SaveFileDialog
+            SaveFileDialog1.Filter = "Metin Dosyalarý(*.pdf) |*.pdf"
+            SaveFileDialog1.InitialDirectory = "c:\"
+            SaveFileDialog1.FileName = "Ekstre.pdf"
+            If SaveFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
+                GridView1.ExportToPdf(SaveFileDialog1.FileName.ToString)
+                If XtraMessageBox.Show(Sorgu_sDil("Kaydý Açmak Ýster misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+                    Process.Start(SaveFileDialog1.FileName.ToString)
+                End If
+            End If
+            SaveFileDialog1 = Nothing
+        End If
+    End Sub
+    Private Sub btn_hesap_ButtonClick(ByVal sender As Object, ByVal e As DevExpress.XtraEditors.Controls.ButtonPressedEventArgs) Handles btn_hesap.ButtonClick
+        firma_sec()
+    End Sub
+    Private Sub btn_hesap_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles btn_hesap.KeyDown
+        If e.KeyCode = Keys.F6 Then
+            firma_sec()
+        End If
+    End Sub
+    Private Sub MenuItem24_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem24.Click
+        yetkiler()
+    End Sub
+    Private Sub MenuItem25_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem25.Click
+        yetkiler_kopyala()
+    End Sub
+    Private Sub BarButtonItem1_ItemClick(ByVal sender As System.Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles BarButtonItem1.ItemClick
+        kayit_ekle()
+    End Sub
+    Private Sub BarButtonItem2_ItemClick(ByVal sender As Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles BarButtonItem2.ItemClick
+        kayit_duzelt()
+    End Sub
+    Private Sub BarButtonItem3_ItemClick(ByVal sender As Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles BarButtonItem3.ItemClick
+        kayit_sil()
+    End Sub
+    Private Sub BarButtonItem4_ItemClick(ByVal sender As Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles BarButtonItem4.ItemClick
+        yetkiler()
+    End Sub
+    Private Sub BarButtonItem5_ItemClick(ByVal sender As Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles BarButtonItem5.ItemClick
+        yetkiler_kopyala()
+    End Sub
+    Private Sub BarButtonItem6_ItemClick(ByVal sender As Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles BarButtonItem6.ItemClick
+        gorunum_yazdir()
+    End Sub
+    Private Sub BarButtonItem7_ItemClick(ByVal sender As Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles BarButtonItem7.ItemClick
+        raporla_excel()
+    End Sub
+    Private Sub BarButtonItem8_ItemClick(ByVal sender As Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles BarButtonItem8.ItemClick
+        raporla_text()
+    End Sub
+    Private Sub BarButtonItem9_ItemClick(ByVal sender As Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles BarButtonItem9.ItemClick
+        raporla_pdf()
+    End Sub
+    Private Sub GridControl1_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles GridControl1.KeyDown
+        If e.KeyCode = Keys.Escape Then
+            Me.Close()
+        End If
+    End Sub
+    Private Sub sec_sSinifKodu_QueryPopUp(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles sec_sSinifKodu.QueryPopUp
+        sec_sSinifKodu.Properties.PopupControl = sec_grid
+        GridControl2.DataSource = ds_tbFSinif1.Tables(0)
+        GridControl2.DataMember = Nothing
+    End Sub
+    Private Sub sec_sSinifKodu_QueryResultValue(ByVal sender As Object, ByVal e As DevExpress.XtraEditors.Controls.QueryResultValueEventArgs) Handles sec_sSinifKodu.QueryResultValue
+        Dim s As String = deger(ds_tbFSinif1)
+        If s.ToString <> "" Then
+            e.Value = s.ToString
+        Else
+            e.Value = ""
+        End If
+    End Sub
+    Private Sub ClosePopup()
+        If Not sec_grid.OwnerEdit Is Nothing Then
+            sec_grid.OwnerEdit.ClosePopup()
+        End If
+    End Sub
+    Private Function deger(ByVal ds As DataSet) As String
+        Dim dr As DataRow
+        Dim s As String = ""
+        Dim satir As String = ""
+        Dim sayi As Integer = 0
+        Dim sayi1 As Integer = 0
+        For Each dr In ds.Tables(0).Rows
+            If dr("SEC") = True Then
+                sayi += 1
+            End If
+        Next
+        For Each dr In ds.Tables(0).Rows
+            If dr("SEC") = True Then
+                sayi1 += 1
+                s += "''" + Trim(dr("KOD")).ToString + "''"
+                satir += Trim(dr("ACIKLAMA"))
+                If sayi1 < sayi Then
+                    s += ","
+                    satir += ","
+                End If
+            End If
+        Next
+        sayi1 = Nothing
+        sayi = Nothing
+        Return s.ToString
+    End Function
+
+    'Bildirim Tercihleri Menu Item Click
+    Private Sub MenuItem27_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem27.Click
+        Try
+            If GridView1.FocusedRowHandle >= 0 Then
+                Dim nPersonelID As Integer = Convert.ToInt32(GridView1.GetFocusedRowCellValue("IND"))
+                Dim sPersonelAdi As String = GridView1.GetFocusedRowCellValue("PERSONELADI").ToString()
+                
+                Dim frm As New frm_PersonelBildirimTercihleri()
+                frm.PersonelID = nPersonelID
+                frm.PersonelAdi = sPersonelAdi
+                frm.ShowDialog()
+            Else
+                MessageBox.Show("Lutfen bir personel secin.", "Uyari", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Bildirim tercihleri acilamadi: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+End Class

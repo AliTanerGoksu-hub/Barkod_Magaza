@@ -1,0 +1,106 @@
+{
+  "talep_tarihi": "2026-02-28",
+  "talep_eden": "Barkod Magaza Entegrasyon Sistemi",
+  "konu": "Ürün Detay Bilgileri İçin Yeni Alan Talebi",
+  
+  "aciklama": "Mevcut API'de ürün açıklaması (longDescription) içinde gönderdiğimiz bazı bilgilerin ayrı alanlar olarak eklenmesini talep ediyoruz. Bu sayede e-ticaret sitesinde bu bilgiler daha düzenli gösterilebilir ve filtreleme/arama işlemlerinde kullanılabilir.",
+  
+  "mevcut_durum": {
+    "aciklama": "Şu anda aşağıdaki bilgiler longDescription alanı içinde HTML formatında gönderilmektedir",
+    "ornek_format": "<h3>🧼 Yıkama Talimatı</h3><ul><li>30°C'de yıkayın</li></ul><h3>🛡️ Bakım Talimatı</h3><ul><li>Düz yüzeyde kurutun</li></ul><h3>⚠️ Güvenlik Uyarısı</h3><ul><li>Çocuklardan uzak tutun</li></ul>"
+  },
+  
+  "talep_edilen_yeni_alanlar": [
+    {
+      "alan_adi": "washingInstructions",
+      "alan_adi_tr": "Yıkama Talimatı",
+      "veri_tipi": "string",
+      "zorunlu": false,
+      "maksimum_uzunluk": 2000,
+      "aciklama": "Ürünün yıkama/temizlik talimatlarını içerir. HTML formatında olabilir.",
+      "ornek_deger": "<ul><li>30°C'de hassas programda yıkayın</li><li>Renklileri ayrı yıkayın</li><li>Çamaşır suyu kullanmayın</li><li>Ters çevirerek yıkayın</li></ul>",
+      "kullanim_alani": "Tekstil, züccaciye, elektronik, tüm ürün kategorileri"
+    },
+    {
+      "alan_adi": "careInstructions", 
+      "alan_adi_tr": "Bakım Talimatı",
+      "veri_tipi": "string",
+      "zorunlu": false,
+      "maksimum_uzunluk": 2000,
+      "aciklama": "Ürünün bakım ve saklama talimatlarını içerir. HTML formatında olabilir.",
+      "ornek_deger": "<ul><li>Düz yüzeyde kurutun</li><li>Orta ısıda ütüleyin</li><li>Kuru temizleme yapmayın</li><li>Direkt güneş ışığından koruyun</li></ul>",
+      "kullanim_alani": "Tekstil, deri ürünler, mobilya, tüm ürün kategorileri"
+    },
+    {
+      "alan_adi": "safetyWarnings",
+      "alan_adi_tr": "Güvenlik Uyarısı",
+      "veri_tipi": "string",
+      "zorunlu": false,
+      "maksimum_uzunluk": 2000,
+      "aciklama": "Ürünün güvenlik uyarılarını içerir. HTML formatında olabilir.",
+      "ornek_deger": "<ul><li>Çocuklardan uzak tutun</li><li>Yutulması halinde doktora başvurun</li><li>Yanıcı maddelerden uzak tutun</li></ul>",
+      "kullanim_alani": "Elektronik, kimyasal ürünler, oyuncaklar, tüm ürün kategorileri"
+    },
+    {
+      "alan_adi": "sizeChart",
+      "alan_adi_tr": "Beden Tablosu",
+      "veri_tipi": "string",
+      "zorunlu": false,
+      "maksimum_uzunluk": 5000,
+      "aciklama": "Tekstil ürünleri için beden ölçü tablosu. HTML tablo formatında olabilir.",
+      "ornek_deger": "<table class='size-chart'><thead><tr><th>Beden</th><th>Göğüs (cm)</th><th>Bel (cm)</th><th>Boy (cm)</th></tr></thead><tbody><tr><td>S</td><td>88-92</td><td>72-76</td><td>165-170</td></tr><tr><td>M</td><td>92-96</td><td>76-80</td><td>170-175</td></tr><tr><td>L</td><td>96-100</td><td>80-84</td><td>175-180</td></tr><tr><td>XL</td><td>100-104</td><td>84-88</td><td>180-185</td></tr></tbody></table>",
+      "kullanim_alani": "Tekstil, giyim, ayakkabı - Beden gerektiren tüm ürünler",
+      "onemli_not": "Bu alan sadece beden gerektiren ürünler için kullanılmalıdır. Züccaciye, elektronik gibi kategorilerde bu alan boş bırakılmalıdır."
+    }
+  ],
+  
+  "onerilen_api_formati": {
+    "endpoint": "product/save",
+    "method": "POST",
+    "ornek_request": {
+      "products": [
+        {
+          "code": "ORNEK-URUN-001",
+          "name": "Örnek Ürün Adı",
+          "longDescription": "Ürün detaylı açıklaması...",
+          "shortDescription": "Kısa açıklama...",
+          "washingInstructions": "<ul><li>30°C'de yıkayın</li><li>Renklileri ayrı yıkayın</li></ul>",
+          "careInstructions": "<ul><li>Düz yüzeyde kurutun</li><li>Orta ısıda ütüleyin</li></ul>",
+          "safetyWarnings": "<ul><li>Çocuklardan uzak tutun</li><li>Islak elle kullanmayın</li></ul>",
+          "sizeChart": "<table class='size-chart'><thead><tr><th>Beden</th><th>Göğüs</th><th>Bel</th><th>Boy</th></tr></thead><tbody><tr><td>S</td><td>88-92</td><td>72-76</td><td>165-170</td></tr><tr><td>M</td><td>92-96</td><td>76-80</td><td>170-175</td></tr><tr><td>L</td><td>96-100</td><td>80-84</td><td>175-180</td></tr></tbody></table>",
+          "brand": "Marka",
+          "category1": "Kategori 1",
+          "salePrice": 199.99,
+          "currency": "TRY",
+          "quantity": 100
+        }
+      ]
+    }
+  },
+  
+  "beklenen_api_response": {
+    "success": true,
+    "message": "Ürün başarıyla kaydedildi",
+    "data": {
+      "code": "ORNEK-URUN-001",
+      "washingInstructions": "<ul><li>30°C'de yıkayın</li></ul>",
+      "careInstructions": "<ul><li>Düz yüzeyde kurutun</li></ul>",
+      "safetyWarnings": "<ul><li>Çocuklardan uzak tutun</li></ul>"
+    }
+  },
+  
+  "faydalar": [
+    "Ürün bilgileri daha düzenli ve ayrıştırılmış şekilde saklanabilir",
+    "Frontend'de bu bilgiler ayrı sekmelerde veya accordion'larda gösterilebilir",
+    "SEO açısından daha iyi yapılandırılmış veri sağlar",
+    "Filtreleme ve arama işlemlerinde kullanılabilir",
+    "E-ticaret standartlarına uyum sağlar (Google Shopping, Meta Commerce vb.)"
+  ],
+  
+  "notlar": [
+    "Bu alanlar opsiyonel olmalıdır, zorunlu değil",
+    "Mevcut longDescription alanı korunmalı, yeni alanlar ek olarak eklenmelidir",
+    "HTML formatı desteklenmelidir (<ul>, <li>, <p>, <strong> vb.)",
+    "Maksimum 2000 karakter yeterli olacaktır"
+  ]
+}

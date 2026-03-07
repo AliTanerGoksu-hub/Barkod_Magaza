@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="PictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        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
+        rkJggg==
+</value>
+  </data>
+  <data name="SimpleButton2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAhZJREFUOE+lk11I
+        U2Ecxv/ntLOtfePH3HGDfbWCs82ECboGyhhCeRdBYV4EhYIEG4UGKsbALoIRfYAQbUGE6y6oBsu6WFoT
+        Jild9DGqi3XhWhhkuJKQI09nQaFwvGkvvHf/5/e87//hYQBQXacGqOfWJf7z+u3ut4ijLM/OzB1Qf7iu
+        1lqvGBvooqWVLrhcNOZwBLOdnZVLfv/EGUH4p9sBmLcp0j+ToxCzd/HEqX+Z0On5Sd5K4zzf8SwUWkE+
+        j5WpKXGivX3kr/EOwOxBZQkPrgKfKthMXcMj3rAU1xlO5Hy+VWQyQKkEJJMY8ngWZAFGIvvMfm4ZN8aB
+        uQVUJ8ew5HZBnJ4GcjmI8ThiLldBSs0hC6jFyRDxN217CpsjQ8DtO0BNnEphbXAQwxZLXhpprc3JAk4z
+        ChpQqCjKqY6+8yhRPdaH9ZMDqB7pw2OnU7RqNIc6GhspYDbLA9KkovReTdcbP/el7CUU9YS3ktl7kwkV
+        rxeZQODVOa/XdtbvlwfcU3GRYhf7db2XUJaSKjaxuK/VbpXMZnwWBPwIh/Gwu/v1cFubW/YLH4PMBk4R
+        voUJqwKLqEH93KDgQonm5sU1nw/fe3qA/n5cDgYXZQHHTcxouZcRN8Iszjco56WVttQWxrGsOWG3F7Yi
+        EbyIRH7tMxqju6ZwWMNGY03cU0nMby+ZkmVbYk7nrFuni+6awv+Uqu4y/QY4vyor3415rQAAAABJRU5E
+        rkJggg==
+</value>
+  </data>
+  <data name="SimpleButton1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAcZJREFUOE9j/P//
+        PwNFAGQAJZgizWDXgwjeVikwhgFGZkYG/mhZBv4aBQbuRikGjnZhBtZuHgaGfmYGhkkMZkq7JK9wV3Mt
+        x2kAv48Cg2iTJooBDG2cbBzTeCvjrlh+8jps/J9Vh6UabgB3syQrEMNdIBijxiBSpwE2gLMeKN4kaKGz
+        UvX4nE9h/1PPOv5nUGepACmGG6A0X/OWUJF0B8wEwUhVsAGc5XJcfB1yrUnHXH7t+5/2P+mo038GVbYa
+        mDq4ATozjE5mX/D9z+8nOQkkyR+mwsBTqeZoMNf4/PRHKf9P/C/5H7XH+T+DMmctcpTDDeDP1rUrOZbw
+        d8qjsv98gTKzhDM1O5L2B/7d9bnx/8HfNf9Dt7j9Z1DirUdPL3ADxFLNGTQbbbfs+TTxf9+tov9d17L+
+        H/nS/3/L56r/wes8/zMpCDRgS2wIA9LMGaRjnR1St0f8P/B5wv+tb9r+L3ld8D9whfd/FjmRJlwpFcUA
+        lTA/BoNy78M9d+P/T36a+N93oe9/dhnJFnzJHG6ARKYVA8gAzYAo75D13v995nn/55KSbSaUR+AGyNhY
+        gw0w9EpmVvP02MwvpzSRkGaUdDCgmQkAdQWW5ma/i5cAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="PictureBox2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        /9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYa
+        HSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgo
+        KCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADSAMgDASIAAhEBAxEB/8QA
+        HwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIh
+        MUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVW
+        V1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXG
+        x8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQF
+        BgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAV
+        YnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOE
+        hYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq
+        8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6pooooAKM0GkoADRmkzTSaAHZpMg0wtt/GpFGOe9AC0opM01i
+        AMseBQA+oLi6ig++3PoKJHJQk/KnfPWsW+n804XCxA5Hq1XGNxNluXUXY4jG0H2yaa9zEkatcSks3QHv
+        WG0008hiEZiTqWzyTSPDHATJcTF+OA57fStlTRNzalnVhlRtHfIxiq7XIPK5qks5niMkYdo0JBJGBj0F
+        XohE+msVTfIp4IP60cvLuFyu95NHkg8e1SRazKmMkNVbkHnr3qlcrtlyvGe1Vyp6Bc6m21aKUgOCDWik
+        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
+        ABRRRQAUUUUAf//Z
+</value>
+  </data>
+  <data name="rtPad.Text" xml:space="preserve">
+    <value>Fatura Programı
+Her Türlü Mal ve Hizmet Alış-Satış işlemleri bu modül aracığı ile yapılır.
+[Enter] ve  yukarı,aşağı yön  tuşları ile FATURA Programı’nın istenilen alt menüsüne ulaşılır.
+Insert	: Faturaya Stok Satırı Eklemeniz için Stok Arama Ekranını getirir.
+Ctrl+Del	: Fatura içinde üzerinde bulunan satırı siler.
+F1	: Fatura Programına ilişkin yardım verir.
+F2	: Fatura yazıcıya gönderilir
+F3	: İlgili faturanın tahsilatını yapmak (kapatmak) üzere Giriş Bordrosu Ekrana gelir
+F4	: İlgili Stok Kartını Ekrana Getirir
+F5	: İlgili Cari Hesap Kartını Ekrana Getirir
+F6	: İlgili stok kartına ait Envanter Depo Dağılımını verir
+F7	: İlgili Stok Kartına Ait Son 100 Hareketi Ekrana Getirir. Stok Hareketleri ekranında Enter Tuşuna basıldığında seçili satırdaki fiyat,iskonto ve satıcı bilgileri faturaya otomatik aktıralacaktır
+F8	: Fatura’ya ilişkin Muhasebe Fişi Görüntülenir. Shift+F8 tuşu ile Muhasebe Fişi’ne Müdahele edebilir
+F9	: Alt İskontolar bölümüne geçiş sağlar
+TAB	: Başlık bölümü,işlemler,alt iskontoları,alt toplamlar,hareket gir ve masraflar bölümü arasında geçiş sağlar
+Shift+F1	: Hesap Makinesi Ekrana gelir
+Ctrl+C	: Fatura, aynı şekli ve yeni nosu ile bir kez daha çoğaltılır.
+Ctrl+D	: Dövizli Cari için fatura düzenlendiğinde ilgili fatura için Kur Belirlenir
+Ctrl+E	: Üzerinde bulunan Stok Kartı’na ait Fiyat Etiketi ya da Barkod Etiketi çıkarılabilir.
+Ctrl+F	: Üzerinde bulunan Stok Kartı’na ait Fiyat Tanımları Ekrana Gelir.
+Alt+F	: Fatura içinde işlem gören stokların Karlılık Analizi Ekrana gelir.
+Ctrl+K	: Hareket gören stoklara ilişkim Kdv Matrah ve Tutarları Görüntülenir.
+Ctrl+O	: İlgili fatura’ya ait ödeme planı görüntülenir.
+Ctrl+R	: İlgili Firmanın RİSK ANALİZİ ayrıntılı olarak izlenir.
+Ctrl+S	: Faturada Saticinin belirlenmesi sağlanır.
+Alt+S	: Üzerinde bulunan satırın hangi satırlara ait maliyet unsuru olduğu belirlenir.
+Ctrl+T	: Text olarak gelen Fatura Hareket Bilgileri Fatura üzerine çağırılır
+Ctrl+Y	: Faturayı Tamamen İptal Eder.
+Ctrl+Z	: Fatura içinde işlem gören stokların karlılığı ve maliyetlendirmesi görüntülenir.
+Alt+M	: Fatura içinde işlem gören stokların maliyetleri hesaplanır.
+F12	: Faturayı Tem Ekranda Gösterir.Ekranı Kaplar
+Yeni Fatura
+Firmamızca gerçekleştirilen Alış ya da Satış işlemleri bu bölümden yapılır. Yeni Fatura seçildiği zaman öncelikle faturanın hangi hesapa işleneceği seçilir. Daha önceden kayıtlarımızda bulunmayan bir Cari Kart, istenirse cari arama ekranından tanımlanabilir. 
+Hareketler bölümünde Alış ya da Satışı yapılan Stok Kodu ve diğer bilgiler (Stok kartı’na KDV,iskonto, Satış Fiyatı gibi bilgiler tam olarak doldurulmuş ise bu bilgiler doğrudan gelir. İstenilir ise üzerinde değişiklik yapılabilir.) yazılır.
+FiyatTipi kolonunda 1,2,3,A,M seçenekleri ile istenilen fiyat otomatik yazdırılabilir.
+Daha önceden kayıtlarımızda bulunmayan bir Stok Kartı, istenirse Otomatik arama bölümünde iken tanımlanabilir. Yeni Stok kodu yazılır, kayıtlarda gözükmüyor ise “Yeni Stok Kartı Tanımlamak İster misiniz..? “Evet/Hayır” onay ekranı gelir “Evet”Dediğiniz zaman Yeni Stok Kartı Penceresi ekrana gelir ve ilgili Stok Kartı bilgileri girilim (Kaydet) tuşuna basıldığında Yeni Stok Kartı tanımlama işi tamamlanır.
+Alış ya da satış yapılan herhangi bir stok bedelsiz işlenmek istendiğinde %99.99 veya 0.001 fiyat girilir..
+Fatura içinde bilgiler girilip [Enter] tuşuna basıldığı anda bilgiler güncellenmekte ve kaydedilmektedir. Satır bilgisi değiştirildiği anda stok bilgisi ve carinin bakiye bilgisi anlık olarak değişmektedir.
+İşlem tamamlandığında sadece [ESC] tuşuna basıp çıkmak yeterlidir.
+F2 tuşu ile ilgili FATURA yazıcıya gönderilebilir.
+SATIŞ FATURASI
+Firmamızca yapılan Satışlar için kullanılır.
+ALIŞ FATURASI
+Firmamızca yapılan Alışlar için kullanılır.
+PROFORMA FATURA
+İlgili Firma’yı bilgilendirmek maksadı ile düzenlenen bir Fatura olup Cari ya da Stok bilgilerini etkilemez.
+SATIŞ HİZMET FATURASI
+Firmamızca Kesilen Hizmet bedelleri için kullanılır
+ALIŞ HİZMET FATURASI
+Firmamıza Kesilen Hizmet bedelleri için kullanılır
+ESKİ FATURALAR
+Daha önceden kaydedilmiş olan Satış-Alış-Satış İade-Alış İade-Proforma-Satış Hizmet-Alış Hizmet Faturalarına topluca ulaşılır,istenilirse gerekli düzeltmeler yapılabilir. İşlem tamamlandığında sadece [ESC] tuşuna basıp çıkmak yeterlidir.
+Toplu Fatura İşlemleri
+Toplu Fatura Basımı 	: Daha önceden kaydedilmiş olan satış faturaları topluca yazıcıdan alınabilir
+Toplu Fatura Kopyalama	: Daha önceden kaydedilmiş satış faturalarından seri şekilde çoğaltma işlemi bu bölümden yapılır. Çoğaltılan bu Satış Faturaları aynı içerikli, Yeni No. Ve Tarihle kayıtlara geçer.
+İstenilir ise Stok Kalemlerine müdahele edilebilir.
+Hesap Kapatma		: Daha önceden kaydedilmiş satış faturalarını girilmiş olan tahsilatlarının eşleştirmesini otomatik olarak bu bölümden yapılır. Açık/Borç Alacak Raporları kullanılacak ve tek tek satış kapatma yapmak istenmiyorsa bu bölüm kullanılır.
+Fatura Raporları
+Fatura Listesi:		: Kayıtlarımıza girilmiş olan tüm Faturalara ilişkin liste alınır.
+Fatura Kalemleri Listesi	: Kayıtlarımıza girilmiş olan tüm Faturalara ait Stok Kalemleri listelenir.
+Kdv Raporları		: Kayıtlarımıza girilmiş olan tüm Faturalara ait Toplam KDV Matrah ve tutarları alınır.
+Detaylı Kdv Raporu	: Kayıtlarımıza girilmiş olan tüm Faturalara ait ayrıntılı KDV Matrah-Oran ve Tutarları alınır.
+Bilanço Esasına Göre Mal/Hizmet Beyanı: BA-BS form çıktıları almak için kullanılır
+Satış Raporları
+Satış Analiz		: Kayıtlarımıza girilmiş olan tüm faturalara ilişkin detaylı satış analiz listelenir.
+Satış Kalan		: Yapılan satış işlemleri sonucunda stokların son durumları listelenir.
+Satış Karlılık		: Satışların Karlılık durumları listelenir.
+Satış Karlılık Analizi	: Satışların karlılık durumları ve Periyodik karşılaştırmaları ve gruplandırmalı bilgiler listelenir.
+Satış Ciroları		: Satışların Günlük,Haftalık,Aylık,3 Er Aylık,Yıllık ve saatlik dilimlerde periyodik toplamları listelenir. İstenirse Grafik olarak değerlendirmesi yapılabilir, yazıcı çıktıları alınabilir.
+Satış Ciroları Satıcılar	: Satışların Satıcı personeller bazında periyodik toplamları listelenir. İstenirse Grafik olarak değerlendirmesi yapılabilir, yazıcı çıktıları alınabilir.
+Satış Ciroları Sınıflandırmalar	: Satışların Stok Sınıflandırmaları bazında periyodik toplamları listelenir. İstenirse Grafik olarak değerlendirmesi yapılabilir, yazıcı çıktıları alınabilir.
+Satış Ciroları Sınıflandırma Analizi: Satışların Cari ve Stok Sınıflandırmaları dikkate alınarak periyodik karşılaştırmalı ve gruplandırmalı bilgiler listelenir.
+Satış Ciroları Mağazalar	: Satışların Depolar bazında periyodik toplamları listelenir. İstenirse Grafik olarak değerlendirmesi yapılabilir, yazıcı çıktıları alınabilir
+-	Raporlardan istenmeyen kolonları kaldırmak, ihtiyaç duyulan veriyi içeren kolonu eklemek için [Görünümü Düzenle] seçeneği kullanılır. İstenmeyen kolon listeden kaldırılabilir. Tanımlı kolonlar listede istenilen yere sürüklenerek gözükmesi sağlanır.
+-	Raporların daha sonraki çalıştırılmalarında aynı görünümde listelenmesi istenirse [Görünümü Kaydet] seçeneği kullanılarak görünüm kaydedilir.
+-	Raporların Ekranda göründüğü şekli ile yazıcı çıktısını almak için [Görünümü Yazdır,Ctrl+P] seçeneği kullanılır.
+-	Raporlar hızlı arama yapmak için [Hızlı Filtre] seçeneği kullanılır
+-	Raporlarda filtreleme yapmak, arama yapmak için [Filtrele] seçeneği kullanılır.
+-	Raporlarda aynı türden bilgiler kullanılarak gruplandırma yapmak için [Gruplandır] seçeneği kullanılır. Gruplandırmak istenilen kolon gruplandırma bölümüne sürüklenir. Seçtiğiniz gruplandırma başlığına göre verileriniz gruplu olarak listelenecektir. 
+-	Raporlarda gruplandırılan verilerin toplu olarak detaylarını görmek için [Satırları Aç] , Detaylarını kapatmak için [Satırları Kapat] seçeneği kullanılır.
+-	Raporlarda listelenen verileri tam ekranda görmek için [Ekranı Kapla] F12 seçeneği kullanılır.
+-	Raporlarda Cari Karta Ulaşmak için Firma Kartı,F4 tuşlarını kullanınız
+-	Raporlarda listelenen verinin yazıcı çıktısını almak için Yazdır,Ctrl+P tuşlarını kullanınız
+-	Raporlarda seçili cari kartın iletişim bilgilerine ulaşmak içik Iletisim,F6 tuşlarını kullanınız
+-	Raporlarda seçili cari kartın Hesap hareketlerine ula şmak için Firma Hareketleri,F7 tuşlarını kullanınız
+-	Raporları Microsoft Excel Dosyası Olarak Kaydetmek için Excel butonuna tıklayınız
+-	Raporları Text Doküman dosyası olarak kaydetmek için Text butonuna tıklayınız
+-	Raporları Mail Atmak için Mail Dökümanı olarak kaydetmek için Mail butonuna tıklayınız
+</value>
+  </data>
+  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        AAABAAQAICAQAAEABADoAgAARgAAABAQEAABAAQAKAEAAC4DAAAYGBAAAQAEAOgBAABWBAAAMDAQAAEA
+        BABoBgAAPgYAACgAAAAgAAAAQAAAAAEABAAAAAAAgAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAACA
+        AAAAgIAAgAAAAIAAgACAgAAAgICAAMDAwAAAAP8AAP8AAAD//wD/AAAA/wD/AP//AAD///8AAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP//////////8AAAAA
+        AAAADwAPAA8ADwAPAAAAAAAAAA///////////wAAAAAAAAAPAA8ADwAPAA8AAAAAAAAAD///////////
+        AAAAAAAAAA8ADwAAAAAAAAAAAAAAAAAP////D/////8P////AAAADwAPAA+Aj4CPAA8ADwAAAA////8P
+        /////w////8AAAAPAA8AD4CPgI8ADwAPAAAAD////w//////D////wAAAEREREQEREREREAPAA8AAABE
+        REREBERERERP////AAAARERERAREREREQA8ADwAAAAAAAAAP//////////8AAAAAAAAADwAPAA8ADwAP
+        AAAAAAAAAA///////////wAAAAAAAABERERERERERERAAAAAAAAAREREREREREREQAAAAAAAAERERERE
+        REREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD////////////////////////////////AAAf/wAAH/8AA
+        B//AAAf/wAAH/8AAB//AAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAf/wAAH/8AAB//A
+        AAf/wAAH/8AAB//AAAf//////////////////////////ygAAAAQAAAAIAAAAAEABAAAAAAAwAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAACAAACAAAAAgIAAgAAAAIAAgACAgAAAgICAAMDAwAAAAP8AAP8AAAD/
+        /wD/AAAA/wD/AP//AAD///8AAAAAAAAAAAAAAAAAAAAAAA//////AAAADw8PDw8AAAAP/////wAAAA8P
+        AAAAAAAAD/8P//8P/wAPDw8PDw8PAA//D///D/8AREQERERPDwBERARERE//AAAADw8PDw8AAAAP////
+        /wAAAEREREREQAAARERERERAAAAAAAAAAAD//wAAAB8AAAAfAAAAHwAAAB8AAAABAAAAAQAAAAEAAAAB
+        AAAAAQAAAAEAAPABAADwAQAA8AEAAPABAAD//wAAKAAAABgAAAAwAAAAAQAEAAAAAACAAQAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAIAAAIAAAACAgACAAAAAgACAAICAAACAgIAAwMDAAAAA/wAA/wAAAP//AP8A
+        AAD/AP8A//8AAP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD////////wAAAAAADwDwDwDwDwAA
+        AAAAD////////wAAAAAADwDwDwDwDwAAAAAAD////////wAAAAAADwDwAAAAAAAAAAAAD///D////w//
+        /wAADwDwDwfwfwDwDwAAD///D////w///wAADwDwDwfwfwDwDwAAD///D////w///wAAREREBEREREDw
+        DwAAREREBERERE///wAAREREBEREREDwDwAAAAAAD////////wAAAAAADwDwDwDwDwAAAAAAD///////
+        /wAAAAAAREREREREREAAAAAAREREREREREAAAAAAREREREREREAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAD///8AwAB/AMAAfwDAAH8AwAB/AMAAfwDAAH8AwAABAMAAAQDAAAEAwAABAMAAAQDAAAEAwAABAMAA
+        AQDAAAEA/wABAP8AAQD/AAEA/wABAP8AAQD/AAEA////AP///wAoAAAAMAAAAGAAAAABAAQAAAAAAAAG
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAICAgADAwMAAAAD/AAD/
+        AAAA//8A/wAAAP8A/wD//wAA////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////////////////AAAAAAAAAAAAAAD///////////////
+        //AAAAAAAAAAAAAAD/AAD/AAD/AAD/AAD/AAAAAAAAAAAAAAD/////////////////AAAAAAAAAAAAAA
+        D/////////////////AAAAAAAAAAAAAAD/AAD/AAD/AAD/AAD/AAAAAAAAAAAAAAD///////////////
+        //AAAAAAAAAAAAAAD/////////////////AAAAAAAAAAAAAAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAA
+        D///////D/////////D///////8AAAAAD///////D/////////D///////8AAAAAD/AAD/AAD/gAj/gA
+        j/AAAP8AAP8AAAAAD///////D/////////D///////8AAAAAD///////D/////////D///////8AAAAA
+        D/AAD/AAD/gAj/gAj/AAAP8AAP8AAAAAD///////D/////////D///////8AAAAAD///////D///////
+        //D///////8AAAAAREREREREBEREREREREQAAP8AAP8AAAAAREREREREBERERERERET///////8AAAAA
+        REREREREBERERERERET///////8AAAAAREREREREBEREREREREQAAP8AAP8AAAAAAAAAAAAAD///////
+        //////////8AAAAAAAAAAAAAD/////////////////8AAAAAAAAAAAAAD/AAD/AAD/AAAP8AAP8AAAAA
+        AAAAAAAAD/////////////////8AAAAAAAAAAAAAD/////////////////8AAAAAAAAAAAAARERERERE
+        RERERERERERAAAAAAAAAAAAARERERERERERERERERERAAAAAAAAAAAAARERERERERERERERERERAAAAA
+        AAAAAAAARERERERERERERERERERAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///////wAA////////AAD///////8AAP//
+        /////wAA////////AAD///////8AAP///////wAA////////AAD///////8AAPAAAAD//wAA8AAAAP//
+        AADwAAAA//8AAPAAAAD//wAA8AAAAP//AADwAAAA//8AAPAAAAD//wAA8AAAAP//AADwAAAA//8AAPAA
+        AAAABwAA8AAAAAAHAADwAAAAAAcAAPAAAAAABwAA8AAAAAAHAADwAAAAAAcAAPAAAAAABwAA8AAAAAAH
+        AADwAAAAAAcAAPAAAAAABwAA8AAAAAAHAADwAAAAAAcAAPAAAAAABwAA//8AAAAHAAD//wAAAAcAAP//
+        AAAABwAA//8AAAAHAAD//wAAAAcAAP//AAAABwAA//8AAAAHAAD//wAAAAcAAP//AAAABwAA////////
+        AAD///////8AAP///////wAA////////AAD///////8AAP///////wAA////////AAD///////8AAA==
+</value>
+  </data>
+</root>

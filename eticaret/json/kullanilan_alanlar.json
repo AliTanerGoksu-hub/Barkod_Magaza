@@ -1,0 +1,225 @@
+{
+  "dokuman_tarihi": "2026-02-28",
+  "versiyon": "1.0",
+  "aciklama": "Barkod Magaza sisteminin furkanpijama.com API'sine gönderdiği tüm ürün alanları",
+  
+  "kullanilan_endpoint": "product/save",
+  
+  "gonderilen_alanlar": {
+    "temel_bilgiler": {
+      "code": {
+        "kaynak": "tbStok.sModel",
+        "aciklama": "Ürün kodu (benzersiz)",
+        "zorunlu": true,
+        "veri_tipi": "string"
+      },
+      "name": {
+        "kaynak": "tbStok.sAciklama",
+        "aciklama": "Ürün adı",
+        "zorunlu": true,
+        "veri_tipi": "string"
+      },
+      "barcode": {
+        "kaynak": "tbStok.sKodu",
+        "aciklama": "Ürün barkodu",
+        "zorunlu": false,
+        "veri_tipi": "string"
+      },
+      "brand": {
+        "kaynak": "Parametrik Sınıf (ETICARET_SINIF_MARKA)",
+        "aciklama": "Marka adı",
+        "zorunlu": false,
+        "veri_tipi": "string"
+      },
+      "modelCode": {
+        "kaynak": "tbStok.sModel",
+        "aciklama": "Model kodu",
+        "zorunlu": false,
+        "veri_tipi": "string"
+      }
+    },
+    
+    "kategori_bilgileri": {
+      "category1": {
+        "kaynak": "Parametrik Sınıf (ETICARET_SINIF_KAT1)",
+        "aciklama": "1. seviye kategori",
+        "zorunlu": false,
+        "veri_tipi": "string"
+      },
+      "category2": {
+        "kaynak": "Parametrik Sınıf (ETICARET_SINIF_KAT2)",
+        "aciklama": "2. seviye kategori",
+        "zorunlu": false,
+        "veri_tipi": "string"
+      }
+    },
+    
+    "fiyat_bilgileri": {
+      "salePrice": {
+        "kaynak": "Parametrik Fiyat Tipi (tbParamGenel.ETICARET_FIYAT_TIPI)",
+        "aciklama": "Satış fiyatı",
+        "zorunlu": true,
+        "veri_tipi": "float"
+      },
+      "listPrice": {
+        "kaynak": "tbStok.nSF1 veya seçilen fiyat tipi",
+        "aciklama": "Liste/piyasa fiyatı",
+        "zorunlu": false,
+        "veri_tipi": "float"
+      },
+      "currency": {
+        "kaynak": "Sabit: TRY",
+        "aciklama": "Para birimi",
+        "zorunlu": true,
+        "veri_tipi": "string"
+      }
+    },
+    
+    "stok_bilgileri": {
+      "quantity": {
+        "kaynak": "tbStokMiktar veya tbRenkBeden",
+        "aciklama": "Toplam stok miktarı",
+        "zorunlu": true,
+        "veri_tipi": "float"
+      }
+    },
+    
+    "aciklama_bilgileri": {
+      "shortDescription": {
+        "kaynak": "tbStokAIIcerik.sKisaAciklama",
+        "aciklama": "Kısa ürün açıklaması",
+        "zorunlu": false,
+        "veri_tipi": "string",
+        "max_uzunluk": 500
+      },
+      "longDescription": {
+        "kaynak": "Birleşik içerik (aşağıda detaylı)",
+        "aciklama": "Detaylı ürün açıklaması - HTML formatında",
+        "zorunlu": false,
+        "veri_tipi": "string",
+        "icerik_yapisi": [
+          "1. tbStokAIIcerik.sDetayliAciklama - Ana ürün açıklaması",
+          "2. tbStokAIIcerik.sOzelliklerHTML - Ürün özellikleri",
+          "3. tbStokAIIcerik.sKullanimTalimati - Kullanım talimatı",
+          "4. tbStokAIIcerik.sYikamaTalimati - Yıkama talimatı",
+          "5. tbStokAIIcerik.sBakimTalimati - Bakım talimatı",
+          "6. tbStokAIIcerik.sGuvenliklUyari - Güvenlik uyarısı",
+          "7. tbStokAIIcerik.sBedenTablosu - Beden tablosu (giyim ürünleri için)"
+        ]
+      }
+    },
+    
+    "seo_bilgileri": {
+      "seoTitle": {
+        "kaynak": "tbStokAIIcerik.sSEOBaslik",
+        "aciklama": "SEO başlığı",
+        "zorunlu": false,
+        "veri_tipi": "string",
+        "max_uzunluk": 100
+      },
+      "seoDescription": {
+        "kaynak": "tbStokAIIcerik.sMetaDescription",
+        "aciklama": "SEO meta açıklaması",
+        "zorunlu": false,
+        "veri_tipi": "string",
+        "max_uzunluk": 160
+      },
+      "seoKeywords": {
+        "kaynak": "tbStokAIIcerik.sAnahtarKelimeler",
+        "aciklama": "SEO anahtar kelimeleri",
+        "zorunlu": false,
+        "veri_tipi": "string"
+      }
+    },
+    
+    "varyant_bilgileri": {
+      "variant1Name": {
+        "kaynak": "Sabit: Renk",
+        "aciklama": "1. varyant adı",
+        "zorunlu": false,
+        "veri_tipi": "string"
+      },
+      "variant2Name": {
+        "kaynak": "Sabit: Beden",
+        "aciklama": "2. varyant adı",
+        "zorunlu": false,
+        "veri_tipi": "string"
+      },
+      "variants": {
+        "kaynak": "tbRenkBeden tablosu",
+        "aciklama": "Renk-beden varyantları",
+        "zorunlu": false,
+        "veri_tipi": "array",
+        "alt_alanlar": {
+          "value1": "Renk değeri",
+          "value2": "Beden değeri",
+          "quantity": "Varyant stok miktarı",
+          "barcode": "Varyant barkodu"
+        }
+      }
+    },
+    
+    "gorsel_bilgileri": {
+      "images": {
+        "kaynak": "Cloudflare R2 üzerindeki resimler",
+        "aciklama": "Ürün görselleri",
+        "zorunlu": false,
+        "veri_tipi": "array",
+        "alt_alanlar": {
+          "imageUrl": "Resim URL'si"
+        }
+      }
+    },
+    
+    "diger_bilgiler": {
+      "status": {
+        "kaynak": "Sabit: true",
+        "aciklama": "Ürün aktif/pasif durumu",
+        "zorunlu": false,
+        "veri_tipi": "boolean"
+      },
+      "taxRate": {
+        "kaynak": "tbStok.nKDV",
+        "aciklama": "KDV oranı",
+        "zorunlu": true,
+        "veri_tipi": "integer"
+      }
+    }
+  },
+  
+  "eksik_alanlar_talep_edilen": {
+    "washingInstructions": {
+      "mevcut_kaynak": "tbStokAIIcerik.sYikamaTalimati",
+      "mevcut_durum": "longDescription içinde gönderiliyor",
+      "talep": "Ayrı alan olarak eklenmesi"
+    },
+    "careInstructions": {
+      "mevcut_kaynak": "tbStokAIIcerik.sBakimTalimati",
+      "mevcut_durum": "longDescription içinde gönderiliyor",
+      "talep": "Ayrı alan olarak eklenmesi"
+    },
+    "safetyWarnings": {
+      "mevcut_kaynak": "tbStokAIIcerik.sGuvenliklUyari",
+      "mevcut_durum": "longDescription içinde gönderiliyor",
+      "talep": "Ayrı alan olarak eklenmesi"
+    },
+    "sizeChart": {
+      "mevcut_kaynak": "tbStokAIIcerik.sBedenTablosu",
+      "mevcut_durum": "longDescription içinde gönderiliyor",
+      "talep": "Ayrı alan olarak eklenmesi",
+      "not": "Sadece tekstil/giyim ürünleri için geçerli. Züccaciye, elektronik gibi kategorilerde boş."
+    }
+  },
+  
+  "veritabani_tablolari": {
+    "tbStok": "Ana stok bilgileri",
+    "tbStokSinifi": "Ürün sınıf/kategori bilgileri",
+    "tbStokAIIcerik": "AI tarafından oluşturulan içerikler",
+    "tbStokUzunNot": "Uzun açıklama notları",
+    "tbRenkBeden": "Renk-beden varyant bilgileri",
+    "tbStokMiktar": "Depo bazlı stok miktarları",
+    "tbSSinif1-10": "Sınıf tanım tabloları",
+    "tbSistemAyar": "Sistem ayarları (sınıf eşleştirmeleri)",
+    "tbParamGenel": "Genel parametreler"
+  }
+}

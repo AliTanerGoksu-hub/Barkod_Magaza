@@ -1,0 +1,7 @@
+﻿[*.vb]
+
+# BC42105: İşlev bütün kod yollarında bir değer döndürmüyor
+dotnet_diagnostic.BC42105.severity = none
+
+# BC42024: Kullanılmayan yerel değişken
+dotnet_diagnostic.BC42024.severity = warning
