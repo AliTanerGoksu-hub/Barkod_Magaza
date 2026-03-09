@@ -341,6 +341,12 @@ Public Class frm_TopluResimYukleme
             sModel = nameWithoutExt.Substring(0, lastDashIndex).Trim()
             lRenkNo = nameWithoutExt.Substring(lastDashIndex + 1).Trim().ToUpper()
             
+            ' Windows'un eklediği parantez içindeki numarayı kaldır: "V1 (1)" → "V1"
+            Dim parantezIndex As Integer = lRenkNo.IndexOf("(")
+            If parantezIndex > 0 Then
+                lRenkNo = lRenkNo.Substring(0, parantezIndex).Trim()
+            End If
+            
             If String.IsNullOrEmpty(sModel) OrElse String.IsNullOrEmpty(lRenkNo) Then
                 Return False
             End If
