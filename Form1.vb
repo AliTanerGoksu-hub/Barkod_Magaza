@@ -23661,12 +23661,12 @@ CleanupExcel:
     ''' </summary>
     Private Sub EnsureModelVaryantRenkTableExists()
         Try
-            Using con As New System.Data.SqlClient.SqlConnection(connection)
+            Using con As New System.Data.OleDb.OleDbConnection(connection)
                 con.Open()
                 
                 ' Tablo var mı kontrol et
                 Dim tableExists As Boolean = False
-                Using cmdCheck As New System.Data.SqlClient.SqlCommand(
+                Using cmdCheck As New System.Data.OleDb.OleDbCommand(
                     "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'tbModelVaryantRenk'", con)
                     Dim count As Integer = CInt(cmdCheck.ExecuteScalar())
                     tableExists = (count > 0)
@@ -23688,24 +23688,24 @@ CleanupExcel:
                             "sEkleyenKullanici VARCHAR(50), " & _
                             "CONSTRAINT UQ_ModelVaryant UNIQUE (sModel, lRenkNo))"
                         
-                        Using cmdCreate As New System.Data.SqlClient.SqlCommand(createTableSQL, con)
+                        Using cmdCreate As New System.Data.OleDb.OleDbCommand(createTableSQL, con)
                             cmdCreate.ExecuteNonQuery()
                         End Using
                         
                         ' 2. CREATE INDEX 1
-                        Using cmdIdx1 As New System.Data.SqlClient.SqlCommand(
+                        Using cmdIdx1 As New System.Data.OleDb.OleDbCommand(
                             "CREATE INDEX IX_ModelVaryantRenk_Model ON tbModelVaryantRenk(sModel, lRenkNo)", con)
                             cmdIdx1.ExecuteNonQuery()
                         End Using
                         
                         ' 3. CREATE INDEX 2
-                        Using cmdIdx2 As New System.Data.SqlClient.SqlCommand(
+                        Using cmdIdx2 As New System.Data.OleDb.OleDbCommand(
                             "CREATE INDEX IX_ModelVaryantRenk_RenkKodu ON tbModelVaryantRenk(sRenkKodu)", con)
                             cmdIdx2.ExecuteNonQuery()
                         End Using
                         
                         ' 4. CREATE INDEX 3
-                        Using cmdIdx3 As New System.Data.SqlClient.SqlCommand(
+                        Using cmdIdx3 As New System.Data.OleDb.OleDbCommand(
                             "CREATE INDEX IX_ModelVaryantRenk_RenkAdi ON tbModelVaryantRenk(sRenkAdi)", con)
                             cmdIdx3.ExecuteNonQuery()
                         End Using
