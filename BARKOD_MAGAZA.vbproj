@@ -1572,6 +1572,9 @@
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frm_TopluResimYukleme.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmkasaara.Designer.vb">
       <DependentUpon>frmkasaara.vb</DependentUpon>
     </Compile>
