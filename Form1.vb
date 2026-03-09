@@ -23675,29 +23675,46 @@ CleanupExcel:
                 If Not tableExists Then
                     Debug.WriteLine("[tbModelVaryantRenk] Tablo bulunamadı, oluşturuluyor...")
                     
-                    ' Tabloyu oluştur
-                    Dim createTableSQL As String = "
-CREATE TABLE tbModelVaryantRenk (
-    nID INT PRIMARY KEY IDENTITY(1,1),
-    sModel VARCHAR(50) NOT NULL,
-    lRenkNo VARCHAR(10) NOT NULL,
-    sRenkAdi VARCHAR(100) NOT NULL,
-    sRenkKodu VARCHAR(20) NOT NULL,
-    dteEklenmeTarihi DATETIME DEFAULT GETDATE(),
-    sEkleyenKullanici VARCHAR(50),
-    CONSTRAINT UQ_ModelVaryant UNIQUE (sModel, lRenkNo)
-)
-
-CREATE INDEX IX_ModelVaryantRenk_Model ON tbModelVaryantRenk(sModel, lRenkNo)
-CREATE INDEX IX_ModelVaryantRenk_RenkKodu ON tbModelVaryantRenk(sRenkKodu)
-CREATE INDEX IX_ModelVaryantRenk_RenkAdi ON tbModelVaryantRenk(sRenkAdi)
-"
-                    
-                    Using cmdCreate As New System.Data.SqlClient.SqlCommand(createTableSQL, con)
-                        cmdCreate.ExecuteNonQuery()
-                    End Using
-                    
-                    Debug.WriteLine("[tbModelVaryantRenk] ✓ Tablo başarıyla oluşturuldu")
+                    ' Tabloyu oluştur (batch'leri ayır)
+                    Try
+                        ' 1. CREATE TABLE
+                        Dim createTableSQL As String = "CREATE TABLE tbModelVaryantRenk (" & _
+                            "nID INT PRIMARY KEY IDENTITY(1,1), " & _
+                            "sModel VARCHAR(50) NOT NULL, " & _
+                            "lRenkNo VARCHAR(10) NOT NULL, " & _
+                            "sRenkAdi VARCHAR(100) NOT NULL, " & _
+                            "sRenkKodu VARCHAR(20) NOT NULL, " & _
+                            "dteEklenmeTarihi DATETIME DEFAULT GETDATE(), " & _
+                            "sEkleyenKullanici VARCHAR(50), " & _
+                            "CONSTRAINT UQ_ModelVaryant UNIQUE (sModel, lRenkNo))"
+                        
+                        Using cmdCreate As New System.Data.SqlClient.SqlCommand(createTableSQL, con)
+                            cmdCreate.ExecuteNonQuery()
+                        End Using
+                        
+                        ' 2. CREATE INDEX 1
+                        Using cmdIdx1 As New System.Data.SqlClient.SqlCommand(
+                            "CREATE INDEX IX_ModelVaryantRenk_Model ON tbModelVaryantRenk(sModel, lRenkNo)", con)
+                            cmdIdx1.ExecuteNonQuery()
+                        End Using
+                        
+                        ' 3. CREATE INDEX 2
+                        Using cmdIdx2 As New System.Data.SqlClient.SqlCommand(
+                            "CREATE INDEX IX_ModelVaryantRenk_RenkKodu ON tbModelVaryantRenk(sRenkKodu)", con)
+                            cmdIdx2.ExecuteNonQuery()
+                        End Using
+                        
+                        ' 4. CREATE INDEX 3
+                        Using cmdIdx3 As New System.Data.SqlClient.SqlCommand(
+                            "CREATE INDEX IX_ModelVaryantRenk_RenkAdi ON tbModelVaryantRenk(sRenkAdi)", con)
+                            cmdIdx3.ExecuteNonQuery()
+                        End Using
+                        
+                        Debug.WriteLine("[tbModelVaryantRenk] ✓ Tablo başarıyla oluşturuldu")
+                    Catch createEx As Exception
+                        Debug.WriteLine("[tbModelVaryantRenk] ✗ Oluşturma hatası: " & createEx.Message)
+                        Throw
+                    End Try
                 Else
                     Debug.WriteLine("[tbModelVaryantRenk] ✓ Tablo mevcut")
                 End If
