@@ -21,7 +21,7 @@ Public Class frm_TopluResimYukleme
     Private btnKlasorSec As SimpleButton
     Private btnYuklemeBaslat As SimpleButton
     Private btnKapat As SimpleButton
-    Private progressBar As ProgressBar
+    Private progressBar As System.Windows.Forms.ProgressBar
     Private lblDurum As LabelControl
     Private lblDetay As LabelControl
     Private memoSonuc As MemoEdit
@@ -37,7 +37,7 @@ Public Class frm_TopluResimYukleme
         Me.btnKlasorSec = New SimpleButton()
         Me.btnYuklemeBaslat = New SimpleButton()
         Me.btnKapat = New SimpleButton()
-        Me.progressBar = New ProgressBar()
+        Me.progressBar = New System.Windows.Forms.ProgressBar()
         Me.lblDurum = New LabelControl()
         Me.lblDetay = New LabelControl()
         Me.memoSonuc = New MemoEdit()
