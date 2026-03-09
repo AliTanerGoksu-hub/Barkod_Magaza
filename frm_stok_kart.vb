@@ -9268,23 +9268,20 @@ Public Class frm_stok_kart
         Dim sKodu As String = If(String.IsNullOrEmpty(Me.sKodu), "", Me.sKodu)
         Dim sRenk As String = ""
         Dim sRenkAdi As String = ""
-        Dim sBeden As String = ""
-        Dim sKavala As String = ""
+        ' DÜZELTME: sBeden ve sKavala artık KULLANILMIYOR
+        ' Resimler Model+Renk bazında, beden bazında değil
         
-        ' Direkt tbStok tablosundan sRenk, sBeden, sKavala bilgilerini çek
+        ' Direkt tbStok tablosundan SADECE sRenk bilgisini çek (beden yok)
         Try
             Using con As New OleDb.OleDbConnection(connection)
                 Using cmd As New OleDb.OleDbCommand(
-                    "SELECT sRenk, sBeden, sKavala FROM tbStok WHERE nStokID = ?", con)
+                    "SELECT sRenk FROM tbStok WHERE nStokID = ?", con)
                     cmd.Parameters.Add("p0", OleDb.OleDbType.Integer).Value = nStokID
                     con.Open()
                     Using reader As OleDb.OleDbDataReader = cmd.ExecuteReader()
                         If reader.Read() Then
-                            ' GetValue() + ToString() daha güvenli!
                             sRenk = If(reader.IsDBNull(0) OrElse reader.GetValue(0) Is Nothing, "", reader.GetValue(0).ToString().Trim())
-                            sBeden = If(reader.IsDBNull(1) OrElse reader.GetValue(1) Is Nothing, "", reader.GetValue(1).ToString().Trim())
-                            sKavala = If(reader.IsDBNull(2) OrElse reader.GetValue(2) Is Nothing, "", reader.GetValue(2).ToString().Trim())
-                            Debug.WriteLine($"[ResimEkle] ✓ tbStok'tan alındı: sRenk='{sRenk}', sBeden='{sBeden}', sKavala='{sKavala}'")
+                            Debug.WriteLine($"[ResimEkle] ✓ tbStok'tan alındı: sRenk='{sRenk}' (beden kullanılmıyor)")
                             
                             ' sRenkAdi'yi tbRenk'ten çek
                             If Not String.IsNullOrEmpty(sRenk) Then
@@ -9308,14 +9305,13 @@ Public Class frm_stok_kart
             Exit Sub
         End If
         
-        Debug.WriteLine($"[ResimEkle] ===== FINAL DEĞERLER =====")
-        Debug.WriteLine($"[ResimEkle] sModel={sModel}, nStokID={nStokID}, sKodu={sKodu}")
-        Debug.WriteLine($"[ResimEkle] sRenk={sRenk}, sRenkAdi={sRenkAdi}")
-        Debug.WriteLine($"[ResimEkle] sBeden={sBeden}, sKavala={sKavala}")
+        Debug.WriteLine($"[ResimEkle] ===== FINAL DEĞERLER (Model+Renk bazlı) =====")
+        Debug.WriteLine($"[ResimEkle] sModel={sModel}, nStokID={nStokID} (referans), sRenk={sRenk}")
+        Debug.WriteLine($"[ResimEkle] sBeden=NULL, sKavala=NULL (tüm bedenler için geçerli)")
         Debug.WriteLine($"[ResimEkle] ==========================")
 
-        ' Resim slot'u al (renk bazlı)
-        Dim nSira As Integer = GetNextAvailableSlot_tbStokResim(Trim(sModel), sRenk, nStokID)
+        ' Resim slot'u al - MODEL+RENK bazlı (beden yok)
+        Dim nSira As Integer = GetNextAvailableSlot_ModelRenk(Trim(sModel), sRenk)
         If nSira > 11 Then
             XtraMessageBox.Show("Bu renk için maksimum 11 resim eklenebilir!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
@@ -9390,11 +9386,10 @@ Public Class frm_stok_kart
                 klasor = ""
             End Try
             
-            ' R2'ye upload et - DOSYA ADI: sModel_sRenk_sBeden_sKavala_nSira.jpg
+            ' R2'ye upload et - DOSYA ADI: sModel_sRenk_nSira.jpg (beden yok)
             Dim fileNameParts As New List(Of String) From {sModel.Trim()}
             If Not String.IsNullOrEmpty(sRenk) Then fileNameParts.Add(sRenk.Trim())
-            If Not String.IsNullOrEmpty(sBeden) Then fileNameParts.Add(sBeden.Trim())
-            If Not String.IsNullOrEmpty(sKavala) Then fileNameParts.Add(sKavala.Trim())
+            ' DÜZELTME: sBeden ve sKavala EKLENMEYECEK - tüm bedenler için geçerli
             fileNameParts.Add(nSira.ToString())
             
             Dim fileName As String = String.Join("_", fileNameParts) & ".jpg"
@@ -9435,29 +9430,28 @@ Public Class frm_stok_kart
                 End Using
                 
                 Try
-                    ' Bu nSira'da zaten resim var mı kontrol et (nStokID + sRenk + nSira kombinasyonu)
+                    ' Bu nSira'da zaten resim var mı kontrol et - MODEL+RENK+nSira (beden yok)
                     Dim existingId As Object = Nothing
                     Using cmdCheck As New OleDb.OleDbCommand(
-                        "SELECT nStokResimID FROM tbStokResim WHERE (nStokID = ? OR (nStokID IS NULL AND sModel = ?)) AND ISNULL(sRenk,'') = ISNULL(?,'') AND nSira = ?", con)
-                        cmdCheck.Parameters.Add("p0", OleDb.OleDbType.Integer).Value = If(nStokID = 0, DBNull.Value, CObj(nStokID))
-                        cmdCheck.Parameters.Add("p1", OleDb.OleDbType.VarChar, 50).Value = sModel
-                        cmdCheck.Parameters.Add("p2", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), DBNull.Value, CObj(sRenk))
-                        cmdCheck.Parameters.Add("p3", OleDb.OleDbType.Integer).Value = nSira
+                        "SELECT nStokResimID FROM tbStokResim WHERE sModel = ? AND ISNULL(sRenk,'') = ISNULL(?,'') AND nSira = ? AND (sBeden IS NULL OR sBeden = '')", con)
+                        cmdCheck.Parameters.Add("p0", OleDb.OleDbType.VarChar, 50).Value = sModel
+                        cmdCheck.Parameters.Add("p1", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), "", sRenk)
+                        cmdCheck.Parameters.Add("p2", OleDb.OleDbType.Integer).Value = nSira
                         existingId = cmdCheck.ExecuteScalar()
                     End Using
                     
-                    Debug.WriteLine($"[ResimEkle] sModel={sModel}, nStokID={nStokID}, nSira={nSira}, ExistingID={If(existingId, "NULL")}")
+                    Debug.WriteLine($"[ResimEkle] sModel={sModel}, sRenk={sRenk}, nSira={nSira}, ExistingID={If(existingId, "NULL")}")
 
                     If existingId Is Nothing Then
-                        ' Yeni satır ekle (INSERT) - nStokID, sRenk, sBeden, sKavala ile
+                        ' Yeni satır ekle (INSERT) - Model+Renk bazlı (sBeden NULL)
                         Using cmd As OleDb.OleDbCommand = con.CreateCommand()
                             cmd.CommandText = "INSERT INTO tbStokResim (sModel, nStokID, sRenk, sBeden, sKavala, nSira, pResim, yol, sAciklama, sKullaniciAdi, dteKayitTarihi) " &
                                              "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                             cmd.Parameters.Add("sModel", OleDb.OleDbType.VarChar, 50).Value = sModel
-                            cmd.Parameters.Add("nStokID", OleDb.OleDbType.Integer).Value = If(nStokID = 0, DBNull.Value, CObj(nStokID))
+                            cmd.Parameters.Add("nStokID", OleDb.OleDbType.Integer).Value = If(nStokID = 0, DBNull.Value, CObj(nStokID)) ' Referans olarak sakla
                             cmd.Parameters.Add("sRenk", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), DBNull.Value, CObj(sRenk))
-                            cmd.Parameters.Add("sBeden", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sBeden), DBNull.Value, CObj(sBeden))
-                            cmd.Parameters.Add("sKavala", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sKavala), DBNull.Value, CObj(sKavala))
+                            cmd.Parameters.Add("sBeden", OleDb.OleDbType.VarChar, 10).Value = DBNull.Value ' BEDEN NULL - tüm bedenler için geçerli
+                            cmd.Parameters.Add("sKavala", OleDb.OleDbType.VarChar, 10).Value = DBNull.Value
                             cmd.Parameters.Add("nSira", OleDb.OleDbType.Integer).Value = nSira
                             
                             ' DEBUG: Base64 string kontrol
@@ -9486,21 +9480,17 @@ Public Class frm_stok_kart
                             End If
                         End Using
                     Else
-                        ' Mevcut satırı güncelle (UPDATE) - nStokID, sRenk, sBeden, sKavala ile
+                        ' Mevcut satırı güncelle (UPDATE) - Model+Renk bazlı
                         Using cmd As OleDb.OleDbCommand = con.CreateCommand()
-                            cmd.CommandText = "UPDATE tbStokResim SET pResim = ?, yol = ?, nStokID = ?, sRenk = ?, sBeden = ?, sKavala = ?, sKullaniciAdi = ?, dteKayitTarihi = ? " &
-                                             "WHERE (nStokID = ? OR (nStokID IS NULL AND sModel = ?)) AND nSira = ?"
+                            cmd.CommandText = "UPDATE tbStokResim SET pResim = ?, yol = ?, sKullaniciAdi = ?, dteKayitTarihi = ? " &
+                                             "WHERE sModel = ? AND ISNULL(sRenk,'') = ISNULL(?,'') AND nSira = ? AND (sBeden IS NULL OR sBeden = '')"
                             ' CRITICAL FIX: LongVarChar kullan (VARCHAR(MAX) için)
                             cmd.Parameters.Add("pResim", OleDb.OleDbType.LongVarChar).Value = base64String
                             cmd.Parameters.Add("yol", OleDb.OleDbType.VarChar, 500).Value = uploadedUrl
-                            cmd.Parameters.Add("nStokID", OleDb.OleDbType.Integer).Value = If(nStokID = 0, DBNull.Value, CObj(nStokID))
-                            cmd.Parameters.Add("sRenk", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), DBNull.Value, CObj(sRenk))
-                            cmd.Parameters.Add("sBeden", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sBeden), DBNull.Value, CObj(sBeden))
-                            cmd.Parameters.Add("sKavala", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sKavala), DBNull.Value, CObj(sKavala))
                             cmd.Parameters.Add("sKullaniciAdi", OleDb.OleDbType.VarChar, 50).Value = kullanici
                             cmd.Parameters.Add("dteKayitTarihi", OleDb.OleDbType.DBTimeStamp).Value = Now
-                            cmd.Parameters.Add("nStokID2", OleDb.OleDbType.Integer).Value = If(nStokID = 0, DBNull.Value, CObj(nStokID))
                             cmd.Parameters.Add("sModel", OleDb.OleDbType.VarChar, 50).Value = sModel
+                            cmd.Parameters.Add("sRenk", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), "", sRenk)
                             cmd.Parameters.Add("nSira", OleDb.OleDbType.Integer).Value = nSira
                             
                             Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
@@ -9518,14 +9508,14 @@ Public Class frm_stok_kart
                         Debug.WriteLine("[ResimEkle] *** COMMIT TRAN YAPILDI *** ✓✓✓")
                     End Using
                     
-                    ' DOĞRULAMA: Gerçekten kaydedildi mi kontrol et (nStokID + nSira)
+                    ' DOĞRULAMA: Gerçekten kaydedildi mi kontrol et - Model+Renk+nSira
                     Using cmdVerify As New OleDb.OleDbCommand(
-                        "SELECT COUNT(*) FROM tbStokResim WHERE (nStokID = ? OR (nStokID IS NULL AND sModel = ?)) AND nSira = ?", con)
-                        cmdVerify.Parameters.Add("p0", OleDb.OleDbType.Integer).Value = If(nStokID = 0, DBNull.Value, CObj(nStokID))
-                        cmdVerify.Parameters.Add("p1", OleDb.OleDbType.VarChar, 50).Value = sModel
+                        "SELECT COUNT(*) FROM tbStokResim WHERE sModel = ? AND ISNULL(sRenk,'') = ISNULL(?,'') AND nSira = ? AND (sBeden IS NULL OR sBeden = '')", con)
+                        cmdVerify.Parameters.Add("p0", OleDb.OleDbType.VarChar, 50).Value = sModel
+                        cmdVerify.Parameters.Add("p1", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), "", sRenk)
                         cmdVerify.Parameters.Add("p2", OleDb.OleDbType.Integer).Value = nSira
                         Dim count As Integer = CInt(cmdVerify.ExecuteScalar())
-                        Debug.WriteLine($"[ResimEkle] DOĞRULAMA: Database'de kayıt sayısı = {count} (Model={sModel}, nStokID={nStokID}, Sira={nSira})")
+                        Debug.WriteLine($"[ResimEkle] DOĞRULAMA: Database'de kayıt sayısı = {count} (Model={sModel}, Renk={sRenk}, Sira={nSira})")
                         
                         If count = 0 Then
                             Throw New Exception("HATA: COMMIT sonrası kayıt bulunamadı!")
@@ -10183,6 +10173,44 @@ End Sub
                 
                 ' Tüm slotlar dolu
                 Debug.WriteLine("[GetNextSlot] Tüm slotlar dolu (11 resim max), 12 dönüyor")
+                Return 12  ' 12 = slot yok (11 resim max)
+            End Using
+        End Using
+    End Function
+    
+    ' MODEL+RENK bazlı slot bulma (beden yok)
+    ' Tüm bedenler için ortak resim olduğundan, Model+Renk ile arama yapılır
+    Private Function GetNextAvailableSlot_ModelRenk(sModel As String, sRenk As String) As Integer
+        Using con As New OleDb.OleDbConnection(connection)
+            con.Open()
+            
+            ' Model+Renk bazında, beden olmayan (NULL veya boş) kayıtları ara
+            Using cmd As New OleDb.OleDbCommand(
+                "SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED " &
+                "SELECT nSira FROM tbStokResim WHERE sModel = ? AND ISNULL(sRenk,'') = ISNULL(?,'') AND (sBeden IS NULL OR sBeden = '') ORDER BY nSira", con)
+                cmd.Parameters.Add("p0", OleDb.OleDbType.VarChar, 50).Value = sModel
+                cmd.Parameters.Add("p1", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), "", sRenk)
+                
+                Dim existingSlots As New HashSet(Of Integer)()
+                
+                Using reader As OleDb.OleDbDataReader = cmd.ExecuteReader()
+                    While reader.Read()
+                        existingSlots.Add(reader.GetInt32(0))
+                    End While
+                End Using
+                
+                Debug.WriteLine($"[GetNextSlot_ModelRenk] sModel={sModel}, sRenk={sRenk}, Mevcut slotlar: {String.Join(",", existingSlots)}")
+                
+                ' 1'den 11'e kadar ilk boş slotu bul
+                For i As Integer = 1 To 11
+                    If Not existingSlots.Contains(i) Then
+                        Debug.WriteLine($"[GetNextSlot_ModelRenk] Boş slot bulundu: {i}")
+                        Return i
+                    End If
+                Next
+                
+                ' Tüm slotlar dolu
+                Debug.WriteLine("[GetNextSlot_ModelRenk] Tüm slotlar dolu (11 resim max), 12 dönüyor")
                 Return 12  ' 12 = slot yok (11 resim max)
             End Using
         End Using
