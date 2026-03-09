@@ -270,22 +270,23 @@ Public Class frm_TopluResimYukleme
                 Continue For
             End If
             
-            AppendLog($"  ✓ {stokIDs.Count} stok bulundu")
+            AppendLog($"  ✓ {stokIDs.Count} stok bulundu (sadece ilk stoğa resim yüklenecek)")
             
-            ' Her stok için resmi yükle
+            ' DÜZELTME: Resmi sadece İLK stokID'ye yükle (beden bazlı değil, model+renk bazlı)
+            ' Çünkü resimler tüm bedenler için ortaktır
             Dim uploadedToAnyStok As Boolean = False
+            Dim firstStokID As Integer = stokIDs(0) ' Sadece ilk stoğu kullan
             
-            For Each nStokID As Integer In stokIDs
-                lblDetay.Text = $"Model: {sModel}, Varyant: {lRenkNo} → Renk: {sRenkKodu}, StokID: {nStokID}"
-                Application.DoEvents()
-                
-                Dim uploaded As Boolean = Await UploadImageToStok(imagePath, nStokID, sModel, sRenkKodu, lRenkNo, resimNo)
-                
-                If uploaded Then
-                    uploadedToAnyStok = True
-                    AppendLog($"✓ {fileName} → StokID: {nStokID} (Model: {sModel}, Renk: {sRenkKodu})")
-                End If
-            Next
+            lblDetay.Text = $"Model: {sModel}, Varyant: {lRenkNo} → Renk: {sRenkKodu}"
+            Application.DoEvents()
+            
+            ' Resmi sadece bir kez yükle (ilk stokID ile, ama sBeden boş olarak)
+            Dim uploaded As Boolean = Await UploadImageToStok_NoBeden(imagePath, firstStokID, sModel, sRenkKodu, lRenkNo, resimNo)
+            
+            If uploaded Then
+                uploadedToAnyStok = True
+                AppendLog($"✓ {fileName} → Model: {sModel}, Renk: {sRenkKodu}, nSira: {resimNo}")
+            End If
             
             If uploadedToAnyStok Then
                 successCount += 1
@@ -638,6 +639,173 @@ Public Class frm_TopluResimYukleme
             
         Catch ex As Exception
             Return False
+        End Try
+    End Function
+    
+    ' BEDEN BAZINDA DEĞİL, MODEL+RENK BAZINDA RESİM YÜKLEME
+    ' Bu fonksiyon sBeden alanını NULL olarak kaydeder
+    ' Böylece resim tüm bedenler için geçerli olur
+    Private Async Function UploadImageToStok_NoBeden(
+        imagePath As String,
+        nStokID As Integer,
+        sModel As String,
+        sRenk As String,
+        lRenkNo As String,
+        resimNo As Integer) As Task(Of Boolean)
+        
+        Try
+            ' NOT: sBeden ve sKavala bilgilerini ALMIYORUZ
+            ' Resim Model+Renk bazında olacak, beden bazında değil
+            Dim sBeden As String = "" ' Boş bırak - tüm bedenler için geçerli
+            Dim sKavala As String = "" ' Boş bırak
+            
+            ' Resim slot'u al
+            ' Eğer dosya adında numara varsa (örn: V1 (3).jpg), o numarayı kullan
+            Dim nSira As Integer
+            If resimNo > 0 AndAlso resimNo <= 11 Then
+                nSira = resimNo
+            Else
+                nSira = GetNextAvailableSlot_ModelRenk(sModel, sRenk)
+            End If
+            
+            If nSira > 11 Then
+                Return False
+            End If
+            
+            ' Resmi yükle ve byte array'e çevir
+            Dim imageBytes As Byte()
+            Using fs As New FileStream(imagePath, FileMode.Open, FileAccess.Read)
+                imageBytes = New Byte(fs.Length - 1) {}
+                fs.Read(imageBytes, 0, imageBytes.Length)
+            End Using
+            
+            ' R2'ye upload et
+            Dim klasor As String = GetFirmaKlasorAdi()
+            
+            ' Dosya adı: Model_Renk_nSira.jpg (beden yok)
+            Dim fileNameParts As New List(Of String) From {sModel.Trim()}
+            If Not String.IsNullOrEmpty(sRenk) Then fileNameParts.Add(sRenk.Trim())
+            fileNameParts.Add(nSira.ToString())
+            
+            Dim fileName As String = String.Join("_", fileNameParts) & ".jpg"
+            Dim objectKey As String = If(String.IsNullOrEmpty(klasor),
+                "products/" & sModel.Trim() & "/" & fileName,
+                "products/" & klasor & "/" & sModel.Trim() & "/" & fileName)
+            
+            Dim uploadedUrl As String = Await R2Helpers.R2UploadFromBytesAsync(imageBytes, objectKey, "image/jpeg")
+            
+            ' Base64 encode
+            Dim base64String As String = Convert.ToBase64String(imageBytes)
+            
+            ' Database'e kaydet - Model+Renk+nSira bazında (beden yok)
+            Using con As New OleDbConnection(connection)
+                con.Open()
+                
+                Try
+                    Using cmdClean As New OleDbCommand("IF @@TRANCOUNT > 0 ROLLBACK TRAN; SET IMPLICIT_TRANSACTIONS OFF", con)
+                        cmdClean.ExecuteNonQuery()
+                    End Using
+                Catch
+                End Try
+                
+                Using cmdBegin As New OleDbCommand("BEGIN TRAN", con)
+                    cmdBegin.ExecuteNonQuery()
+                End Using
+                
+                Try
+                    ' Model+Renk+nSira bazında kontrol (beden yok)
+                    Dim existingId As Object = Nothing
+                    Using cmdCheck As New OleDbCommand(
+                        "SELECT nStokResimID FROM tbStokResim WHERE sModel = ? AND ISNULL(sRenk,'') = ISNULL(?,'') AND nSira = ? AND (sBeden IS NULL OR sBeden = '')", con)
+                        cmdCheck.Parameters.Add("p0", OleDbType.VarChar, 50).Value = sModel
+                        cmdCheck.Parameters.Add("p1", OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), "", sRenk)
+                        cmdCheck.Parameters.Add("p2", OleDbType.Integer).Value = nSira
+                        existingId = cmdCheck.ExecuteScalar()
+                    End Using
+                    
+                    If existingId Is Nothing Then
+                        Using cmd As OleDbCommand = con.CreateCommand()
+                            cmd.CommandText = "INSERT INTO tbStokResim (sModel, nStokID, sRenk, sBeden, sKavala, lRenkNo, nSira, pResim, yol, sAciklama, sKullaniciAdi, dteKayitTarihi) " &
+                                             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                            cmd.Parameters.Add("sModel", OleDbType.VarChar, 50).Value = sModel
+                            cmd.Parameters.Add("nStokID", OleDbType.Integer).Value = nStokID ' İlk stokID'yi referans olarak tut
+                            cmd.Parameters.Add("sRenk", OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), DBNull.Value, CObj(sRenk))
+                            cmd.Parameters.Add("sBeden", OleDbType.VarChar, 10).Value = DBNull.Value ' BEDEN NULL - tüm bedenler için geçerli
+                            cmd.Parameters.Add("sKavala", OleDbType.VarChar, 10).Value = DBNull.Value
+                            cmd.Parameters.Add("lRenkNo", OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(lRenkNo), DBNull.Value, CObj(lRenkNo))
+                            cmd.Parameters.Add("nSira", OleDbType.Integer).Value = nSira
+                            
+                            Dim pResimParam As New OleDbParameter("pResim", OleDbType.LongVarChar)
+                            pResimParam.Value = If(String.IsNullOrEmpty(base64String), DBNull.Value, CObj(base64String))
+                            cmd.Parameters.Add(pResimParam)
+                            
+                            cmd.Parameters.Add("yol", OleDbType.VarChar, 500).Value = uploadedUrl
+                            cmd.Parameters.Add("sAciklama", OleDbType.VarChar, 250).Value = ""
+                            cmd.Parameters.Add("sKullaniciAdi", OleDbType.VarChar, 50).Value = kullanici
+                            cmd.Parameters.Add("dteKayitTarihi", OleDbType.DBTimeStamp).Value = Now
+                            
+                            cmd.ExecuteNonQuery()
+                        End Using
+                    Else
+                        ' Güncelleme - Model+Renk+nSira bazında
+                        Using cmd As OleDbCommand = con.CreateCommand()
+                            cmd.CommandText = "UPDATE tbStokResim SET pResim = ?, yol = ?, lRenkNo = ?, sKullaniciAdi = ?, dteKayitTarihi = ? " &
+                                             "WHERE sModel = ? AND ISNULL(sRenk,'') = ISNULL(?,'') AND nSira = ? AND (sBeden IS NULL OR sBeden = '')"
+                            cmd.Parameters.Add("pResim", OleDbType.LongVarChar).Value = base64String
+                            cmd.Parameters.Add("yol", OleDbType.VarChar, 500).Value = uploadedUrl
+                            cmd.Parameters.Add("lRenkNo", OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(lRenkNo), DBNull.Value, CObj(lRenkNo))
+                            cmd.Parameters.Add("sKullaniciAdi", OleDbType.VarChar, 50).Value = kullanici
+                            cmd.Parameters.Add("dteKayitTarihi", OleDbType.DBTimeStamp).Value = Now
+                            cmd.Parameters.Add("sModel", OleDbType.VarChar, 50).Value = sModel
+                            cmd.Parameters.Add("sRenk", OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), "", sRenk)
+                            cmd.Parameters.Add("nSira", OleDbType.Integer).Value = nSira
+                            
+                            cmd.ExecuteNonQuery()
+                        End Using
+                    End If
+                    
+                    Using cmdCommit As New OleDbCommand("COMMIT TRAN", con)
+                        cmdCommit.ExecuteNonQuery()
+                    End Using
+                    
+                    Return True
+                    
+                Catch dbEx As Exception
+                    Try
+                        Using cmdRollback As New OleDbCommand("IF @@TRANCOUNT > 0 ROLLBACK TRAN", con)
+                            cmdRollback.ExecuteNonQuery()
+                        End Using
+                    Catch
+                    End Try
+                    
+                    Throw dbEx
+                End Try
+            End Using
+            
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
+    
+    ' Model+Renk bazında boş slot bul (beden yok)
+    Private Function GetNextAvailableSlot_ModelRenk(sModel As String, sRenk As String) As Integer
+        Try
+            Using con As New OleDbConnection(connection)
+                con.Open()
+                Using cmd As New OleDbCommand(
+                    "SELECT ISNULL(MAX(nSira), 0) FROM tbStokResim WHERE sModel = ? AND ISNULL(sRenk,'') = ISNULL(?,'') AND (sBeden IS NULL OR sBeden = '')", con)
+                    cmd.Parameters.Add("p0", OleDbType.VarChar, 50).Value = sModel
+                    cmd.Parameters.Add("p1", OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), "", sRenk)
+                    Dim maxSira As Object = cmd.ExecuteScalar()
+                    If maxSira IsNot Nothing AndAlso Not IsDBNull(maxSira) Then
+                        Return CInt(maxSira) + 1
+                    Else
+                        Return 1
+                    End If
+                End Using
+            End Using
+        Catch
+            Return 1
         End Try
     End Function
     
