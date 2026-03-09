@@ -357,8 +357,8 @@ Public Class frm_TopluResimYukleme
         Try
             Using con As New OleDbConnection(connection)
                 con.Open()
-                Using cmd As New OleDbCommand("SELECT sRenk FROM tbRenk WHERE LTRIM(RTRIM(lRenkNo)) = ?", con)
-                    cmd.Parameters.Add("lRenkNo", OleDbType.VarChar, 10).Value = lRenkNo.Trim()
+                Using cmd As New OleDbCommand("SELECT sRenk FROM tbRenk WHERE lRenkNo LIKE ?", con)
+                    cmd.Parameters.Add("lRenkNo", OleDbType.VarChar, 10).Value = lRenkNo.Trim() & "%"
                     
                     Using reader As OleDbDataReader = cmd.ExecuteReader()
                         While reader.Read()
@@ -385,9 +385,9 @@ Public Class frm_TopluResimYukleme
         Try
             Using con As New OleDbConnection(connection)
                 con.Open()
-                Using cmd As New OleDbCommand("SELECT nStokID FROM tbStok WHERE LTRIM(RTRIM(sModel)) = ? AND LTRIM(RTRIM(sRenk)) = ?", con)
-                    cmd.Parameters.Add("sModel", OleDbType.VarChar, 50).Value = sModel.Trim()
-                    cmd.Parameters.Add("sRenk", OleDbType.VarChar, 10).Value = sRenk.Trim()
+                Using cmd As New OleDbCommand("SELECT nStokID FROM tbStok WHERE sModel LIKE ? AND sRenk LIKE ?", con)
+                    cmd.Parameters.Add("sModel", OleDbType.VarChar, 50).Value = sModel.Trim() & "%"
+                    cmd.Parameters.Add("sRenk", OleDbType.VarChar, 10).Value = sRenk.Trim() & "%"
                     
                     Using reader As OleDbDataReader = cmd.ExecuteReader()
                         While reader.Read()
