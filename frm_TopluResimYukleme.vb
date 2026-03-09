@@ -245,46 +245,46 @@ Public Class frm_TopluResimYukleme
                 Continue For
             End If
             
-            ' tbRenk'ten lRenkNo'ya göre renk kodlarını bul
+            ' tbModelVaryantRenk tablosundan Model+Varyant ile renk kodunu bul
             Dim resimNoStr As String = If(resimNo > 0, $" #{resimNo}", "")
-            AppendLog($"→ {fileName}: Model='{sModel}', lRenkNo='{lRenkNo}'{resimNoStr}")
-            Dim renkKodlari As List(Of String) = GetRenkKoduFromLRenkNo(lRenkNo)
+            AppendLog($"→ {fileName}: Model='{sModel}', Varyant='{lRenkNo}'{resimNoStr}")
             
-            If renkKodlari.Count = 0 Then
-                failedFiles.Add($"{fileName} (lRenkNo='{lRenkNo}' için renk kodu bulunamadı)")
+            Dim sRenkKodu As String = GetRenkKoduFromModelVaryant(sModel, lRenkNo)
+            
+            If String.IsNullOrEmpty(sRenkKodu) Then
+                failedFiles.Add($"{fileName} (Model='{sModel}' + Varyant='{lRenkNo}' için renk kodu bulunamadı)")
                 skippedCount += 1
-                AppendLog($"  ⊘ lRenkNo '{lRenkNo}' için renk kodu bulunamadı")
+                AppendLog($"  ⊘ Model '{sModel}' + Varyant '{lRenkNo}' için eşleşme yok")
                 Continue For
             End If
             
-            AppendLog($"  ✓ {renkKodlari.Count} renk kodu bulundu: {String.Join(", ", renkKodlari)}")
+            AppendLog($"  ✓ Renk Kodu bulundu: '{sRenkKodu}'")
             
-            ' Her renk kodu için stokları bul ve yükle
+            ' Bu model ve renk koduna sahip stokları bul
+            Dim stokIDs As List(Of Integer) = GetStokIDsByModelAndRenk(sModel, sRenkKodu)
+            
+            If stokIDs.Count = 0 Then
+                failedFiles.Add($"{fileName} (Model='{sModel}' + Renk='{sRenkKodu}' için stok kaydı yok)")
+                skippedCount += 1
+                AppendLog($"  ⊘ Model '{sModel}' + Renk '{sRenkKodu}' için stok kaydı yok")
+                Continue For
+            End If
+            
+            AppendLog($"  ✓ {stokIDs.Count} stok bulundu")
+            
+            ' Her stok için resmi yükle
             Dim uploadedToAnyStok As Boolean = False
             
-            For Each sRenk As String In renkKodlari
-                ' Bu model ve renk koduna sahip stokları bul
-                Dim stokIDs As List(Of Integer) = GetStokIDsByModelAndRenk(sModel, sRenk)
+            For Each nStokID As Integer In stokIDs
+                lblDetay.Text = $"Model: {sModel}, Varyant: {lRenkNo} → Renk: {sRenkKodu}, StokID: {nStokID}"
+                Application.DoEvents()
                 
-                If stokIDs.Count = 0 Then
-                    AppendLog($"  ⊘ Model='{sModel}' + Renk='{sRenk}' için stok kaydı yok")
-                    Continue For
+                Dim uploaded As Boolean = Await UploadImageToStok(imagePath, nStokID, sModel, sRenkKodu, lRenkNo, resimNo)
+                
+                If uploaded Then
+                    uploadedToAnyStok = True
+                    AppendLog($"✓ {fileName} → StokID: {nStokID} (Model: {sModel}, Renk: {sRenkKodu})")
                 End If
-                
-                AppendLog($"  ✓ Renk '{sRenk}' için {stokIDs.Count} stok bulundu")
-                
-                ' Her stok için resmi yükle
-                For Each nStokID As Integer In stokIDs
-                    lblDetay.Text = $"Model: {sModel}, Varyant: {lRenkNo} → Renk: {sRenk}, StokID: {nStokID}"
-                    Application.DoEvents()
-                    
-                    Dim uploaded As Boolean = Await UploadImageToStok(imagePath, nStokID, sModel, sRenk, lRenkNo, resimNo)
-                    
-                    If uploaded Then
-                        uploadedToAnyStok = True
-                        AppendLog($"✓ {fileName} → StokID: {nStokID} (Model: {sModel}, Renk: {sRenk})")
-                    End If
-                Next
             Next
             
             If uploadedToAnyStok Then
@@ -371,6 +371,38 @@ Public Class frm_TopluResimYukleme
         End Try
     End Function
     
+    ''' <summary>
+    ''' tbModelVaryantRenk tablosundan Model+Varyant'a göre renk kodunu bulur
+    ''' YENİ YÖNTEM: Model bazlı varyant sistemi
+    ''' </summary>
+    Private Function GetRenkKoduFromModelVaryant(sModel As String, lRenkNo As String) As String
+        Dim renkKodu As String = ""
+        
+        Try
+            Using con As New OleDbConnection(connection)
+                con.Open()
+                Using cmd As New OleDbCommand(
+                    "SELECT sRenkKodu FROM tbModelVaryantRenk WHERE sModel LIKE ? AND lRenkNo LIKE ?", con)
+                    cmd.Parameters.Add("sModel", OleDbType.VarChar, 50).Value = sModel.Trim() & "%"
+                    cmd.Parameters.Add("lRenkNo", OleDbType.VarChar, 10).Value = lRenkNo.Trim() & "%"
+                    
+                    Dim result As Object = cmd.ExecuteScalar()
+                    If result IsNot Nothing AndAlso Not IsDBNull(result) Then
+                        renkKodu = result.ToString().Trim()
+                    End If
+                End Using
+            End Using
+        Catch
+            ' Ignore
+        End Try
+        
+        Return renkKodu
+    End Function
+    
+    ''' <summary>
+    ''' ESKİ YÖNTEM: tbRenk tablosundan lRenkNo'ya göre renk kodlarını bulur
+    ''' NOT: Artık kullanılmıyor, yeni GetRenkKoduFromModelVaryant kullanılıyor
+    ''' </summary>
     Private Function GetRenkKoduFromLRenkNo(lRenkNo As String) As List(Of String)
         Dim renkKodlari As New List(Of String)
         
