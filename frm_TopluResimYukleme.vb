@@ -245,14 +245,17 @@ Public Class frm_TopluResimYukleme
             End If
             
             ' tbRenk'ten lRenkNo'ya göre renk kodlarını bul
+            AppendLog($"→ {fileName}: Model='{sModel}', lRenkNo='{lRenkNo}'")
             Dim renkKodlari As List(Of String) = GetRenkKoduFromLRenkNo(lRenkNo)
             
             If renkKodlari.Count = 0 Then
                 failedFiles.Add($"{fileName} (lRenkNo='{lRenkNo}' için renk kodu bulunamadı)")
                 skippedCount += 1
-                AppendLog($"⊘ {fileName} - lRenkNo '{lRenkNo}' için renk kodu bulunamadı")
+                AppendLog($"  ⊘ lRenkNo '{lRenkNo}' için renk kodu bulunamadı")
                 Continue For
             End If
+            
+            AppendLog($"  ✓ {renkKodlari.Count} renk kodu bulundu: {String.Join(", ", renkKodlari)}")
             
             ' Her renk kodu için stokları bul ve yükle
             Dim uploadedToAnyStok As Boolean = False
@@ -262,8 +265,11 @@ Public Class frm_TopluResimYukleme
                 Dim stokIDs As List(Of Integer) = GetStokIDsByModelAndRenk(sModel, sRenk)
                 
                 If stokIDs.Count = 0 Then
+                    AppendLog($"  ⊘ Model='{sModel}' + Renk='{sRenk}' için stok kaydı yok")
                     Continue For
                 End If
+                
+                AppendLog($"  ✓ Renk '{sRenk}' için {stokIDs.Count} stok bulundu")
                 
                 ' Her stok için resmi yükle
                 For Each nStokID As Integer In stokIDs
@@ -351,8 +357,8 @@ Public Class frm_TopluResimYukleme
         Try
             Using con As New OleDbConnection(connection)
                 con.Open()
-                Using cmd As New OleDbCommand("SELECT sRenk FROM tbRenk WHERE lRenkNo = ?", con)
-                    cmd.Parameters.Add("lRenkNo", OleDbType.VarChar, 10).Value = lRenkNo
+                Using cmd As New OleDbCommand("SELECT sRenk FROM tbRenk WHERE LTRIM(RTRIM(lRenkNo)) = ?", con)
+                    cmd.Parameters.Add("lRenkNo", OleDbType.VarChar, 10).Value = lRenkNo.Trim()
                     
                     Using reader As OleDbDataReader = cmd.ExecuteReader()
                         While reader.Read()
@@ -379,9 +385,9 @@ Public Class frm_TopluResimYukleme
         Try
             Using con As New OleDbConnection(connection)
                 con.Open()
-                Using cmd As New OleDbCommand("SELECT nStokID FROM tbStok WHERE sModel = ? AND sRenk = ?", con)
-                    cmd.Parameters.Add("sModel", OleDbType.VarChar, 50).Value = sModel
-                    cmd.Parameters.Add("sRenk", OleDbType.VarChar, 10).Value = sRenk
+                Using cmd As New OleDbCommand("SELECT nStokID FROM tbStok WHERE LTRIM(RTRIM(sModel)) = ? AND LTRIM(RTRIM(sRenk)) = ?", con)
+                    cmd.Parameters.Add("sModel", OleDbType.VarChar, 50).Value = sModel.Trim()
+                    cmd.Parameters.Add("sRenk", OleDbType.VarChar, 10).Value = sRenk.Trim()
                     
                     Using reader As OleDbDataReader = cmd.ExecuteReader()
                         While reader.Read()
