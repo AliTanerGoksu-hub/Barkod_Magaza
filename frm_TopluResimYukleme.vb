@@ -236,8 +236,9 @@ Public Class frm_TopluResimYukleme
             ' Dosya adından bilgileri çıkar
             Dim sModel As String = ""
             Dim lRenkNo As String = ""
+            Dim resimNo As Integer = 0
             
-            If Not ParseImageFileName(fileName, sModel, lRenkNo) Then
+            If Not ParseImageFileName(fileName, sModel, lRenkNo, resimNo) Then
                 failedFiles.Add($"{fileName} (Dosya adı formatı hatalı)")
                 failedCount += 1
                 AppendLog($"✗ {fileName} - Dosya adı formatı hatalı")
@@ -245,7 +246,8 @@ Public Class frm_TopluResimYukleme
             End If
             
             ' tbRenk'ten lRenkNo'ya göre renk kodlarını bul
-            AppendLog($"→ {fileName}: Model='{sModel}', lRenkNo='{lRenkNo}'")
+            Dim resimNoStr As String = If(resimNo > 0, $" #{resimNo}", "")
+            AppendLog($"→ {fileName}: Model='{sModel}', lRenkNo='{lRenkNo}'{resimNoStr}")
             Dim renkKodlari As List(Of String) = GetRenkKoduFromLRenkNo(lRenkNo)
             
             If renkKodlari.Count = 0 Then
@@ -276,7 +278,7 @@ Public Class frm_TopluResimYukleme
                     lblDetay.Text = $"Model: {sModel}, Varyant: {lRenkNo} → Renk: {sRenk}, StokID: {nStokID}"
                     Application.DoEvents()
                     
-                    Dim uploaded As Boolean = Await UploadImageToStok(imagePath, nStokID, sModel, sRenk, lRenkNo)
+                    Dim uploaded As Boolean = Await UploadImageToStok(imagePath, nStokID, sModel, sRenk, lRenkNo, resimNo)
                     
                     If uploaded Then
                         uploadedToAnyStok = True
@@ -329,7 +331,7 @@ Public Class frm_TopluResimYukleme
     ' YARDIMCI FONKSİYONLAR
     ' ============================================================================
     
-    Private Function ParseImageFileName(fileName As String, ByRef sModel As String, ByRef lRenkNo As String) As Boolean
+    Private Function ParseImageFileName(fileName As String, ByRef sModel As String, ByRef lRenkNo As String, ByRef resimNo As Integer) As Boolean
         Try
             Dim nameWithoutExt As String = Path.GetFileNameWithoutExtension(fileName)
             Dim lastDashIndex As Integer = nameWithoutExt.LastIndexOf("-")
@@ -339,12 +341,24 @@ Public Class frm_TopluResimYukleme
             End If
             
             sModel = nameWithoutExt.Substring(0, lastDashIndex).Trim()
-            lRenkNo = nameWithoutExt.Substring(lastDashIndex + 1).Trim().ToUpper()
+            Dim variantPart As String = nameWithoutExt.Substring(lastDashIndex + 1).Trim().ToUpper()
             
-            ' Windows'un eklediği parantez içindeki numarayı kaldır: "V1 (1)" → "V1"
-            Dim parantezIndex As Integer = lRenkNo.IndexOf("(")
+            ' Parantez içindeki resim numarasını çıkar: "V1 (3)" → lRenkNo = "V1", resimNo = 3
+            resimNo = 0  ' 0 = otomatik slot bul
+            Dim parantezIndex As Integer = variantPart.IndexOf("(")
+            
             If parantezIndex > 0 Then
-                lRenkNo = lRenkNo.Substring(0, parantezIndex).Trim()
+                lRenkNo = variantPart.Substring(0, parantezIndex).Trim()
+                
+                ' Parantez içindeki sayıyı çıkar
+                Dim parantezKapama As Integer = variantPart.IndexOf(")")
+                If parantezKapama > parantezIndex Then
+                    Dim numStr As String = variantPart.Substring(parantezIndex + 1, parantezKapama - parantezIndex - 1).Trim()
+                    Integer.TryParse(numStr, resimNo)
+                End If
+            Else
+                lRenkNo = variantPart
+                resimNo = 0  ' Otomatik slot
             End If
             
             If String.IsNullOrEmpty(sModel) OrElse String.IsNullOrEmpty(lRenkNo) Then
@@ -442,7 +456,8 @@ Public Class frm_TopluResimYukleme
         nStokID As Integer,
         sModel As String,
         sRenk As String,
-        lRenkNo As String) As Task(Of Boolean)
+        lRenkNo As String,
+        resimNo As Integer) As Task(Of Boolean)
         
         Try
             ' tbStok'tan sBeden ve sKavala bilgilerini al
@@ -465,8 +480,16 @@ Public Class frm_TopluResimYukleme
                 End Using
             End Using
             
-            ' Resim slot'u al (renk bazlı)
-            Dim nSira As Integer = GetNextAvailableSlot_tbStokResim(sModel, sRenk, nStokID)
+            ' Resim slot'u al
+            ' Eğer dosya adında numara varsa (örn: V1 (3).jpg), o numarayı kullan
+            ' Yoksa, otomatik boş slot bul
+            Dim nSira As Integer
+            If resimNo > 0 AndAlso resimNo <= 11 Then
+                nSira = resimNo
+            Else
+                nSira = GetNextAvailableSlot_tbStokResim(sModel, sRenk, nStokID)
+            End If
+            
             If nSira > 11 Then
                 Return False
             End If
