@@ -9734,6 +9734,14 @@ Public Class Form1
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         'DevExpress.XtraBars.BarLinkUserDefines.Caption Or
         
+        ' ============ tbModelVaryantRenk TABLOSU KONTROLÜ VE OLUŞTURMA ============
+        Try
+            EnsureModelVaryantRenkTableExists()
+        Catch ex As Exception
+            Debug.WriteLine("tbModelVaryantRenk tablo kontrolü hatası: " & ex.Message)
+        End Try
+        ' ==================================================================
+        
         ' ============ SSL/TLS PROTOKOL AYARI (EN BASTA OLMALI) ============
         Try
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 Or System.Net.SecurityProtocolType.Tls11 Or System.Net.SecurityProtocolType.Tls
@@ -23642,5 +23650,63 @@ CleanupExcel:
             XtraMessageBox.Show("Toplu resim yükleme formu açılırken hata:" & vbCrLf & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
+    ' ============================================================================
+    ' tbModelVaryantRenk TABLOSU KONTROL VE OLUŞTURMA
+    ' ============================================================================
+    
+    ''' <summary>
+    ''' Uygulama açılışında tbModelVaryantRenk tablosunun varlığını kontrol eder.
+    ''' Tablo yoksa otomatik oluşturur.
+    ''' </summary>
+    Private Sub EnsureModelVaryantRenkTableExists()
+        Try
+            Using con As New System.Data.SqlClient.SqlConnection(connection)
+                con.Open()
+                
+                ' Tablo var mı kontrol et
+                Dim tableExists As Boolean = False
+                Using cmdCheck As New System.Data.SqlClient.SqlCommand(
+                    "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'tbModelVaryantRenk'", con)
+                    Dim count As Integer = CInt(cmdCheck.ExecuteScalar())
+                    tableExists = (count > 0)
+                End Using
+                
+                If Not tableExists Then
+                    Debug.WriteLine("[tbModelVaryantRenk] Tablo bulunamadı, oluşturuluyor...")
+                    
+                    ' Tabloyu oluştur
+                    Dim createTableSQL As String = "
+CREATE TABLE tbModelVaryantRenk (
+    nID INT PRIMARY KEY IDENTITY(1,1),
+    sModel VARCHAR(50) NOT NULL,
+    lRenkNo VARCHAR(10) NOT NULL,
+    sRenkAdi VARCHAR(100) NOT NULL,
+    sRenkKodu VARCHAR(20) NOT NULL,
+    dteEklenmeTarihi DATETIME DEFAULT GETDATE(),
+    sEkleyenKullanici VARCHAR(50),
+    CONSTRAINT UQ_ModelVaryant UNIQUE (sModel, lRenkNo)
+)
+
+CREATE INDEX IX_ModelVaryantRenk_Model ON tbModelVaryantRenk(sModel, lRenkNo)
+CREATE INDEX IX_ModelVaryantRenk_RenkKodu ON tbModelVaryantRenk(sRenkKodu)
+CREATE INDEX IX_ModelVaryantRenk_RenkAdi ON tbModelVaryantRenk(sRenkAdi)
+"
+                    
+                    Using cmdCreate As New System.Data.SqlClient.SqlCommand(createTableSQL, con)
+                        cmdCreate.ExecuteNonQuery()
+                    End Using
+                    
+                    Debug.WriteLine("[tbModelVaryantRenk] ✓ Tablo başarıyla oluşturuldu")
+                Else
+                    Debug.WriteLine("[tbModelVaryantRenk] ✓ Tablo mevcut")
+                End If
+            End Using
+        Catch ex As Exception
+            Debug.WriteLine("[tbModelVaryantRenk] ✗ Hata: " & ex.Message)
+            ' Hata olsa bile uygulama açılmaya devam etsin
+        End Try
+    End Sub
+
 
 End Class
