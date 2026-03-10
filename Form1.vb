@@ -23903,35 +23903,27 @@ CleanupExcel:
                 con.Open()
                 
                 ' Pazaryeri API URL'leri - doğru endpoint'ler
-                Dim apiUrls As New Dictionary(Of String, String)(StringComparer.OrdinalIgnoreCase) From {
-                    {"Trendyol", "https://api.trendyol.com"},
-                    {"Hepsiburada", "https://radium.hepsiburada.com"},
-                    {"Amazon", "https://sellingpartnerapi-eu.amazon.com"},
-                    {"PttAVM", "https://api.pttavm.com"},
-                    {"CicekSepeti", "https://apis.ciceksepeti.com"},
-                    {"Modanisa", "https://api.modanisa.com"},
-                    {"N11", "https://api.n11.com/ws"},
-                    {"Pazarama", "https://isortagim.pazarama.com"},
-                    {"Farmazon", "https://api.farmazon.com.tr"},
-                    {"LCWaikiki", "https://api.lcwaikiki.com"},
-                    {"Idefix", "https://api.idefix.com"}
-                }
+                Dim pazaryerleri() As String = {"Trendyol", "Hepsiburada", "Amazon", "PttAVM", "CicekSepeti", "Modanisa", "N11", "Pazarama", "Farmazon", "LCWaikiki", "Idefix"}
+                Dim apiUrls() As String = {"https://api.trendyol.com", "https://radium.hepsiburada.com", "https://sellingpartnerapi-eu.amazon.com", "https://api.pttavm.com", "https://apis.ciceksepeti.com", "https://api.modanisa.com", "https://api.n11.com/ws", "https://isortagim.pazarama.com", "https://api.farmazon.com.tr", "https://api.lcwaikiki.com", "https://api.idefix.com"}
                 
-                For Each kvp In apiUrls
+                For i As Integer = 0 To pazaryerleri.Length - 1
                     Try
+                        Dim pazaryeri As String = pazaryerleri(i)
+                        Dim apiUrl As String = apiUrls(i)
+                        
                         ' Sadece yanlış URL'leri güncelle (mağaza URL'si olanlar veya boş olanlar)
                         Dim updateCmd As New OleDb.OleDbCommand(
                             "UPDATE tbPazaryeriAyar SET sBaseUrl = ? " &
                             "WHERE UPPER(sPazaryeri) = UPPER(?) " &
-                            "AND (sBaseUrl IS NULL OR sBaseUrl = '' OR sBaseUrl NOT LIKE 'https://api.%' OR sBaseUrl LIKE '%/magaza/%')", con)
-                        updateCmd.Parameters.AddWithValue("p0", kvp.Value)
-                        updateCmd.Parameters.AddWithValue("p1", kvp.Key)
+                            "AND (sBaseUrl IS NULL OR sBaseUrl = '' OR sBaseUrl LIKE '%/magaza/%' OR sBaseUrl LIKE '%www.%')", con)
+                        updateCmd.Parameters.AddWithValue("p0", apiUrl)
+                        updateCmd.Parameters.AddWithValue("p1", pazaryeri)
                         Dim affected As Integer = updateCmd.ExecuteNonQuery()
                         If affected > 0 Then
-                            Debug.WriteLine($"[PazaryeriBaseUrl] {kvp.Key} güncellendi: {kvp.Value}")
+                            Debug.WriteLine("[PazaryeriBaseUrl] " & pazaryeri & " güncellendi: " & apiUrl)
                         End If
                     Catch updateEx As Exception
-                        Debug.WriteLine($"[PazaryeriBaseUrl] {kvp.Key} güncellenemedi: {updateEx.Message}")
+                        Debug.WriteLine("[PazaryeriBaseUrl] Güncellenemedi: " & updateEx.Message)
                     End Try
                 Next
                 
