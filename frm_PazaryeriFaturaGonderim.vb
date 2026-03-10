@@ -466,8 +466,8 @@ Public Class frm_PazaryeriFaturaGonderim
 
     ''' <summary>
     ''' Hepsiburada'ya fatura gönder
-    ''' Hepsiburada API: https://radium.hepsiburada.com/api/order/invoice_link
-    ''' Authentication: Basic Auth (merchantId:apiKey base64 encoded)
+    ''' Hepsiburada API: Bearer Token authentication
+    ''' Token endpoint: /auth/getToken
     ''' </summary>
     Private Function GonderHepsiburada(siparisNo As String, gibFaturaNo As String, faturaGuid As String, ByRef hataMesaji As String) As Boolean
         Try
@@ -488,27 +488,28 @@ Public Class frm_PazaryeriFaturaGonderim
                 Return False
             End If
 
-            ' Hepsiburada API Base URL (radium)
-            Dim baseUrl As String = "https://radium.hepsiburada.com"
-            If Not String.IsNullOrEmpty(api.BaseUrl) AndAlso api.BaseUrl.Contains("hepsiburada") Then
-                baseUrl = api.BaseUrl.TrimEnd("/"c)
+            ' Hepsiburada API Base URL
+            Dim baseUrl As String = api.BaseUrl
+            If String.IsNullOrEmpty(baseUrl) OrElse Not baseUrl.Contains("api") Then
+                baseUrl = "https://mpop-sit.hepsiburada.com"
+            End If
+            baseUrl = baseUrl.TrimEnd("/"c)
+            
+            ' Önce Bearer Token al
+            Dim token As String = GetHepsiburadaBearerToken(api, baseUrl, hataMesaji)
+            If String.IsNullOrEmpty(token) Then
+                Return False
             End If
             
-            ' API isteği - Basic Authentication kullanıyoruz
-            Dim url As String = $"{baseUrl}/api/order/invoice_link"
+            ' API isteği - Bearer Token Authentication
+            Dim url As String = baseUrl & "/api/order/invoice_link"
 
             Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
             req.Method = "POST"
             req.ContentType = "application/json"
             req.Accept = "application/json"
             req.Timeout = 30000
-            
-            ' Basic Authentication: merchantId:servisAnahtari base64 encoded
-            ' Hepsiburada'da Servis Anahtarı = sApiSecret alanında
-            Dim servisAnahtari As String = If(Not String.IsNullOrEmpty(api.ApiKey), api.ApiKey, api.ApiSecret)
-            Dim credentials As String = $"{api.SellerId}:{servisAnahtari}"
-            Dim encodedCredentials As String = Convert.ToBase64String(Encoding.UTF8.GetBytes(credentials))
-            req.Headers.Add("Authorization", "Basic " & encodedCredentials)
+            req.Headers.Add("Authorization", "Bearer " & token)
 
             ' Body
             Dim body As New Dictionary(Of String, String) From {
@@ -527,17 +528,21 @@ Public Class frm_PazaryeriFaturaGonderim
                 If resp.StatusCode = HttpStatusCode.OK OrElse resp.StatusCode = HttpStatusCode.Created OrElse resp.StatusCode = HttpStatusCode.NoContent Then
                     Return True
                 Else
-                    hataMesaji = $"HTTP {CInt(resp.StatusCode)}: {resp.StatusDescription}"
+                    hataMesaji = "HTTP " & CInt(resp.StatusCode) & ": " & resp.StatusDescription
                     Return False
                 End If
             End Using
 
         Catch wex As WebException
             If wex.Response IsNot Nothing Then
-                Using reader As New StreamReader(wex.Response.GetResponseStream())
-                    Dim errorResponse As String = reader.ReadToEnd()
-                    hataMesaji = $"API Hatası: {errorResponse}"
-                End Using
+                Try
+                    Using reader As New StreamReader(wex.Response.GetResponseStream(), Encoding.UTF8)
+                        Dim errorResponse As String = reader.ReadToEnd()
+                        hataMesaji = "API Hatası: " & If(errorResponse.Length > 200, errorResponse.Substring(0, 200), errorResponse)
+                    End Using
+                Catch
+                    hataMesaji = wex.Message
+                End Try
             Else
                 hataMesaji = wex.Message
             End If
@@ -545,6 +550,43 @@ Public Class frm_PazaryeriFaturaGonderim
         Catch ex As Exception
             hataMesaji = ex.Message
             Return False
+        End Try
+    End Function
+    
+    ''' <summary>
+    ''' Hepsiburada Bearer Token al
+    ''' </summary>
+    Private Function GetHepsiburadaBearerToken(api As PazaryeriAPI, baseUrl As String, ByRef hataMesaji As String) As String
+        Try
+            Dim url As String = baseUrl & "/auth/getToken"
+            Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
+            req.Method = "GET"
+            req.Accept = "application/json"
+            req.Timeout = 30000
+            
+            ' Basic Auth header ile token al
+            Dim servisAnahtari As String = If(Not String.IsNullOrEmpty(api.ApiKey), api.ApiKey, api.ApiSecret)
+            Dim credentials As String = api.SellerId & ":" & servisAnahtari
+            Dim encodedCredentials As String = Convert.ToBase64String(Encoding.UTF8.GetBytes(credentials))
+            req.Headers.Add("Authorization", "Basic " & encodedCredentials)
+
+            Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
+                Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
+                    Dim json As String = reader.ReadToEnd()
+                    Dim obj As JObject = JObject.Parse(json)
+                    Dim token As String = ""
+                    If obj("token") IsNot Nothing Then
+                        token = obj("token").ToString()
+                    ElseIf obj("access_token") IsNot Nothing Then
+                        token = obj("access_token").ToString()
+                    End If
+                    Return token
+                End Using
+            End Using
+
+        Catch ex As Exception
+            hataMesaji = "Token alınamadı: " & ex.Message
+            Return Nothing
         End Try
     End Function
 
@@ -556,9 +598,6 @@ Public Class frm_PazaryeriFaturaGonderim
         hataMesaji = "N11 entegrasyonu henüz aktif değil"
         Return False
     End Function
-
-    ' NOT: Hepsiburada artık Basic Authentication kullanıyor, token endpoint'i kaldırıldı
-    ' Eski GetHepsiburadaToken fonksiyonu artık kullanılmıyor
 
     ''' <summary>
     ''' GİB e-Arşiv fatura linkini al
