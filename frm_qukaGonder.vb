@@ -82,15 +82,94 @@ Public Class frm_qukaGonder
         If String.IsNullOrEmpty(cityCode) Then Return ""
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
+            
+            ' Önce plaka kodu ile dene (örn: "34" -> "İstanbul")
             Using cmd As New OleDb.OleDbCommand("SELECT sIl FROM tbIl WHERE sPlaka = ?", conn)
                 cmd.Parameters.AddWithValue("?", cityCode)
                 Dim result As Object = cmd.ExecuteScalar()
-                Log("DEBUG", "GetIlName", $"cityCode={cityCode}, sonuc={If(result IsNot Nothing, result.ToString(), "null")}")
-                Return If(result IsNot Nothing, result.ToString(), cityCode)
+                If result IsNot Nothing AndAlso Not String.IsNullOrEmpty(result.ToString()) Then
+                    Log("DEBUG", "GetIlName", $"cityCode={cityCode}, plaka ile bulundu: {result.ToString()}")
+                    Return result.ToString()
+                End If
             End Using
+            
+            ' Plaka ile bulunamazsa, il adı ile dene (case-insensitive ve Türkçe karakter toleranslı)
+            ' Örn: "Kahramanmaraş" -> "Kahramanmaraş" veya "KAHRAMANMARAŞ"
+            Using cmdByName As New OleDb.OleDbCommand("SELECT TOP 1 sIl FROM tbIl WHERE UPPER(sIl) = UPPER(?) OR sIl LIKE ?", conn)
+                cmdByName.Parameters.AddWithValue("?", cityCode.ToUpperInvariant())
+                cmdByName.Parameters.AddWithValue("?", cityCode & "%")
+                Dim resultByName As Object = cmdByName.ExecuteScalar()
+                If resultByName IsNot Nothing AndAlso Not String.IsNullOrEmpty(resultByName.ToString()) Then
+                    Log("DEBUG", "GetIlName", $"cityCode={cityCode}, isim ile bulundu: {resultByName.ToString()}")
+                    Return resultByName.ToString()
+                End If
+            End Using
+            
+            ' Türkçe karakter dönüşümü ile tekrar dene (İ->I, ı->i, ş->s, ğ->g, ü->u, ö->o, ç->c)
+            Dim normalizedCity As String = NormalizeTurkishChars(cityCode)
+            Using cmdNormalized As New OleDb.OleDbCommand("SELECT TOP 1 sIl FROM tbIl", conn)
+                Dim reader As OleDb.OleDbDataReader = cmdNormalized.ExecuteReader()
+                While reader.Read()
+                    Dim dbIl As String = reader("sIl").ToString()
+                    If String.Equals(NormalizeTurkishChars(dbIl), normalizedCity, StringComparison.OrdinalIgnoreCase) Then
+                        reader.Close()
+                        Log("DEBUG", "GetIlName", $"cityCode={cityCode}, normalize ile bulundu: {dbIl}")
+                        Return dbIl
+                    End If
+                End While
+                reader.Close()
+            End Using
+            
+            Log("WARNING", "GetIlName", $"cityCode={cityCode} bulunamadı, gelen değer döndürülüyor")
+            Return cityCode
         Catch ex As Exception
             LogError($"GetIlName hata: {ex.Message}")
             Return cityCode
+        End Try
+    End Function
+    
+    ''' <summary>
+    ''' Türkçe karakterleri ASCII karşılıklarına dönüştürür (karşılaştırma için)
+    ''' </summary>
+    Private Function NormalizeTurkishChars(ByVal text As String) As String
+        If String.IsNullOrEmpty(text) Then Return ""
+        Return text.Replace("İ", "I").Replace("ı", "i").Replace("Ş", "S").Replace("ş", "s") _
+                   .Replace("Ğ", "G").Replace("ğ", "g").Replace("Ü", "U").Replace("ü", "u") _
+                   .Replace("Ö", "O").Replace("ö", "o").Replace("Ç", "C").Replace("ç", "c")
+    End Function
+    
+    ''' <summary>
+    ''' Veritabanından varsayılan il değerini alır (İstanbul - plaka 34)
+    ''' Bu fonksiyon FK constraint hatalarını önlemek için gerçek veritabanı değerini döndürür
+    ''' </summary>
+    Private Function GetVarsayilanIl(ByVal conn As OleDb.OleDbConnection) As String
+        Try
+            If conn.State = ConnectionState.Closed Then conn.Open()
+            
+            ' İstanbul için plaka 34 ile sorgula
+            Using cmd As New OleDb.OleDbCommand("SELECT sIl FROM tbIl WHERE sPlaka = '34'", conn)
+                Dim result As Object = cmd.ExecuteScalar()
+                If result IsNot Nothing AndAlso Not String.IsNullOrEmpty(result.ToString()) Then
+                    Log("DEBUG", "GetVarsayilanIl", $"Varsayilan il (plaka 34): {result.ToString()}")
+                    Return result.ToString()
+                End If
+            End Using
+            
+            ' Plaka 34 bulunamazsa, tablodaki ilk kaydı al
+            Using cmdFirst As New OleDb.OleDbCommand("SELECT TOP 1 sIl FROM tbIl ORDER BY sPlaka", conn)
+                Dim resultFirst As Object = cmdFirst.ExecuteScalar()
+                If resultFirst IsNot Nothing AndAlso Not String.IsNullOrEmpty(resultFirst.ToString()) Then
+                    Log("WARNING", "GetVarsayilanIl", $"Plaka 34 bulunamadi, ilk kayit kullaniliyor: {resultFirst.ToString()}")
+                    Return resultFirst.ToString()
+                End If
+            End Using
+            
+            ' Hiçbir şey bulunamazsa hardcoded değer (bu durumda FK hatası alınabilir)
+            Log("ERROR", "GetVarsayilanIl", "tbIl tablosu bos! Varsayilan Istanbul kullaniliyor.")
+            Return "Istanbul"
+        Catch ex As Exception
+            LogError($"GetVarsayilanIl hata: {ex.Message}")
+            Return "Istanbul"
         End Try
     End Function
     Public Sub New()
@@ -3190,13 +3269,22 @@ Public Class frm_qukaGonder
                 ElseIf cust.ContainsKey("city_code") AndAlso cust("city_code") IsNot Nothing Then
                     cityName = cust("city_code").ToString().Trim()
                 End If
-                Dim il As String = If(Not String.IsNullOrEmpty(cityName), If(GetIlName(cityName, conn), cityName), "Istanbul")
-
+                
+                ' Varsayılan il değerini veritabanından al (İstanbul için plaka 34)
+                Dim varsayilanIl As String = GetVarsayilanIl(conn)
+                Log("DEBUG", "AddOrder", $"Varsayilan il: {varsayilanIl}")
+                
+                Dim il As String = If(Not String.IsNullOrEmpty(cityName), GetIlName(cityName, conn), varsayilanIl)
+                
+                ' GetIlName null veya boş döndüyse varsayılanı kullan
+                If String.IsNullOrEmpty(il) Then
+                    il = varsayilanIl
+                End If
 
                 ' İl validasyonu: tbIl tablosunda var mı kontrol et
                 If String.IsNullOrEmpty(il) OrElse il = "Bilinmeyen" OrElse il = "00" Then
-                    Log("WARNING", "AddOrder", $"Gecersiz sehir: cityName=[{cityName}], orderID={orderID} - Varsayilan: Istanbul")
-                    il = "Istanbul"
+                    Log("WARNING", "AddOrder", $"Gecersiz sehir: cityName=[{cityName}], orderID={orderID} - Varsayilan: {varsayilanIl}")
+                    il = varsayilanIl
                 Else
                     ' İlin veritabanında gerçekten var olduğunu kontrol et
                     Dim checkIlCmd As New OleDb.OleDbCommand("SELECT COUNT(*) FROM tbIl WHERE sIl = ?", conn)
@@ -3204,11 +3292,10 @@ Public Class frm_qukaGonder
                     Dim ilExists As Integer = CInt(checkIlCmd.ExecuteScalar())
 
                     If ilExists = 0 Then
-                        Log("WARNING", "AddOrder", $"Il tbIl tablosunda bulunamadi: [{il}], orderID={orderID} - Varsayilan: Istanbul")
-                        il = "Istanbul"
-                    Else
-                        il = ToTurkishTitleCase(il)
+                        Log("WARNING", "AddOrder", $"Il tbIl tablosunda bulunamadi: [{il}], orderID={orderID} - Varsayilan: {varsayilanIl}")
+                        il = varsayilanIl
                     End If
+                    ' NOT: ToTurkishTitleCase kullanmıyoruz çünkü veritabanındaki değeri aynen kullanmalıyız
                 End If
                 ' ===== ILCE: API v2.2.4 - customer.delivery.district alanindan =====
                 Dim rawIlce As String = ""
@@ -9838,7 +9925,22 @@ Public Class frm_qukaGonder
                         ' ===== IL: API v2.2.4 - customer.delivery.city alanindan =====
                         Dim il As String = ""
                         If custDelivery IsNot Nothing AndAlso custDelivery.ContainsKey("city") AndAlso custDelivery("city") IsNot Nothing Then
-                            il = custDelivery("city").ToString().Trim()
+                            Dim rawIl As String = custDelivery("city").ToString().Trim()
+                            ' GetIlName ile veritabanındaki gerçek değeri al
+                            Using oleConn As New OleDb.OleDbConnection(connection)
+                                oleConn.Open()
+                                il = GetIlName(rawIl, oleConn)
+                                ' Eğer hala boşsa veya bulunamadıysa, validasyon için kontrol et
+                                If Not String.IsNullOrEmpty(il) Then
+                                    Dim checkIlCmd As New OleDb.OleDbCommand("SELECT COUNT(*) FROM tbIl WHERE sIl = ?", oleConn)
+                                    checkIlCmd.Parameters.AddWithValue("?", il)
+                                    Dim ilExists As Integer = CInt(checkIlCmd.ExecuteScalar())
+                                    If ilExists = 0 Then
+                                        Log("WARNING", "EksikBilgi", $"[{siparisKodu}] İl tbIl tablosunda bulunamadi: [{il}], il güncellemesi atlanacak")
+                                        il = "" ' Boş bırak, güncelleme yapılmasın
+                                    End If
+                                End If
+                            End Using
                         End If
                         
                         ' ===== API'DEN GELEN VERİLERİ LOGLA =====
