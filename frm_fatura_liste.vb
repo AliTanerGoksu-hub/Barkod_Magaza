@@ -261,7 +261,6 @@ Public Class frm_fatura_liste
     Dim gibUser As String = ""
     Dim gibPass As String = ""
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frm_fatura_liste))
         Dim SuperToolTip1 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
         Dim ToolTipTitleItem1 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
@@ -314,7 +313,7 @@ Public Class frm_fatura_liste
         Me.sec_Aktar = New DevExpress.XtraEditors.CheckEdit()
         Me.SimpleButton3 = New DevExpress.XtraEditors.SimpleButton()
         Me.sec_bFaturayaDonustumu = New DevExpress.XtraEditors.ComboBoxEdit()
-        Me.BarManager1 = New DevExpress.XtraBars.BarManager(Me.components)
+        Me.BarManager1 = New DevExpress.XtraBars.BarManager()
         Me.Bar3 = New DevExpress.XtraBars.Bar()
         Me.btnEkle = New DevExpress.XtraBars.BarButtonItem()
         Me.btnDuzelt = New DevExpress.XtraBars.BarButtonItem()
@@ -417,8 +416,8 @@ Public Class frm_fatura_liste
         Me.MenuItem54 = New System.Windows.Forms.MenuItem()
         Me.MenuItem44 = New System.Windows.Forms.MenuItem()
         Me.MenuItem45 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem57 = New System.Windows.Forms.MenuItem()
         Me.MenuItem56 = New System.Windows.Forms.MenuItem()
-        Me.MenuItem57 = New System.Windows.Forms.MenuItem() ' Pazaryeri Fatura Gönder
         Me.MenuItem15 = New System.Windows.Forms.MenuItem()
         Me.MenuItem19 = New System.Windows.Forms.MenuItem()
         Me.MenuItem16 = New System.Windows.Forms.MenuItem()
@@ -517,8 +516,8 @@ Public Class frm_fatura_liste
         Me.coldteVadeTarihi = New DevExpress.XtraGrid.Columns.GridColumn()
         Me.colsAciklama1 = New DevExpress.XtraGrid.Columns.GridColumn()
         Me.colGibFaturaNo = New DevExpress.XtraGrid.Columns.GridColumn()
-        Me.ps = New DevExpress.XtraPrinting.PrintingSystem(Me.components)
-        Me.printlink1 = New DevExpress.XtraPrinting.PrintableComponentLink(Me.components)
+        Me.ps = New DevExpress.XtraPrinting.PrintingSystem()
+        Me.printlink1 = New DevExpress.XtraPrinting.PrintableComponentLink()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         CType(Me.PanelControl1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -916,22 +915,22 @@ Public Class frm_fatura_liste
         '
         Me.barDockControlBottom.CausesValidation = False
         Me.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.barDockControlBottom.Location = New System.Drawing.Point(0, 1159)
-        Me.barDockControlBottom.Size = New System.Drawing.Size(2156, 30)
+        Me.barDockControlBottom.Location = New System.Drawing.Point(0, 1158)
+        Me.barDockControlBottom.Size = New System.Drawing.Size(2156, 31)
         '
         'barDockControlLeft
         '
         Me.barDockControlLeft.CausesValidation = False
         Me.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left
         Me.barDockControlLeft.Location = New System.Drawing.Point(0, 0)
-        Me.barDockControlLeft.Size = New System.Drawing.Size(0, 1159)
+        Me.barDockControlLeft.Size = New System.Drawing.Size(0, 1158)
         '
         'barDockControlRight
         '
         Me.barDockControlRight.CausesValidation = False
         Me.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right
         Me.barDockControlRight.Location = New System.Drawing.Point(2156, 0)
-        Me.barDockControlRight.Size = New System.Drawing.Size(0, 1159)
+        Me.barDockControlRight.Size = New System.Drawing.Size(0, 1158)
         '
         'BarButtonItem4
         '
@@ -1436,7 +1435,7 @@ Public Class frm_fatura_liste
         Me.PanelControl2.Controls.Add(Me.SimpleButton2)
         Me.PanelControl2.Controls.Add(Me.SimpleButton1)
         Me.PanelControl2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelControl2.Location = New System.Drawing.Point(0, 1091)
+        Me.PanelControl2.Location = New System.Drawing.Point(0, 1090)
         Me.PanelControl2.Name = "PanelControl2"
         Me.PanelControl2.Size = New System.Drawing.Size(2156, 68)
         Me.PanelControl2.TabIndex = 1
@@ -1498,7 +1497,7 @@ Public Class frm_fatura_liste
         Me.PanelControl3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelControl3.Location = New System.Drawing.Point(0, 214)
         Me.PanelControl3.Name = "PanelControl3"
-        Me.PanelControl3.Size = New System.Drawing.Size(2156, 877)
+        Me.PanelControl3.Size = New System.Drawing.Size(2156, 876)
         Me.PanelControl3.TabIndex = 0
         '
         'Group_Muhasebelestir
@@ -1640,7 +1639,7 @@ Public Class frm_fatura_liste
         Me.GridControl1.Location = New System.Drawing.Point(2, 2)
         Me.GridControl1.MainView = Me.GridView1
         Me.GridControl1.Name = "GridControl1"
-        Me.GridControl1.Size = New System.Drawing.Size(2152, 873)
+        Me.GridControl1.Size = New System.Drawing.Size(2152, 872)
         Me.GridControl1.TabIndex = 0
         Me.GridControl1.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView1})
         '
@@ -1763,7 +1762,7 @@ Public Class frm_fatura_liste
         Me.MenuItem45.Index = 3
         Me.MenuItem45.Text = "Entegrasyonu İptal Et"
         '
-        'MenuItem57 - Pazaryeri Fatura Gönder
+        'MenuItem57
         '
         Me.MenuItem57.Index = 4
         Me.MenuItem57.Text = "Pazaryeri Fatura Gönder"
