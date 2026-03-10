@@ -19599,14 +19599,13 @@ Public Class Form1
                 sYedekAciklama = sYedekPath & "\" & sDatabaseGenel & "_" & Now.Year & "_" & Now.Month & "_" & Now.Day & "_" & "10" & "_" & "00" & "_" & "00" & ".BCK"
                 yedekle(sDatabaseGenel, sYedekAciklama, bOtomatikYedekRar)
             ElseIf TimeSerial(Now.Hour, Now.Minute, Now.Second) = "14:00:00" Then
-                ' 14:00 yedeğini async olarak başlat - UI bloke etme
+                ' 14:00 yedeğini async olarak başlat - Gelişmiş FTP Yedekleme
                 System.Threading.Tasks.Task.Run(Sub()
                     Try
                         Dim cmd As New OleDb.OleDbCommand
                         Dim cmd1 As New OleDb.OleDbCommand
                         Dim con As New OleDb.OleDbConnection
                         Dim con1 As New OleDb.OleDbConnection
-                        Dim adapter As New OleDb.OleDbDataAdapter
                         Dim Ftp As String = ""
                         Dim FirmaID As String = ""
                         Dim Source As String = ""
@@ -19640,30 +19639,61 @@ Public Class Form1
                             End If
                             con1.Close()
                         Catch dbEx As Exception
-                            ' Uzak DB hatasında firma kodu kullan
                             sOzelNot = sOnayKodu
                             logla("14:00 Yedek - Uzak DB hatası: " & dbEx.Message)
                         End Try
                         
-                        ' Yedek al
+                        ' Yedek dosya yolu
                         Dim localYedekPath As String = sYedekPath & "\" & sOzelNot & "_" & sDatabaseGenel & "_" & Now.Year & "_" & Now.Month & "_" & Now.Day & ".BCK"
-                        yedekle(sDatabaseGenel, localYedekPath, bOtomatikYedekRar)
                         
-                        ' FTP'ye yükle
-                        If File.Exists(localYedekPath) AndAlso Not String.IsNullOrEmpty(Ftp) Then
-                            Dim dosya As FileInfo = New FileInfo(localYedekPath)
-                            Dim ftpAdress As String = "ftp://" & Ftp & "/backup/" & dosya.Name
-                            Try
-                                My.Computer.Network.UploadFile(localYedekPath, ftpAdress, "backup", "Backup0555", False, 300000) ' 5 min timeout
-                                logla("14:00 Yedek başarılı: " & dosya.Name)
-                            Catch ftpEx As Exception
-                                logla("14:00 Yedek - FTP hatası: " & ftpEx.Message)
-                            End Try
+                        ' Gelişmiş yedekleme: 7z sıkıştırma + parçalı FTP upload
+                        If Not String.IsNullOrEmpty(Ftp) Then
+                            GelismisYedekVeGonder(sDatabaseGenel, localYedekPath, Ftp, "backup", "Backup0555")
+                        Else
+                            ' FTP yoksa sadece yerel yedek al
+                            yedekle(sDatabaseGenel, localYedekPath, bOtomatikYedekRar)
                         End If
+                        
                     Catch ex As Exception
                         logla("14:00 Yedek - Genel hata: " & ex.Message)
                     End Try
                 End Sub)
+
+            ElseIf TimeSerial(Now.Hour, Now.Minute, Now.Second) = "02:00:00" Then
+                ' 02:00 - Başarısız FTP yedeklerini tekrar dene
+                If bFtpYedekBasarisiz AndAlso Not String.IsNullOrEmpty(sFtpYedekDosya) Then
+                    System.Threading.Tasks.Task.Run(Sub()
+                        Try
+                            logla("[02:00 Retry] Başarısız FTP yedeği tekrar deneniyor...")
+                            
+                            Dim cmd As New OleDb.OleDbCommand
+                            Dim con As New OleDb.OleDbConnection
+                            Dim Ftp As String = ""
+                            
+                            con.ConnectionString = connection
+                            cmd.Connection = con
+                            con.Open()
+                            cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT TOP 1 EticaretFtp FROM tbParamGenel")
+                            Ftp = cmd.ExecuteScalar.ToString()
+                            con.Close()
+                            
+                            If File.Exists(sFtpYedekDosya) AndAlso Not String.IsNullOrEmpty(Ftp) Then
+                                Dim dosyaAdi As String = Path.GetFileName(sFtpYedekDosya)
+                                Dim ftpHedef As String = "ftp://" & Ftp & "/backup/" & dosyaAdi
+                                
+                                If ParcaliFtpUpload(sFtpYedekDosya, ftpHedef, "backup", "Backup0555") Then
+                                    logla("[02:00 Retry] FTP upload başarılı!")
+                                    bFtpYedekBasarisiz = False
+                                    sFtpYedekDosya = ""
+                                Else
+                                    logla("[02:00 Retry] FTP upload hala başarısız")
+                                End If
+                            End If
+                        Catch ex As Exception
+                            logla("[02:00 Retry] Hata: " & ex.Message)
+                        End Try
+                    End Sub)
+                End If
 
             ElseIf TimeSerial(Now.Hour, Now.Minute, Now.Second) = "18:00:00" Then
                 sYedekAciklama = sYedekPath & "\" & sDatabaseGenel & "_" & Now.Year & "_" & Now.Month & "_" & Now.Day & "_" & "18" & "_" & "00" & "_" & "00" & ".BCK"
@@ -23933,5 +23963,303 @@ CleanupExcel:
             Debug.WriteLine("[PazaryeriBaseUrl] ✗ Hata: " & ex.Message)
         End Try
     End Sub
+
+#Region "Gelişmiş FTP Yedekleme - 7z Sıkıştırma + Parçalı Upload + Retry"
+
+    ' FTP yedekleme durumu - başarısız olursa 02:00'da tekrar dene
+    Private Shared bFtpYedekBasarisiz As Boolean = False
+    Private Shared sFtpYedekDosya As String = ""
+    Private Shared sFtpYedekHedef As String = ""
+    Private Shared sFtpYedekFtp As String = ""
+
+    ''' <summary>
+    ''' Gelişmiş FTP Yedekleme - 7z sıkıştırma + parçalı upload
+    ''' </summary>
+    Public Sub GelismisYedekVeGonder(veritabani As String, yedekDosya As String, ftpAdres As String, ftpKullanici As String, ftpSifre As String)
+        Try
+            logla("[GelismisYedek] Başlıyor: " & veritabani)
+            
+            ' 1. SQL Server yedeği al (sıkıştırmalı)
+            If Not File.Exists(yedekDosya) Then
+                logla("[GelismisYedek] Yedek dosyası bulunamadı, yedek alınıyor...")
+                yedekle(veritabani, yedekDosya, False)
+            End If
+            
+            If Not File.Exists(yedekDosya) Then
+                logla("[GelismisYedek] HATA: Yedek dosyası oluşturulamadı!")
+                bFtpYedekBasarisiz = True
+                sFtpYedekDosya = yedekDosya
+                Return
+            End If
+            
+            Dim orijinalBoyut As Long = New FileInfo(yedekDosya).Length
+            logla("[GelismisYedek] Orijinal boyut: " & FormatBytes(orijinalBoyut))
+            
+            ' 2. 7z ile sıkıştır (eğer 7z varsa)
+            Dim sikistirilmisDosya As String = yedekDosya & ".7z"
+            Dim gonderilecekDosya As String = yedekDosya
+            
+            If SikistirDosya7z(yedekDosya, sikistirilmisDosya) Then
+                gonderilecekDosya = sikistirilmisDosya
+                Dim sikistirilmisBoyut As Long = New FileInfo(sikistirilmisDosya).Length
+                logla("[GelismisYedek] 7z sıkıştırma başarılı: " & FormatBytes(orijinalBoyut) & " -> " & FormatBytes(sikistirilmisBoyut) & " (%" & Math.Round((1 - sikistirilmisBoyut / orijinalBoyut) * 100, 1) & " küçüldü)")
+            Else
+                logla("[GelismisYedek] 7z bulunamadı veya sıkıştırma başarısız, orijinal dosya gönderilecek")
+            End If
+            
+            ' 3. Parçalı FTP Upload
+            Dim dosyaAdi As String = Path.GetFileName(gonderilecekDosya)
+            Dim ftpHedef As String = "ftp://" & ftpAdres & "/backup/" & dosyaAdi
+            
+            Dim uploadBasarili As Boolean = ParcaliFtpUpload(gonderilecekDosya, ftpHedef, ftpKullanici, ftpSifre)
+            
+            If uploadBasarili Then
+                logla("[GelismisYedek] FTP upload başarılı: " & dosyaAdi)
+                bFtpYedekBasarisiz = False
+                
+                ' Sıkıştırılmış dosyayı sil (orijinal kalsın)
+                If File.Exists(sikistirilmisDosya) AndAlso sikistirilmisDosya <> yedekDosya Then
+                    Try
+                        File.Delete(sikistirilmisDosya)
+                    Catch
+                    End Try
+                End If
+            Else
+                logla("[GelismisYedek] FTP upload BAŞARISIZ - 02:00'da tekrar denenecek")
+                bFtpYedekBasarisiz = True
+                sFtpYedekDosya = gonderilecekDosya
+                sFtpYedekHedef = ftpHedef
+                sFtpYedekFtp = ftpAdres
+            End If
+            
+        Catch ex As Exception
+            logla("[GelismisYedek] HATA: " & ex.Message)
+            bFtpYedekBasarisiz = True
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' 7z ile dosya sıkıştır (7z.exe varsa)
+    ''' </summary>
+    Private Function SikistirDosya7z(kaynakDosya As String, hedefDosya As String) As Boolean
+        Try
+            ' 7z.exe yollarını kontrol et
+            Dim sevenZipPaths() As String = {
+                "C:\Program Files\7-Zip\7z.exe",
+                "C:\Program Files (x86)\7-Zip\7z.exe",
+                Path.Combine(Application.StartupPath, "7z.exe"),
+                "C:\7-Zip\7z.exe"
+            }
+            
+            Dim sevenZipExe As String = ""
+            For Each path In sevenZipPaths
+                If File.Exists(path) Then
+                    sevenZipExe = path
+                    Exit For
+                End If
+            Next
+            
+            If String.IsNullOrEmpty(sevenZipExe) Then
+                logla("[7z] 7z.exe bulunamadı, RAR ile denenecek...")
+                Return SikistirDosyaRar(kaynakDosya, hedefDosya.Replace(".7z", ".rar"))
+            End If
+            
+            ' Eski sıkıştırılmış dosya varsa sil
+            If File.Exists(hedefDosya) Then
+                File.Delete(hedefDosya)
+            End If
+            
+            ' 7z komutu: a = add, -mx=9 = ultra sıkıştırma, -mmt = multi-thread
+            Dim arguments As String = "a -mx=9 -mmt=on """ & hedefDosya & """ """ & kaynakDosya & """"
+            
+            Dim psi As New ProcessStartInfo()
+            psi.FileName = sevenZipExe
+            psi.Arguments = arguments
+            psi.WindowStyle = ProcessWindowStyle.Hidden
+            psi.CreateNoWindow = True
+            psi.UseShellExecute = False
+            
+            logla("[7z] Sıkıştırma başlıyor: " & arguments)
+            
+            Using proc As Process = Process.Start(psi)
+                proc.WaitForExit(3600000) ' Max 1 saat bekle
+                If proc.ExitCode = 0 AndAlso File.Exists(hedefDosya) Then
+                    Return True
+                End If
+            End Using
+            
+            Return False
+        Catch ex As Exception
+            logla("[7z] Sıkıştırma hatası: " & ex.Message)
+            Return False
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' RAR ile dosya sıkıştır (WinRAR varsa)
+    ''' </summary>
+    Private Function SikistirDosyaRar(kaynakDosya As String, hedefDosya As String) As Boolean
+        Try
+            Dim rarPaths() As String = {
+                "C:\Program Files\WinRAR\Rar.exe",
+                "C:\Program Files (x86)\WinRAR\Rar.exe"
+            }
+            
+            Dim rarExe As String = ""
+            For Each path In rarPaths
+                If File.Exists(path) Then
+                    rarExe = path
+                    Exit For
+                End If
+            Next
+            
+            If String.IsNullOrEmpty(rarExe) Then
+                Return False
+            End If
+            
+            If File.Exists(hedefDosya) Then
+                File.Delete(hedefDosya)
+            End If
+            
+            ' RAR komutu: a = add, -m5 = best compression
+            Dim arguments As String = "a -m5 -ep """ & hedefDosya & """ """ & kaynakDosya & """"
+            
+            Dim psi As New ProcessStartInfo()
+            psi.FileName = rarExe
+            psi.Arguments = arguments
+            psi.WindowStyle = ProcessWindowStyle.Hidden
+            psi.CreateNoWindow = True
+            psi.UseShellExecute = False
+            
+            Using proc As Process = Process.Start(psi)
+                proc.WaitForExit(3600000)
+                If proc.ExitCode = 0 AndAlso File.Exists(hedefDosya) Then
+                    Return True
+                End If
+            End Using
+            
+            Return False
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Parçalı FTP Upload - büyük dosyaları 50MB parçalar halinde gönderir
+    ''' </summary>
+    Private Function ParcaliFtpUpload(dosyaYolu As String, ftpHedef As String, kullanici As String, sifre As String) As Boolean
+        Try
+            Dim dosyaBoyut As Long = New FileInfo(dosyaYolu).Length
+            Dim parcaBoyut As Long = 50 * 1024 * 1024 ' 50MB
+            
+            ' Dosya 50MB'dan küçükse direkt gönder
+            If dosyaBoyut < parcaBoyut Then
+                logla("[FTP] Dosya küçük, direkt gönderiliyor: " & FormatBytes(dosyaBoyut))
+                Return DirekFtpUpload(dosyaYolu, ftpHedef, kullanici, sifre)
+            End If
+            
+            ' Büyük dosya - parçalara böl ve gönder
+            Dim parcaSayisi As Integer = CInt(Math.Ceiling(dosyaBoyut / parcaBoyut))
+            logla("[FTP] Dosya " & parcaSayisi & " parçaya bölünecek: " & FormatBytes(dosyaBoyut))
+            
+            Dim basariliParcalar As Integer = 0
+            Dim parcaDosyalari As New List(Of String)
+            
+            Using fs As New FileStream(dosyaYolu, FileMode.Open, FileAccess.Read)
+                For i As Integer = 0 To parcaSayisi - 1
+                    Dim parcaDosya As String = dosyaYolu & ".part" & i.ToString("D3")
+                    Dim okunanBoyut As Long = Math.Min(parcaBoyut, dosyaBoyut - (i * parcaBoyut))
+                    
+                    ' Parça dosyasını oluştur
+                    Dim buffer(CInt(okunanBoyut) - 1) As Byte
+                    fs.Read(buffer, 0, CInt(okunanBoyut))
+                    File.WriteAllBytes(parcaDosya, buffer)
+                    parcaDosyalari.Add(parcaDosya)
+                    
+                    ' Parçayı FTP'ye gönder
+                    Dim parcaFtpHedef As String = ftpHedef & ".part" & i.ToString("D3")
+                    logla("[FTP] Parça " & (i + 1) & "/" & parcaSayisi & " gönderiliyor...")
+                    
+                    Dim parcaBasarili As Boolean = False
+                    For deneme As Integer = 1 To 3 ' 3 deneme hakkı
+                        If DirekFtpUpload(parcaDosya, parcaFtpHedef, kullanici, sifre) Then
+                            parcaBasarili = True
+                            basariliParcalar += 1
+                            Exit For
+                        Else
+                            logla("[FTP] Parça " & (i + 1) & " deneme " & deneme & " başarısız, tekrar deneniyor...")
+                            Threading.Thread.Sleep(5000) ' 5 saniye bekle
+                        End If
+                    Next
+                    
+                    If Not parcaBasarili Then
+                        logla("[FTP] Parça " & (i + 1) & " gönderilemedi!")
+                        ' Parça dosyalarını temizle
+                        For Each pf In parcaDosyalari
+                            If File.Exists(pf) Then File.Delete(pf)
+                        Next
+                        Return False
+                    End If
+                    
+                    ' Gönderilen parçayı sil
+                    If File.Exists(parcaDosya) Then File.Delete(parcaDosya)
+                Next
+            End Using
+            
+            logla("[FTP] Tüm parçalar başarıyla gönderildi: " & basariliParcalar & "/" & parcaSayisi)
+            Return True
+            
+        Catch ex As Exception
+            logla("[FTP] Parçalı upload hatası: " & ex.Message)
+            Return False
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Direkt FTP Upload - küçük dosyalar için
+    ''' </summary>
+    Private Function DirekFtpUpload(dosyaYolu As String, ftpHedef As String, kullanici As String, sifre As String) As Boolean
+        Try
+            Dim request As FtpWebRequest = CType(WebRequest.Create(ftpHedef), FtpWebRequest)
+            request.Method = WebRequestMethods.Ftp.UploadFile
+            request.Credentials = New NetworkCredential(kullanici, sifre)
+            request.UseBinary = True
+            request.UsePassive = True
+            request.KeepAlive = False
+            request.Timeout = 600000 ' 10 dakika timeout
+            
+            Dim fileContents As Byte() = File.ReadAllBytes(dosyaYolu)
+            request.ContentLength = fileContents.Length
+            
+            Using requestStream As Stream = request.GetRequestStream()
+                requestStream.Write(fileContents, 0, fileContents.Length)
+            End Using
+            
+            Using response As FtpWebResponse = CType(request.GetResponse(), FtpWebResponse)
+                Return response.StatusCode = FtpStatusCode.ClosingData OrElse response.StatusCode = FtpStatusCode.FileActionOK
+            End Using
+            
+        Catch ex As Exception
+            logla("[FTP] Direkt upload hatası: " & ex.Message)
+            Return False
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Byte formatla (KB, MB, GB)
+    ''' </summary>
+    Private Function FormatBytes(bytes As Long) As String
+        If bytes >= 1073741824 Then
+            Return Math.Round(bytes / 1073741824, 2) & " GB"
+        ElseIf bytes >= 1048576 Then
+            Return Math.Round(bytes / 1048576, 2) & " MB"
+        ElseIf bytes >= 1024 Then
+            Return Math.Round(bytes / 1024, 2) & " KB"
+        Else
+            Return bytes & " Bytes"
+        End If
+    End Function
+
+#End Region
 
 End Class
