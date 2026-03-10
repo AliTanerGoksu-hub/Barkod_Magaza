@@ -4329,6 +4329,77 @@ Public Class frm_perakende_odeme
             Next
             If kkTutar <= 0D Then Return True
 
+            ' ===== ÖNCE POS'A ÖDEME GÖNDER =====
+            Dim currentPosPaymentId As String = Nothing
+            Try
+                If String.IsNullOrEmpty(KolaysoftToken) OrElse String.IsNullOrEmpty(KolaysoftFirmaId) Then
+                    LogYaz("PosOdemeOnayBekle", "Token veya FirmaId bos - POS entegrasyonu yapilamiyor")
+                    Return True ' POS bilgileri yoksa odemeyi kabul et
+                End If
+                
+                ' Belge numarası oluştur
+                Dim documentNo As String = "PRKND-" & DateTime.Now.ToString("yyyyMMdd-HHmmss")
+                
+                ' POS'a ödeme gönder
+                Dim body As New Dictionary(Of String, Object) From {
+                    {"companyId", KolaysoftFirmaId},
+                    {"branchCode", ""},
+                    {"documentNo", documentNo},
+                    {"creditCardFirstAmount", kkTutar}
+                }
+                Dim jsonBody As String = JsonConvert.SerializeObject(body, Formatting.None)
+                
+                LogYaz("PosOdemeOnayBekle", "POS'a gonderiliyor: " & jsonBody)
+                
+                ServicePointManager.Expect100Continue = False
+                Dim url As String = "https://service.kolaysoftpos.com/services/pos/api/erp/current-pos-payments"
+                Dim req = CType(WebRequest.Create(url), HttpWebRequest)
+                req.Method = "POST"
+                req.ContentType = "application/json"
+                req.Accept = "application/json"
+                req.Headers.Add("Authorization", "Bearer " & KolaysoftToken)
+                req.Timeout = 30000
+                req.KeepAlive = False
+                req.Proxy = Nothing
+                
+                Dim data = Encoding.UTF8.GetBytes(jsonBody)
+                req.ContentLength = data.Length
+                Using s = req.GetRequestStream()
+                    s.Write(data, 0, data.Length)
+                End Using
+                
+                Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
+                    Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
+                        Dim txt As String = reader.ReadToEnd().Trim()
+                        LogYaz("PosOdemeOnayBekle", "POS yaniti: " & If(txt.Length > 300, txt.Substring(0, 300), txt))
+                        
+                        Try
+                            Dim tok As JToken = JToken.Parse(txt)
+                            If TypeOf tok Is JObject Then
+                                currentPosPaymentId = CStr(CType(tok, JObject).SelectToken("id"))
+                            ElseIf TypeOf tok Is JArray Then
+                                Dim arr As JArray = CType(tok, JArray)
+                                If arr.Count > 0 Then
+                                    currentPosPaymentId = CStr(CType(arr(0), JObject).SelectToken("id"))
+                                End If
+                            End If
+                        Catch
+                        End Try
+                    End Using
+                End Using
+                
+                LogYaz("PosOdemeOnayBekle", "POS Payment ID: " & If(currentPosPaymentId, "NULL"))
+            Catch posEx As Exception
+                LogYaz("PosOdemeOnayBekle", "POS gonderme hatasi: " & posEx.Message)
+                ' POS'a gonderme basarisiz - kullaniciya sor
+                Dim sonuc = MessageBox.Show("POS'a odeme gonderilemedi." & vbCrLf & vbCrLf & 
+                    "Hata: " & posEx.Message & vbCrLf & vbCrLf &
+                    "Yine de odemeyi kaydetmek istiyor musunuz?",
+                    "POS Hatasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                Return (sonuc = DialogResult.Yes)
+            End Try
+            ' ===== POS GONDERME BITTI =====
+
             Dim posOnay As Boolean = False
             Dim maxBekleme As Integer = 120
             Dim gecenSure As Integer = 0
@@ -4351,7 +4422,7 @@ Public Class frm_perakende_odeme
                 frmBekle.Controls.Add(lblMesaj)
 
                 Dim lblDurum As New Label()
-                lblDurum.Text = "Durum: Bekleniyor..."
+                lblDurum.Text = "Durum: POS'a gonderildi, bekleniyor..."
                 lblDurum.AutoSize = False
                 lblDurum.Size = New Size(380, 30)
                 lblDurum.Location = New Point(20, 100)
@@ -4359,10 +4430,13 @@ Public Class frm_perakende_odeme
                 frmBekle.Controls.Add(lblDurum)
 
                 Dim btnIptal As New Button()
-                btnIptal.Text = "IPTAL"
-                btnIptal.Size = New Size(120, 40)
-                btnIptal.Location = New Point(150, 135)
-                AddHandler btnIptal.Click, Sub(s, ev) frmBekle.DialogResult = DialogResult.Cancel
+                btnIptal.Text = "IPTAL (Yine de Kaydet)"
+                btnIptal.Size = New Size(160, 40)
+                btnIptal.Location = New Point(130, 135)
+                AddHandler btnIptal.Click, Sub(s, ev) 
+                    posOnay = True ' Iptal edilse bile odemeyi kaydet
+                    frmBekle.DialogResult = DialogResult.OK
+                End Sub
                 frmBekle.Controls.Add(btnIptal)
 
                 Dim timer As New Windows.Forms.Timer()
@@ -4393,10 +4467,18 @@ Public Class frm_perakende_odeme
                                            ElseIf durum = "ON_TERMINAL" OrElse durum = "IN_PROGRESS" Then
                                                lblDurum.Text = "Durum: POS islem yapiyor..."
                                            ElseIf gecenSure >= maxBekleme Then
-                                               lblDurum.Text = "Zaman asimi!"
-                                               posOnay = False
+                                               ' Zaman asimi - yine de kaydet seçeneği sun
                                                timer.Stop()
-                                               frmBekle.DialogResult = DialogResult.Abort
+                                               Dim sonuc = MessageBox.Show("POS'tan yanit alinamadi (zaman asimi)." & vbCrLf & vbCrLf &
+                                                   "Yine de odemeyi kaydetmek istiyor musunuz?",
+                                                   "Zaman Asimi", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                                               If sonuc = DialogResult.Yes Then
+                                                   posOnay = True
+                                                   frmBekle.DialogResult = DialogResult.OK
+                                               Else
+                                                   posOnay = False
+                                                   frmBekle.DialogResult = DialogResult.Abort
+                                               End If
                                            End If
                                        End Sub
 
