@@ -24070,14 +24070,14 @@ CleanupExcel:
             Dim sevenZipPaths() As String = {
                 "C:\Program Files\7-Zip\7z.exe",
                 "C:\Program Files (x86)\7-Zip\7z.exe",
-                Path.Combine(Application.StartupPath, "7z.exe"),
+                System.IO.Path.Combine(Application.StartupPath, "7z.exe"),
                 "C:\7-Zip\7z.exe"
             }
             
             Dim sevenZipExe As String = ""
-            For Each path In sevenZipPaths
-                If File.Exists(path) Then
-                    sevenZipExe = path
+            For Each szPath As String In sevenZipPaths
+                If File.Exists(szPath) Then
+                    sevenZipExe = szPath
                     Exit For
                 End If
             Next
@@ -24180,9 +24180,9 @@ CleanupExcel:
             }
             
             Dim rarExe As String = ""
-            For Each path In rarPaths
-                If File.Exists(path) Then
-                    rarExe = path
+            For Each rPath As String In rarPaths
+                If File.Exists(rPath) Then
+                    rarExe = rPath
                     Exit For
                 End If
             Next
@@ -24240,7 +24240,7 @@ CleanupExcel:
             logla("[FTP] Dosya 300MB üzeri, " & parcaSayisi & " parçaya bölünecek: " & FormatBytes(dosyaBoyut))
             
             Dim basariliParcalar As Integer = 0
-            Dim parcaDosyalari As New List(Of String)
+            Dim parcaDosyalari As New System.Collections.Generic.List(Of String)
             
             Using fs As New FileStream(dosyaYolu, FileMode.Open, FileAccess.Read)
                 For i As Integer = 0 To parcaSayisi - 1
@@ -24272,8 +24272,8 @@ CleanupExcel:
                     If Not parcaBasarili Then
                         logla("[FTP] Parça " & (i + 1) & " gönderilemedi!")
                         ' Parça dosyalarını temizle
-                        For Each pf In parcaDosyalari
-                            If File.Exists(pf) Then File.Delete(pf)
+                        For Each parcaFile As String In parcaDosyalari
+                            If File.Exists(parcaFile) Then File.Delete(parcaFile)
                         Next
                         Return False
                     End If
@@ -24354,7 +24354,7 @@ CleanupExcel:
             request.UsePassive = True
             request.Timeout = 30000
             
-            Dim dosyaListesi As New List(Of String)
+            Dim dosyaListesi As New System.Collections.Generic.List(Of String)
             
             Using response As FtpWebResponse = CType(request.GetResponse(), FtpWebResponse)
                 Using reader As New StreamReader(response.GetResponseStream())
@@ -24379,22 +24379,22 @@ CleanupExcel:
             
             Dim silinenSayisi As Integer = 0
             
-            For Each dosya In dosyaListesi
+            For Each ftpDosya As String In dosyaListesi
                 ' Bugünkü dosyayı silme
-                If dosya = bugunDosyaAdi OrElse dosya.StartsWith(bugunDosyaAdi) Then
+                If ftpDosya = bugunDosyaAdi OrElse ftpDosya.StartsWith(bugunDosyaAdi) Then
                     Continue For
                 End If
                 
                 ' Aynı firma/veritabanına ait eski yedekleri sil
-                If Not String.IsNullOrEmpty(bugunTemel) AndAlso dosya.StartsWith(bugunTemel) Then
+                If Not String.IsNullOrEmpty(bugunTemel) AndAlso ftpDosya.StartsWith(bugunTemel) Then
                     ' .BCK, .gz, .7z, .rar veya .part dosyalarını sil
-                    If dosya.EndsWith(".BCK") OrElse dosya.EndsWith(".gz") OrElse dosya.EndsWith(".7z") OrElse dosya.EndsWith(".rar") OrElse dosya.Contains(".part") Then
+                    If ftpDosya.EndsWith(".BCK") OrElse ftpDosya.EndsWith(".gz") OrElse ftpDosya.EndsWith(".7z") OrElse ftpDosya.EndsWith(".rar") OrElse ftpDosya.Contains(".part") Then
                         Try
-                            FtpDosyaSil(ftpAdres, kullanici, sifre, dosya)
+                            FtpDosyaSil(ftpAdres, kullanici, sifre, ftpDosya)
                             silinenSayisi += 1
-                            logla("[FTP Temizlik] Silindi: " & dosya)
+                            logla("[FTP Temizlik] Silindi: " & ftpDosya)
                         Catch silEx As Exception
-                            logla("[FTP Temizlik] Silinemedi: " & dosya & " - " & silEx.Message)
+                            logla("[FTP Temizlik] Silinemedi: " & ftpDosya & " - " & silEx.Message)
                         End Try
                     End If
                 End If
