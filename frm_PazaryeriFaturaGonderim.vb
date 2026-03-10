@@ -465,9 +465,9 @@ Public Class frm_PazaryeriFaturaGonderim
     End Function
 
     ''' <summary>
-    ''' Hepsiburada'ya fatura gönder
-    ''' Hepsiburada API: Bearer Token authentication
-    ''' Token endpoint: /auth/getToken
+    ''' Hepsiburada'ya fatura linki gönder
+    ''' Endpoint: PUT /packages/merchantid/{merchantId}/packagenumber/{packageNumber}/invoice
+    ''' Authentication: Basic Auth (ApiKey:ApiSecret base64 encoded)
     ''' </summary>
     Private Function GonderHepsiburada(siparisNo As String, gibFaturaNo As String, faturaGuid As String, ByRef hataMesaji As String) As Boolean
         Try
@@ -478,10 +478,14 @@ Public Class frm_PazaryeriFaturaGonderim
 
             Dim api = pazaryeriApis("HEPSIBURADA")
 
-            ' Sipariş numarasından order ID'yi çıkar (HB12345678 -> 12345678)
-            Dim orderNumber As String = siparisNo.Replace("HB", "").Trim()
+            ' Sipariş numarasından package number'ı çıkar (HB12345678 -> 12345678)
+            Dim packageNumber As String = siparisNo.Replace("HB", "").Replace("hb", "").Trim()
+            If String.IsNullOrEmpty(packageNumber) Then
+                hataMesaji = "Package number boş"
+                Return False
+            End If
 
-            ' Fatura linki oluştur
+            ' Fatura linki al
             Dim invoiceLink As String = GetKolaysoftFaturaLink(gibFaturaNo, faturaGuid)
             If String.IsNullOrEmpty(invoiceLink) Then
                 hataMesaji = "Fatura linki alınamadı"
@@ -495,29 +499,29 @@ Public Class frm_PazaryeriFaturaGonderim
             End If
             baseUrl = baseUrl.TrimEnd("/"c)
             
-            ' Önce Bearer Token al
-            Dim token As String = GetHepsiburadaBearerToken(api, baseUrl, hataMesaji)
-            If String.IsNullOrEmpty(token) Then
-                Return False
-            End If
-            
-            ' API isteği - Bearer Token Authentication
-            Dim url As String = baseUrl & "/api/order/invoice_link"
+            ' API URL: PUT /packages/merchantid/{merchantId}/packagenumber/{packageNumber}/invoice
+            Dim url As String = baseUrl & "/packages/merchantid/" & api.SellerId & "/packagenumber/" & packageNumber & "/invoice"
 
+            ' HTTP isteği oluştur
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+            
             Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
-            req.Method = "POST"
+            req.Method = "PUT"
             req.ContentType = "application/json"
             req.Accept = "application/json"
-            req.Timeout = 30000
-            req.Headers.Add("Authorization", "Bearer " & token)
+            req.Timeout = 60000
+            
+            ' Basic Authentication: ApiKey:ApiSecret base64 encoded
+            Dim apiKey As String = If(Not String.IsNullOrEmpty(api.ApiKey), api.ApiKey, api.ApiSecret)
+            Dim apiSecret As String = api.ApiSecret
+            Dim authRaw As String = apiKey & ":" & apiSecret
+            Dim authBytes As Byte() = Encoding.UTF8.GetBytes(authRaw)
+            Dim authBase64 As String = Convert.ToBase64String(authBytes)
+            req.Headers.Add("Authorization", "Basic " & authBase64)
 
-            ' Body
-            Dim body As New Dictionary(Of String, String) From {
-                {"orderNumber", orderNumber},
-                {"invoiceLink", invoiceLink}
-            }
-            Dim jsonBody As String = JsonConvert.SerializeObject(body)
-            Dim data As Byte() = Encoding.UTF8.GetBytes(jsonBody)
+            ' Body: {"invoiceLink": "url"}
+            Dim payload As String = "{""invoiceLink"": """ & invoiceLink.Replace("""", "\""") & """}"
+            Dim data As Byte() = Encoding.UTF8.GetBytes(payload)
             req.ContentLength = data.Length
 
             Using stream = req.GetRequestStream()
@@ -525,10 +529,11 @@ Public Class frm_PazaryeriFaturaGonderim
             End Using
 
             Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
-                If resp.StatusCode = HttpStatusCode.OK OrElse resp.StatusCode = HttpStatusCode.Created OrElse resp.StatusCode = HttpStatusCode.NoContent Then
+                Dim statusCode As Integer = CInt(resp.StatusCode)
+                If statusCode >= 200 AndAlso statusCode < 300 Then
                     Return True
                 Else
-                    hataMesaji = "HTTP " & CInt(resp.StatusCode) & ": " & resp.StatusDescription
+                    hataMesaji = "HTTP " & statusCode & ": " & resp.StatusDescription
                     Return False
                 End If
             End Using
@@ -536,9 +541,10 @@ Public Class frm_PazaryeriFaturaGonderim
         Catch wex As WebException
             If wex.Response IsNot Nothing Then
                 Try
-                    Using reader As New StreamReader(wex.Response.GetResponseStream(), Encoding.UTF8)
+                    Dim resp As HttpWebResponse = CType(wex.Response, HttpWebResponse)
+                    Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
                         Dim errorResponse As String = reader.ReadToEnd()
-                        hataMesaji = "API Hatası: " & If(errorResponse.Length > 200, errorResponse.Substring(0, 200), errorResponse)
+                        hataMesaji = "HTTP " & CInt(resp.StatusCode) & ": " & If(errorResponse.Length > 200, errorResponse.Substring(0, 200), errorResponse)
                     End Using
                 Catch
                     hataMesaji = wex.Message
@@ -550,43 +556,6 @@ Public Class frm_PazaryeriFaturaGonderim
         Catch ex As Exception
             hataMesaji = ex.Message
             Return False
-        End Try
-    End Function
-    
-    ''' <summary>
-    ''' Hepsiburada Bearer Token al
-    ''' </summary>
-    Private Function GetHepsiburadaBearerToken(api As PazaryeriAPI, baseUrl As String, ByRef hataMesaji As String) As String
-        Try
-            Dim url As String = baseUrl & "/auth/getToken"
-            Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
-            req.Method = "GET"
-            req.Accept = "application/json"
-            req.Timeout = 30000
-            
-            ' Basic Auth header ile token al
-            Dim servisAnahtari As String = If(Not String.IsNullOrEmpty(api.ApiKey), api.ApiKey, api.ApiSecret)
-            Dim credentials As String = api.SellerId & ":" & servisAnahtari
-            Dim encodedCredentials As String = Convert.ToBase64String(Encoding.UTF8.GetBytes(credentials))
-            req.Headers.Add("Authorization", "Basic " & encodedCredentials)
-
-            Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
-                Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
-                    Dim json As String = reader.ReadToEnd()
-                    Dim obj As JObject = JObject.Parse(json)
-                    Dim token As String = ""
-                    If obj("token") IsNot Nothing Then
-                        token = obj("token").ToString()
-                    ElseIf obj("access_token") IsNot Nothing Then
-                        token = obj("access_token").ToString()
-                    End If
-                    Return token
-                End Using
-            End Using
-
-        Catch ex As Exception
-            hataMesaji = "Token alınamadı: " & ex.Message
-            Return Nothing
         End Try
     End Function
 
