@@ -418,6 +418,7 @@ Public Class frm_fatura_liste
         Me.MenuItem44 = New System.Windows.Forms.MenuItem()
         Me.MenuItem45 = New System.Windows.Forms.MenuItem()
         Me.MenuItem56 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem57 = New System.Windows.Forms.MenuItem() ' Pazaryeri Fatura Gönder
         Me.MenuItem15 = New System.Windows.Forms.MenuItem()
         Me.MenuItem19 = New System.Windows.Forms.MenuItem()
         Me.MenuItem16 = New System.Windows.Forms.MenuItem()
@@ -1739,7 +1740,7 @@ Public Class frm_fatura_liste
         'MenuItem43
         '
         Me.MenuItem43.Index = 11
-        Me.MenuItem43.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuItem55, Me.MenuItem54, Me.MenuItem44, Me.MenuItem45})
+        Me.MenuItem43.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuItem55, Me.MenuItem54, Me.MenuItem44, Me.MenuItem45, Me.MenuItem57})
         Me.MenuItem43.Text = "Muhasebe"
         '
         'MenuItem55
@@ -1761,6 +1762,11 @@ Public Class frm_fatura_liste
         '
         Me.MenuItem45.Index = 3
         Me.MenuItem45.Text = "Entegrasyonu İptal Et"
+        '
+        'MenuItem57 - Pazaryeri Fatura Gönder
+        '
+        Me.MenuItem57.Index = 4
+        Me.MenuItem57.Text = "Pazaryeri Fatura Gönder"
         '
         'MenuItem56
         '
@@ -7289,6 +7295,7 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
 
     Friend WithEvents colGibFaturaNo As DevExpress.XtraGrid.Columns.GridColumn
     Friend WithEvents MenuItem56 As MenuItem
+    Friend WithEvents MenuItem57 As MenuItem ' Pazaryeri Fatura Gönder
     Private Sub MenuItem56_Click(sender As Object, e As EventArgs) Handles MenuItem56.Click
         Dim selectedRows() As Integer = GridView1.GetSelectedRows()
         If selectedRows.Length = 0 Then
@@ -7333,6 +7340,18 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
 
         Catch ex As Exception
             MsgBox("HTML görüntüleme sırasında hata: " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Pazaryeri Fatura Gönder menü öğesi tıklandığında
+    ''' </summary>
+    Private Sub MenuItem57_Click(sender As Object, e As EventArgs) Handles MenuItem57.Click
+        Try
+            Dim frm As New frm_PazaryeriFaturaGonderim()
+            frm.ShowDialog()
+        Catch ex As Exception
+            MsgBox("Pazaryeri Fatura Gönderim formu açılırken hata: " & ex.Message)
         End Try
     End Sub
 End Class
