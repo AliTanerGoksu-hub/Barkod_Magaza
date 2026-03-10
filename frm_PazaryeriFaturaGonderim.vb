@@ -503,8 +503,10 @@ Public Class frm_PazaryeriFaturaGonderim
             req.Accept = "application/json"
             req.Timeout = 30000
             
-            ' Basic Authentication: merchantId:apiKey base64 encoded
-            Dim credentials As String = $"{api.SellerId}:{api.ApiKey}"
+            ' Basic Authentication: merchantId:servisAnahtari base64 encoded
+            ' Hepsiburada'da Servis Anahtarı = sApiSecret alanında
+            Dim servisAnahtari As String = If(Not String.IsNullOrEmpty(api.ApiKey), api.ApiKey, api.ApiSecret)
+            Dim credentials As String = $"{api.SellerId}:{servisAnahtari}"
             Dim encodedCredentials As String = Convert.ToBase64String(Encoding.UTF8.GetBytes(credentials))
             req.Headers.Add("Authorization", "Basic " & encodedCredentials)
 
