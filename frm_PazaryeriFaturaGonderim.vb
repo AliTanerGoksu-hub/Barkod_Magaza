@@ -35,7 +35,7 @@ Public Class frm_PazaryeriFaturaGonderim
     Private WithEvents GroupControl1 As GroupControl
 
     ' ===== VERİTABANI =====
-    Private connection As String = Form1.connection
+    Private connection As String = frm_fatura_liste.connection
     Private dtFaturalar As New DataTable()
 
     ' ===== API BİLGİLERİ =====
@@ -158,7 +158,6 @@ Public Class frm_PazaryeriFaturaGonderim
         ' Grid sütunları
         GridView1.OptionsView.ShowGroupPanel = False
         GridView1.OptionsSelection.MultiSelect = True
-        GridView1.OptionsSelection.MultiSelectMode = DevExpress.XtraGrid.Views.Grid.GridMultiSelectMode.CheckBoxRowSelect
 
         ' Progress Bar
         ProgressBar1 = New ProgressBarControl()
