@@ -3262,6 +3262,13 @@ Public Class frm_perakende_odeme
 
         ' Eger POS aktifse ve kredi karti odemesi varsa, ONCE POS onay bekle
         If bPosEntegre AndAlso OdemedeKrediKartiVar() Then
+            ' ÖNEMLİ: POS işlemi yapmadan önce Kolaysoft token ve cihaz bilgilerini al
+            Try
+                InitKolaysoftTokenVeCihaz(sDepo)
+            Catch ex As Exception
+                LogYaz("tamamla", "Kolaysoft init hatasi: " & ex.Message)
+            End Try
+            
             Dim posOnay As Boolean = PosOdemeOnayBekle()
             If Not posOnay Then
                 ' POS RED verdi - odeme kaydetme
