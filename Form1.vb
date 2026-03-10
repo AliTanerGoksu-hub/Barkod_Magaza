@@ -11152,64 +11152,18 @@ Public Class Form1
             Dim bYeniLicense As Boolean = False
             btnDecrypt()
             Dim dosya As String = "C:\Formlar\lic.Dat"
-            FileOpen(1, dosya, OpenMode.Input)
-            'Dim oku() As Byte
-            Dim s As String
+            Dim fileHandle As Integer = FreeFile() ' Dinamik dosya numarası al
+            Dim s As String = ""
             Dim sayi As Integer = 0
             lbl_Dist.Text = ""
             sec_mdl.Items.Clear()
             sLicenseModule.Items.Clear()
             Dim Wrap As String = Chr(13) + Chr(10)
-            Do Until EOF(1)
-                s = LineInput(1)
-                If sayi = 0 Then
-                    lbl_lisans.Caption = "Lisans: " & sOnayKodu & "-" & s
-                    lisansNo = s
-                ElseIf sayi = 1 Then
-                    nKayitSinir = s
-                ElseIf sayi = 2 Or sayi = 3 Or sayi = 4 Or sayi = 5 Or sayi = 6 Or sayi = 7 Then
-                    lbl_Dist.Text += s & Wrap
-                ElseIf sayi = 8 Then
-                    'sKasaIletisim = s
-                ElseIf sayi > 8 Then
-                    'If yetki_kontrol(kullanici, s, False) = True Then
-                    If (s <> "Sonradan Teslim") And (s <> "Barkod") And (s <> "Etiket") And (s <> "Karpin") Then
-                        If s = "Turab" Then
-                            sec_mdl.Items.Add("Easy")
-                        Else
-                            sec_mdl.Items.Add(s)
-                        End If
-                        sLicenseModule.Items.Add(s)
-                        sec_mdl.Size = New Size(sec_mdl.Width, sec_mdl.ItemHeight * sec_mdl.Items.Count)
-                        mn_Main.Size = New Size(mn_Main.Width, sec_mdl.Height + 21)
-                    End If
-                    'End If
-                    If s = "Kasa" Then
-                        'If yetki_kontrol(kullanici, "Banka", False) = True Then
-                        sec_mdl.Items.Add("Banka")
-                        sLicenseModule.Items.Add("Banka")
-                        sec_mdl.Size = New Size(sec_mdl.Width, sec_mdl.ItemHeight * sec_mdl.Items.Count)
-                        mn_Main.Size = New Size(mn_Main.Width, sec_mdl.Height + 21)
-                        'End If
-                    End If
-                End If
-                If s = "Ã‡Ä±kÄ±ÅŸ" Then
-                    bYeniLicense = True
-                End If
-                sayi += 1
-            Loop
-            FileClose(1)
-            Dim fileEncrypted As New FileInfo(dosya)
-            fileEncrypted.Delete()
-            If bYeniLicense = True Then
-                btnDecrypt()
-                sec_mdl.Items.Clear()
-                sLicenseModule.Items.Clear()
-                sayi = 0
-                lbl_Dist.Text = ""
-                Dim sk As StreamReader = File.OpenText(dosya)
-                Do While sk.Peek() > -1
-                    s = sk.ReadLine
+            
+            Try
+                FileOpen(fileHandle, dosya, OpenMode.Input)
+                Do Until EOF(fileHandle)
+                    s = LineInput(fileHandle)
                     If sayi = 0 Then
                         lbl_lisans.Caption = "Lisans: " & sOnayKodu & "-" & s
                         lisansNo = s
@@ -11223,22 +11177,95 @@ Public Class Form1
                         'If yetki_kontrol(kullanici, s, False) = True Then
                         If (s <> "Sonradan Teslim") And (s <> "Barkod") And (s <> "Etiket") And (s <> "Karpin") Then
                             If s = "Turab" Then
-                                sec_mdl.Items.Add(Sorgu_sDil("Easy", sDil))
+                                sec_mdl.Items.Add("Easy")
                             Else
-                                sec_mdl.Items.Add(Sorgu_sDil(s, sDil))
+                                sec_mdl.Items.Add(s)
                             End If
                             sLicenseModule.Items.Add(s)
                             sec_mdl.Size = New Size(sec_mdl.Width, sec_mdl.ItemHeight * sec_mdl.Items.Count)
                             mn_Main.Size = New Size(mn_Main.Width, sec_mdl.Height + 21)
                         End If
                         'End If
+                        If s = "Kasa" Then
+                            'If yetki_kontrol(kullanici, "Banka", False) = True Then
+                            sec_mdl.Items.Add("Banka")
+                            sLicenseModule.Items.Add("Banka")
+                            sec_mdl.Size = New Size(sec_mdl.Width, sec_mdl.ItemHeight * sec_mdl.Items.Count)
+                            mn_Main.Size = New Size(mn_Main.Width, sec_mdl.Height + 21)
+                            'End If
+                        End If
+                    End If
+                    If s = "Ã‡Ä±kÄ±ÅŸ" Then
+                        bYeniLicense = True
                     End If
                     sayi += 1
                 Loop
-                sk.Close()
-                fileEncrypted.Delete()
+            Catch ex As Exception
+                ' Dosya okuma hatası - sessizce devam et
+                Debug.WriteLine("License dosya okuma hatası: " & ex.Message)
+            Finally
+                ' Dosyayı her durumda kapat
+                Try
+                    FileClose(fileHandle)
+                Catch
+                End Try
+            End Try
+            
+            ' Dosyayı sil
+            Try
+                Dim fileEncrypted As New FileInfo(dosya)
+                If fileEncrypted.Exists Then fileEncrypted.Delete()
+            Catch
+            End Try
+            If bYeniLicense = True Then
+                btnDecrypt()
+                sec_mdl.Items.Clear()
+                sLicenseModule.Items.Clear()
+                sayi = 0
+                lbl_Dist.Text = ""
+                
+                ' StreamReader ile güvenli dosya okuma
+                Try
+                    Using sk As New StreamReader(dosya)
+                        Do While sk.Peek() > -1
+                            s = sk.ReadLine
+                            If sayi = 0 Then
+                                lbl_lisans.Caption = "Lisans: " & sOnayKodu & "-" & s
+                                lisansNo = s
+                            ElseIf sayi = 1 Then
+                                nKayitSinir = s
+                            ElseIf sayi = 2 Or sayi = 3 Or sayi = 4 Or sayi = 5 Or sayi = 6 Or sayi = 7 Then
+                                lbl_Dist.Text += s & Wrap
+                            ElseIf sayi = 8 Then
+                                'sKasaIletisim = s
+                            ElseIf sayi > 8 Then
+                                'If yetki_kontrol(kullanici, s, False) = True Then
+                                If (s <> "Sonradan Teslim") And (s <> "Barkod") And (s <> "Etiket") And (s <> "Karpin") Then
+                                    If s = "Turab" Then
+                                        sec_mdl.Items.Add(Sorgu_sDil("Easy", sDil))
+                                    Else
+                                        sec_mdl.Items.Add(Sorgu_sDil(s, sDil))
+                                    End If
+                                    sLicenseModule.Items.Add(s)
+                                    sec_mdl.Size = New Size(sec_mdl.Width, sec_mdl.ItemHeight * sec_mdl.Items.Count)
+                                    mn_Main.Size = New Size(mn_Main.Width, sec_mdl.Height + 21)
+                                End If
+                                'End If
+                            End If
+                            sayi += 1
+                        Loop
+                    End Using ' StreamReader otomatik kapatılır
+                Catch ex As Exception
+                    Debug.WriteLine("YeniLicense dosya okuma hatası: " & ex.Message)
+                End Try
+                
+                ' Dosyayı sil
+                Try
+                    If File.Exists(dosya) Then File.Delete(dosya)
+                Catch
+                End Try
             End If
-            fileEncrypted = Nothing
+            
             sec_mdl.Items.Insert(1, "Peşin")
             sLicenseModule.Items.Add("Peşin")
             s = Nothing
