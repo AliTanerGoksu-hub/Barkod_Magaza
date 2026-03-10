@@ -223,8 +223,8 @@ Public Class frm_PazaryeriFaturaGonderim
                 "M.dteFisTarihi, " &
                 "M.lFisNo, " &
                 "M.GibFaturaNo, " &
-                "M.sEFaturaGuid, " &
-                "M.sEFaturaTipi, " &
+                "M.sEfaturaGuid, " &
+                "M.sEfaturaTipi, " &
                 "M.lNetTutar, " &
                 "A.sAciklama3 AS SiparisNo, " &
                 "CASE " &
@@ -268,8 +268,8 @@ Public Class frm_PazaryeriFaturaGonderim
                     Case "dteFisTarihi" : col.Caption = "Fatura Tarihi"
                     Case "lFisNo" : col.Caption = "Fiş No"
                     Case "GibFaturaNo" : col.Caption = "GİB Fatura No"
-                    Case "sEFaturaGuid" : col.Caption = "Fatura UUID"
-                    Case "sEFaturaTipi" : col.Caption = "Fatura Tipi"
+                    Case "sEfaturaGuid" : col.Caption = "Fatura UUID"
+                    Case "sEfaturaTipi" : col.Caption = "Fatura Tipi"
                     Case "lNetTutar" : col.Caption = "Net Tutar" : col.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric : col.DisplayFormat.FormatString = "N2"
                     Case "SiparisNo" : col.Caption = "Sipariş No"
                     Case "Pazaryeri" : col.Caption = "Pazaryeri"
@@ -340,7 +340,7 @@ Public Class frm_PazaryeriFaturaGonderim
                 Dim siparisNo As String = dr("SiparisNo").ToString().Trim()
                 Dim pazaryeri As String = dr("Pazaryeri").ToString().Trim()
                 Dim gibFaturaNo As String = dr("GibFaturaNo").ToString().Trim()
-                Dim faturaGuid As String = If(dr("sEFaturaGuid") IsNot DBNull.Value, dr("sEFaturaGuid").ToString().Trim(), "")
+                Dim faturaGuid As String = If(dr("sEfaturaGuid") IsNot DBNull.Value, dr("sEfaturaGuid").ToString().Trim(), "")
 
                 lblDurum.Text = $"Gönderiliyor: {siparisNo} ({pazaryeri}) - {i + 1}/{rows.Length}"
                 Application.DoEvents()
