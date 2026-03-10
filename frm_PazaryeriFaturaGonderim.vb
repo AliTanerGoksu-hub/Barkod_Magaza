@@ -587,54 +587,48 @@ Public Class frm_PazaryeriFaturaGonderim
     End Function
 
     ''' <summary>
-    ''' Kolaysoft'tan fatura linkini al
+    ''' GİB e-Arşiv fatura linkini al
+    ''' Önce tbStokFisiMaster'dan sEfaturaUrl kontrol edilir, yoksa GİB standart URL formatı kullanılır
     ''' </summary>
     Private Function GetKolaysoftFaturaLink(gibFaturaNo As String, faturaGuid As String) As String
         Try
-            ' Kolaysoft token ve firma bilgilerini al
-            Dim kolaysoftToken As String = ""
-            Dim kolaysoftFirmaId As String = ""
-
+            ' Önce veritabanından kayıtlı fatura URL'ini kontrol et
+            Dim faturaUrl As String = ""
+            
             Using con As New OleDbConnection(connection)
                 con.Open()
-                Using cmd As New OleDbCommand("SELECT TOP 1 KolaysoftToken, KolaysoftFirmaId FROM tbParamGenel", con)
-                    Using reader = cmd.ExecuteReader()
-                        If reader.Read() Then
-                            kolaysoftToken = If(reader.IsDBNull(0), "", reader.GetString(0).Trim())
-                            kolaysoftFirmaId = If(reader.IsDBNull(1), "", reader.GetString(1).Trim())
+                
+                ' tbStokFisiMaster'da sEfaturaUrl sütunu var mı kontrol et ve değerini al
+                Try
+                    Using cmd As New OleDbCommand("SELECT TOP 1 sEfaturaUrl FROM tbStokFisiMaster WHERE GibFaturaNo = ? AND sEfaturaUrl IS NOT NULL AND sEfaturaUrl <> ''", con)
+                        cmd.Parameters.Add("p0", OleDbType.VarChar, 50).Value = gibFaturaNo
+                        Dim result = cmd.ExecuteScalar()
+                        If result IsNot Nothing AndAlso result IsNot DBNull.Value Then
+                            faturaUrl = result.ToString().Trim()
                         End If
                     End Using
-                End Using
+                Catch
+                    ' sEfaturaUrl sütunu yoksa devam et
+                End Try
+                
+                ' Eğer veritabanında URL yoksa, GİB standart formatını kullan
+                If String.IsNullOrEmpty(faturaUrl) AndAlso Not String.IsNullOrEmpty(faturaGuid) Then
+                    ' GİB e-Arşiv portal linki formatı
+                    ' Format: https://earsivportal.efatura.gov.tr/intragiris.html?ettn=GUID
+                    faturaUrl = $"https://earsivportal.efatura.gov.tr/intragiris.html?ettn={faturaGuid}"
+                End If
             End Using
-
-            If String.IsNullOrEmpty(kolaysoftToken) OrElse String.IsNullOrEmpty(kolaysoftFirmaId) Then
-                ' Kolaysoft yoksa, alternatif link oluştur
-                ' TODO: Yerel PDF desteği eklenecek
-                Return ""
+            
+            ' Hala URL yoksa ve GibFaturaNo varsa, alternatif format dene
+            If String.IsNullOrEmpty(faturaUrl) AndAlso Not String.IsNullOrEmpty(gibFaturaNo) Then
+                ' Alternatif: GİB sorgu linki
+                faturaUrl = $"https://earsivportal.efatura.gov.tr/intragiris.html?fatession={gibFaturaNo}"
             End If
-
-            ' Kolaysoft API'den fatura PDF linkini al
-            Dim url As String = $"https://service.kolaysoftpos.com/services/pos/api/erp/invoices?companyId.equals={Uri.EscapeDataString(kolaysoftFirmaId)}&invoiceNumber.equals={Uri.EscapeDataString(gibFaturaNo)}"
-
-            Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
-            req.Method = "GET"
-            req.ContentType = "application/json"
-            req.Headers.Add("Authorization", "Bearer " & kolaysoftToken)
-            req.Timeout = 30000
-
-            Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
-                Using reader As New StreamReader(resp.GetResponseStream())
-                    Dim json As String = reader.ReadToEnd()
-                    Dim arr As JArray = JArray.Parse(json)
-                    If arr.Count > 0 Then
-                        Return arr(0)("pdfUrl")?.ToString()
-                    End If
-                End Using
-            End Using
-
-            Return ""
+            
+            Return faturaUrl
+            
         Catch ex As Exception
-            Debug.WriteLine("Kolaysoft fatura link hatası: " & ex.Message)
+            Debug.WriteLine("Fatura link hatası: " & ex.Message)
             Return ""
         End Try
     End Function
