@@ -7349,6 +7349,7 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
     Private Sub MenuItem57_Click(sender As Object, e As EventArgs) Handles MenuItem57.Click
         Try
             Dim frm As New frm_PazaryeriFaturaGonderim()
+            frm.connection = Me.connection ' Connection string'i aktar
             frm.ShowDialog()
         Catch ex As Exception
             MsgBox("Pazaryeri Fatura Gönderim formu açılırken hata: " & ex.Message)

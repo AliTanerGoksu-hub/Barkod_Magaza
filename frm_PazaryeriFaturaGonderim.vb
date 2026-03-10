@@ -35,7 +35,7 @@ Public Class frm_PazaryeriFaturaGonderim
     Private WithEvents GroupControl1 As GroupControl
 
     ' ===== VERİTABANI =====
-    Private connection As String = frm_fatura_liste.connection
+    Public connection As String = ""
     Private dtFaturalar As New DataTable()
 
     ' ===== API BİLGİLERİ =====
@@ -52,7 +52,7 @@ Public Class frm_PazaryeriFaturaGonderim
 
     Public Sub New()
         InitializeComponent()
-        LoadPazaryeriApis()
+        ' API'ler Load event'inde yüklenecek (connection atandıktan sonra)
     End Sub
 
     Private Sub InitializeComponent()
@@ -702,7 +702,12 @@ Public Class frm_PazaryeriFaturaGonderim
     End Sub
 
     Private Sub frm_PazaryeriFaturaGonderim_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ' Form yüklendiğinde otomatik listele
-        ListeleFaturalar()
+        ' Connection atandıktan sonra API'leri yükle
+        If Not String.IsNullOrEmpty(connection) Then
+            LoadPazaryeriApis()
+            ListeleFaturalar()
+        Else
+            lblDurum.Text = "Hata: Veritabanı bağlantısı yok!"
+        End If
     End Sub
 End Class
