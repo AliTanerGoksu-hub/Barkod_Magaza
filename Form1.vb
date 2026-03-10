@@ -24212,22 +24212,24 @@ CleanupExcel:
     End Function
 
     ''' <summary>
-    ''' Parçalı FTP Upload - büyük dosyaları 50MB parçalar halinde gönderir
+    ''' Parçalı FTP Upload - 300MB üzeri dosyaları 100MB parçalar halinde gönderir
+    ''' 300MB altı dosyalar direkt gönderilir
     ''' </summary>
     Private Function ParcaliFtpUpload(dosyaYolu As String, ftpHedef As String, kullanici As String, sifre As String) As Boolean
         Try
             Dim dosyaBoyut As Long = New FileInfo(dosyaYolu).Length
-            Dim parcaBoyut As Long = 50 * 1024 * 1024 ' 50MB
+            Dim parcaBoyut As Long = 100 * 1024 * 1024 ' 100MB parçalar
+            Dim bolmeEsik As Long = 300 * 1024 * 1024 ' 300MB eşik
             
-            ' Dosya 50MB'dan küçükse direkt gönder
-            If dosyaBoyut < parcaBoyut Then
-                logla("[FTP] Dosya küçük, direkt gönderiliyor: " & FormatBytes(dosyaBoyut))
+            ' Dosya 300MB'dan küçükse direkt gönder
+            If dosyaBoyut < bolmeEsik Then
+                logla("[FTP] Dosya 300MB altında, direkt gönderiliyor: " & FormatBytes(dosyaBoyut))
                 Return DirekFtpUpload(dosyaYolu, ftpHedef, kullanici, sifre)
             End If
             
-            ' Büyük dosya - parçalara böl ve gönder
+            ' Büyük dosya - 100MB parçalara böl ve gönder
             Dim parcaSayisi As Integer = CInt(Math.Ceiling(dosyaBoyut / parcaBoyut))
-            logla("[FTP] Dosya " & parcaSayisi & " parçaya bölünecek: " & FormatBytes(dosyaBoyut))
+            logla("[FTP] Dosya 300MB üzeri, " & parcaSayisi & " parçaya bölünecek: " & FormatBytes(dosyaBoyut))
             
             Dim basariliParcalar As Integer = 0
             Dim parcaDosyalari As New List(Of String)
