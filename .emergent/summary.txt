@@ -1,161 +1,150 @@
 <analysis>**original_problem_statement:**
-The user initially requested an analysis of the  function in . This evolved into a major feature request to create a Bulk Image Upload functionality. The core requirement is to upload images from a folder and automatically associate them with the correct stock items based on a filename convention: .
+The user's primary goal is to add a major new feature: Pazaryeri Fatura Entegrasyonu (Marketplace Invoice Integration). This involves creating a new interface to send GİB-approved invoices to marketplaces like Trendyol and Hepsiburada using their respective APIs.
 
-This led to the discovery of a significant architectural limitation: the existing  table could not handle model-specific color variants (e.g., for Model X, White is V1, but for Model Y, White is V2).
+Throughout the session, the user also reported several critical bugs unrelated to the new feature, which the agent had to prioritize and fix. These included:
+-   An issue where customer information was not being saved when importing orders from the Quka API ().
+-   A POS payment process freezing in .
+-   A file-locking crash related to license checks () that occurred after midnight.
+-   Duplicate images being created during bulk and single image uploads due to incorrect logic (size-based instead of model-color based).
+-   Various errors during Excel imports, including data not being saved correctly and COM exceptions.
 
-To solve this, the user and agent decided on a new architecture:
-1.  Create a new table, , to map ,  (variant), and .
-2.  Update the Excel import process () to populate this new table.
-3.  Update the new Bulk Image Upload feature () to use this new table for lookups.
-4.  This isolates the new functionality, ensuring the legacy system remains untouched.
-
-**PRODUCT REQUIREMENTS:**
-1.  Create a Bulk Image Upload form accessible from the Sistem tab in the main application window ().
-2.  This form should allow the user to select a folder of images.
-3.  The system must parse filenames like  to extract the Model, Variant (), and image sequence number ().
-4.  The system must use the new  table to find the correct  for a given Model and Variant.
-5.  The Excel import feature () must populate the  table. It should handle creating new entries and updating existing ones if the color changes for a specific model-variant combination.
-6.  The  table should be created automatically on application startup if it doesn't exist.
+**PRODUCT REQUIREMENTS (Marketplace Invoice Integration):**
+1.  Create a new form, , accessible via a new Pazaryeri Fatura Gönder button in the  context menu.
+2.  The form must list GİB-approved invoices ( is not null) that are identified as marketplace orders (via  in ).
+3.  Users should be able to filter invoices by marketplace and date.
+4.  A Gönder button will send the selected invoice details (especially the GİB e-Arşiv link) to the corresponding marketplace API.
+5.  API credentials from the  table must be used for authentication.
+6.  A new log table, , must be created to track the submission status of each invoice. This table should be created automatically by the application on startup if it doesn't exist.
 
 **User's preferred language**: Turkish. The next agent **MUST** respond in Turkish.
 
 **what currently exists?**
-A large, monolithic VB.NET Windows Forms application. A major new feature for Bulk Image Upload has been implemented, along with a significant architectural addition: a new database table  to manage model-specific color-variant mappings.
+A large, monolithic VB.NET Windows Forms application. Several critical bugs related to POS payments, license checks, image uploads, and Excel imports have been resolved in this session.
 
-- A new form, , handles the bulk upload logic.
-- A button has been added to the Sistem tab in  to launch this new form.
-- The Excel import logic in  has been updated to write data to the new  table.
-- A function has been added to  to automatically create the  table if it doesn't exist.
-- All code changes have been pushed to the user's GitHub repository.
+The foundation for the new Marketplace Invoice Integration feature is in place:
+-   The new form  has been created and is accessible.
+-   The required database table  is created automatically on application startup.
+-   The form successfully lists GİB-approved invoices that are from marketplaces.
+-   The actual API sending logic in the  and  functions is still a placeholder and needs to be implemented.
 
 **Last working item**:
-- **Last item agent was working:** The agent was debugging a critical issue where the new  table was not being populated during the Excel import process. The user reported that the  data was not being read from the Excel file.
-- **Status:** IN PROGRESS
-- **Agent Testing Done:** N
-- **Which testing method agent to use?** N/A. The user performs all testing manually after the agent pushes code changes to GitHub.
-- **User Testing Done:** N
+-   **Last item agent was working:** The agent was investigating a new, high-priority bug reported by the user. In , when importing orders from the Quka API, customer information for some orders (e.g., ) is not being saved to the database, despite being present in the API response. The user has provided log files for investigation.
+-   **Status:** IN PROGRESS
+-   **Agent Testing Done:** N
+-   **Which testing method agent to use?** N/A. The user performs all testing manually.
+-   **User Testing Done:** N
 
 **All Pending/In progress Issue list**:
-- **Issue 1:  is not populated on Excel import (P0)**
-    - **Description:** During the Excel import process in , the code fails to extract the Varyant value from the selected Excel column. This prevents the new  table from being populated, which breaks the entire new image upload feature. The user has confirmed they are selecting the correct column () in the UI.
-    - **Attempted fixes:**
-        1.  Added extensive debug logging to  to trace the values of , , and .
-        2.  The agent incorrectly assumed the Varyant column was missing from the Excel file and added a temporary fix to default the  variable to V1. This needs to be re-evaluated as the user confirmed the column exists.
-    - **Next debug checklist:**
-        1.  Go to .
-        2.  Locate the  function or the  event handler where the import loop resides.
-        3.  Find the line: .
-        4.  The issue is that  is not returning the value from the correct Excel column () even though it's selected in the  dropdown.
-        5.  Investigate the implementation of the  function. It likely uses the  array which maps dropdown selections to column indices. There might be a bug in how  (for the 'Varyant' dropdown) is being read or used.
-        6.  Confirm the logic that defaults an empty  to V1 is still in place. While it was a temporary fix, it might be masking the root problem. The goal is to read the *actual* value from the Excel file.
-    - **Why fix this issue and what will be achieved with the fix?** This is a critical blocker. Without populating , the entire Bulk Image Upload feature is unusable. Fixing this will complete the data pipeline for the new architecture.
-    - **Status:** IN PROGRESS
-    - **Is recurring issue?** N
-    - **Should Test frontend/backend/both after fix?** N/A (User will test the VB.NET app).
-    - **Blocked on other issue:** No.
+-   **Issue 1: Customer info not saving from Quka API (P0)**
+    -   **Description:** When importing orders via , customer data (name, address) is sometimes not saved to the  table. This is a data integrity issue. The user provided order ID  and log files (, ) as examples.
+    -   **Attempted fixes:** None. Investigation just started.
+    -   **Next debug checklist:**
+        1.  Analyze the provided log files to see the raw API response for the order.
+        2.  Open  and find the function that parses the API response and saves customer data.
+        3.  Trace the logic to understand why the save operation is being skipped. Check the conditions for creating a new customer () vs. updating an existing one. The logic to detect if a customer already exists might be flawed.
+    -   **Why fix this issue and what will be achieved with the fix?** This is a critical data integrity bug that can cause shipping and accounting errors. Fixing it will ensure all order information is correctly captured.
+    -   **Status:** IN PROGRESS
+    -   **Is recurring issue?** Y
+    -   **Should Test frontend/backend/both after fix?** N/A (User will test).
+    -   **Blocked on other issue:** No. This is the current top priority.
 
 **In progress Task List**:
-There are no other in-progress tasks. The sole focus is on fixing the P0 issue above.
+-   **Task 1: Complete Marketplace Invoice Integration (P1)**
+    -   **Description:** Implement the core logic for sending GİB invoices to marketplace APIs. This task was paused to address the P0 bug above.
+    -   **Where to resume:**
+        1.  Open .
+        2.  Implement the  and  functions.
+        3.  This involves: reading API keys from , constructing the JSON payload for the marketplace's specific endpoint (e.g., Trendyol's ), making the HTTP request, and logging the result in  and the UI.
+    -   **What will be achieved with this?** This will complete a major feature that automates a crucial business process.
+    -   **Status:** IN PROGRESS
+    -   **Should Test frontend/backend/both after fix?** N/A (User will test).
+    -   **Blocked on something:** Blocked by **Issue 1**, as per the user's request to fix the bug first.
 
 **Upcoming and Future Tasks**
-- **Upcoming Tasks:**
-    - **Full Workflow Test (P0):** Once the import bug is fixed, the user must perform a full end-to-end test of the new system:
-        1.  Import an Excel file with stock data (including variants).
-        2.  Verify  is populated correctly.
-        3.  Use the Bulk Image Upload feature to upload corresponding images.
-        4.  Verify images are correctly associated with the stock items in the .
-- **Future Tasks:**
-    - **Automatic Variant Increment (P2):** The user expressed interest in a feature where if a model has multiple colors, the system could automatically assign incrementing variants (V1, V2, V3...). This would be an enhancement to the Excel import logic.
+-   None have been discussed beyond the current P0 bug and P1 feature.
 
 **Completed work in this session**
-- **Analysis:** Analyzed the  image upload function in .
-- **Feature: Bulk Image Upload:**
-    - Created , a new form with a UI for selecting a folder and a progress log.
-    - Added a Toplu Resim Yükle button to the Sistem ribbon tab in .
-    - Implemented logic to parse filenames () to extract model, variant, and image sequence number.
-- **Architecture: Model-Variant Mapping:**
-    - Designed and implemented a new database table  to create a relationship between ,  (variant), and .
-    - Added a function to  to automatically create this table on application startup using  commands.
-- **Integration:**
-    - Modified  to populate the new  table during Excel imports.
-    - Modified  to read from  to find the correct color for an image.
-- **Bug Fixes:**
-    - Fixed multiple compilation errors (, , ) by adding missing file references to the  file, adding necessary  statements, and resolving ambiguous type references.
-    - Fixed multiple logic bugs in the image upload feature related to trailing spaces in  ( vs ) and parsing image sequence numbers from filenames.
+-   **Bug Fix:** Resolved an issue where the POS payment process () would freeze by ensuring the payment request is sent *before* waiting for confirmation.
+-   **Bug Fix:** Fixed an application crash that occurred after midnight due to a file lock on  by implementing a  block to ensure the file is closed.
+-   **Bug Fix:** Corrected the image upload logic in  and  to be based on Model+Color instead of Model+Color+Size, preventing duplicate images for each size.
+-   **Bug Fix:** Addressed multiple Excel import bugs in , including fixing data persistence for variants and resolving a  COM error.
+-   **Feature Scaffolding:** Created the form (), database table, and menu integration for the Marketplace Invoice Integration feature. The logic to list eligible invoices is complete.
+-   **Bug Fix:** Resolved multiple compilation and runtime errors (, , ) that arose during the development of the new feature.
 
 **Earlier issues found/mentioned but not fixed**
-- None. All identified issues during this session were either fixed or are currently being worked on (the main P0 issue).
+-   None. All reported issues were either resolved or are currently in the pending list.
 
 **Known issue recurrence from previous fork**
-- None.
+-   None.
 
 **Code Architecture**
-- A monolithic VB.NET Windows Forms application.
-- Interacts with a SQL database via ADO.NET ( provider).
-- A new, isolated architecture has been introduced for handling color/variant data for new features. It revolves around the new  table, which is populated by the Excel import process and read by the bulk image upload feature. The legacy  table is left untouched for existing application parts.
-
-**Key Technical Concepts**
-- **VB.NET & Windows Forms:** The core technology stack.
-- **ADO.NET (OleDb):** The project uses the  provider for all database interactions. This is a critical detail, as using  will fail.
-- **File Encoding:** The  source files are in . They must be converted to  for editing and converted back to  before saving.
-- **Git:** Version control is managed via Git, with all changes pushed to the user's remote repository.
+-   A monolithic VB.NET Windows Forms application using DevExpress components.
+-   It connects to a SQL Server database via the ADO.NET  provider.
+-   The application integrates with several external APIs for e-invoicing (Kolaysoft) and order management (Quka).
 
 **key DB schema**
-- **tbStok:** Main product table {, , , ...}
-- **tbRenk:** Legacy global color definitions {, , }
-- **tbStokResim:** Stores product images {, , , , , , ...}
-- **tbModelVaryantRenk (New):** Maps model-specific variants to colors {, , , , }
+-   **tbStokFisiMaster:** Main invoice header table (, , , ).
+-   **tbStokFisiAciklamasi:** Contains the marketplace order number in .
+-   **tbPazaryeriAyar:** Stores marketplace API credentials (, , , ).
+-   **tbPazaryeriFaturaGonderim (New):** Logs invoice submissions to marketplaces.
+-   **tbCari:** Stores customer information.
 
 **changes in tech stack**
-- No changes to the core tech stack, but a significant addition to the database schema () to support new feature requirements.
+-   None.
 
 **All files of reference**
-- : (Created) The new form for the bulk image upload feature.
-- : (Heavily Modified) The Excel import form, now integrated with the  table.
-- : (Modified) The main application form, updated to add the new button and the automatic table creation logic.
-- : (Modified) The Visual Studio project file, updated to include the new  form.
-- : (Created) A helper script for manually creating the new database table.
+-   : (To be investigated) For the customer data saving bug.
+-   : (Created/Modified) The new marketplace integration form.
+-   : (Modified) Menu item for the new form was added here.
+-   : (Modified) Added auto-table creation and fixed the license file lock.
+-   : (Modified) Fixed the POS payment freeze.
+-   : (Modified) Corrected duplicate image upload logic.
+-   : (Modified) Corrected image upload logic.
+-   : (Modified) Fixed Excel import issues.
+-   : (Modified) Updated to include the new form.
 
 **Areas that need refactoring**:
-- None at the moment. The new architecture was specifically designed to avoid refactoring the legacy system.
+-   The license check code in  uses legacy /. While patched, it could be modernized using  for better error handling and resource management.
 
 **Critical Info for New Agent**
-- **MUST SPEAK TURKISH.** All user communication must be in Turkish.
-- **CRITICAL: USE OleDb, NOT SqlClient.** The project's database connection is configured for the  provider. The agent's attempt to use  for the auto-table-creation feature failed until it was switched to . Assume all new DB code must use .
-- **CRITICAL: File Encoding.** VB.NET source files () are in  encoding. You **must** use  to convert them to  before viewing/editing and convert them back to  before saving.
-- **User-Driven Testing:** You cannot compile or run the VB.NET application. Your workflow is: implement fix -> push to GitHub -> await user feedback. The user will provide compilation errors or runtime bug reports, often with screenshots.
-- **New Architecture:** Be aware of the new, isolated architecture for variants. The  table is central to all new features. Do not mix its logic with the legacy  table.
+-   **MUST SPEAK TURKISH.** All communication with the user must be in Turkish.
+-   **File Encoding is UTF-16LE.** You **must** convert  files to UTF-8 before editing and back to  before saving using . The previous agent made mistakes here, so be careful.
+-   **No Local Testing Environment.** You cannot compile or run the code. The workflow is: implement changes -> push to GitHub -> wait for the user to test and report back.
+-   **Current Priority:** The user has explicitly stated to fix the bug in  **before** continuing with the marketplace integration feature.
 
 **documents and test reports created in this job**
-- 
+-   
+-   User-provided logs (e.g., ) are available in the message history.
 
 **Last 10 User Messages and any pending HUMAN messages**
-1.  **User:** Reports that  table was not created automatically. (Status: Resolved)
-2.  **User:** Provides the error log: . (Status: Resolved, led to OleDb fix)
-3.  **User:** Reports that the new table is still not being populated with data. (Status: In Progress)
-4.  **User:** Asks the agent to add debug code to check variables. (Status: Completed)
-5.  **User:** States that the Varyant data is not being pulled from Excel, providing a screenshot of the mapping UI. (Status: In Progress)
-6.  **User:** Provides the Excel file again for the agent to inspect. (Status: Completed)
-7.  **Agent:** Incorrectly suggests the 'J' column should be used for 'Varyant'.
-8.  **User:** Corrects the agent, stating the 'I' column is 'Varyant'.
-9.  **User:** Asks with frustration if the agent is blind, re-posting the screenshot showing Column 'I' is indeed 'Varyant'.
-10. **Agent:** Apologizes and acknowledges that Column 'I' is correct, pivoting to question why data isn't being read from it. (This is the current state).
+1.  **User:** Reports the application crashes after midnight due to a file lock on . (Status: Resolved)
+2.  **User:** Reports the POS payment screen in  freezes. (Status: Resolved)
+3.  **User:** Asks the agent to research how to implement marketplace invoice integration. (Status: Research complete, implementation started)
+4.  **User:** Confirms data storage locations and UI preferences for the new feature.
+5.  **User:** Confirms all other tasks are complete and tells the agent to focus on the new marketplace feature.
+6.  **Agent:** Starts building the new feature.
+7.  **User:** Asks how to select which marketplace's invoices to send. (Status: Clarified)
+8.  **User:** Provides compilation error feedback for the new form. (Status: Resolved)
+9.  **User:** Provides a runtime error () for the new form. (Status: Resolved)
+10. **User:** Interrupts with a new, urgent bug:  is not saving customer info for some orders and provides logs. (Status: IN PROGRESS - **This is the current task**).
 
 **Project Health Check:**
-- **Broken:** The primary new feature is non-functional due to the critical bug in the Excel import process.
+-   **Broken:** The Quka order import process has a critical data integrity bug that prevents customer information from being saved correctly.
 
 **3rd Party Integrations**
-- **NPOI Library:** Inferred from VB.NET code, used for handling Excel files.
-- **GitHub:** Used for version control.
+-   **NPOI:** Used for Excel operations.
+-   **DevExpress:** UI component library.
+-   **Kolaysoft:** Used for GİB e-Fatura integration.
+-   **Quka API:** Used for importing marketplace orders.
+-   **Trendyol & Hepsiburada APIs:** To be implemented for invoice submission.
 
 **Testing status**
-- **Testing agent used after significant changes:** NO (Not applicable for VB.NET).
-- **Troubleshoot agent used after agent stuck in loop:** NO.
-- **Test files created:** None.
-- **Known regressions:** None.
+-   **Testing agent used after significant changes:** NO (Not applicable to VB.NET project).
+-   **Test files created:** None.
+-   **Known regressions:** None.
 
 **Credentials to test flow:**
-- **GitHub Token:**  (The user provided this token, it might still be valid).
+-   N/A
 
 **What agent forgot to execute**
-- The agent has followed all user commands, but made several logical errors that required user correction (e.g., placing the button in the wrong form, misinterpreting filename conventions, using SqlClient instead of OleDb). There are no pending unexecuted tasks, only the pending bug fix.</analysis>
+-   The implementation of the marketplace invoice sending logic is incomplete, as it was correctly paused to address a higher-priority bug reported by the user. The next agent should resolve the bug first, then resume the feature work.</analysis>
