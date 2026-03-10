@@ -9750,6 +9750,14 @@ Public Class Form1
         End Try
         ' ==================================================================
         
+        ' ============ sEfaturaUrl SÜTUNU KONTROLÜ VE OLUŞTURMA ============
+        Try
+            EnsureEfaturaUrlColumnExists()
+        Catch ex As Exception
+            Debug.WriteLine("sEfaturaUrl sütun kontrolü hatası: " & ex.Message)
+        End Try
+        ' ==================================================================
+        
         ' ============ SSL/TLS PROTOKOL AYARI (EN BASTA OLMALI) ============
         Try
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 Or System.Net.SecurityProtocolType.Tls11 Or System.Net.SecurityProtocolType.Tls
@@ -23840,6 +23848,40 @@ CleanupExcel:
         Catch ex As Exception
             Debug.WriteLine("[tbPazaryeriFaturaGonderim] ✗ Hata: " & ex.Message)
             ' Hata olsa bile uygulama açılmaya devam etsin
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' tbStokFisiMaster tablosuna sEfaturaUrl sütununu ekler (yoksa)
+    ''' Pazaryerlerine gönderilecek e-Arşiv fatura linkini saklamak için
+    ''' </summary>
+    Public Sub EnsureEfaturaUrlColumnExists()
+        Try
+            Using con As New OleDb.OleDbConnection(connection)
+                con.Open()
+                
+                ' Sütun var mı kontrol et
+                Dim checkCmd As New OleDb.OleDbCommand(
+                    "SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'tbStokFisiMaster' AND COLUMN_NAME = 'sEfaturaUrl'", con)
+                Dim columnExists As Integer = CInt(checkCmd.ExecuteScalar())
+                
+                If columnExists = 0 Then
+                    Debug.WriteLine("[sEfaturaUrl] Sütun bulunamadı, ekleniyor...")
+                    Try
+                        ' Sütunu ekle
+                        Dim alterCmd As New OleDb.OleDbCommand(
+                            "ALTER TABLE tbStokFisiMaster ADD sEfaturaUrl NVARCHAR(500) NULL", con)
+                        alterCmd.ExecuteNonQuery()
+                        Debug.WriteLine("[sEfaturaUrl] ✓ Sütun başarıyla eklendi")
+                    Catch alterEx As Exception
+                        Debug.WriteLine("[sEfaturaUrl] ✗ Ekleme hatası: " & alterEx.Message)
+                    End Try
+                Else
+                    Debug.WriteLine("[sEfaturaUrl] ✓ Sütun mevcut")
+                End If
+            End Using
+        Catch ex As Exception
+            Debug.WriteLine("[sEfaturaUrl] ✗ Hata: " & ex.Message)
         End Try
     End Sub
 
