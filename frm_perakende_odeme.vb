@@ -3268,7 +3268,7 @@ Public Class frm_perakende_odeme
             Catch ex As Exception
                 LogYaz("tamamla", "Kolaysoft init hatasi: " & ex.Message)
             End Try
-            
+
             Dim posOnay As Boolean = PosOdemeOnayBekle()
             If Not posOnay Then
                 ' POS RED verdi - odeme kaydetme
