@@ -500,10 +500,10 @@ Public Class frm_PazaryeriFaturaGonderim
             End If
             baseUrl = baseUrl.TrimEnd("/"c)
             
-            ' Authentication bilgileri
-            Dim apiKey As String = If(Not String.IsNullOrEmpty(api.ApiKey), api.ApiKey, api.ApiSecret)
-            Dim apiSecret As String = api.ApiSecret
-            Dim authRaw As String = apiKey & ":" & apiSecret
+            ' Authentication bilgileri - Hepsiburada: MerchantId:ServisAnahtari
+            ' MerchantId = SellerId, ServisAnahtari = ApiSecret
+            Dim servisAnahtari As String = If(Not String.IsNullOrEmpty(api.ApiSecret), api.ApiSecret, api.ApiKey)
+            Dim authRaw As String = api.SellerId & ":" & servisAnahtari
             Dim authBytes As Byte() = Encoding.UTF8.GetBytes(authRaw)
             Dim authBase64 As String = Convert.ToBase64String(authBytes)
             
