@@ -9758,6 +9758,14 @@ Public Class Form1
         End Try
         ' ==================================================================
         
+        ' ============ PAZARYERİ BASE URL GÜNCELLEMESİ ============
+        Try
+            UpdatePazaryeriBaseUrls()
+        Catch ex As Exception
+            Debug.WriteLine("Pazaryeri BaseUrl güncelleme hatası: " & ex.Message)
+        End Try
+        ' ==================================================================
+        
         ' ============ SSL/TLS PROTOKOL AYARI (EN BASTA OLMALI) ============
         Try
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 Or System.Net.SecurityProtocolType.Tls11 Or System.Net.SecurityProtocolType.Tls
@@ -23885,5 +23893,53 @@ CleanupExcel:
         End Try
     End Sub
 
+    ''' <summary>
+    ''' Pazaryeri API Base URL'lerini günceller
+    ''' Mağaza URL'leri yerine doğru API endpoint'lerini ayarlar
+    ''' </summary>
+    Public Sub UpdatePazaryeriBaseUrls()
+        Try
+            Using con As New OleDb.OleDbConnection(connection)
+                con.Open()
+                
+                ' Pazaryeri API URL'leri - doğru endpoint'ler
+                Dim apiUrls As New Dictionary(Of String, String)(StringComparer.OrdinalIgnoreCase) From {
+                    {"Trendyol", "https://api.trendyol.com"},
+                    {"Hepsiburada", "https://radium.hepsiburada.com"},
+                    {"Amazon", "https://sellingpartnerapi-eu.amazon.com"},
+                    {"PttAVM", "https://api.pttavm.com"},
+                    {"CicekSepeti", "https://apis.ciceksepeti.com"},
+                    {"Modanisa", "https://api.modanisa.com"},
+                    {"N11", "https://api.n11.com/ws"},
+                    {"Pazarama", "https://isortagim.pazarama.com"},
+                    {"Farmazon", "https://api.farmazon.com.tr"},
+                    {"LCWaikiki", "https://api.lcwaikiki.com"},
+                    {"Idefix", "https://api.idefix.com"}
+                }
+                
+                For Each kvp In apiUrls
+                    Try
+                        ' Sadece yanlış URL'leri güncelle (mağaza URL'si olanlar veya boş olanlar)
+                        Dim updateCmd As New OleDb.OleDbCommand(
+                            "UPDATE tbPazaryeriAyar SET sBaseUrl = ? " &
+                            "WHERE UPPER(sPazaryeri) = UPPER(?) " &
+                            "AND (sBaseUrl IS NULL OR sBaseUrl = '' OR sBaseUrl NOT LIKE 'https://api.%' OR sBaseUrl LIKE '%/magaza/%')", con)
+                        updateCmd.Parameters.AddWithValue("p0", kvp.Value)
+                        updateCmd.Parameters.AddWithValue("p1", kvp.Key)
+                        Dim affected As Integer = updateCmd.ExecuteNonQuery()
+                        If affected > 0 Then
+                            Debug.WriteLine($"[PazaryeriBaseUrl] {kvp.Key} güncellendi: {kvp.Value}")
+                        End If
+                    Catch updateEx As Exception
+                        Debug.WriteLine($"[PazaryeriBaseUrl] {kvp.Key} güncellenemedi: {updateEx.Message}")
+                    End Try
+                Next
+                
+                Debug.WriteLine("[PazaryeriBaseUrl] ✓ Kontrol tamamlandı")
+            End Using
+        Catch ex As Exception
+            Debug.WriteLine("[PazaryeriBaseUrl] ✗ Hata: " & ex.Message)
+        End Try
+    End Sub
 
 End Class
