@@ -580,26 +580,46 @@ Public Class frm_PazaryeriFaturaGonderim
             Dim omsBaseUrl As String = "https://oms-external.hepsiburada.com"
             
             Dim packageNumber As String = ""
+            Dim aramaYapildi As Boolean = False
             
             ' Yöntem 1: Teslim edilenler listesinde ara
-            packageNumber = SearchPackageInDelivered(omsBaseUrl, merchantId, orderNumber, authBase64)
-            If Not String.IsNullOrEmpty(packageNumber) Then
-                Return packageNumber
-            End If
+            Try
+                packageNumber = SearchPackageInDelivered(omsBaseUrl, merchantId, orderNumber, authBase64)
+                aramaYapildi = True
+                If Not String.IsNullOrEmpty(packageNumber) Then
+                    Return packageNumber
+                End If
+            Catch ex As Exception
+                Debug.WriteLine("[HB] Delivered arama hatası: " & ex.Message)
+            End Try
             
             ' Yöntem 2: Kargoda olanlar listesinde ara
-            packageNumber = SearchPackageInShipped(omsBaseUrl, merchantId, orderNumber, authBase64)
-            If Not String.IsNullOrEmpty(packageNumber) Then
-                Return packageNumber
-            End If
+            Try
+                packageNumber = SearchPackageInShipped(omsBaseUrl, merchantId, orderNumber, authBase64)
+                aramaYapildi = True
+                If Not String.IsNullOrEmpty(packageNumber) Then
+                    Return packageNumber
+                End If
+            Catch ex As Exception
+                Debug.WriteLine("[HB] Shipped arama hatası: " & ex.Message)
+            End Try
             
             ' Yöntem 3: Paket bilgilerinde ara (open status) - mpop API kullan
-            packageNumber = SearchPackageInOpen(baseUrl, merchantId, orderNumber, authBase64)
-            If Not String.IsNullOrEmpty(packageNumber) Then
-                Return packageNumber
-            End If
+            Try
+                packageNumber = SearchPackageInOpen(baseUrl, merchantId, orderNumber, authBase64)
+                aramaYapildi = True
+                If Not String.IsNullOrEmpty(packageNumber) Then
+                    Return packageNumber
+                End If
+            Catch ex As Exception
+                Debug.WriteLine("[HB] Open arama hatası: " & ex.Message)
+            End Try
             
-            hataMesaji = "Sipariş için paket numarası bulunamadı: " & orderNumber
+            If aramaYapildi Then
+                hataMesaji = "Sipariş için paket numarası bulunamadı: " & orderNumber
+            Else
+                hataMesaji = "API bağlantı hatası - Sipariş: " & orderNumber
+            End If
             Return Nothing
             
         Catch ex As Exception
@@ -616,29 +636,60 @@ Public Class frm_PazaryeriFaturaGonderim
             ' Son 30 günlük teslim edilenler
             Dim beginDate As String = DateTime.Now.AddDays(-30).ToString("yyyy-MM-dd")
             Dim endDate As String = DateTime.Now.ToString("yyyy-MM-dd")
-            Dim url As String = baseUrl & "/packages/merchantid/" & merchantId & "/delivered?beginDate=" & beginDate & "&endDate=" & endDate & "&limit=50&offset=0"
+            Dim url As String = baseUrl & "/packages/merchantid/" & merchantId & "/delivered?begindate=" & beginDate & "&enddate=" & endDate & "&limit=50&offset=0"
+            
+            Debug.WriteLine("[HB-Delivered] URL: " & url)
             
             Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
             req.Method = "GET"
             req.Accept = "application/json"
             req.Timeout = 30000
             req.Headers.Add("Authorization", "Basic " & authBase64)
+            req.Headers.Add("User-Agent", "BusinessSmart/1.0")
             
             Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
                 Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
                     Dim json As String = reader.ReadToEnd()
-                    ' JSON'dan orderNumber eşleşen kaydın packageNumber'ını bul
-                    Dim arr As JArray = JArray.Parse(json)
-                    For Each item As JObject In arr
-                        Dim itemOrderNo As String = If(item("orderNumber") IsNot Nothing, item("orderNumber").ToString(), "")
-                        If itemOrderNo = orderNumber OrElse itemOrderNo.EndsWith(orderNumber) OrElse orderNumber.EndsWith(itemOrderNo) Then
-                            Return If(item("packageNumber") IsNot Nothing, item("packageNumber").ToString(), "")
+                    Debug.WriteLine("[HB-Delivered] Response: " & If(json.Length > 500, json.Substring(0, 500), json))
+                    
+                    ' Response array veya object olabilir
+                    If json.StartsWith("[") Then
+                        Dim arr As JArray = JArray.Parse(json)
+                        For Each item As JObject In arr
+                            Dim itemOrderNo As String = If(item("orderNumber") IsNot Nothing, item("orderNumber").ToString(), "")
+                            Debug.WriteLine("[HB-Delivered] Checking: " & itemOrderNo & " vs " & orderNumber)
+                            If itemOrderNo = orderNumber OrElse itemOrderNo.EndsWith(orderNumber) OrElse orderNumber.EndsWith(itemOrderNo) Then
+                                Return If(item("packageNumber") IsNot Nothing, item("packageNumber").ToString(), "")
+                            End If
+                        Next
+                    ElseIf json.StartsWith("{") Then
+                        ' Object ise items array'i içinde olabilir
+                        Dim obj As JObject = JObject.Parse(json)
+                        If obj("items") IsNot Nothing Then
+                            For Each item As JObject In obj("items")
+                                Dim itemOrderNo As String = If(item("orderNumber") IsNot Nothing, item("orderNumber").ToString(), "")
+                                If itemOrderNo = orderNumber OrElse itemOrderNo.EndsWith(orderNumber) OrElse orderNumber.EndsWith(itemOrderNo) Then
+                                    Return If(item("packageNumber") IsNot Nothing, item("packageNumber").ToString(), "")
+                                End If
+                            Next
                         End If
-                    Next
+                    End If
                 End Using
             End Using
             Return Nothing
-        Catch
+        Catch ex As WebException
+            Debug.WriteLine("[HB-Delivered] WebException: " & ex.Message)
+            If ex.Response IsNot Nothing Then
+                Try
+                    Using reader As New StreamReader(ex.Response.GetResponseStream(), Encoding.UTF8)
+                        Debug.WriteLine("[HB-Delivered] Error Response: " & reader.ReadToEnd())
+                    End Using
+                Catch
+                End Try
+            End If
+            Return Nothing
+        Catch ex As Exception
+            Debug.WriteLine("[HB-Delivered] Exception: " & ex.Message)
             Return Nothing
         End Try
     End Function
@@ -650,28 +701,49 @@ Public Class frm_PazaryeriFaturaGonderim
         Try
             Dim beginDate As String = DateTime.Now.AddDays(-30).ToString("yyyy-MM-dd")
             Dim endDate As String = DateTime.Now.ToString("yyyy-MM-dd")
-            Dim url As String = baseUrl & "/packages/merchantid/" & merchantId & "/shipped?beginDate=" & beginDate & "&endDate=" & endDate & "&limit=50&offset=0"
+            Dim url As String = baseUrl & "/packages/merchantid/" & merchantId & "/shipped?begindate=" & beginDate & "&enddate=" & endDate & "&limit=50&offset=0"
+            
+            Debug.WriteLine("[HB-Shipped] URL: " & url)
             
             Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
             req.Method = "GET"
             req.Accept = "application/json"
             req.Timeout = 30000
             req.Headers.Add("Authorization", "Basic " & authBase64)
+            req.Headers.Add("User-Agent", "BusinessSmart/1.0")
             
             Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
                 Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
                     Dim json As String = reader.ReadToEnd()
-                    Dim arr As JArray = JArray.Parse(json)
-                    For Each item As JObject In arr
-                        Dim itemOrderNo As String = If(item("orderNumber") IsNot Nothing, item("orderNumber").ToString(), "")
-                        If itemOrderNo = orderNumber OrElse itemOrderNo.EndsWith(orderNumber) OrElse orderNumber.EndsWith(itemOrderNo) Then
-                            Return If(item("packageNumber") IsNot Nothing, item("packageNumber").ToString(), "")
+                    Debug.WriteLine("[HB-Shipped] Response length: " & json.Length)
+                    
+                    If json.StartsWith("[") Then
+                        Dim arr As JArray = JArray.Parse(json)
+                        For Each item As JObject In arr
+                            Dim itemOrderNo As String = If(item("orderNumber") IsNot Nothing, item("orderNumber").ToString(), "")
+                            If itemOrderNo = orderNumber OrElse itemOrderNo.EndsWith(orderNumber) OrElse orderNumber.EndsWith(itemOrderNo) Then
+                                Return If(item("packageNumber") IsNot Nothing, item("packageNumber").ToString(), "")
+                            End If
+                        Next
+                    ElseIf json.StartsWith("{") Then
+                        Dim obj As JObject = JObject.Parse(json)
+                        If obj("items") IsNot Nothing Then
+                            For Each item As JObject In obj("items")
+                                Dim itemOrderNo As String = If(item("orderNumber") IsNot Nothing, item("orderNumber").ToString(), "")
+                                If itemOrderNo = orderNumber OrElse itemOrderNo.EndsWith(orderNumber) OrElse orderNumber.EndsWith(itemOrderNo) Then
+                                    Return If(item("packageNumber") IsNot Nothing, item("packageNumber").ToString(), "")
+                                End If
+                            Next
                         End If
-                    Next
+                    End If
                 End Using
             End Using
             Return Nothing
-        Catch
+        Catch ex As WebException
+            Debug.WriteLine("[HB-Shipped] WebException: " & ex.Message)
+            Return Nothing
+        Catch ex As Exception
+            Debug.WriteLine("[HB-Shipped] Exception: " & ex.Message)
             Return Nothing
         End Try
     End Function
