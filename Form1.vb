@@ -24039,11 +24039,27 @@ CleanupExcel:
     End Sub
 
     ''' <summary>
-    ''' 7z ile dosya sıkıştır (7z.exe varsa)
+    ''' 7z ile dosya sıkıştır - Önce built-in GZip dene, yoksa 7z/RAR
     ''' </summary>
     Private Function SikistirDosya7z(kaynakDosya As String, hedefDosya As String) As Boolean
         Try
-            ' 7z.exe yollarını kontrol et
+            ' Önce .NET built-in GZip sıkıştırma dene (her sistemde çalışır)
+            Dim gzipDosya As String = kaynakDosya & ".gz"
+            If SikistirDosyaGZip(kaynakDosya, gzipDosya) Then
+                ' Hedef dosya adını .gz olarak değiştir
+                If hedefDosya.EndsWith(".7z") Then
+                    hedefDosya = hedefDosya.Replace(".7z", ".gz")
+                End If
+                If File.Exists(hedefDosya) AndAlso hedefDosya <> gzipDosya Then
+                    File.Delete(hedefDosya)
+                End If
+                If gzipDosya <> hedefDosya Then
+                    File.Move(gzipDosya, hedefDosya)
+                End If
+                Return True
+            End If
+            
+            ' GZip başarısız olursa 7z.exe dene
             Dim sevenZipPaths() As String = {
                 "C:\Program Files\7-Zip\7z.exe",
                 "C:\Program Files (x86)\7-Zip\7z.exe",
@@ -24060,7 +24076,7 @@ CleanupExcel:
             Next
             
             If String.IsNullOrEmpty(sevenZipExe) Then
-                logla("[7z] 7z.exe bulunamadı, RAR ile denenecek...")
+                logla("[Sıkıştırma] 7z.exe bulunamadı, RAR deneniyor...")
                 Return SikistirDosyaRar(kaynakDosya, hedefDosya.Replace(".7z", ".rar"))
             End If
             
@@ -24090,7 +24106,58 @@ CleanupExcel:
             
             Return False
         Catch ex As Exception
-            logla("[7z] Sıkıştırma hatası: " & ex.Message)
+            logla("[Sıkıştırma] Hata: " & ex.Message)
+            Return False
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' .NET Built-in GZip sıkıştırma - Ek paket gerektirmez
+    ''' </summary>
+    Private Function SikistirDosyaGZip(kaynakDosya As String, hedefDosya As String) As Boolean
+        Try
+            logla("[GZip] Sıkıştırma başlıyor: " & kaynakDosya)
+            
+            ' Eski dosya varsa sil
+            If File.Exists(hedefDosya) Then
+                File.Delete(hedefDosya)
+            End If
+            
+            Using kaynakStream As New FileStream(kaynakDosya, FileMode.Open, FileAccess.Read)
+                Using hedefStream As New FileStream(hedefDosya, FileMode.Create, FileAccess.Write)
+                    Using gzipStream As New System.IO.Compression.GZipStream(hedefStream, System.IO.Compression.CompressionLevel.Optimal)
+                        ' 1MB buffer ile kopyala (bellek dostu)
+                        Dim buffer(1048575) As Byte ' 1MB
+                        Dim bytesRead As Integer
+                        Dim totalRead As Long = 0
+                        Dim kaynakBoyut As Long = kaynakStream.Length
+                        
+                        While True
+                            bytesRead = kaynakStream.Read(buffer, 0, buffer.Length)
+                            If bytesRead = 0 Then Exit While
+                            gzipStream.Write(buffer, 0, bytesRead)
+                            totalRead += bytesRead
+                            
+                            ' Her 100MB'da ilerleme logla
+                            If totalRead Mod (100 * 1048576) < 1048576 Then
+                                Dim yuzde As Integer = CInt((totalRead / kaynakBoyut) * 100)
+                                logla("[GZip] İlerleme: %" & yuzde & " (" & FormatBytes(totalRead) & "/" & FormatBytes(kaynakBoyut) & ")")
+                            End If
+                        End While
+                    End Using
+                End Using
+            End Using
+            
+            If File.Exists(hedefDosya) Then
+                Dim orijinalBoyut As Long = New FileInfo(kaynakDosya).Length
+                Dim sikistirilmisBoyut As Long = New FileInfo(hedefDosya).Length
+                logla("[GZip] Sıkıştırma tamamlandı: " & FormatBytes(orijinalBoyut) & " -> " & FormatBytes(sikistirilmisBoyut))
+                Return True
+            End If
+            
+            Return False
+        Catch ex As Exception
+            logla("[GZip] Sıkıştırma hatası: " & ex.Message)
             Return False
         End Try
     End Function
