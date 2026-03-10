@@ -466,6 +466,8 @@ Public Class frm_PazaryeriFaturaGonderim
 
     ''' <summary>
     ''' Hepsiburada'ya fatura gönder
+    ''' Hepsiburada API: https://radium.hepsiburada.com/api/order/invoice_link
+    ''' Authentication: Basic Auth (merchantId:apiKey base64 encoded)
     ''' </summary>
     Private Function GonderHepsiburada(siparisNo As String, gibFaturaNo As String, faturaGuid As String, ByRef hataMesaji As String) As Boolean
         Try
@@ -486,21 +488,25 @@ Public Class frm_PazaryeriFaturaGonderim
                 Return False
             End If
 
-            ' Önce token al
-            Dim token As String = GetHepsiburadaToken(api, hataMesaji)
-            If String.IsNullOrEmpty(token) Then
-                Return False
+            ' Hepsiburada API Base URL (radium)
+            Dim baseUrl As String = "https://radium.hepsiburada.com"
+            If Not String.IsNullOrEmpty(api.BaseUrl) AndAlso api.BaseUrl.Contains("hepsiburada") Then
+                baseUrl = api.BaseUrl.TrimEnd("/"c)
             End If
-
-            ' API isteği
-            Dim url As String = $"{api.BaseUrl}/api/order/invoice_link"
+            
+            ' API isteği - Basic Authentication kullanıyoruz
+            Dim url As String = $"{baseUrl}/api/order/invoice_link"
 
             Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
             req.Method = "POST"
             req.ContentType = "application/json"
             req.Accept = "application/json"
-            req.Headers.Add("Authorization", "Bearer " & token)
             req.Timeout = 30000
+            
+            ' Basic Authentication: merchantId:apiKey base64 encoded
+            Dim credentials As String = $"{api.SellerId}:{api.ApiKey}"
+            Dim encodedCredentials As String = Convert.ToBase64String(Encoding.UTF8.GetBytes(credentials))
+            req.Headers.Add("Authorization", "Basic " & encodedCredentials)
 
             ' Body
             Dim body As New Dictionary(Of String, String) From {
@@ -516,7 +522,7 @@ Public Class frm_PazaryeriFaturaGonderim
             End Using
 
             Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
-                If resp.StatusCode = HttpStatusCode.OK OrElse resp.StatusCode = HttpStatusCode.Created Then
+                If resp.StatusCode = HttpStatusCode.OK OrElse resp.StatusCode = HttpStatusCode.Created OrElse resp.StatusCode = HttpStatusCode.NoContent Then
                     Return True
                 Else
                     hataMesaji = $"HTTP {CInt(resp.StatusCode)}: {resp.StatusDescription}"
@@ -527,7 +533,8 @@ Public Class frm_PazaryeriFaturaGonderim
         Catch wex As WebException
             If wex.Response IsNot Nothing Then
                 Using reader As New StreamReader(wex.Response.GetResponseStream())
-                    hataMesaji = reader.ReadToEnd()
+                    Dim errorResponse As String = reader.ReadToEnd()
+                    hataMesaji = $"API Hatası: {errorResponse}"
                 End Using
             Else
                 hataMesaji = wex.Message
@@ -548,43 +555,8 @@ Public Class frm_PazaryeriFaturaGonderim
         Return False
     End Function
 
-    ''' <summary>
-    ''' Hepsiburada token al
-    ''' </summary>
-    Private Function GetHepsiburadaToken(api As PazaryeriAPI, ByRef hataMesaji As String) As String
-        Try
-            Dim url As String = $"{api.BaseUrl}/auth/getToken"
-            Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
-            req.Method = "POST"
-            req.ContentType = "application/json"
-            req.Timeout = 30000
-
-            Dim body As New Dictionary(Of String, String) From {
-                {"merchantId", api.SellerId},
-                {"apiKey", api.ApiKey},
-                {"secretKey", api.ApiSecret}
-            }
-            Dim jsonBody As String = JsonConvert.SerializeObject(body)
-            Dim data As Byte() = Encoding.UTF8.GetBytes(jsonBody)
-            req.ContentLength = data.Length
-
-            Using stream = req.GetRequestStream()
-                stream.Write(data, 0, data.Length)
-            End Using
-
-            Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
-                Using reader As New StreamReader(resp.GetResponseStream())
-                    Dim json As String = reader.ReadToEnd()
-                    Dim obj As JObject = JObject.Parse(json)
-                    Return obj("token")?.ToString()
-                End Using
-            End Using
-
-        Catch ex As Exception
-            hataMesaji = "Token alınamadı: " & ex.Message
-            Return Nothing
-        End Try
-    End Function
+    ' NOT: Hepsiburada artık Basic Authentication kullanıyor, token endpoint'i kaldırıldı
+    ' Eski GetHepsiburadaToken fonksiyonu artık kullanılmıyor
 
     ''' <summary>
     ''' GİB e-Arşiv fatura linkini al
