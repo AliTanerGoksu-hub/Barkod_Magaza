@@ -9742,6 +9742,14 @@ Public Class Form1
         End Try
         ' ==================================================================
         
+        ' ============ tbPazaryeriFaturaGonderim TABLOSU KONTROLÜ VE OLUŞTURMA ============
+        Try
+            EnsurePazaryeriFaturaGonderimTableExists()
+        Catch ex As Exception
+            Debug.WriteLine("tbPazaryeriFaturaGonderim tablo kontrolü hatası: " & ex.Message)
+        End Try
+        ' ==================================================================
+        
         ' ============ SSL/TLS PROTOKOL AYARI (EN BASTA OLMALI) ============
         Try
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 Or System.Net.SecurityProtocolType.Tls11 Or System.Net.SecurityProtocolType.Tls
@@ -23748,6 +23756,89 @@ CleanupExcel:
             End Using
         Catch ex As Exception
             Debug.WriteLine("[tbModelVaryantRenk] ✗ Hata: " & ex.Message)
+            ' Hata olsa bile uygulama açılmaya devam etsin
+        End Try
+    End Sub
+
+    ' ============================================================================
+    ' tbPazaryeriFaturaGonderim TABLOSU KONTROL VE OLUŞTURMA
+    ' ============================================================================
+    
+    ''' <summary>
+    ''' Uygulama açılışında tbPazaryeriFaturaGonderim tablosunun varlığını kontrol eder.
+    ''' Tablo yoksa otomatik oluşturur. Pazaryeri fatura gönderim takibi için kullanılır.
+    ''' </summary>
+    Private Sub EnsurePazaryeriFaturaGonderimTableExists()
+        Try
+            Using con As New System.Data.OleDb.OleDbConnection(connection)
+                con.Open()
+                
+                ' Tablo var mı kontrol et
+                Dim tableExists As Boolean = False
+                Using cmdCheck As New System.Data.OleDb.OleDbCommand(
+                    "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'tbPazaryeriFaturaGonderim'", con)
+                    Dim count As Integer = CInt(cmdCheck.ExecuteScalar())
+                    tableExists = (count > 0)
+                End Using
+                
+                If Not tableExists Then
+                    Debug.WriteLine("[tbPazaryeriFaturaGonderim] Tablo bulunamadı, oluşturuluyor...")
+                    
+                    Try
+                        ' 1. CREATE TABLE
+                        Dim createTableSQL As String = "CREATE TABLE tbPazaryeriFaturaGonderim (" & _
+                            "nID INT PRIMARY KEY IDENTITY(1,1), " & _
+                            "nStokFisiID INT NOT NULL, " & _
+                            "sPazaryeri NVARCHAR(50), " & _
+                            "sSiparisNo NVARCHAR(50), " & _
+                            "sFaturaNo NVARCHAR(50), " & _
+                            "sFaturaUUID NVARCHAR(100), " & _
+                            "bGonderildi BIT DEFAULT 0, " & _
+                            "dteGonderimTarihi DATETIME, " & _
+                            "sGonderimSonucu NVARCHAR(500), " & _
+                            "sHataMesaji NVARCHAR(500), " & _
+                            "nDenemeAdet INT DEFAULT 0, " & _
+                            "dteOlusturma DATETIME DEFAULT GETDATE())"
+                        
+                        Using cmdCreate As New System.Data.OleDb.OleDbCommand(createTableSQL, con)
+                            cmdCreate.ExecuteNonQuery()
+                        End Using
+                        
+                        ' 2. CREATE INDEX - StokFisiID
+                        Using cmdIdx1 As New System.Data.OleDb.OleDbCommand(
+                            "CREATE INDEX IX_PazaryeriFatura_StokFisiID ON tbPazaryeriFaturaGonderim(nStokFisiID)", con)
+                            cmdIdx1.ExecuteNonQuery()
+                        End Using
+                        
+                        ' 3. CREATE INDEX - Pazaryeri
+                        Using cmdIdx2 As New System.Data.OleDb.OleDbCommand(
+                            "CREATE INDEX IX_PazaryeriFatura_Pazaryeri ON tbPazaryeriFaturaGonderim(sPazaryeri)", con)
+                            cmdIdx2.ExecuteNonQuery()
+                        End Using
+                        
+                        ' 4. CREATE INDEX - SiparisNo
+                        Using cmdIdx3 As New System.Data.OleDb.OleDbCommand(
+                            "CREATE INDEX IX_PazaryeriFatura_SiparisNo ON tbPazaryeriFaturaGonderim(sSiparisNo)", con)
+                            cmdIdx3.ExecuteNonQuery()
+                        End Using
+                        
+                        ' 5. CREATE INDEX - Gonderildi
+                        Using cmdIdx4 As New System.Data.OleDb.OleDbCommand(
+                            "CREATE INDEX IX_PazaryeriFatura_Gonderildi ON tbPazaryeriFaturaGonderim(bGonderildi)", con)
+                            cmdIdx4.ExecuteNonQuery()
+                        End Using
+                        
+                        Debug.WriteLine("[tbPazaryeriFaturaGonderim] ✓ Tablo başarıyla oluşturuldu")
+                    Catch createEx As Exception
+                        Debug.WriteLine("[tbPazaryeriFaturaGonderim] ✗ Oluşturma hatası: " & createEx.Message)
+                        Throw
+                    End Try
+                Else
+                    Debug.WriteLine("[tbPazaryeriFaturaGonderim] ✓ Tablo mevcut")
+                End If
+            End Using
+        Catch ex As Exception
+            Debug.WriteLine("[tbPazaryeriFaturaGonderim] ✗ Hata: " & ex.Message)
             ' Hata olsa bile uygulama açılmaya devam etsin
         End Try
     End Sub
