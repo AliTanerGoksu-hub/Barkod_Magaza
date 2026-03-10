@@ -570,28 +570,30 @@ Public Class frm_PazaryeriFaturaGonderim
     ''' <summary>
     ''' Hepsiburada'dan sipariş numarasıyla package number'ı bul
     ''' Teslim edilen siparişler veya paket bilgileri listesinden arar
+    ''' OMS API Base URL: https://oms-external.hepsiburada.com
     ''' </summary>
     Private Function GetHepsiburadaPackageNumber(baseUrl As String, merchantId As String, orderNumber As String, authBase64 As String, ByRef hataMesaji As String) As String
         Try
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
             
-            ' Önce teslim edilen siparişlerde ara (son 30 gün)
-            ' GET /packages/merchantid/{merchantId}/delivered?limit=50&offset=0
+            ' OMS API için farklı base URL kullanılıyor
+            Dim omsBaseUrl As String = "https://oms-external.hepsiburada.com"
+            
             Dim packageNumber As String = ""
             
             ' Yöntem 1: Teslim edilenler listesinde ara
-            packageNumber = SearchPackageInDelivered(baseUrl, merchantId, orderNumber, authBase64)
+            packageNumber = SearchPackageInDelivered(omsBaseUrl, merchantId, orderNumber, authBase64)
             If Not String.IsNullOrEmpty(packageNumber) Then
                 Return packageNumber
             End If
             
             ' Yöntem 2: Kargoda olanlar listesinde ara
-            packageNumber = SearchPackageInShipped(baseUrl, merchantId, orderNumber, authBase64)
+            packageNumber = SearchPackageInShipped(omsBaseUrl, merchantId, orderNumber, authBase64)
             If Not String.IsNullOrEmpty(packageNumber) Then
                 Return packageNumber
             End If
             
-            ' Yöntem 3: Paket bilgilerinde ara (open status)
+            ' Yöntem 3: Paket bilgilerinde ara (open status) - mpop API kullan
             packageNumber = SearchPackageInOpen(baseUrl, merchantId, orderNumber, authBase64)
             If Not String.IsNullOrEmpty(packageNumber) Then
                 Return packageNumber
