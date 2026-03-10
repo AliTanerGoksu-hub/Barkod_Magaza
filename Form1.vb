@@ -23904,7 +23904,7 @@ CleanupExcel:
                 
                 ' Pazaryeri API URL'leri - doğru endpoint'ler
                 Dim pazaryerleri() As String = {"Trendyol", "Hepsiburada", "Amazon", "PttAVM", "CicekSepeti", "Modanisa", "N11", "Pazarama", "Farmazon", "LCWaikiki", "Idefix"}
-                Dim apiUrls() As String = {"https://api.trendyol.com", "https://mpop-sit.hepsiburada.com", "https://sellingpartnerapi-eu.amazon.com", "https://api.pttavm.com", "https://apis.ciceksepeti.com", "https://api.modanisa.com", "https://api.n11.com/ws", "https://isortagim.pazarama.com", "https://api.farmazon.com.tr", "https://api.lcwaikiki.com", "https://api.idefix.com"}
+                Dim apiUrls() As String = {"https://api.trendyol.com", "https://mpop.hepsiburada.com", "https://sellingpartnerapi-eu.amazon.com", "https://api.pttavm.com", "https://apis.ciceksepeti.com", "https://api.modanisa.com", "https://api.n11.com/ws", "https://isortagim.pazarama.com", "https://api.farmazon.com.tr", "https://api.lcwaikiki.com", "https://api.idefix.com"}
                 
                 For i As Integer = 0 To pazaryerleri.Length - 1
                     Try

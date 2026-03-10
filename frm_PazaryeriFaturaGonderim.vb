@@ -490,8 +490,8 @@ Public Class frm_PazaryeriFaturaGonderim
 
             ' Hepsiburada API Base URL
             Dim baseUrl As String = api.BaseUrl
-            If String.IsNullOrEmpty(baseUrl) OrElse Not baseUrl.Contains("api") Then
-                baseUrl = "https://mpop-sit.hepsiburada.com"
+            If String.IsNullOrEmpty(baseUrl) OrElse baseUrl.Contains("/magaza/") OrElse baseUrl.Contains("www.") Then
+                baseUrl = "https://mpop.hepsiburada.com"
             End If
             baseUrl = baseUrl.TrimEnd("/"c)
             
