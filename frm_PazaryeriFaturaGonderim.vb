@@ -645,7 +645,7 @@ Public Class frm_PazaryeriFaturaGonderim
             req.Accept = "application/json"
             req.Timeout = 30000
             req.Headers.Add("Authorization", "Basic " & authBase64)
-            req.Headers.Add("User-Agent", "BusinessSmart/1.0")
+            req.UserAgent = "BusinessSmart/1.0"
             
             Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
                 Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
