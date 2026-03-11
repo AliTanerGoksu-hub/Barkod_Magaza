@@ -261,6 +261,7 @@ Public Class frm_fatura_liste
     Dim gibUser As String = ""
     Dim gibPass As String = ""
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frm_fatura_liste))
         Dim SuperToolTip1 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
         Dim ToolTipTitleItem1 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
@@ -313,7 +314,7 @@ Public Class frm_fatura_liste
         Me.sec_Aktar = New DevExpress.XtraEditors.CheckEdit()
         Me.SimpleButton3 = New DevExpress.XtraEditors.SimpleButton()
         Me.sec_bFaturayaDonustumu = New DevExpress.XtraEditors.ComboBoxEdit()
-        Me.BarManager1 = New DevExpress.XtraBars.BarManager()
+        Me.BarManager1 = New DevExpress.XtraBars.BarManager(Me.components)
         Me.Bar3 = New DevExpress.XtraBars.Bar()
         Me.btnEkle = New DevExpress.XtraBars.BarButtonItem()
         Me.btnDuzelt = New DevExpress.XtraBars.BarButtonItem()
@@ -517,8 +518,8 @@ Public Class frm_fatura_liste
         Me.colsAciklama1 = New DevExpress.XtraGrid.Columns.GridColumn()
         Me.colGibFaturaNo = New DevExpress.XtraGrid.Columns.GridColumn()
         Me.colsEfaturaUrl = New DevExpress.XtraGrid.Columns.GridColumn()
-        Me.ps = New DevExpress.XtraPrinting.PrintingSystem()
-        Me.printlink1 = New DevExpress.XtraPrinting.PrintableComponentLink()
+        Me.ps = New DevExpress.XtraPrinting.PrintingSystem(Me.components)
+        Me.printlink1 = New DevExpress.XtraPrinting.PrintableComponentLink(Me.components)
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         CType(Me.PanelControl1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -6011,85 +6012,85 @@ Public Class frm_fatura_liste
                         End If
                     ElseIf sec_sMuhasebeEntegrasyonTuru.Text = "Toplu Muhasebeleştirme" Then
                         dteFisTarihi = txt_dteEntegreTarihi.EditValue
-                        End If
-                        nSatir = 0
-                        dr1("lKdvTutari") = sorgu_sayi(dr1("lKdvTutari"), 0)
-                        If Trim(dr1("sFisTipi")) = "FS" Then
-                            If dr1("sKodu").ToString.Contains("-") = True Then
-                                sHesapKodu = Trim(dr1("sKodu"))
-                                sHesapAciklama = dr1("sAciklama")
-                            Else
-                                sHesapKodu = "120-0001-" & sayiuzunlukkontrol(Trim(dr1("sKodu")), 7)
-                                sHesapAciklama = dr1("sAciklama")
-                            End If
+                    End If
+                    nSatir = 0
+                    dr1("lKdvTutari") = sorgu_sayi(dr1("lKdvTutari"), 0)
+                    If Trim(dr1("sFisTipi")) = "FS" Then
+                        If dr1("sKodu").ToString.Contains("-") = True Then
+                            sHesapKodu = Trim(dr1("sKodu"))
+                            sHesapAciklama = dr1("sAciklama")
+                        Else
                             sHesapKodu = "120-0001-" & sayiuzunlukkontrol(Trim(dr1("sKodu")), 7)
                             sHesapAciklama = dr1("sAciklama")
-                            nHesapID = sorgula_nStokID("Select nHesapID from tbHesapPlani Where sKodu = '" & sHesapKodu & "'")
-                            If nHesapID = 0 Then
-                                nHesapID = tbHesapPlani_kaydet_yeni(sHesapKodu, sHesapAciklama, "", 0, "", 0, "", "", 0, "SA", Now)
-                            End If
-                            nFisSiraID = sorgu_nFisSiraID()
-                            If dr1("lNetTutar") > 0 Then
-                                lBorcTutar = FormatNumber(Math.Abs(dr1("lNetTutar")), 2)
-                                lAlacakTutar = 0
-                            ElseIf dr1("lNetTutar") < 0 Then
-                                lAlacakTutar = FormatNumber(Math.Abs(dr1("lNetTutar")), 2)
-                                lBorcTutar = 0
-                            End If
-                            sDovizCinsi1 = ""
-                            lDovizKuru1 = 0
-                            lDovizMiktari1 = 0
-                            sDovizCinsi2 = ""
-                            lDovizKuru2 = 0
-                            lDovizMiktari2 = 0
-                            lGirenMiktar = 0
-                            lCikanMiktar = 0
-                            If Trim(dr1("sAciklama1").ToString) = "" Then
-                                sAciklama = dr1("lFisNo")
-                            Else
-                                If sDatabaseGenel = "AVCIMESRUBAT" Then
-                                    sAciklama = dr1("sAciklama1")
-                                Else
-                                    sAciklama = dr1("lFisNo")
-                                End If
-                            End If
-                            nFisSiraID = tbMuhasebeFisi_kaydet_yeni(nFisSiraID, dteFisTarihi, sMuhFisTipi, lFisNo, lYevmiyeNo, nHesapID, sAciklama, lGirenMiktar, lCikanMiktar, lBorcTutar, lAlacakTutar, sMasrafYontemi, nKasaID, sHangiUygulama, sHareketTipi, nCariHareketID, kullaniciadi, Now, sDovizCinsi1, lDovizMiktari1, lDovizKuru1, sDovizCinsi2, lDovizMiktari2, lDovizKuru2, nSatir, sSubeMagaza, kullaniciadi, Now)
-                            nFisSiraID_degistir(nFisSiraID)
-                        ElseIf Trim(dr1("sFisTipi")) = "FA" Then
-                            If dr1("sKodu").ToString.Contains("-") = True Then
-                                sHesapKodu = Trim(dr1("sKodu"))
-                                sHesapAciklama = dr1("sAciklama")
-                            Else
-                                sHesapKodu = "320-0001-" & sayiuzunlukkontrol(Trim(dr1("sKodu")), 7)
-                                sHesapAciklama = dr1("sAciklama")
-                            End If
-                            nHesapID = sorgula_nStokID("Select nHesapID from tbHesapPlani Where sKodu = '" & sHesapKodu & "'")
-                            If nHesapID = 0 Then
-                                nHesapID = tbHesapPlani_kaydet_yeni(sHesapKodu, sHesapAciklama, "", 0, "", 0, "", "", 0, "SA", Now)
-                            End If
-                            nFisSiraID = sorgu_nFisSiraID()
-                            If dr1("lNetTutar") > 0 Then
-                                lAlacakTutar = FormatNumber(Math.Abs(dr1("lNetTutar")), 2)
-                                lBorcTutar = 0
-                            ElseIf dr1("lNetTutar") < 0 Then
-                                lBorcTutar = FormatNumber(Math.Abs(dr1("lNetTutar")), 2)
-                                lAlacakTutar = 0
-                            End If
-                            sDovizCinsi1 = ""
-                            lDovizKuru1 = 0
-                            lDovizMiktari1 = 0
-                            sDovizCinsi2 = ""
-                            lDovizKuru2 = 0
-                            lDovizMiktari2 = 0
-                            lGirenMiktar = 0
-                            lCikanMiktar = 0
-                            sAciklama = dr1("lFisNo")
-                            nFisSiraID = tbMuhasebeFisi_kaydet_yeni(nFisSiraID, dteFisTarihi, sMuhFisTipi, lFisNo, lYevmiyeNo, nHesapID, sAciklama, lGirenMiktar, lCikanMiktar, lBorcTutar, lAlacakTutar, sMasrafYontemi, nKasaID, sHangiUygulama, sHareketTipi, nCariHareketID, kullaniciadi, Now, sDovizCinsi1, lDovizMiktari1, lDovizKuru1, sDovizCinsi2, lDovizMiktari2, lDovizKuru2, nSatir, sSubeMagaza, kullaniciadi, Now)
-                            nFisSiraID_degistir(nFisSiraID)
                         End If
+                        sHesapKodu = "120-0001-" & sayiuzunlukkontrol(Trim(dr1("sKodu")), 7)
+                        sHesapAciklama = dr1("sAciklama")
+                        nHesapID = sorgula_nStokID("Select nHesapID from tbHesapPlani Where sKodu = '" & sHesapKodu & "'")
+                        If nHesapID = 0 Then
+                            nHesapID = tbHesapPlani_kaydet_yeni(sHesapKodu, sHesapAciklama, "", 0, "", 0, "", "", 0, "SA", Now)
+                        End If
+                        nFisSiraID = sorgu_nFisSiraID()
+                        If dr1("lNetTutar") > 0 Then
+                            lBorcTutar = FormatNumber(Math.Abs(dr1("lNetTutar")), 2)
+                            lAlacakTutar = 0
+                        ElseIf dr1("lNetTutar") < 0 Then
+                            lAlacakTutar = FormatNumber(Math.Abs(dr1("lNetTutar")), 2)
+                            lBorcTutar = 0
+                        End If
+                        sDovizCinsi1 = ""
+                        lDovizKuru1 = 0
+                        lDovizMiktari1 = 0
+                        sDovizCinsi2 = ""
+                        lDovizKuru2 = 0
+                        lDovizMiktari2 = 0
+                        lGirenMiktar = 0
+                        lCikanMiktar = 0
+                        If Trim(dr1("sAciklama1").ToString) = "" Then
+                            sAciklama = dr1("lFisNo")
+                        Else
+                            If sDatabaseGenel = "AVCIMESRUBAT" Then
+                                sAciklama = dr1("sAciklama1")
+                            Else
+                                sAciklama = dr1("lFisNo")
+                            End If
+                        End If
+                        nFisSiraID = tbMuhasebeFisi_kaydet_yeni(nFisSiraID, dteFisTarihi, sMuhFisTipi, lFisNo, lYevmiyeNo, nHesapID, sAciklama, lGirenMiktar, lCikanMiktar, lBorcTutar, lAlacakTutar, sMasrafYontemi, nKasaID, sHangiUygulama, sHareketTipi, nCariHareketID, kullaniciadi, Now, sDovizCinsi1, lDovizMiktari1, lDovizKuru1, sDovizCinsi2, lDovizMiktari2, lDovizKuru2, nSatir, sSubeMagaza, kullaniciadi, Now)
+                        nFisSiraID_degistir(nFisSiraID)
+                    ElseIf Trim(dr1("sFisTipi")) = "FA" Then
+                        If dr1("sKodu").ToString.Contains("-") = True Then
+                            sHesapKodu = Trim(dr1("sKodu"))
+                            sHesapAciklama = dr1("sAciklama")
+                        Else
+                            sHesapKodu = "320-0001-" & sayiuzunlukkontrol(Trim(dr1("sKodu")), 7)
+                            sHesapAciklama = dr1("sAciklama")
+                        End If
+                        nHesapID = sorgula_nStokID("Select nHesapID from tbHesapPlani Where sKodu = '" & sHesapKodu & "'")
+                        If nHesapID = 0 Then
+                            nHesapID = tbHesapPlani_kaydet_yeni(sHesapKodu, sHesapAciklama, "", 0, "", 0, "", "", 0, "SA", Now)
+                        End If
+                        nFisSiraID = sorgu_nFisSiraID()
+                        If dr1("lNetTutar") > 0 Then
+                            lAlacakTutar = FormatNumber(Math.Abs(dr1("lNetTutar")), 2)
+                            lBorcTutar = 0
+                        ElseIf dr1("lNetTutar") < 0 Then
+                            lBorcTutar = FormatNumber(Math.Abs(dr1("lNetTutar")), 2)
+                            lAlacakTutar = 0
+                        End If
+                        sDovizCinsi1 = ""
+                        lDovizKuru1 = 0
+                        lDovizMiktari1 = 0
+                        sDovizCinsi2 = ""
+                        lDovizKuru2 = 0
+                        lDovizMiktari2 = 0
+                        lGirenMiktar = 0
+                        lCikanMiktar = 0
+                        sAciklama = dr1("lFisNo")
+                        nFisSiraID = tbMuhasebeFisi_kaydet_yeni(nFisSiraID, dteFisTarihi, sMuhFisTipi, lFisNo, lYevmiyeNo, nHesapID, sAciklama, lGirenMiktar, lCikanMiktar, lBorcTutar, lAlacakTutar, sMasrafYontemi, nKasaID, sHangiUygulama, sHareketTipi, nCariHareketID, kullaniciadi, Now, sDovizCinsi1, lDovizMiktari1, lDovizKuru1, sDovizCinsi2, lDovizMiktari2, lDovizKuru2, nSatir, sSubeMagaza, kullaniciadi, Now)
+                        nFisSiraID_degistir(nFisSiraID)
                     End If
-                    'Hareketleri Kaydet
-                    For Each dr1 In ds_Muhasebelestir.Tables(0).Rows
+                End If
+                'Hareketleri Kaydet
+                For Each dr1 In ds_Muhasebelestir.Tables(0).Rows
                     nSatir += 1
                     '600 veya 153 kaydet
                     If Trim(dr1("sFisTipi")) = "FS" Then
@@ -6594,7 +6595,7 @@ Public Class frm_fatura_liste
             cmd.ExecuteNonQuery()
         Catch ex As Exception
         End Try
-        
+
         ' E-Ticaret sipariş kaydını orders tablosundan sil (eğer varsa)
         Try
             ' Önce siparişin e-ticaret siparişi olup olmadığını kontrol et
@@ -6602,7 +6603,7 @@ Public Class frm_fatura_liste
             cmdCheck.Connection = cmd.Connection
             cmdCheck.CommandText = sorgu_query("SELECT sAciklama3 FROM tbStokFisiAciklamasi WHERE nStokFisiID = '" & nStokFisiID & "'")
             Dim siparisKodu As Object = cmdCheck.ExecuteScalar()
-            
+
             If siparisKodu IsNot Nothing AndAlso siparisKodu IsNot DBNull.Value Then
                 Dim kod As String = siparisKodu.ToString().Trim()
                 ' E-ticaret sipariş kodu kontrolü (TY, HB ile başlıyor veya sadece sayı)
@@ -6610,7 +6611,7 @@ Public Class frm_fatura_liste
                     ' orders tablosundan sil
                     cmd.CommandText = sorgu_query("DELETE FROM orders WHERE ID IN (SELECT ID FROM orders WHERE randStr LIKE '%" & kod & "%' OR CAST(ID AS NVARCHAR(50)) = '" & kod.Replace("TY", "").Replace("HB", "") & "')")
                     cmd.ExecuteNonQuery()
-                    
+
                     ' fis_detay tablosundan sil
                     cmd.CommandText = sorgu_query("DELETE FROM fis_detay WHERE fisID LIKE '%" & kod & "%'")
                     cmd.ExecuteNonQuery()
@@ -6619,7 +6620,7 @@ Public Class frm_fatura_liste
         Catch ex As Exception
             ' orders veya fis_detay tablosu olmayabilir, hatayı görmezden gel
         End Try
-        
+
         ' Audit Log - Stok Fişi Master Silme
         Try
             Dim recordId As Long = 0
@@ -6634,7 +6635,7 @@ Public Class frm_fatura_liste
         Catch ex As Exception
             ' Log hatası işlemi durdurmasın
         End Try
-        
+
         con.Close()
         con.Dispose()
         cmd.Dispose()
@@ -6672,7 +6673,7 @@ Public Class frm_fatura_liste
         End Try
         cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED UPDATE tbCariSiraNo SET nSonID = (SELECT TOP 1 ISNULL(nHareketID + 1 , 1) AS nSonID FROM tbFirmaHareketi ORDER BY nHareketID DESC) WHERE (nSiraIndex = 1)")
         cmd.ExecuteNonQuery()
-        
+
         ' Audit Log - Nakit Kasa Silme
         Try
             Dim recordId As Long = 0
@@ -6687,7 +6688,7 @@ Public Class frm_fatura_liste
         Catch ex As Exception
             ' Log hatası işlemi durdurmasın
         End Try
-        
+
         con.Close()
         con.Dispose()
         cmd.Dispose()

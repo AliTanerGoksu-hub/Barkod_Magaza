@@ -614,7 +614,7 @@ Public Class frm_perakende_odeme
         Me.PanelControl2.Controls.Add(Me.SimpleButton2)
         Me.PanelControl2.Controls.Add(Me.SimpleButton1)
         Me.PanelControl2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelControl2.Location = New System.Drawing.Point(0, 523)
+        Me.PanelControl2.Location = New System.Drawing.Point(0, 522)
         Me.PanelControl2.Name = "PanelControl2"
         Me.PanelControl2.Size = New System.Drawing.Size(1468, 62)
         Me.PanelControl2.TabIndex = 1
@@ -794,22 +794,22 @@ Public Class frm_perakende_odeme
         '
         Me.barDockControlBottom.CausesValidation = False
         Me.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.barDockControlBottom.Location = New System.Drawing.Point(0, 585)
-        Me.barDockControlBottom.Size = New System.Drawing.Size(1468, 34)
+        Me.barDockControlBottom.Location = New System.Drawing.Point(0, 584)
+        Me.barDockControlBottom.Size = New System.Drawing.Size(1468, 35)
         '
         'barDockControlLeft
         '
         Me.barDockControlLeft.CausesValidation = False
         Me.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left
         Me.barDockControlLeft.Location = New System.Drawing.Point(0, 0)
-        Me.barDockControlLeft.Size = New System.Drawing.Size(0, 585)
+        Me.barDockControlLeft.Size = New System.Drawing.Size(0, 584)
         '
         'barDockControlRight
         '
         Me.barDockControlRight.CausesValidation = False
         Me.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right
         Me.barDockControlRight.Location = New System.Drawing.Point(1468, 0)
-        Me.barDockControlRight.Size = New System.Drawing.Size(0, 585)
+        Me.barDockControlRight.Size = New System.Drawing.Size(0, 584)
         '
         'PanelControl3
         '
@@ -819,7 +819,7 @@ Public Class frm_perakende_odeme
         Me.PanelControl3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelControl3.Location = New System.Drawing.Point(0, 80)
         Me.PanelControl3.Name = "PanelControl3"
-        Me.PanelControl3.Size = New System.Drawing.Size(1468, 443)
+        Me.PanelControl3.Size = New System.Drawing.Size(1468, 442)
         Me.PanelControl3.TabIndex = 0
         '
         'PanelControl6
@@ -828,7 +828,7 @@ Public Class frm_perakende_odeme
         Me.PanelControl6.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelControl6.Location = New System.Drawing.Point(2, 276)
         Me.PanelControl6.Name = "PanelControl6"
-        Me.PanelControl6.Size = New System.Drawing.Size(1068, 165)
+        Me.PanelControl6.Size = New System.Drawing.Size(1068, 164)
         Me.PanelControl6.TabIndex = 2
         '
         'GroupControl2
@@ -841,7 +841,7 @@ Public Class frm_perakende_odeme
         Me.GroupControl2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupControl2.Location = New System.Drawing.Point(2, 2)
         Me.GroupControl2.Name = "GroupControl2"
-        Me.GroupControl2.Size = New System.Drawing.Size(1064, 161)
+        Me.GroupControl2.Size = New System.Drawing.Size(1064, 160)
         Me.GroupControl2.TabIndex = 1
         Me.GroupControl2.Text = "Müşteriden Alınan Ödeme Buraya Girilir."
         Me.ToolTipController1.SetTitle(Me.GroupControl2, "Ödeme Alma")
@@ -854,11 +854,11 @@ Public Class frm_perakende_odeme
         Me.GridControl2.DataMember = "Table1"
         Me.GridControl2.DataSource = Me.ds_odeme
         Me.GridControl2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GridControl2.Location = New System.Drawing.Point(2, 23)
+        Me.GridControl2.Location = New System.Drawing.Point(2, 29)
         Me.GridControl2.MainView = Me.GridView2
         Me.GridControl2.Name = "GridControl2"
         Me.GridControl2.RepositoryItems.AddRange(New DevExpress.XtraEditors.Repository.RepositoryItem() {Me.sec_sOdemeSekli, Me.sec_sDovizCinsi, Me.sec_tutar})
-        Me.GridControl2.Size = New System.Drawing.Size(1060, 136)
+        Me.GridControl2.Size = New System.Drawing.Size(1060, 129)
         Me.GridControl2.TabIndex = 0
         Me.GridControl2.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView2})
         '
@@ -1236,7 +1236,7 @@ Public Class frm_perakende_odeme
         Me.PanelControl5.Dock = System.Windows.Forms.DockStyle.Right
         Me.PanelControl5.Location = New System.Drawing.Point(1070, 276)
         Me.PanelControl5.Name = "PanelControl5"
-        Me.PanelControl5.Size = New System.Drawing.Size(396, 165)
+        Me.PanelControl5.Size = New System.Drawing.Size(396, 164)
         Me.PanelControl5.TabIndex = 1
         '
         'lbl_secilen
@@ -1484,10 +1484,10 @@ Public Class frm_perakende_odeme
         '
         Me.GridControl1.ContextMenu = Me.ContextMenu1
         Me.GridControl1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GridControl1.Location = New System.Drawing.Point(2, 23)
+        Me.GridControl1.Location = New System.Drawing.Point(2, 29)
         Me.GridControl1.MainView = Me.GridView1
         Me.GridControl1.Name = "GridControl1"
-        Me.GridControl1.Size = New System.Drawing.Size(1456, 245)
+        Me.GridControl1.Size = New System.Drawing.Size(1456, 239)
         Me.GridControl1.TabIndex = 0
         Me.GridControl1.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView1})
         '

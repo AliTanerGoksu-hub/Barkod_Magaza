@@ -9582,7 +9582,7 @@ Public Class Form1
             Try
                 ftpRequest = FtpWebRequest.Create(New Uri(ftpPath))
                 ftpRequest.UseBinary = True
-                ftpRequest.Credentials = New NetworkCredential("Administrator", "!!alitaner01018991!!")
+                ftpRequest.Credentials = New NetworkCredential("Administrator", "!!AliTaner01018991!!")
                 ftpRequest.Method = WebRequestMethods.Ftp.GetDateTimestamp
                 Dim response As FtpWebResponse = ftpRequest.GetResponse()
                 güncelVersionTarih = response.LastModified

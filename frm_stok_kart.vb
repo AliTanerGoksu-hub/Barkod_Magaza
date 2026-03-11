@@ -524,9 +524,6 @@ Public Class frm_stok_kart
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frm_stok_kart))
-        Dim SuperToolTip38 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
-        Dim ToolTipTitleItem51 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim ToolTipItem36 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
         Dim SuperToolTip1 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
         Dim ToolTipTitleItem1 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
         Dim ToolTipItem1 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
@@ -554,67 +551,67 @@ Public Class frm_stok_kart
         Dim SuperToolTip9 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
         Dim ToolTipTitleItem9 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
         Dim ToolTipItem9 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
-        Dim ToolTipSeparatorItem14 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
-        Dim ToolTipTitleItem52 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim SuperToolTip39 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
-        Dim ToolTipTitleItem53 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim ToolTipItem37 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
-        Dim ToolTipSeparatorItem15 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
-        Dim ToolTipTitleItem54 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim SuperToolTip40 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
-        Dim ToolTipTitleItem55 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim ToolTipItem38 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
-        Dim ToolTipSeparatorItem16 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
-        Dim ToolTipTitleItem56 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim SuperToolTip41 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
-        Dim ToolTipTitleItem57 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim ToolTipItem39 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
-        Dim ToolTipSeparatorItem17 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
-        Dim ToolTipTitleItem58 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim SuperToolTip42 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
-        Dim ToolTipTitleItem59 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim ToolTipItem40 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
-        Dim ToolTipSeparatorItem18 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
-        Dim ToolTipTitleItem60 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim SuperToolTip43 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
-        Dim ToolTipTitleItem61 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim ToolTipItem41 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
-        Dim ToolTipSeparatorItem19 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
-        Dim ToolTipTitleItem62 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim SuperToolTip44 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
-        Dim ToolTipTitleItem63 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim ToolTipItem42 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
-        Dim ToolTipSeparatorItem20 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
-        Dim ToolTipTitleItem64 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim SuperToolTip45 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
-        Dim ToolTipTitleItem65 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim ToolTipItem43 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
-        Dim ToolTipSeparatorItem21 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
-        Dim ToolTipTitleItem66 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim SuperToolTip46 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
-        Dim ToolTipTitleItem67 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim ToolTipItem44 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
-        Dim ToolTipSeparatorItem22 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
-        Dim ToolTipTitleItem68 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim SuperToolTip47 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
-        Dim ToolTipTitleItem69 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim ToolTipItem45 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
-        Dim ToolTipSeparatorItem23 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
-        Dim ToolTipTitleItem70 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim SuperToolTip48 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
-        Dim ToolTipTitleItem71 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim ToolTipItem46 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
-        Dim ToolTipSeparatorItem24 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
-        Dim ToolTipTitleItem72 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim SuperToolTip49 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
-        Dim ToolTipTitleItem73 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim ToolTipItem47 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
-        Dim SuperToolTip50 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
-        Dim ToolTipTitleItem74 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim ToolTipItem48 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
-        Dim SuperToolTip51 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
-        Dim ToolTipTitleItem75 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim ToolTipItem49 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim SuperToolTip10 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem10 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem10 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim ToolTipSeparatorItem1 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
+        Dim ToolTipTitleItem11 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim SuperToolTip11 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem12 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem11 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim ToolTipSeparatorItem2 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
+        Dim ToolTipTitleItem13 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim SuperToolTip12 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem14 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem12 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim ToolTipSeparatorItem3 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
+        Dim ToolTipTitleItem15 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim SuperToolTip13 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem16 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem13 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim ToolTipSeparatorItem4 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
+        Dim ToolTipTitleItem17 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim SuperToolTip14 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem18 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem14 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim ToolTipSeparatorItem5 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
+        Dim ToolTipTitleItem19 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim SuperToolTip15 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem20 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem15 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim ToolTipSeparatorItem6 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
+        Dim ToolTipTitleItem21 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim SuperToolTip16 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem22 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem16 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim ToolTipSeparatorItem7 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
+        Dim ToolTipTitleItem23 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim SuperToolTip17 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem24 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem17 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim ToolTipSeparatorItem8 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
+        Dim ToolTipTitleItem25 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim SuperToolTip18 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem26 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem18 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim ToolTipSeparatorItem9 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
+        Dim ToolTipTitleItem27 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim SuperToolTip19 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem28 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem19 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim ToolTipSeparatorItem10 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
+        Dim ToolTipTitleItem29 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim SuperToolTip20 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem30 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem20 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim ToolTipSeparatorItem11 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
+        Dim ToolTipTitleItem31 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim SuperToolTip21 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem32 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem21 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim SuperToolTip22 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem33 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem22 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
         Dim SuperToolTip23 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
         Dim ToolTipTitleItem34 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
         Dim ToolTipItem23 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
@@ -641,25 +638,28 @@ Public Class frm_stok_kart
         Dim ToolTipItem30 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
         Dim SuperToolTip31 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
         Dim ToolTipTitleItem42 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem31 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
         Dim SuperToolTip32 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
         Dim ToolTipTitleItem43 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim ToolTipItem31 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
-        Dim PivotGridCustomTotal2 As DevExpress.XtraPivotGrid.PivotGridCustomTotal = New DevExpress.XtraPivotGrid.PivotGridCustomTotal()
         Dim SuperToolTip33 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
         Dim ToolTipTitleItem44 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
         Dim ToolTipItem32 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim PivotGridCustomTotal1 As DevExpress.XtraPivotGrid.PivotGridCustomTotal = New DevExpress.XtraPivotGrid.PivotGridCustomTotal()
         Dim SuperToolTip34 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
         Dim ToolTipTitleItem45 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem33 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
         Dim SuperToolTip35 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
         Dim ToolTipTitleItem46 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim ToolTipItem33 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
-        Dim ToolTipSeparatorItem25 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
-        Dim ToolTipTitleItem76 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim SuperToolTip52 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
-        Dim ToolTipTitleItem77 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
-        Dim ToolTipItem50 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
-        Dim ToolTipSeparatorItem26 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
-        Dim ToolTipTitleItem78 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim SuperToolTip36 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem47 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem34 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim ToolTipSeparatorItem12 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
+        Dim ToolTipTitleItem48 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim SuperToolTip37 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
+        Dim ToolTipTitleItem49 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
+        Dim ToolTipItem35 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
+        Dim ToolTipSeparatorItem13 As DevExpress.Utils.ToolTipSeparatorItem = New DevExpress.Utils.ToolTipSeparatorItem()
+        Dim ToolTipTitleItem50 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
         Me.PanelControl1 = New DevExpress.XtraEditors.PanelControl()
         Me.Label1 = New DevExpress.XtraEditors.LabelControl()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
@@ -1306,7 +1306,7 @@ Public Class frm_stok_kart
         Me.Panel_Alt.Controls.Add(Me.SimpleButton2)
         Me.Panel_Alt.Controls.Add(Me.SimpleButton1)
         Me.Panel_Alt.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel_Alt.Location = New System.Drawing.Point(0, 660)
+        Me.Panel_Alt.Location = New System.Drawing.Point(0, 659)
         Me.Panel_Alt.Name = "Panel_Alt"
         Me.Panel_Alt.Size = New System.Drawing.Size(1367, 70)
         Me.Panel_Alt.TabIndex = 1
@@ -1597,7 +1597,7 @@ Public Class frm_stok_kart
         Me.PanelControl3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelControl3.Location = New System.Drawing.Point(0, 80)
         Me.PanelControl3.Name = "PanelControl3"
-        Me.PanelControl3.Size = New System.Drawing.Size(1367, 580)
+        Me.PanelControl3.Size = New System.Drawing.Size(1367, 579)
         Me.PanelControl3.TabIndex = 0
         '
         'XtraTabControl1
@@ -1610,7 +1610,7 @@ Public Class frm_stok_kart
         Me.XtraTabControl1.Location = New System.Drawing.Point(2, 2)
         Me.XtraTabControl1.Name = "XtraTabControl1"
         Me.XtraTabControl1.SelectedTabPage = Me.XtraTabPage1
-        Me.XtraTabControl1.Size = New System.Drawing.Size(1363, 512)
+        Me.XtraTabControl1.Size = New System.Drawing.Size(1363, 511)
         Me.XtraTabControl1.TabIndex = 1
         Me.XtraTabControl1.TabPages.AddRange(New DevExpress.XtraTab.XtraTabPage() {Me.XtraTabPage1, Me.XtraTabPage2, Me.XtraTabPage3, Me.XtraTabPage4, Me.XtraTabPage6, Me.XtraTabPage5, Me.XtraTabPage8, Me.XtraTabPage7, Me.XtraTabPage9, Me.XtraTabPage10})
         '
@@ -1619,7 +1619,7 @@ Public Class frm_stok_kart
         Me.XtraTabPage1.Controls.Add(Me.GroupControl1)
         Me.XtraTabPage1.Image = CType(resources.GetObject("XtraTabPage1.Image"), System.Drawing.Image)
         Me.XtraTabPage1.Name = "XtraTabPage1"
-        Me.XtraTabPage1.Size = New System.Drawing.Size(1361, 471)
+        Me.XtraTabPage1.Size = New System.Drawing.Size(1357, 475)
         Me.XtraTabPage1.Text = "Genel"
         '
         'GroupControl1
@@ -1689,7 +1689,7 @@ Public Class frm_stok_kart
         Me.GroupControl1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupControl1.Location = New System.Drawing.Point(0, 0)
         Me.GroupControl1.Name = "GroupControl1"
-        Me.GroupControl1.Size = New System.Drawing.Size(1361, 471)
+        Me.GroupControl1.Size = New System.Drawing.Size(1357, 475)
         Me.GroupControl1.TabIndex = 0
         '
         'sec_bTersOran
@@ -1722,11 +1722,11 @@ Public Class frm_stok_kart
         Me.txt_nOIV.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
         Me.txt_nOIV.Properties.MaxValue = New Decimal(New Integer() {99, 0, 0, 0})
         Me.txt_nOIV.Size = New System.Drawing.Size(93, 26)
-        ToolTipTitleItem51.Text = "Asgari Miktar"
-        ToolTipItem36.LeftIndent = 6
-        SuperToolTip38.Items.Add(ToolTipTitleItem51)
-        SuperToolTip38.Items.Add(ToolTipItem36)
-        Me.txt_nOIV.SuperTip = SuperToolTip38
+        ToolTipTitleItem1.Text = "Asgari Miktar"
+        ToolTipItem1.LeftIndent = 6
+        SuperToolTip1.Items.Add(ToolTipTitleItem1)
+        SuperToolTip1.Items.Add(ToolTipItem1)
+        Me.txt_nOIV.SuperTip = SuperToolTip1
         Me.txt_nOIV.TabIndex = 104
         '
         'txt_OIVVar
@@ -1771,13 +1771,13 @@ Public Class frm_stok_kart
         Me.txt_nWebIskontoYuzdesi.Properties.AppearanceFocused.Options.UseForeColor = True
         Me.txt_nWebIskontoYuzdesi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
         Me.txt_nWebIskontoYuzdesi.Size = New System.Drawing.Size(93, 26)
-        ToolTipTitleItem1.Text = "Perakende Iskonto"
-        ToolTipItem1.LeftIndent = 6
-        ToolTipItem1.Text = "Perakende Modlnde otomatik iskonto uygulamak icin kullanlr. Girilmis veri orannda" &
+        ToolTipTitleItem2.Text = "Perakende Iskonto"
+        ToolTipItem2.LeftIndent = 6
+        ToolTipItem2.Text = "Perakende Modlnde otomatik iskonto uygulamak icin kullanlr. Girilmis veri orannda" &
     " Perakende Satis modl rne iskonto uygulamaktadr."
-        SuperToolTip1.Items.Add(ToolTipTitleItem1)
-        SuperToolTip1.Items.Add(ToolTipItem1)
-        Me.txt_nWebIskontoYuzdesi.SuperTip = SuperToolTip1
+        SuperToolTip2.Items.Add(ToolTipTitleItem2)
+        SuperToolTip2.Items.Add(ToolTipItem2)
+        Me.txt_nWebIskontoYuzdesi.SuperTip = SuperToolTip2
         Me.txt_nWebIskontoYuzdesi.TabIndex = 100
         '
         'LabelControl40
@@ -1853,12 +1853,12 @@ Public Class frm_stok_kart
         Me.txt_tbBedenTipi.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
         Me.txt_tbBedenTipi.Properties.ValueMember = "sBedenTipi"
         Me.txt_tbBedenTipi.Size = New System.Drawing.Size(197, 28)
-        ToolTipTitleItem2.Text = "BedenTipi"
-        ToolTipItem2.LeftIndent = 6
-        ToolTipItem2.Text = "Beden Tipleri Listesi"
-        SuperToolTip2.Items.Add(ToolTipTitleItem2)
-        SuperToolTip2.Items.Add(ToolTipItem2)
-        Me.txt_tbBedenTipi.SuperTip = SuperToolTip2
+        ToolTipTitleItem3.Text = "BedenTipi"
+        ToolTipItem3.LeftIndent = 6
+        ToolTipItem3.Text = "Beden Tipleri Listesi"
+        SuperToolTip3.Items.Add(ToolTipTitleItem3)
+        SuperToolTip3.Items.Add(ToolTipItem3)
+        Me.txt_tbBedenTipi.SuperTip = SuperToolTip3
         Me.txt_tbBedenTipi.TabIndex = 19
         '
         'txt_nHacim
@@ -1877,11 +1877,11 @@ Public Class frm_stok_kart
         Me.txt_nHacim.Properties.DisplayFormat.FormatString = "#,0.##"
         Me.txt_nHacim.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
         Me.txt_nHacim.Size = New System.Drawing.Size(93, 26)
-        ToolTipTitleItem3.Text = "Azami Miktar"
-        ToolTipItem3.LeftIndent = 6
-        SuperToolTip3.Items.Add(ToolTipTitleItem3)
-        SuperToolTip3.Items.Add(ToolTipItem3)
-        Me.txt_nHacim.SuperTip = SuperToolTip3
+        ToolTipTitleItem4.Text = "Azami Miktar"
+        ToolTipItem4.LeftIndent = 6
+        SuperToolTip4.Items.Add(ToolTipTitleItem4)
+        SuperToolTip4.Items.Add(ToolTipItem4)
+        Me.txt_nHacim.SuperTip = SuperToolTip4
         Me.txt_nHacim.TabIndex = 24
         '
         'LabelControl38
@@ -1910,13 +1910,13 @@ Public Class frm_stok_kart
         Me.txt_sDovizCinsi.Properties.NullText = "[DovizCinsi]"
         Me.txt_sDovizCinsi.Properties.ValueMember = "sDovizCinsi"
         Me.txt_sDovizCinsi.Size = New System.Drawing.Size(154, 26)
-        ToolTipTitleItem4.Text = "Satici"
-        ToolTipItem4.LeftIndent = 6
-        ToolTipItem4.Text = "Stok Filerinde ve Raporlarda geerli olmas istenen Satici Personel buradan seilir." &
+        ToolTipTitleItem5.Text = "Satici"
+        ToolTipItem5.LeftIndent = 6
+        ToolTipItem5.Text = "Stok Filerinde ve Raporlarda geerli olmas istenen Satici Personel buradan seilir." &
     ""
-        SuperToolTip4.Items.Add(ToolTipTitleItem4)
-        SuperToolTip4.Items.Add(ToolTipItem4)
-        Me.txt_sDovizCinsi.SuperTip = SuperToolTip4
+        SuperToolTip5.Items.Add(ToolTipTitleItem5)
+        SuperToolTip5.Items.Add(ToolTipItem5)
+        Me.txt_sDovizCinsi.SuperTip = SuperToolTip5
         Me.txt_sDovizCinsi.TabIndex = 26
         '
         'LabelControl39
@@ -1945,11 +1945,11 @@ Public Class frm_stok_kart
         Me.txt_nAgirlik.Properties.DisplayFormat.FormatString = "#,0.##"
         Me.txt_nAgirlik.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
         Me.txt_nAgirlik.Size = New System.Drawing.Size(93, 26)
-        ToolTipTitleItem5.Text = "Azami Miktar"
-        ToolTipItem5.LeftIndent = 6
-        SuperToolTip5.Items.Add(ToolTipTitleItem5)
-        SuperToolTip5.Items.Add(ToolTipItem5)
-        Me.txt_nAgirlik.SuperTip = SuperToolTip5
+        ToolTipTitleItem6.Text = "Azami Miktar"
+        ToolTipItem6.LeftIndent = 6
+        SuperToolTip6.Items.Add(ToolTipTitleItem6)
+        SuperToolTip6.Items.Add(ToolTipItem6)
+        Me.txt_nAgirlik.SuperTip = SuperToolTip6
         Me.txt_nAgirlik.TabIndex = 25
         '
         'LabelControl37
@@ -1988,11 +1988,11 @@ Public Class frm_stok_kart
         Me.txt_nYukseklik.Properties.DisplayFormat.FormatString = "#,0.##"
         Me.txt_nYukseklik.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
         Me.txt_nYukseklik.Size = New System.Drawing.Size(93, 26)
-        ToolTipTitleItem6.Text = "Asgari Miktar"
-        ToolTipItem6.LeftIndent = 6
-        SuperToolTip6.Items.Add(ToolTipTitleItem6)
-        SuperToolTip6.Items.Add(ToolTipItem6)
-        Me.txt_nYukseklik.SuperTip = SuperToolTip6
+        ToolTipTitleItem7.Text = "Asgari Miktar"
+        ToolTipItem7.LeftIndent = 6
+        SuperToolTip7.Items.Add(ToolTipTitleItem7)
+        SuperToolTip7.Items.Add(ToolTipItem7)
+        Me.txt_nYukseklik.SuperTip = SuperToolTip7
         Me.txt_nYukseklik.TabIndex = 23
         '
         'LabelControl35
@@ -2031,11 +2031,11 @@ Public Class frm_stok_kart
         Me.txt_nBoy.Properties.DisplayFormat.FormatString = "#,0.##"
         Me.txt_nBoy.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
         Me.txt_nBoy.Size = New System.Drawing.Size(93, 26)
-        ToolTipTitleItem7.Text = "Asgari Miktar"
-        ToolTipItem7.LeftIndent = 6
-        SuperToolTip7.Items.Add(ToolTipTitleItem7)
-        SuperToolTip7.Items.Add(ToolTipItem7)
-        Me.txt_nBoy.SuperTip = SuperToolTip7
+        ToolTipTitleItem8.Text = "Asgari Miktar"
+        ToolTipItem8.LeftIndent = 6
+        SuperToolTip8.Items.Add(ToolTipTitleItem8)
+        SuperToolTip8.Items.Add(ToolTipItem8)
+        Me.txt_nBoy.SuperTip = SuperToolTip8
         Me.txt_nBoy.TabIndex = 22
         '
         'txt_nEn
@@ -2054,11 +2054,11 @@ Public Class frm_stok_kart
         Me.txt_nEn.Properties.DisplayFormat.FormatString = "#,0.##"
         Me.txt_nEn.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
         Me.txt_nEn.Size = New System.Drawing.Size(93, 26)
-        ToolTipTitleItem8.Text = "Asgari Miktar"
-        ToolTipItem8.LeftIndent = 6
-        SuperToolTip8.Items.Add(ToolTipTitleItem8)
-        SuperToolTip8.Items.Add(ToolTipItem8)
-        Me.txt_nEn.SuperTip = SuperToolTip8
+        ToolTipTitleItem9.Text = "Asgari Miktar"
+        ToolTipItem9.LeftIndent = 6
+        SuperToolTip9.Items.Add(ToolTipTitleItem9)
+        SuperToolTip9.Items.Add(ToolTipItem9)
+        Me.txt_nEn.SuperTip = SuperToolTip9
         Me.txt_nEn.TabIndex = 21
         '
         'GroupControl6
@@ -2144,16 +2144,16 @@ Public Class frm_stok_kart
         Me.BarButtonItem1.ItemAppearance.Normal.Options.UseFont = True
         Me.BarButtonItem1.ItemShortcut = New DevExpress.XtraBars.BarShortcut(System.Windows.Forms.Keys.Insert)
         Me.BarButtonItem1.Name = "BarButtonItem1"
-        ToolTipTitleItem9.Text = "Ekle"
-        ToolTipItem9.LeftIndent = 6
-        ToolTipItem9.Text = "Yeni Stok kayd Eklemek icin kullanilir."
-        ToolTipTitleItem52.LeftIndent = 6
-        ToolTipTitleItem52.Text = "Insert"
-        SuperToolTip9.Items.Add(ToolTipTitleItem9)
-        SuperToolTip9.Items.Add(ToolTipItem9)
-        SuperToolTip9.Items.Add(ToolTipSeparatorItem14)
-        SuperToolTip9.Items.Add(ToolTipTitleItem52)
-        Me.BarButtonItem1.SuperTip = SuperToolTip9
+        ToolTipTitleItem10.Text = "Ekle"
+        ToolTipItem10.LeftIndent = 6
+        ToolTipItem10.Text = "Yeni Stok kayd Eklemek icin kullanilir."
+        ToolTipTitleItem11.LeftIndent = 6
+        ToolTipTitleItem11.Text = "Insert"
+        SuperToolTip10.Items.Add(ToolTipTitleItem10)
+        SuperToolTip10.Items.Add(ToolTipItem10)
+        SuperToolTip10.Items.Add(ToolTipSeparatorItem1)
+        SuperToolTip10.Items.Add(ToolTipTitleItem11)
+        Me.BarButtonItem1.SuperTip = SuperToolTip10
         '
         'BarButtonItem2
         '
@@ -2163,18 +2163,18 @@ Public Class frm_stok_kart
         Me.BarButtonItem2.ItemAppearance.Normal.Options.UseFont = True
         Me.BarButtonItem2.ItemShortcut = New DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.K))
         Me.BarButtonItem2.Name = "BarButtonItem2"
-        ToolTipTitleItem53.Text = "Kopyala"
-        ToolTipItem37.LeftIndent = 6
-        ToolTipItem37.Text = "Stok kart bilgilerini kullanarak yeni bir stok kart kaydi Amak icin kullanilir. s" &
+        ToolTipTitleItem12.Text = "Kopyala"
+        ToolTipItem11.LeftIndent = 6
+        ToolTipItem11.Text = "Stok kart bilgilerini kullanarak yeni bir stok kart kaydi Amak icin kullanilir. s" &
     "eri olarak stoklar kopyalanabilir. Renk/Beden/Kavala kaydi girilmis stoklarda ba" &
     "rkodlar ve fiyatlar kopyalanmaz."
-        ToolTipTitleItem54.LeftIndent = 6
-        ToolTipTitleItem54.Text = "Ctrl+K"
-        SuperToolTip39.Items.Add(ToolTipTitleItem53)
-        SuperToolTip39.Items.Add(ToolTipItem37)
-        SuperToolTip39.Items.Add(ToolTipSeparatorItem15)
-        SuperToolTip39.Items.Add(ToolTipTitleItem54)
-        Me.BarButtonItem2.SuperTip = SuperToolTip39
+        ToolTipTitleItem13.LeftIndent = 6
+        ToolTipTitleItem13.Text = "Ctrl+K"
+        SuperToolTip11.Items.Add(ToolTipTitleItem12)
+        SuperToolTip11.Items.Add(ToolTipItem11)
+        SuperToolTip11.Items.Add(ToolTipSeparatorItem2)
+        SuperToolTip11.Items.Add(ToolTipTitleItem13)
+        Me.BarButtonItem2.SuperTip = SuperToolTip11
         '
         'BarButtonItem3
         '
@@ -2184,17 +2184,17 @@ Public Class frm_stok_kart
         Me.BarButtonItem3.ItemAppearance.Normal.Options.UseFont = True
         Me.BarButtonItem3.ItemShortcut = New DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Delete))
         Me.BarButtonItem3.Name = "BarButtonItem3"
-        ToolTipTitleItem55.Text = "Sil"
-        ToolTipItem38.LeftIndent = 6
-        ToolTipItem38.Text = "Stok Kart Kayd silmek icin kullanilir. Stok kartna bal barkodlar,fiyatlar ve stou" &
+        ToolTipTitleItem14.Text = "Sil"
+        ToolTipItem12.LeftIndent = 6
+        ToolTipItem12.Text = "Stok Kart Kayd silmek icin kullanilir. Stok kartna bal barkodlar,fiyatlar ve stou" &
     "n serileri silinmektedir."
-        ToolTipTitleItem56.LeftIndent = 6
-        ToolTipTitleItem56.Text = "Ctrl+Delete"
-        SuperToolTip40.Items.Add(ToolTipTitleItem55)
-        SuperToolTip40.Items.Add(ToolTipItem38)
-        SuperToolTip40.Items.Add(ToolTipSeparatorItem16)
-        SuperToolTip40.Items.Add(ToolTipTitleItem56)
-        Me.BarButtonItem3.SuperTip = SuperToolTip40
+        ToolTipTitleItem15.LeftIndent = 6
+        ToolTipTitleItem15.Text = "Ctrl+Delete"
+        SuperToolTip12.Items.Add(ToolTipTitleItem14)
+        SuperToolTip12.Items.Add(ToolTipItem12)
+        SuperToolTip12.Items.Add(ToolTipSeparatorItem3)
+        SuperToolTip12.Items.Add(ToolTipTitleItem15)
+        Me.BarButtonItem3.SuperTip = SuperToolTip12
         '
         'BarButtonItem4
         '
@@ -2204,17 +2204,17 @@ Public Class frm_stok_kart
         Me.BarButtonItem4.ItemAppearance.Normal.Options.UseFont = True
         Me.BarButtonItem4.ItemShortcut = New DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.D))
         Me.BarButtonItem4.Name = "BarButtonItem4"
-        ToolTipTitleItem57.Text = "Kod Degistir"
-        ToolTipItem39.LeftIndent = 6
-        ToolTipItem39.Text = "Stok Kodunu degistirmek icin kullanilir. Stok kartna bal model tanmlarda deimekte" &
+        ToolTipTitleItem16.Text = "Kod Degistir"
+        ToolTipItem13.LeftIndent = 6
+        ToolTipItem13.Text = "Stok Kodunu degistirmek icin kullanilir. Stok kartna bal model tanmlarda deimekte" &
     "dir. Renk/Bedenli stoklarda kullanmlmas nerilmez."
-        ToolTipTitleItem58.LeftIndent = 6
-        ToolTipTitleItem58.Text = "Ctrl+D"
-        SuperToolTip41.Items.Add(ToolTipTitleItem57)
-        SuperToolTip41.Items.Add(ToolTipItem39)
-        SuperToolTip41.Items.Add(ToolTipSeparatorItem17)
-        SuperToolTip41.Items.Add(ToolTipTitleItem58)
-        Me.BarButtonItem4.SuperTip = SuperToolTip41
+        ToolTipTitleItem17.LeftIndent = 6
+        ToolTipTitleItem17.Text = "Ctrl+D"
+        SuperToolTip13.Items.Add(ToolTipTitleItem16)
+        SuperToolTip13.Items.Add(ToolTipItem13)
+        SuperToolTip13.Items.Add(ToolTipSeparatorItem4)
+        SuperToolTip13.Items.Add(ToolTipTitleItem17)
+        Me.BarButtonItem4.SuperTip = SuperToolTip13
         '
         'BarButtonItem5
         '
@@ -2224,15 +2224,15 @@ Public Class frm_stok_kart
         Me.BarButtonItem5.ItemAppearance.Normal.Options.UseFont = True
         Me.BarButtonItem5.ItemShortcut = New DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.B))
         Me.BarButtonItem5.Name = "BarButtonItem5"
-        ToolTipTitleItem59.Text = "Birim Cevrimi"
-        ToolTipItem40.LeftIndent = 6
-        ToolTipTitleItem60.LeftIndent = 6
-        ToolTipTitleItem60.Text = "Ctrl+B"
-        SuperToolTip42.Items.Add(ToolTipTitleItem59)
-        SuperToolTip42.Items.Add(ToolTipItem40)
-        SuperToolTip42.Items.Add(ToolTipSeparatorItem18)
-        SuperToolTip42.Items.Add(ToolTipTitleItem60)
-        Me.BarButtonItem5.SuperTip = SuperToolTip42
+        ToolTipTitleItem18.Text = "Birim Cevrimi"
+        ToolTipItem14.LeftIndent = 6
+        ToolTipTitleItem19.LeftIndent = 6
+        ToolTipTitleItem19.Text = "Ctrl+B"
+        SuperToolTip14.Items.Add(ToolTipTitleItem18)
+        SuperToolTip14.Items.Add(ToolTipItem14)
+        SuperToolTip14.Items.Add(ToolTipSeparatorItem5)
+        SuperToolTip14.Items.Add(ToolTipTitleItem19)
+        Me.BarButtonItem5.SuperTip = SuperToolTip14
         '
         'BarButtonItem6
         '
@@ -2242,15 +2242,15 @@ Public Class frm_stok_kart
         Me.BarButtonItem6.ItemAppearance.Normal.Options.UseFont = True
         Me.BarButtonItem6.ItemShortcut = New DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.F))
         Me.BarButtonItem6.Name = "BarButtonItem6"
-        ToolTipTitleItem61.Text = "Stok Fiyatlandr"
-        ToolTipItem41.LeftIndent = 6
-        ToolTipTitleItem62.LeftIndent = 6
-        ToolTipTitleItem62.Text = "Ctrl+F"
-        SuperToolTip43.Items.Add(ToolTipTitleItem61)
-        SuperToolTip43.Items.Add(ToolTipItem41)
-        SuperToolTip43.Items.Add(ToolTipSeparatorItem19)
-        SuperToolTip43.Items.Add(ToolTipTitleItem62)
-        Me.BarButtonItem6.SuperTip = SuperToolTip43
+        ToolTipTitleItem20.Text = "Stok Fiyatlandr"
+        ToolTipItem15.LeftIndent = 6
+        ToolTipTitleItem21.LeftIndent = 6
+        ToolTipTitleItem21.Text = "Ctrl+F"
+        SuperToolTip15.Items.Add(ToolTipTitleItem20)
+        SuperToolTip15.Items.Add(ToolTipItem15)
+        SuperToolTip15.Items.Add(ToolTipSeparatorItem6)
+        SuperToolTip15.Items.Add(ToolTipTitleItem21)
+        Me.BarButtonItem6.SuperTip = SuperToolTip15
         '
         'BarButtonItem7
         '
@@ -2260,17 +2260,17 @@ Public Class frm_stok_kart
         Me.BarButtonItem7.ItemAppearance.Normal.Options.UseFont = True
         Me.BarButtonItem7.ItemShortcut = New DevExpress.XtraBars.BarShortcut(System.Windows.Forms.Keys.F9)
         Me.BarButtonItem7.Name = "BarButtonItem7"
-        ToolTipTitleItem63.Text = "Notlar"
-        ToolTipItem42.LeftIndent = 6
-        ToolTipItem42.Text = "Stok kartna ait Notlar listelenir. Stok listelendiginde veya secildiginde uyarilm" &
+        ToolTipTitleItem22.Text = "Notlar"
+        ToolTipItem16.LeftIndent = 6
+        ToolTipItem16.Text = "Stok kartna ait Notlar listelenir. Stok listelendiginde veya secildiginde uyarilm" &
     "asini istediimiz notlar buraya kaydedilir."
-        ToolTipTitleItem64.LeftIndent = 6
-        ToolTipTitleItem64.Text = "F9"
-        SuperToolTip44.Items.Add(ToolTipTitleItem63)
-        SuperToolTip44.Items.Add(ToolTipItem42)
-        SuperToolTip44.Items.Add(ToolTipSeparatorItem20)
-        SuperToolTip44.Items.Add(ToolTipTitleItem64)
-        Me.BarButtonItem7.SuperTip = SuperToolTip44
+        ToolTipTitleItem23.LeftIndent = 6
+        ToolTipTitleItem23.Text = "F9"
+        SuperToolTip16.Items.Add(ToolTipTitleItem22)
+        SuperToolTip16.Items.Add(ToolTipItem16)
+        SuperToolTip16.Items.Add(ToolTipSeparatorItem7)
+        SuperToolTip16.Items.Add(ToolTipTitleItem23)
+        Me.BarButtonItem7.SuperTip = SuperToolTip16
         '
         'BarButtonItem8
         '
@@ -2279,15 +2279,15 @@ Public Class frm_stok_kart
         Me.BarButtonItem8.ItemAppearance.Normal.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
         Me.BarButtonItem8.ItemAppearance.Normal.Options.UseFont = True
         Me.BarButtonItem8.Name = "BarButtonItem8"
-        ToolTipTitleItem65.Text = "Envanter"
-        ToolTipItem43.LeftIndent = 6
-        ToolTipTitleItem66.LeftIndent = 6
-        ToolTipTitleItem66.Text = "F6"
-        SuperToolTip45.Items.Add(ToolTipTitleItem65)
-        SuperToolTip45.Items.Add(ToolTipItem43)
-        SuperToolTip45.Items.Add(ToolTipSeparatorItem21)
-        SuperToolTip45.Items.Add(ToolTipTitleItem66)
-        Me.BarButtonItem8.SuperTip = SuperToolTip45
+        ToolTipTitleItem24.Text = "Envanter"
+        ToolTipItem17.LeftIndent = 6
+        ToolTipTitleItem25.LeftIndent = 6
+        ToolTipTitleItem25.Text = "F6"
+        SuperToolTip17.Items.Add(ToolTipTitleItem24)
+        SuperToolTip17.Items.Add(ToolTipItem17)
+        SuperToolTip17.Items.Add(ToolTipSeparatorItem8)
+        SuperToolTip17.Items.Add(ToolTipTitleItem25)
+        Me.BarButtonItem8.SuperTip = SuperToolTip17
         '
         'BarButtonItem9
         '
@@ -2296,15 +2296,15 @@ Public Class frm_stok_kart
         Me.BarButtonItem9.ItemAppearance.Normal.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
         Me.BarButtonItem9.ItemAppearance.Normal.Options.UseFont = True
         Me.BarButtonItem9.Name = "BarButtonItem9"
-        ToolTipTitleItem67.Text = "Hareketler"
-        ToolTipItem44.LeftIndent = 6
-        ToolTipTitleItem68.LeftIndent = 6
-        ToolTipTitleItem68.Text = "F7"
-        SuperToolTip46.Items.Add(ToolTipTitleItem67)
-        SuperToolTip46.Items.Add(ToolTipItem44)
-        SuperToolTip46.Items.Add(ToolTipSeparatorItem22)
-        SuperToolTip46.Items.Add(ToolTipTitleItem68)
-        Me.BarButtonItem9.SuperTip = SuperToolTip46
+        ToolTipTitleItem26.Text = "Hareketler"
+        ToolTipItem18.LeftIndent = 6
+        ToolTipTitleItem27.LeftIndent = 6
+        ToolTipTitleItem27.Text = "F7"
+        SuperToolTip18.Items.Add(ToolTipTitleItem26)
+        SuperToolTip18.Items.Add(ToolTipItem18)
+        SuperToolTip18.Items.Add(ToolTipSeparatorItem9)
+        SuperToolTip18.Items.Add(ToolTipTitleItem27)
+        Me.BarButtonItem9.SuperTip = SuperToolTip18
         '
         'BarButtonItem10
         '
@@ -2313,15 +2313,15 @@ Public Class frm_stok_kart
         Me.BarButtonItem10.ItemAppearance.Normal.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
         Me.BarButtonItem10.ItemAppearance.Normal.Options.UseFont = True
         Me.BarButtonItem10.Name = "BarButtonItem10"
-        ToolTipTitleItem69.Text = "Transferler"
-        ToolTipItem45.LeftIndent = 6
-        ToolTipTitleItem70.LeftIndent = 6
-        ToolTipTitleItem70.Text = "F8"
-        SuperToolTip47.Items.Add(ToolTipTitleItem69)
-        SuperToolTip47.Items.Add(ToolTipItem45)
-        SuperToolTip47.Items.Add(ToolTipSeparatorItem23)
-        SuperToolTip47.Items.Add(ToolTipTitleItem70)
-        Me.BarButtonItem10.SuperTip = SuperToolTip47
+        ToolTipTitleItem28.Text = "Transferler"
+        ToolTipItem19.LeftIndent = 6
+        ToolTipTitleItem29.LeftIndent = 6
+        ToolTipTitleItem29.Text = "F8"
+        SuperToolTip19.Items.Add(ToolTipTitleItem28)
+        SuperToolTip19.Items.Add(ToolTipItem19)
+        SuperToolTip19.Items.Add(ToolTipSeparatorItem10)
+        SuperToolTip19.Items.Add(ToolTipTitleItem29)
+        Me.BarButtonItem10.SuperTip = SuperToolTip19
         '
         'BarButtonItem11
         '
@@ -2330,15 +2330,15 @@ Public Class frm_stok_kart
         Me.BarButtonItem11.ItemAppearance.Normal.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
         Me.BarButtonItem11.ItemAppearance.Normal.Options.UseFont = True
         Me.BarButtonItem11.Name = "BarButtonItem11"
-        ToolTipTitleItem71.Text = "Snflar"
-        ToolTipItem46.LeftIndent = 6
-        ToolTipTitleItem72.LeftIndent = 6
-        ToolTipTitleItem72.Text = "F11"
-        SuperToolTip48.Items.Add(ToolTipTitleItem71)
-        SuperToolTip48.Items.Add(ToolTipItem46)
-        SuperToolTip48.Items.Add(ToolTipSeparatorItem24)
-        SuperToolTip48.Items.Add(ToolTipTitleItem72)
-        Me.BarButtonItem11.SuperTip = SuperToolTip48
+        ToolTipTitleItem30.Text = "Snflar"
+        ToolTipItem20.LeftIndent = 6
+        ToolTipTitleItem31.LeftIndent = 6
+        ToolTipTitleItem31.Text = "F11"
+        SuperToolTip20.Items.Add(ToolTipTitleItem30)
+        SuperToolTip20.Items.Add(ToolTipItem20)
+        SuperToolTip20.Items.Add(ToolTipSeparatorItem11)
+        SuperToolTip20.Items.Add(ToolTipTitleItem31)
+        Me.BarButtonItem11.SuperTip = SuperToolTip20
         '
         'BarButtonItem12
         '
@@ -2347,11 +2347,11 @@ Public Class frm_stok_kart
         Me.BarButtonItem12.ItemAppearance.Normal.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
         Me.BarButtonItem12.ItemAppearance.Normal.Options.UseFont = True
         Me.BarButtonItem12.Name = "BarButtonItem12"
-        ToolTipTitleItem73.Text = "Renk"
-        ToolTipItem47.LeftIndent = 6
-        SuperToolTip49.Items.Add(ToolTipTitleItem73)
-        SuperToolTip49.Items.Add(ToolTipItem47)
-        Me.BarButtonItem12.SuperTip = SuperToolTip49
+        ToolTipTitleItem32.Text = "Renk"
+        ToolTipItem21.LeftIndent = 6
+        SuperToolTip21.Items.Add(ToolTipTitleItem32)
+        SuperToolTip21.Items.Add(ToolTipItem21)
+        Me.BarButtonItem12.SuperTip = SuperToolTip21
         '
         'BarButtonItem13
         '
@@ -2360,11 +2360,11 @@ Public Class frm_stok_kart
         Me.BarButtonItem13.ItemAppearance.Normal.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
         Me.BarButtonItem13.ItemAppearance.Normal.Options.UseFont = True
         Me.BarButtonItem13.Name = "BarButtonItem13"
-        ToolTipTitleItem74.Text = "Bedenler"
-        ToolTipItem48.LeftIndent = 6
-        SuperToolTip50.Items.Add(ToolTipTitleItem74)
-        SuperToolTip50.Items.Add(ToolTipItem48)
-        Me.BarButtonItem13.SuperTip = SuperToolTip50
+        ToolTipTitleItem33.Text = "Bedenler"
+        ToolTipItem22.LeftIndent = 6
+        SuperToolTip22.Items.Add(ToolTipTitleItem33)
+        SuperToolTip22.Items.Add(ToolTipItem22)
+        Me.BarButtonItem13.SuperTip = SuperToolTip22
         '
         'BarButtonItem14
         '
@@ -2391,22 +2391,22 @@ Public Class frm_stok_kart
         '
         Me.barDockControlBottom.CausesValidation = False
         Me.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.barDockControlBottom.Location = New System.Drawing.Point(0, 730)
-        Me.barDockControlBottom.Size = New System.Drawing.Size(1367, 34)
+        Me.barDockControlBottom.Location = New System.Drawing.Point(0, 729)
+        Me.barDockControlBottom.Size = New System.Drawing.Size(1367, 35)
         '
         'barDockControlLeft
         '
         Me.barDockControlLeft.CausesValidation = False
         Me.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left
         Me.barDockControlLeft.Location = New System.Drawing.Point(0, 0)
-        Me.barDockControlLeft.Size = New System.Drawing.Size(0, 730)
+        Me.barDockControlLeft.Size = New System.Drawing.Size(0, 729)
         '
         'barDockControlRight
         '
         Me.barDockControlRight.CausesValidation = False
         Me.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right
         Me.barDockControlRight.Location = New System.Drawing.Point(1367, 0)
-        Me.barDockControlRight.Size = New System.Drawing.Size(0, 730)
+        Me.barDockControlRight.Size = New System.Drawing.Size(0, 729)
         '
         'LabelControl26
         '
@@ -2442,11 +2442,11 @@ Public Class frm_stok_kart
         Me.txt_nPrim.Properties.AppearanceFocused.Options.UseForeColor = True
         Me.txt_nPrim.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
         Me.txt_nPrim.Size = New System.Drawing.Size(93, 26)
-        ToolTipTitleItem75.Text = "Toptan iskonto"
-        ToolTipItem49.LeftIndent = 6
-        SuperToolTip51.Items.Add(ToolTipTitleItem75)
-        SuperToolTip51.Items.Add(ToolTipItem49)
-        Me.txt_nPrim.SuperTip = SuperToolTip51
+        ToolTipTitleItem34.Text = "Toptan iskonto"
+        ToolTipItem23.LeftIndent = 6
+        SuperToolTip23.Items.Add(ToolTipTitleItem34)
+        SuperToolTip23.Items.Add(ToolTipItem23)
+        Me.txt_nPrim.SuperTip = SuperToolTip23
         Me.txt_nPrim.TabIndex = 17
         '
         'LabelControl24
@@ -2468,12 +2468,12 @@ Public Class frm_stok_kart
         Me.txt_lBirimCarpan.Name = "txt_lBirimCarpan"
         Me.txt_lBirimCarpan.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.txt_lBirimCarpan.Size = New System.Drawing.Size(125, 26)
-        ToolTipTitleItem34.Text = "Birimarpan"
-        ToolTipItem23.LeftIndent = 6
-        ToolTipItem23.Text = "2.Birim arpan Buraya Yazlr"
-        SuperToolTip23.Items.Add(ToolTipTitleItem34)
-        SuperToolTip23.Items.Add(ToolTipItem23)
-        Me.txt_lBirimCarpan.SuperTip = SuperToolTip23
+        ToolTipTitleItem35.Text = "Birimarpan"
+        ToolTipItem24.LeftIndent = 6
+        ToolTipItem24.Text = "2.Birim arpan Buraya Yazlr"
+        SuperToolTip24.Items.Add(ToolTipTitleItem35)
+        SuperToolTip24.Items.Add(ToolTipItem24)
+        Me.txt_lBirimCarpan.SuperTip = SuperToolTip24
         Me.txt_lBirimCarpan.TabIndex = 5
         '
         'txt_tbStokTipi
@@ -2496,14 +2496,14 @@ Public Class frm_stok_kart
         Me.txt_tbStokTipi.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
         Me.txt_tbStokTipi.Properties.ValueMember = "nStokTipi"
         Me.txt_tbStokTipi.Size = New System.Drawing.Size(197, 28)
-        ToolTipTitleItem35.Text = "Stok Tipi"
-        ToolTipItem24.LeftIndent = 6
-        ToolTipItem24.Text = "Farkl Stok Tiplerinde ilemler yaplmaktadr." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Model" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Renkli" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Renk/Bedenli" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Renk/Bed" &
+        ToolTipTitleItem36.Text = "Stok Tipi"
+        ToolTipItem25.LeftIndent = 6
+        ToolTipItem25.Text = "Farkl Stok Tiplerinde ilemler yaplmaktadr." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Model" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Renkli" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Renk/Bedenli" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Renk/Bed" &
     "en/Kavala" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Hizmet (""Maliyet ve Karllk Hesaplanmaz"")" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Pasif (""Pasif Stoklar Liste" &
     "lenmez,Islem Grmez"")"
-        SuperToolTip24.Items.Add(ToolTipTitleItem35)
-        SuperToolTip24.Items.Add(ToolTipItem24)
-        Me.txt_tbStokTipi.SuperTip = SuperToolTip24
+        SuperToolTip25.Items.Add(ToolTipTitleItem36)
+        SuperToolTip25.Items.Add(ToolTipItem25)
+        Me.txt_tbStokTipi.SuperTip = SuperToolTip25
         Me.txt_tbStokTipi.TabIndex = 20
         '
         'LabelControl22
@@ -2555,11 +2555,11 @@ Public Class frm_stok_kart
         Me.txt_nFiyatlandirma.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
         Me.txt_nFiyatlandirma.Properties.ValueMember = "nFiyatlandirma"
         Me.txt_nFiyatlandirma.Size = New System.Drawing.Size(295, 28)
-        ToolTipTitleItem36.Text = "Stok Fiyatlandrma Modelleri"
-        ToolTipItem25.LeftIndent = 6
-        SuperToolTip25.Items.Add(ToolTipTitleItem36)
-        SuperToolTip25.Items.Add(ToolTipItem25)
-        Me.txt_nFiyatlandirma.SuperTip = SuperToolTip25
+        ToolTipTitleItem37.Text = "Stok Fiyatlandrma Modelleri"
+        ToolTipItem26.LeftIndent = 6
+        SuperToolTip26.Items.Add(ToolTipTitleItem37)
+        SuperToolTip26.Items.Add(ToolTipItem26)
+        Me.txt_nFiyatlandirma.SuperTip = SuperToolTip26
         Me.txt_nFiyatlandirma.TabIndex = 18
         '
         'LabelControl12
@@ -2586,11 +2586,11 @@ Public Class frm_stok_kart
         Me.txt_nIskontoYuzdesi.Properties.AppearanceFocused.Options.UseForeColor = True
         Me.txt_nIskontoYuzdesi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
         Me.txt_nIskontoYuzdesi.Size = New System.Drawing.Size(93, 26)
-        ToolTipTitleItem37.Text = "Toptan iskonto"
-        ToolTipItem26.LeftIndent = 6
-        SuperToolTip26.Items.Add(ToolTipTitleItem37)
-        SuperToolTip26.Items.Add(ToolTipItem26)
-        Me.txt_nIskontoYuzdesi.SuperTip = SuperToolTip26
+        ToolTipTitleItem38.Text = "Toptan iskonto"
+        ToolTipItem27.LeftIndent = 6
+        SuperToolTip27.Items.Add(ToolTipTitleItem38)
+        SuperToolTip27.Items.Add(ToolTipItem27)
+        Me.txt_nIskontoYuzdesi.SuperTip = SuperToolTip27
         Me.txt_nIskontoYuzdesi.TabIndex = 16
         '
         'LabelControl11
@@ -2617,13 +2617,13 @@ Public Class frm_stok_kart
         Me.txt_nIskontoYuzdesiAV.Properties.AppearanceFocused.Options.UseForeColor = True
         Me.txt_nIskontoYuzdesiAV.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
         Me.txt_nIskontoYuzdesiAV.Size = New System.Drawing.Size(93, 26)
-        ToolTipTitleItem38.Text = "Perakende Iskonto"
-        ToolTipItem27.LeftIndent = 6
-        ToolTipItem27.Text = "Perakende Modlnde otomatik iskonto uygulamak icin kullanlr. Girilmis veri orannda" &
+        ToolTipTitleItem39.Text = "Perakende Iskonto"
+        ToolTipItem28.LeftIndent = 6
+        ToolTipItem28.Text = "Perakende Modlnde otomatik iskonto uygulamak icin kullanlr. Girilmis veri orannda" &
     " Perakende Satis modl rne iskonto uygulamaktadr."
-        SuperToolTip27.Items.Add(ToolTipTitleItem38)
-        SuperToolTip27.Items.Add(ToolTipItem27)
-        Me.txt_nIskontoYuzdesiAV.SuperTip = SuperToolTip27
+        SuperToolTip28.Items.Add(ToolTipTitleItem39)
+        SuperToolTip28.Items.Add(ToolTipItem28)
+        Me.txt_nIskontoYuzdesiAV.SuperTip = SuperToolTip28
         Me.txt_nIskontoYuzdesiAV.TabIndex = 15
         '
         'LabelControl10
@@ -2650,11 +2650,11 @@ Public Class frm_stok_kart
         Me.txt_nTeminSuresi.Properties.AppearanceFocused.Options.UseForeColor = True
         Me.txt_nTeminSuresi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
         Me.txt_nTeminSuresi.Size = New System.Drawing.Size(93, 26)
-        ToolTipTitleItem39.Text = "Temin Sresi"
-        ToolTipItem28.LeftIndent = 6
-        SuperToolTip28.Items.Add(ToolTipTitleItem39)
-        SuperToolTip28.Items.Add(ToolTipItem28)
-        Me.txt_nTeminSuresi.SuperTip = SuperToolTip28
+        ToolTipTitleItem40.Text = "Temin Sresi"
+        ToolTipItem29.LeftIndent = 6
+        SuperToolTip29.Items.Add(ToolTipTitleItem40)
+        SuperToolTip29.Items.Add(ToolTipItem29)
+        Me.txt_nTeminSuresi.SuperTip = SuperToolTip29
         Me.txt_nTeminSuresi.TabIndex = 14
         '
         'LabelControl9
@@ -2681,11 +2681,11 @@ Public Class frm_stok_kart
         Me.txt_lAzamiMiktar.Properties.AppearanceFocused.Options.UseForeColor = True
         Me.txt_lAzamiMiktar.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
         Me.txt_lAzamiMiktar.Size = New System.Drawing.Size(93, 26)
-        ToolTipTitleItem40.Text = "Azami Miktar"
-        ToolTipItem29.LeftIndent = 6
-        SuperToolTip29.Items.Add(ToolTipTitleItem40)
-        SuperToolTip29.Items.Add(ToolTipItem29)
-        Me.txt_lAzamiMiktar.SuperTip = SuperToolTip29
+        ToolTipTitleItem41.Text = "Azami Miktar"
+        ToolTipItem30.LeftIndent = 6
+        SuperToolTip30.Items.Add(ToolTipTitleItem41)
+        SuperToolTip30.Items.Add(ToolTipItem30)
+        Me.txt_lAzamiMiktar.SuperTip = SuperToolTip30
         Me.txt_lAzamiMiktar.TabIndex = 13
         '
         'LabelControl8
@@ -2712,11 +2712,11 @@ Public Class frm_stok_kart
         Me.txt_lAsgariMiktar.Properties.AppearanceFocused.Options.UseForeColor = True
         Me.txt_lAsgariMiktar.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
         Me.txt_lAsgariMiktar.Size = New System.Drawing.Size(93, 26)
-        ToolTipTitleItem41.Text = "Asgari Miktar"
-        ToolTipItem30.LeftIndent = 6
-        SuperToolTip30.Items.Add(ToolTipTitleItem41)
-        SuperToolTip30.Items.Add(ToolTipItem30)
-        Me.txt_lAsgariMiktar.SuperTip = SuperToolTip30
+        ToolTipTitleItem42.Text = "Asgari Miktar"
+        ToolTipItem31.LeftIndent = 6
+        SuperToolTip31.Items.Add(ToolTipTitleItem42)
+        SuperToolTip31.Items.Add(ToolTipItem31)
+        Me.txt_lAsgariMiktar.SuperTip = SuperToolTip31
         Me.txt_lAsgariMiktar.TabIndex = 12
         '
         'LabelControl14
@@ -2895,9 +2895,9 @@ Public Class frm_stok_kart
         Me.txt_sBirimCinsi1.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
         Me.txt_sBirimCinsi1.Properties.ValueMember = "sBirimCinsi"
         Me.txt_sBirimCinsi1.Size = New System.Drawing.Size(160, 26)
-        ToolTipTitleItem42.Text = "Ana Birim"
-        SuperToolTip31.Items.Add(ToolTipTitleItem42)
-        Me.txt_sBirimCinsi1.SuperTip = SuperToolTip31
+        ToolTipTitleItem43.Text = "Ana Birim"
+        SuperToolTip32.Items.Add(ToolTipTitleItem43)
+        Me.txt_sBirimCinsi1.SuperTip = SuperToolTip32
         Me.txt_sBirimCinsi1.TabIndex = 3
         '
         'LabelControl4
@@ -2923,11 +2923,11 @@ Public Class frm_stok_kart
         Me.txt_sKisaAdi.Properties.AppearanceFocused.Options.UseForeColor = True
         Me.txt_sKisaAdi.Properties.MaxLength = 20
         Me.txt_sKisaAdi.Size = New System.Drawing.Size(390, 26)
-        ToolTipTitleItem43.Text = "Kisa Adi"
-        ToolTipItem31.LeftIndent = 6
-        SuperToolTip32.Items.Add(ToolTipTitleItem43)
-        SuperToolTip32.Items.Add(ToolTipItem31)
-        Me.txt_sKisaAdi.SuperTip = SuperToolTip32
+        ToolTipTitleItem44.Text = "Kisa Adi"
+        ToolTipItem32.LeftIndent = 6
+        SuperToolTip33.Items.Add(ToolTipTitleItem44)
+        SuperToolTip33.Items.Add(ToolTipItem32)
+        Me.txt_sKisaAdi.SuperTip = SuperToolTip33
         Me.txt_sKisaAdi.TabIndex = 2
         '
         'LabelControl2
@@ -2995,7 +2995,7 @@ Public Class frm_stok_kart
         Me.XtraTabPage2.Controls.Add(Me.GridControl1)
         Me.XtraTabPage2.Image = CType(resources.GetObject("XtraTabPage2.Image"), System.Drawing.Image)
         Me.XtraTabPage2.Name = "XtraTabPage2"
-        Me.XtraTabPage2.Size = New System.Drawing.Size(1361, 471)
+        Me.XtraTabPage2.Size = New System.Drawing.Size(1357, 476)
         Me.XtraTabPage2.Text = "Sınıflar"
         '
         'GridControl1
@@ -3007,7 +3007,7 @@ Public Class frm_stok_kart
         Me.GridControl1.MainView = Me.GridView1
         Me.GridControl1.Name = "GridControl1"
         Me.GridControl1.RepositoryItems.AddRange(New DevExpress.XtraEditors.Repository.RepositoryItem() {Me.sec_sSinifKodu, Me.sec_Siniflar})
-        Me.GridControl1.Size = New System.Drawing.Size(1361, 471)
+        Me.GridControl1.Size = New System.Drawing.Size(1357, 476)
         Me.GridControl1.TabIndex = 4
         Me.GridControl1.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView1})
         '
@@ -3503,9 +3503,9 @@ Public Class frm_stok_kart
         Me.fieldnMevcut.Caption = "Mevcut"
         Me.fieldnMevcut.CellFormat.FormatString = "#,0.####"
         Me.fieldnMevcut.CellFormat.FormatType = DevExpress.Utils.FormatType.Numeric
-        PivotGridCustomTotal2.CellFormat.FormatType = DevExpress.Utils.FormatType.Numeric
-        PivotGridCustomTotal2.Format.FormatType = DevExpress.Utils.FormatType.Numeric
-        Me.fieldnMevcut.CustomTotals.AddRange(New DevExpress.XtraPivotGrid.PivotGridCustomTotal() {PivotGridCustomTotal2})
+        PivotGridCustomTotal1.CellFormat.FormatType = DevExpress.Utils.FormatType.Numeric
+        PivotGridCustomTotal1.Format.FormatType = DevExpress.Utils.FormatType.Numeric
+        Me.fieldnMevcut.CustomTotals.AddRange(New DevExpress.XtraPivotGrid.PivotGridCustomTotal() {PivotGridCustomTotal1})
         Me.fieldnMevcut.FieldName = "nMevcut"
         Me.fieldnMevcut.GrandTotalCellFormat.FormatString = "#,0.####"
         Me.fieldnMevcut.GrandTotalCellFormat.FormatType = DevExpress.Utils.FormatType.Numeric
@@ -3736,11 +3736,11 @@ Public Class frm_stok_kart
         Me.txt_lBarkodMiktar.Properties.AppearanceFocused.Options.UseForeColor = True
         Me.txt_lBarkodMiktar.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
         Me.txt_lBarkodMiktar.Size = New System.Drawing.Size(132, 26)
-        ToolTipTitleItem44.Text = "Toptan iskonto"
-        ToolTipItem32.LeftIndent = 6
-        SuperToolTip33.Items.Add(ToolTipTitleItem44)
-        SuperToolTip33.Items.Add(ToolTipItem32)
-        Me.txt_lBarkodMiktar.SuperTip = SuperToolTip33
+        ToolTipTitleItem45.Text = "Toptan iskonto"
+        ToolTipItem33.LeftIndent = 6
+        SuperToolTip34.Items.Add(ToolTipTitleItem45)
+        SuperToolTip34.Items.Add(ToolTipItem33)
+        Me.txt_lBarkodMiktar.SuperTip = SuperToolTip34
         Me.txt_lBarkodMiktar.TabIndex = 74
         '
         'sec_sBarkodBirimCinsi
@@ -3762,9 +3762,9 @@ Public Class frm_stok_kart
         Me.sec_sBarkodBirimCinsi.Properties.ShowDropDown = DevExpress.XtraEditors.Controls.ShowDropDown.DoubleClick
         Me.sec_sBarkodBirimCinsi.Properties.ValueMember = "sBirimCinsi"
         Me.sec_sBarkodBirimCinsi.Size = New System.Drawing.Size(132, 26)
-        ToolTipTitleItem45.Text = "Ana Birim"
-        SuperToolTip34.Items.Add(ToolTipTitleItem45)
-        Me.sec_sBarkodBirimCinsi.SuperTip = SuperToolTip34
+        ToolTipTitleItem46.Text = "Ana Birim"
+        SuperToolTip35.Items.Add(ToolTipTitleItem46)
+        Me.sec_sBarkodBirimCinsi.SuperTip = SuperToolTip35
         Me.sec_sBarkodBirimCinsi.TabIndex = 71
         '
         'sec_sBarkodTipi
@@ -4215,7 +4215,7 @@ Public Class frm_stok_kart
         Me.XtraTabPage5.Controls.Add(Me.txt_sUzunNot)
         Me.XtraTabPage5.Image = CType(resources.GetObject("XtraTabPage5.Image"), System.Drawing.Image)
         Me.XtraTabPage5.Name = "XtraTabPage5"
-        Me.XtraTabPage5.Size = New System.Drawing.Size(1361, 471)
+        Me.XtraTabPage5.Size = New System.Drawing.Size(1357, 476)
         Me.XtraTabPage5.Text = "Not"
         '
         'btnAIAciklamaEkle
@@ -5195,7 +5195,7 @@ Public Class frm_stok_kart
         Me.PanelControl4.Controls.Add(Me.SimpleButton5)
         Me.PanelControl4.Controls.Add(Me.SimpleButton6)
         Me.PanelControl4.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelControl4.Location = New System.Drawing.Point(2, 514)
+        Me.PanelControl4.Location = New System.Drawing.Point(2, 513)
         Me.PanelControl4.LookAndFeel.Style = DevExpress.LookAndFeel.LookAndFeelStyle.Style3D
         Me.PanelControl4.LookAndFeel.UseDefaultLookAndFeel = False
         Me.PanelControl4.Name = "PanelControl4"
@@ -5703,16 +5703,16 @@ Public Class frm_stok_kart
         Me.SimpleButton5.Location = New System.Drawing.Point(1307, 20)
         Me.SimpleButton5.Name = "SimpleButton5"
         Me.SimpleButton5.Size = New System.Drawing.Size(35, 31)
-        ToolTipTitleItem46.Text = "Sonraki Kart"
-        ToolTipItem33.LeftIndent = 6
-        ToolTipItem33.Text = "Sonraki Stok Kartn Ekrana Getirir"
-        ToolTipTitleItem76.LeftIndent = 6
-        ToolTipTitleItem76.Text = "Ctrl+Right"
-        SuperToolTip35.Items.Add(ToolTipTitleItem46)
-        SuperToolTip35.Items.Add(ToolTipItem33)
-        SuperToolTip35.Items.Add(ToolTipSeparatorItem25)
-        SuperToolTip35.Items.Add(ToolTipTitleItem76)
-        Me.SimpleButton5.SuperTip = SuperToolTip35
+        ToolTipTitleItem47.Text = "Sonraki Kart"
+        ToolTipItem34.LeftIndent = 6
+        ToolTipItem34.Text = "Sonraki Stok Kartn Ekrana Getirir"
+        ToolTipTitleItem48.LeftIndent = 6
+        ToolTipTitleItem48.Text = "Ctrl+Right"
+        SuperToolTip36.Items.Add(ToolTipTitleItem47)
+        SuperToolTip36.Items.Add(ToolTipItem34)
+        SuperToolTip36.Items.Add(ToolTipSeparatorItem12)
+        SuperToolTip36.Items.Add(ToolTipTitleItem48)
+        Me.SimpleButton5.SuperTip = SuperToolTip36
         Me.SimpleButton5.TabIndex = 76
         Me.SimpleButton5.Text = ">>"
         '
@@ -5727,16 +5727,16 @@ Public Class frm_stok_kart
         Me.SimpleButton6.Location = New System.Drawing.Point(1267, 20)
         Me.SimpleButton6.Name = "SimpleButton6"
         Me.SimpleButton6.Size = New System.Drawing.Size(40, 31)
-        ToolTipTitleItem77.Text = "Onceki Kart"
-        ToolTipItem50.LeftIndent = 6
-        ToolTipItem50.Text = "Onceki Stok Kartn Ekrana Getirir"
-        ToolTipTitleItem78.LeftIndent = 6
-        ToolTipTitleItem78.Text = "Ctrl+Left"
-        SuperToolTip52.Items.Add(ToolTipTitleItem77)
-        SuperToolTip52.Items.Add(ToolTipItem50)
-        SuperToolTip52.Items.Add(ToolTipSeparatorItem26)
-        SuperToolTip52.Items.Add(ToolTipTitleItem78)
-        Me.SimpleButton6.SuperTip = SuperToolTip52
+        ToolTipTitleItem49.Text = "Onceki Kart"
+        ToolTipItem35.LeftIndent = 6
+        ToolTipItem35.Text = "Onceki Stok Kartn Ekrana Getirir"
+        ToolTipTitleItem50.LeftIndent = 6
+        ToolTipTitleItem50.Text = "Ctrl+Left"
+        SuperToolTip37.Items.Add(ToolTipTitleItem49)
+        SuperToolTip37.Items.Add(ToolTipItem35)
+        SuperToolTip37.Items.Add(ToolTipSeparatorItem13)
+        SuperToolTip37.Items.Add(ToolTipTitleItem50)
+        Me.SimpleButton6.SuperTip = SuperToolTip37
         Me.SimpleButton6.TabIndex = 75
         '
         'ps
