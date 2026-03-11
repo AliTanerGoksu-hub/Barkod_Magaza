@@ -577,8 +577,12 @@ Partial Public Class frm_AI_TopluIslem
                     Dim kat1Subquery As String = $"(SELECT TOP 1 sAciklama FROM tbSSinif{kat1SinifNo} WHERE sSinifKodu = T2.{kat1Field}) as sKategori1"
                     Dim kat2Subquery As String = $"(SELECT TOP 1 sAciklama FROM tbSSinif{kat2SinifNo} WHERE sSinifKodu = T2.{kat2Field}) as sKategori2"
 
+                    Debug.WriteLine($"[AI-Sinif] Marka Field: {markaField} (Sinif{markaSinifNo})")
+                    Debug.WriteLine($"[AI-Sinif] Kat1 Field: {kat1Field} (Sinif{kat1SinifNo})")
+                    Debug.WriteLine($"[AI-Sinif] Kat2 Field: {kat2Field} (Sinif{kat2SinifNo})")
+
                     Dim cmd As New OleDbCommand(
-                        $"SELECT T1.sAciklama, T1.sModel, T1.sMarka, {markaSubquery}, {kat1Subquery}, {kat2Subquery} " &
+                        $"SELECT T1.sAciklama, T1.sModel, T1.sMarka, T2.{markaField} as MarkaKod, T2.{kat1Field} as Kat1Kod, T2.{kat2Field} as Kat2Kod, {markaSubquery}, {kat1Subquery}, {kat2Subquery} " &
                         "FROM tbStok AS T1 LEFT JOIN tbStokSinifi AS T2 ON T2.nStokID = T1.nStokID " &
                         "WHERE T1.nStokID = ?", conn)
                     cmd.Parameters.AddWithValue("?", stokID)
@@ -587,6 +591,12 @@ Partial Public Class frm_AI_TopluIslem
                             urunAdi = If(reader("sAciklama") Is DBNull.Value, "", reader("sAciklama").ToString())
                             sModel = If(reader("sModel") Is DBNull.Value, "", reader("sModel").ToString())
 
+                            ' Debug: Ham sınıf kodlarını göster
+                            Dim markaKod As String = If(reader("MarkaKod") Is DBNull.Value, "NULL", reader("MarkaKod").ToString())
+                            Dim kat1Kod As String = If(reader("Kat1Kod") Is DBNull.Value, "NULL", reader("Kat1Kod").ToString())
+                            Dim kat2Kod As String = If(reader("Kat2Kod") Is DBNull.Value, "NULL", reader("Kat2Kod").ToString())
+                            Debug.WriteLine($"[AI-Sinif] Ham Kodlar - Marka:{markaKod}, Kat1:{kat1Kod}, Kat2:{kat2Kod}")
+
                             ' Marka: Önce parametrik sınıftan, yoksa tbStok.sMarka'dan
                             Dim sinifMarka As String = If(reader("sSinifMarka") Is DBNull.Value, "", reader("sSinifMarka").ToString().Trim())
                             sMarka = If(Not String.IsNullOrEmpty(sinifMarka), sinifMarka, If(reader("sMarka") Is DBNull.Value, "", reader("sMarka").ToString()))
@@ -594,6 +604,8 @@ Partial Public Class frm_AI_TopluIslem
                             ' Kategoriler (parametrik sınıflardan)
                             kategori1 = If(reader("sKategori1") Is DBNull.Value, "", reader("sKategori1").ToString().Trim())
                             kategori2 = If(reader("sKategori2") Is DBNull.Value, "", reader("sKategori2").ToString().Trim())
+
+                            Debug.WriteLine($"[AI-Sinif] Çözümlenmiş - Marka:{sMarka}, Kat1:{kategori1}, Kat2:{kategori2}")
 
                             ' Tam kategori: "KAT1 > KAT2" formatında
                             tumKategori = kategori1
