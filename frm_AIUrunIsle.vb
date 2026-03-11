@@ -836,7 +836,7 @@ Public Class frm_AIUrunIsle
                           "ORDER BY s.sModel"
                     AddLog("📋 Mod: TEKRAR OLUŞTUR - Tüm modeller alınıyor...")
                     
-                ' SADECE BOŞLAR seçiliyse: Eksik içeriği olan modelleri getir
+                ' SADECE BOŞLAR seçiliyse: Eksik içeriği olan modelleri getir (bAIIcerikVar=0 olanlar)
                 ElseIf chkSadeceBoslar.Checked Then
                     ' Hangi alanların kontrol edileceğini belirle
                     Dim kosullar As New List(Of String)
@@ -857,15 +857,16 @@ Public Class frm_AIUrunIsle
                         whereKosul = "AND (" & String.Join(" OR ", kosullar) & ")"
                     End If
                     
+                    ' bAIIcerikVar = 0 veya NULL olanları al (daha önce AI çağrılmamış)
                     sql = $"SELECT TOP {maxCount} MIN(s.nStokID) as nStokID, s.sModel, MIN(s.sAciklama) as sAciklama, " &
                           $"{markaSubquery}, {kat1Subquery}, {kat2Subquery}, {kat3Subquery}, {kat4Subquery}, {kat5Subquery} " &
                           "FROM tbStok s " &
                           "LEFT JOIN tbStokUzunNot u ON s.sModel = u.sModel " &
                           "LEFT JOIN tbStokAIIcerik a ON s.sModel = a.sModel " &
-                          "WHERE s.bWebGoruntule = 1 " & whereKosul & " " &
+                          "WHERE s.bWebGoruntule = 1 AND (s.bAIIcerikVar = 0 OR s.bAIIcerikVar IS NULL) " & whereKosul & " " &
                           "GROUP BY s.sModel " &
                           "ORDER BY s.sModel"
-                    AddLog("📋 Mod: SADECE BOŞLAR - Eksik içerikli modeller alınıyor...")
+                    AddLog("📋 Mod: SADECE BOŞLAR - AI çağrılmamış modeller alınıyor...")
                     
                 ' Varsayılan: AI içeriği hiç olmayan modeller
                 Else
@@ -1134,13 +1135,15 @@ Public Class frm_AIUrunIsle
     End Function
     
     ''' <summary>
-    ''' Dictionary'den değer al, yoksa boş string döndür
+    ''' Dictionary'den değer al, yoksa placeholder döndür
+    ''' AI üretemediği alanlar için "---" yazılır, böylece tekrar sorgulanmaz
     ''' </summary>
     Private Function GetContentValue(dict As Dictionary(Of String, String), key As String) As String
         If dict.ContainsKey(key) AndAlso Not String.IsNullOrEmpty(dict(key)) Then
             Return dict(key)
         End If
-        Return ""
+        ' AI üretemedi - placeholder yaz ki tekrar sorgulanmasın
+        Return "---"
     End Function
     
     ''' <summary>
