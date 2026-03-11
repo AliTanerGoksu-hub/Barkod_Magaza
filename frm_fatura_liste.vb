@@ -7425,8 +7425,8 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
             frm.connection = Me.connection
             frm.ShowDialog()
             
-            ' Listeyi yenile
-            SimpleButton1_Click(Nothing, Nothing)
+            ' Listeyi yenile (ara fonksiyonu ile)
+            ara()
             
             If gibGonderilen > 0 Then
                 MsgBox("GİB'e gönderilen: " & gibGonderilen & vbCrLf &
@@ -7499,6 +7499,7 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                         For Each rowHandle As Integer In selectedRows
                             Dim nStokFisiID As Long = CLng(GridView1.GetRowCellValue(rowHandle, "nStokFisiID"))
                             
+                            ' 1. tbStokFisiMaster güncelle
                             Using cmd As New OleDbCommand("UPDATE tbStokFisiMaster SET " &
                                 "dteFisTarihi = ?, " &
                                 "dteValorTarihi = ?, " &
@@ -7514,12 +7515,25 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                                     guncellenen += 1
                                 End If
                             End Using
+                            
+                            ' 2. tbStokFisiDetayi güncelle
+                            Using cmdDetay As New OleDbCommand("UPDATE tbStokFisiDetayi SET " &
+                                "dteIslemTarihi = ?, " &
+                                "dteFisTarihi = ? " &
+                                "WHERE nStokFisiID = ?", con)
+                                
+                                cmdDetay.Parameters.Add("@dteIslemTarihi", OleDbType.Date).Value = yeniTarih
+                                cmdDetay.Parameters.Add("@dteFisTarihi", OleDbType.Date).Value = yeniTarih
+                                cmdDetay.Parameters.Add("@nStokFisiID", OleDbType.BigInt).Value = nStokFisiID
+                                
+                                cmdDetay.ExecuteNonQuery()
+                            End Using
                         Next
                         
                     End Using
                     
-                    ' Listeyi yenile
-                    SimpleButton1_Click(Nothing, Nothing)
+                    ' Listeyi yenile (ara fonksiyonu ile)
+                    ara()
                     
                     MsgBox(guncellenen & " adet faturanın tarihi güncellendi.", MsgBoxStyle.Information)
                 End If
