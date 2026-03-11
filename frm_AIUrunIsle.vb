@@ -382,6 +382,7 @@ Public Class frm_AIUrunIsle
         If chkSadeceBoslar.Checked AndAlso chkTekrarOlustur.Checked Then
             chkTekrarOlustur.Checked = False
         End If
+        KaydetCheckboxDurumlari()
     End Sub
     
     ''' <summary>
@@ -391,6 +392,7 @@ Public Class frm_AIUrunIsle
         If chkTekrarOlustur.Checked AndAlso chkSadeceBoslar.Checked Then
             chkSadeceBoslar.Checked = False
         End If
+        KaydetCheckboxDurumlari()
     End Sub
     
     Private Sub frm_AIUrunIsle_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -415,6 +417,8 @@ Public Class frm_AIUrunIsle
                 AyarYaz(conn, "AI_CHK_YIKAMA", If(chkYikamaTalimati.Checked, "1", "0"))
                 AyarYaz(conn, "AI_CHK_BAKIM", If(chkBakimTalimati.Checked, "1", "0"))
                 AyarYaz(conn, "AI_CHK_GUVENLIK", If(chkGuvenlikUyari.Checked, "1", "0"))
+                AyarYaz(conn, "AI_CHK_SADECE_BOSLAR", If(chkSadeceBoslar.Checked, "1", "0"))
+                AyarYaz(conn, "AI_CHK_TEKRAR_OLUSTUR", If(chkTekrarOlustur.Checked, "1", "0"))
             End Using
         Catch
         End Try
@@ -428,15 +432,17 @@ Public Class frm_AIUrunIsle
             Using conn As New OleDb.OleDbConnection(connection)
                 conn.Open()
                 chkBaslik.Checked = AyarOku(conn, "AI_CHK_BASLIK") = "1"
-                chkKisaAciklama.Checked = AyarOku(conn, "AI_CHK_KISA_ACIKLAMA") <> "0"
-                chkUzunAciklama.Checked = AyarOku(conn, "AI_CHK_UZUN_ACIKLAMA") <> "0"
-                chkOzellikler.Checked = AyarOku(conn, "AI_CHK_OZELLIKLER") <> "0"
-                chkTalimat.Checked = AyarOku(conn, "AI_CHK_TALIMAT") <> "0"
-                chkSEOBilgisi.Checked = AyarOku(conn, "AI_CHK_SEO_BILGISI") <> "0"
+                chkKisaAciklama.Checked = AyarOku(conn, "AI_CHK_KISA_ACIKLAMA") = "1"
+                chkUzunAciklama.Checked = AyarOku(conn, "AI_CHK_UZUN_ACIKLAMA") = "1"
+                chkOzellikler.Checked = AyarOku(conn, "AI_CHK_OZELLIKLER") = "1"
+                chkTalimat.Checked = AyarOku(conn, "AI_CHK_TALIMAT") = "1"
+                chkSEOBilgisi.Checked = AyarOku(conn, "AI_CHK_SEO_BILGISI") = "1"
                 chkBedenTablosu.Checked = AyarOku(conn, "AI_CHK_BEDEN_TABLOSU") = "1"
-                chkYikamaTalimati.Checked = AyarOku(conn, "AI_CHK_YIKAMA") <> "0"
-                chkBakimTalimati.Checked = AyarOku(conn, "AI_CHK_BAKIM") <> "0"
-                chkGuvenlikUyari.Checked = AyarOku(conn, "AI_CHK_GUVENLIK") <> "0"
+                chkYikamaTalimati.Checked = AyarOku(conn, "AI_CHK_YIKAMA") = "1"
+                chkBakimTalimati.Checked = AyarOku(conn, "AI_CHK_BAKIM") = "1"
+                chkGuvenlikUyari.Checked = AyarOku(conn, "AI_CHK_GUVENLIK") = "1"
+                chkSadeceBoslar.Checked = AyarOku(conn, "AI_CHK_SADECE_BOSLAR") = "1"
+                chkTekrarOlustur.Checked = AyarOku(conn, "AI_CHK_TEKRAR_OLUSTUR") = "1"
             End Using
         Catch
         End Try
