@@ -411,9 +411,23 @@ Public Class frm_PazaryeriFaturaGonderim
             Debug.WriteLine("[TY] Satıcı ID: " & api.SellerId)
             Debug.WriteLine("[TY] API Key: " & api.ApiKey)
 
-            ' Sipariş numarasından package ID'yi çıkar (TY11035907594 -> 11035907594)
-            Dim packageId As String = siparisNo.Replace("TY", "").Replace("ty", "").Trim()
-            Debug.WriteLine("[TY] Package ID: " & packageId)
+            ' Sipariş numarasını temizle (TY11035907594 -> 11035907594)
+            Dim orderNumber As String = siparisNo.Replace("TY", "").Replace("ty", "").Trim()
+            Debug.WriteLine("[TY] Order Number: " & orderNumber)
+            
+            ' Auth bilgileri
+            Dim authRaw As String = api.ApiKey & ":" & api.ApiSecret
+            Dim authBytes As Byte() = Encoding.UTF8.GetBytes(authRaw)
+            Dim authBase64 As String = Convert.ToBase64String(authBytes)
+            Dim userAgent As String = api.SellerId & " - SelfIntegration"
+            
+            ' 1. ADIM: Sipariş numarasıyla Paket ID'yi bul
+            Dim shipmentPackageId As String = GetTrendyolShipmentPackageId(api.SellerId, orderNumber, authBase64, userAgent, hataMesaji)
+            If String.IsNullOrEmpty(shipmentPackageId) Then
+                Debug.WriteLine("[TY] HATA: Paket ID bulunamadı - " & hataMesaji)
+                Return False
+            End If
+            Debug.WriteLine("[TY] Shipment Package ID bulundu: " & shipmentPackageId)
 
             ' Fatura linki oluştur (Kolaysoft'tan alınacak)
             Dim invoiceLink As String = GetKolaysoftFaturaLink(gibFaturaNo, faturaGuid)
@@ -424,7 +438,7 @@ Public Class frm_PazaryeriFaturaGonderim
             End If
             Debug.WriteLine("[TY] Fatura Link: " & invoiceLink)
 
-            ' API isteği - Trendyol endpoint (Dökümantasyondan)
+            ' 2. ADIM: Fatura linkini gönder
             ' POST https://apigw.trendyol.com/integration/sellers/{sellerId}/seller-invoice-links
             Dim baseUrl As String = "https://apigw.trendyol.com"
             
@@ -439,19 +453,12 @@ Public Class frm_PazaryeriFaturaGonderim
             req.Accept = "application/json"
             
             ' Trendyol özel User-Agent formatı: {supplierId} - SelfIntegration
-            req.UserAgent = api.SellerId & " - SelfIntegration"
-
-            ' Basic Auth - ApiKey:ApiSecret
-            Dim authRaw As String = api.ApiKey & ":" & api.ApiSecret
-            Debug.WriteLine("[TY] Auth: " & api.ApiKey & ":***")
-            
-            Dim authBytes As Byte() = Encoding.UTF8.GetBytes(authRaw)
-            req.Headers.Add("Authorization", "Basic " & Convert.ToBase64String(authBytes))
+            req.UserAgent = userAgent
+            req.Headers.Add("Authorization", "Basic " & authBase64)
             req.Timeout = 30000
 
             ' Body - Trendyol fatura linki formatı
-            ' {"shipmentPackageId": "xxx", "invoiceLink": "url"} veya sadece {"invoiceLink": "url"}
-            Dim jsonBody As String = "{""shipmentPackageId"": """ & packageId & """, ""invoiceLink"": """ & invoiceLink.Replace("""", "\""") & """}"
+            Dim jsonBody As String = "{""shipmentPackageId"": """ & shipmentPackageId & """, ""invoiceLink"": """ & invoiceLink.Replace("""", "\""") & """}"
             Debug.WriteLine("[TY] Body: " & jsonBody)
             
             Dim data As Byte() = Encoding.UTF8.GetBytes(jsonBody)
@@ -500,6 +507,94 @@ Public Class frm_PazaryeriFaturaGonderim
             Return False
         End Try
     End Function
+
+    ''' <summary>
+    ''' Trendyol API'den sipariş numarasıyla Shipment Package ID'yi bul
+    ''' GET /sapigw/suppliers/{supplierId}/orders?orderNumber={orderNumber}
+    ''' </summary>
+    Private Function GetTrendyolShipmentPackageId(sellerId As String, orderNumber As String, authBase64 As String, userAgent As String, ByRef hataMesaji As String) As String
+        Try
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+            
+            ' Sipariş detayını çek
+            ' GET /sapigw/suppliers/{supplierId}/orders?orderNumber={orderNumber}
+            Dim url As String = "https://api.trendyol.com/sapigw/suppliers/" & sellerId & "/orders?orderNumber=" & orderNumber
+            Debug.WriteLine("[TY-Search] URL: " & url)
+            
+            Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
+            req.Method = "GET"
+            req.Accept = "application/json"
+            req.UserAgent = userAgent
+            req.Headers.Add("Authorization", "Basic " & authBase64)
+            req.Timeout = 30000
+            
+            Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
+                Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
+                    Dim json As String = reader.ReadToEnd()
+                    Debug.WriteLine("[TY-Search] Response length: " & json.Length)
+                    
+                    If json.Length > 0 Then
+                        Debug.WriteLine("[TY-Search] Response preview: " & If(json.Length > 500, json.Substring(0, 500), json))
+                    End If
+                    
+                    ' JSON parse et
+                    Dim obj As JObject = JObject.Parse(json)
+                    
+                    ' content array içinde siparişler var
+                    If obj("content") IsNot Nothing Then
+                        Dim contentArray As JArray = CType(obj("content"), JArray)
+                        Debug.WriteLine("[TY-Search] Content count: " & contentArray.Count)
+                        
+                        For Each order As JObject In contentArray
+                            ' Her siparişin lines array'i var
+                            If order("lines") IsNot Nothing Then
+                                Dim linesArray As JArray = CType(order("lines"), JArray)
+                                For Each line As JObject In linesArray
+                                    ' shipmentPackageId burada
+                                    If line("shipmentPackageId") IsNot Nothing Then
+                                        Dim pkgId As String = line("shipmentPackageId").ToString()
+                                        Debug.WriteLine("[TY-Search] Found shipmentPackageId: " & pkgId)
+                                        Return pkgId
+                                    End If
+                                Next
+                            End If
+                            
+                            ' Veya direkt shipmentPackageId olabilir
+                            If order("shipmentPackageId") IsNot Nothing Then
+                                Return order("shipmentPackageId").ToString()
+                            End If
+                        Next
+                    End If
+                    
+                    hataMesaji = "Sipariş bulundu ama shipmentPackageId bulunamadı"
+                    Return Nothing
+                End Using
+            End Using
+            
+        Catch wex As WebException
+            If wex.Response IsNot Nothing Then
+                Try
+                    Dim resp As HttpWebResponse = CType(wex.Response, HttpWebResponse)
+                    Dim statusCode As Integer = CInt(resp.StatusCode)
+                    Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
+                        Dim errorBody As String = reader.ReadToEnd()
+                        hataMesaji = "HTTP " & statusCode & ": " & If(errorBody.Length > 200, errorBody.Substring(0, 200), errorBody)
+                        Debug.WriteLine("[TY-Search] WebException: " & hataMesaji)
+                    End Using
+                Catch
+                    hataMesaji = wex.Message
+                End Try
+            Else
+                hataMesaji = wex.Message
+            End If
+            Return Nothing
+        Catch ex As Exception
+            hataMesaji = "Paket arama hatası: " & ex.Message
+            Debug.WriteLine("[TY-Search] Exception: " & ex.Message)
+            Return Nothing
+        End Try
+    End Function
+
 
     ''' <summary>
     ''' Hepsiburada'ya fatura linki gönder
