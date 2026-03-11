@@ -550,6 +550,12 @@ Partial Public Class frm_AI_TopluIslem
         Dim markaField As String = GetSinifAyar("ETICARET_SINIF_MARKA", "sSinifKodu3")
         Dim kat1Field As String = GetSinifAyar("ETICARET_SINIF_KAT1", "sSinifKodu4")
         Dim kat2Field As String = GetSinifAyar("ETICARET_SINIF_KAT2", "sSinifKodu5")
+        
+        ' Form loguna da yaz
+        AddLog("📋 Sınıf Eşleştirme Ayarları:")
+        AddLog("   MARKA = " & markaField)
+        AddLog("   KAT1 = " & kat1Field)
+        AddLog("   KAT2 = " & kat2Field)
 
         ' Sınıf numaralarını çıkar
         Dim markaSinifNo As String = markaField.Replace("sSinifKodu", "")
