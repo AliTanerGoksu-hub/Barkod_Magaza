@@ -785,9 +785,11 @@ Public Class frm_AIUrunIsle
                 ' Parametrik sınıf eşleştirmelerini al
                 ' Varsayılan değerler kullanıcının ayarlarına göre:
                 ' Marka = Sınıf 5, Kategori1 = Sınıf 4, Kategori2 = Sınıf 3
-                Dim markaField As String = GetSinifEslemeAyar(conn, "ETICARET_SINIF_MARKA", "sSinifKodu5")
+                Dim markaField As String = GetSinifEslemeAyar(conn, "ETICARET_SINIF_MARKA", "sSinifKodu3")
                 Dim kat1Field As String = GetSinifEslemeAyar(conn, "ETICARET_SINIF_KAT1", "sSinifKodu4")
-                Dim kat2Field As String = GetSinifEslemeAyar(conn, "ETICARET_SINIF_KAT2", "sSinifKodu3")
+                Dim kat2Field As String = GetSinifEslemeAyar(conn, "ETICARET_SINIF_KAT2", "sSinifKodu5")
+                
+                AddLog("📋 Sınıf Eşleştirme: MARKA=" & markaField & ", KAT1=" & kat1Field & ", KAT2=" & kat2Field)
                 
                 ' Sınıf numaralarını al
                 Dim markaSinifNo As String = markaField.Replace("sSinifKodu", "")
