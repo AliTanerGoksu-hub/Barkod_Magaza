@@ -596,15 +596,20 @@ Public Class frm_PazaryeriFaturaGonderim
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
             
             Dim packageNumber As String = ""
+            Dim mpopBase As String = "https://mpop.hepsiburada.com"
             
-            ' Yöntem 1: MPOP API - Sipariş detayı ile arama
-            ' GET /orders/merchantid/{merchantId}?ordernumber={orderNumber}
+            ' Tarih aralığı - son 30 gün
+            Dim beginDate As String = DateTime.Now.AddDays(-30).ToString("yyyy-MM-dd")
+            Dim endDate As String = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")
+            
+            ' Yöntem 1: Teslim Edilen Siparişler (Delivered)
+            ' GET /packages/merchantid/{merchantId}/delivered?beginDate=...&endDate=...
             Try
-                Debug.WriteLine("[HB-Search] Yöntem 1: MPOP Orders API")
-                Dim ordersUrl As String = "https://mpop.hepsiburada.com/orders/merchantid/" & merchantId & "?ordernumber=" & orderNumber
-                Debug.WriteLine("[HB-Search] URL: " & ordersUrl)
+                Debug.WriteLine("[HB-Search] Yöntem 1: Teslim Edilenler (Delivered)")
+                Dim deliveredUrl As String = mpopBase & "/packages/merchantid/" & merchantId & "/delivered?beginDate=" & beginDate & "&endDate=" & endDate & "&limit=50&offset=0"
+                Debug.WriteLine("[HB-Search] URL: " & deliveredUrl)
                 
-                packageNumber = TryGetPackageFromUrl(ordersUrl, authBase64, orderNumber)
+                packageNumber = TryGetPackageFromUrl(deliveredUrl, authBase64, orderNumber)
                 If Not String.IsNullOrEmpty(packageNumber) Then
                     Debug.WriteLine("[HB-Search] Yöntem 1 başarılı! PackageNumber: " & packageNumber)
                     Return packageNumber
@@ -613,14 +618,14 @@ Public Class frm_PazaryeriFaturaGonderim
                 Debug.WriteLine("[HB-Search] Yöntem 1 hatası: " & ex.Message)
             End Try
             
-            ' Yöntem 2: MPOP API - Paket listesi
-            ' GET /packages/merchantid/{merchantId}?ordernumber={orderNumber}
+            ' Yöntem 2: Kargoda Olanlar (Shipped/InTransit)
+            ' GET /packages/merchantid/{merchantId}/shipped?beginDate=...&endDate=...
             Try
-                Debug.WriteLine("[HB-Search] Yöntem 2: MPOP Packages API with ordernumber")
-                Dim packagesUrl As String = "https://mpop.hepsiburada.com/packages/merchantid/" & merchantId & "?ordernumber=" & orderNumber
-                Debug.WriteLine("[HB-Search] URL: " & packagesUrl)
+                Debug.WriteLine("[HB-Search] Yöntem 2: Kargoda Olanlar (Shipped)")
+                Dim shippedUrl As String = mpopBase & "/packages/merchantid/" & merchantId & "/shipped?beginDate=" & beginDate & "&endDate=" & endDate & "&limit=50&offset=0"
+                Debug.WriteLine("[HB-Search] URL: " & shippedUrl)
                 
-                packageNumber = TryGetPackageFromUrl(packagesUrl, authBase64, orderNumber)
+                packageNumber = TryGetPackageFromUrl(shippedUrl, authBase64, orderNumber)
                 If Not String.IsNullOrEmpty(packageNumber) Then
                     Debug.WriteLine("[HB-Search] Yöntem 2 başarılı! PackageNumber: " & packageNumber)
                     Return packageNumber
@@ -629,13 +634,14 @@ Public Class frm_PazaryeriFaturaGonderim
                 Debug.WriteLine("[HB-Search] Yöntem 2 hatası: " & ex.Message)
             End Try
             
-            ' Yöntem 3: MPOP API - Son paketler (timespan ile)
+            ' Yöntem 3: Açık Paketler (Open) - timespan ile son 24 saat
+            ' GET /packages/merchantid/{merchantId}?timespan=24&limit=50&offset=0
             Try
-                Debug.WriteLine("[HB-Search] Yöntem 3: MPOP Recent Packages")
-                Dim recentUrl As String = "https://mpop.hepsiburada.com/packages/merchantid/" & merchantId & "?timespan=720&limit=100&offset=0"
-                Debug.WriteLine("[HB-Search] URL: " & recentUrl)
+                Debug.WriteLine("[HB-Search] Yöntem 3: Açık Paketler (Open)")
+                Dim openUrl As String = mpopBase & "/packages/merchantid/" & merchantId & "?timespan=24&limit=50&offset=0"
+                Debug.WriteLine("[HB-Search] URL: " & openUrl)
                 
-                packageNumber = TryGetPackageFromUrl(recentUrl, authBase64, orderNumber)
+                packageNumber = TryGetPackageFromUrl(openUrl, authBase64, orderNumber)
                 If Not String.IsNullOrEmpty(packageNumber) Then
                     Debug.WriteLine("[HB-Search] Yöntem 3 başarılı! PackageNumber: " & packageNumber)
                     Return packageNumber
@@ -644,13 +650,14 @@ Public Class frm_PazaryeriFaturaGonderim
                 Debug.WriteLine("[HB-Search] Yöntem 3 hatası: " & ex.Message)
             End Try
             
-            ' Yöntem 4: Listing API
+            ' Yöntem 4: Sipariş Detayı
+            ' GET /orders/merchantid/{merchantId}/{orderNumber}
             Try
-                Debug.WriteLine("[HB-Search] Yöntem 4: Listing API")
-                Dim listingUrl As String = "https://listing-external.hepsiburada.com/orders/merchantid/" & merchantId & "?ordernumber=" & orderNumber
-                Debug.WriteLine("[HB-Search] URL: " & listingUrl)
+                Debug.WriteLine("[HB-Search] Yöntem 4: Sipariş Detayı")
+                Dim orderUrl As String = mpopBase & "/orders/merchantid/" & merchantId & "/" & orderNumber
+                Debug.WriteLine("[HB-Search] URL: " & orderUrl)
                 
-                packageNumber = TryGetPackageFromUrl(listingUrl, authBase64, orderNumber)
+                packageNumber = TryGetPackageFromOrderDetail(orderUrl, authBase64)
                 If Not String.IsNullOrEmpty(packageNumber) Then
                     Debug.WriteLine("[HB-Search] Yöntem 4 başarılı! PackageNumber: " & packageNumber)
                     Return packageNumber
@@ -664,6 +671,62 @@ Public Class frm_PazaryeriFaturaGonderim
             
         Catch ex As Exception
             hataMesaji = "Paket arama hatası: " & ex.Message
+            Return Nothing
+        End Try
+    End Function
+    
+    ''' <summary>
+    ''' Sipariş detayından paket numarası al
+    ''' </summary>
+    Private Function TryGetPackageFromOrderDetail(url As String, authBase64 As String) As String
+        Try
+            Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
+            req.Method = "GET"
+            req.Accept = "application/json"
+            req.Timeout = 30000
+            req.Headers.Add("Authorization", "Basic " & authBase64)
+            req.UserAgent = "BusinessSmart/1.0"
+            
+            Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
+                Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
+                    Dim json As String = reader.ReadToEnd()
+                    Debug.WriteLine("[HB-Search] Order detail response: " & If(json.Length > 500, json.Substring(0, 500), json))
+                    
+                    If json.Trim().StartsWith("{") Then
+                        Dim obj As JObject = JObject.Parse(json)
+                        
+                        ' packageNumber direkt varsa
+                        If obj("packageNumber") IsNot Nothing Then
+                            Return obj("packageNumber").ToString()
+                        End If
+                        
+                        ' items içinde olabilir
+                        If obj("items") IsNot Nothing Then
+                            For Each item As JObject In CType(obj("items"), JArray)
+                                If item("packageNumber") IsNot Nothing Then
+                                    Return item("packageNumber").ToString()
+                                End If
+                            Next
+                        End If
+                        
+                        ' lineItems içinde olabilir
+                        If obj("lineItems") IsNot Nothing Then
+                            For Each item As JObject In CType(obj("lineItems"), JArray)
+                                If item("packageNumber") IsNot Nothing Then
+                                    Return item("packageNumber").ToString()
+                                End If
+                            Next
+                        End If
+                    End If
+                End Using
+            End Using
+            
+            Return Nothing
+        Catch wex As WebException
+            Debug.WriteLine("[HB-Search] Order detail WebException: " & wex.Message)
+            Return Nothing
+        Catch ex As Exception
+            Debug.WriteLine("[HB-Search] Order detail Exception: " & ex.Message)
             Return Nothing
         End Try
     End Function
