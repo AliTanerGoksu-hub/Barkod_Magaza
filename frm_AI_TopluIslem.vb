@@ -542,9 +542,10 @@ Partial Public Class frm_AI_TopluIslem
         AddLog("")
 
         ' Parametrik sınıf eşleştirmelerini al (bir kere oku, tüm ürünler için kullan)
-        Dim markaField As String = GetSinifAyar("ETICARET_SINIF_MARKA", "sSinifKodu5")
+        ' Varsayılanlar frm_SinifEsleme ile uyumlu olmalı
+        Dim markaField As String = GetSinifAyar("ETICARET_SINIF_MARKA", "sSinifKodu3")
         Dim kat1Field As String = GetSinifAyar("ETICARET_SINIF_KAT1", "sSinifKodu4")
-        Dim kat2Field As String = GetSinifAyar("ETICARET_SINIF_KAT2", "sSinifKodu3")
+        Dim kat2Field As String = GetSinifAyar("ETICARET_SINIF_KAT2", "sSinifKodu5")
 
         ' Sınıf numaralarını çıkar
         Dim markaSinifNo As String = markaField.Replace("sSinifKodu", "")
