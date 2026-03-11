@@ -31,6 +31,7 @@ Public Class frm_PazaryeriFaturaGonderim
     Private WithEvents lblDurum As LabelControl
     Private WithEvents ProgressBar1 As ProgressBarControl
     Private WithEvents chkTumunuSec As CheckEdit
+    Private WithEvents chkGonderilenleriGoster As CheckEdit
     Private WithEvents PanelControl1 As PanelControl
     Private WithEvents GroupControl1 As GroupControl
 
@@ -136,6 +137,13 @@ Public Class frm_PazaryeriFaturaGonderim
         chkTumunuSec.Location = New Point(10, 50)
         chkTumunuSec.Size = New Size(100, 25)
         PanelControl1.Controls.Add(chkTumunuSec)
+        
+        ' Gönderilenleri Göster
+        chkGonderilenleriGoster = New CheckEdit()
+        chkGonderilenleriGoster.Text = "Gönderilenleri de Göster"
+        chkGonderilenleriGoster.Location = New Point(120, 50)
+        chkGonderilenleriGoster.Size = New Size(180, 25)
+        PanelControl1.Controls.Add(chkGonderilenleriGoster)
 
         ' Durum Label
         lblDurum = New LabelControl()
@@ -243,9 +251,9 @@ Public Class frm_PazaryeriFaturaGonderim
                 "WHERE M.dteFisTarihi >= ? AND M.dteFisTarihi <= ? " &
                 "AND M.GibFaturaNo IS NOT NULL AND M.GibFaturaNo <> '' " &
                 "AND (A.sAciklama3 LIKE 'TY%' OR A.sAciklama3 LIKE 'HB%' OR A.sAciklama3 LIKE 'N11%') " &
-                "AND ISNULL(P.bGonderildi, 0) = 0 " &
+                If(chkGonderilenleriGoster.Checked, "", "AND ISNULL(P.bGonderildi, 0) = 0 ") &
                 pazaryeriFiltre &
-                "ORDER BY M.dteFisTarihi DESC"
+                "ORDER BY ISNULL(P.bGonderildi, 0) ASC, M.dteFisTarihi DESC"
 
             Using con As New OleDbConnection(connection)
                 con.Open()
@@ -273,14 +281,28 @@ Public Class frm_PazaryeriFaturaGonderim
                     Case "lNetTutar" : col.Caption = "Net Tutar" : col.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric : col.DisplayFormat.FormatString = "N2"
                     Case "SiparisNo" : col.Caption = "Sipariş No"
                     Case "Pazaryeri" : col.Caption = "Pazaryeri"
-                    Case "bGonderildi" : col.Visible = False
+                    Case "bGonderildi" : col.Caption = "Durum" : col.Visible = True
                     Case "dteGonderimTarihi" : col.Caption = "Gönderim Tarihi"
                     Case "sGonderimSonucu" : col.Caption = "Sonuç"
                     Case "sHataMesaji" : col.Caption = "Hata"
                 End Select
             Next
+            
+            ' Satır renklendirme için event handler ekle
+            AddHandler GridView1.RowStyle, AddressOf GridView1_RowStyle
+            
+            ' Gönderilen ve bekleyen sayılarını hesapla
+            Dim gonderildi As Integer = 0
+            Dim bekliyor As Integer = 0
+            For Each row As DataRow In dtFaturalar.Rows
+                If CBool(row("bGonderildi")) Then
+                    gonderildi += 1
+                Else
+                    bekliyor += 1
+                End If
+            Next
 
-            lblDurum.Text = $"Toplam {dtFaturalar.Rows.Count} fatura listelendi. Gönderilmeyi bekliyor."
+            lblDurum.Text = "Toplam " & dtFaturalar.Rows.Count & " fatura. Bekleyen: " & bekliyor & ", Gönderilmiş: " & gonderildi
             Cursor = Cursors.Default
 
         Catch ex As Exception
@@ -290,6 +312,25 @@ Public Class frm_PazaryeriFaturaGonderim
         End Try
     End Sub
 
+    ''' <summary>
+    ''' Gönderilmiş satırları yeşil, bekleyenleri normal renkte göster
+    ''' </summary>
+    Private Sub GridView1_RowStyle(sender As Object, e As DevExpress.XtraGrid.Views.Grid.RowStyleEventArgs)
+        Try
+            If e.RowHandle >= 0 Then
+                Dim view As GridView = CType(sender, GridView)
+                Dim gonderildi As Object = view.GetRowCellValue(e.RowHandle, "bGonderildi")
+                If gonderildi IsNot Nothing AndAlso gonderildi IsNot DBNull.Value AndAlso CBool(gonderildi) Then
+                    e.Appearance.BackColor = Color.LightGreen
+                    e.Appearance.ForeColor = Color.DarkGreen
+                End If
+            End If
+        Catch
+            ' Hata durumunda sessizce devam et
+        End Try
+    End Sub
+
+
     Private Sub btnSecilileriGonder_Click(sender As Object, e As EventArgs) Handles btnSecilileriGonder.Click
         Dim selectedRows As Integer() = GridView1.GetSelectedRows()
         If selectedRows.Length = 0 Then
@@ -297,7 +338,7 @@ Public Class frm_PazaryeriFaturaGonderim
             Return
         End If
 
-        If MessageBox.Show($"{selectedRows.Length} fatura pazaryerlerine gönderilecek. Devam edilsin mi?",
+        If MessageBox.Show(selectedRows.Length & " fatura pazaryerlerine gönderilecek. Devam edilsin mi?",
                           "Onay", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
             GonderFaturalar(selectedRows)
         End If
@@ -309,7 +350,7 @@ Public Class frm_PazaryeriFaturaGonderim
             Return
         End If
 
-        If MessageBox.Show($"Tüm {dtFaturalar.Rows.Count} fatura pazaryerlerine gönderilecek. Devam edilsin mi?",
+        If MessageBox.Show("Tüm " & dtFaturalar.Rows.Count & " fatura pazaryerlerine gönderilecek. Devam edilsin mi?",
                           "Onay", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
             Dim allRows(dtFaturalar.Rows.Count - 1) As Integer
             For i As Integer = 0 To dtFaturalar.Rows.Count - 1
@@ -342,7 +383,7 @@ Public Class frm_PazaryeriFaturaGonderim
                 Dim gibFaturaNo As String = dr("GibFaturaNo").ToString().Trim()
                 Dim faturaGuid As String = If(dr("sEfaturaGuid") IsNot DBNull.Value, dr("sEfaturaGuid").ToString().Trim(), "")
 
-                lblDurum.Text = $"Gönderiliyor: {siparisNo} ({pazaryeri}) - {i + 1}/{rows.Length}"
+                lblDurum.Text = "Gönderiliyor: " & siparisNo & " (" & pazaryeri & ") - " & (i + 1) & "/" & rows.Length
                 Application.DoEvents()
 
                 Dim sonuc As Boolean = False
@@ -372,10 +413,10 @@ Public Class frm_PazaryeriFaturaGonderim
                 Application.DoEvents()
             Next
 
-            lblDurum.Text = $"Tamamlandı! Başarılı: {basarili}, Başarısız: {basarisiz}"
-            MessageBox.Show($"Gönderim tamamlandı!" & vbCrLf & vbCrLf &
-                           $"Başarılı: {basarili}" & vbCrLf &
-                           $"Başarısız: {basarisiz}",
+            lblDurum.Text = "Tamamlandı! Başarılı: " & basarili & ", Başarısız: " & basarisiz
+            MessageBox.Show("Gönderim tamamlandı!" & vbCrLf & vbCrLf &
+                           "Başarılı: " & basarili & vbCrLf &
+                           "Başarısız: " & basarisiz,
                            "Sonuç", MessageBoxButtons.OK,
                            If(basarisiz = 0, MessageBoxIcon.Information, MessageBoxIcon.Warning))
 
@@ -1011,14 +1052,14 @@ Public Class frm_PazaryeriFaturaGonderim
                 If String.IsNullOrEmpty(faturaUrl) AndAlso Not String.IsNullOrEmpty(faturaGuid) Then
                     ' GİB e-Arşiv portal linki formatı
                     ' Format: https://earsivportal.efatura.gov.tr/intragiris.html?ettn=GUID
-                    faturaUrl = $"https://earsivportal.efatura.gov.tr/intragiris.html?ettn={faturaGuid}"
+                    faturaUrl = "https://earsivportal.efatura.gov.tr/intragiris.html?ettn=" & faturaGuid
                 End If
             End Using
             
             ' Hala URL yoksa ve GibFaturaNo varsa, alternatif format dene
             If String.IsNullOrEmpty(faturaUrl) AndAlso Not String.IsNullOrEmpty(gibFaturaNo) Then
                 ' Alternatif: GİB sorgu linki
-                faturaUrl = $"https://earsivportal.efatura.gov.tr/intragiris.html?fatession={gibFaturaNo}"
+                faturaUrl = "https://earsivportal.efatura.gov.tr/intragiris.html?fatession=" & gibFaturaNo
             End If
             
             Return faturaUrl
