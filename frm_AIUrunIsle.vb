@@ -673,13 +673,22 @@ Public Class frm_AIUrunIsle
                     productData("sAciklama") = If(model.ContainsKey("sAciklama"), model("sAciklama").ToString(), sModel)
                     productData("sMarka") = If(model.ContainsKey("sMarka"), model("sMarka").ToString(), "")
                     
-                    ' Kategori bilgilerini ekle (parametrik sınıflardan alındı)
+                    ' Kategori bilgilerini ekle (parametrik sınıflardan alındı - 5 seviye)
                     Dim kat1 As String = If(model.ContainsKey("sKategori1"), model("sKategori1").ToString(), "")
                     Dim kat2 As String = If(model.ContainsKey("sKategori2"), model("sKategori2").ToString(), "")
-                    Dim tumKategori As String = kat1
-                    If Not String.IsNullOrEmpty(kat2) Then
-                        tumKategori = kat1 & " > " & kat2
-                    End If
+                    Dim kat3 As String = If(model.ContainsKey("sKategori3"), model("sKategori3").ToString(), "")
+                    Dim kat4 As String = If(model.ContainsKey("sKategori4"), model("sKategori4").ToString(), "")
+                    Dim kat5 As String = If(model.ContainsKey("sKategori5"), model("sKategori5").ToString(), "")
+                    
+                    ' Tüm kategorileri birleştir (boş olmayanları " > " ile ayır)
+                    Dim kategoriParcalari As New List(Of String)
+                    If Not String.IsNullOrEmpty(kat1) Then kategoriParcalari.Add(kat1)
+                    If Not String.IsNullOrEmpty(kat2) Then kategoriParcalari.Add(kat2)
+                    If Not String.IsNullOrEmpty(kat3) Then kategoriParcalari.Add(kat3)
+                    If Not String.IsNullOrEmpty(kat4) Then kategoriParcalari.Add(kat4)
+                    If Not String.IsNullOrEmpty(kat5) Then kategoriParcalari.Add(kat5)
+                    Dim tumKategori As String = String.Join(" > ", kategoriParcalari)
+                    
                     productData("sKategori") = tumKategori
                     productData("sKategoriAdi") = tumKategori
                     
@@ -783,30 +792,38 @@ Public Class frm_AIUrunIsle
                 conn.Open()
                 
                 ' Parametrik sınıf eşleştirmelerini al
-                ' Varsayılan değerler kullanıcının ayarlarına göre:
-                ' Marka = Sınıf 5, Kategori1 = Sınıf 4, Kategori2 = Sınıf 3
+                ' Varsayılan değerler frm_SinifEsleme ile uyumlu
                 Dim markaField As String = GetSinifEslemeAyar(conn, "ETICARET_SINIF_MARKA", "sSinifKodu3")
                 Dim kat1Field As String = GetSinifEslemeAyar(conn, "ETICARET_SINIF_KAT1", "sSinifKodu4")
                 Dim kat2Field As String = GetSinifEslemeAyar(conn, "ETICARET_SINIF_KAT2", "sSinifKodu5")
+                Dim kat3Field As String = GetSinifEslemeAyar(conn, "ETICARET_SINIF_KAT3", "sSinifKodu6")
+                Dim kat4Field As String = GetSinifEslemeAyar(conn, "ETICARET_SINIF_KAT4", "sSinifKodu7")
+                Dim kat5Field As String = GetSinifEslemeAyar(conn, "ETICARET_SINIF_KAT5", "sSinifKodu8")
                 
-                AddLog("📋 Sınıf Eşleştirme: MARKA=" & markaField & ", KAT1=" & kat1Field & ", KAT2=" & kat2Field)
+                AddLog("📋 Sınıf Eşleştirme: MARKA=" & markaField & ", KAT1=" & kat1Field & ", KAT2=" & kat2Field & ", KAT3=" & kat3Field & ", KAT4=" & kat4Field & ", KAT5=" & kat5Field)
                 
                 ' Sınıf numaralarını al
                 Dim markaSinifNo As String = markaField.Replace("sSinifKodu", "")
                 Dim kat1SinifNo As String = kat1Field.Replace("sSinifKodu", "")
                 Dim kat2SinifNo As String = kat2Field.Replace("sSinifKodu", "")
+                Dim kat3SinifNo As String = kat3Field.Replace("sSinifKodu", "")
+                Dim kat4SinifNo As String = kat4Field.Replace("sSinifKodu", "")
+                Dim kat5SinifNo As String = kat5Field.Replace("sSinifKodu", "")
                 
                 Dim sql As String = ""
                 
-                ' Marka, Kategori1, Kategori2 subquery'leri
+                ' Marka ve Kategori subquery'leri (5 kategoriye kadar)
                 Dim markaSubquery As String = $"(SELECT TOP 1 sAciklama FROM tbSSinif{markaSinifNo} WHERE sSinifKodu = (SELECT TOP 1 {markaField} FROM tbStokSinifi WHERE nStokID = MIN(s.nStokID))) as sMarka"
                 Dim kat1Subquery As String = $"(SELECT TOP 1 sAciklama FROM tbSSinif{kat1SinifNo} WHERE sSinifKodu = (SELECT TOP 1 {kat1Field} FROM tbStokSinifi WHERE nStokID = MIN(s.nStokID))) as sKategori1"
                 Dim kat2Subquery As String = $"(SELECT TOP 1 sAciklama FROM tbSSinif{kat2SinifNo} WHERE sSinifKodu = (SELECT TOP 1 {kat2Field} FROM tbStokSinifi WHERE nStokID = MIN(s.nStokID))) as sKategori2"
+                Dim kat3Subquery As String = $"(SELECT TOP 1 sAciklama FROM tbSSinif{kat3SinifNo} WHERE sSinifKodu = (SELECT TOP 1 {kat3Field} FROM tbStokSinifi WHERE nStokID = MIN(s.nStokID))) as sKategori3"
+                Dim kat4Subquery As String = $"(SELECT TOP 1 sAciklama FROM tbSSinif{kat4SinifNo} WHERE sSinifKodu = (SELECT TOP 1 {kat4Field} FROM tbStokSinifi WHERE nStokID = MIN(s.nStokID))) as sKategori4"
+                Dim kat5Subquery As String = $"(SELECT TOP 1 sAciklama FROM tbSSinif{kat5SinifNo} WHERE sSinifKodu = (SELECT TOP 1 {kat5Field} FROM tbStokSinifi WHERE nStokID = MIN(s.nStokID))) as sKategori5"
                 
                 ' TEKRAR OLUŞTUR seçiliyse: Tüm web'de görüntülenen ürünleri getir
                 If chkTekrarOlustur.Checked Then
                     sql = $"SELECT TOP {maxCount} MIN(s.nStokID) as nStokID, s.sModel, MIN(s.sAciklama) as sAciklama, " &
-                          $"{markaSubquery}, {kat1Subquery}, {kat2Subquery} " &
+                          $"{markaSubquery}, {kat1Subquery}, {kat2Subquery}, {kat3Subquery}, {kat4Subquery}, {kat5Subquery} " &
                           "FROM tbStok s " &
                           "WHERE s.bWebGoruntule = 1 " &
                           "GROUP BY s.sModel " &
@@ -835,7 +852,7 @@ Public Class frm_AIUrunIsle
                     End If
                     
                     sql = $"SELECT TOP {maxCount} MIN(s.nStokID) as nStokID, s.sModel, MIN(s.sAciklama) as sAciklama, " &
-                          $"{markaSubquery}, {kat1Subquery}, {kat2Subquery} " &
+                          $"{markaSubquery}, {kat1Subquery}, {kat2Subquery}, {kat3Subquery}, {kat4Subquery}, {kat5Subquery} " &
                           "FROM tbStok s " &
                           "LEFT JOIN tbStokUzunNot u ON s.sModel = u.sModel " &
                           "LEFT JOIN tbStokAIIcerik a ON s.sModel = a.sModel " &
@@ -847,7 +864,7 @@ Public Class frm_AIUrunIsle
                 ' Varsayılan: AI içeriği hiç olmayan modeller
                 Else
                     sql = $"SELECT TOP {maxCount} MIN(s.nStokID) as nStokID, s.sModel, MIN(s.sAciklama) as sAciklama, " &
-                          $"{markaSubquery}, {kat1Subquery}, {kat2Subquery} " &
+                          $"{markaSubquery}, {kat1Subquery}, {kat2Subquery}, {kat3Subquery}, {kat4Subquery}, {kat5Subquery} " &
                           "FROM tbStok s " &
                           "LEFT JOIN tbStokUzunNot u ON s.sModel = u.sModel " &
                           "WHERE s.bWebGoruntule = 1 " &
@@ -868,6 +885,9 @@ Public Class frm_AIUrunIsle
                         model("sMarka") = If(IsDBNull(reader("sMarka")), "", reader("sMarka"))
                         model("sKategori1") = If(IsDBNull(reader("sKategori1")), "", reader("sKategori1"))
                         model("sKategori2") = If(IsDBNull(reader("sKategori2")), "", reader("sKategori2"))
+                        model("sKategori3") = If(IsDBNull(reader("sKategori3")), "", reader("sKategori3"))
+                        model("sKategori4") = If(IsDBNull(reader("sKategori4")), "", reader("sKategori4"))
+                        model("sKategori5") = If(IsDBNull(reader("sKategori5")), "", reader("sKategori5"))
                         modeller.Add(model)
                     End While
                 End Using
