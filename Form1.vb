@@ -9587,7 +9587,9 @@ Public Class Form1
                 Dim response As FtpWebResponse = ftpRequest.GetResponse()
                 güncelVersionTarih = response.LastModified
             Catch ex As Exception
-                MsgBox(ex.Message.ToString())
+                ' FTP bağlantı hatası - sessizce geç, güncelleme yapılmaz
+                Debug.WriteLine("[OtoGuncelleme] FTP hata: " & ex.Message)
+                Exit Sub
             End Try
 
             If Date.Compare(simdikiVersionTarih, güncelVersionTarih) < 0 Then
@@ -9642,9 +9644,11 @@ Public Class Form1
                 guncelVersionTarihManage = response.LastModified
 
             Catch ex As Exception
-                MsgBox(ex.Message.ToString())
+                ' FTP bağlantı hatası - sessizce geç
+                Debug.WriteLine("[OtoGuncelleme-Manage] FTP hata: " & ex.Message)
+                Exit Sub
             End Try
-
+            
             If DateTime.Compare(simdikiVersionTarihManage, guncelVersionTarihManage) < 0 Then
                 If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE.exe") Then
                     Try
