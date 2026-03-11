@@ -404,35 +404,55 @@ Public Class frm_PazaryeriFaturaGonderim
             End If
 
             Dim api = pazaryeriApis("TRENDYOL")
+            
+            Debug.WriteLine("[TY] ===== TRENDYOL FATURA GÖNDERME =====")
+            Debug.WriteLine("[TY] Sipariş No: " & siparisNo)
+            Debug.WriteLine("[TY] GİB Fatura No: " & gibFaturaNo)
+            Debug.WriteLine("[TY] Satıcı ID: " & api.SellerId)
+            Debug.WriteLine("[TY] API Key: " & api.ApiKey)
 
             ' Sipariş numarasından package ID'yi çıkar (TY11035907594 -> 11035907594)
-            Dim packageId As String = siparisNo.Replace("TY", "").Trim()
+            Dim packageId As String = siparisNo.Replace("TY", "").Replace("ty", "").Trim()
+            Debug.WriteLine("[TY] Package ID: " & packageId)
 
             ' Fatura linki oluştur (Kolaysoft'tan alınacak)
             Dim invoiceLink As String = GetKolaysoftFaturaLink(gibFaturaNo, faturaGuid)
             If String.IsNullOrEmpty(invoiceLink) Then
                 hataMesaji = "Fatura linki alınamadı"
+                Debug.WriteLine("[TY] HATA: Fatura linki alınamadı")
                 Return False
             End If
+            Debug.WriteLine("[TY] Fatura Link: " & invoiceLink)
 
-            ' API isteği
-            Dim url As String = $"{api.BaseUrl}/suppliers/{api.SellerId}/shipment-packages/{packageId}/invoice-link"
+            ' API isteği - Trendyol endpoint
+            ' PUT /sapigw/suppliers/{supplierId}/shipment-packages/{id}/invoice-link
+            Dim baseUrl As String = api.BaseUrl
+            If String.IsNullOrEmpty(baseUrl) Then
+                baseUrl = "https://api.trendyol.com"
+            End If
+            baseUrl = baseUrl.TrimEnd("/"c)
+            
+            Dim url As String = baseUrl & "/sapigw/suppliers/" & api.SellerId & "/shipment-packages/" & packageId & "/invoice-link"
+            Debug.WriteLine("[TY] URL: " & url)
 
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+            
             Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
-            req.Method = "POST"
+            req.Method = "PUT"
             req.ContentType = "application/json"
             req.Accept = "application/json"
+            req.UserAgent = "BusinessSmart/1.0"
 
-            ' Basic Auth
-            Dim authBytes As Byte() = Encoding.ASCII.GetBytes($"{api.ApiKey}:{api.ApiSecret}")
+            ' Basic Auth - ApiKey:ApiSecret
+            Dim authRaw As String = api.ApiKey & ":" & api.ApiSecret
+            Dim authBytes As Byte() = Encoding.UTF8.GetBytes(authRaw)
             req.Headers.Add("Authorization", "Basic " & Convert.ToBase64String(authBytes))
             req.Timeout = 30000
 
-            ' Body
-            Dim body As New Dictionary(Of String, String) From {
-                {"invoiceLink", invoiceLink}
-            }
-            Dim jsonBody As String = JsonConvert.SerializeObject(body)
+            ' Body - {"invoiceLink": "url"}
+            Dim jsonBody As String = "{""invoiceLink"": """ & invoiceLink.Replace("""", "\""") & """}"
+            Debug.WriteLine("[TY] Body: " & jsonBody)
+            
             Dim data As Byte() = Encoding.UTF8.GetBytes(jsonBody)
             req.ContentLength = data.Length
 
@@ -441,25 +461,41 @@ Public Class frm_PazaryeriFaturaGonderim
             End Using
 
             Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
-                If resp.StatusCode = HttpStatusCode.OK OrElse resp.StatusCode = HttpStatusCode.Created Then
+                Dim statusCode As Integer = CInt(resp.StatusCode)
+                Debug.WriteLine("[TY] Response Status: " & statusCode)
+                
+                If statusCode >= 200 AndAlso statusCode < 300 Then
+                    Debug.WriteLine("[TY] BAŞARILI!")
                     Return True
                 Else
-                    hataMesaji = $"HTTP {CInt(resp.StatusCode)}: {resp.StatusDescription}"
+                    hataMesaji = "HTTP " & statusCode & ": " & resp.StatusDescription
+                    Debug.WriteLine("[TY] HATA: " & hataMesaji)
                     Return False
                 End If
             End Using
 
         Catch wex As WebException
             If wex.Response IsNot Nothing Then
-                Using reader As New StreamReader(wex.Response.GetResponseStream())
-                    hataMesaji = reader.ReadToEnd()
-                End Using
+                Try
+                    Dim resp As HttpWebResponse = CType(wex.Response, HttpWebResponse)
+                    Dim statusCode As Integer = CInt(resp.StatusCode)
+                    Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
+                        Dim errorBody As String = reader.ReadToEnd()
+                        hataMesaji = "HTTP " & statusCode & ": " & If(errorBody.Length > 300, errorBody.Substring(0, 300), errorBody)
+                        Debug.WriteLine("[TY] WebException: " & hataMesaji)
+                    End Using
+                Catch
+                    hataMesaji = wex.Message
+                    Debug.WriteLine("[TY] WebException: " & hataMesaji)
+                End Try
             Else
                 hataMesaji = wex.Message
+                Debug.WriteLine("[TY] WebException (no response): " & hataMesaji)
             End If
             Return False
         Catch ex As Exception
             hataMesaji = ex.Message
+            Debug.WriteLine("[TY] Exception: " & hataMesaji)
             Return False
         End Try
     End Function
