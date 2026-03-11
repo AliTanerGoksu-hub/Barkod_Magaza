@@ -424,21 +424,17 @@ Public Class frm_PazaryeriFaturaGonderim
             End If
             Debug.WriteLine("[TY] Fatura Link: " & invoiceLink)
 
-            ' API isteği - Trendyol endpoint
-            ' PUT /sapigw/suppliers/{supplierId}/shipment-packages/{id}/invoice-link
-            Dim baseUrl As String = api.BaseUrl
-            If String.IsNullOrEmpty(baseUrl) Then
-                baseUrl = "https://api.trendyol.com"
-            End If
-            baseUrl = baseUrl.TrimEnd("/"c)
+            ' API isteği - Trendyol endpoint (Dökümantasyondan)
+            ' POST https://apigw.trendyol.com/integration/sellers/{sellerId}/seller-invoice-links
+            Dim baseUrl As String = "https://apigw.trendyol.com"
             
-            Dim url As String = baseUrl & "/sapigw/suppliers/" & api.SellerId & "/shipment-packages/" & packageId & "/invoice-link"
+            Dim url As String = baseUrl & "/integration/sellers/" & api.SellerId & "/seller-invoice-links"
             Debug.WriteLine("[TY] URL: " & url)
 
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
             
             Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
-            req.Method = "PUT"
+            req.Method = "POST"
             req.ContentType = "application/json"
             req.Accept = "application/json"
             
@@ -453,8 +449,9 @@ Public Class frm_PazaryeriFaturaGonderim
             req.Headers.Add("Authorization", "Basic " & Convert.ToBase64String(authBytes))
             req.Timeout = 30000
 
-            ' Body - {"invoiceLink": "url"}
-            Dim jsonBody As String = "{""invoiceLink"": """ & invoiceLink.Replace("""", "\""") & """}"
+            ' Body - Trendyol fatura linki formatı
+            ' {"shipmentPackageId": "xxx", "invoiceLink": "url"} veya sadece {"invoiceLink": "url"}
+            Dim jsonBody As String = "{""shipmentPackageId"": """ & packageId & """, ""invoiceLink"": """ & invoiceLink.Replace("""", "\""") & """}"
             Debug.WriteLine("[TY] Body: " & jsonBody)
             
             Dim data As Byte() = Encoding.UTF8.GetBytes(jsonBody)
