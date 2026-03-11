@@ -425,8 +425,10 @@ Partial Public Class frm_AI_TopluIslem
                 AyarYaz(conn, "AI_CHK_BAKIM", If(chkBakimTalimati.Checked, "1", "0"))
                 AyarYaz(conn, "AI_CHK_GUVENLIK", If(chkGuvenlikUyari.Checked, "1", "0"))
                 AyarYaz(conn, "AI_CHK_GORSEL", If(chkGorsel.Checked, "1", "0"))
+                Debug.WriteLine("[AI Checkbox] Ayarlar kaydedildi")
             End Using
-        Catch
+        Catch ex As Exception
+            Debug.WriteLine("[AI Checkbox] Kaydetme hatası: " & ex.Message)
         End Try
     End Sub
     
@@ -437,19 +439,21 @@ Partial Public Class frm_AI_TopluIslem
         Try
             Using conn As New OleDb.OleDbConnection(connection)
                 conn.Open()
+                ' Tüm checkbox'lar için tutarlı mantık: "1" = seçili, diğer = seçili değil
                 chkBaslik.Checked = AyarOku(conn, "AI_CHK_BASLIK") = "1"
-                chkKisaAciklama.Checked = AyarOku(conn, "AI_CHK_KISA_ACIKLAMA") <> "0"
-                chkUzunAciklama.Checked = AyarOku(conn, "AI_CHK_UZUN_ACIKLAMA") <> "0"
-                chkOzellikler.Checked = AyarOku(conn, "AI_CHK_OZELLIKLER") <> "0"
-                chkTalimat.Checked = AyarOku(conn, "AI_CHK_TALIMAT") <> "0"
-                chkSEOBilgisi.Checked = AyarOku(conn, "AI_CHK_SEO_BILGISI") <> "0"
+                chkKisaAciklama.Checked = AyarOku(conn, "AI_CHK_KISA_ACIKLAMA") = "1"
+                chkUzunAciklama.Checked = AyarOku(conn, "AI_CHK_UZUN_ACIKLAMA") = "1"
+                chkOzellikler.Checked = AyarOku(conn, "AI_CHK_OZELLIKLER") = "1"
+                chkTalimat.Checked = AyarOku(conn, "AI_CHK_TALIMAT") = "1"
+                chkSEOBilgisi.Checked = AyarOku(conn, "AI_CHK_SEO_BILGISI") = "1"
                 chkBedenTablosu.Checked = AyarOku(conn, "AI_CHK_BEDEN_TABLOSU") = "1"
-                chkYikamaTalimati.Checked = AyarOku(conn, "AI_CHK_YIKAMA") <> "0"
-                chkBakimTalimati.Checked = AyarOku(conn, "AI_CHK_BAKIM") <> "0"
-                chkGuvenlikUyari.Checked = AyarOku(conn, "AI_CHK_GUVENLIK") <> "0"
+                chkYikamaTalimati.Checked = AyarOku(conn, "AI_CHK_YIKAMA") = "1"
+                chkBakimTalimati.Checked = AyarOku(conn, "AI_CHK_BAKIM") = "1"
+                chkGuvenlikUyari.Checked = AyarOku(conn, "AI_CHK_GUVENLIK") = "1"
                 chkGorsel.Checked = AyarOku(conn, "AI_CHK_GORSEL") = "1"
             End Using
-        Catch
+        Catch ex As Exception
+            Debug.WriteLine("[AI Checkbox] Yükleme hatası: " & ex.Message)
         End Try
     End Sub
     
