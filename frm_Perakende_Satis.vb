@@ -15704,14 +15704,19 @@ Public Class frm_Perakende_Satis
         Dim soyad As String = If(mus IsNot Nothing AndAlso Not IsDBNull(mus("sSoyAdi")), mus("sSoyAdi").ToString().Trim(), "")
         Dim email As String = If(mus IsNot Nothing AndAlso Not IsDBNull(mus("sEmail")), mus("sEmail").ToString().Trim(), "")
 
-        ' Firma ünvanı: sUnvan varsa onu kullan, yoksa Ad + Soyad
+        ' Firma ünvanı: Sadece sUnvan alanında FARKLI bir değer varsa kullan
+        ' Bireysel müşterilerde (sUnvan boş veya ad+soyad ile aynı) currentTitle boş kalacak
         Dim unvan As String = ""
         If mus IsNot Nothing AndAlso Not IsDBNull(mus("sUnvan")) AndAlso mus("sUnvan") IsNot Nothing Then
-            unvan = mus("sUnvan").ToString().Trim()
-        End If
-        ' sUnvan boşsa Ad + Soyad kullan
-        If String.IsNullOrEmpty(unvan) AndAlso (Not String.IsNullOrEmpty(ad) OrElse Not String.IsNullOrEmpty(soyad)) Then
-            unvan = (ad & " " & soyad).Trim()
+            Dim tempUnvan As String = mus("sUnvan").ToString().Trim()
+            Dim adSoyad As String = (ad & " " & soyad).Trim()
+            ' sUnvan, ad+soyad ile aynı DEĞİLSE kullan (firma müşterisi)
+            If Not String.IsNullOrEmpty(tempUnvan) AndAlso 
+               tempUnvan.ToUpperInvariant() <> adSoyad.ToUpperInvariant() AndAlso
+               tempUnvan.ToUpperInvariant() <> ad.ToUpperInvariant() AndAlso
+               tempUnvan.ToUpperInvariant() <> soyad.ToUpperInvariant() Then
+                unvan = tempUnvan
+            End If
         End If
 
         ' Vergi Dairesi Kodu
@@ -15725,8 +15730,8 @@ Public Class frm_Perakende_Satis
         End If
 
         ' *** 5000₺ ÜSTÜ SATIŞLARDA MÜŞTERİ BİLGİSİ ZORUNLU ***
-        ' *** FIRMA UNVANI KONTROLU - Bos ise kullaniciyi uyar ***
-        If String.IsNullOrEmpty(unvan) Then
+        ' *** MÜŞTERİ BİLGİSİ KONTROLÜ - En az ad veya soyad olmalı ***
+        If String.IsNullOrEmpty(ad) AndAlso String.IsNullOrEmpty(soyad) AndAlso String.IsNullOrEmpty(unvan) Then
             Throw New Exception("MUSTERI BILGISI EKSIK!" & vbCrLf & vbCrLf &
                 "Musteri kartinda Firma Unvani veya Ad-Soyad bilgisi bulunamiyor." & vbCrLf & vbCrLf &
                 "Lutfen kontrol edin:" & vbCrLf &
