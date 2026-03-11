@@ -441,10 +441,14 @@ Public Class frm_PazaryeriFaturaGonderim
             req.Method = "PUT"
             req.ContentType = "application/json"
             req.Accept = "application/json"
-            req.UserAgent = "BusinessSmart/1.0"
+            
+            ' Trendyol özel User-Agent formatı: {supplierId} - SelfIntegration
+            req.UserAgent = api.SellerId & " - SelfIntegration"
 
             ' Basic Auth - ApiKey:ApiSecret
             Dim authRaw As String = api.ApiKey & ":" & api.ApiSecret
+            Debug.WriteLine("[TY] Auth: " & api.ApiKey & ":***")
+            
             Dim authBytes As Byte() = Encoding.UTF8.GetBytes(authRaw)
             req.Headers.Add("Authorization", "Basic " & Convert.ToBase64String(authBytes))
             req.Timeout = 30000
