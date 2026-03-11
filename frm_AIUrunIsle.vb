@@ -907,6 +907,7 @@ Public Class frm_AIUrunIsle
     
     ''' <summary>
     ''' Model içeriğini kaydet - tbStokUzunNot, tbStokAIIcerik ve tbStok güncelle
+    ''' chkSadeceBoslar seçiliyse sadece boş alanları doldurur
     ''' </summary>
     Private Function SaveModelContent(sModel As String, nStokID As Integer, content As Dictionary(Of String, String)) As Boolean
         Dim kayitBasarili As Boolean = False
@@ -940,24 +941,38 @@ Public Class frm_AIUrunIsle
                 Dim bakimTalimatiYeni As String = GetContentValue(content, "bakimTalimati")
                 Dim guvenlikUyari As String = GetContentValue(content, "guvenlikUyari")
                 
-                ' DEBUG LOG - Bu alanlar dolu mu kontrol et
-                System.Diagnostics.Debug.WriteLine($"=== YENİ ALANLAR DEBUG ===")
-                System.Diagnostics.Debug.WriteLine($"yikamaTalimati: {If(String.IsNullOrEmpty(yikamaTalimati), "BOŞ", yikamaTalimati.Substring(0, Math.Min(50, yikamaTalimati.Length)))}")
-                System.Diagnostics.Debug.WriteLine($"bakimTalimati: {If(String.IsNullOrEmpty(bakimTalimatiYeni), "BOŞ", bakimTalimatiYeni.Substring(0, Math.Min(50, bakimTalimatiYeni.Length)))}")
-                System.Diagnostics.Debug.WriteLine($"guvenlikUyari: {If(String.IsNullOrEmpty(guvenlikUyari), "BOŞ", guvenlikUyari.Substring(0, Math.Min(50, guvenlikUyari.Length)))}")
-                
-                ' Content dictionary'deki tüm keyleri listele
-                System.Diagnostics.Debug.WriteLine($"Content Keys: {String.Join(", ", content.Keys)}")
-                
                 ' =====================================================
                 ' 1. tbStokUzunNot - Ana içerik tablosu
                 ' =====================================================
                 Try
-                    Dim checkCmd As New OleDbCommand("SELECT COUNT(*) FROM tbStokUzunNot WHERE sModel = ?", conn)
+                    Dim checkCmd As New OleDbCommand("SELECT sUzunNot, sBedenTablosu, sOzellikler, sKullanimTalimati FROM tbStokUzunNot WHERE sModel = ?", conn)
                     checkCmd.Parameters.AddWithValue("?", sModel)
-                    Dim exists As Integer = Convert.ToInt32(checkCmd.ExecuteScalar())
                     
-                    If exists > 0 Then
+                    Dim reader As OleDbDataReader = checkCmd.ExecuteReader()
+                    Dim mevcutUzunNot As String = ""
+                    Dim mevcutBeden As String = ""
+                    Dim mevcutOzellik As String = ""
+                    Dim mevcutTalimat As String = ""
+                    Dim kayitVar As Boolean = False
+                    
+                    If reader.Read() Then
+                        kayitVar = True
+                        mevcutUzunNot = If(IsDBNull(reader("sUzunNot")), "", reader("sUzunNot").ToString())
+                        mevcutBeden = If(IsDBNull(reader("sBedenTablosu")), "", reader("sBedenTablosu").ToString())
+                        mevcutOzellik = If(IsDBNull(reader("sOzellikler")), "", reader("sOzellikler").ToString())
+                        mevcutTalimat = If(IsDBNull(reader("sKullanimTalimati")), "", reader("sKullanimTalimati").ToString())
+                    End If
+                    reader.Close()
+                    
+                    ' Sadece Boşlar modunda: mevcut dolu alanları koru
+                    If chkSadeceBoslar.Checked Then
+                        If Not String.IsNullOrEmpty(mevcutUzunNot) Then aciklama = mevcutUzunNot
+                        If Not String.IsNullOrEmpty(mevcutBeden) Then bedenTablosu = mevcutBeden
+                        If Not String.IsNullOrEmpty(mevcutOzellik) Then ozellikler = mevcutOzellik
+                        If Not String.IsNullOrEmpty(mevcutTalimat) Then bakimTalimati = mevcutTalimat
+                    End If
+                    
+                    If kayitVar Then
                         Dim updateCmd As New OleDbCommand(
                             "UPDATE tbStokUzunNot SET sUzunNot = ?, sBedenTablosu = ?, sOzellikler = ?, " &
                             "sKullanimTalimati = ?, sSonKullaniciAdi = ?, dteSonUpdateTarihi = ? WHERE sModel = ?", conn)
@@ -990,16 +1005,61 @@ Public Class frm_AIUrunIsle
                 
                 ' =====================================================
                 ' 2. tbStokAIIcerik - SEO ve detaylı içerik tablosu
-                ' Doğru sütun adları: sDetayliAciklama, dteOlusturma, dteGuncelleme
-                ' nStokID zorunlu alan!
                 ' =====================================================
                 Try
-                    Dim checkAI As New OleDbCommand("SELECT COUNT(*) FROM tbStokAIIcerik WHERE sModel = ?", conn)
+                    Dim checkAI As New OleDbCommand("SELECT sDetayliAciklama, sKisaAciklama, sOzelliklerHTML, sKullanimTalimati, " &
+                        "sSEOBaslik, sMetaDescription, sAnahtarKelimeler, sBedenTablosu, sYikamaTalimati, sBakimTalimati, sGuvenliklUyari " &
+                        "FROM tbStokAIIcerik WHERE sModel = ?", conn)
                     checkAI.Parameters.AddWithValue("?", sModel)
-                    Dim existsAI As Integer = Convert.ToInt32(checkAI.ExecuteScalar())
                     
-                    If existsAI > 0 Then
-                        ' UPDATE - mevcut kaydı güncelle (YENİ ALANLAR EKLENDİ)
+                    Dim readerAI As OleDbDataReader = checkAI.ExecuteReader()
+                    Dim kayitVarAI As Boolean = False
+                    
+                    If readerAI.Read() Then
+                        kayitVarAI = True
+                        
+                        ' Sadece Boşlar modunda: mevcut dolu alanları koru
+                        If chkSadeceBoslar.Checked Then
+                            Dim mevcutVal As String
+                            
+                            mevcutVal = If(IsDBNull(readerAI("sDetayliAciklama")), "", readerAI("sDetayliAciklama").ToString())
+                            If Not String.IsNullOrEmpty(mevcutVal) Then aciklama = mevcutVal
+                            
+                            mevcutVal = If(IsDBNull(readerAI("sKisaAciklama")), "", readerAI("sKisaAciklama").ToString())
+                            If Not String.IsNullOrEmpty(mevcutVal) Then kisaAciklama = mevcutVal
+                            
+                            mevcutVal = If(IsDBNull(readerAI("sOzelliklerHTML")), "", readerAI("sOzelliklerHTML").ToString())
+                            If Not String.IsNullOrEmpty(mevcutVal) Then ozellikler = mevcutVal
+                            
+                            mevcutVal = If(IsDBNull(readerAI("sKullanimTalimati")), "", readerAI("sKullanimTalimati").ToString())
+                            If Not String.IsNullOrEmpty(mevcutVal) Then bakimTalimati = mevcutVal
+                            
+                            mevcutVal = If(IsDBNull(readerAI("sSEOBaslik")), "", readerAI("sSEOBaslik").ToString())
+                            If Not String.IsNullOrEmpty(mevcutVal) Then seoBaslik = mevcutVal
+                            
+                            mevcutVal = If(IsDBNull(readerAI("sMetaDescription")), "", readerAI("sMetaDescription").ToString())
+                            If Not String.IsNullOrEmpty(mevcutVal) Then metaAciklama = mevcutVal
+                            
+                            mevcutVal = If(IsDBNull(readerAI("sAnahtarKelimeler")), "", readerAI("sAnahtarKelimeler").ToString())
+                            If Not String.IsNullOrEmpty(mevcutVal) Then anahtarKelimeler = mevcutVal
+                            
+                            mevcutVal = If(IsDBNull(readerAI("sBedenTablosu")), "", readerAI("sBedenTablosu").ToString())
+                            If Not String.IsNullOrEmpty(mevcutVal) Then bedenTablosu = mevcutVal
+                            
+                            mevcutVal = If(IsDBNull(readerAI("sYikamaTalimati")), "", readerAI("sYikamaTalimati").ToString())
+                            If Not String.IsNullOrEmpty(mevcutVal) Then yikamaTalimati = mevcutVal
+                            
+                            mevcutVal = If(IsDBNull(readerAI("sBakimTalimati")), "", readerAI("sBakimTalimati").ToString())
+                            If Not String.IsNullOrEmpty(mevcutVal) Then bakimTalimatiYeni = mevcutVal
+                            
+                            mevcutVal = If(IsDBNull(readerAI("sGuvenliklUyari")), "", readerAI("sGuvenliklUyari").ToString())
+                            If Not String.IsNullOrEmpty(mevcutVal) Then guvenlikUyari = mevcutVal
+                        End If
+                    End If
+                    readerAI.Close()
+                    
+                    If kayitVarAI Then
+                        ' UPDATE - mevcut kaydı güncelle
                         Dim updateAI As New OleDbCommand(
                             "UPDATE tbStokAIIcerik SET sDetayliAciklama = ?, sKisaAciklama = ?, sOzelliklerHTML = ?, " &
                             "sKullanimTalimati = ?, sSEOBaslik = ?, sMetaDescription = ?, sAnahtarKelimeler = ?, " &
@@ -1021,7 +1081,7 @@ Public Class frm_AIUrunIsle
                         updateAI.Parameters.AddWithValue("?", sModel)
                         updateAI.ExecuteNonQuery()
                     Else
-                        ' INSERT - nStokID zorunlu! (YENİ ALANLAR EKLENDİ)
+                        ' INSERT - nStokID zorunlu!
                         Dim insertAI As New OleDbCommand(
                             "INSERT INTO tbStokAIIcerik (nStokID, sModel, sDetayliAciklama, sKisaAciklama, sOzelliklerHTML, " &
                             "sKullanimTalimati, sSEOBaslik, sMetaDescription, sAnahtarKelimeler, sBedenTablosu, " &
