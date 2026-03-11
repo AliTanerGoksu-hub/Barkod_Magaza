@@ -970,11 +970,17 @@ Partial Public Class frm_AI_TopluIslem
                 cmd.Parameters.AddWithValue("?", ayarKodu)
                 Dim result As Object = cmd.ExecuteScalar()
                 If result IsNot Nothing AndAlso result IsNot DBNull.Value Then
-                    Return result.ToString()
+                    Dim deger As String = result.ToString().Trim()
+                    If Not String.IsNullOrEmpty(deger) Then
+                        Debug.WriteLine($"[SinifAyar] {ayarKodu} = {deger} (veritabanından)")
+                        Return deger
+                    End If
                 End If
             End Using
-        Catch
+        Catch ex As Exception
+            Debug.WriteLine($"[SinifAyar] HATA: {ayarKodu} - {ex.Message}")
         End Try
+        Debug.WriteLine($"[SinifAyar] {ayarKodu} = {varsayilan} (VARSAYILAN)")
         Return varsayilan
     End Function
 
