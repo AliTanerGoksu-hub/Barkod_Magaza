@@ -418,6 +418,7 @@ Public Class frm_fatura_liste
         Me.MenuItem44 = New System.Windows.Forms.MenuItem()
         Me.MenuItem45 = New System.Windows.Forms.MenuItem()
         Me.MenuItem57 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem58 = New System.Windows.Forms.MenuItem()
         Me.MenuItem56 = New System.Windows.Forms.MenuItem()
         Me.MenuItem15 = New System.Windows.Forms.MenuItem()
         Me.MenuItem19 = New System.Windows.Forms.MenuItem()
@@ -1647,7 +1648,7 @@ Public Class frm_fatura_liste
         '
         'ContextMenu1
         '
-        Me.ContextMenu1.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuItem21, Me.MenuItem23, Me.MenuItem46, Me.MenuItem47, Me.MenuItem24, Me.MenuItem18, Me.MenuItem13, Me.MenuItem39, Me.MenuItem48, Me.MenuItem50, Me.MenuItem52, Me.MenuItem43, Me.MenuItem56, Me.MenuItem15, Me.MenuItem19, Me.MenuItem16, Me.MenuItem17, Me.MenuItem22, Me.MenuItem42, Me.MenuItem20, Me.MenuItem1, Me.MenuItem2, Me.MenuItem3, Me.MenuItem4, Me.MenuItem10, Me.MenuItem25, Me.MenuItem36, Me.MenuItem32, Me.MenuItem37, Me.MenuItem14, Me.MenuItem5, Me.MenuItem6, Me.MenuItem11, Me.MenuItem7, Me.MenuItem8, Me.MenuItem12, Me.MenuItem9})
+        Me.ContextMenu1.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuItem21, Me.MenuItem23, Me.MenuItem46, Me.MenuItem47, Me.MenuItem24, Me.MenuItem18, Me.MenuItem13, Me.MenuItem39, Me.MenuItem48, Me.MenuItem50, Me.MenuItem52, Me.MenuItem43, Me.MenuItem56, Me.MenuItem58, Me.MenuItem15, Me.MenuItem19, Me.MenuItem16, Me.MenuItem17, Me.MenuItem22, Me.MenuItem42, Me.MenuItem20, Me.MenuItem1, Me.MenuItem2, Me.MenuItem3, Me.MenuItem4, Me.MenuItem10, Me.MenuItem25, Me.MenuItem36, Me.MenuItem32, Me.MenuItem37, Me.MenuItem14, Me.MenuItem5, Me.MenuItem6, Me.MenuItem11, Me.MenuItem7, Me.MenuItem8, Me.MenuItem12, Me.MenuItem9})
         '
         'MenuItem21
         '
@@ -1768,6 +1769,11 @@ Public Class frm_fatura_liste
         '
         Me.MenuItem57.Index = 4
         Me.MenuItem57.Text = "Pazaryeri Fatura Gönder"
+        '
+        'MenuItem58
+        '
+        Me.MenuItem58.Index = 13
+        Me.MenuItem58.Text = "Toplu Tarih Değiştir"
         '
         'MenuItem56
         '
@@ -7307,6 +7313,7 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
     Friend WithEvents colsEfaturaUrl As DevExpress.XtraGrid.Columns.GridColumn
     Friend WithEvents MenuItem56 As MenuItem
     Friend WithEvents MenuItem57 As MenuItem ' Pazaryeri Fatura Gönder
+    Friend WithEvents MenuItem58 As MenuItem ' Toplu Tarih Değiştir
     Private Sub MenuItem56_Click(sender As Object, e As EventArgs) Handles MenuItem56.Click
         Dim selectedRows() As Integer = GridView1.GetSelectedRows()
         If selectedRows.Length = 0 Then
@@ -7356,14 +7363,170 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
 
     ''' <summary>
     ''' Pazaryeri Fatura Gönder menü öğesi tıklandığında
+    ''' Önce GİB'e gönderilmemişse GİB'e gönderir, sonra pazaryerine gönderir
     ''' </summary>
     Private Sub MenuItem57_Click(sender As Object, e As EventArgs) Handles MenuItem57.Click
+        Dim selectedRows() As Integer = GridView1.GetSelectedRows()
+        If selectedRows.Length = 0 Then
+            MsgBox("Lütfen fatura seçin!", MsgBoxStyle.Exclamation)
+            Exit Sub
+        End If
+        
         Try
+            Dim basarili As Integer = 0
+            Dim basarisiz As Integer = 0
+            Dim gibGonderilen As Integer = 0
+            
+            For Each rowHandle As Integer In selectedRows
+                Dim nStokFisiID As Long = CLng(GridView1.GetRowCellValue(rowHandle, "nStokFisiID"))
+                Dim gibFaturaNo As String = ""
+                Dim siparisNo As String = ""
+                
+                ' GİB Fatura No'yu kontrol et
+                Dim gibFaturaNoObj As Object = GridView1.GetRowCellValue(rowHandle, "GibFaturaNo")
+                If gibFaturaNoObj IsNot Nothing AndAlso gibFaturaNoObj IsNot DBNull.Value Then
+                    gibFaturaNo = gibFaturaNoObj.ToString().Trim()
+                End If
+                
+                ' Sipariş No'yu al (pazaryeri siparişi mi kontrol et)
+                Dim siparisNoObj As Object = GridView1.GetRowCellValue(rowHandle, "sAciklama3")
+                If siparisNoObj IsNot Nothing AndAlso siparisNoObj IsNot DBNull.Value Then
+                    siparisNo = siparisNoObj.ToString().Trim()
+                End If
+                
+                ' Pazaryeri siparişi değilse atla
+                If String.IsNullOrEmpty(siparisNo) OrElse
+                   (Not siparisNo.StartsWith("TY") AndAlso Not siparisNo.StartsWith("HB") AndAlso Not siparisNo.StartsWith("N11")) Then
+                    Continue For
+                End If
+                
+                ' GİB'e gönderilmemişse önce GİB'e gönder
+                If String.IsNullOrEmpty(gibFaturaNo) Then
+                    Try
+                        Dim sonuc As String = FaturaGonder(nStokFisiID)
+                        If Not String.IsNullOrEmpty(sonuc) AndAlso Not sonuc.ToLower().Contains("hata") Then
+                            gibGonderilen += 1
+                            gibFaturaNo = sonuc
+                        Else
+                            basarisiz += 1
+                            Continue For
+                        End If
+                    Catch ex As Exception
+                        basarisiz += 1
+                        Continue For
+                    End Try
+                End If
+                
+                basarili += 1
+            Next
+            
+            ' Pazaryeri gönderim formunu aç
             Dim frm As New frm_PazaryeriFaturaGonderim()
-            frm.connection = Me.connection ' Connection string'i aktar
+            frm.connection = Me.connection
             frm.ShowDialog()
+            
+            ' Listeyi yenile
+            SimpleButton1_Click(Nothing, Nothing)
+            
+            If gibGonderilen > 0 Then
+                MsgBox("GİB'e gönderilen: " & gibGonderilen & vbCrLf &
+                       "İşlem tamamlandı.", MsgBoxStyle.Information)
+            End If
+            
         Catch ex As Exception
-            MsgBox("Pazaryeri Fatura Gönderim formu açılırken hata: " & ex.Message)
+            MsgBox("Pazaryeri Fatura Gönderim hatası: " & ex.Message, MsgBoxStyle.Critical)
+        End Try
+    End Sub
+    
+    ''' <summary>
+    ''' Toplu Tarih Değiştir menü öğesi tıklandığında
+    ''' Seçili faturaların dteFisTarihi, dteValorTarihi, dteTeslimTarihi alanlarını değiştirir
+    ''' </summary>
+    Private Sub MenuItem58_Click(sender As Object, e As EventArgs) Handles MenuItem58.Click
+        Dim selectedRows() As Integer = GridView1.GetSelectedRows()
+        If selectedRows.Length = 0 Then
+            MsgBox("Lütfen en az bir fatura seçin!", MsgBoxStyle.Exclamation)
+            Exit Sub
+        End If
+        
+        Try
+            ' Tarih seçim formu oluştur
+            Using frmTarih As New Form()
+                frmTarih.Text = "Toplu Tarih Değiştir"
+                frmTarih.Size = New Size(350, 200)
+                frmTarih.StartPosition = FormStartPosition.CenterParent
+                frmTarih.FormBorderStyle = FormBorderStyle.FixedDialog
+                frmTarih.MaximizeBox = False
+                frmTarih.MinimizeBox = False
+                
+                Dim lblBilgi As New Label()
+                lblBilgi.Text = selectedRows.Length & " adet fatura seçildi." & vbCrLf & "Yeni tarihi seçin:"
+                lblBilgi.Location = New Point(20, 20)
+                lblBilgi.Size = New Size(300, 40)
+                frmTarih.Controls.Add(lblBilgi)
+                
+                Dim dtpYeniTarih As New DateTimePicker()
+                dtpYeniTarih.Location = New Point(20, 70)
+                dtpYeniTarih.Size = New Size(200, 25)
+                dtpYeniTarih.Format = DateTimePickerFormat.Short
+                dtpYeniTarih.Value = DateTime.Today
+                frmTarih.Controls.Add(dtpYeniTarih)
+                
+                Dim btnUygula As New Button()
+                btnUygula.Text = "Uygula"
+                btnUygula.Location = New Point(20, 110)
+                btnUygula.Size = New Size(100, 30)
+                btnUygula.DialogResult = DialogResult.OK
+                frmTarih.Controls.Add(btnUygula)
+                
+                Dim btnIptal As New Button()
+                btnIptal.Text = "İptal"
+                btnIptal.Location = New Point(130, 110)
+                btnIptal.Size = New Size(100, 30)
+                btnIptal.DialogResult = DialogResult.Cancel
+                frmTarih.Controls.Add(btnIptal)
+                
+                frmTarih.AcceptButton = btnUygula
+                frmTarih.CancelButton = btnIptal
+                
+                If frmTarih.ShowDialog() = DialogResult.OK Then
+                    Dim yeniTarih As DateTime = dtpYeniTarih.Value.Date
+                    Dim guncellenen As Integer = 0
+                    
+                    Using con As New OleDbConnection(connection)
+                        con.Open()
+                        
+                        For Each rowHandle As Integer In selectedRows
+                            Dim nStokFisiID As Long = CLng(GridView1.GetRowCellValue(rowHandle, "nStokFisiID"))
+                            
+                            Using cmd As New OleDbCommand("UPDATE tbStokFisiMaster SET " &
+                                "dteFisTarihi = ?, " &
+                                "dteValorTarihi = ?, " &
+                                "dteTeslimTarihi = ? " &
+                                "WHERE nStokFisiID = ?", con)
+                                
+                                cmd.Parameters.Add("@dteFisTarihi", OleDbType.Date).Value = yeniTarih
+                                cmd.Parameters.Add("@dteValorTarihi", OleDbType.Date).Value = yeniTarih
+                                cmd.Parameters.Add("@dteTeslimTarihi", OleDbType.Date).Value = yeniTarih
+                                cmd.Parameters.Add("@nStokFisiID", OleDbType.BigInt).Value = nStokFisiID
+                                
+                                If cmd.ExecuteNonQuery() > 0 Then
+                                    guncellenen += 1
+                                End If
+                            End Using
+                        Next
+                        
+                    End Using
+                    
+                    ' Listeyi yenile
+                    SimpleButton1_Click(Nothing, Nothing)
+                    
+                    MsgBox(guncellenen & " adet faturanın tarihi güncellendi.", MsgBoxStyle.Information)
+                End If
+            End Using
+            
+        Catch ex As Exception
+            MsgBox("Tarih değiştirme hatası: " & ex.Message, MsgBoxStyle.Critical)
         End Try
     End Sub
 End Class
