@@ -18984,10 +18984,17 @@ Public Class Form1
             Try
                 If guncellemeYapildiMi = True Then
                     If File.Exists("C:\Program Files (x86)\Business Smart\business_smart.exe") Then
+                        ' Önce eski _old dosyasını sil
+                        If File.Exists("C:\Program Files (x86)\Business Smart\business_smart_old.exe") Then
+                            System.IO.File.Delete("C:\Program Files (x86)\Business Smart\business_smart_old.exe")
+                        End If
                         My.Computer.FileSystem.RenameFile("C:\Program Files (x86)\Business Smart\business_smart.exe", "business_smart_old.exe")
                         System.IO.File.Copy("C:\Program Files (x86)\Business Smart\Util\business_smart.exe", "C:\Program Files (x86)\Business Smart\business_smart.exe")
                         System.IO.File.Delete("C:\Program Files (x86)\Business Smart\Util\business_smart.exe")
                     ElseIf File.Exists("C:\Program Files\Business Smart\business_smart.exe") Then
+                        If File.Exists("C:\Program Files\Business Smart\business_smart_old.exe") Then
+                            System.IO.File.Delete("C:\Program Files\Business Smart\business_smart_old.exe")
+                        End If
                         My.Computer.FileSystem.RenameFile("C:\Program Files\Business Smart\business_smart.exe", "business_smart_old.exe")
                         System.IO.File.Copy("C:\Program Files\Business Smart\Util\business_smart.exe", "C:\Program Files\Business Smart\business_smart.exe")
                         System.IO.File.Delete("C:\Program Files\Business Smart\Util\business_smart.exe")
@@ -18995,10 +19002,16 @@ Public Class Form1
                 End If
                 If guncellemeYapildiMiManage = True Then
                     If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE.exe") Then
+                        If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE_old.exe") Then
+                            System.IO.File.Delete("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE_old.exe")
+                        End If
                         My.Computer.FileSystem.RenameFile("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE.exe", "BUSINESS_SMART_MANAGE_old.exe")
                         System.IO.File.Copy("C:\Program Files (x86)\Business Smart\Util\BUSINESS_SMART_MANAGE.exe", "C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE.exe")
                         System.IO.File.Delete("C:\Program Files (x86)\Business Smart\Util\BUSINESS_SMART_MANAGE.exe")
                     ElseIf File.Exists("C:\Program Files\Business Smart\BUSINESS_SMART_MANAGE.exe") Then
+                        If File.Exists("C:\Program Files\Business Smart\BUSINESS_SMART_MANAGE_old.exe") Then
+                            System.IO.File.Delete("C:\Program Files\Business Smart\BUSINESS_SMART_MANAGE_old.exe")
+                        End If
                         My.Computer.FileSystem.RenameFile("C:\Program Files\Business Smart\BUSINESS_SMART_MANAGE.exe", "BUSINESS_SMART_MANAGE_old.exe")
                         System.IO.File.Copy("C:\Program Files\Business Smart\Util\BUSINESS_SMART_MANAGE.exe", "C:\Program Files\Business Smart\BUSINESS_SMART_MANAGE.exe")
                         System.IO.File.Delete("C:\Program Files\Business Smart\Util\BUSINESS_SMART_MANAGE.exe")
@@ -19008,10 +19021,16 @@ Public Class Form1
                 
                 If guncellemeYapildiMiLicense = True Then
                     If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE.exe") Then
+                        If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE_old.exe") Then
+                            System.IO.File.Delete("C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE_old.exe")
+                        End If
                         My.Computer.FileSystem.RenameFile("C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE.exe", "BUSINESS_LICENSE_old.exe")
                         System.IO.File.Copy("C:\Program Files (x86)\Business Smart\Util\BUSINESS_LICENSE.exe", "C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE.exe")
                         System.IO.File.Delete("C:\Program Files (x86)\Business Smart\Util\BUSINESS_LICENSE.exe")
                     ElseIf File.Exists("C:\Program Files\Business Smart\BUSINESS_LICENSE.exe") Then
+                        If File.Exists("C:\Program Files\Business Smart\BUSINESS_LICENSE_old.exe") Then
+                            System.IO.File.Delete("C:\Program Files\Business Smart\BUSINESS_LICENSE_old.exe")
+                        End If
                         My.Computer.FileSystem.RenameFile("C:\Program Files\Business Smart\BUSINESS_LICENSE.exe", "BUSINESS_LICENSE_old.exe")
                         System.IO.File.Copy("C:\Program Files\Business Smart\Util\BUSINESS_LICENSE.exe", "C:\Program Files\Business Smart\BUSINESS_LICENSE.exe")
                         System.IO.File.Delete("C:\Program Files\Business Smart\Util\BUSINESS_LICENSE.exe")
