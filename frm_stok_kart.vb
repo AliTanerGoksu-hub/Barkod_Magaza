@@ -9340,7 +9340,7 @@ Public Class frm_stok_kart
                 If Not String.IsNullOrEmpty(sOnayKodu) AndAlso sOnayKodu <> "0" Then
                     Try
                         ' API ile lisans bilgisini al
-                        Dim licenseResult = ApiClient.VerifyLicense(sOnayKodu, Form1.Netzwerk(3))
+                        Dim licenseResult = ApiClient.VerifyLicense(sOnayKodu, "")
                         If licenseResult.IsValid AndAlso Not String.IsNullOrEmpty(licenseResult.OzelNot) Then
                             klasor = licenseResult.OzelNot.Trim()
                         End If
@@ -10319,7 +10319,7 @@ End Sub
             ' API ile lisans bilgisini al
             If Not String.IsNullOrEmpty(sOnayKodu) AndAlso sOnayKodu <> "0" Then
                 Try
-                    Dim licenseResult = ApiClient.VerifyLicense(sOnayKodu, Form1.Netzwerk(3))
+                    Dim licenseResult = ApiClient.VerifyLicense(sOnayKodu, "")
                     If licenseResult.IsValid AndAlso Not String.IsNullOrEmpty(licenseResult.OzelNot) Then
                         klasor = licenseResult.OzelNot.Trim()
                     End If
@@ -10584,7 +10584,7 @@ End Sub
                             
                             If Not String.IsNullOrEmpty(sOnayKodu) AndAlso sOnayKodu <> "0" Then
                                 Try
-                                    Dim licenseResult = ApiClient.VerifyLicense(sOnayKodu, Form1.Netzwerk(3))
+                                    Dim licenseResult = ApiClient.VerifyLicense(sOnayKodu, "")
                                     If licenseResult.IsValid AndAlso Not String.IsNullOrEmpty(licenseResult.OzelNot) Then
                                         klasor = licenseResult.OzelNot.Trim()
                                     End If

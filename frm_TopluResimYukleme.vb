@@ -824,7 +824,7 @@ Public Class frm_TopluResimYukleme
             If Not String.IsNullOrEmpty(sOnayKodu) AndAlso sOnayKodu <> "0" Then
                 Try
                     ' API ile lisans bilgisini al
-                    Dim licenseResult = ApiClient.VerifyLicense(sOnayKodu, Form1.Netzwerk(3))
+                    Dim licenseResult = ApiClient.VerifyLicense(sOnayKodu, "")
                     If licenseResult.IsValid AndAlso Not String.IsNullOrEmpty(licenseResult.OzelNot) Then
                         klasor = licenseResult.OzelNot.Trim()
                     End If

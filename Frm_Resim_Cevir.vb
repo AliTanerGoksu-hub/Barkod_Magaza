@@ -716,7 +716,7 @@ End Sub
         ' API üzerinden klasör adını al (güvenli yöntem)
         Try
             If Not String.IsNullOrEmpty(sOnayKodu) AndAlso sOnayKodu <> "0" Then
-                Dim licenseResult = ApiClient.VerifyLicense(sOnayKodu, Form1.Netzwerk(3))
+                Dim licenseResult = ApiClient.VerifyLicense(sOnayKodu, "")
                 If licenseResult.IsValid AndAlso Not String.IsNullOrEmpty(licenseResult.OzelNot) Then
                     Return licenseResult.OzelNot.Trim()
                 End If
