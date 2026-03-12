@@ -682,21 +682,19 @@ app.MapPost("/api/license/verify", async (HttpContext context) =>
         if (string.IsNullOrEmpty(licenseKey))
             return Results.Json(new { success = false, message = "License key required" }, statusCode: 400);
 
-        // BAYII veritabanına bağlan ve lisans kontrolü yap
-        var licenseConnStr = config["LicenseConnectionString"] ?? 
-            "Provider=SQLOLEDB.1;Password=87918991;Persist Security Info=True;User ID=bayii1;Initial Catalog=BAYII;Data Source=SERVER\\SERVER,8991";
+        var sqlConnStr = config["SqlConnectionString"] ?? "Data Source=localhost,8991;Initial Catalog=BAYII;User ID=sa;Password=87918991";
         
-        using var conn = new System.Data.OleDb.OleDbConnection(licenseConnStr);
+        using var conn = new SqlConnection(sqlConnStr);
         await conn.OpenAsync();
         
-        using var cmd = new System.Data.OleDb.OleDbCommand(
+        using var cmd = new SqlCommand(
             @"SELECT tbFirmaLisans.sOnayKodu, tbFirmaLisans.sMacID, tbFirmaLisans.dteGecerlilikTarihi, 
                      tbFirmaLisans.sParametre1, tbFirmaLisans.sParametre2, tbFirmaLisans.nFirmaID,
                      tbFirma.sKodu, tbFirma.sAciklama, tbFirma.sOzelNot
               FROM tbFirmaLisans 
               INNER JOIN tbFirma ON tbFirmaLisans.nFirmaID = tbFirma.nFirmaID 
-              WHERE tbFirmaLisans.sOnayKodu = ?", conn);
-        cmd.Parameters.AddWithValue("?", licenseKey);
+              WHERE tbFirmaLisans.sOnayKodu = @licenseKey", conn);
+        cmd.Parameters.AddWithValue("@licenseKey", licenseKey);
         
         using var reader = await cmd.ExecuteReaderAsync();
         
@@ -780,49 +778,50 @@ app.MapPost("/api/license/activate", async (HttpContext context) =>
         if (string.IsNullOrEmpty(licenseKey) || string.IsNullOrEmpty(machineId))
             return Results.Json(new { success = false, message = "Lisans anahtarı ve MAC ID gerekli" }, statusCode: 400);
 
-        var licenseConnStr = config["LicenseConnectionString"];
+        var sqlConnStr = config["SqlConnectionString"] ?? "Data Source=localhost,8991;Initial Catalog=BAYII;User ID=sa;Password=87918991";
         
-        using var conn = new System.Data.OleDb.OleDbConnection(licenseConnStr);
+        using var conn = new SqlConnection(sqlConnStr);
         await conn.OpenAsync();
         
         // Önce lisansın var olup olmadığını kontrol et
-        using var checkCmd = new System.Data.OleDb.OleDbCommand(
-            "SELECT sMacID FROM tbFirmaLisans WHERE sOnayKodu = ?", conn);
-        checkCmd.Parameters.AddWithValue("?", licenseKey);
-        var existingMac = await checkCmd.ExecuteScalarAsync() as string;
+        using var checkCmd = new SqlCommand(
+            "SELECT sMacID FROM tbFirmaLisans WHERE sOnayKodu = @licenseKey", conn);
+        checkCmd.Parameters.AddWithValue("@licenseKey", licenseKey);
+        var existingMac = await checkCmd.ExecuteScalarAsync();
         
-        if (existingMac == null)
+        if (existingMac == null && existingMac != DBNull.Value)
         {
             return Results.Json(new { success = false, message = "Lisans bulunamadı" });
         }
         
         // MAC ID ve diğer bilgileri güncelle (BARKOD_INSTALL'dan gelen tüm alanlar)
-        using var updateCmd = new System.Data.OleDb.OleDbCommand(
+        using var updateCmd = new SqlCommand(
             @"UPDATE tbFirmaLisans SET 
-                sMacID = ?, sBilgisayar = ?, sOturum = ?, sIP = ?, sOS = ?,
-                sCpuID = ?, sHddSerial = ?, sBiosVersion = ?,
-                sManufactor = ?, sModel = ?, sSystemType = ?,
-                sParametre1 = ?, sParametre2 = ?,
-                sUlke = ?, sBolge = ?, sSifreyiAlan = ?
-              WHERE sOnayKodu = ?", conn);
+                sMacID = @machineId, sBilgisayar = @computerName, sOturum = @userName, 
+                sIP = @ipAddress, sOS = @osVersion,
+                sCpuID = @cpuId, sHddSerial = @hddSerial, sBiosVersion = @biosVersion,
+                sManufactor = @manufacturer, sModel = @model, sSystemType = @systemType,
+                sParametre1 = @parametre1, sParametre2 = @parametre2,
+                sUlke = @country, sBolge = @region, sSifreyiAlan = @installedBy
+              WHERE sOnayKodu = @licenseKey2", conn);
         
-        updateCmd.Parameters.AddWithValue("?", machineId);
-        updateCmd.Parameters.AddWithValue("?", computerName);
-        updateCmd.Parameters.AddWithValue("?", userName);
-        updateCmd.Parameters.AddWithValue("?", ipAddress);
-        updateCmd.Parameters.AddWithValue("?", osVersion);
-        updateCmd.Parameters.AddWithValue("?", cpuId);
-        updateCmd.Parameters.AddWithValue("?", hddSerial);
-        updateCmd.Parameters.AddWithValue("?", biosVersion);
-        updateCmd.Parameters.AddWithValue("?", manufacturer);
-        updateCmd.Parameters.AddWithValue("?", model);
-        updateCmd.Parameters.AddWithValue("?", systemType);
-        updateCmd.Parameters.AddWithValue("?", parametre1);
-        updateCmd.Parameters.AddWithValue("?", parametre2);
-        updateCmd.Parameters.AddWithValue("?", country);
-        updateCmd.Parameters.AddWithValue("?", region);
-        updateCmd.Parameters.AddWithValue("?", installedBy);
-        updateCmd.Parameters.AddWithValue("?", licenseKey);
+        updateCmd.Parameters.AddWithValue("@machineId", machineId);
+        updateCmd.Parameters.AddWithValue("@computerName", computerName);
+        updateCmd.Parameters.AddWithValue("@userName", userName);
+        updateCmd.Parameters.AddWithValue("@ipAddress", ipAddress);
+        updateCmd.Parameters.AddWithValue("@osVersion", osVersion);
+        updateCmd.Parameters.AddWithValue("@cpuId", cpuId);
+        updateCmd.Parameters.AddWithValue("@hddSerial", hddSerial);
+        updateCmd.Parameters.AddWithValue("@biosVersion", biosVersion);
+        updateCmd.Parameters.AddWithValue("@manufacturer", manufacturer);
+        updateCmd.Parameters.AddWithValue("@model", model);
+        updateCmd.Parameters.AddWithValue("@systemType", systemType);
+        updateCmd.Parameters.AddWithValue("@parametre1", parametre1);
+        updateCmd.Parameters.AddWithValue("@parametre2", parametre2);
+        updateCmd.Parameters.AddWithValue("@country", country);
+        updateCmd.Parameters.AddWithValue("@region", region);
+        updateCmd.Parameters.AddWithValue("@installedBy", installedBy);
+        updateCmd.Parameters.AddWithValue("@licenseKey2", licenseKey);
         
         await updateCmd.ExecuteNonQueryAsync();
         
@@ -848,12 +847,12 @@ app.MapGet("/api/license/list", async (HttpContext context) =>
 
     try
     {
-        var licenseConnStr = config["LicenseConnectionString"];
+        var sqlConnStr = config["SqlConnectionString"] ?? "Data Source=localhost,8991;Initial Catalog=BAYII;User ID=sa;Password=87918991";
         
-        using var conn = new System.Data.OleDb.OleDbConnection(licenseConnStr);
+        using var conn = new SqlConnection(sqlConnStr);
         await conn.OpenAsync();
         
-        using var cmd = new System.Data.OleDb.OleDbCommand(
+        using var cmd = new SqlCommand(
             @"SELECT TOP 100 tbFirmaLisans.sOnayKodu, tbFirmaLisans.sMacID, 
                      tbFirmaLisans.dteGecerlilikTarihi, tbFirmaLisans.sBilgisayar,
                      tbFirmaLisans.sIP, tbFirma.sKodu, tbFirma.sAciklama
