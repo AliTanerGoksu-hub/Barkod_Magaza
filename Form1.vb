@@ -9736,6 +9736,14 @@ Public Class Form1
         End Try
         ' ==================================================================
 
+        ' ============ E-TİCARET PLATFORM PARAMETRELERİ KONTROLÜ ============
+        Try
+            EnsureETicaretPlatformParametreleri()
+        Catch ex As Exception
+            Debug.WriteLine("E-Ticaret platform parametreleri kontrolü hatası: " & ex.Message)
+        End Try
+        ' ==================================================================
+
         ' ============ SSL/TLS PROTOKOL AYARI (EN BASTA OLMALI) ============
         Try
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 Or System.Net.SecurityProtocolType.Tls11 Or System.Net.SecurityProtocolType.Tls
@@ -24316,6 +24324,80 @@ CleanupExcel:
         Using response As FtpWebResponse = CType(request.GetResponse(), FtpWebResponse)
             ' Silme başarılı
         End Using
+    End Sub
+
+#End Region
+
+#Region "E-Ticaret Platform Parametreleri"
+
+    ' ============================================================================
+    ' E-TİCARET PLATFORM PARAMETRELERİ KONTROL VE OLUŞTURMA
+    ' ============================================================================
+
+    ''' <summary>
+    ''' Uygulama açılışında e-ticaret platformları için gerekli parametrelerin
+    ''' tbParamETicaret tablosunda var olup olmadığını kontrol eder.
+    ''' Eksik platformlar için varsayılan kayıtlar oluşturur.
+    ''' </summary>
+    Private Sub EnsureETicaretPlatformParametreleri()
+        Try
+            Using con As New System.Data.OleDb.OleDbConnection(connection)
+                con.Open()
+
+                ' Tüm e-ticaret platformları ve önekleri
+                Dim platformlar As New Dictionary(Of String, String)()
+                platformlar.Add("ty(", "Trendyol")
+                platformlar.Add("Hb(", "Hepsiburada")
+                platformlar.Add("n11", "N11")
+                platformlar.Add("am(", "Amazon")
+                platformlar.Add("gg(", "GittiGidiyor")
+                platformlar.Add("cs(", "Çiçeksepeti")
+                platformlar.Add("ky(", "Kitapyurdu")
+                platformlar.Add("pt(", "PTTAvm")
+                platformlar.Add("mh(", "Morhipo")
+                platformlar.Add("paz(", "Pazarama")
+
+                For Each platform In platformlar
+                    Try
+                        ' Bu platform için kayıt var mı kontrol et
+                        Dim varMi As Boolean = False
+                        Using cmdCheck As New System.Data.OleDb.OleDbCommand(
+                            "SELECT COUNT(*) FROM tbParamETicaret WHERE sSiparisNoOnek = ?", con)
+                            cmdCheck.Parameters.AddWithValue("?", platform.Key)
+                            Dim count As Integer = CInt(cmdCheck.ExecuteScalar())
+                            varMi = (count > 0)
+                        End Using
+
+                        If Not varMi Then
+                            ' Varsayılan değerlerle kayıt ekle
+                            Debug.WriteLine($"[tbParamETicaret] {platform.Value} ({platform.Key}) kaydı ekleniyor...")
+                            
+                            Using cmdInsert As New System.Data.OleDb.OleDbCommand(
+                                "INSERT INTO tbParamETicaret (sSiparisNoOnek, sAciklama, bAktif, " &
+                                "nKomisyonTipi, nKomisyonOrani, lKomisyonSabitTutar, lKargoSabitBedel, " &
+                                "nIadeOperasyonOrani, nPaketlemeOrani, nOdemeIslemUcretiOrani, lOdemeIslemSabitUcret, " &
+                                "lDigerMasraf1, lDigerMasraf2) " &
+                                "VALUES (?, ?, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0)", con)
+                                
+                                cmdInsert.Parameters.AddWithValue("?", platform.Key)
+                                cmdInsert.Parameters.AddWithValue("?", platform.Value)
+                                cmdInsert.ExecuteNonQuery()
+                            End Using
+                            
+                            Debug.WriteLine($"[tbParamETicaret] ✓ {platform.Value} kaydı eklendi")
+                        End If
+                    Catch platformEx As Exception
+                        Debug.WriteLine($"[tbParamETicaret] ✗ {platform.Value} hatası: " & platformEx.Message)
+                        ' Tek platform hatası diğerlerini etkilemesin
+                    End Try
+                Next
+
+                Debug.WriteLine("[tbParamETicaret] ✓ Platform parametreleri kontrolü tamamlandı")
+            End Using
+        Catch ex As Exception
+            Debug.WriteLine("[tbParamETicaret] ✗ Genel hata: " & ex.Message)
+            ' Hata olsa bile uygulama açılmaya devam etsin
+        End Try
     End Sub
 
 #End Region
