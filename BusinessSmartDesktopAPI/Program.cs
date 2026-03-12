@@ -29,10 +29,12 @@ var config = builder.Configuration;
 var apiKey = config["ApiKey"] ?? "BSmart2024Desktop!@#";
 var updatesPath = config["UpdatesPath"] ?? @"C:\BusinessSmartFiles\Updates";
 var backupsPath = config["BackupsPath"] ?? @"C:\BusinessSmartFiles\Backups";
+var filesPath = config["FilesPath"] ?? @"C:\BusinessSmartFiles\SharedFiles";
 
 // Klasörleri oluştur
 Directory.CreateDirectory(updatesPath);
 Directory.CreateDirectory(backupsPath);
+Directory.CreateDirectory(filesPath);
 
 app.UseCors("AllowAll");
 
@@ -58,7 +60,12 @@ app.MapGet("/", () => Results.Ok(new
         "POST /api/backup/upload",
         "GET  /api/backup/list",
         "GET  /api/backup/download?file=xxx",
-        "POST /api/license/verify"
+        "POST /api/license/verify",
+        "GET  /api/files/list?folder=xxx",
+        "GET  /api/files/download?file=xxx",
+        "POST /api/files/upload?folder=xxx",
+        "DELETE /api/files/delete?file=xxx",
+        "POST /api/files/mkdir?folder=xxx"
     }
 }));
 
@@ -355,6 +362,203 @@ string SanitizeFolderName(string name)
     return name;
 }
 
+// ==================== DOSYA YÖNETİMİ API (FTP YERİNE) ====================
+
+// Dosya listele
+app.MapGet("/api/files/list", (HttpContext context) =>
+{
+    if (!ValidateApiKey(context))
+        return Results.Json(new { success = false, message = "Invalid API Key" }, statusCode: 401);
+
+    var folder = context.Request.Query["folder"].FirstOrDefault() ?? "";
+    
+    // Güvenlik: Path traversal engelle
+    folder = folder.Replace("..", "").Trim('/').Trim('\\');
+    
+    var targetPath = string.IsNullOrEmpty(folder) 
+        ? filesPath 
+        : Path.Combine(filesPath, folder);
+
+    if (!Directory.Exists(targetPath))
+        return Results.Json(new { success = false, message = "Folder not found" }, statusCode: 404);
+
+    var files = new List<object>();
+    var folders = new List<object>();
+
+    // Alt klasörleri listele
+    foreach (var dir in Directory.GetDirectories(targetPath))
+    {
+        var di = new DirectoryInfo(dir);
+        folders.Add(new
+        {
+            name = di.Name,
+            type = "folder",
+            lastModified = di.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss")
+        });
+    }
+
+    // Dosyaları listele
+    foreach (var file in Directory.GetFiles(targetPath))
+    {
+        var fi = new FileInfo(file);
+        files.Add(new
+        {
+            name = fi.Name,
+            type = "file",
+            size = fi.Length,
+            lastModified = fi.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss"),
+            downloadUrl = $"/api/files/download?file={Uri.EscapeDataString(Path.Combine(folder, fi.Name).Replace("\\", "/"))}"
+        });
+    }
+
+    return Results.Json(new
+    {
+        success = true,
+        currentFolder = folder,
+        folderCount = folders.Count,
+        fileCount = files.Count,
+        folders,
+        files
+    });
+});
+
+// Dosya indir
+app.MapGet("/api/files/download", async (HttpContext context) =>
+{
+    if (!ValidateApiKey(context))
+    {
+        context.Response.StatusCode = 401;
+        await context.Response.WriteAsJsonAsync(new { success = false, message = "Invalid API Key" });
+        return;
+    }
+
+    var filePath = context.Request.Query["file"].FirstOrDefault();
+    
+    if (string.IsNullOrEmpty(filePath))
+    {
+        context.Response.StatusCode = 400;
+        await context.Response.WriteAsJsonAsync(new { success = false, message = "File path required" });
+        return;
+    }
+
+    // Güvenlik: Path traversal engelle
+    filePath = filePath.Replace("..", "");
+    var fullPath = Path.Combine(filesPath, filePath);
+
+    if (!File.Exists(fullPath))
+    {
+        context.Response.StatusCode = 404;
+        await context.Response.WriteAsJsonAsync(new { success = false, message = "File not found" });
+        return;
+    }
+
+    var fi = new FileInfo(fullPath);
+    context.Response.ContentType = "application/octet-stream";
+    context.Response.Headers.Append("Content-Disposition", $"attachment; filename=\"{fi.Name}\"");
+    context.Response.ContentLength = fi.Length;
+
+    await context.Response.SendFileAsync(fullPath);
+});
+
+// Dosya yükle
+app.MapPost("/api/files/upload", async (HttpContext context) =>
+{
+    if (!ValidateApiKey(context))
+        return Results.Json(new { success = false, message = "Invalid API Key" }, statusCode: 401);
+
+    var folder = context.Request.Query["folder"].FirstOrDefault() ?? "";
+    
+    // Güvenlik
+    folder = folder.Replace("..", "").Trim('/').Trim('\\');
+    
+    if (!context.Request.HasFormContentType)
+        return Results.Json(new { success = false, message = "Form content required" }, statusCode: 400);
+
+    var form = await context.Request.ReadFormAsync();
+    var file = form.Files.FirstOrDefault();
+
+    if (file == null || file.Length == 0)
+        return Results.Json(new { success = false, message = "No file uploaded" }, statusCode: 400);
+
+    var targetPath = string.IsNullOrEmpty(folder)
+        ? filesPath
+        : Path.Combine(filesPath, folder);
+    
+    Directory.CreateDirectory(targetPath);
+
+    var fileName = Path.GetFileName(file.FileName);
+    var fullPath = Path.Combine(targetPath, fileName);
+
+    // Dosyayı kaydet
+    using (var stream = new FileStream(fullPath, FileMode.Create))
+    {
+        await file.CopyToAsync(stream);
+    }
+
+    var fi = new FileInfo(fullPath);
+    return Results.Json(new
+    {
+        success = true,
+        message = "File uploaded successfully",
+        fileName = fi.Name,
+        folder = folder,
+        fileSize = fi.Length,
+        uploadTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+    });
+});
+
+// Dosya sil
+app.MapDelete("/api/files/delete", (HttpContext context) =>
+{
+    if (!ValidateApiKey(context))
+        return Results.Json(new { success = false, message = "Invalid API Key" }, statusCode: 401);
+
+    var filePath = context.Request.Query["file"].FirstOrDefault();
+    
+    if (string.IsNullOrEmpty(filePath))
+        return Results.Json(new { success = false, message = "File path required" }, statusCode: 400);
+
+    // Güvenlik
+    filePath = filePath.Replace("..", "");
+    var fullPath = Path.Combine(filesPath, filePath);
+
+    if (!File.Exists(fullPath))
+        return Results.Json(new { success = false, message = "File not found" }, statusCode: 404);
+
+    File.Delete(fullPath);
+
+    return Results.Json(new
+    {
+        success = true,
+        message = "File deleted successfully"
+    });
+});
+
+// Klasör oluştur
+app.MapPost("/api/files/mkdir", (HttpContext context) =>
+{
+    if (!ValidateApiKey(context))
+        return Results.Json(new { success = false, message = "Invalid API Key" }, statusCode: 401);
+
+    var folder = context.Request.Query["folder"].FirstOrDefault();
+    
+    if (string.IsNullOrEmpty(folder))
+        return Results.Json(new { success = false, message = "Folder name required" }, statusCode: 400);
+
+    // Güvenlik
+    folder = folder.Replace("..", "").Trim('/').Trim('\\');
+    var fullPath = Path.Combine(filesPath, folder);
+
+    Directory.CreateDirectory(fullPath);
+
+    return Results.Json(new
+    {
+        success = true,
+        message = "Folder created successfully",
+        folder = folder
+    });
+});
+
 // Port ayarı - environment variable veya appsettings'den al
 var port = Environment.GetEnvironmentVariable("API_PORT") ?? config["Port"] ?? "5080";
 var listenUrl = $"http://0.0.0.0:{port}";
@@ -366,6 +570,7 @@ Console.WriteLine("===========================================");
 Console.WriteLine($"  Listening on: {listenUrl}");
 Console.WriteLine($"  Updates Path: {updatesPath}");
 Console.WriteLine($"  Backups Path: {backupsPath}");
+Console.WriteLine($"  Files Path:   {filesPath}");
 Console.WriteLine("===========================================");
 
 app.Run(listenUrl);
