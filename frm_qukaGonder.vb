@@ -2896,8 +2896,8 @@ Public Class frm_qukaGonder
 
         Dim codeUpper As String = code.ToUpper().Trim()
 
-        ' Bilinen e-ticaret platformu önekleri
-        Dim validPrefixes As String() = {"TY", "HB", "N11", "AM", "GG", "CS", "KY", "PT", "MH"}
+        ' Bilinen e-ticaret platformu önekleri (PAZ = Pazarama eklendi)
+        Dim validPrefixes As String() = {"TY", "HB", "N11", "AM", "GG", "CS", "KY", "PT", "MH", "PAZ"}
 
         For Each prefix As String In validPrefixes
             If codeUpper.StartsWith(prefix) Then
