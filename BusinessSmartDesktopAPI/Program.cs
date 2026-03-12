@@ -61,6 +61,8 @@ app.MapGet("/", () => Results.Ok(new
         "GET  /api/backup/list",
         "GET  /api/backup/download?file=xxx",
         "POST /api/license/verify",
+        "POST /api/license/activate",
+        "GET  /api/license/list",
         "GET  /api/files/list?folder=xxx",
         "GET  /api/files/download?file=xxx",
         "POST /api/files/upload?folder=xxx",
@@ -396,6 +398,147 @@ app.MapPost("/api/license/verify", async (HttpContext context) =>
     catch (Exception ex)
     {
         return Results.Json(new { success = false, message = "Veritabanı hatası: " + ex.Message }, statusCode: 500);
+    }
+});
+
+// Lisans aktivasyonu - MAC ID kaydet
+app.MapPost("/api/license/activate", async (HttpContext context) =>
+{
+    if (!ValidateApiKey(context))
+        return Results.Json(new { success = false, message = "Invalid API Key" }, statusCode: 401);
+
+    try
+    {
+        var body = await new StreamReader(context.Request.Body).ReadToEndAsync();
+        var data = JsonSerializer.Deserialize<Dictionary<string, string>>(body) ?? new Dictionary<string, string>();
+
+        var licenseKey = data.GetValueOrDefault("licenseKey", "");
+        var machineId = data.GetValueOrDefault("machineId", "");
+        var computerName = data.GetValueOrDefault("computerName", "");
+        var userName = data.GetValueOrDefault("userName", "");
+        var ipAddress = data.GetValueOrDefault("ipAddress", "");
+        var osVersion = data.GetValueOrDefault("osVersion", "");
+        var cpuId = data.GetValueOrDefault("cpuId", "");
+        var hddSerial = data.GetValueOrDefault("hddSerial", "");
+        var biosVersion = data.GetValueOrDefault("biosVersion", "");
+        var manufacturer = data.GetValueOrDefault("manufacturer", "");
+        var model = data.GetValueOrDefault("model", "");
+        var systemType = data.GetValueOrDefault("systemType", "");
+
+        if (string.IsNullOrEmpty(licenseKey) || string.IsNullOrEmpty(machineId))
+            return Results.Json(new { success = false, message = "Lisans anahtarı ve MAC ID gerekli" }, statusCode: 400);
+
+        var licenseConnStr = config["LicenseConnectionString"];
+        
+        using var conn = new System.Data.OleDb.OleDbConnection(licenseConnStr);
+        await conn.OpenAsync();
+        
+        // Önce lisansın var olup olmadığını kontrol et
+        using var checkCmd = new System.Data.OleDb.OleDbCommand(
+            "SELECT sMacID FROM tbFirmaLisans WHERE sOnayKodu = ?", conn);
+        checkCmd.Parameters.AddWithValue("?", licenseKey);
+        var existingMac = await checkCmd.ExecuteScalarAsync() as string;
+        
+        if (existingMac == null)
+        {
+            return Results.Json(new { success = false, message = "Lisans bulunamadı" });
+        }
+        
+        // Zaten başka MAC'e kayıtlıysa
+        if (!string.IsNullOrEmpty(existingMac) && !existingMac.Equals(machineId, StringComparison.OrdinalIgnoreCase))
+        {
+            return Results.Json(new { 
+                success = false, 
+                message = "Bu lisans başka bir bilgisayara kayıtlı",
+                registeredMac = existingMac
+            });
+        }
+        
+        // MAC ID ve diğer bilgileri güncelle
+        using var updateCmd = new System.Data.OleDb.OleDbCommand(
+            @"UPDATE tbFirmaLisans SET 
+                sMacID = ?, sBilgisayar = ?, sOturum = ?, sIP = ?, sOS = ?,
+                sCpuID = ?, sHddSerial = ?, sBiosVersion = ?,
+                sManufactor = ?, sModel = ?, sSystemType = ?
+              WHERE sOnayKodu = ?", conn);
+        
+        updateCmd.Parameters.AddWithValue("?", machineId);
+        updateCmd.Parameters.AddWithValue("?", computerName);
+        updateCmd.Parameters.AddWithValue("?", userName);
+        updateCmd.Parameters.AddWithValue("?", ipAddress);
+        updateCmd.Parameters.AddWithValue("?", osVersion);
+        updateCmd.Parameters.AddWithValue("?", cpuId);
+        updateCmd.Parameters.AddWithValue("?", hddSerial);
+        updateCmd.Parameters.AddWithValue("?", biosVersion);
+        updateCmd.Parameters.AddWithValue("?", manufacturer);
+        updateCmd.Parameters.AddWithValue("?", model);
+        updateCmd.Parameters.AddWithValue("?", systemType);
+        updateCmd.Parameters.AddWithValue("?", licenseKey);
+        
+        await updateCmd.ExecuteNonQueryAsync();
+        
+        return Results.Json(new
+        {
+            success = true,
+            message = "Lisans başarıyla aktive edildi",
+            licenseKey = licenseKey,
+            machineId = machineId
+        });
+    }
+    catch (Exception ex)
+    {
+        return Results.Json(new { success = false, message = "Aktivasyon hatası: " + ex.Message }, statusCode: 500);
+    }
+});
+
+// Lisans listesi (Admin için)
+app.MapGet("/api/license/list", async (HttpContext context) =>
+{
+    if (!ValidateApiKey(context))
+        return Results.Json(new { success = false, message = "Invalid API Key" }, statusCode: 401);
+
+    try
+    {
+        var licenseConnStr = config["LicenseConnectionString"];
+        
+        using var conn = new System.Data.OleDb.OleDbConnection(licenseConnStr);
+        await conn.OpenAsync();
+        
+        using var cmd = new System.Data.OleDb.OleDbCommand(
+            @"SELECT TOP 100 tbFirmaLisans.sOnayKodu, tbFirmaLisans.sMacID, 
+                     tbFirmaLisans.dteGecerlilikTarihi, tbFirmaLisans.sBilgisayar,
+                     tbFirmaLisans.sIP, tbFirma.sKodu, tbFirma.sAciklama
+              FROM tbFirmaLisans 
+              INNER JOIN tbFirma ON tbFirmaLisans.nFirmaID = tbFirma.nFirmaID 
+              ORDER BY tbFirma.sAciklama", conn);
+        
+        using var reader = await cmd.ExecuteReaderAsync();
+        var licenses = new List<object>();
+        
+        while (reader.Read())
+        {
+            licenses.Add(new
+            {
+                licenseKey = reader["sOnayKodu"]?.ToString(),
+                macId = reader["sMacID"]?.ToString(),
+                expiryDate = (reader["dteGecerlilikTarihi"] as DateTime?)?.ToString("yyyy-MM-dd"),
+                computerName = reader["sBilgisayar"]?.ToString(),
+                ipAddress = reader["sIP"]?.ToString(),
+                firmaKodu = reader["sKodu"]?.ToString(),
+                firmaAdi = reader["sAciklama"]?.ToString()
+            });
+        }
+        
+        return Results.Json(new
+        {
+            success = true,
+            count = licenses.Count,
+            licenses
+        });
+    }
+    catch (Exception ex)
+    {
+        return Results.Json(new { success = false, message = ex.Message }, statusCode: 500);
     }
 });
 
