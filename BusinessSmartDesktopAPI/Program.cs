@@ -767,6 +767,12 @@ app.MapPost("/api/license/activate", async (HttpContext context) =>
         var manufacturer = data.GetValueOrDefault("manufacturer", "");
         var model = data.GetValueOrDefault("model", "");
         var systemType = data.GetValueOrDefault("systemType", "");
+        var parametre1 = data.GetValueOrDefault("parametre1", "");
+        var parametre2 = data.GetValueOrDefault("parametre2", "");
+        var country = data.GetValueOrDefault("country", "");
+        var region = data.GetValueOrDefault("region", "");
+        var installedBy = data.GetValueOrDefault("installedBy", "");
+        var bayiiId = data.GetValueOrDefault("bayiiId", "");
 
         if (string.IsNullOrEmpty(licenseKey) || string.IsNullOrEmpty(machineId))
             return Results.Json(new { success = false, message = "Lisans anahtarı ve MAC ID gerekli" }, statusCode: 400);
@@ -787,22 +793,14 @@ app.MapPost("/api/license/activate", async (HttpContext context) =>
             return Results.Json(new { success = false, message = "Lisans bulunamadı" });
         }
         
-        // Zaten başka MAC'e kayıtlıysa
-        if (!string.IsNullOrEmpty(existingMac) && !existingMac.Equals(machineId, StringComparison.OrdinalIgnoreCase))
-        {
-            return Results.Json(new { 
-                success = false, 
-                message = "Bu lisans başka bir bilgisayara kayıtlı",
-                registeredMac = existingMac
-            });
-        }
-        
-        // MAC ID ve diğer bilgileri güncelle
+        // MAC ID ve diğer bilgileri güncelle (BARKOD_INSTALL'dan gelen tüm alanlar)
         using var updateCmd = new System.Data.OleDb.OleDbCommand(
             @"UPDATE tbFirmaLisans SET 
                 sMacID = ?, sBilgisayar = ?, sOturum = ?, sIP = ?, sOS = ?,
                 sCpuID = ?, sHddSerial = ?, sBiosVersion = ?,
-                sManufactor = ?, sModel = ?, sSystemType = ?
+                sManufactor = ?, sModel = ?, sSystemType = ?,
+                sParametre1 = ?, sParametre2 = ?,
+                sUlke = ?, sBolge = ?, sSifreyiAlan = ?
               WHERE sOnayKodu = ?", conn);
         
         updateCmd.Parameters.AddWithValue("?", machineId);
@@ -816,6 +814,11 @@ app.MapPost("/api/license/activate", async (HttpContext context) =>
         updateCmd.Parameters.AddWithValue("?", manufacturer);
         updateCmd.Parameters.AddWithValue("?", model);
         updateCmd.Parameters.AddWithValue("?", systemType);
+        updateCmd.Parameters.AddWithValue("?", parametre1);
+        updateCmd.Parameters.AddWithValue("?", parametre2);
+        updateCmd.Parameters.AddWithValue("?", country);
+        updateCmd.Parameters.AddWithValue("?", region);
+        updateCmd.Parameters.AddWithValue("?", installedBy);
         updateCmd.Parameters.AddWithValue("?", licenseKey);
         
         await updateCmd.ExecuteNonQueryAsync();
@@ -893,6 +896,130 @@ string SanitizeFolderName(string name)
         name = name.Replace(c, '_');
     return name;
 }
+
+// ==================== LİSANS DETAY API (BARKOD_INSTALL için) ====================
+
+// Lisans detayları - Firma bilgileri dahil
+app.MapGet("/api/license/details", async (HttpContext context) =>
+{
+    if (!ValidateApiKey(context))
+        return Results.Json(new { success = false, message = "Invalid API Key" }, statusCode: 401);
+
+    try
+    {
+        var licenseKey = context.Request.Query["key"].FirstOrDefault();
+        
+        if (string.IsNullOrEmpty(licenseKey))
+            return Results.Json(new { success = false, message = "License key required" }, statusCode: 400);
+
+        var licenseConnStr = config["LicenseConnectionString"];
+        
+        using var conn = new System.Data.OleDb.OleDbConnection(licenseConnStr);
+        await conn.OpenAsync();
+        
+        using var cmd = new System.Data.OleDb.OleDbCommand(
+            @"SELECT tbFirma.nFirmaID, tbFirma.sKodu, tbFirma.sAciklama, tbFirma.sAdres1, tbFirma.sAdres2, 
+                     tbFirma.sSemt, tbFirma.sIl, tbFirma.sUlke, tbFirma.sOzelNot,
+                     tbFirmaLisans.sOnayKodu, tbFirmaLisans.dteGecerlilikTarihi,
+                     tbFirmaLisans.sParametre1, tbFirmaLisans.sParametre2, 
+                     tbFirmaLisans.sManufactor, tbFirmaLisans.sModel, tbFirmaLisans.sSystemType, 
+                     tbFirmaLisans.sCpuID, tbFirmaLisans.sBiosVersion, tbFirmaLisans.sHddSerial, tbFirmaLisans.sMacID,
+                     (SELECT TOP 1 sIletisimAdresi FROM tbFirmaIletisimi WHERE nFirmaId = tbFirma.nFirmaID AND sIletisimAraci = 'E-Mail') AS Email,
+                     (SELECT TOP 1 sIletisimAdresi FROM tbFirmaIletisimi WHERE nFirmaId = tbFirma.nFirmaID AND sIletisimAraci = 'Telefon') AS Telefon,
+                     (SELECT TOP 1 sIletisimAdresi FROM tbFirmaIletisimi WHERE nFirmaId = tbFirma.nFirmaID AND sIletisimAraci = 'Gsm') AS Gsm,
+                     (SELECT TOP 1 sIletisimAdresi FROM tbFirmaIletisimi WHERE nFirmaId = tbFirma.nFirmaID AND sIletisimAraci = 'Yetkili') AS Yetkili
+              FROM tbFirmaLisans 
+              INNER JOIN tbFirma ON tbFirmaLisans.nFirmaID = tbFirma.nFirmaID 
+              WHERE tbFirmaLisans.sOnayKodu = ?", conn);
+        cmd.Parameters.AddWithValue("?", licenseKey);
+        
+        using var reader = await cmd.ExecuteReaderAsync();
+        
+        if (!reader.Read())
+            return Results.Json(new { success = false, message = "Lisans bulunamadı" });
+
+        return Results.Json(new
+        {
+            success = true,
+            firmaId = reader["nFirmaID"]?.ToString(),
+            firmaKodu = reader["sKodu"]?.ToString(),
+            firmaAdi = reader["sAciklama"]?.ToString(),
+            adres1 = reader["sAdres1"]?.ToString(),
+            adres2 = reader["sAdres2"]?.ToString(),
+            semt = reader["sSemt"]?.ToString(),
+            il = reader["sIl"]?.ToString(),
+            ulke = reader["sUlke"]?.ToString(),
+            ozelNot = reader["sOzelNot"]?.ToString(),
+            expiryDate = reader["dteGecerlilikTarihi"]?.ToString(),
+            parametre1 = reader["sParametre1"]?.ToString(),
+            parametre2 = reader["sParametre2"]?.ToString(),
+            manufacturer = reader["sManufactor"]?.ToString(),
+            model = reader["sModel"]?.ToString(),
+            systemType = reader["sSystemType"]?.ToString(),
+            cpuId = reader["sCpuID"]?.ToString(),
+            biosVersion = reader["sBiosVersion"]?.ToString(),
+            hddSerial = reader["sHddSerial"]?.ToString(),
+            macId = reader["sMacID"]?.ToString(),
+            email = reader["Email"]?.ToString(),
+            telefon = reader["Telefon"]?.ToString(),
+            gsm = reader["Gsm"]?.ToString(),
+            yetkili = reader["Yetkili"]?.ToString()
+        });
+    }
+    catch (Exception ex)
+    {
+        return Results.Json(new { success = false, message = ex.Message }, statusCode: 500);
+    }
+});
+
+// Bayii bilgisi al
+app.MapGet("/api/license/bayii", async (HttpContext context) =>
+{
+    if (!ValidateApiKey(context))
+        return Results.Json(new { success = false, message = "Invalid API Key" }, statusCode: 401);
+
+    try
+    {
+        var bayiiId = context.Request.Query["id"].FirstOrDefault();
+        
+        if (string.IsNullOrEmpty(bayiiId))
+            return Results.Json(new { success = false, message = "Bayii ID required" }, statusCode: 400);
+
+        var licenseConnStr = config["LicenseConnectionString"];
+        
+        using var conn = new System.Data.OleDb.OleDbConnection(licenseConnStr);
+        await conn.OpenAsync();
+        
+        using var cmd = new System.Data.OleDb.OleDbCommand(
+            @"SELECT nFirmaID, sKodu, sAciklama, sAdres1, sAdres2,
+                     (SELECT TOP 1 sIletisimAdresi FROM tbFirmaIletisimi WHERE nFirmaId = tbFirma.nFirmaID AND sIletisimAraci = 'Telefon') AS Telefon,
+                     (SELECT TOP 1 sIletisimAdresi FROM tbFirmaIletisimi WHERE nFirmaId = tbFirma.nFirmaID AND sIletisimAraci = 'Web') AS Web
+              FROM tbFirma 
+              WHERE nFirmaID = ? AND sKodu LIKE '320%'", conn);
+        cmd.Parameters.AddWithValue("?", bayiiId);
+        
+        using var reader = await cmd.ExecuteReaderAsync();
+        
+        if (!reader.Read())
+            return Results.Json(new { success = false, message = "Bayii bulunamadı" });
+
+        return Results.Json(new
+        {
+            success = true,
+            bayiiId = reader["nFirmaID"]?.ToString(),
+            bayiiKodu = reader["sKodu"]?.ToString(),
+            bayiiAdi = reader["sAciklama"]?.ToString(),
+            adres1 = reader["sAdres1"]?.ToString(),
+            adres2 = reader["sAdres2"]?.ToString(),
+            telefon = reader["Telefon"]?.ToString(),
+            web = reader["Web"]?.ToString()
+        });
+    }
+    catch (Exception ex)
+    {
+        return Results.Json(new { success = false, message = ex.Message }, statusCode: 500);
+    }
+});
 
 // ==================== DOSYA YÖNETİMİ API (FTP YERİNE) ====================
 
