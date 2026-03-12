@@ -71,6 +71,7 @@ Public Class Form1
     Dim counter As Integer
     Dim guncellemeYapildiMi As Boolean = False
     Dim guncellemeYapildiMiManage As Boolean = False
+    Dim guncellemeYapildiMiLicense As Boolean = False
     'Required by the Windows Form Designer
     Private components As System.ComponentModel.IContainer
     'NOTE: The following procedure is required by the Windows Form Designer
@@ -9560,6 +9561,12 @@ Public Class Form1
             ElseIf File.Exists("C:\Program Files\Business Smart\BUSINESS_SMART_POS_old.exe") Then
                 System.IO.File.Delete("C:\Program Files\Business Smart\BUSINESS_SMART_POS_old.exe")
             End If
+            ' LICENSE eski dosyasını sil
+            If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE_old.exe") Then
+                System.IO.File.Delete("C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE_old.exe")
+            ElseIf File.Exists("C:\Program Files\Business Smart\BUSINESS_LICENSE_old.exe") Then
+                System.IO.File.Delete("C:\Program Files\Business Smart\BUSINESS_LICENSE_old.exe")
+            End If
 
         Else
             otoGuncelleme = False
@@ -9717,7 +9724,7 @@ Public Class Form1
                             End If
                             My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x64/BUSINESS_SMART_POS.exe", "C:\Program Files (x86)\Business Smart\Util\BUSINESS_SMART_POS.exe", "Administrator", "!!AliTaner01018991!!")
                         Catch ex As Exception
-                            MessageBox.Show(ex.Message.ToString())
+                            Debug.WriteLine("[OtoGuncelleme] POS x64 download hata: " & ex.Message)
                         End Try
 
                     ElseIf File.Exists("C:\Program Files\Business Smart\BUSINESS_SMART_POS.exe") Then
@@ -9728,7 +9735,67 @@ Public Class Form1
                             End If
                             My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x86/BUSINESS_SMART_POS.exe", "C:\Program Files\Business Smart\Util\BUSINESS_SMART_POS.exe", "Administrator", "!!AliTaner01018991!!")
                         Catch ex As Exception
-                            MessageBox.Show(ex.Message.ToString())
+                            Debug.WriteLine("[OtoGuncelleme] POS x86 download hata: " & ex.Message)
+                        End Try
+                    End If
+                End If
+            End If
+            ' ============================================================
+
+            ' ============ BUSINESS_LICENSE.exe GÜNCELLEMESİ ============
+            Dim simdikiLicenseYolu As String = ""
+            Dim ftpPathLicense As String = ""
+            Dim simdikiVersionTarihLicense As DateTime
+            Dim guncelVersionTarihLicense As DateTime
+
+            If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE.exe") Then
+                simdikiLicenseYolu = "C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE.exe"
+                ftpPathLicense = "ftp://" & Ftp & "/BusinessSmart/x64/BUSINESS_LICENSE.exe"
+            ElseIf File.Exists("C:\Program Files\Business Smart\BUSINESS_LICENSE.exe") Then
+                simdikiLicenseYolu = "C:\Program Files\Business Smart\BUSINESS_LICENSE.exe"
+                ftpPathLicense = "ftp://" & Ftp & "/BusinessSmart/x86/BUSINESS_LICENSE.exe"
+            End If
+
+            If Not String.IsNullOrEmpty(simdikiLicenseYolu) Then
+                simdikiVersionTarihLicense = System.IO.File.GetLastWriteTime(simdikiLicenseYolu)
+
+                ' FTP'de olan LICENSE version
+                Try
+                    ftpRequest = FtpWebRequest.Create(New Uri(ftpPathLicense))
+                    ftpRequest.UseBinary = True
+                    ftpRequest.Credentials = New NetworkCredential("Administrator", "!!AliTaner01018991!!")
+                    ftpRequest.Method = WebRequestMethods.Ftp.GetDateTimestamp
+                    Dim responseLicense As FtpWebResponse = ftpRequest.GetResponse()
+                    guncelVersionTarihLicense = responseLicense.LastModified
+                    responseLicense.Close()
+                Catch ex As Exception
+                    ' LICENSE güncelleme hatası sessizce geç
+                    Debug.WriteLine("[OtoGuncelleme] LICENSE FTP tarih hata: " & ex.Message)
+                End Try
+
+                If DateTime.Compare(simdikiVersionTarihLicense, guncelVersionTarihLicense) < 0 Then
+                    If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE.exe") Then
+                        Try
+                            ' Hedef dosya varsa önce sil
+                            If File.Exists("C:\Program Files (x86)\Business Smart\Util\BUSINESS_LICENSE.exe") Then
+                                System.IO.File.Delete("C:\Program Files (x86)\Business Smart\Util\BUSINESS_LICENSE.exe")
+                            End If
+                            My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x64/BUSINESS_LICENSE.exe", "C:\Program Files (x86)\Business Smart\Util\BUSINESS_LICENSE.exe", "Administrator", "!!AliTaner01018991!!")
+                            guncellemeYapildiMiLicense = True
+                        Catch ex As Exception
+                            Debug.WriteLine("[OtoGuncelleme] LICENSE x64 download hata: " & ex.Message)
+                        End Try
+
+                    ElseIf File.Exists("C:\Program Files\Business Smart\BUSINESS_LICENSE.exe") Then
+                        Try
+                            ' Hedef dosya varsa önce sil
+                            If File.Exists("C:\Program Files\Business Smart\Util\BUSINESS_LICENSE.exe") Then
+                                System.IO.File.Delete("C:\Program Files\Business Smart\Util\BUSINESS_LICENSE.exe")
+                            End If
+                            My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x86/BUSINESS_LICENSE.exe", "C:\Program Files\Business Smart\Util\BUSINESS_LICENSE.exe", "Administrator", "!!AliTaner01018991!!")
+                            guncellemeYapildiMiLicense = True
+                        Catch ex As Exception
+                            Debug.WriteLine("[OtoGuncelleme] LICENSE x86 download hata: " & ex.Message)
                         End Try
                     End If
                 End If
@@ -18937,6 +19004,18 @@ Public Class Form1
                         System.IO.File.Delete("C:\Program Files\Business Smart\Util\BUSINESS_SMART_MANAGE.exe")
                     End If
 
+                End If
+                
+                If guncellemeYapildiMiLicense = True Then
+                    If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE.exe") Then
+                        My.Computer.FileSystem.RenameFile("C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE.exe", "BUSINESS_LICENSE_old.exe")
+                        System.IO.File.Copy("C:\Program Files (x86)\Business Smart\Util\BUSINESS_LICENSE.exe", "C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE.exe")
+                        System.IO.File.Delete("C:\Program Files (x86)\Business Smart\Util\BUSINESS_LICENSE.exe")
+                    ElseIf File.Exists("C:\Program Files\Business Smart\BUSINESS_LICENSE.exe") Then
+                        My.Computer.FileSystem.RenameFile("C:\Program Files\Business Smart\BUSINESS_LICENSE.exe", "BUSINESS_LICENSE_old.exe")
+                        System.IO.File.Copy("C:\Program Files\Business Smart\Util\BUSINESS_LICENSE.exe", "C:\Program Files\Business Smart\BUSINESS_LICENSE.exe")
+                        System.IO.File.Delete("C:\Program Files\Business Smart\Util\BUSINESS_LICENSE.exe")
+                    End If
                 End If
 
             Catch ex As Exception
