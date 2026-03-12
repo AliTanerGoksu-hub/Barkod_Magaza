@@ -9805,7 +9805,7 @@ Public Class Form1
     End Sub
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         'DevExpress.XtraBars.BarLinkUserDefines.Caption Or
-        
+
         ' ============ tbModelVaryantRenk TABLOSU KONTROLÜ VE OLUŞTURMA ============
         Try
             EnsureModelVaryantRenkTableExists()
@@ -9813,7 +9813,7 @@ Public Class Form1
             Debug.WriteLine("tbModelVaryantRenk tablo kontrolü hatası: " & ex.Message)
         End Try
         ' ==================================================================
-        
+
         ' ============ tbPazaryeriFaturaGonderim TABLOSU KONTROLÜ VE OLUŞTURMA ============
         Try
             EnsurePazaryeriFaturaGonderimTableExists()
@@ -9821,7 +9821,7 @@ Public Class Form1
             Debug.WriteLine("tbPazaryeriFaturaGonderim tablo kontrolü hatası: " & ex.Message)
         End Try
         ' ==================================================================
-        
+
         ' ============ sEfaturaUrl SÜTUNU KONTROLÜ VE OLUŞTURMA ============
         Try
             EnsureEfaturaUrlColumnExists()
@@ -9829,7 +9829,7 @@ Public Class Form1
             Debug.WriteLine("sEfaturaUrl sütun kontrolü hatası: " & ex.Message)
         End Try
         ' ==================================================================
-        
+
         ' ============ PAZARYERİ BASE URL GÜNCELLEMESİ ============
         Try
             UpdatePazaryeriBaseUrls()
@@ -9837,7 +9837,7 @@ Public Class Form1
             Debug.WriteLine("Pazaryeri BaseUrl güncelleme hatası: " & ex.Message)
         End Try
         ' ==================================================================
-        
+
         ' ============ SSL/TLS PROTOKOL AYARI (EN BASTA OLMALI) ============
         Try
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 Or System.Net.SecurityProtocolType.Tls11 Or System.Net.SecurityProtocolType.Tls
@@ -9846,7 +9846,7 @@ Public Class Form1
             Debug.WriteLine("SSL/TLS ayarı hatası: " & ex.Message)
         End Try
         ' ==================================================================
-        
+
         ' ============ AUDIT LOG SİSTEMİ BAŞLAT ============
         Try
             ' Kullanıcı adını kullan (kullaniciadi değişkeni)
@@ -9863,19 +9863,19 @@ Public Class Form1
             Debug.WriteLine("Audit Logger başlatma hatası: " & ex.Message)
         End Try
         ' ==================================================
-        
+
         ' ============ BILDIRIM KONTROLLERI ============
         Try
             ' Vadesi yaklasan cek/senetleri kontrol et (acilista bir kez)
             BildirimServisi.UygulamaAcilisKontrolleri()
-            
+
             ' Gunluk bildirim timer'ini baslat (her saat basinda kontrol)
             BildirimTimerBaslat()
         Catch ex As Exception
             Debug.WriteLine("Bildirim kontrolleri hatasi: " & ex.Message)
         End Try
         ' ==============================================
-        
+
         Try
             OtoGuncelleme()
 
@@ -9893,13 +9893,13 @@ Public Class Form1
             ' Default değerler: 18:00, Aktif durumu email'e bağlı
             otoMailDakika = 60 * 60
             otoMailSaat = TimeSpan.Parse("18:00")  ' Default: 18:00
-            
+
             ' Email adresini tbParamGenel'den al
             otoMailAdres = GetDefaultEmailAdres()
-            
+
             ' Email dolu ise Aktif, boş ise Pasif
             otoMail = Not String.IsNullOrWhiteSpace(otoMailAdres)
-            
+
             ' Registry'ye default değerleri kaydet
             Registry.CurrentUser.CreateSubKey("Software").CreateSubKey("BusinessSmart").CreateSubKey("OtoMail").SetValue("durum", otoMail.ToString())
             Registry.CurrentUser.CreateSubKey("Software").CreateSubKey("BusinessSmart").CreateSubKey("OtoMail").SetValue("adres", otoMailAdres)
@@ -10427,7 +10427,7 @@ Public Class Form1
         If ayniKul = True Then
             XtraMessageBox.Show("Bu lisans, Başka bir kullanıcı tarafından kullanılmaktadır!" & vbCrLf & Sorgu_sDil("Lütfen En Kısa Zamanda Yetkili Satıcınızla Görüşün...", sDil), "Business Smart")
         End If
-        
+
         ' ============ AUDIT LOG BUTONU OLUŞTUR ============
         Try
             Dim btnAuditLog As New DevExpress.XtraBars.BarButtonItem()
@@ -10439,7 +10439,7 @@ Public Class Form1
         Catch ex As Exception
             Debug.WriteLine("Audit Log butonu eklenemedi: " & ex.Message)
         End Try
-        
+
         ' ==================================================
         ' URETIM AYARLARI BUTONU (Tanimlar menusunde)
         ' ==================================================
@@ -10453,7 +10453,7 @@ Public Class Form1
         Catch ex As Exception
             Debug.WriteLine("Uretim Ayarlari butonu eklenemedi: " & ex.Message)
         End Try
-        
+
         ' ==================================================
         ' BILDIRIM AYARLARI BUTONU (Tanimlar menusunde)
         ' ==================================================
@@ -10467,7 +10467,7 @@ Public Class Form1
         Catch ex As Exception
             Debug.WriteLine("Bildirim Ayarlari butonu eklenemedi: " & ex.Message)
         End Try
-        
+
         ' ==================================================
         ' SATIN ALMA TALEPLERI BUTONU (rbmStokYonetimi menusunde)
         ' ==================================================
@@ -10483,7 +10483,7 @@ Public Class Form1
         End Try
         ' ==================================================
     End Sub
-    
+
     ''' <summary>
     ''' Uretim Ayarlari formunu acar (Sadece uretim sekmeleri)
     ''' </summary>
@@ -10497,7 +10497,7 @@ Public Class Form1
             MessageBox.Show("Uretim Ayarlari formu acilamadi: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    
+
     ''' <summary>
     ''' Bildirim Ayarlari formunu acar
     ''' </summary>
@@ -10524,11 +10524,11 @@ Public Class Form1
             MessageBox.Show("Satin Alma Talepleri formu acilamadi: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    
+
     ' ============ BILDIRIM TIMER SISTEMI ============
     Private WithEvents bildirimTimer As New System.Timers.Timer()
     Private sonBildirimKontrolTarihi As Date = Date.MinValue
-    
+
     ''' <summary>
     ''' Bildirim timer'ini baslatir - Her saat basinda kontrol yapar
     ''' </summary>
@@ -10543,7 +10543,7 @@ Public Class Form1
             Debug.WriteLine("BildirimTimerBaslat Hata: " & ex.Message)
         End Try
     End Sub
-    
+
     ''' <summary>
     ''' Timer tick - Her saat basinda calisir
     ''' </summary>
@@ -10551,22 +10551,22 @@ Public Class Form1
         Try
             ' Gunde bir kez kontrol yap (saat 09:00-10:00 arasi)
             Dim simdikiSaat As Integer = DateTime.Now.Hour
-            
+
             If simdikiSaat = 9 AndAlso sonBildirimKontrolTarihi.Date <> DateTime.Now.Date Then
                 ' Bugun henuz kontrol yapilmamis, yap
                 sonBildirimKontrolTarihi = DateTime.Now
-                
+
                 ' Thread-safe cagri
                 Me.BeginInvoke(Sub()
-                    Try
-                        BildirimServisi.VadeKontrolEtVeBildir()
-                        ' 24 saat icinde teslim edilmeyen/okunmayan bildirimleri kontrol et
-                        BildirimServisi.TeslimEdilmeyenBildirimleriKontrolEt()
-                        ' Kritik stok kontrolu (opsiyonel - performans icin kapali)
-                        ' BildirimServisi.KritikStokKontrolEtVeBildir()
-                    Catch
-                    End Try
-                End Sub)
+                                   Try
+                                       BildirimServisi.VadeKontrolEtVeBildir()
+                                       ' 24 saat icinde teslim edilmeyen/okunmayan bildirimleri kontrol et
+                                       BildirimServisi.TeslimEdilmeyenBildirimleriKontrolEt()
+                                       ' Kritik stok kontrolu (opsiyonel - performans icin kapali)
+                                       ' BildirimServisi.KritikStokKontrolEtVeBildir()
+                                   Catch
+                                   End Try
+                               End Sub)
             End If
         Catch ex As Exception
             Debug.WriteLine("bildirimTimer_Elapsed Hata: " & ex.Message)
@@ -11255,7 +11255,7 @@ Public Class Form1
             sec_mdl.Items.Clear()
             sLicenseModule.Items.Clear()
             Dim Wrap As String = Chr(13) + Chr(10)
-            
+
             Try
                 FileOpen(fileHandle, dosya, OpenMode.Input)
                 Do Until EOF(fileHandle)
@@ -11306,7 +11306,7 @@ Public Class Form1
                 Catch
                 End Try
             End Try
-            
+
             ' Dosyayı sil
             Try
                 Dim fileEncrypted As New FileInfo(dosya)
@@ -11319,7 +11319,7 @@ Public Class Form1
                 sLicenseModule.Items.Clear()
                 sayi = 0
                 lbl_Dist.Text = ""
-                
+
                 ' StreamReader ile güvenli dosya okuma
                 Try
                     Using sk As New StreamReader(dosya)
@@ -11354,14 +11354,14 @@ Public Class Form1
                 Catch ex As Exception
                     Debug.WriteLine("YeniLicense dosya okuma hatası: " & ex.Message)
                 End Try
-                
+
                 ' Dosyayı sil
                 Try
                     If File.Exists(dosya) Then File.Delete(dosya)
                 Catch
                 End Try
             End If
-            
+
             sec_mdl.Items.Insert(1, "Peşin")
             sLicenseModule.Items.Add("Peşin")
             s = Nothing
@@ -19018,7 +19018,7 @@ Public Class Form1
                     End If
 
                 End If
-                
+
                 If guncellemeYapildiMiLicense = True Then
                     If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE.exe") Then
                         If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE_old.exe") Then
@@ -19704,98 +19704,98 @@ Public Class Form1
             ElseIf TimeSerial(Now.Hour, Now.Minute, Now.Second) = "14:00:00" Then
                 ' 14:00 yedeğini async olarak başlat - Gelişmiş FTP Yedekleme
                 System.Threading.Tasks.Task.Run(Sub()
-                    Try
-                        Dim cmd As New OleDb.OleDbCommand
-                        Dim cmd1 As New OleDb.OleDbCommand
-                        Dim con As New OleDb.OleDbConnection
-                        Dim con1 As New OleDb.OleDbConnection
-                        Dim Ftp As String = ""
-                        Dim FirmaID As String = ""
-                        Dim Source As String = ""
-                        Dim sOzelNot As String = ""
-                        
-                        ' Yerel DB'den bilgileri al
-                        con.ConnectionString = connection
-                        cmd.Connection = con
-                        con.Open()
-                        cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT TOP 1 Lisans FROM tbParamGenel")
-                        Source = cmd.ExecuteScalar.ToString()
-                        cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT TOP 1 EticaretFtp FROM tbParamGenel")
-                        Ftp = cmd.ExecuteScalar.ToString()
-                        con.Close()
-                        
-                        ' Uzak DB bağlantısı - hata varsa logla ve devam et
-                        Try
-                            con1.ConnectionString = "Provider=SQLOLEDB.1;Password=87918991;Persist Security Info=True;User ID=bayii1;Initial Catalog=BAYII;Data Source= '" & Source & ",8991'"
-                            cmd1.Connection = con1
-                            con1.Open()
-                            cmd1.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT nFirmaID FROM tbFirmaLisans WHERE (sOnayKodu = '" & sOnayKodu & "')")
-                            Dim firmaResult = cmd1.ExecuteScalar()
-                            FirmaID = If(firmaResult IsNot Nothing AndAlso firmaResult IsNot DBNull.Value, firmaResult.ToString(), "")
-                            
-                            If Not String.IsNullOrEmpty(FirmaID) Then
-                                cmd1.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT sOzelNot FROM tbFirma WHERE (nFirmaID='" & FirmaID & "')")
-                                Dim ozelNotResult = cmd1.ExecuteScalar()
-                                sOzelNot = If(ozelNotResult IsNot Nothing AndAlso ozelNotResult IsNot DBNull.Value, ozelNotResult.ToString(), sOnayKodu)
-                            Else
-                                sOzelNot = sOnayKodu
-                            End If
-                            con1.Close()
-                        Catch dbEx As Exception
-                            sOzelNot = sOnayKodu
-                            logla("14:00 Yedek - Uzak DB hatası: " & dbEx.Message)
-                        End Try
-                        
-                        ' Yedek dosya yolu
-                        Dim localYedekPath As String = sYedekPath & "\" & sOzelNot & "_" & sDatabaseGenel & "_" & Now.Year & "_" & Now.Month & "_" & Now.Day & ".BCK"
-                        
-                        ' Gelişmiş yedekleme: 7z sıkıştırma + parçalı FTP upload
-                        If Not String.IsNullOrEmpty(Ftp) Then
-                            GelismisYedekVeGonder(sDatabaseGenel, localYedekPath, Ftp, "Administrator", "!!AliTaner01018991!!")
-                        Else
-                            ' FTP yoksa sadece yerel yedek al
-                            yedekle(sDatabaseGenel, localYedekPath, bOtomatikYedekRar)
-                        End If
-                        
-                    Catch ex As Exception
-                        logla("14:00 Yedek - Genel hata: " & ex.Message)
-                    End Try
-                End Sub)
+                                                    Try
+                                                        Dim cmd As New OleDb.OleDbCommand
+                                                        Dim cmd1 As New OleDb.OleDbCommand
+                                                        Dim con As New OleDb.OleDbConnection
+                                                        Dim con1 As New OleDb.OleDbConnection
+                                                        Dim Ftp As String = ""
+                                                        Dim FirmaID As String = ""
+                                                        Dim Source As String = ""
+                                                        Dim sOzelNot As String = ""
+
+                                                        ' Yerel DB'den bilgileri al
+                                                        con.ConnectionString = connection
+                                                        cmd.Connection = con
+                                                        con.Open()
+                                                        cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT TOP 1 Lisans FROM tbParamGenel")
+                                                        Source = cmd.ExecuteScalar.ToString()
+                                                        cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT TOP 1 EticaretFtp FROM tbParamGenel")
+                                                        Ftp = cmd.ExecuteScalar.ToString()
+                                                        con.Close()
+
+                                                        ' Uzak DB bağlantısı - hata varsa logla ve devam et
+                                                        Try
+                                                            con1.ConnectionString = "Provider=SQLOLEDB.1;Password=87918991;Persist Security Info=True;User ID=bayii1;Initial Catalog=BAYII;Data Source= '" & Source & ",8991'"
+                                                            cmd1.Connection = con1
+                                                            con1.Open()
+                                                            cmd1.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT nFirmaID FROM tbFirmaLisans WHERE (sOnayKodu = '" & sOnayKodu & "')")
+                                                            Dim firmaResult = cmd1.ExecuteScalar()
+                                                            FirmaID = If(firmaResult IsNot Nothing AndAlso firmaResult IsNot DBNull.Value, firmaResult.ToString(), "")
+
+                                                            If Not String.IsNullOrEmpty(FirmaID) Then
+                                                                cmd1.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT sOzelNot FROM tbFirma WHERE (nFirmaID='" & FirmaID & "')")
+                                                                Dim ozelNotResult = cmd1.ExecuteScalar()
+                                                                sOzelNot = If(ozelNotResult IsNot Nothing AndAlso ozelNotResult IsNot DBNull.Value, ozelNotResult.ToString(), sOnayKodu)
+                                                            Else
+                                                                sOzelNot = sOnayKodu
+                                                            End If
+                                                            con1.Close()
+                                                        Catch dbEx As Exception
+                                                            sOzelNot = sOnayKodu
+                                                            logla("14:00 Yedek - Uzak DB hatası: " & dbEx.Message)
+                                                        End Try
+
+                                                        ' Yedek dosya yolu
+                                                        Dim localYedekPath As String = sYedekPath & "\" & sOzelNot & "_" & sDatabaseGenel & "_" & Now.Year & "_" & Now.Month & "_" & Now.Day & ".BCK"
+
+                                                        ' Gelişmiş yedekleme: 7z sıkıştırma + parçalı FTP upload
+                                                        If Not String.IsNullOrEmpty(Ftp) Then
+                                                            GelismisYedekVeGonder(sDatabaseGenel, localYedekPath, Ftp, "Administrator", "!!AliTaner01018991!!")
+                                                        Else
+                                                            ' FTP yoksa sadece yerel yedek al
+                                                            yedekle(sDatabaseGenel, localYedekPath, bOtomatikYedekRar)
+                                                        End If
+
+                                                    Catch ex As Exception
+                                                        logla("14:00 Yedek - Genel hata: " & ex.Message)
+                                                    End Try
+                                                End Sub)
 
             ElseIf TimeSerial(Now.Hour, Now.Minute, Now.Second) = "02:00:00" Then
                 ' 02:00 - Başarısız FTP yedeklerini tekrar dene
                 If bFtpYedekBasarisiz AndAlso Not String.IsNullOrEmpty(sFtpYedekDosya) Then
                     System.Threading.Tasks.Task.Run(Sub()
-                        Try
-                            logla("[02:00 Retry] Başarısız FTP yedeği tekrar deneniyor...")
-                            
-                            Dim cmd As New OleDb.OleDbCommand
-                            Dim con As New OleDb.OleDbConnection
-                            Dim Ftp As String = ""
-                            
-                            con.ConnectionString = connection
-                            cmd.Connection = con
-                            con.Open()
-                            cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT TOP 1 EticaretFtp FROM tbParamGenel")
-                            Ftp = cmd.ExecuteScalar.ToString()
-                            con.Close()
-                            
-                            If File.Exists(sFtpYedekDosya) AndAlso Not String.IsNullOrEmpty(Ftp) Then
-                                Dim dosyaAdi As String = Path.GetFileName(sFtpYedekDosya)
-                                Dim ftpHedef As String = "ftp://" & Ftp & "/backup/" & dosyaAdi
-                                
-                                If ParcaliFtpUpload(sFtpYedekDosya, ftpHedef, "Administrator", "!!AliTaner01018991!!") Then
-                                    logla("[02:00 Retry] FTP upload başarılı!")
-                                    bFtpYedekBasarisiz = False
-                                    sFtpYedekDosya = ""
-                                Else
-                                    logla("[02:00 Retry] FTP upload hala başarısız")
-                                End If
-                            End If
-                        Catch ex As Exception
-                            logla("[02:00 Retry] Hata: " & ex.Message)
-                        End Try
-                    End Sub)
+                                                        Try
+                                                            logla("[02:00 Retry] Başarısız FTP yedeği tekrar deneniyor...")
+
+                                                            Dim cmd As New OleDb.OleDbCommand
+                                                            Dim con As New OleDb.OleDbConnection
+                                                            Dim Ftp As String = ""
+
+                                                            con.ConnectionString = connection
+                                                            cmd.Connection = con
+                                                            con.Open()
+                                                            cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT TOP 1 EticaretFtp FROM tbParamGenel")
+                                                            Ftp = cmd.ExecuteScalar.ToString()
+                                                            con.Close()
+
+                                                            If File.Exists(sFtpYedekDosya) AndAlso Not String.IsNullOrEmpty(Ftp) Then
+                                                                Dim dosyaAdi As String = Path.GetFileName(sFtpYedekDosya)
+                                                                Dim ftpHedef As String = "ftp://" & Ftp & "/backup/" & dosyaAdi
+
+                                                                If ParcaliFtpUpload(sFtpYedekDosya, ftpHedef, "Administrator", "!!AliTaner01018991!!") Then
+                                                                    logla("[02:00 Retry] FTP upload başarılı!")
+                                                                    bFtpYedekBasarisiz = False
+                                                                    sFtpYedekDosya = ""
+                                                                Else
+                                                                    logla("[02:00 Retry] FTP upload hala başarısız")
+                                                                End If
+                                                            End If
+                                                        Catch ex As Exception
+                                                            logla("[02:00 Retry] Hata: " & ex.Message)
+                                                        End Try
+                                                    End Sub)
                 End If
 
             ElseIf TimeSerial(Now.Hour, Now.Minute, Now.Second) = "18:00:00" Then
@@ -21737,11 +21737,11 @@ Public Class Form1
         emir_ajandalar.dataload()
         emir_ajandalar.dataload_gorev(emir_ajandalar.DateEdit1.EditValue, emir_ajandalar.sec_personel.EditValue, emir_ajandalar.sec_durum.Text, emir_ajandalar.sec_tamamlandi.Text)
         grd_ajanda.DataSource = emir_ajandalar.DataSet1.Tables(0)
-        
+
         ' Bildirim sayisini guncelle
         GuncelleGorevBildirimSayisi()
     End Sub
-    
+
     ''' <summary>
     ''' Okunmamis gorev ve bildirim sayisini gunceller ve panelde gosterir
     ''' </summary>
@@ -21754,17 +21754,17 @@ Public Class Form1
             Catch
                 ' Eger tanimli degilse 0 kalsin
             End Try
-            
+
             If nKullaniciID > 0 Then
                 ' Okunmamis gorev sayisi
                 Dim nGorevSayisi As Integer = BildirimServisi.OkunmamisGorevSayisi(nKullaniciID)
-                
+
                 ' Okunmamis bildirim sayisi
                 Dim nBildirimSayisi As Integer = BildirimServisi.OkunmamisBildirimSayisi(nKullaniciID)
-                
+
                 ' Toplam
                 Dim nToplam As Integer = nGorevSayisi + nBildirimSayisi
-                
+
                 ' Panel basligini guncelle
                 If nToplam > 0 Then
                     DockPanel1.Text = "Gorevler (" & nToplam & " yeni)"
@@ -22353,18 +22353,18 @@ Public Class Form1
             Dim con As New OleDb.OleDbConnection
             cmd.Connection = con
             con.ConnectionString = connection
-            
+
             If con.State = ConnectionState.Closed Then
                 con.Open()
             End If
-            
+
             cmd.CommandText = "SELECT Email FROM tbParamGenel WHERE nFirmaNo = " & firmano
             Dim result As Object = cmd.ExecuteScalar()
-            
+
             con.Close()
             cmd.Dispose()
             con.Dispose()
-            
+
             If result IsNot Nothing AndAlso Not IsDBNull(result) Then
                 Return result.ToString().Trim()
             Else
@@ -22374,14 +22374,14 @@ Public Class Form1
             Return ""
         End Try
     End Function
-    
+
     Private Sub BaslatTimer()
         Try
             If otoMail Then
                 Dim hedefSaat As TimeSpan = otoMailSaat
                 Dim suAn As TimeSpan = Now.TimeOfDay
                 Dim gecikme As TimeSpan = If(suAn < hedefSaat, hedefSaat - suAn, TimeSpan.FromDays(1) + hedefSaat - suAn)
-                
+
                 OtoMailTimer.Interval = Math.Min(CInt(gecikme.TotalMilliseconds), Integer.MaxValue)
                 OtoMailTimer.Start()
             End If
@@ -22655,7 +22655,7 @@ Public Class Form1
     'End Function
 
     ' ===== AI SISTEM MENU FONKSIYONLARI =====
-    
+
     Private Sub btnAISistemi_ItemClick(sender As Object, e As DevExpress.XtraBars.ItemClickEventArgs) Handles btnAISistemi.ItemClick
         Try
             Dim aiMenu As New Form()
@@ -22666,7 +22666,7 @@ Public Class Form1
             aiMenu.BackColor = Color.White
             aiMenu.MaximizeBox = False
             aiMenu.MinimizeBox = False
-            
+
             ' Başlık etiketi
             Dim lblBaslik As New Label()
             lblBaslik.Text = "AI Sistemi Menüsü"
@@ -22675,9 +22675,9 @@ Public Class Form1
             lblBaslik.Location = New Point(20, 15)
             lblBaslik.AutoSize = True
             aiMenu.Controls.Add(lblBaslik)
-            
+
             Dim yPos As Integer = 60
-            
+
             ' ===== GENEL İŞLEMLER =====
             Dim lblGenel As New Label()
             lblGenel.Text = "📋 GENEL İŞLEMLER"
@@ -22687,7 +22687,7 @@ Public Class Form1
             lblGenel.AutoSize = True
             aiMenu.Controls.Add(lblGenel)
             yPos += 30
-            
+
             Dim btnAyarlar As New DevExpress.XtraEditors.SimpleButton()
             btnAyarlar.Text = "⚙️ AI Ayarları"
             btnAyarlar.Location = New Point(20, yPos)
@@ -22697,13 +22697,13 @@ Public Class Form1
             btnAyarlar.Appearance.BorderColor = Color.FromArgb(180, 180, 200)
             btnAyarlar.Font = New Font("Segoe UI", 10, FontStyle.Regular)
             AddHandler btnAyarlar.Click, Sub()
-                aiMenu.Close()
-                Dim frm As New frm_AIAyarlari()
-                frm.ShowDialog()
-            End Sub
+                                             aiMenu.Close()
+                                             Dim frm As New frm_AIAyarlari()
+                                             frm.ShowDialog()
+                                         End Sub
             aiMenu.Controls.Add(btnAyarlar)
             yPos += 55
-            
+
             Dim btnTekUrun As New DevExpress.XtraEditors.SimpleButton()
             btnTekUrun.Text = "🔄 Tek Ürün İşle"
             btnTekUrun.Location = New Point(20, yPos)
@@ -22713,13 +22713,13 @@ Public Class Form1
             btnTekUrun.Appearance.BorderColor = Color.FromArgb(180, 180, 200)
             btnTekUrun.Font = New Font("Segoe UI", 10, FontStyle.Regular)
             AddHandler btnTekUrun.Click, Sub()
-                aiMenu.Close()
-                Dim frm As New frm_AIUrunIsle()
-                frm.Show()
-            End Sub
+                                             aiMenu.Close()
+                                             Dim frm As New frm_AIUrunIsle()
+                                             frm.Show()
+                                         End Sub
             aiMenu.Controls.Add(btnTekUrun)
             yPos += 55
-            
+
             Dim btnStokListe As New DevExpress.XtraEditors.SimpleButton()
             btnStokListe.Text = "📦 Toplu İşlem (Web Ürünleri)"
             btnStokListe.Location = New Point(20, yPos)
@@ -22729,13 +22729,13 @@ Public Class Form1
             btnStokListe.Appearance.BorderColor = Color.FromArgb(180, 180, 200)
             btnStokListe.Font = New Font("Segoe UI", 10, FontStyle.Regular)
             AddHandler btnStokListe.Click, Sub()
-                aiMenu.Close()
-                Dim frm As New frm_AIUrunIsle()
-                frm.Show()
-            End Sub
+                                               aiMenu.Close()
+                                               Dim frm As New frm_AIUrunIsle()
+                                               frm.Show()
+                                           End Sub
             aiMenu.Controls.Add(btnStokListe)
             yPos += 70
-            
+
             ' ===== TRENDYOL İŞLEMLERİ =====
             Dim lblTrendyol As New Label()
             lblTrendyol.Text = "🛒 TRENDYOL İŞLEMLERİ"
@@ -22745,7 +22745,7 @@ Public Class Form1
             lblTrendyol.AutoSize = True
             aiMenu.Controls.Add(lblTrendyol)
             yPos += 30
-            
+
             ' Trendyol Kategori Eşleştirme butonu
             Dim btnTrendyolKategori As New DevExpress.XtraEditors.SimpleButton()
             btnTrendyolKategori.Text = "🏷️ Trendyol Kategori Eşleştir"
@@ -22755,20 +22755,20 @@ Public Class Form1
             btnTrendyolKategori.Appearance.ForeColor = Color.Black
             btnTrendyolKategori.Font = New Font("Segoe UI", 10, FontStyle.Bold)
             AddHandler btnTrendyolKategori.Click, Sub()
-                aiMenu.Close()
-                Try
-                    Dim frm As New frm_TrendyolKategoriEslestir()
-                    frm.WindowState = FormWindowState.Normal
-                    frm.StartPosition = FormStartPosition.CenterScreen
-                    frm.Show()
-                    frm.Activate()
-                Catch ex As Exception
-                    MessageBox.Show("Form açılamadı: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End Try
-            End Sub
+                                                      aiMenu.Close()
+                                                      Try
+                                                          Dim frm As New frm_TrendyolKategoriEslestir()
+                                                          frm.WindowState = FormWindowState.Normal
+                                                          frm.StartPosition = FormStartPosition.CenterScreen
+                                                          frm.Show()
+                                                          frm.Activate()
+                                                      Catch ex As Exception
+                                                          MessageBox.Show("Form açılamadı: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                                      End Try
+                                                  End Sub
             aiMenu.Controls.Add(btnTrendyolKategori)
             yPos += 55
-            
+
             ' Trendyol API Ayarları butonu
             Dim btnTrendyolAyar As New DevExpress.XtraEditors.SimpleButton()
             btnTrendyolAyar.Text = "⚙️ Trendyol API Ayarları"
@@ -22778,12 +22778,12 @@ Public Class Form1
             btnTrendyolAyar.Appearance.ForeColor = Color.Black
             btnTrendyolAyar.Font = New Font("Segoe UI", 10, FontStyle.Regular)
             AddHandler btnTrendyolAyar.Click, Sub()
-                aiMenu.Close()
-                OpenTrendyolAyar()
-            End Sub
+                                                  aiMenu.Close()
+                                                  OpenTrendyolAyar()
+                                              End Sub
             aiMenu.Controls.Add(btnTrendyolAyar)
             yPos += 55
-            
+
             ' Trendyol BuyBox Analiz butonu
             Dim btnTrendyolBuyBox As New DevExpress.XtraEditors.SimpleButton()
             btnTrendyolBuyBox.Text = "🔍 Trendyol BuyBox Analiz"
@@ -22793,12 +22793,12 @@ Public Class Form1
             btnTrendyolBuyBox.Appearance.ForeColor = Color.Black
             btnTrendyolBuyBox.Font = New Font("Segoe UI", 10, FontStyle.Regular)
             AddHandler btnTrendyolBuyBox.Click, Sub()
-                aiMenu.Close()
-                OpenTrendyolBuyBoxAnaliz()
-            End Sub
+                                                    aiMenu.Close()
+                                                    OpenTrendyolBuyBoxAnaliz()
+                                                End Sub
             aiMenu.Controls.Add(btnTrendyolBuyBox)
             yPos += 55
-            
+
             ' Trendyol Fiyat/Stok Senkronizasyon butonu
             Dim btnTrendyolSync As New DevExpress.XtraEditors.SimpleButton()
             btnTrendyolSync.Text = "🔄 Trendyol Fiyat/Stok Senkron"
@@ -22808,12 +22808,12 @@ Public Class Form1
             btnTrendyolSync.Appearance.ForeColor = Color.Black
             btnTrendyolSync.Font = New Font("Segoe UI", 10, FontStyle.Regular)
             AddHandler btnTrendyolSync.Click, Sub()
-                aiMenu.Close()
-                OpenTrendyolEntegrasyon()
-            End Sub
+                                                  aiMenu.Close()
+                                                  OpenTrendyolEntegrasyon()
+                                              End Sub
             aiMenu.Controls.Add(btnTrendyolSync)
             yPos += 70
-            
+
             ' ===== RAPORLAR =====
             Dim lblRaporlar As New Label()
             lblRaporlar.Text = "📊 RAPORLAR"
@@ -22823,7 +22823,7 @@ Public Class Form1
             lblRaporlar.AutoSize = True
             aiMenu.Controls.Add(lblRaporlar)
             yPos += 30
-            
+
             ' AI Kullanım Raporu butonu
             Dim btnKullanimRaporu As New DevExpress.XtraEditors.SimpleButton()
             btnKullanimRaporu.Text = "📊 AI Kullanım Raporu"
@@ -22833,23 +22833,23 @@ Public Class Form1
             btnKullanimRaporu.Appearance.ForeColor = Color.Black
             btnKullanimRaporu.Font = New Font("Segoe UI", 10, FontStyle.Regular)
             AddHandler btnKullanimRaporu.Click, Sub()
-                aiMenu.Close()
-                Try
-                    Dim frm As New frm_AIKullanimRaporu()
-                    frm.Show()
-                Catch ex As Exception
-                    MessageBox.Show("Rapor açılamadı: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End Try
-            End Sub
+                                                    aiMenu.Close()
+                                                    Try
+                                                        Dim frm As New frm_AIKullanimRaporu()
+                                                        frm.Show()
+                                                    Catch ex As Exception
+                                                        MessageBox.Show("Rapor açılamadı: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                                    End Try
+                                                End Sub
             aiMenu.Controls.Add(btnKullanimRaporu)
-            
+
             aiMenu.ShowDialog()
-            
+
         Catch ex As Exception
             MessageBox.Show("Hata: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    
+
     ' ===== AI SISTEM FONKSIYONLARI SONU =====
 
     ' ===== AUDIT LOG SİSTEMİ =====
@@ -22897,30 +22897,30 @@ Public Class Form1
         Try
             ' Email öncelik kontrolü: Manuel > tbParamGenel.Email
             Dim emailAdresi As String = otoMailAdres
-            
+
             ' Eğer manuel email girilmemişse, tbParamGenel'den al
             If String.IsNullOrWhiteSpace(emailAdresi) Then
                 emailAdresi = GetDefaultEmailAdres()
-                
+
                 ' Eğer hala boşsa, gönderme
                 If String.IsNullOrWhiteSpace(emailAdresi) Then
                     Return
                 End If
-                
+
                 ' tbParamGenel'den alınan email'i otoMailAdres'e ata (bir sonraki sefere için)
                 otoMailAdres = emailAdresi
             End If
-            
+
             ' otoMailKontrol flag'ini aç - frm_Gonderi bu flag'i kontrol eder
             otoMailKontrol = True
-            
+
             ' frm_Gonderi formunu aç - bu form raporları hazırlayıp gönderecek
             Dim frmGonderi As New frm_Gonderi()
             frmGonderi.firmano = firmano
             frmGonderi.donemno = donemno
             frmGonderi.kullanici = kullanici
             frmGonderi.connection = connection
-            
+
             ' Form açılır, 900 saniye (15 dakika) içinde:
             ' - Raporları hazırlar (895. saniyede hazirla() çağrılır)
             ' - Mail gönderir (mail_gonder() otomatik çağrılır)
@@ -22933,21 +22933,21 @@ Public Class Form1
     End Sub
 
     ' ===== TRENDYOL & HEPSİBURADA RESİM YÜKLEME FONKSİYONLARI =====
-    
+
     ''' <summary>
     ''' Trendyol Excel'inden resim linklerini okuyup ürünlere yükler
     ''' </summary>
     Private Sub btnTrendyolResimYukle_ItemClick(sender As Object, e As DevExpress.XtraBars.ItemClickEventArgs) Handles btnTrendyolResimYukle.ItemClick
         YukleETicaretResimleri("Trendyol")
     End Sub
-    
+
     ''' <summary>
     ''' Hepsiburada Excel'inden resim linklerini okuyup ürünlere yükler
     ''' </summary>
     Private Sub btnHepsiBuradaResimYukle_ItemClick(sender As Object, e As DevExpress.XtraBars.ItemClickEventArgs) Handles btnHepsiBuradaResimYukle.ItemClick
         YukleETicaretResimleri("Hepsiburada")
     End Sub
-    
+
     ''' <summary>
     ''' E-Ticaret platformlarından Excel'deki resim linklerini okuyup ürünlere yükler
     ''' </summary>
@@ -22957,29 +22957,29 @@ Public Class Form1
             Using ofd As New OpenFileDialog()
                 ofd.Title = platform & " Excel Dosyası Seçin"
                 ofd.Filter = "Excel Dosyaları (*.xlsx;*.xls)|*.xlsx;*.xls"
-                
+
                 If ofd.ShowDialog() <> DialogResult.OK Then Exit Sub
-                
+
                 Dim excelPath As String = ofd.FileName
-                
+
                 ' Excel'i Microsoft.Office.Interop.Excel ile oku
                 Dim excelApp As Microsoft.Office.Interop.Excel.Application = Nothing
                 Dim workbook As Microsoft.Office.Interop.Excel.Workbook = Nothing
                 Dim worksheet As Microsoft.Office.Interop.Excel.Worksheet = Nothing
-                
+
                 Try
                     excelApp = New Microsoft.Office.Interop.Excel.Application()
                     excelApp.Visible = False
                     excelApp.DisplayAlerts = False
-                    
+
                     workbook = excelApp.Workbooks.Open(excelPath)
                     worksheet = CType(workbook.Sheets(1), Microsoft.Office.Interop.Excel.Worksheet)
-                    
+
                     ' Kullanılan alanı al
                     Dim usedRange As Microsoft.Office.Interop.Excel.Range = worksheet.UsedRange
                     Dim rowCount As Integer = usedRange.Rows.Count
                     Dim colCount As Integer = usedRange.Columns.Count
-                    
+
                     ' Sütun başlıklarını oku
                     Dim sutunlar As New System.Collections.Generic.List(Of String)()
                     For col As Integer = 1 To colCount
@@ -22990,16 +22990,16 @@ Public Class Form1
                             sutunlar.Add("(Boş)")
                         End If
                     Next
-                    
+
                     ' Excel verilerini önizleme için oku (ilk 10 satır)
                     Dim previewRowCount As Integer = Math.Min(rowCount, 11) ' başlık + 10 satır
                     Dim previewData As New System.Data.DataTable()
-                    
+
                     ' Sütunları ekle
                     For col As Integer = 1 To colCount
                         previewData.Columns.Add(sutunlar(col - 1))
                     Next
-                    
+
                     ' Veri satırlarını ekle
                     For row As Integer = 2 To previewRowCount
                         Dim newRow As System.Data.DataRow = previewData.NewRow()
@@ -23009,11 +23009,11 @@ Public Class Form1
                         Next
                         previewData.Rows.Add(newRow)
                     Next
-                    
+
                     ' Seçilen sütunları takip et
                     Dim selectedBarkodCol As Integer = -1
                     Dim selectedResimCols As New System.Collections.Generic.List(Of Integer)()
-                    
+
                     ' Sütun eşleştirme formu göster (Excel önizleme ile)
                     Dim eslestirmeForm As New Form()
                     eslestirmeForm.Text = "Excel Sütun Eşleştirme - " & platform
@@ -23022,24 +23022,24 @@ Public Class Form1
                     eslestirmeForm.FormBorderStyle = FormBorderStyle.Sizable
                     eslestirmeForm.MaximizeBox = True
                     eslestirmeForm.MinimizeBox = False
-                    
+
                     ' Bilgi etiketi
                     Dim lblInfo As New Label()
-                    lblInfo.Text = "Sütun başlıklarına tıklayarak seçim yapın:" & vbCrLf & 
-                                   "• Sol tık = Barkod sütunu (yeşil)" & vbCrLf & 
+                    lblInfo.Text = "Sütun başlıklarına tıklayarak seçim yapın:" & vbCrLf &
+                                   "• Sol tık = Barkod sütunu (yeşil)" & vbCrLf &
                                    "• Sağ tık = Resim sütunu ekle/çıkar (mavi)"
                     lblInfo.Location = New Point(20, 10)
                     lblInfo.AutoSize = True
                     lblInfo.Font = New Font(lblInfo.Font, FontStyle.Bold)
                     eslestirmeForm.Controls.Add(lblInfo)
-                    
+
                     ' Seçim durumu etiketi
                     Dim lblSecim As New Label()
                     lblSecim.Location = New Point(20, 65)
                     lblSecim.AutoSize = True
                     lblSecim.Text = "Barkod: (seçilmedi) | Resim Sütunları: 0 adet"
                     eslestirmeForm.Controls.Add(lblSecim)
-                    
+
                     ' DataGridView
                     Dim dgvPreview As New System.Windows.Forms.DataGridView()
                     dgvPreview.Location = New Point(20, 95)
@@ -23053,31 +23053,31 @@ Public Class Form1
                     dgvPreview.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells
                     dgvPreview.ColumnHeadersDefaultCellStyle.Font = New Font(dgvPreview.Font, FontStyle.Bold)
                     eslestirmeForm.Controls.Add(dgvPreview)
-                    
+
                     ' Sütun renklerini güncelleme fonksiyonu
                     Dim updateColumnColors As Action = Sub()
-                        For i As Integer = 0 To dgvPreview.Columns.Count - 1
-                            ' SortMode'u devre dışı bırak (ColumnHeaderSelect için gerekli)
-                            dgvPreview.Columns(i).SortMode = DataGridViewColumnSortMode.NotSortable
-                            
-                            If i = selectedBarkodCol Then
-                                dgvPreview.Columns(i).HeaderCell.Style.BackColor = Color.LightGreen
-                                dgvPreview.Columns(i).DefaultCellStyle.BackColor = Color.Honeydew
-                            ElseIf selectedResimCols.Contains(i) Then
-                                dgvPreview.Columns(i).HeaderCell.Style.BackColor = Color.LightBlue
-                                dgvPreview.Columns(i).DefaultCellStyle.BackColor = Color.AliceBlue
-                            Else
-                                dgvPreview.Columns(i).HeaderCell.Style.BackColor = SystemColors.Control
-                                dgvPreview.Columns(i).DefaultCellStyle.BackColor = Color.White
-                            End If
-                        Next
-                        dgvPreview.Refresh()
-                        
-                        ' Seçim etiketini güncelle
-                        Dim barkodText As String = If(selectedBarkodCol >= 0, sutunlar(selectedBarkodCol), "(seçilmedi)")
-                        lblSecim.Text = "Barkod: " & barkodText & " | Resim Sütunları: " & selectedResimCols.Count.ToString() & " adet"
-                    End Sub
-                    
+                                                           For i As Integer = 0 To dgvPreview.Columns.Count - 1
+                                                               ' SortMode'u devre dışı bırak (ColumnHeaderSelect için gerekli)
+                                                               dgvPreview.Columns(i).SortMode = DataGridViewColumnSortMode.NotSortable
+
+                                                               If i = selectedBarkodCol Then
+                                                                   dgvPreview.Columns(i).HeaderCell.Style.BackColor = Color.LightGreen
+                                                                   dgvPreview.Columns(i).DefaultCellStyle.BackColor = Color.Honeydew
+                                                               ElseIf selectedResimCols.Contains(i) Then
+                                                                   dgvPreview.Columns(i).HeaderCell.Style.BackColor = Color.LightBlue
+                                                                   dgvPreview.Columns(i).DefaultCellStyle.BackColor = Color.AliceBlue
+                                                               Else
+                                                                   dgvPreview.Columns(i).HeaderCell.Style.BackColor = SystemColors.Control
+                                                                   dgvPreview.Columns(i).DefaultCellStyle.BackColor = Color.White
+                                                               End If
+                                                           Next
+                                                           dgvPreview.Refresh()
+
+                                                           ' Seçim etiketini güncelle
+                                                           Dim barkodText As String = If(selectedBarkodCol >= 0, sutunlar(selectedBarkodCol), "(seçilmedi)")
+                                                           lblSecim.Text = "Barkod: " & barkodText & " | Resim Sütunları: " & selectedResimCols.Count.ToString() & " adet"
+                                                       End Sub
+
                     ' Otomatik seçim yap (barkod ve resim sütunları)
                     For i As Integer = 0 To sutunlar.Count - 1
                         Dim headerLower As String = sutunlar(i).ToLowerInvariant()
@@ -23090,42 +23090,42 @@ Public Class Form1
                             End If
                         End If
                     Next
-                    
+
                     ' Başlangıç renklerini uygula ve SortMode'u düzelt
                     AddHandler dgvPreview.DataBindingComplete, Sub(s, ev)
-                        ' Tüm sütunların SortMode'unu NotSortable yap
-                        For i As Integer = 0 To dgvPreview.Columns.Count - 1
-                            dgvPreview.Columns(i).SortMode = DataGridViewColumnSortMode.NotSortable
-                        Next
-                        updateColumnColors()
-                    End Sub
-                    
+                                                                   ' Tüm sütunların SortMode'unu NotSortable yap
+                                                                   For i As Integer = 0 To dgvPreview.Columns.Count - 1
+                                                                       dgvPreview.Columns(i).SortMode = DataGridViewColumnSortMode.NotSortable
+                                                                   Next
+                                                                   updateColumnColors()
+                                                               End Sub
+
                     ' Sütun başlığına tıklama olayı (sol tık = barkod)
                     AddHandler dgvPreview.ColumnHeaderMouseClick, Sub(s, ev)
-                        If ev.Button = MouseButtons.Left Then
-                            ' Sol tık: Barkod sütunu seç
-                            selectedBarkodCol = ev.ColumnIndex
-                            ' Barkod olarak seçilen sütunu resim listesinden çıkar
-                            If selectedResimCols.Contains(ev.ColumnIndex) Then
-                                selectedResimCols.Remove(ev.ColumnIndex)
-                            End If
-                            updateColumnColors()
-                        ElseIf ev.Button = MouseButtons.Right Then
-                            ' Sağ tık: Resim sütunu ekle/çıkar
-                            If ev.ColumnIndex = selectedBarkodCol Then
-                                ' Barkod sütunu resim olamaz
-                                XtraMessageBox.Show("Bu sütun zaten barkod olarak seçili!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                            Else
-                                If selectedResimCols.Contains(ev.ColumnIndex) Then
-                                    selectedResimCols.Remove(ev.ColumnIndex)
-                                Else
-                                    selectedResimCols.Add(ev.ColumnIndex)
-                                End If
-                                updateColumnColors()
-                            End If
-                        End If
-                    End Sub
-                    
+                                                                      If ev.Button = MouseButtons.Left Then
+                                                                          ' Sol tık: Barkod sütunu seç
+                                                                          selectedBarkodCol = ev.ColumnIndex
+                                                                          ' Barkod olarak seçilen sütunu resim listesinden çıkar
+                                                                          If selectedResimCols.Contains(ev.ColumnIndex) Then
+                                                                              selectedResimCols.Remove(ev.ColumnIndex)
+                                                                          End If
+                                                                          updateColumnColors()
+                                                                      ElseIf ev.Button = MouseButtons.Right Then
+                                                                          ' Sağ tık: Resim sütunu ekle/çıkar
+                                                                          If ev.ColumnIndex = selectedBarkodCol Then
+                                                                              ' Barkod sütunu resim olamaz
+                                                                              XtraMessageBox.Show("Bu sütun zaten barkod olarak seçili!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                                                                          Else
+                                                                              If selectedResimCols.Contains(ev.ColumnIndex) Then
+                                                                                  selectedResimCols.Remove(ev.ColumnIndex)
+                                                                              Else
+                                                                                  selectedResimCols.Add(ev.ColumnIndex)
+                                                                              End If
+                                                                              updateColumnColors()
+                                                                          End If
+                                                                      End If
+                                                                  End Sub
+
                     ' Temizle butonu
                     Dim btnTemizle As New System.Windows.Forms.Button()
                     btnTemizle.Text = "Seçimleri Temizle"
@@ -23133,12 +23133,12 @@ Public Class Form1
                     btnTemizle.Size = New Size(120, 35)
                     btnTemizle.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
                     AddHandler btnTemizle.Click, Sub()
-                        selectedBarkodCol = -1
-                        selectedResimCols.Clear()
-                        updateColumnColors()
-                    End Sub
+                                                     selectedBarkodCol = -1
+                                                     selectedResimCols.Clear()
+                                                     updateColumnColors()
+                                                 End Sub
                     eslestirmeForm.Controls.Add(btnTemizle)
-                    
+
                     ' Tüm Resimleri Seç butonu
                     Dim btnTumResim As New System.Windows.Forms.Button()
                     btnTumResim.Text = "Tüm Resimleri Seç"
@@ -23146,20 +23146,20 @@ Public Class Form1
                     btnTumResim.Size = New Size(130, 35)
                     btnTumResim.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
                     AddHandler btnTumResim.Click, Sub()
-                        For i As Integer = 0 To sutunlar.Count - 1
-                            Dim headerLower As String = sutunlar(i).ToLowerInvariant()
-                            If i <> selectedBarkodCol AndAlso 
-                               (headerLower.Contains("resim") OrElse headerLower.Contains("görsel") OrElse 
+                                                      For i As Integer = 0 To sutunlar.Count - 1
+                                                          Dim headerLower As String = sutunlar(i).ToLowerInvariant()
+                                                          If i <> selectedBarkodCol AndAlso
+                               (headerLower.Contains("resim") OrElse headerLower.Contains("görsel") OrElse
                                 headerLower.Contains("gorsel") OrElse headerLower.Contains("image")) Then
-                                If Not selectedResimCols.Contains(i) Then
-                                    selectedResimCols.Add(i)
-                                End If
-                            End If
-                        Next
-                        updateColumnColors()
-                    End Sub
+                                                              If Not selectedResimCols.Contains(i) Then
+                                                                  selectedResimCols.Add(i)
+                                                              End If
+                                                          End If
+                                                      Next
+                                                      updateColumnColors()
+                                                  End Sub
                     eslestirmeForm.Controls.Add(btnTumResim)
-                    
+
                     ' Satır sayısı bilgisi
                     Dim lblSatir As New Label()
                     lblSatir.Text = "Toplam satır: " & (rowCount - 1).ToString() & " (önizleme: ilk " & (previewRowCount - 1).ToString() & " satır)"
@@ -23167,7 +23167,7 @@ Public Class Form1
                     lblSatir.AutoSize = True
                     lblSatir.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
                     eslestirmeForm.Controls.Add(lblSatir)
-                    
+
                     ' Resimleri Güncelle checkbox'u
                     Dim chkResimGuncelle As New System.Windows.Forms.CheckBox()
                     chkResimGuncelle.Text = "Mevcut resimleri güncelle"
@@ -23178,10 +23178,10 @@ Public Class Form1
                     chkResimGuncelle.Font = New Font(chkResimGuncelle.Font, FontStyle.Bold)
                     chkResimGuncelle.ForeColor = Color.DarkBlue
                     eslestirmeForm.Controls.Add(chkResimGuncelle)
-                    
+
                     ' Form boyutunu biraz artır (checkbox için yer aç)
                     eslestirmeForm.Size = New Size(900, 680)
-                    
+
                     ' Başlat ve İptal butonları
                     Dim btnBaslat As New System.Windows.Forms.Button()
                     btnBaslat.Text = "Başlat"
@@ -23191,7 +23191,7 @@ Public Class Form1
                     btnBaslat.DialogResult = System.Windows.Forms.DialogResult.OK
                     btnBaslat.BackColor = Color.LightGreen
                     eslestirmeForm.Controls.Add(btnBaslat)
-                    
+
                     Dim btnIptal As New System.Windows.Forms.Button()
                     btnIptal.Text = "İptal"
                     btnIptal.Location = New Point(780, 555)
@@ -23199,34 +23199,34 @@ Public Class Form1
                     btnIptal.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
                     btnIptal.DialogResult = System.Windows.Forms.DialogResult.Cancel
                     eslestirmeForm.Controls.Add(btnIptal)
-                    
+
                     eslestirmeForm.AcceptButton = btnBaslat
                     eslestirmeForm.CancelButton = btnIptal
-                    
+
                     ' Formu göster
                     If eslestirmeForm.ShowDialog() <> System.Windows.Forms.DialogResult.OK Then
                         GoTo CleanupExcel
                     End If
-                    
+
                     ' Checkbox değerini kaydet (form kapandıktan sonra kullanılacak)
                     Dim mevcutResimGuncelle As Boolean = chkResimGuncelle.Checked
-                    
+
                     ' Seçimleri kontrol et
                     If selectedBarkodCol < 0 Then
                         XtraMessageBox.Show("Lütfen barkod sütununu seçin (sol tık)!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                         GoTo CleanupExcel
                     End If
-                    
+
                     If selectedResimCols.Count = 0 Then
                         XtraMessageBox.Show("Lütfen en az bir resim sütunu seçin (sağ tık)!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                         GoTo CleanupExcel
                     End If
-                    
+
                     ' Seçimleri 1-based index'e çevir
                     Dim barkodColIndex As Integer = selectedBarkodCol + 1
                     Dim gorselColIndexes As New System.Collections.Generic.List(Of Integer)()
                     Dim gorselSiraMap As New System.Collections.Generic.Dictionary(Of Integer, Integer)()
-                    
+
                     ' Resim sütunlarını sırala
                     selectedResimCols.Sort()
                     Dim sira As Integer = 1
@@ -23236,7 +23236,7 @@ Public Class Form1
                         gorselSiraMap(colIndex) = sira
                         sira += 1
                     Next
-                    
+
                     ' Progress Dialog
                     Dim progressForm As New Form()
                     progressForm.Text = platform & " Resimleri Yükleniyor..."
@@ -23244,58 +23244,58 @@ Public Class Form1
                     progressForm.StartPosition = FormStartPosition.CenterParent
                     progressForm.FormBorderStyle = FormBorderStyle.FixedDialog
                     progressForm.ControlBox = False
-                    
+
                     Dim lblStatus As New Label()
                     lblStatus.AutoSize = False
                     lblStatus.Size = New Size(450, 50)
                     lblStatus.Location = New Point(20, 20)
                     lblStatus.Text = "İşlem başlıyor..."
                     progressForm.Controls.Add(lblStatus)
-                    
+
                     Dim progressBar As New DevExpress.XtraEditors.ProgressBarControl()
                     progressBar.Size = New Size(450, 30)
                     progressBar.Location = New Point(20, 80)
                     progressForm.Controls.Add(progressBar)
-                    
+
                     Dim lblDetails As New Label()
                     lblDetails.AutoSize = False
                     lblDetails.Size = New Size(450, 30)
                     lblDetails.Location = New Point(20, 120)
                     lblDetails.Text = ""
                     progressForm.Controls.Add(lblDetails)
-                    
+
                     progressForm.Show()
                     Application.DoEvents()
-                    
+
                     Dim yuklenenAdet As Integer = 0
                     Dim hataAdet As Integer = 0
                     Dim toplamUrun As Integer = rowCount - 1 ' Başlık hariç
                     Dim islemSayisi As Integer = 0
-                    
+
                     progressBar.Properties.Maximum = toplamUrun
-                    
+
                     ' Her satır için işlem yap (2. satırdan başla - başlık hariç)
                     For row As Integer = 2 To rowCount
                         islemSayisi += 1
                         progressBar.EditValue = islemSayisi
-                        
+
                         Dim barkodCell As Object = usedRange.Cells(row, barkodColIndex).Value
                         Dim barkod As String = If(barkodCell IsNot Nothing, barkodCell.ToString().Trim(), "")
                         If String.IsNullOrEmpty(barkod) Then Continue For
-                        
+
                         lblStatus.Text = "İşleniyor: " & islemSayisi.ToString() & "/" & toplamUrun.ToString() & " - Barkod: " & barkod
                         Application.DoEvents()
-                        
+
                         ' Barkoddan nStokId'yi bul (tbStokBarkodu tablosu)
                         Dim nStokID As Integer = 0
                         Dim sModel As String = ""
                         Dim sRenk As String = ""
                         Dim sBeden As String = ""
                         Dim sKavala As String = ""
-                        
+
                         Using dbCon As New OleDb.OleDbConnection(connection)
                             dbCon.Open()
-                            
+
                             ' tbStokBarkodu'ndan nStokId'yi al
                             Using cmdBarkod As New OleDb.OleDbCommand(
                                 "SELECT nStokId FROM tbStokBarkodu WHERE sBarkod = ?", dbCon)
@@ -23305,12 +23305,12 @@ Public Class Form1
                                     nStokID = CInt(result)
                                 End If
                             End Using
-                            
+
                             If nStokID = 0 Then
                                 hataAdet += 1
                                 Continue For
                             End If
-                            
+
                             ' tbStok'tan ürün bilgilerini al
                             Using cmdStok As New OleDb.OleDbCommand(
                                 "SELECT sModel, sRenk, sBeden, sKavala FROM tbStok WHERE nStokID = ?", dbCon)
@@ -23325,32 +23325,32 @@ Public Class Form1
                                 End Using
                             End Using
                         End Using
-                        
+
                         If String.IsNullOrEmpty(sModel) Then
                             hataAdet += 1
                             Continue For
                         End If
-                        
+
                         ' Her görsel sütunu için resim yükle
                         For Each gorselColIndex As Integer In gorselColIndexes
                             ' Sıra numarasını map'ten al (doğru sıra numarası için)
                             Dim nSira As Integer = gorselSiraMap(gorselColIndex)
-                            
+
                             Dim gorselCell As Object = usedRange.Cells(row, gorselColIndex).Value
                             Dim imageUrl As String = If(gorselCell IsNot Nothing, gorselCell.ToString().Trim(), "")
                             If String.IsNullOrEmpty(imageUrl) Then
                                 Continue For
                             End If
-                            
+
                             lblDetails.Text = "Resim yükleniyor: Resim " & nSira.ToString()
                             Application.DoEvents()
-                            
+
                             ' Resmi URL'den indir ve kaydet (mevcutResimGuncelle parametresi ile)
                             Dim basarili As Boolean = YukleResimUrlden(imageUrl, sModel, nStokID, sRenk, sBeden, sKavala, nSira, mevcutResimGuncelle)
                             If basarili Then yuklenenAdet += 1
                         Next
                     Next
-                    
+
 CleanupExcel:
                     ' Excel temizlik
                     If workbook IsNot Nothing Then
@@ -23361,7 +23361,7 @@ CleanupExcel:
                         excelApp.Quit()
                         System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp)
                     End If
-                    
+
                     If yuklenenAdet > 0 OrElse hataAdet > 0 Then
                         progressForm.Close()
                         XtraMessageBox.Show(platform & " resim yükleme tamamlandı!" & vbCrLf & vbCrLf &
@@ -23370,7 +23370,7 @@ CleanupExcel:
                                            "Hatalı/Bulunamayan: " & hataAdet.ToString(),
                                            "Tamamlandı", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     End If
-                    
+
                 Catch excelEx As Exception
                     ' Excel temizlik (hata durumunda)
                     Try
@@ -23381,17 +23381,17 @@ CleanupExcel:
                     Throw excelEx
                 End Try
             End Using
-            
+
         Catch ex As Exception
             XtraMessageBox.Show("Hata: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    
+
     ''' <summary>
     ''' URL'den resmi indirir ve veritabanına kaydeder
     ''' mevcutResimGuncelle: True ise mevcut resimleri günceller, False ise sadece yeni resim ekler
     ''' </summary>
-    Private Function YukleResimUrlden(imageUrl As String, sModel As String, nStokID As Integer, 
+    Private Function YukleResimUrlden(imageUrl As String, sModel As String, nStokID As Integer,
                                             sRenk As String, sBeden As String, sKavala As String, nSira As Integer,
                                             Optional mevcutResimGuncelle As Boolean = True) As Boolean
         Try
@@ -23414,7 +23414,7 @@ CleanupExcel:
                     End Using
                 End Using
             End If
-            
+
             ' WebClient ile resmi indir
             Dim imageBytes As Byte() = Nothing
             Using webClient As New System.Net.WebClient()
@@ -23423,7 +23423,7 @@ CleanupExcel:
                 webClient.Headers.Add("Accept", "image/webp,image/apng,image/*,*/*;q=0.8")
                 webClient.Headers.Add("Accept-Language", "tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7")
                 webClient.Headers.Add("Referer", "https://www.trendyol.com/")
-                
+
                 Try
                     imageBytes = webClient.DownloadData(imageUrl)
                     Debug.WriteLine("[ETicaretResim] Resim indirildi: " & imageUrl & " - Boyut: " & imageBytes.Length.ToString() & " bytes")
@@ -23432,30 +23432,30 @@ CleanupExcel:
                     Return False
                 End Try
             End Using
-            
+
             If imageBytes Is Nothing OrElse imageBytes.Length = 0 Then Return False
-            
+
             ' WebP formatını JPEG'e dönüştür (.NET Framework WebP desteklemiyor)
             Dim finalImageBytes As Byte() = imageBytes
             Dim fileExtension As String = ".jpg"
             Dim contentType As String = "image/jpeg"
-            
+
             Try
                 Dim urlLower As String = imageUrl.ToLower()
-                
+
                 ' WebP ise JPEG olarak yeniden indir
                 If urlLower.Contains(".webp") Then
                     Debug.WriteLine("[ETicaretResim] WebP tespit edildi, JPEG olarak indiriliyor...")
-                    
+
                     ' Trendyol URL'sini JPEG formatına çevir
                     ' Örnek: ...sw1000sh1000.webp -> ...sw1000sh1000.jpg
                     Dim jpgUrl As String = imageUrl
-                    
+
                     ' .webp uzantısını .jpg ile değiştir
                     jpgUrl = System.Text.RegularExpressions.Regex.Replace(jpgUrl, "\.webp$", ".jpg", System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-                    
+
                     Debug.WriteLine("[ETicaretResim] JPEG URL: " & jpgUrl)
-                    
+
                     Try
                         Using webClient2 As New System.Net.WebClient()
                             webClient2.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
@@ -23466,7 +23466,7 @@ CleanupExcel:
                         End Using
                     Catch jpgEx As Exception
                         Debug.WriteLine("[ETicaretResim] JPEG indirme hatası: " & jpgEx.Message)
-                        
+
                         ' JPG URL çalışmadıysa, WebP'yi System.Drawing ile JPEG'e çevirmeyi dene
                         Try
                             Using ms As New System.IO.MemoryStream(imageBytes)
@@ -23498,21 +23498,21 @@ CleanupExcel:
             Catch ex As Exception
                 Debug.WriteLine("[ETicaretResim] Format dönüştürme hatası: " & ex.Message)
             End Try
-            
+
             ' Base64 string oluştur (finalImageBytes kullan)
             Dim base64String As String = Convert.ToBase64String(finalImageBytes)
             Debug.WriteLine("[ETicaretResim] Base64 boyutu: " & base64String.Length & " karakter")
-            
+
             ' R2'ye upload et
             Dim klasor As String = GetR2Klasor()
-            
+
             Dim fileNameParts As New System.Collections.Generic.List(Of String)()
             fileNameParts.Add(sModel.Trim())
             If Not String.IsNullOrEmpty(sRenk) Then fileNameParts.Add(sRenk.Trim())
             If Not String.IsNullOrEmpty(sBeden) Then fileNameParts.Add(sBeden.Trim())
             If Not String.IsNullOrEmpty(sKavala) Then fileNameParts.Add(sKavala.Trim())
             fileNameParts.Add(nSira.ToString())
-            
+
             Dim fileName As String = String.Join("_", fileNameParts.ToArray()) & fileExtension
             Dim objectKey As String = ""
             If String.IsNullOrEmpty(klasor) Then
@@ -23520,15 +23520,15 @@ CleanupExcel:
             Else
                 objectKey = "products/" & klasor & "/" & sModel.Trim() & "/" & fileName
             End If
-            
+
             ' R2'ye upload et (finalImageBytes kullan)
             Dim uploadedUrl As String = R2Helpers.R2UploadFromBytesAsync(finalImageBytes, objectKey, contentType).Result
             Debug.WriteLine("[ETicaretResim] R2 upload tamamlandı: " & uploadedUrl)
-            
+
             ' Database'e kaydet
             Using con As New OleDb.OleDbConnection(connection)
                 con.Open()
-                
+
                 ' Transaction state temizle
                 Try
                     Using cmdClean As New OleDb.OleDbCommand("IF @@TRANCOUNT > 0 ROLLBACK TRAN; SET IMPLICIT_TRANSACTIONS OFF", con)
@@ -23536,95 +23536,95 @@ CleanupExcel:
                     End Using
                 Catch
                 End Try
-                
+
                 Using cmdBegin As New OleDb.OleDbCommand("BEGIN TRAN", con)
                     cmdBegin.ExecuteNonQuery()
                 End Using
-                
+
                 Try
                     ' Mevcut kayıt kontrol
                     Dim existingId As Object = Nothing
                     Using cmdCheck As New OleDb.OleDbCommand(
                         "SELECT nStokResimID FROM tbStokResim WHERE nStokID = ? AND ISNULL(sRenk,'') = ISNULL(?,'') AND nSira = ?", con)
                         cmdCheck.Parameters.Add("p0", OleDb.OleDbType.Integer).Value = If(nStokID = 0, DBNull.Value, CObj(nStokID))
-                            cmdCheck.Parameters.Add("p1", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), DBNull.Value, CObj(sRenk))
-                            cmdCheck.Parameters.Add("p2", OleDb.OleDbType.Integer).Value = nSira
-                            existingId = cmdCheck.ExecuteScalar()
-                        End Using
-                        
-                        If existingId Is Nothing Then
-                            ' INSERT - Yeni resim ekle
-                            Using cmd As OleDb.OleDbCommand = con.CreateCommand()
-                                cmd.CommandText = "INSERT INTO tbStokResim (sModel, nStokID, sRenk, sBeden, sKavala, nSira, pResim, yol, sAciklama, sKullaniciAdi, dteKayitTarihi) " &
+                        cmdCheck.Parameters.Add("p1", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), DBNull.Value, CObj(sRenk))
+                        cmdCheck.Parameters.Add("p2", OleDb.OleDbType.Integer).Value = nSira
+                        existingId = cmdCheck.ExecuteScalar()
+                    End Using
+
+                    If existingId Is Nothing Then
+                        ' INSERT - Yeni resim ekle
+                        Using cmd As OleDb.OleDbCommand = con.CreateCommand()
+                            cmd.CommandText = "INSERT INTO tbStokResim (sModel, nStokID, sRenk, sBeden, sKavala, nSira, pResim, yol, sAciklama, sKullaniciAdi, dteKayitTarihi) " &
                                                  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-                                cmd.Parameters.Add("sModel", OleDb.OleDbType.VarChar, 50).Value = sModel
-                                cmd.Parameters.Add("nStokID", OleDb.OleDbType.Integer).Value = If(nStokID = 0, DBNull.Value, CObj(nStokID))
-                                cmd.Parameters.Add("sRenk", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), DBNull.Value, CObj(sRenk))
-                                cmd.Parameters.Add("sBeden", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sBeden), DBNull.Value, CObj(sBeden))
-                                cmd.Parameters.Add("sKavala", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sKavala), DBNull.Value, CObj(sKavala))
-                                cmd.Parameters.Add("nSira", OleDb.OleDbType.Integer).Value = nSira
-                                
-                                ' pResim: BASE64 STRING olarak kaydet (uygulama böyle bekliyor)
-                                Dim pResimParam As New OleDb.OleDbParameter("pResim", OleDb.OleDbType.LongVarChar)
-                                pResimParam.Value = If(String.IsNullOrEmpty(base64String), DBNull.Value, CObj(base64String))
-                                cmd.Parameters.Add(pResimParam)
-                                
-                                cmd.Parameters.Add("yol", OleDb.OleDbType.VarChar, 500).Value = uploadedUrl
-                                cmd.Parameters.Add("sAciklama", OleDb.OleDbType.VarChar, 250).Value = "E-Ticaret Import"
-                                cmd.Parameters.Add("sKullaniciAdi", OleDb.OleDbType.VarChar, 50).Value = kullanici
-                                cmd.Parameters.Add("dteKayitTarihi", OleDb.OleDbType.DBTimeStamp).Value = Now
-                                
-                                cmd.ExecuteNonQuery()
-                            End Using
-                        ElseIf mevcutResimGuncelle Then
-                            ' UPDATE - Sadece mevcutResimGuncelle True ise güncelle
-                            Using cmd As OleDb.OleDbCommand = con.CreateCommand()
-                                cmd.CommandText = "UPDATE tbStokResim SET pResim = ?, yol = ?, sKullaniciAdi = ?, dteKayitTarihi = ? " &
+                            cmd.Parameters.Add("sModel", OleDb.OleDbType.VarChar, 50).Value = sModel
+                            cmd.Parameters.Add("nStokID", OleDb.OleDbType.Integer).Value = If(nStokID = 0, DBNull.Value, CObj(nStokID))
+                            cmd.Parameters.Add("sRenk", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), DBNull.Value, CObj(sRenk))
+                            cmd.Parameters.Add("sBeden", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sBeden), DBNull.Value, CObj(sBeden))
+                            cmd.Parameters.Add("sKavala", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sKavala), DBNull.Value, CObj(sKavala))
+                            cmd.Parameters.Add("nSira", OleDb.OleDbType.Integer).Value = nSira
+
+                            ' pResim: BASE64 STRING olarak kaydet (uygulama böyle bekliyor)
+                            Dim pResimParam As New OleDb.OleDbParameter("pResim", OleDb.OleDbType.LongVarChar)
+                            pResimParam.Value = If(String.IsNullOrEmpty(base64String), DBNull.Value, CObj(base64String))
+                            cmd.Parameters.Add(pResimParam)
+
+                            cmd.Parameters.Add("yol", OleDb.OleDbType.VarChar, 500).Value = uploadedUrl
+                            cmd.Parameters.Add("sAciklama", OleDb.OleDbType.VarChar, 250).Value = "E-Ticaret Import"
+                            cmd.Parameters.Add("sKullaniciAdi", OleDb.OleDbType.VarChar, 50).Value = kullanici
+                            cmd.Parameters.Add("dteKayitTarihi", OleDb.OleDbType.DBTimeStamp).Value = Now
+
+                            cmd.ExecuteNonQuery()
+                        End Using
+                    ElseIf mevcutResimGuncelle Then
+                        ' UPDATE - Sadece mevcutResimGuncelle True ise güncelle
+                        Using cmd As OleDb.OleDbCommand = con.CreateCommand()
+                            cmd.CommandText = "UPDATE tbStokResim SET pResim = ?, yol = ?, sKullaniciAdi = ?, dteKayitTarihi = ? " &
                                                  "WHERE nStokID = ? AND ISNULL(sRenk,'') = ISNULL(?,'') AND nSira = ?"
-                                ' pResim: BASE64 STRING olarak kaydet (uygulama böyle bekliyor)
-                                Dim pResimParam As New OleDb.OleDbParameter("pResim", OleDb.OleDbType.LongVarChar)
-                                pResimParam.Value = If(String.IsNullOrEmpty(base64String), DBNull.Value, CObj(base64String))
-                                cmd.Parameters.Add(pResimParam)
-                                cmd.Parameters.Add("yol", OleDb.OleDbType.VarChar, 500).Value = uploadedUrl
-                                cmd.Parameters.Add("sKullaniciAdi", OleDb.OleDbType.VarChar, 50).Value = kullanici
-                                cmd.Parameters.Add("dteKayitTarihi", OleDb.OleDbType.DBTimeStamp).Value = Now
-                                cmd.Parameters.Add("nStokID", OleDb.OleDbType.Integer).Value = If(nStokID = 0, DBNull.Value, CObj(nStokID))
-                                cmd.Parameters.Add("sRenk", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), DBNull.Value, CObj(sRenk))
-                                cmd.Parameters.Add("nSira", OleDb.OleDbType.Integer).Value = nSira
-                                
-                                cmd.ExecuteNonQuery()
-                            End Using
-                        Else
-                            ' Mevcut resim var ama güncelleme yapılmayacak - COMMIT yap ve False dön
-                            Using cmdCommit As New OleDb.OleDbCommand("COMMIT TRAN", con)
-                                cmdCommit.ExecuteNonQuery()
-                            End Using
-                            Return False
-                        End If
-                        
+                            ' pResim: BASE64 STRING olarak kaydet (uygulama böyle bekliyor)
+                            Dim pResimParam As New OleDb.OleDbParameter("pResim", OleDb.OleDbType.LongVarChar)
+                            pResimParam.Value = If(String.IsNullOrEmpty(base64String), DBNull.Value, CObj(base64String))
+                            cmd.Parameters.Add(pResimParam)
+                            cmd.Parameters.Add("yol", OleDb.OleDbType.VarChar, 500).Value = uploadedUrl
+                            cmd.Parameters.Add("sKullaniciAdi", OleDb.OleDbType.VarChar, 50).Value = kullanici
+                            cmd.Parameters.Add("dteKayitTarihi", OleDb.OleDbType.DBTimeStamp).Value = Now
+                            cmd.Parameters.Add("nStokID", OleDb.OleDbType.Integer).Value = If(nStokID = 0, DBNull.Value, CObj(nStokID))
+                            cmd.Parameters.Add("sRenk", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), DBNull.Value, CObj(sRenk))
+                            cmd.Parameters.Add("nSira", OleDb.OleDbType.Integer).Value = nSira
+
+                            cmd.ExecuteNonQuery()
+                        End Using
+                    Else
+                        ' Mevcut resim var ama güncelleme yapılmayacak - COMMIT yap ve False dön
                         Using cmdCommit As New OleDb.OleDbCommand("COMMIT TRAN", con)
                             cmdCommit.ExecuteNonQuery()
                         End Using
-                        
-                        Return True
-                        
-                    Catch dbEx As Exception
-                        Try
-                            Using cmdRollback As New OleDb.OleDbCommand("IF @@TRANCOUNT > 0 ROLLBACK TRAN", con)
-                                cmdRollback.ExecuteNonQuery()
-                            End Using
-                        Catch
-                        End Try
                         Return False
+                    End If
+
+                    Using cmdCommit As New OleDb.OleDbCommand("COMMIT TRAN", con)
+                        cmdCommit.ExecuteNonQuery()
+                    End Using
+
+                    Return True
+
+                Catch dbEx As Exception
+                    Try
+                        Using cmdRollback As New OleDb.OleDbCommand("IF @@TRANCOUNT > 0 ROLLBACK TRAN", con)
+                            cmdRollback.ExecuteNonQuery()
+                        End Using
+                    Catch
                     End Try
-                End Using
-            
+                    Return False
+                End Try
+            End Using
+
         Catch ex As Exception
             Debug.WriteLine("[ETicaretResim] Hata: " & ex.Message)
             Return False
         End Try
     End Function
-    
+
     ''' <summary>
     ''' R2 klasör adını al (BAYII veritabanından)
     ''' </summary>
@@ -23640,21 +23640,21 @@ CleanupExcel:
                     End If
                 End Using
             End Using
-            
+
             If String.IsNullOrEmpty(sourceIP) Then sourceIP = "212.156.206.214"
-            
+
             Dim sOnayKodu As String = ""
             Try
                 sOnayKodu = My.Computer.Registry.LocalMachine.OpenSubKey("Software").OpenSubKey("BusinessSmart").OpenSubKey("Key").GetValue("sOnayKodu").ToString()
             Catch
                 sOnayKodu = ""
             End Try
-            
+
             If Not String.IsNullOrEmpty(sOnayKodu) AndAlso sOnayKodu <> "0" Then
                 Dim remoteConnectionString As String = String.Format(
                     "Provider=SQLOLEDB.1;Password=87918991;Persist Security Info=True;User ID=bayii1;Initial Catalog=BAYII;Data Source={0},8991",
                     sourceIP)
-                
+
                 Try
                     Using conRemote As New OleDb.OleDbConnection(remoteConnectionString)
                         conRemote.Open()
@@ -23674,11 +23674,11 @@ CleanupExcel:
         End Try
         Return ""
     End Function
-    
+
     ' ===== TRENDYOL & HEPSİBURADA RESİM YÜKLEME FONKSİYONLARI SONU =====
 
     ' ===== TRENDYOL DİREKT ENTEGRASYON FONKSİYONLARI =====
-    
+
     ''' <summary>
     ''' Trendyol API Ayarları formunu açar
     ''' </summary>
@@ -23691,7 +23691,7 @@ CleanupExcel:
             MessageBox.Show("Trendyol Ayar formu açılırken hata: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    
+
     ''' <summary>
     ''' Trendyol BuyBox Analiz formunu açar
     ''' </summary>
@@ -23704,7 +23704,7 @@ CleanupExcel:
             MessageBox.Show("Trendyol BuyBox Analiz formu açılırken hata: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    
+
     ''' <summary>
     ''' Trendyol Fiyat/Stok Entegrasyon formunu açar
     ''' </summary>
@@ -23717,7 +23717,7 @@ CleanupExcel:
             MessageBox.Show("Trendyol Entegrasyon formu açılırken hata: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    
+
     ' ===== TRENDYOL DİREKT ENTEGRASYON FONKSİYONLARI SONU =====
 
     ' ===== KOLAYSOFT RAPOR =====
@@ -23731,7 +23731,7 @@ CleanupExcel:
     End Sub
 
     ' ===== E-TİCARET ANALİZ FORMLARI =====
-    
+
     ''' <summary>
     ''' Satış İvmesi Dashboard formunu açar
     ''' </summary>
@@ -23743,7 +23743,7 @@ CleanupExcel:
             MessageBox.Show("Satış İvmesi Dashboard açılırken hata: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    
+
     ''' <summary>
     ''' Rakip Fiyat Otomasyonu formunu açar
     ''' </summary>
@@ -23755,7 +23755,7 @@ CleanupExcel:
             MessageBox.Show("Rakip Fiyat Otomasyonu açılırken hata: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    
+
     ''' <summary>
     ''' Favori/Sepet Analizi formunu açar
     ''' </summary>
@@ -23767,7 +23767,7 @@ CleanupExcel:
             MessageBox.Show("Favori/Sepet Analizi açılırken hata: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    
+
     ''' <summary>
     ''' İade Riski Tahmini formunu açar
     ''' </summary>
@@ -23779,7 +23779,7 @@ CleanupExcel:
             MessageBox.Show("İade Riski Tahmini açılırken hata: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    
+
     ''' <summary>
     ''' Kampanya Önerisi formunu açar
     ''' </summary>
@@ -23791,7 +23791,7 @@ CleanupExcel:
             MessageBox.Show("Kampanya Önerisi açılırken hata: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    
+
     ''' <summary>
     ''' Yorum Analizi formunu açar
     ''' </summary>
@@ -23803,7 +23803,7 @@ CleanupExcel:
             MessageBox.Show("Yorum Analizi açılırken hata: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    
+
     ''' <summary>
     ''' E-Ticaret Analiz Ana Menüsünü açar
     ''' Tüm analiz araçlarına buradan erişilebilir
@@ -23816,14 +23816,14 @@ CleanupExcel:
             MessageBox.Show("E-Ticaret Analiz Menüsü açılırken hata: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    
+
     ' ===== E-TİCARET ANALİZ FORMLARI SONU =====
 
 
     ' ============================================================================
     ' TOPLU RESİM YÜKLEME FONKSİYONLARI - VARYANT BAZLI
     ' ============================================================================
-    
+
     Private Sub btnTopluResimYukle_ItemClick(sender As Object, e As DevExpress.XtraBars.ItemClickEventArgs) Handles btnTopluResimYukle.ItemClick
         Try
             Dim frmTopluResim As New frm_TopluResimYukleme()
@@ -23838,7 +23838,7 @@ CleanupExcel:
     ' ============================================================================
     ' tbModelVaryantRenk TABLOSU KONTROL VE OLUŞTURMA
     ' ============================================================================
-    
+
     ''' <summary>
     ''' Uygulama açılışında tbModelVaryantRenk tablosunun varlığını kontrol eder.
     ''' Tablo yoksa otomatik oluşturur.
@@ -23847,7 +23847,7 @@ CleanupExcel:
         Try
             Using con As New System.Data.OleDb.OleDbConnection(connection)
                 con.Open()
-                
+
                 ' Tablo var mı kontrol et
                 Dim tableExists As Boolean = False
                 Using cmdCheck As New System.Data.OleDb.OleDbCommand(
@@ -23855,45 +23855,45 @@ CleanupExcel:
                     Dim count As Integer = CInt(cmdCheck.ExecuteScalar())
                     tableExists = (count > 0)
                 End Using
-                
+
                 If Not tableExists Then
                     Debug.WriteLine("[tbModelVaryantRenk] Tablo bulunamadı, oluşturuluyor...")
-                    
+
                     ' Tabloyu oluştur (batch'leri ayır)
                     Try
                         ' 1. CREATE TABLE
-                        Dim createTableSQL As String = "CREATE TABLE tbModelVaryantRenk (" & _
-                            "nID INT PRIMARY KEY IDENTITY(1,1), " & _
-                            "sModel VARCHAR(50) NOT NULL, " & _
-                            "lRenkNo VARCHAR(10) NOT NULL, " & _
-                            "sRenkAdi VARCHAR(100) NOT NULL, " & _
-                            "sRenkKodu VARCHAR(20) NOT NULL, " & _
-                            "dteEklenmeTarihi DATETIME DEFAULT GETDATE(), " & _
-                            "sEkleyenKullanici VARCHAR(50), " & _
+                        Dim createTableSQL As String = "CREATE TABLE tbModelVaryantRenk (" &
+                            "nID INT PRIMARY KEY IDENTITY(1,1), " &
+                            "sModel VARCHAR(50) NOT NULL, " &
+                            "lRenkNo VARCHAR(10) NOT NULL, " &
+                            "sRenkAdi VARCHAR(100) NOT NULL, " &
+                            "sRenkKodu VARCHAR(20) NOT NULL, " &
+                            "dteEklenmeTarihi DATETIME DEFAULT GETDATE(), " &
+                            "sEkleyenKullanici VARCHAR(50), " &
                             "CONSTRAINT UQ_ModelVaryant UNIQUE (sModel, lRenkNo))"
-                        
+
                         Using cmdCreate As New System.Data.OleDb.OleDbCommand(createTableSQL, con)
                             cmdCreate.ExecuteNonQuery()
                         End Using
-                        
+
                         ' 2. CREATE INDEX 1
                         Using cmdIdx1 As New System.Data.OleDb.OleDbCommand(
                             "CREATE INDEX IX_ModelVaryantRenk_Model ON tbModelVaryantRenk(sModel, lRenkNo)", con)
                             cmdIdx1.ExecuteNonQuery()
                         End Using
-                        
+
                         ' 3. CREATE INDEX 2
                         Using cmdIdx2 As New System.Data.OleDb.OleDbCommand(
                             "CREATE INDEX IX_ModelVaryantRenk_RenkKodu ON tbModelVaryantRenk(sRenkKodu)", con)
                             cmdIdx2.ExecuteNonQuery()
                         End Using
-                        
+
                         ' 4. CREATE INDEX 3
                         Using cmdIdx3 As New System.Data.OleDb.OleDbCommand(
                             "CREATE INDEX IX_ModelVaryantRenk_RenkAdi ON tbModelVaryantRenk(sRenkAdi)", con)
                             cmdIdx3.ExecuteNonQuery()
                         End Using
-                        
+
                         Debug.WriteLine("[tbModelVaryantRenk] ✓ Tablo başarıyla oluşturuldu")
                     Catch createEx As Exception
                         Debug.WriteLine("[tbModelVaryantRenk] ✗ Oluşturma hatası: " & createEx.Message)
@@ -23912,7 +23912,7 @@ CleanupExcel:
     ' ============================================================================
     ' tbPazaryeriFaturaGonderim TABLOSU KONTROL VE OLUŞTURMA
     ' ============================================================================
-    
+
     ''' <summary>
     ''' Uygulama açılışında tbPazaryeriFaturaGonderim tablosunun varlığını kontrol eder.
     ''' Tablo yoksa otomatik oluşturur. Pazaryeri fatura gönderim takibi için kullanılır.
@@ -23921,7 +23921,7 @@ CleanupExcel:
         Try
             Using con As New System.Data.OleDb.OleDbConnection(connection)
                 con.Open()
-                
+
                 ' Tablo var mı kontrol et
                 Dim tableExists As Boolean = False
                 Using cmdCheck As New System.Data.OleDb.OleDbCommand(
@@ -23929,54 +23929,54 @@ CleanupExcel:
                     Dim count As Integer = CInt(cmdCheck.ExecuteScalar())
                     tableExists = (count > 0)
                 End Using
-                
+
                 If Not tableExists Then
                     Debug.WriteLine("[tbPazaryeriFaturaGonderim] Tablo bulunamadı, oluşturuluyor...")
-                    
+
                     Try
                         ' 1. CREATE TABLE
-                        Dim createTableSQL As String = "CREATE TABLE tbPazaryeriFaturaGonderim (" & _
-                            "nID INT PRIMARY KEY IDENTITY(1,1), " & _
-                            "nStokFisiID INT NOT NULL, " & _
-                            "sPazaryeri NVARCHAR(50), " & _
-                            "sSiparisNo NVARCHAR(50), " & _
-                            "sFaturaNo NVARCHAR(50), " & _
-                            "sFaturaUUID NVARCHAR(100), " & _
-                            "bGonderildi BIT DEFAULT 0, " & _
-                            "dteGonderimTarihi DATETIME, " & _
-                            "sGonderimSonucu NVARCHAR(500), " & _
-                            "sHataMesaji NVARCHAR(500), " & _
-                            "nDenemeAdet INT DEFAULT 0, " & _
+                        Dim createTableSQL As String = "CREATE TABLE tbPazaryeriFaturaGonderim (" &
+                            "nID INT PRIMARY KEY IDENTITY(1,1), " &
+                            "nStokFisiID INT NOT NULL, " &
+                            "sPazaryeri NVARCHAR(50), " &
+                            "sSiparisNo NVARCHAR(50), " &
+                            "sFaturaNo NVARCHAR(50), " &
+                            "sFaturaUUID NVARCHAR(100), " &
+                            "bGonderildi BIT DEFAULT 0, " &
+                            "dteGonderimTarihi DATETIME, " &
+                            "sGonderimSonucu NVARCHAR(500), " &
+                            "sHataMesaji NVARCHAR(500), " &
+                            "nDenemeAdet INT DEFAULT 0, " &
                             "dteOlusturma DATETIME DEFAULT GETDATE())"
-                        
+
                         Using cmdCreate As New System.Data.OleDb.OleDbCommand(createTableSQL, con)
                             cmdCreate.ExecuteNonQuery()
                         End Using
-                        
+
                         ' 2. CREATE INDEX - StokFisiID
                         Using cmdIdx1 As New System.Data.OleDb.OleDbCommand(
                             "CREATE INDEX IX_PazaryeriFatura_StokFisiID ON tbPazaryeriFaturaGonderim(nStokFisiID)", con)
                             cmdIdx1.ExecuteNonQuery()
                         End Using
-                        
+
                         ' 3. CREATE INDEX - Pazaryeri
                         Using cmdIdx2 As New System.Data.OleDb.OleDbCommand(
                             "CREATE INDEX IX_PazaryeriFatura_Pazaryeri ON tbPazaryeriFaturaGonderim(sPazaryeri)", con)
                             cmdIdx2.ExecuteNonQuery()
                         End Using
-                        
+
                         ' 4. CREATE INDEX - SiparisNo
                         Using cmdIdx3 As New System.Data.OleDb.OleDbCommand(
                             "CREATE INDEX IX_PazaryeriFatura_SiparisNo ON tbPazaryeriFaturaGonderim(sSiparisNo)", con)
                             cmdIdx3.ExecuteNonQuery()
                         End Using
-                        
+
                         ' 5. CREATE INDEX - Gonderildi
                         Using cmdIdx4 As New System.Data.OleDb.OleDbCommand(
                             "CREATE INDEX IX_PazaryeriFatura_Gonderildi ON tbPazaryeriFaturaGonderim(bGonderildi)", con)
                             cmdIdx4.ExecuteNonQuery()
                         End Using
-                        
+
                         Debug.WriteLine("[tbPazaryeriFaturaGonderim] ✓ Tablo başarıyla oluşturuldu")
                     Catch createEx As Exception
                         Debug.WriteLine("[tbPazaryeriFaturaGonderim] ✗ Oluşturma hatası: " & createEx.Message)
@@ -24000,12 +24000,12 @@ CleanupExcel:
         Try
             Using con As New OleDb.OleDbConnection(connection)
                 con.Open()
-                
+
                 ' Sütun var mı kontrol et
                 Dim checkCmd As New OleDb.OleDbCommand(
                     "SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'tbStokFisiMaster' AND COLUMN_NAME = 'sEfaturaUrl'", con)
                 Dim columnExists As Integer = CInt(checkCmd.ExecuteScalar())
-                
+
                 If columnExists = 0 Then
                     Debug.WriteLine("[sEfaturaUrl] Sütun bulunamadı, ekleniyor...")
                     Try
@@ -24034,16 +24034,16 @@ CleanupExcel:
         Try
             Using con As New OleDb.OleDbConnection(connection)
                 con.Open()
-                
+
                 ' Pazaryeri API URL'leri - doğru endpoint'ler
                 Dim pazaryerleri() As String = {"Trendyol", "Hepsiburada", "Amazon", "PttAVM", "CicekSepeti", "Modanisa", "N11", "Pazarama", "Farmazon", "LCWaikiki", "Idefix"}
                 Dim apiUrls() As String = {"https://api.trendyol.com", "https://mpop.hepsiburada.com", "https://sellingpartnerapi-eu.amazon.com", "https://api.pttavm.com", "https://apis.ciceksepeti.com", "https://api.modanisa.com", "https://api.n11.com/ws", "https://isortagim.pazarama.com", "https://api.farmazon.com.tr", "https://api.lcwaikiki.com", "https://api.idefix.com"}
-                
+
                 For i As Integer = 0 To pazaryerleri.Length - 1
                     Try
                         Dim pazaryeri As String = pazaryerleri(i)
                         Dim apiUrl As String = apiUrls(i)
-                        
+
                         ' Sadece yanlış URL'leri güncelle (mağaza URL'si olanlar veya boş olanlar)
                         Dim updateCmd As New OleDb.OleDbCommand(
                             "UPDATE tbPazaryeriAyar SET sBaseUrl = ? " &
@@ -24059,7 +24059,7 @@ CleanupExcel:
                         Debug.WriteLine("[PazaryeriBaseUrl] Güncellenemedi: " & updateEx.Message)
                     End Try
                 Next
-                
+
                 Debug.WriteLine("[PazaryeriBaseUrl] ✓ Kontrol tamamlandı")
             End Using
         Catch ex As Exception
@@ -24081,27 +24081,27 @@ CleanupExcel:
     Public Sub GelismisYedekVeGonder(veritabani As String, yedekDosya As String, ftpAdres As String, ftpKullanici As String, ftpSifre As String)
         Try
             logla("[GelismisYedek] Başlıyor: " & veritabani)
-            
+
             ' 1. SQL Server yedeği al (sıkıştırmalı)
             If Not File.Exists(yedekDosya) Then
                 logla("[GelismisYedek] Yedek dosyası bulunamadı, yedek alınıyor...")
                 yedekle(veritabani, yedekDosya, False)
             End If
-            
+
             If Not File.Exists(yedekDosya) Then
                 logla("[GelismisYedek] HATA: Yedek dosyası oluşturulamadı!")
                 bFtpYedekBasarisiz = True
                 sFtpYedekDosya = yedekDosya
                 Return
             End If
-            
+
             Dim orijinalBoyut As Long = New FileInfo(yedekDosya).Length
             logla("[GelismisYedek] Orijinal boyut: " & FormatBytes(orijinalBoyut))
-            
+
             ' 2. 7z ile sıkıştır (eğer 7z varsa)
             Dim sikistirilmisDosya As String = yedekDosya & ".7z"
             Dim gonderilecekDosya As String = yedekDosya
-            
+
             If SikistirDosya7z(yedekDosya, sikistirilmisDosya) Then
                 gonderilecekDosya = sikistirilmisDosya
                 Dim sikistirilmisBoyut As Long = New FileInfo(sikistirilmisDosya).Length
@@ -24109,24 +24109,24 @@ CleanupExcel:
             Else
                 logla("[GelismisYedek] 7z bulunamadı veya sıkıştırma başarısız, orijinal dosya gönderilecek")
             End If
-            
+
             ' 3. Parçalı FTP Upload
             Dim dosyaAdi As String = Path.GetFileName(gonderilecekDosya)
             Dim ftpHedef As String = "ftp://" & ftpAdres & "/backup/" & dosyaAdi
-            
+
             Dim uploadBasarili As Boolean = ParcaliFtpUpload(gonderilecekDosya, ftpHedef, ftpKullanici, ftpSifre)
-            
+
             If uploadBasarili Then
                 logla("[GelismisYedek] FTP upload başarılı: " & dosyaAdi)
                 bFtpYedekBasarisiz = False
-                
+
                 ' Eski yedekleri FTP'den sil (bugünkü hariç)
                 Try
                     FtpEskiYedekleriSil(ftpAdres, ftpKullanici, ftpSifre, dosyaAdi)
                 Catch silEx As Exception
                     logla("[GelismisYedek] Eski yedek silme hatası: " & silEx.Message)
                 End Try
-                
+
                 ' Sıkıştırılmış dosyayı sil (orijinal kalsın)
                 If File.Exists(sikistirilmisDosya) AndAlso sikistirilmisDosya <> yedekDosya Then
                     Try
@@ -24141,7 +24141,7 @@ CleanupExcel:
                 sFtpYedekHedef = ftpHedef
                 sFtpYedekFtp = ftpAdres
             End If
-            
+
         Catch ex As Exception
             logla("[GelismisYedek] HATA: " & ex.Message)
             bFtpYedekBasarisiz = True
