@@ -18985,34 +18985,55 @@ Public Class Form1
                 If guncellemeYapildiMi = True Then
                     If File.Exists("C:\Program Files (x86)\Business Smart\business_smart.exe") Then
                         ' Önce eski _old dosyasını sil
-                        If File.Exists("C:\Program Files (x86)\Business Smart\business_smart_old.exe") Then
-                            System.IO.File.Delete("C:\Program Files (x86)\Business Smart\business_smart_old.exe")
-                        End If
-                        My.Computer.FileSystem.RenameFile("C:\Program Files (x86)\Business Smart\business_smart.exe", "business_smart_old.exe")
+                        Try
+                            If File.Exists("C:\Program Files (x86)\Business Smart\business_smart_old.exe") Then
+                                System.IO.File.Delete("C:\Program Files (x86)\Business Smart\business_smart_old.exe")
+                            End If
+                            My.Computer.FileSystem.RenameFile("C:\Program Files (x86)\Business Smart\business_smart.exe", "business_smart_old.exe")
+                        Catch
+                            ' Silinemezse rastgele isimle yeniden adlandır
+                            Dim randomName As String = "business_smart_" & DateTime.Now.Ticks.ToString() & ".exe"
+                            My.Computer.FileSystem.RenameFile("C:\Program Files (x86)\Business Smart\business_smart.exe", randomName)
+                        End Try
                         System.IO.File.Copy("C:\Program Files (x86)\Business Smart\Util\business_smart.exe", "C:\Program Files (x86)\Business Smart\business_smart.exe")
                         System.IO.File.Delete("C:\Program Files (x86)\Business Smart\Util\business_smart.exe")
                     ElseIf File.Exists("C:\Program Files\Business Smart\business_smart.exe") Then
-                        If File.Exists("C:\Program Files\Business Smart\business_smart_old.exe") Then
-                            System.IO.File.Delete("C:\Program Files\Business Smart\business_smart_old.exe")
-                        End If
-                        My.Computer.FileSystem.RenameFile("C:\Program Files\Business Smart\business_smart.exe", "business_smart_old.exe")
+                        Try
+                            If File.Exists("C:\Program Files\Business Smart\business_smart_old.exe") Then
+                                System.IO.File.Delete("C:\Program Files\Business Smart\business_smart_old.exe")
+                            End If
+                            My.Computer.FileSystem.RenameFile("C:\Program Files\Business Smart\business_smart.exe", "business_smart_old.exe")
+                        Catch
+                            Dim randomName As String = "business_smart_" & DateTime.Now.Ticks.ToString() & ".exe"
+                            My.Computer.FileSystem.RenameFile("C:\Program Files\Business Smart\business_smart.exe", randomName)
+                        End Try
                         System.IO.File.Copy("C:\Program Files\Business Smart\Util\business_smart.exe", "C:\Program Files\Business Smart\business_smart.exe")
                         System.IO.File.Delete("C:\Program Files\Business Smart\Util\business_smart.exe")
                     End If
                 End If
                 If guncellemeYapildiMiManage = True Then
                     If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE.exe") Then
-                        If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE_old.exe") Then
-                            System.IO.File.Delete("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE_old.exe")
-                        End If
-                        My.Computer.FileSystem.RenameFile("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE.exe", "BUSINESS_SMART_MANAGE_old.exe")
+                        Try
+                            If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE_old.exe") Then
+                                System.IO.File.Delete("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE_old.exe")
+                            End If
+                            My.Computer.FileSystem.RenameFile("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE.exe", "BUSINESS_SMART_MANAGE_old.exe")
+                        Catch
+                            Dim randomName As String = "BUSINESS_SMART_MANAGE_" & DateTime.Now.Ticks.ToString() & ".exe"
+                            My.Computer.FileSystem.RenameFile("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE.exe", randomName)
+                        End Try
                         System.IO.File.Copy("C:\Program Files (x86)\Business Smart\Util\BUSINESS_SMART_MANAGE.exe", "C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE.exe")
                         System.IO.File.Delete("C:\Program Files (x86)\Business Smart\Util\BUSINESS_SMART_MANAGE.exe")
                     ElseIf File.Exists("C:\Program Files\Business Smart\BUSINESS_SMART_MANAGE.exe") Then
-                        If File.Exists("C:\Program Files\Business Smart\BUSINESS_SMART_MANAGE_old.exe") Then
-                            System.IO.File.Delete("C:\Program Files\Business Smart\BUSINESS_SMART_MANAGE_old.exe")
-                        End If
-                        My.Computer.FileSystem.RenameFile("C:\Program Files\Business Smart\BUSINESS_SMART_MANAGE.exe", "BUSINESS_SMART_MANAGE_old.exe")
+                        Try
+                            If File.Exists("C:\Program Files\Business Smart\BUSINESS_SMART_MANAGE_old.exe") Then
+                                System.IO.File.Delete("C:\Program Files\Business Smart\BUSINESS_SMART_MANAGE_old.exe")
+                            End If
+                            My.Computer.FileSystem.RenameFile("C:\Program Files\Business Smart\BUSINESS_SMART_MANAGE.exe", "BUSINESS_SMART_MANAGE_old.exe")
+                        Catch
+                            Dim randomName As String = "BUSINESS_SMART_MANAGE_" & DateTime.Now.Ticks.ToString() & ".exe"
+                            My.Computer.FileSystem.RenameFile("C:\Program Files\Business Smart\BUSINESS_SMART_MANAGE.exe", randomName)
+                        End Try
                         System.IO.File.Copy("C:\Program Files\Business Smart\Util\BUSINESS_SMART_MANAGE.exe", "C:\Program Files\Business Smart\BUSINESS_SMART_MANAGE.exe")
                         System.IO.File.Delete("C:\Program Files\Business Smart\Util\BUSINESS_SMART_MANAGE.exe")
                     End If
@@ -19021,24 +19042,35 @@ Public Class Form1
 
                 If guncellemeYapildiMiLicense = True Then
                     If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE.exe") Then
-                        If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE_old.exe") Then
-                            System.IO.File.Delete("C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE_old.exe")
-                        End If
-                        My.Computer.FileSystem.RenameFile("C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE.exe", "BUSINESS_LICENSE_old.exe")
+                        Try
+                            If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE_old.exe") Then
+                                System.IO.File.Delete("C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE_old.exe")
+                            End If
+                            My.Computer.FileSystem.RenameFile("C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE.exe", "BUSINESS_LICENSE_old.exe")
+                        Catch
+                            Dim randomName As String = "BUSINESS_LICENSE_" & DateTime.Now.Ticks.ToString() & ".exe"
+                            My.Computer.FileSystem.RenameFile("C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE.exe", randomName)
+                        End Try
                         System.IO.File.Copy("C:\Program Files (x86)\Business Smart\Util\BUSINESS_LICENSE.exe", "C:\Program Files (x86)\Business Smart\BUSINESS_LICENSE.exe")
                         System.IO.File.Delete("C:\Program Files (x86)\Business Smart\Util\BUSINESS_LICENSE.exe")
                     ElseIf File.Exists("C:\Program Files\Business Smart\BUSINESS_LICENSE.exe") Then
-                        If File.Exists("C:\Program Files\Business Smart\BUSINESS_LICENSE_old.exe") Then
-                            System.IO.File.Delete("C:\Program Files\Business Smart\BUSINESS_LICENSE_old.exe")
-                        End If
-                        My.Computer.FileSystem.RenameFile("C:\Program Files\Business Smart\BUSINESS_LICENSE.exe", "BUSINESS_LICENSE_old.exe")
+                        Try
+                            If File.Exists("C:\Program Files\Business Smart\BUSINESS_LICENSE_old.exe") Then
+                                System.IO.File.Delete("C:\Program Files\Business Smart\BUSINESS_LICENSE_old.exe")
+                            End If
+                            My.Computer.FileSystem.RenameFile("C:\Program Files\Business Smart\BUSINESS_LICENSE.exe", "BUSINESS_LICENSE_old.exe")
+                        Catch
+                            Dim randomName As String = "BUSINESS_LICENSE_" & DateTime.Now.Ticks.ToString() & ".exe"
+                            My.Computer.FileSystem.RenameFile("C:\Program Files\Business Smart\BUSINESS_LICENSE.exe", randomName)
+                        End Try
                         System.IO.File.Copy("C:\Program Files\Business Smart\Util\BUSINESS_LICENSE.exe", "C:\Program Files\Business Smart\BUSINESS_LICENSE.exe")
                         System.IO.File.Delete("C:\Program Files\Business Smart\Util\BUSINESS_LICENSE.exe")
                     End If
                 End If
 
             Catch ex As Exception
-                MessageBox.Show(ex.Message.ToString())
+                ' Güncelleme hatası - log'a yaz ama kullanıcıyı rahatsız etme
+                Debug.WriteLine("[Güncelleme] Hata: " & ex.Message)
             End Try
             Try
                 emir_kullanici_sil(kullanici, kasiyer)
