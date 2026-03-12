@@ -19909,215 +19909,64 @@ Public Class Form1
         Return Tarih.ToString("dd.MM.yyyy")
     End Function
     Private Sub LisansTarihiKontrol()
-        'Dim cmd As New SqlClient.SqlCommand
-        'Dim con As New SqlClient.SqlConnection
-        Dim cmd As New OleDb.OleDbCommand
-        Dim con As New OleDb.OleDbConnection
-        Dim cmd1 As New OleDb.OleDbCommand
-        Dim con1 As New OleDb.OleDbConnection
-        'Dim adapter As New SqlClient.SqlDataAdapter
-        Dim adapter As New OleDb.OleDbDataAdapter
-        Dim DS As New DataSet
-        Dim dr As DataRow
-        Dim macAdres As String = ""
-        Dim Source As String = ""
-        Dim dteGecerlilikTarihi As Date = "31/12/2010"
-        If con1.State = ConnectionState.Closed Then
-            con1.ConnectionString = connection
-            cmd1.Connection = con1
-            con1.Open()
-        End If
-        cmd1.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT TOP 1 Lisans FROM tbParamGenel")
-        Source = cmd1.ExecuteScalar.ToString()
-        If Source = "" Then
-            Source = "88.247.79.39"
-        End If
-        cmd1.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT TOP 1 Lisans FROM tbParamGenel")
-        Source = cmd1.ExecuteScalar.ToString()
-        If My.Computer.Network.Ping(Source) Then
-            Source = Source
-        Else
-            Source = "213.14.187.18"
-        End If
-        If My.Computer.Network.Ping(Source) Then
-            Source = Source
-        Else
-            Source = "78.187.104.94"
-        End If
-        If My.Computer.Network.Ping(Source) Then
-
-            lisansSorSonra = False
-
-
-            con1.Close()
-            Try
-                con.ConnectionString = "Provider=SQLOLEDB.1;Password=87918991;Persist Security Info=True;User ID=bayii1;Initial Catalog=BAYII;Data Source= '" & Source & ",8991'"
-                cmd.CommandTimeout = False
-                cmd.Connection = con
-                con.Open()
-                con.Close()
-            Catch ex As Exception
-                con.ConnectionString = "Provider=SQLOLEDB.1;Password=87918991;Persist Security Info=True;User ID=bayii1;Initial Catalog=BAYII;Data Source=78.187.104.94,8991"
-            End Try
-            ' Erdem orospu çocuğunun yaptığı boktan lisans atlama 23.10.2018 tarihinde benim tarafımdan kapatıldı
-            '        Try
-            '    cmd.CommandTimeout = False
-            '    cmd.CommandText = "SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT tbFirmaLisans.sOnayKodu, tbFirmaLisans.sParametre1, tbFirmaLisans.sParametre2, tbFirmaLisans.sManufactor, tbFirmaLisans.sModel, tbFirmaLisans.sSystemType, tbFirmaLisans.sCpuID, tbFirmaLisans.sBiosVersion, tbFirmaLisans.sHddSerial, tbFirmaLisans.sMacID, tbFirmaLisans.sBilgisayar, tbFirmaLisans.sOturum, tbFirmaLisans.sOS, tbFirmaLisans.sVer, tbFirmaLisans.sIP, tbFirmaLisans.sUlke, tbFirmaLisans.sBolge, tbFirmaLisans.sSifreyiAlan, tbFirmaLisans.dteGecerlilikTarihi, tbFirma.sKodu, tbFirma.sAciklama, tbFirma.sAdres1, tbFirma.sOzelNot FROM tbFirmaLisans INNER JOIN tbFirma ON tbFirmaLisans.nFirmaID = tbFirma.nFirmaID WHERE (tbFirmaLisans.sOnayKodu = '" & sOnayKodu & "')"
-            '    cmd.Connection = con
-            '    adapter.SelectCommand = cmd
-            '    con.Open()
-            '    Dim N As Integer = adapter.Fill(DS, "TABLE1")
-            '    con.Close()
-            '    Try
-            '        If Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("Microsoft").OpenSubKey("Windows").OpenSubKey("MSSQL").GetValue("integer") = 1 Then
-            '            Registry.CurrentUser.CreateSubKey("Software").CreateSubKey("Microsoft").CreateSubKey("Windows").CreateSubKey("MSSQL").SetValue("integer", 0)
-            '        End If
-            '    Catch ex As Exception
-            '        Registry.CurrentUser.CreateSubKey("Software").CreateSubKey("Microsoft").CreateSubKey("Windows").CreateSubKey("MSSQL").SetValue("integer", 0)
-            '    End Try
-            '    lisansSorSonra = False
-            'Catch ex As Exception
-            '    Try
-            '        If Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("Microsoft").OpenSubKey("Windows").OpenSubKey("MSSQL").GetValue("integer") = 0 Then
-            '            Registry.CurrentUser.CreateSubKey("Software").CreateSubKey("Microsoft").CreateSubKey("Windows").CreateSubKey("MSSQL").SetValue("integer", 1)
-            '            Registry.CurrentUser.CreateSubKey("Software").CreateSubKey("Microsoft").CreateSubKey("Windows").CreateSubKey("MSSQL").SetValue("verDateLast", tarihVerBize(1))
-            '            Registry.CurrentUser.CreateSubKey("Software").CreateSubKey("Microsoft").CreateSubKey("Windows").CreateSubKey("MSSQL").SetValue("encoding", "28ef49a310033648a82493f82ed143b7")
-            '        End If
-            '    Catch ex1 As Exception
-            '        Registry.CurrentUser.CreateSubKey("Software").CreateSubKey("Microsoft").CreateSubKey("Windows").CreateSubKey("MSSQL").SetValue("integer", 1)
-            '        Registry.CurrentUser.CreateSubKey("Software").CreateSubKey("Microsoft").CreateSubKey("Windows").CreateSubKey("MSSQL").SetValue("verDateLast", tarihVerBize(1))
-            '        Registry.CurrentUser.CreateSubKey("Software").CreateSubKey("Microsoft").CreateSubKey("Windows").CreateSubKey("MSSQL").SetValue("encoding", "28ef49a310033648a82493f82ed143b7")
-            '    End Try
-            'lisansSorSonra = False
-            'End Try
-            Lisans_tarih_kontrol(lisansSorSonra)
-            If LisansKont >= Today Then
-                lisansSorSonra = False
-            Else
-                lisansSorSonra = False
+        ' ============ API TABANLI LİSANS KONTROLÜ ============
+        ' Doğrudan SQL bağlantısı yerine güvenli HTTPS API kullanılıyor
+        ' API: https://desktop.barkodyazilimevi.com/api/license/verify
+        
+        Try
+            ' Önce API'nin erişilebilir olup olmadığını kontrol et
+            If Not ApiClient.IsApiAvailable() Then
+                Debug.WriteLine("[LisansTarihiKontrol] API erişilemez, yerel kontrol yapılacak")
+                Lisans_tarih_kontrol(False)
+                Return
             End If
-
-            If lisansSorSonra = False Then
-                Try
-                    If con.State = ConnectionState.Closed Then
-                        con.Open()
-                    End If
-                    cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT sMacID FROM tbFirmaLisans WHERE (sOnayKodu = '" & sOnayKodu & "')")
-                    macAdres = cmd.ExecuteScalar.ToString()
-                    con.Close()
-                Catch ex As Exception
-                End Try
-                'MessageBox.Show(macAdres + " | " + Netzwerk(3))
+            
+            ' MAC adresi al
+            Dim localMacId As String = Netzwerk(3)
+            
+            ' API ile lisans doğrula
+            Dim licenseResult = ApiClient.VerifyLicense(sOnayKodu, localMacId)
+            
+            If licenseResult.IsValid Then
+                ' Lisans geçerli
+                lisansSorSonra = False
                 ayniKul = False
-                Dim s As String
-
-                If macAdres <> Netzwerk(3) Then
-                    Lisans_tarih_kontrol(lisansSorSonra)
-                    FARK = LisansKont - Today
-                    FARK1 = Int32.Parse(FARK.Days.ToString())
-                    If LisansKont >= Today And FARK1 <= 2 Then
-                        lisansSorSonra = True
-                    Else
-                        lisansSorSonra = False
-                        '   MessageBox.Show(macAdres + " | " + Netzwerk(3))
-                        ayniKul = True
-                        nKayitSinir = 30
-                    End If
-                ElseIf macAdres = "" Then
-                    Lisans_tarih_kontrol(lisansSorSonra)
-                    FARK = LisansKont - Today
-                    FARK1 = Int32.Parse(FARK.Days.ToString())
-                    If LisansKont >= Today And FARK1 <= 2 Then
-                        lisansSorSonra = True
-
-                        '  MessageBox.Show(macAdres + " | " + Netzwerk(3))
-
-                    Else
-                        lisansSorSonra = False
-                        ayniKul = True
-                        nKayitSinir = 30
-                    End If
-
+                
+                ' Firma adını göster
+                If Not String.IsNullOrEmpty(licenseResult.FirmaAdi) Then
+                    lbl_Firma.Text = sDatabaseGenel & vbNewLine & "Lisans Sahibi" & vbNewLine & licenseResult.FirmaAdi
+                    AlertControl1.Show(Me, "Lisans", licenseResult.FirmaAdi, "LisansKontrol")
                 End If
+                
+                Debug.WriteLine("[LisansTarihiKontrol] Lisans geçerli (API)")
+                
             Else
-                lisansSorSonra = True
-            End If
-            'adapter.SelectCommand = cmd
-            'cmd.CommandTimeout = False
-            'cmd.Connection = con
-            'cmd.CommandText = "SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT tbFirmaLisans.sOnayKodu, tbFirmaLisans.sParametre1, tbFirmaLisans.sParametre2, tbFirmaLisans.sManufactor, tbFirmaLisans.sModel, tbFirmaLisans.sSystemType, tbFirmaLisans.sCpuID, tbFirmaLisans.sBiosVersion, tbFirmaLisans.sHddSerial, tbFirmaLisans.sMacID, tbFirmaLisans.sBilgisayar, tbFirmaLisans.sOturum, tbFirmaLisans.sOS, tbFirmaLisans.sVer, tbFirmaLisans.sIP, tbFirmaLisans.sUlke, tbFirmaLisans.sBolge, tbFirmaLisans.sSifreyiAlan, tbFirmaLisans.dteGecerlilikTarihi, tbFirma.sKodu, tbFirma.sAciklama, tbFirma.sAdres1, tbFirma.sOzelNot FROM tbFirmaLisans INNER JOIN tbFirma ON tbFirmaLisans.nFirmaID = tbFirma.nFirmaID WHERE (tbFirmaLisans.sOnayKodu = '" & sOnayKodu & "')"
-            cmd.CommandTimeout = False
-            cmd.CommandText = "SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT tbFirmaLisans.sOnayKodu, tbFirmaLisans.sParametre1, tbFirmaLisans.sParametre2, tbFirmaLisans.sManufactor, tbFirmaLisans.sModel, tbFirmaLisans.sSystemType, tbFirmaLisans.sCpuID, tbFirmaLisans.sBiosVersion, tbFirmaLisans.sHddSerial, tbFirmaLisans.sMacID, tbFirmaLisans.sBilgisayar, tbFirmaLisans.sOturum, tbFirmaLisans.sOS, tbFirmaLisans.sVer, tbFirmaLisans.sIP, tbFirmaLisans.sUlke, tbFirmaLisans.sBolge, tbFirmaLisans.sSifreyiAlan, tbFirmaLisans.dteGecerlilikTarihi, tbFirma.sKodu, tbFirma.sAciklama, tbFirma.sAdres1, tbFirma.sOzelNot FROM tbFirmaLisans INNER JOIN tbFirma ON tbFirmaLisans.nFirmaID = tbFirma.nFirmaID WHERE (tbFirmaLisans.sOnayKodu = '" & sOnayKodu & "')"
-            cmd.Connection = con
-            adapter.SelectCommand = cmd
-            Lisans_tarih_kontrol(lisansSorSonra)
-            FARK = LisansKont - Today
-            FARK1 = Int32.Parse(FARK.Days.ToString())
-            If LisansKont >= Today And FARK1 <= 2 Then
-                lisansSorSonra = True
-
-            Else
-                lisansSorSonra = False
-                If con.State = ConnectionState.Closed = True Then
-                    con.Open()
+                ' Lisans geçersiz veya başka bilgisayara kayıtlı
+                Debug.WriteLine("[LisansTarihiKontrol] " & licenseResult.Message)
+                
+                If licenseResult.Message.Contains("başka bir bilgisayara") Then
+                    ' MAC ID uyuşmuyor
+                    ayniKul = True
+                    nKayitSinir = 30
+                    lisansSorSonra = False
+                ElseIf licenseResult.Message.Contains("süresi dolmuş") Then
+                    ' Lisans süresi dolmuş
+                    nKayitSinir = 30
+                    sLicensekey = "DEMO"
+                    bYasal = False
+                    sLisansUyari = Sorgu_sDil("Lisans Süreniz Bitmiş...", sDil)
+                    XtraMessageBox.Show(sLisansUyari & vbCrLf & Sorgu_sDil("Lütfen En Kısa Zamanda Yetkili Satıcınızla Görüşün...", sDil))
+                Else
+                    ' Lisans bulunamadı veya diğer hata
+                    lisansSorSonra = True
                 End If
-                Dim N As Integer = adapter.Fill(DS, "TABLE1")
-                con.Close()
-                Try
-                    Dim sLisansSahibi As String = ""
-                    For Each dr In DS.Tables(0).Rows
-                        dteGecerlilikTarihi = dr("dteGecerlilikTarihi")
-                        sLisansSahibi = dr("sKodu") & vbCrLf
-                        sLisansSahibi += dr("sAciklama").ToString & vbCrLf
-                        sLisansSahibi += dr("sAdres1").ToString
-                        lbl_Firma.Text = sDatabaseGenel & vbNewLine & "Lisans Sahibi" & vbNewLine & dr("sAciklama").ToString()
-
-                    Next
-                    If sLisansSahibi = "" Then
-                    Else
-                        AlertControl1.Show(Me, "Lisans", sLisansSahibi, "LisansKontrol")
-                        Lisans_tarih_Update(Today, dteGecerlilikTarihi)
-                    End If
-
-
-
-                    'cmd.Connection = con
-                    'If con.State = ConnectionState.Closed Then
-                    '    con.Open()
-                    'End If
-                    'cmd.CommandText = String.Format("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     TOP 1 dteGecerlilikTarihi FROM         tbFirmaLisans WHERE     (sOnayKodu = '{0}')", sOnayKodu)
-                    'Try
-                    '    dteGecerlilikTarihi = cmd.ExecuteScalar
-                    'Catch ex As Exception
-                    '    dteGecerlilikTarihi = "31/12/2078"
-                    'End Try
-                    'con.Close()
-                    'cmd = Nothing
-                    'con = Nothing
-                    If dteGecerlilikTarihi = "00:00:00" Then
-                        dteGecerlilikTarihi = "31/12/2010"
-                    End If
-                    If dteGecerlilikTarihi <= dteSistemTarihi And dteGecerlilikTarihi <> "00:00:00" Then
-                        nKayitSinir = 30
-                        sLicensekey = "DEMO"
-                        bYasal = False
-                        sLisansUyari = Sorgu_sDil("(Kısıtlı Kullanım)", sDil)
-                    End If
-                    If DateDiff(DateInterval.Day, dteSistemTarihi, dteGecerlilikTarihi) > 0 Then
-                        If DateDiff(DateInterval.Day, dteSistemTarihi, dteGecerlilikTarihi) < 30 Then
-                            sLisansUyari = DateDiff(DateInterval.Day, dteSistemTarihi, dteGecerlilikTarihi) & Sorgu_sDil(" Gün Sonra Lisans Süreniz Bitecek...", sDil)
-                            'XtraMessageBox.Show(sLisansUyari & vbCrLf & Sorgu_sDil("Lütfen En Kısa Zamanda Yetkili Satıcınızla Görüşün...", sDil))
-                            AlertControl1.Show(Me, "Uyarı", sLisansUyari & vbCrLf & Sorgu_sDil("Lütfen En Kısa Zamanda Yetkili Satıcınızla Görüşün...", sDil))
-                        End If
-                    ElseIf DateDiff(DateInterval.Day, dteSistemTarihi, dteGecerlilikTarihi) <= 0 Then
-                        sLisansUyari = Sorgu_sDil("Lisans Süreniz Bitmiş...", sDil)
-                        XtraMessageBox.Show(sLisansUyari & vbCrLf & Sorgu_sDil("Lütfen En Kısa Zamanda Yetkili Satıcınızla Görüşün...", sDil))
-                    End If
-                Catch ex As Exception
-                End Try
             End If
-
-        End If
+            
+        Catch ex As Exception
+            Debug.WriteLine("[LisansTarihiKontrol] Hata: " & ex.Message)
+            ' API hatası durumunda yerel kontrole geri dön
+            Lisans_tarih_kontrol(False)
+        End Try
     End Sub
     Private Sub Timer_message_tek_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer_message_tek.Tick
         If bMessageCheck = True Then
