@@ -9510,231 +9510,107 @@ Public Class Form1
         magazaChartAktif = False
 
     End Sub
+    ''' <summary>
+    ''' Otomatik güncelleme - API üzerinden (FTP yerine)
+    ''' </summary>
     Private Sub OtoGuncelleme()
-
-        Dim webClient As New WebClient
-        Dim cmd As New OleDb.OleDbCommand
-        Dim con As New OleDb.OleDbConnection
-        Dim otoGuncelleme As Boolean = False
-        Dim Ftp As String = ""
-        Dim ftpPath As String = ""
-        Dim ftpPathManage As String = ""
-        Dim simdikiExeYolu As String = ""
-        Dim simdikiVersionTarih As DateTime
-        Dim simdikiManageYolu As String = ""
-        Dim güncelVersionTarih As DateTime
-        Dim simdikiVersionTarihManage As DateTime
-        Dim guncelVersionTarihManage As DateTime
-        Dim ftpRequest As FtpWebRequest
-        con.ConnectionString = connection
-        cmd.Connection = con
-        con.Open()
-        cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT TOP 1 otoGuncelleme FROM tbParamGenel")
-        otoGuncelleme = Convert.ToBoolean(cmd.ExecuteScalar().ToString())
-        cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT TOP 1 EticaretFtp FROM tbParamGenel")
-        Ftp = cmd.ExecuteScalar.ToString()
-        con.Close()
-        If My.Computer.Network.Ping(Ftp) Then
-            Ftp = Ftp
-        Else
-            Ftp = "213.14.187.18"
-        End If
-
-        If My.Computer.Network.Ping(Ftp) Then
-
-            If File.Exists("C:\Program Files (x86)\Business Smart\business_smart_old.exe") Then
-                System.IO.File.Delete("C:\Program Files (x86)\Business Smart\business_smart_old.exe")
-
-            ElseIf File.Exists("C:\Program Files\Business Smart\business_smart_old.exe") Then
-                System.IO.File.Delete("C:\Program Files\Business Smart\business_smart_old.exe")
+        Try
+            Dim cmd As New OleDb.OleDbCommand
+            Dim con As New OleDb.OleDbConnection
+            Dim otoGuncelleme As Boolean = False
+            
+            con.ConnectionString = connection
+            cmd.Connection = con
+            con.Open()
+            cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT TOP 1 otoGuncelleme FROM tbParamGenel")
+            otoGuncelleme = Convert.ToBoolean(cmd.ExecuteScalar().ToString())
+            con.Close()
+            
+            If Not otoGuncelleme Then Exit Sub
+            
+            ' Eski dosyaları temizle
+            TemizleEskiDosyalar()
+            
+            ' Platform belirle (x64 veya x86)
+            Dim platform As String = If(File.Exists("C:\Program Files (x86)\Business Smart\business_smart.exe"), "x64", "x86")
+            Dim programPath As String = If(platform = "x64", "C:\Program Files (x86)\Business Smart", "C:\Program Files\Business Smart")
+            Dim utilPath As String = Path.Combine(programPath, "Util")
+            
+            If Not Directory.Exists(utilPath) Then
+                Directory.CreateDirectory(utilPath)
             End If
-            If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE_old.exe") Then
-                System.IO.File.Delete("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE_old.exe")
-
-            ElseIf File.Exists("C:\Program Files\Business Smart\BUSINESS_SMART_MANAGE_old.exe") Then
-                System.IO.File.Delete("C:\Program Files\Business Smart\BUSINESS_SMART_MANAGE_old.exe")
-            End If
-            ' POS eski dosyasını sil
-            If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_POS_old.exe") Then
-                System.IO.File.Delete("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_POS_old.exe")
-            ElseIf File.Exists("C:\Program Files\Business Smart\BUSINESS_SMART_POS_old.exe") Then
-                System.IO.File.Delete("C:\Program Files\Business Smart\BUSINESS_SMART_POS_old.exe")
-            End If
-
-        Else
-            otoGuncelleme = False
-        End If
-        If otoGuncelleme = True Then
-
-            'şimdiki version
-            If File.Exists("C:\Program Files (x86)\Business Smart\business_smart.exe") Then
-                simdikiExeYolu = "C:\Program Files (x86)\Business Smart\business_smart.exe"
-                ftpPath = "ftp://" & Ftp & "/BusinessSmart/x64/business_smart.exe"
-            End If
-            If File.Exists("C:\Program Files\Business Smart\business_smart.exe") Then
-                simdikiExeYolu = "C:\Program Files\Business Smart\business_smart.exe"
-                ftpPath = "ftp://" & Ftp & "/BusinessSmart/x86/business_smart.exe"
-            End If
-            simdikiVersionTarih = System.IO.File.GetLastWriteTime(simdikiExeYolu)
-
-            'ftp'de olan version
-
-            Try
-                ftpRequest = FtpWebRequest.Create(New Uri(ftpPath))
-                ftpRequest.UseBinary = True
-                ftpRequest.Credentials = New NetworkCredential("Administrator", "!!AliTaner01018991!!")
-                ftpRequest.Method = WebRequestMethods.Ftp.GetDateTimestamp
-                Using response As FtpWebResponse = ftpRequest.GetResponse()
-                    güncelVersionTarih = response.LastModified
-                End Using
-            Catch ex As Exception
-                ' FTP bağlantı hatası - sessizce geç, güncelleme yapılmaz
-                Debug.WriteLine("[OtoGuncelleme] FTP hata: " & ex.Message)
-                Exit Sub
-            End Try
-
-            If Date.Compare(simdikiVersionTarih, güncelVersionTarih) < 0 Then
-                If File.Exists("C:\Program Files (x86)\Business Smart\business_smart.exe") Then
-                    Try
-                        ' Hedef dosya varsa önce sil
-                        If File.Exists("C:\Program Files (x86)\Business Smart\Util\business_smart.exe") Then
-                            System.IO.File.Delete("C:\Program Files (x86)\Business Smart\Util\business_smart.exe")
-                        End If
-                        My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x64/business_smart.exe", "C:\Program Files (x86)\Business Smart\Util\business_smart.exe", "Administrator", "!!AliTaner01018991!!")
-                        guncellemeYapildiMi = True
-                    Catch ex As Exception
-                        MessageBox.Show(ex.Message.ToString())
-                    End Try
-
-                ElseIf File.Exists("C:\Program Files\Business Smart\business_smart.exe") Then
-                    Try
-                        ' Hedef dosya varsa önce sil
-                        If File.Exists("C:\Program Files\Business Smart\Util\business_smart.exe") Then
-                            System.IO.File.Delete("C:\Program Files\Business Smart\Util\business_smart.exe")
-                        End If
-                        My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x86/business_smart.exe", "C:\Program Files\Business Smart\Util\business_smart.exe", "Administrator", "!!AliTaner01018991!!")
-                        guncellemeYapildiMi = True
-
-                    Catch ex As Exception
-                        MessageBox.Show(ex.Message.ToString())
-                    End Try
-
-                End If
-            End If
-
-            'şimdiki version manage
-            If File.Exists("C:\Program Files (x86)\Business Smart\business_smart.exe") Then
-                simdikiManageYolu = "C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE.exe"
-                ftpPathManage = "ftp://" & Ftp & "/BusinessSmart/x64/BUSINESS_SMART_MANAGE.exe"
-            End If
-            If File.Exists("C:\Program Files\Business Smart\business_smart.exe") Then
-                simdikiManageYolu = "C:\Program Files\Business Smart\BUSINESS_SMART_MANAGE.exe"
-                ftpPathManage = "ftp://" & Ftp & "/BusinessSmart/x86/BUSINESS_SMART_MANAGE.exe"
-            End If
-
-            simdikiVersionTarihManage = System.IO.File.GetLastWriteTime(simdikiManageYolu)
-
-            'ftp'de olan version Manage
-
-            Try
-                ftpRequest = FtpWebRequest.Create(New Uri(ftpPathManage))
-                ftpRequest.UseBinary = True
-                ftpRequest.Credentials = New NetworkCredential("Administrator", "!!AliTaner01018991!!")
-                ftpRequest.Method = WebRequestMethods.Ftp.GetDateTimestamp
-                Using response As FtpWebResponse = ftpRequest.GetResponse()
-                    guncelVersionTarihManage = response.LastModified
-                End Using
-            Catch ex As Exception
-                ' FTP bağlantı hatası - sessizce geç
-                Debug.WriteLine("[OtoGuncelleme-Manage] FTP hata: " & ex.Message)
-                Exit Sub
-            End Try
-
-            If DateTime.Compare(simdikiVersionTarihManage, guncelVersionTarihManage) < 0 Then
-                If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE.exe") Then
-                    Try
-                        ' Hedef dosya varsa önce sil
-                        If File.Exists("C:\Program Files (x86)\Business Smart\Util\BUSINESS_SMART_MANAGE.exe") Then
-                            System.IO.File.Delete("C:\Program Files (x86)\Business Smart\Util\BUSINESS_SMART_MANAGE.exe")
-                        End If
-                        My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x64/BUSINESS_SMART_MANAGE.exe", "C:\Program Files (x86)\Business Smart\Util\BUSINESS_SMART_MANAGE.exe", "Administrator", "!!AliTaner01018991!!")
-                        guncellemeYapildiMiManage = True
-                    Catch ex As Exception
-                        MessageBox.Show(ex.Message.ToString())
-                    End Try
-
-                ElseIf File.Exists("C:\Program Files\Business Smart\BUSINESS_SMART_MANAGE.exe") Then
-                    Try
-                        ' Hedef dosya varsa önce sil
-                        If File.Exists("C:\Program Files\Business Smart\Util\BUSINESS_SMART_MANAGE.exe") Then
-                            System.IO.File.Delete("C:\Program Files\Business Smart\Util\BUSINESS_SMART_MANAGE.exe")
-                        End If
-                        My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x86/BUSINESS_SMART_MANAGE.exe", "C:\Program Files\Business Smart\Util\BUSINESS_SMART_MANAGE.exe", "Administrator", "!!AliTaner01018991!!")
-                        guncellemeYapildiMiManage = True
-
-                    Catch ex As Exception
-                        MessageBox.Show(ex.Message.ToString())
-                    End Try
-
-                End If
-            End If
-
-            ' ============ BUSINESS_SMART_POS.exe GÜNCELLEMESİ ============
-            Dim simdikiPosYolu As String = ""
-            Dim ftpPathPos As String = ""
-            Dim simdikiVersionTarihPos As DateTime
-            Dim guncelVersionTarihPos As DateTime
-
-            If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_POS.exe") Then
-                simdikiPosYolu = "C:\Program Files (x86)\Business Smart\BUSINESS_SMART_POS.exe"
-                ftpPathPos = "ftp://" & Ftp & "/BusinessSmart/x64/BUSINESS_SMART_POS.exe"
-            ElseIf File.Exists("C:\Program Files\Business Smart\BUSINESS_SMART_POS.exe") Then
-                simdikiPosYolu = "C:\Program Files\Business Smart\BUSINESS_SMART_POS.exe"
-                ftpPathPos = "ftp://" & Ftp & "/BusinessSmart/x86/BUSINESS_SMART_POS.exe"
-            End If
-
-            If Not String.IsNullOrEmpty(simdikiPosYolu) Then
-                simdikiVersionTarihPos = System.IO.File.GetLastWriteTime(simdikiPosYolu)
-
-                ' FTP'de olan POS version
-                Try
-                    ftpRequest = FtpWebRequest.Create(New Uri(ftpPathPos))
-                    ftpRequest.UseBinary = True
-                    ftpRequest.Credentials = New NetworkCredential("Administrator", "!!AliTaner01018991!!")
-                    ftpRequest.Method = WebRequestMethods.Ftp.GetDateTimestamp
-                    Dim responsePos As FtpWebResponse = ftpRequest.GetResponse()
-                    guncelVersionTarihPos = responsePos.LastModified
-                Catch ex As Exception
-                    ' POS güncelleme hatası sessizce geç
-                End Try
-
-                If DateTime.Compare(simdikiVersionTarihPos, guncelVersionTarihPos) < 0 Then
-                    If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_POS.exe") Then
-                        Try
-                            ' Hedef dosya varsa önce sil
-                            If File.Exists("C:\Program Files (x86)\Business Smart\Util\BUSINESS_SMART_POS.exe") Then
-                                System.IO.File.Delete("C:\Program Files (x86)\Business Smart\Util\BUSINESS_SMART_POS.exe")
+            
+            ' API'den güncelleme kontrolü
+            Dim updateInfo = ApiClient.CheckForUpdates("business_smart", "1.0.0")
+            
+            If updateInfo IsNot Nothing AndAlso updateInfo("success").ToObject(Of Boolean)() Then
+                Dim updates = updateInfo("updates")
+                
+                For Each update In updates
+                    Dim fileName = update("fileName").ToString()
+                    Dim updatePlatform = update("platform").ToString()
+                    Dim lastModified = DateTime.Parse(update("lastModified").ToString())
+                    
+                    ' Sadece bizim platformumuza ait güncellemeleri kontrol et
+                    If updatePlatform = platform Then
+                        Dim localFile = Path.Combine(programPath, fileName)
+                        
+                        If File.Exists(localFile) Then
+                            Dim localDate = File.GetLastWriteTime(localFile)
+                            
+                            ' Sunucudaki daha yeni ise indir
+                            If lastModified > localDate Then
+                                Dim downloadPath = Path.Combine(utilPath, fileName)
+                                
+                                Debug.WriteLine($"[OtoGuncelleme-API] İndiriliyor: {fileName}")
+                                
+                                If ApiClient.DownloadUpdate($"{platform}/{fileName}", downloadPath) Then
+                                    Debug.WriteLine($"[OtoGuncelleme-API] İndirildi: {fileName}")
+                                    
+                                    ' Hangi dosya güncellendi işaretle
+                                    Select Case fileName.ToLower()
+                                        Case "business_smart.exe"
+                                            guncellemeYapildiMi = True
+                                        Case "business_smart_manage.exe"
+                                            guncellemeYapildiMiManage = True
+                                        Case "business_smart_pos.exe"
+                                            guncellemeYapildiMiPOS = True
+                                    End Select
+                                End If
                             End If
-                            My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x64/BUSINESS_SMART_POS.exe", "C:\Program Files (x86)\Business Smart\Util\BUSINESS_SMART_POS.exe", "Administrator", "!!AliTaner01018991!!")
-                        Catch ex As Exception
-                            MessageBox.Show(ex.Message.ToString())
-                        End Try
-
-                    ElseIf File.Exists("C:\Program Files\Business Smart\BUSINESS_SMART_POS.exe") Then
-                        Try
-                            ' Hedef dosya varsa önce sil
-                            If File.Exists("C:\Program Files\Business Smart\Util\BUSINESS_SMART_POS.exe") Then
-                                System.IO.File.Delete("C:\Program Files\Business Smart\Util\BUSINESS_SMART_POS.exe")
-                            End If
-                            My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x86/BUSINESS_SMART_POS.exe", "C:\Program Files\Business Smart\Util\BUSINESS_SMART_POS.exe", "Administrator", "!!AliTaner01018991!!")
-                        Catch ex As Exception
-                            MessageBox.Show(ex.Message.ToString())
-                        End Try
+                        End If
                     End If
-                End If
+                Next
+            Else
+                Debug.WriteLine("[OtoGuncelleme-API] API'den güncelleme bilgisi alınamadı")
             End If
-            ' ============================================================
-        End If
+            
+        Catch ex As Exception
+            Debug.WriteLine("[OtoGuncelleme-API] Hata: " & ex.Message)
+        End Try
+    End Sub
+    
+    ''' <summary>
+    ''' Eski güncelleme dosyalarını temizle
+    ''' </summary>
+    Private Sub TemizleEskiDosyalar()
+        Dim eskiDosyalar() As String = {
+            "C:\Program Files (x86)\Business Smart\business_smart_old.exe",
+            "C:\Program Files\Business Smart\business_smart_old.exe",
+            "C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE_old.exe",
+            "C:\Program Files\Business Smart\BUSINESS_SMART_MANAGE_old.exe",
+            "C:\Program Files (x86)\Business Smart\BUSINESS_SMART_POS_old.exe",
+            "C:\Program Files\Business Smart\BUSINESS_SMART_POS_old.exe"
+        }
+        
+        For Each dosya In eskiDosyalar
+            Try
+                If File.Exists(dosya) Then
+                    File.Delete(dosya)
+                End If
+            Catch
+            End Try
+        Next
     End Sub
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         'DevExpress.XtraBars.BarLinkUserDefines.Caption Or
@@ -23969,36 +23845,34 @@ CleanupExcel:
         End Try
     End Sub
 
-#Region "Gelişmiş FTP Yedekleme - 7z Sıkıştırma + Parçalı Upload + Retry"
+#Region "Gelişmiş Yedekleme - API Üzerinden (FTP Yerine)"
 
-    ' FTP yedekleme durumu - başarısız olursa 02:00'da tekrar dene
-    Private Shared bFtpYedekBasarisiz As Boolean = False
-    Private Shared sFtpYedekDosya As String = ""
-    Private Shared sFtpYedekHedef As String = ""
-    Private Shared sFtpYedekFtp As String = ""
-
+    ' Yedekleme durumu - başarısız olursa 02:00'da tekrar dene
+    Private Shared bApiYedekBasarisiz As Boolean = False
+    Private Shared sApiYedekDosya As String = ""
+    
     ''' <summary>
-    ''' Gelişmiş FTP Yedekleme - 7z sıkıştırma + parçalı upload
+    ''' Gelişmiş Yedekleme - API üzerinden (FTP yerine)
     ''' </summary>
     Public Sub GelismisYedekVeGonder(veritabani As String, yedekDosya As String, ftpAdres As String, ftpKullanici As String, ftpSifre As String)
         Try
-            logla("[GelismisYedek] Başlıyor: " & veritabani)
+            logla("[GelismisYedek-API] Başlıyor: " & veritabani)
             
             ' 1. SQL Server yedeği al (sıkıştırmalı)
             If Not File.Exists(yedekDosya) Then
-                logla("[GelismisYedek] Yedek dosyası bulunamadı, yedek alınıyor...")
+                logla("[GelismisYedek-API] Yedek dosyası bulunamadı, yedek alınıyor...")
                 yedekle(veritabani, yedekDosya, False)
             End If
             
             If Not File.Exists(yedekDosya) Then
-                logla("[GelismisYedek] HATA: Yedek dosyası oluşturulamadı!")
-                bFtpYedekBasarisiz = True
-                sFtpYedekDosya = yedekDosya
+                logla("[GelismisYedek-API] HATA: Yedek dosyası oluşturulamadı!")
+                bApiYedekBasarisiz = True
+                sApiYedekDosya = yedekDosya
                 Return
             End If
             
             Dim orijinalBoyut As Long = New FileInfo(yedekDosya).Length
-            logla("[GelismisYedek] Orijinal boyut: " & FormatBytes(orijinalBoyut))
+            logla("[GelismisYedek-API] Orijinal boyut: " & FormatBytes(orijinalBoyut))
             
             ' 2. 7z ile sıkıştır (eğer 7z varsa)
             Dim sikistirilmisDosya As String = yedekDosya & ".7z"
@@ -24007,27 +23881,21 @@ CleanupExcel:
             If SikistirDosya7z(yedekDosya, sikistirilmisDosya) Then
                 gonderilecekDosya = sikistirilmisDosya
                 Dim sikistirilmisBoyut As Long = New FileInfo(sikistirilmisDosya).Length
-                logla("[GelismisYedek] 7z sıkıştırma başarılı: " & FormatBytes(orijinalBoyut) & " -> " & FormatBytes(sikistirilmisBoyut) & " (%" & Math.Round((1 - sikistirilmisBoyut / orijinalBoyut) * 100, 1) & " küçüldü)")
+                logla("[GelismisYedek-API] Sıkıştırma başarılı: " & FormatBytes(orijinalBoyut) & " -> " & FormatBytes(sikistirilmisBoyut))
             Else
-                logla("[GelismisYedek] 7z bulunamadı veya sıkıştırma başarısız, orijinal dosya gönderilecek")
+                logla("[GelismisYedek-API] Sıkıştırma başarısız, orijinal dosya gönderilecek")
             End If
             
-            ' 3. Parçalı FTP Upload
-            Dim dosyaAdi As String = Path.GetFileName(gonderilecekDosya)
-            Dim ftpHedef As String = "ftp://" & ftpAdres & "/backup/" & dosyaAdi
+            ' 3. API üzerinden upload
+            Dim clientId As String = sDatabaseGenel ' Veritabanı adını client ID olarak kullan
             
-            Dim uploadBasarili As Boolean = ParcaliFtpUpload(gonderilecekDosya, ftpHedef, ftpKullanici, ftpSifre)
+            logla("[GelismisYedek-API] Upload başlıyor: " & Path.GetFileName(gonderilecekDosya))
             
-            If uploadBasarili Then
-                logla("[GelismisYedek] FTP upload başarılı: " & dosyaAdi)
-                bFtpYedekBasarisiz = False
-                
-                ' Eski yedekleri FTP'den sil (bugünkü hariç)
-                Try
-                    FtpEskiYedekleriSil(ftpAdres, ftpKullanici, ftpSifre, dosyaAdi)
-                Catch silEx As Exception
-                    logla("[GelismisYedek] Eski yedek silme hatası: " & silEx.Message)
-                End Try
+            Dim result = ApiClient.UploadBackup(gonderilecekDosya, clientId)
+            
+            If result IsNot Nothing AndAlso result("success").ToObject(Of Boolean)() Then
+                logla("[GelismisYedek-API] Upload başarılı: " & result("fileName").ToString())
+                bApiYedekBasarisiz = False
                 
                 ' Sıkıştırılmış dosyayı sil (orijinal kalsın)
                 If File.Exists(sikistirilmisDosya) AndAlso sikistirilmisDosya <> yedekDosya Then
@@ -24037,16 +23905,15 @@ CleanupExcel:
                     End Try
                 End If
             Else
-                logla("[GelismisYedek] FTP upload BAŞARISIZ - 02:00'da tekrar denenecek")
-                bFtpYedekBasarisiz = True
-                sFtpYedekDosya = gonderilecekDosya
-                sFtpYedekHedef = ftpHedef
-                sFtpYedekFtp = ftpAdres
+                Dim errorMsg As String = If(result IsNot Nothing, result("message").ToString(), "Bağlantı hatası")
+                logla("[GelismisYedek-API] Upload BAŞARISIZ: " & errorMsg & " - 02:00'da tekrar denenecek")
+                bApiYedekBasarisiz = True
+                sApiYedekDosya = gonderilecekDosya
             End If
             
         Catch ex As Exception
-            logla("[GelismisYedek] HATA: " & ex.Message)
-            bFtpYedekBasarisiz = True
+            logla("[GelismisYedek-API] HATA: " & ex.Message)
+            bApiYedekBasarisiz = True
         End Try
     End Sub
 
