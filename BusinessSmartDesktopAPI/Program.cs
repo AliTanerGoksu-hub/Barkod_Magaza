@@ -31,7 +31,7 @@ var apiKey = config["ApiKey"] ?? "BSmart2024Desktop!@#";
 var updatesPath = config["UpdatesPath"] ?? @"C:\BusinessSmartFiles\Updates";
 var backupsPath = config["BackupsPath"] ?? @"C:\BusinessSmartFiles\Backups";
 var filesPath = config["FilesPath"] ?? @"C:\BusinessSmartFiles\SharedFiles";
-var downloadsPath = config["DownloadsPath"] ?? @"C:\BusinessSmartFiles\Downloads"; // Bayii indirme klasörü
+var downloadsPath = config["DownloadsPath"] ?? @"D:\ftp"; // Bayii indirme klasörü
 
 // Bayii kullanıcı bilgileri
 var bayiiUsername = config["BayiiUsername"] ?? "bayii";
