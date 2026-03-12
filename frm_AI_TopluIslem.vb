@@ -431,7 +431,7 @@ Partial Public Class frm_AI_TopluIslem
             Debug.WriteLine("[AI Checkbox] Kaydetme hatası: " & ex.Message)
         End Try
     End Sub
-    
+
     ''' <summary>
     ''' Checkbox durumlarını veritabanından yükle
     ''' </summary>
@@ -456,7 +456,7 @@ Partial Public Class frm_AI_TopluIslem
             Debug.WriteLine("[AI Checkbox] Yükleme hatası: " & ex.Message)
         End Try
     End Sub
-    
+
     Private Function AyarOku(conn As OleDb.OleDbConnection, paramAdi As String) As String
         Try
             Using cmd As New OleDb.OleDbCommand("SELECT sParamDegeri FROM tbParamGenel WHERE sParamAdi = ?", conn)
@@ -468,13 +468,13 @@ Partial Public Class frm_AI_TopluIslem
             Return ""
         End Try
     End Function
-    
+
     Private Sub AyarYaz(conn As OleDb.OleDbConnection, paramAdi As String, paramDegeri As String)
         Try
             Using checkCmd As New OleDb.OleDbCommand("SELECT COUNT(*) FROM tbParamGenel WHERE sParamAdi = ?", conn)
                 checkCmd.Parameters.AddWithValue("?", paramAdi)
                 Dim exists As Integer = Convert.ToInt32(checkCmd.ExecuteScalar())
-                
+
                 If exists > 0 Then
                     Using updateCmd As New OleDb.OleDbCommand("UPDATE tbParamGenel SET sParamDegeri = ? WHERE sParamAdi = ?", conn)
                         updateCmd.Parameters.AddWithValue("?", paramDegeri)
@@ -492,11 +492,11 @@ Partial Public Class frm_AI_TopluIslem
         Catch
         End Try
     End Sub
-    
+
     Private Async Sub btnBasla_Click(sender As Object, e As EventArgs) Handles btnBasla.Click
         Try
             If isProcessing Then Return
-            
+
             ' Onay al
             Dim dialogResult As DialogResult = MessageBox.Show(
                 selectedStokIDs.Count.ToString() & " ürün için AI içerik oluşturulacak." & vbCrLf & vbCrLf &
@@ -505,19 +505,19 @@ Partial Public Class frm_AI_TopluIslem
                 "Onay",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question)
-            
+
             If dialogResult <> DialogResult.Yes Then Return
-            
+
             isProcessing = True
             btnBasla.Enabled = False
             btnIptal.Enabled = False
             progressBar.Value = 0
             progressBar.Maximum = selectedStokIDs.Count
             lstLog.Items.Clear()
-            
+
             ' İşlemi başlat
             ProcessProducts()
-            
+
         Catch ex As Exception
             MessageBox.Show("Hata: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
@@ -526,12 +526,12 @@ Partial Public Class frm_AI_TopluIslem
             btnIptal.Enabled = True
         End Try
     End Sub
-    
+
     Private Async Sub ProcessProducts()
         Dim successCount As Integer = 0
         Dim failCount As Integer = 0
         Dim bedenCount As Integer = 0
-        
+
         AddLog("🚀 Toplu AI işlem başlatıldı: " & selectedStokIDs.Count.ToString() & " ürün")
         AddLog("")
         AddLog("Seçili işlemler:")
@@ -550,7 +550,7 @@ Partial Public Class frm_AI_TopluIslem
         Dim markaField As String = GetSinifAyar("ETICARET_SINIF_MARKA", "sSinifKodu3")
         Dim kat1Field As String = GetSinifAyar("ETICARET_SINIF_KAT1", "sSinifKodu4")
         Dim kat2Field As String = GetSinifAyar("ETICARET_SINIF_KAT2", "sSinifKodu5")
-        
+
         ' Form loguna da yaz
         AddLog("📋 Sınıf Eşleştirme Ayarları:")
         AddLog("   MARKA = " & markaField)

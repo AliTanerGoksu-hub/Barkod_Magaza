@@ -9600,7 +9600,7 @@ Public Class Form1
                         If File.Exists("C:\Program Files (x86)\Business Smart\Util\business_smart.exe") Then
                             System.IO.File.Delete("C:\Program Files (x86)\Business Smart\Util\business_smart.exe")
                         End If
-                        My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x64/business_smart.exe", "C:\Program Files (x86)\Business Smart\Util\business_smart.exe", "backup", "Backup0555")
+                        My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x64/business_smart.exe", "C:\Program Files (x86)\Business Smart\Util\business_smart.exe", "administrator", "!!AliTaner01018991!!")
                         guncellemeYapildiMi = True
                     Catch ex As Exception
                         MessageBox.Show(ex.Message.ToString())
@@ -9639,7 +9639,7 @@ Public Class Form1
             Try
                 ftpRequest = FtpWebRequest.Create(New Uri(ftpPathManage))
                 ftpRequest.UseBinary = True
-                ftpRequest.Credentials = New NetworkCredential("Administrator", "!!alitaner01018991!!")
+                ftpRequest.Credentials = New NetworkCredential("Administrator", "!!AliTaner01018991!!")
                 ftpRequest.Method = WebRequestMethods.Ftp.GetDateTimestamp
                 Using response As FtpWebResponse = ftpRequest.GetResponse()
                     guncelVersionTarihManage = response.LastModified
@@ -9649,7 +9649,7 @@ Public Class Form1
                 Debug.WriteLine("[OtoGuncelleme-Manage] FTP hata: " & ex.Message)
                 Exit Sub
             End Try
-            
+
             If DateTime.Compare(simdikiVersionTarihManage, guncelVersionTarihManage) < 0 Then
                 If File.Exists("C:\Program Files (x86)\Business Smart\BUSINESS_SMART_MANAGE.exe") Then
                     Try
