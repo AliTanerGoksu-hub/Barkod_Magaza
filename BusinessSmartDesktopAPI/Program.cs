@@ -1020,7 +1020,11 @@ app.MapGet("/api/license/bayii", async (HttpContext context) =>
     }
     catch (Exception ex)
     {
-        return Results.Json(new { success = false, message = ex.Message }, statusCode: 500);
+        return Results.Json(new { 
+            success = false, 
+            message = "Bayii sorgu hatası: " + ex.Message,
+            innerException = ex.InnerException?.Message
+        }, statusCode: 500);
     }
 });
 
