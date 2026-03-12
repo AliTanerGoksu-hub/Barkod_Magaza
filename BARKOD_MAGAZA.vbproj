@@ -594,6 +594,7 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiClient.vb" />
     <Compile Include="AuditLogger.vb" />
     <Compile Include="AuditLogHelper.vb" />
     <Compile Include="frm_ExcelSutunEslestirme.vb" />

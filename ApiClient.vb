@@ -1,374 +1,286 @@
 Imports System.Net
-Imports System.Net.Http
 Imports System.IO
 Imports System.Text
-Imports Newtonsoft.Json
-Imports Newtonsoft.Json.Linq
 
 ''' <summary>
 ''' Business Smart Desktop API Client
-''' Güncelleme, Yedekleme, Lisans işlemleri için API bağlantısı
+''' FTP ve doğrudan SQL bağlantıları yerine güvenli API kullanımı sağlar
 ''' </summary>
-Public Module ApiClient
+Public Class ApiClient
     
-    ' API Ayarları
-    Private Const API_BASE_URL As String = "https://desktop.barkodyazilimevi.com"
-    Private Const API_KEY As String = "BSmart2024Desktop!@#SecureKey"
-    
-    Private ReadOnly httpClient As New HttpClient()
+    Private Shared ReadOnly API_BASE_URL As String = "https://desktop.barkodyazilimevi.com"
+    Private Shared ReadOnly API_KEY As String = "BSmart2024Desktop!@#"
     
     ''' <summary>
-    ''' API'ye istek gönder
+    ''' Güncelleme dosyasının bilgisini API'den alır (FTP GetDateTimestamp yerine)
     ''' </summary>
-    Private Function SendRequest(endpoint As String, method As String, Optional body As String = Nothing) As String
+    Public Shared Function GetUpdateFileInfo(fileName As String, platform As String) As UpdateFileInfo
+        Dim result As New UpdateFileInfo()
+        result.Success = False
+        
         Try
-            Dim request As New HttpRequestMessage()
-            request.RequestUri = New Uri(API_BASE_URL & endpoint)
-            request.Method = New HttpMethod(method)
+            Dim url As String = $"{API_BASE_URL}/api/update/info?file={platform}/{fileName}"
+            Dim request As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
+            request.Method = "GET"
             request.Headers.Add("X-Api-Key", API_KEY)
+            request.Timeout = 30000
             
-            If body IsNot Nothing Then
-                request.Content = New StringContent(body, Encoding.UTF8, "application/json")
-            End If
-            
-            Dim response = httpClient.SendAsync(request).Result
-            Return response.Content.ReadAsStringAsync().Result
-        Catch ex As Exception
-            Debug.WriteLine("[API] Hata: " & ex.Message)
-            Return Nothing
-        End Try
-    End Function
-    
-    ' ==================== GÜNCELLEME API ====================
-    
-    ''' <summary>
-    ''' Güncelleme kontrolü yap
-    ''' </summary>
-    Public Function CheckForUpdates(appName As String, currentVersion As String) As JObject
-        Try
-            Dim response = SendRequest($"/api/update/check?app={appName}&version={currentVersion}", "GET")
-            If response IsNot Nothing Then
-                Return JObject.Parse(response)
-            End If
-        Catch ex As Exception
-            Debug.WriteLine("[API-Update] Check hatası: " & ex.Message)
-        End Try
-        Return Nothing
-    End Function
-    
-    ''' <summary>
-    ''' Güncelleme dosyası bilgisini al
-    ''' </summary>
-    Public Function GetUpdateInfo(fileName As String) As JObject
-        Try
-            Dim response = SendRequest($"/api/update/info?file={fileName}", "GET")
-            If response IsNot Nothing Then
-                Return JObject.Parse(response)
-            End If
-        Catch ex As Exception
-            Debug.WriteLine("[API-Update] Info hatası: " & ex.Message)
-        End Try
-        Return Nothing
-    End Function
-    
-    ''' <summary>
-    ''' Güncelleme dosyasını indir
-    ''' </summary>
-    Public Function DownloadUpdate(fileName As String, localPath As String) As Boolean
-        Try
-            Dim request As New HttpRequestMessage()
-            request.RequestUri = New Uri(API_BASE_URL & $"/api/update/download?file={fileName}")
-            request.Method = HttpMethod.Get
-            request.Headers.Add("X-Api-Key", API_KEY)
-            
-            Dim response = httpClient.SendAsync(request).Result
-            
-            If response.IsSuccessStatusCode Then
-                Using fileStream As New FileStream(localPath, FileMode.Create)
-                    response.Content.CopyToAsync(fileStream).Wait()
+            Using response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
+                Using reader As New StreamReader(response.GetResponseStream())
+                    Dim json As String = reader.ReadToEnd()
+                    
+                    ' Basit JSON parsing
+                    If json.Contains("""success"":true") OrElse json.Contains("""success"": true") Then
+                        result.Success = True
+                        
+                        ' lastModified parse et
+                        Dim lastModifiedStart As Integer = json.IndexOf("""lastModified"":")
+                        If lastModifiedStart > 0 Then
+                            Dim valueStart As Integer = json.IndexOf("""", lastModifiedStart + 15) + 1
+                            Dim valueEnd As Integer = json.IndexOf("""", valueStart)
+                            If valueEnd > valueStart Then
+                                Dim dateStr As String = json.Substring(valueStart, valueEnd - valueStart)
+                                DateTime.TryParse(dateStr, result.LastModified)
+                            End If
+                        End If
+                        
+                        ' fileSize parse et
+                        Dim fileSizeStart As Integer = json.IndexOf("""fileSize"":")
+                        If fileSizeStart > 0 Then
+                            Dim valueStart As Integer = fileSizeStart + 11
+                            Dim valueEnd As Integer = json.IndexOfAny(New Char() {","c, "}"c}, valueStart)
+                            If valueEnd > valueStart Then
+                                Long.TryParse(json.Substring(valueStart, valueEnd - valueStart).Trim(), result.FileSize)
+                            End If
+                        End If
+                    End If
                 End Using
-                Return True
-            End If
-        Catch ex As Exception
-            Debug.WriteLine("[API-Update] Download hatası: " & ex.Message)
-        End Try
-        Return False
-    End Function
-    
-    ' ==================== YEDEKLEME API ====================
-    
-    ''' <summary>
-    ''' Yedek dosyasını API'ye yükle
-    ''' </summary>
-    Public Function UploadBackup(filePath As String, clientId As String) As JObject
-        Try
-            If Not File.Exists(filePath) Then
-                Return JObject.Parse("{""success"":false,""message"":""Dosya bulunamadı""}")
-            End If
-            
-            Using content As New MultipartFormDataContent()
-                Dim fileContent As New ByteArrayContent(File.ReadAllBytes(filePath))
-                fileContent.Headers.ContentType = New Headers.MediaTypeHeaderValue("application/octet-stream")
-                content.Add(fileContent, "file", Path.GetFileName(filePath))
-                
-                Dim request As New HttpRequestMessage()
-                request.RequestUri = New Uri(API_BASE_URL & "/api/backup/upload")
-                request.Method = HttpMethod.Post
-                request.Headers.Add("X-Api-Key", API_KEY)
-                request.Headers.Add("X-Client-Id", clientId)
-                request.Content = content
-                
-                Dim response = httpClient.SendAsync(request).Result
-                Dim result = response.Content.ReadAsStringAsync().Result
-                Return JObject.Parse(result)
             End Using
-        Catch ex As Exception
-            Debug.WriteLine("[API-Backup] Upload hatası: " & ex.Message)
-            Return JObject.Parse("{""success"":false,""message"":""" & ex.Message & """}")
-        End Try
-    End Function
-    
-    ''' <summary>
-    ''' Yedek listesini al
-    ''' </summary>
-    Public Function ListBackups(clientId As String) As JObject
-        Try
-            Dim response = SendRequest($"/api/backup/list?clientId={clientId}", "GET")
-            If response IsNot Nothing Then
-                Return JObject.Parse(response)
-            End If
-        Catch ex As Exception
-            Debug.WriteLine("[API-Backup] List hatası: " & ex.Message)
-        End Try
-        Return Nothing
-    End Function
-    
-    ' ==================== LİSANS API ====================
-    
-    ''' <summary>
-    ''' Lisans doğrula
-    ''' </summary>
-    Public Function VerifyLicense(licenseKey As String, machineId As String) As JObject
-        Try
-            Dim body = JsonConvert.SerializeObject(New With {
-                .licenseKey = licenseKey,
-                .machineId = machineId
-            })
             
-            Dim response = SendRequest("/api/license/verify", "POST", body)
-            If response IsNot Nothing Then
-                Return JObject.Parse(response)
-            End If
         Catch ex As Exception
-            Debug.WriteLine("[API-License] Verify hatası: " & ex.Message)
+            Debug.WriteLine("[ApiClient.GetUpdateFileInfo] Hata: " & ex.Message)
+            result.Success = False
+            result.ErrorMessage = ex.Message
         End Try
-        Return Nothing
+        
+        Return result
     End Function
     
     ''' <summary>
-    ''' Lisans aktive et (donanım bilgileriyle)
+    ''' Güncelleme dosyasını API'den indirir (FTP DownloadFile yerine)
     ''' </summary>
-    Public Function ActivateLicense(licenseKey As String) As JObject
+    Public Shared Function DownloadUpdateFile(fileName As String, platform As String, localPath As String) As Boolean
         Try
-            Dim body = JsonConvert.SerializeObject(New With {
-                .licenseKey = licenseKey,
-                .machineId = GetMacAddress(),
-                .computerName = Environment.MachineName,
-                .userName = Environment.UserName,
-                .ipAddress = GetLocalIPAddress(),
-                .osVersion = Environment.OSVersion.ToString(),
-                .cpuId = GetCPUId(),
-                .hddSerial = GetHDDSerial(),
-                .biosVersion = GetBiosVersion(),
-                .manufacturer = GetComputerManufacturer(),
-                .model = GetComputerModel(),
-                .systemType = If(Environment.Is64BitOperatingSystem, "x64", "x86")
-            })
-            
-            Dim response = SendRequest("/api/license/activate", "POST", body)
-            If response IsNot Nothing Then
-                Return JObject.Parse(response)
-            End If
-        Catch ex As Exception
-            Debug.WriteLine("[API-License] Activate hatası: " & ex.Message)
-        End Try
-        Return Nothing
-    End Function
-    
-    ' ==================== DOSYA API (FTP YERİNE) ====================
-    
-    ''' <summary>
-    ''' Dosya listele
-    ''' </summary>
-    Public Function ListFiles(folder As String) As JObject
-        Try
-            Dim response = SendRequest($"/api/files/list?folder={Uri.EscapeDataString(folder)}", "GET")
-            If response IsNot Nothing Then
-                Return JObject.Parse(response)
-            End If
-        Catch ex As Exception
-            Debug.WriteLine("[API-Files] List hatası: " & ex.Message)
-        End Try
-        Return Nothing
-    End Function
-    
-    ''' <summary>
-    ''' Dosya indir
-    ''' </summary>
-    Public Function DownloadFile(remoteFile As String, localPath As String) As Boolean
-        Try
-            Dim request As New HttpRequestMessage()
-            request.RequestUri = New Uri(API_BASE_URL & $"/api/files/download?file={Uri.EscapeDataString(remoteFile)}")
-            request.Method = HttpMethod.Get
+            Dim url As String = $"{API_BASE_URL}/api/update/download?file={platform}/{fileName}"
+            Dim request As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
+            request.Method = "GET"
             request.Headers.Add("X-Api-Key", API_KEY)
+            request.Timeout = 300000 ' 5 dakika timeout - büyük dosyalar için
             
-            Dim response = httpClient.SendAsync(request).Result
-            
-            If response.IsSuccessStatusCode Then
-                Using fileStream As New FileStream(localPath, FileMode.Create)
-                    response.Content.CopyToAsync(fileStream).Wait()
+            Using response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
+                Using responseStream As Stream = response.GetResponseStream()
+                    ' Hedef klasörü oluştur
+                    Dim dir As String = Path.GetDirectoryName(localPath)
+                    If Not Directory.Exists(dir) Then
+                        Directory.CreateDirectory(dir)
+                    End If
+                    
+                    ' Dosyayı kaydet
+                    Using fileStream As New FileStream(localPath, FileMode.Create, FileAccess.Write)
+                        responseStream.CopyTo(fileStream)
+                    End Using
                 End Using
-                Return True
-            End If
+            End Using
+            
+            Debug.WriteLine("[ApiClient.DownloadUpdateFile] Başarılı: " & fileName)
+            Return True
+            
         Catch ex As Exception
-            Debug.WriteLine("[API-Files] Download hatası: " & ex.Message)
+            Debug.WriteLine("[ApiClient.DownloadUpdateFile] Hata: " & ex.Message)
+            Return False
         End Try
-        Return False
     End Function
     
     ''' <summary>
-    ''' Dosya yükle
+    ''' Yedek dosyasını API'ye yükler (FTP Upload yerine)
     ''' </summary>
-    Public Function UploadFile(localPath As String, remoteFolder As String) As JObject
+    Public Shared Function UploadBackup(localFilePath As String, clientId As String) As Boolean
         Try
-            If Not File.Exists(localPath) Then
-                Return JObject.Parse("{""success"":false,""message"":""Dosya bulunamadı""}")
+            If Not File.Exists(localFilePath) Then
+                Return False
             End If
             
-            Using content As New MultipartFormDataContent()
-                Dim fileContent As New ByteArrayContent(File.ReadAllBytes(localPath))
-                fileContent.Headers.ContentType = New Headers.MediaTypeHeaderValue("application/octet-stream")
-                content.Add(fileContent, "file", Path.GetFileName(localPath))
+            Dim url As String = $"{API_BASE_URL}/api/backup/upload"
+            Dim boundary As String = "----" & DateTime.Now.Ticks.ToString("x")
+            
+            Dim request As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
+            request.Method = "POST"
+            request.ContentType = "multipart/form-data; boundary=" & boundary
+            request.Headers.Add("X-Api-Key", API_KEY)
+            request.Headers.Add("X-Client-Id", clientId)
+            request.Timeout = 600000 ' 10 dakika timeout
+            
+            Using requestStream As Stream = request.GetRequestStream()
+                Dim fileBytes As Byte() = File.ReadAllBytes(localFilePath)
+                Dim fileName As String = Path.GetFileName(localFilePath)
                 
-                Dim request As New HttpRequestMessage()
-                request.RequestUri = New Uri(API_BASE_URL & $"/api/files/upload?folder={Uri.EscapeDataString(remoteFolder)}")
-                request.Method = HttpMethod.Post
-                request.Headers.Add("X-Api-Key", API_KEY)
-                request.Content = content
+                ' Multipart form data oluştur
+                Dim header As String = $"--{boundary}" & vbCrLf &
+                    $"Content-Disposition: form-data; name=""file""; filename=""{fileName}""" & vbCrLf &
+                    "Content-Type: application/octet-stream" & vbCrLf & vbCrLf
                 
-                Dim response = httpClient.SendAsync(request).Result
-                Dim result = response.Content.ReadAsStringAsync().Result
-                Return JObject.Parse(result)
+                Dim headerBytes As Byte() = Encoding.UTF8.GetBytes(header)
+                Dim footerBytes As Byte() = Encoding.UTF8.GetBytes(vbCrLf & $"--{boundary}--" & vbCrLf)
+                
+                requestStream.Write(headerBytes, 0, headerBytes.Length)
+                requestStream.Write(fileBytes, 0, fileBytes.Length)
+                requestStream.Write(footerBytes, 0, footerBytes.Length)
             End Using
+            
+            Using response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
+                Debug.WriteLine("[ApiClient.UploadBackup] Başarılı: " & Path.GetFileName(localFilePath))
+                Return response.StatusCode = HttpStatusCode.OK
+            End Using
+            
         Catch ex As Exception
-            Debug.WriteLine("[API-Files] Upload hatası: " & ex.Message)
-            Return JObject.Parse("{""success"":false,""message"":""" & ex.Message & """}")
+            Debug.WriteLine("[ApiClient.UploadBackup] Hata: " & ex.Message)
+            Return False
         End Try
-    End Function
-    
-    ' ==================== YARDIMCI FONKSİYONLAR ====================
-    
-    ''' <summary>
-    ''' MAC adresini al
-    ''' </summary>
-    Private Function GetMacAddress() As String
-        Try
-            For Each nic In System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces()
-                If nic.OperationalStatus = NetworkInformation.OperationalStatus.Up Then
-                    Return nic.GetPhysicalAddress().ToString()
-                End If
-            Next
-        Catch
-        End Try
-        Return ""
     End Function
     
     ''' <summary>
-    ''' Yerel IP adresini al
+    ''' Lisans doğrulama (Doğrudan SQL bağlantısı yerine)
     ''' </summary>
-    Private Function GetLocalIPAddress() As String
+    Public Shared Function VerifyLicense(licenseKey As String, machineId As String) As LicenseInfo
+        Dim result As New LicenseInfo()
+        result.IsValid = False
+        
         Try
-            Dim host = Dns.GetHostEntry(Dns.GetHostName())
-            For Each ip In host.AddressList
-                If ip.AddressFamily = Sockets.AddressFamily.InterNetwork Then
-                    Return ip.ToString()
-                End If
-            Next
-        Catch
+            Dim url As String = $"{API_BASE_URL}/api/license/verify"
+            Dim request As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
+            request.Method = "POST"
+            request.ContentType = "application/json"
+            request.Headers.Add("X-Api-Key", API_KEY)
+            request.Timeout = 30000
+            
+            ' JSON body
+            Dim jsonBody As String = "{""licenseKey"":""" & licenseKey & """,""machineId"":""" & machineId & """}"
+            Dim bodyBytes As Byte() = Encoding.UTF8.GetBytes(jsonBody)
+            
+            Using requestStream As Stream = request.GetRequestStream()
+                requestStream.Write(bodyBytes, 0, bodyBytes.Length)
+            End Using
+            
+            Using response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
+                Using reader As New StreamReader(response.GetResponseStream())
+                    Dim json As String = reader.ReadToEnd()
+                    
+                    result.IsValid = json.Contains("""isValid"":true") OrElse json.Contains("""isValid"": true")
+                    
+                    ' Firma adını parse et
+                    Dim firmaStart As Integer = json.IndexOf("""firmaAdi"":")
+                    If firmaStart > 0 Then
+                        Dim valueStart As Integer = json.IndexOf("""", firmaStart + 11) + 1
+                        Dim valueEnd As Integer = json.IndexOf("""", valueStart)
+                        If valueEnd > valueStart Then
+                            result.FirmaAdi = json.Substring(valueStart, valueEnd - valueStart)
+                        End If
+                    End If
+                    
+                    ' Mesajı parse et
+                    Dim msgStart As Integer = json.IndexOf("""message"":")
+                    If msgStart > 0 Then
+                        Dim valueStart As Integer = json.IndexOf("""", msgStart + 10) + 1
+                        Dim valueEnd As Integer = json.IndexOf("""", valueStart)
+                        If valueEnd > valueStart Then
+                            result.Message = json.Substring(valueStart, valueEnd - valueStart)
+                        End If
+                    End If
+                End Using
+            End Using
+            
+        Catch ex As Exception
+            Debug.WriteLine("[ApiClient.VerifyLicense] Hata: " & ex.Message)
+            result.IsValid = False
+            result.Message = "Bağlantı hatası: " & ex.Message
         End Try
-        Return ""
+        
+        Return result
     End Function
     
     ''' <summary>
-    ''' CPU ID al
+    ''' Lisans aktivasyonu - MAC ID kaydet
     ''' </summary>
-    Private Function GetCPUId() As String
+    Public Shared Function ActivateLicense(licenseKey As String, machineId As String, computerName As String) As Boolean
         Try
-            Dim mc As New Management.ManagementClass("Win32_Processor")
-            For Each mo As Management.ManagementObject In mc.GetInstances()
-                Return mo.Properties("ProcessorId").Value.ToString()
-            Next
-        Catch
+            Dim url As String = $"{API_BASE_URL}/api/license/activate"
+            Dim request As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
+            request.Method = "POST"
+            request.ContentType = "application/json"
+            request.Headers.Add("X-Api-Key", API_KEY)
+            request.Timeout = 30000
+            
+            ' JSON body
+            Dim jsonBody As String = "{" &
+                """licenseKey"":""" & licenseKey & """," &
+                """machineId"":""" & machineId & """," &
+                """computerName"":""" & computerName & """" &
+                "}"
+            Dim bodyBytes As Byte() = Encoding.UTF8.GetBytes(jsonBody)
+            
+            Using requestStream As Stream = request.GetRequestStream()
+                requestStream.Write(bodyBytes, 0, bodyBytes.Length)
+            End Using
+            
+            Using response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
+                Using reader As New StreamReader(response.GetResponseStream())
+                    Dim json As String = reader.ReadToEnd()
+                    Return json.Contains("""success"":true") OrElse json.Contains("""success"": true")
+                End Using
+            End Using
+            
+        Catch ex As Exception
+            Debug.WriteLine("[ApiClient.ActivateLicense] Hata: " & ex.Message)
+            Return False
         End Try
-        Return ""
     End Function
     
     ''' <summary>
-    ''' HDD Seri numarası al
+    ''' API sunucusunun erişilebilir olup olmadığını kontrol eder
     ''' </summary>
-    Private Function GetHDDSerial() As String
+    Public Shared Function IsApiAvailable() As Boolean
         Try
-            Dim mc As New Management.ManagementClass("Win32_PhysicalMedia")
-            For Each mo As Management.ManagementObject In mc.GetInstances()
-                If mo("SerialNumber") IsNot Nothing Then
-                    Return mo("SerialNumber").ToString().Trim()
-                End If
-            Next
+            Dim request As HttpWebRequest = CType(WebRequest.Create(API_BASE_URL), HttpWebRequest)
+            request.Method = "GET"
+            request.Timeout = 5000
+            
+            Using response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
+                Return response.StatusCode = HttpStatusCode.OK
+            End Using
+            
         Catch
+            Return False
         End Try
-        Return ""
     End Function
     
-    ''' <summary>
-    ''' BIOS versiyonu al
-    ''' </summary>
-    Private Function GetBiosVersion() As String
-        Try
-            Dim mc As New Management.ManagementClass("Win32_BIOS")
-            For Each mo As Management.ManagementObject In mc.GetInstances()
-                Return mo.Properties("Version").Value.ToString()
-            Next
-        Catch
-        End Try
-        Return ""
-    End Function
-    
-    ''' <summary>
-    ''' Bilgisayar üreticisi al
-    ''' </summary>
-    Private Function GetComputerManufacturer() As String
-        Try
-            Dim mc As New Management.ManagementClass("Win32_ComputerSystem")
-            For Each mo As Management.ManagementObject In mc.GetInstances()
-                Return mo("Manufacturer").ToString()
-            Next
-        Catch
-        End Try
-        Return ""
-    End Function
-    
-    ''' <summary>
-    ''' Bilgisayar modeli al
-    ''' </summary>
-    Private Function GetComputerModel() As String
-        Try
-            Dim mc As New Management.ManagementClass("Win32_ComputerSystem")
-            For Each mo As Management.ManagementObject In mc.GetInstances()
-                Return mo("Model").ToString()
-            Next
-        Catch
-        End Try
-        Return ""
-    End Function
-    
-End Module
+End Class
+
+''' <summary>
+''' Güncelleme dosyası bilgisi
+''' </summary>
+Public Class UpdateFileInfo
+    Public Property Success As Boolean
+    Public Property LastModified As DateTime
+    Public Property FileSize As Long
+    Public Property ErrorMessage As String
+End Class
+
+''' <summary>
+''' Lisans bilgisi
+''' </summary>
+Public Class LicenseInfo
+    Public Property IsValid As Boolean
+    Public Property FirmaAdi As String
+    Public Property Message As String
+    Public Property ExpiryDate As DateTime
+End Class
