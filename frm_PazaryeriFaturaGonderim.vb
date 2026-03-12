@@ -666,25 +666,52 @@ Public Class frm_PazaryeriFaturaGonderim
                 Return False
             End If
 
-            ' ===== 2024 YENİ API: radium.hepsiburada.com/api/order/invoice_link =====
-            ' Mağaza ID = SellerId (MerchantId)
-            ' Servis Anahtarı = ApiSecret
-            Dim magazaId As String = api.SellerId
+            ' ===== HEPSIBURADA API - Basic Auth =====
+            ' Entegratör Adı (ApiKey) : Servis Anahtarı (ApiSecret)
+            ' merchant.hepsiburada.com > Entegrasyon > Entegratör Bilgileri
+            Dim merchantId As String = api.SellerId
+            Dim entegratorAdi As String = api.ApiKey
             Dim servisAnahtari As String = api.ApiSecret
             
-            If String.IsNullOrEmpty(magazaId) OrElse String.IsNullOrEmpty(servisAnahtari) Then
-                hataMesaji = "Mağaza ID veya Servis Anahtarı eksik. Hepsiburada > Entegrasyon > Entegratör Bilgileri'nden alın."
+            ' Eğer entegratör adı yoksa merchantId kullan
+            If String.IsNullOrEmpty(entegratorAdi) Then
+                entegratorAdi = merchantId
+            End If
+            
+            If String.IsNullOrEmpty(merchantId) OrElse String.IsNullOrEmpty(servisAnahtari) Then
+                hataMesaji = "Mağaza ID veya Servis Anahtarı eksik. merchant.hepsiburada.com > Entegrasyon > Entegratör Bilgileri"
                 Return False
             End If
             
-            Debug.WriteLine("[HB-Invoice] ===== YENİ API (2024) FATURA GÖNDERME =====")
+            ' Basic Auth: EntegratorAdi:ServisAnahtari
+            Dim authRaw As String = entegratorAdi & ":" & servisAnahtari
+            Dim authBytes As Byte() = Encoding.UTF8.GetBytes(authRaw)
+            Dim authBase64 As String = Convert.ToBase64String(authBytes)
+            
+            Debug.WriteLine("[HB-Invoice] ===== FATURA GÖNDERME =====")
             Debug.WriteLine("[HB-Invoice] Sipariş No: " & orderNumber)
-            Debug.WriteLine("[HB-Invoice] Mağaza ID: " & magazaId)
+            Debug.WriteLine("[HB-Invoice] MerchantId: " & merchantId)
+            Debug.WriteLine("[HB-Invoice] Entegratör: " & entegratorAdi)
             Debug.WriteLine("[HB-Invoice] Fatura Link: " & invoiceLink)
             
-            ' Yeni API Base URL
-            Dim baseUrl As String = "https://radium.hepsiburada.com"
-            Dim url As String = baseUrl & "/api/order/invoice_link"
+            ' 1. ADIM: Package Number'ı bul
+            Dim baseUrl As String = "https://oms-external.hepsiburada.com"
+            Dim packageNumber As String = ""
+            Dim apiHataMesaji As String = ""
+            
+            packageNumber = GetHepsiburadaPackageNumber(baseUrl, merchantId, orderNumber, authBase64, apiHataMesaji)
+            
+            If String.IsNullOrEmpty(packageNumber) Then
+                Debug.WriteLine("[HB-Invoice] Paket numarası bulunamadı: " & apiHataMesaji)
+                hataMesaji = apiHataMesaji
+                Return False
+            End If
+            
+            Debug.WriteLine("[HB-Invoice] Paket numarası bulundu: " & packageNumber)
+            
+            ' 2. ADIM: Fatura linkini gönder
+            ' PUT /packages/merchantid/{merchantId}/packagenumber/{packageNumber}/invoice
+            Dim url As String = baseUrl & "/packages/merchantid/" & merchantId & "/packagenumber/" & packageNumber & "/invoice"
             
             Debug.WriteLine("[HB-Invoice] URL: " & url)
             
@@ -692,18 +719,15 @@ Public Class frm_PazaryeriFaturaGonderim
             ServicePointManager.SecurityProtocol = CType(3072, SecurityProtocolType) ' TLS 1.2
             
             Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
-            req.Method = "POST"
+            req.Method = "PUT"
             req.ContentType = "application/json"
             req.Accept = "application/json"
             req.Timeout = 60000
-            req.UserAgent = "BusinessSmart/1.0"
+            req.Headers.Add("Authorization", "Basic " & authBase64)
+            req.Headers.Add("User-Agent", "BusinessSmart/1.0")
             
-            ' Header'lara Mağaza ID ve Servis Anahtarı ekle
-            req.Headers.Add("X-Merchant-Id", magazaId)
-            req.Headers.Add("X-Api-Key", servisAnahtari)
-            
-            ' Body: sipariş numarası ve fatura linki
-            Dim payload As String = "{""orderNumber"": """ & orderNumber & """, ""invoiceLink"": """ & invoiceLink.Replace("""", "\""") & """}"
+            ' Body: invoiceLink
+            Dim payload As String = "{""invoiceLink"": """ & invoiceLink.Replace("""", "\""") & """}"
             Debug.WriteLine("[HB-Invoice] Payload: " & payload)
             
             Dim data As Byte() = Encoding.UTF8.GetBytes(payload)
@@ -715,12 +739,10 @@ Public Class frm_PazaryeriFaturaGonderim
 
             Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
                 Dim statusCode As Integer = CInt(resp.StatusCode)
-                Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
-                    Dim responseBody As String = reader.ReadToEnd()
-                    Debug.WriteLine("[HB-Invoice] Response (" & statusCode & "): " & responseBody)
-                End Using
+                Debug.WriteLine("[HB-Invoice] Response Status: " & statusCode)
                 
-                If statusCode >= 200 AndAlso statusCode < 300 Then
+                ' 204 No Content = Başarılı
+                If statusCode = 204 OrElse (statusCode >= 200 AndAlso statusCode < 300) Then
                     Return True
                 Else
                     hataMesaji = "HTTP " & statusCode & ": " & resp.StatusDescription
@@ -737,19 +759,21 @@ Public Class frm_PazaryeriFaturaGonderim
                         Dim errorResponse As String = reader.ReadToEnd()
                         Debug.WriteLine("[HB-Invoice] Error (" & statusCode & "): " & errorResponse)
                         
-                        ' 403 Forbidden - Yetkilendirme hatası
-                        If statusCode = 403 Then
-                            hataMesaji = "Yetkilendirme hatası (403). Mağaza ID ve Servis Anahtarı'nı kontrol edin. " & _
-                                        "Hepsiburada Satıcı Paneli > Entegrasyon > Entegratör Bilgileri"
-                        ' 404 - Sipariş bulunamadı
-                        ElseIf statusCode = 404 Then
-                            hataMesaji = "Sipariş bulunamadı (404). Sipariş numarasını kontrol edin: " & siparisNo
-                        ' 401 - Kimlik doğrulama hatası
-                        ElseIf statusCode = 401 Then
-                            hataMesaji = "Kimlik doğrulama hatası (401). API bilgilerinizi kontrol edin."
-                        Else
-                            hataMesaji = "HTTP " & statusCode & ": " & If(errorResponse.Length > 300, errorResponse.Substring(0, 300), errorResponse)
-                        End If
+                        ' Detaylı hata mesajları
+                        Select Case statusCode
+                            Case 400
+                                hataMesaji = "Fatura linki geçersiz format (400). Link PDF veya HTML olmalı."
+                            Case 401
+                                hataMesaji = "Kimlik doğrulama hatası (401). Entegratör Adı ve Servis Anahtarı'nı kontrol edin."
+                            Case 403
+                                hataMesaji = "Yetki hatası (403). Paket bu mağazaya ait değil veya yetkiniz yok."
+                            Case 409
+                                hataMesaji = "Bu pakete zaten fatura eklenmiş (409)."
+                            Case 404
+                                hataMesaji = "Paket bulunamadı (404)."
+                            Case Else
+                                hataMesaji = "HTTP " & statusCode & ": " & If(errorResponse.Length > 300, errorResponse.Substring(0, 300), errorResponse)
+                        End Select
                     End Using
                 Catch
                     hataMesaji = wex.Message
@@ -770,10 +794,9 @@ Public Class frm_PazaryeriFaturaGonderim
     ''' </summary>
     Private Function GetHepsiburadaPackageNumber(baseUrl As String, merchantId As String, orderNumber As String, authBase64 As String, ByRef hataMesaji As String) As String
         Try
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+            ServicePointManager.SecurityProtocol = CType(3072, SecurityProtocolType) ' TLS 1.2
             
             Dim packageNumber As String = ""
-            Dim mpopBase As String = "https://mpop.hepsiburada.com"
             
             ' Tarih aralığı - son 30 gün
             Dim beginDate As String = DateTime.Now.AddDays(-30).ToString("yyyy-MM-dd")
@@ -783,7 +806,7 @@ Public Class frm_PazaryeriFaturaGonderim
             ' GET /packages/merchantid/{merchantId}/delivered?beginDate=...&endDate=...
             Try
                 Debug.WriteLine("[HB-Search] Yöntem 1: Teslim Edilenler (Delivered)")
-                Dim deliveredUrl As String = mpopBase & "/packages/merchantid/" & merchantId & "/delivered?beginDate=" & beginDate & "&endDate=" & endDate & "&limit=50&offset=0"
+                Dim deliveredUrl As String = baseUrl & "/packages/merchantid/" & merchantId & "/delivered?beginDate=" & beginDate & "&endDate=" & endDate & "&limit=50&offset=0"
                 Debug.WriteLine("[HB-Search] URL: " & deliveredUrl)
                 
                 packageNumber = TryGetPackageFromUrl(deliveredUrl, authBase64, orderNumber)
@@ -799,7 +822,7 @@ Public Class frm_PazaryeriFaturaGonderim
             ' GET /packages/merchantid/{merchantId}/shipped?beginDate=...&endDate=...
             Try
                 Debug.WriteLine("[HB-Search] Yöntem 2: Kargoda Olanlar (Shipped)")
-                Dim shippedUrl As String = mpopBase & "/packages/merchantid/" & merchantId & "/shipped?beginDate=" & beginDate & "&endDate=" & endDate & "&limit=50&offset=0"
+                Dim shippedUrl As String = baseUrl & "/packages/merchantid/" & merchantId & "/shipped?beginDate=" & beginDate & "&endDate=" & endDate & "&limit=50&offset=0"
                 Debug.WriteLine("[HB-Search] URL: " & shippedUrl)
                 
                 packageNumber = TryGetPackageFromUrl(shippedUrl, authBase64, orderNumber)
@@ -815,7 +838,7 @@ Public Class frm_PazaryeriFaturaGonderim
             ' GET /packages/merchantid/{merchantId}?timespan=24&limit=50&offset=0
             Try
                 Debug.WriteLine("[HB-Search] Yöntem 3: Açık Paketler (Open)")
-                Dim openUrl As String = mpopBase & "/packages/merchantid/" & merchantId & "?timespan=24&limit=50&offset=0"
+                Dim openUrl As String = baseUrl & "/packages/merchantid/" & merchantId & "?timespan=24&limit=50&offset=0"
                 Debug.WriteLine("[HB-Search] URL: " & openUrl)
                 
                 packageNumber = TryGetPackageFromUrl(openUrl, authBase64, orderNumber)
@@ -831,7 +854,7 @@ Public Class frm_PazaryeriFaturaGonderim
             ' GET /orders/merchantid/{merchantId}/{orderNumber}
             Try
                 Debug.WriteLine("[HB-Search] Yöntem 4: Sipariş Detayı")
-                Dim orderUrl As String = mpopBase & "/orders/merchantid/" & merchantId & "/" & orderNumber
+                Dim orderUrl As String = baseUrl & "/orders/merchantid/" & merchantId & "/" & orderNumber
                 Debug.WriteLine("[HB-Search] URL: " & orderUrl)
                 
                 packageNumber = TryGetPackageFromOrderDetail(orderUrl, authBase64)
