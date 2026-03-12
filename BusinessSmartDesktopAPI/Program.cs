@@ -902,7 +902,7 @@ string SanitizeFolderName(string name)
 
 // ==================== LİSANS DETAY API (BARKOD_INSTALL için) ====================
 
-// Lisans detayları - Firma bilgileri dahil
+// Lisans detayları - Firma bilgileri ve modüller dahil
 app.MapGet("/api/license/details", async (HttpContext context) =>
 {
     if (!ValidateApiKey(context))
@@ -921,7 +921,8 @@ app.MapGet("/api/license/details", async (HttpContext context) =>
         await conn.OpenAsync();
         
         using var cmd = new SqlCommand(
-            @"SELECT tbFirma.nFirmaID, tbFirma.sKodu, tbFirma.sAciklama, tbFirma.sAdres1, tbFirma.sAdres2, 
+            @"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+              SELECT tbFirma.nFirmaID, tbFirma.sKodu, tbFirma.sAciklama, tbFirma.sAdres1, tbFirma.sAdres2, 
                      tbFirma.sSemt, tbFirma.sIl, tbFirma.sUlke, tbFirma.sOzelNot,
                      tbFirmaLisans.sOnayKodu, tbFirmaLisans.dteGecerlilikTarihi,
                      tbFirmaLisans.sParametre1, tbFirmaLisans.sParametre2, 
@@ -941,33 +942,63 @@ app.MapGet("/api/license/details", async (HttpContext context) =>
         if (!reader.Read())
             return Results.Json(new { success = false, message = "Lisans bulunamadı" });
 
-        return Results.Json(new
+        var firmaId = reader["nFirmaID"]?.ToString();
+        var responseData = new Dictionary<string, object?>
         {
-            success = true,
-            firmaId = reader["nFirmaID"]?.ToString(),
-            firmaKodu = reader["sKodu"]?.ToString(),
-            firmaAdi = reader["sAciklama"]?.ToString(),
-            adres1 = reader["sAdres1"]?.ToString(),
-            adres2 = reader["sAdres2"]?.ToString(),
-            semt = reader["sSemt"]?.ToString(),
-            il = reader["sIl"]?.ToString(),
-            ulke = reader["sUlke"]?.ToString(),
-            ozelNot = reader["sOzelNot"]?.ToString(),
-            expiryDate = reader["dteGecerlilikTarihi"]?.ToString(),
-            parametre1 = reader["sParametre1"]?.ToString(),
-            parametre2 = reader["sParametre2"]?.ToString(),
-            manufacturer = reader["sManufactor"]?.ToString(),
-            model = reader["sModel"]?.ToString(),
-            systemType = reader["sSystemType"]?.ToString(),
-            cpuId = reader["sCpuID"]?.ToString(),
-            biosVersion = reader["sBiosVersion"]?.ToString(),
-            hddSerial = reader["sHddSerial"]?.ToString(),
-            macId = reader["sMacID"]?.ToString(),
-            email = reader["Email"]?.ToString(),
-            telefon = reader["Telefon"]?.ToString(),
-            gsm = reader["Gsm"]?.ToString(),
-            yetkili = reader["Yetkili"]?.ToString()
-        });
+            ["success"] = true,
+            ["firmaId"] = firmaId,
+            ["firmaKodu"] = reader["sKodu"]?.ToString(),
+            ["firmaAdi"] = reader["sAciklama"]?.ToString(),
+            ["adres1"] = reader["sAdres1"]?.ToString(),
+            ["adres2"] = reader["sAdres2"]?.ToString(),
+            ["semt"] = reader["sSemt"]?.ToString(),
+            ["il"] = reader["sIl"]?.ToString(),
+            ["ulke"] = reader["sUlke"]?.ToString(),
+            ["ozelNot"] = reader["sOzelNot"]?.ToString(),
+            ["expiryDate"] = reader["dteGecerlilikTarihi"]?.ToString(),
+            ["parametre1"] = reader["sParametre1"]?.ToString(),
+            ["parametre2"] = reader["sParametre2"]?.ToString(),
+            ["manufacturer"] = reader["sManufactor"]?.ToString(),
+            ["model"] = reader["sModel"]?.ToString(),
+            ["systemType"] = reader["sSystemType"]?.ToString(),
+            ["cpuId"] = reader["sCpuID"]?.ToString(),
+            ["biosVersion"] = reader["sBiosVersion"]?.ToString(),
+            ["hddSerial"] = reader["sHddSerial"]?.ToString(),
+            ["macId"] = reader["sMacID"]?.ToString(),
+            ["email"] = reader["Email"]?.ToString(),
+            ["telefon"] = reader["Telefon"]?.ToString(),
+            ["gsm"] = reader["Gsm"]?.ToString(),
+            ["yetkili"] = reader["Yetkili"]?.ToString()
+        };
+        
+        reader.Close();
+        
+        // Modülleri al
+        var moduller = new List<object>();
+        if (!string.IsNullOrEmpty(firmaId) && int.TryParse(firmaId, out int firmaIdInt))
+        {
+            using var modCmd = new SqlCommand(
+                @"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+                  SELECT tbFirmaModulu.sModul, tbFirmaModulu.sAciklama 
+                  FROM tbFirmaModulu 
+                  INNER JOIN tbModul ON tbFirmaModulu.sModul = tbModul.sModul 
+                  WHERE tbFirmaModulu.nFirmaID = @firmaId 
+                  ORDER BY tbModul.nModulID", conn);
+            modCmd.Parameters.AddWithValue("@firmaId", firmaIdInt);
+            
+            using var modReader = await modCmd.ExecuteReaderAsync();
+            while (modReader.Read())
+            {
+                moduller.Add(new
+                {
+                    modul = modReader["sModul"]?.ToString(),
+                    aciklama = modReader["sAciklama"]?.ToString()
+                });
+            }
+        }
+        responseData["moduller"] = moduller;
+
+        return Results.Json(responseData);
     }
     catch (Exception ex)
     {
