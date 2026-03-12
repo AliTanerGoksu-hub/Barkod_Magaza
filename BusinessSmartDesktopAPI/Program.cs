@@ -682,7 +682,7 @@ app.MapPost("/api/license/verify", async (HttpContext context) =>
         if (string.IsNullOrEmpty(licenseKey))
             return Results.Json(new { success = false, message = "License key required" }, statusCode: 400);
 
-        var sqlConnStr = config["SqlConnectionString"] ?? "Data Source=localhost,8991;Initial Catalog=BAYII;User ID=sa;Password=87918991";
+        var sqlConnStr = config["SqlConnectionString"] ?? throw new Exception("SqlConnectionString not configured in appsettings.json");
         
         using var conn = new SqlConnection(sqlConnStr);
         await conn.OpenAsync();
@@ -778,7 +778,7 @@ app.MapPost("/api/license/activate", async (HttpContext context) =>
         if (string.IsNullOrEmpty(licenseKey) || string.IsNullOrEmpty(machineId))
             return Results.Json(new { success = false, message = "Lisans anahtarı ve MAC ID gerekli" }, statusCode: 400);
 
-        var sqlConnStr = config["SqlConnectionString"] ?? "Data Source=localhost,8991;Initial Catalog=BAYII;User ID=sa;Password=87918991";
+        var sqlConnStr = config["SqlConnectionString"] ?? throw new Exception("SqlConnectionString not configured in appsettings.json");
         
         using var conn = new SqlConnection(sqlConnStr);
         await conn.OpenAsync();
@@ -847,7 +847,7 @@ app.MapGet("/api/license/list", async (HttpContext context) =>
 
     try
     {
-        var sqlConnStr = config["SqlConnectionString"] ?? "Data Source=localhost,8991;Initial Catalog=BAYII;User ID=sa;Password=87918991";
+        var sqlConnStr = config["SqlConnectionString"] ?? throw new Exception("SqlConnectionString not configured in appsettings.json");
         
         using var conn = new SqlConnection(sqlConnStr);
         await conn.OpenAsync();
@@ -914,7 +914,7 @@ app.MapGet("/api/license/details", async (HttpContext context) =>
         if (string.IsNullOrEmpty(licenseKey))
             return Results.Json(new { success = false, message = "License key required" }, statusCode: 400);
 
-        var sqlConnStr = config["SqlConnectionString"] ?? "Data Source=localhost,8991;Initial Catalog=BAYII;User ID=sa;Password=87918991";
+        var sqlConnStr = config["SqlConnectionString"] ?? throw new Exception("SqlConnectionString not configured in appsettings.json");
         
         using var conn = new SqlConnection(sqlConnStr);
         await conn.OpenAsync();
@@ -1019,7 +1019,7 @@ app.MapGet("/api/license/bayii", async (HttpContext context) =>
             return Results.Json(new { success = false, message = "Bayii ID required" }, statusCode: 400);
 
         // SqlClient bağlantı stringi
-        var sqlConnStr = config["SqlConnectionString"] ?? "Data Source=localhost,8991;Initial Catalog=BAYII;User ID=sa;Password=87918991";
+        var sqlConnStr = config["SqlConnectionString"] ?? throw new Exception("SqlConnectionString not configured in appsettings.json");
         
         using var conn = new SqlConnection(sqlConnStr);
         await conn.OpenAsync();
@@ -1061,6 +1061,72 @@ app.MapGet("/api/license/bayii", async (HttpContext context) =>
 });
 
 // ==================== DOSYA YÖNETİMİ API (FTP YERİNE) ====================
+
+// Lisans email bildirimi
+app.MapPost("/api/license/notify", async (HttpContext context) =>
+{
+    if (!ValidateApiKey(context))
+        return Results.Json(new { success = false, message = "Invalid API Key" }, statusCode: 401);
+
+    try
+    {
+        var body = await new StreamReader(context.Request.Body).ReadToEndAsync();
+        var data = JsonSerializer.Deserialize<Dictionary<string, string>>(body) ?? new Dictionary<string, string>();
+
+        var licenseKey = data.GetValueOrDefault("licenseKey", "");
+        var customerName = data.GetValueOrDefault("customerName", "");
+        var customerEmail = data.GetValueOrDefault("customerEmail", "");
+        var parametre1 = data.GetValueOrDefault("parametre1", "");
+        var parametre2 = data.GetValueOrDefault("parametre2", "");
+        var moduller = data.GetValueOrDefault("moduller", "");
+
+        // Email bilgilerini config'den al
+        var smtpHost = config["SmtpHost"] ?? "smtp.gmail.com";
+        var smtpPort = int.Parse(config["SmtpPort"] ?? "587");
+        var smtpUser = config["SmtpUser"] ?? "";
+        var smtpPassword = config["SmtpPassword"] ?? "";
+        var notifyEmails = config["NotifyEmails"] ?? "alitanergoksu@barkodyazilimevi.com";
+
+        if (string.IsNullOrEmpty(smtpUser) || string.IsNullOrEmpty(smtpPassword))
+        {
+            // Email yapılandırılmamış, sadece log tut
+            Console.WriteLine($"[LICENSE NOTIFY] License: {licenseKey}, Customer: {customerName}");
+            Console.WriteLine($"[LICENSE NOTIFY] Parametre1: {parametre1}, Parametre2: {parametre2}");
+            Console.WriteLine($"[LICENSE NOTIFY] Moduller: {moduller}");
+            return Results.Json(new { success = true, message = "Notification logged (email not configured)" });
+        }
+
+        // Email gönder
+        using var client = new System.Net.Mail.SmtpClient(smtpHost, smtpPort);
+        client.EnableSsl = true;
+        client.Credentials = new System.Net.NetworkCredential(smtpUser, smtpPassword);
+
+        var message = new System.Net.Mail.MailMessage();
+        message.From = new System.Net.Mail.MailAddress(smtpUser);
+        foreach (var email in notifyEmails.Split(','))
+        {
+            if (!string.IsNullOrWhiteSpace(email))
+                message.To.Add(email.Trim());
+        }
+        message.Subject = $"Install - {licenseKey} - {customerName}";
+        message.Body = $"Müşteri: {customerName}\n" +
+                       $"Email: {customerEmail}\n" +
+                       $"OnayKodu: {licenseKey}\n\n" +
+                       $"Parametre1: {parametre1}\n" +
+                       $"Parametre2: {parametre2}\n\n" +
+                       $"Modüller:\n{moduller}\n\n" +
+                       $"Tarih: {DateTime.Now}";
+
+        await client.SendMailAsync(message);
+
+        return Results.Json(new { success = true, message = "Email sent successfully" });
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[LICENSE NOTIFY ERROR] {ex.Message}");
+        return Results.Json(new { success = false, message = ex.Message }, statusCode: 500);
+    }
+});
 
 // Dosya listele
 app.MapGet("/api/files/list", (HttpContext context) =>

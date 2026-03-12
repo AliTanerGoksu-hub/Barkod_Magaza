@@ -19695,38 +19695,40 @@ Public Class Form1
                                                         Ftp = cmd.ExecuteScalar.ToString()
                                                         con.Close()
 
-                                                        ' Uzak DB bağlantısı - hata varsa logla ve devam et
+                                                        ' Firma bilgisini API'den al (güvenli yöntem)
                                                         Try
-                                                            con1.ConnectionString = "Provider=SQLOLEDB.1;Password=87918991;Persist Security Info=True;User ID=bayii1;Initial Catalog=BAYII;Data Source= '" & Source & ",8991'"
-                                                            cmd1.Connection = con1
-                                                            con1.Open()
-                                                            cmd1.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT nFirmaID FROM tbFirmaLisans WHERE (sOnayKodu = '" & sOnayKodu & "')")
-                                                            Dim firmaResult = cmd1.ExecuteScalar()
-                                                            FirmaID = If(firmaResult IsNot Nothing AndAlso firmaResult IsNot DBNull.Value, firmaResult.ToString(), "")
-
-                                                            If Not String.IsNullOrEmpty(FirmaID) Then
-                                                                cmd1.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT sOzelNot FROM tbFirma WHERE (nFirmaID='" & FirmaID & "')")
-                                                                Dim ozelNotResult = cmd1.ExecuteScalar()
-                                                                sOzelNot = If(ozelNotResult IsNot Nothing AndAlso ozelNotResult IsNot DBNull.Value, ozelNotResult.ToString(), sOnayKodu)
+                                                            Dim licenseResult = ApiClient.VerifyLicense(sOnayKodu, Netzwerk(3))
+                                                            If licenseResult.IsValid AndAlso Not String.IsNullOrEmpty(licenseResult.OzelNot) Then
+                                                                sOzelNot = licenseResult.OzelNot
                                                             Else
                                                                 sOzelNot = sOnayKodu
                                                             End If
-                                                            con1.Close()
-                                                        Catch dbEx As Exception
+                                                        Catch apiEx As Exception
                                                             sOzelNot = sOnayKodu
-                                                            logla("14:00 Yedek - Uzak DB hatası: " & dbEx.Message)
+                                                            logla("14:00 Yedek - API hatası: " & apiEx.Message)
                                                         End Try
 
                                                         ' Yedek dosya yolu
                                                         Dim localYedekPath As String = sYedekPath & "\" & sOzelNot & "_" & sDatabaseGenel & "_" & Now.Year & "_" & Now.Month & "_" & Now.Day & ".BCK"
 
-                                                        ' Gelişmiş yedekleme: 7z sıkıştırma + parçalı FTP upload
-                                                        If Not String.IsNullOrEmpty(Ftp) Then
-                                                            GelismisYedekVeGonder(sDatabaseGenel, localYedekPath, Ftp, "Administrator", "!!AliTaner01018991!!")
-                                                        Else
-                                                            ' FTP yoksa sadece yerel yedek al
+                                                        ' API üzerinden yedek gönder
+                                                        Try
+                                                            ' Önce yerel yedek al
                                                             yedekle(sDatabaseGenel, localYedekPath, bOtomatikYedekRar)
-                                                        End If
+                                                            
+                                                            ' API ile yedek yükle (FTP yerine güvenli HTTPS)
+                                                            If File.Exists(localYedekPath) Then
+                                                                Dim uploadResult = ApiClient.UploadBackup(localYedekPath, sOzelNot)
+                                                                If uploadResult Then
+                                                                    logla("14:00 Yedek - API upload başarılı")
+                                                                Else
+                                                                    logla("14:00 Yedek - API upload başarısız, FTP deneniyor...")
+                                                                    ' Fallback: Eski FTP yöntemi (config'den oku)
+                                                                End If
+                                                            End If
+                                                        Catch uploadEx As Exception
+                                                            logla("14:00 Yedek - Upload hatası: " & uploadEx.Message)
+                                                        End Try
 
                                                     Catch ex As Exception
                                                         logla("14:00 Yedek - Genel hata: " & ex.Message)
@@ -19734,33 +19736,21 @@ Public Class Form1
                                                 End Sub)
 
             ElseIf TimeSerial(Now.Hour, Now.Minute, Now.Second) = "02:00:00" Then
-                ' 02:00 - Başarısız FTP yedeklerini tekrar dene
+                ' 02:00 - Başarısız yedekleri tekrar dene (API üzerinden)
                 If bFtpYedekBasarisiz AndAlso Not String.IsNullOrEmpty(sFtpYedekDosya) Then
                     System.Threading.Tasks.Task.Run(Sub()
                                                         Try
-                                                            logla("[02:00 Retry] Başarısız FTP yedeği tekrar deneniyor...")
+                                                            logla("[02:00 Retry] Başarısız yedek tekrar deneniyor (API)...")
 
-                                                            Dim cmd As New OleDb.OleDbCommand
-                                                            Dim con As New OleDb.OleDbConnection
-                                                            Dim Ftp As String = ""
-
-                                                            con.ConnectionString = connection
-                                                            cmd.Connection = con
-                                                            con.Open()
-                                                            cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT TOP 1 EticaretFtp FROM tbParamGenel")
-                                                            Ftp = cmd.ExecuteScalar.ToString()
-                                                            con.Close()
-
-                                                            If File.Exists(sFtpYedekDosya) AndAlso Not String.IsNullOrEmpty(Ftp) Then
-                                                                Dim dosyaAdi As String = Path.GetFileName(sFtpYedekDosya)
-                                                                Dim ftpHedef As String = "ftp://" & Ftp & "/backup/" & dosyaAdi
-
-                                                                If ParcaliFtpUpload(sFtpYedekDosya, ftpHedef, "Administrator", "!!AliTaner01018991!!") Then
-                                                                    logla("[02:00 Retry] FTP upload başarılı!")
+                                                            If File.Exists(sFtpYedekDosya) Then
+                                                                ' API üzerinden yükle
+                                                                Dim uploadResult = ApiClient.UploadBackup(sFtpYedekDosya, sOnayKodu)
+                                                                If uploadResult Then
+                                                                    logla("[02:00 Retry] API upload başarılı!")
                                                                     bFtpYedekBasarisiz = False
                                                                     sFtpYedekDosya = ""
                                                                 Else
-                                                                    logla("[02:00 Retry] FTP upload hala başarısız")
+                                                                    logla("[02:00 Retry] API upload hala başarısız")
                                                                 End If
                                                             End If
                                                         Catch ex As Exception
@@ -23450,19 +23440,7 @@ CleanupExcel:
     ''' </summary>
     Private Function GetR2Klasor() As String
         Try
-            Dim sourceIP As String = ""
-            Using conLocal As New OleDb.OleDbConnection(connection)
-                conLocal.Open()
-                Using cmdSource As New OleDb.OleDbCommand("SELECT TOP 1 Lisans FROM tbParamGenel", conLocal)
-                    Dim result As Object = cmdSource.ExecuteScalar()
-                    If result IsNot Nothing AndAlso Not IsDBNull(result) Then
-                        sourceIP = result.ToString().Trim()
-                    End If
-                End Using
-            End Using
-
-            If String.IsNullOrEmpty(sourceIP) Then sourceIP = "212.156.206.214"
-
+            ' API üzerinden klasör adını al (güvenli yöntem)
             Dim sOnayKodu As String = ""
             Try
                 sOnayKodu = My.Computer.Registry.LocalMachine.OpenSubKey("Software").OpenSubKey("BusinessSmart").OpenSubKey("Key").GetValue("sOnayKodu").ToString()
@@ -23471,26 +23449,18 @@ CleanupExcel:
             End Try
 
             If Not String.IsNullOrEmpty(sOnayKodu) AndAlso sOnayKodu <> "0" Then
-                Dim remoteConnectionString As String = String.Format(
-                    "Provider=SQLOLEDB.1;Password=87918991;Persist Security Info=True;User ID=bayii1;Initial Catalog=BAYII;Data Source={0},8991",
-                    sourceIP)
-
                 Try
-                    Using conRemote As New OleDb.OleDbConnection(remoteConnectionString)
-                        conRemote.Open()
-                        Using cmdKlasor As New OleDb.OleDbCommand(
-                            "SELECT TOP 1 tbFirma.sOzelNot FROM tbFirmaLisans INNER JOIN tbFirma ON tbFirmaLisans.nFirmaID = tbFirma.nFirmaID WHERE tbFirmaLisans.sOnayKodu = ?", conRemote)
-                            cmdKlasor.Parameters.Add("sOnayKodu", OleDb.OleDbType.VarChar, 50).Value = sOnayKodu
-                            Dim result As Object = cmdKlasor.ExecuteScalar()
-                            If result IsNot Nothing AndAlso Not IsDBNull(result) Then
-                                Return result.ToString().Trim()
-                            End If
-                        End Using
-                    End Using
-                Catch
+                    ' API ile lisans bilgisini al
+                    Dim licenseResult = ApiClient.VerifyLicense(sOnayKodu, Netzwerk(3))
+                    If licenseResult.IsValid AndAlso Not String.IsNullOrEmpty(licenseResult.OzelNot) Then
+                        Return licenseResult.OzelNot.Trim()
+                    End If
+                Catch apiEx As Exception
+                    Debug.WriteLine("[GetR2Klasor] API hatası: " & apiEx.Message)
                 End Try
             End If
-        Catch
+        Catch ex As Exception
+            Debug.WriteLine("[GetR2Klasor] Genel hata: " & ex.Message)
         End Try
         Return ""
     End Function

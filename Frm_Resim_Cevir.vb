@@ -713,24 +713,18 @@ End Sub
     End Function
 
     Public Function GetFirmaKlasorByOnay(sourceIp As String, sOnayKodu As String) As String
-        Dim conStr As String = String.Format("Provider=SQLOLEDB.1;Password=87918991;Persist Security Info=True;User ID=bayii1;Initial Catalog=BAYII;Data Source={0},8991", sourceIp)
+        ' API üzerinden klasör adını al (güvenli yöntem)
         Try
-            Using con As New OleDbConnection(conStr)
-                Using cmd As OleDbCommand = con.CreateCommand()
-                    cmd.CommandText =
-                        "SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED " &
-                        "SELECT TOP 1 tbFirma.sOzelNot FROM tbFirmaLisans " &
-                        "INNER JOIN tbFirma ON tbFirmaLisans.nFirmaID = tbFirma.nFirmaID " &
-                        "WHERE tbFirmaLisans.sOnayKodu = ?"
-                    cmd.Parameters.Add("p0", OleDbType.VarChar, 50).Value = sOnayKodu
-                    con.Open()
-                    Dim o = cmd.ExecuteScalar()
-                    Return If(o Is Nothing OrElse o Is DBNull.Value, "", CStr(o))
-                End Using
-            End Using
-        Catch
-            Return ""
+            If Not String.IsNullOrEmpty(sOnayKodu) AndAlso sOnayKodu <> "0" Then
+                Dim licenseResult = ApiClient.VerifyLicense(sOnayKodu, Form1.Netzwerk(3))
+                If licenseResult.IsValid AndAlso Not String.IsNullOrEmpty(licenseResult.OzelNot) Then
+                    Return licenseResult.OzelNot.Trim()
+                End If
+            End If
+        Catch ex As Exception
+            Debug.WriteLine("[GetFirmaKlasorByOnay] API hatası: " & ex.Message)
         End Try
+        Return ""
     End Function
 
     Private Function ResizeToWidth(src As Image, targetWidth As Integer) As Image

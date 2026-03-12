@@ -813,21 +813,7 @@ Public Class frm_TopluResimYukleme
         Dim klasor As String = ""
         
         Try
-            Dim sourceIP As String = ""
-            Using conLocal As New OleDbConnection(connection)
-                conLocal.Open()
-                Using cmdSource As New OleDbCommand("SELECT TOP 1 Lisans FROM tbParamGenel", conLocal)
-                    Dim result As Object = cmdSource.ExecuteScalar()
-                    If result IsNot Nothing AndAlso Not IsDBNull(result) Then
-                        sourceIP = result.ToString().Trim()
-                    End If
-                End Using
-            End Using
-            
-            If String.IsNullOrEmpty(sourceIP) Then
-                sourceIP = "212.156.206.214"
-            End If
-            
+            ' API üzerinden klasör adını al (güvenli yöntem)
             Dim sOnayKodu As String = ""
             Try
                 sOnayKodu = Registry.LocalMachine.OpenSubKey("Software").OpenSubKey("BusinessSmart").OpenSubKey("Key").GetValue("sOnayKodu").ToString()
@@ -836,31 +822,18 @@ Public Class frm_TopluResimYukleme
             End Try
             
             If Not String.IsNullOrEmpty(sOnayKodu) AndAlso sOnayKodu <> "0" Then
-                Dim remoteConnectionString As String = String.Format(
-                    "Provider=SQLOLEDB.1;Password=87918991;Persist Security Info=True;User ID=bayii1;Initial Catalog=BAYII;Data Source={0},8991",
-                    sourceIP)
-                
                 Try
-                    Using conRemote As New OleDbConnection(remoteConnectionString)
-                        conRemote.Open()
-                        Using cmdKlasor As New OleDbCommand(
-                            "SELECT TOP 1 tbFirma.sOzelNot " &
-                            "FROM tbFirmaLisans " &
-                            "INNER JOIN tbFirma ON tbFirmaLisans.nFirmaID = tbFirma.nFirmaID " &
-                            "WHERE tbFirmaLisans.sOnayKodu = ?", conRemote)
-                            cmdKlasor.Parameters.Add("sOnayKodu", OleDbType.VarChar, 50).Value = sOnayKodu
-                            
-                            Dim result As Object = cmdKlasor.ExecuteScalar()
-                            If result IsNot Nothing AndAlso Not IsDBNull(result) Then
-                                klasor = result.ToString().Trim()
-                            End If
-                        End Using
-                    End Using
-                Catch
-                    klasor = ""
+                    ' API ile lisans bilgisini al
+                    Dim licenseResult = ApiClient.VerifyLicense(sOnayKodu, Form1.Netzwerk(3))
+                    If licenseResult.IsValid AndAlso Not String.IsNullOrEmpty(licenseResult.OzelNot) Then
+                        klasor = licenseResult.OzelNot.Trim()
+                    End If
+                Catch apiEx As Exception
+                    Debug.WriteLine("[GetR2Klasor] API hatası: " & apiEx.Message)
                 End Try
             End If
-        Catch
+        Catch ex As Exception
+            Debug.WriteLine("[GetR2Klasor] Genel hata: " & ex.Message)
             klasor = ""
         End Try
         

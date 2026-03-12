@@ -9329,25 +9329,7 @@ Public Class frm_stok_kart
             ' Firma klasör adını al (REMOTE SERVER - BAYII database)
             Dim klasor As String = ""
             Try
-                ' 1. LOCAL DB'den Server IP'sini al
-                Dim sourceIP As String = ""
-                Using conLocal As New OleDb.OleDbConnection(connection)
-                    conLocal.Open()
-                    Using cmdSource As New OleDb.OleDbCommand(
-                        "SELECT TOP 1 Lisans FROM tbParamGenel", conLocal)
-                        Dim result As Object = cmdSource.ExecuteScalar()
-                        If result IsNot Nothing AndAlso Not IsDBNull(result) Then
-                            sourceIP = result.ToString().Trim()
-                        End If
-                    End Using
-                End Using
-                
-                ' Default IP
-                If String.IsNullOrEmpty(sourceIP) Then
-                    sourceIP = "212.156.206.214"
-                End If
-                
-                ' 2. Registry'den sOnayKodu al
+                ' API üzerinden klasör adını al (güvenli yöntem)
                 Dim sOnayKodu As String = ""
                 Try
                     sOnayKodu = Registry.LocalMachine.OpenSubKey("Software").OpenSubKey("BusinessSmart").OpenSubKey("Key").GetValue("sOnayKodu").ToString()
@@ -9355,31 +9337,15 @@ Public Class frm_stok_kart
                     sOnayKodu = ""
                 End Try
                 
-                ' 3. REMOTE SERVER'a bağlan ve sOzelNot al
                 If Not String.IsNullOrEmpty(sOnayKodu) AndAlso sOnayKodu <> "0" Then
-                    Dim remoteConnectionString As String = String.Format(
-                        "Provider=SQLOLEDB.1;Password=87918991;Persist Security Info=True;User ID=bayii1;Initial Catalog=BAYII;Data Source={0},8991",
-                        sourceIP)
-                    
                     Try
-                        Using conRemote As New OleDb.OleDbConnection(remoteConnectionString)
-                            conRemote.Open()
-                            Using cmdKlasor As New OleDb.OleDbCommand(
-                                "SELECT TOP 1 tbFirma.sOzelNot " &
-                                "FROM tbFirmaLisans " &
-                                "INNER JOIN tbFirma ON tbFirmaLisans.nFirmaID = tbFirma.nFirmaID " &
-                                "WHERE tbFirmaLisans.sOnayKodu = ?", conRemote)
-                                cmdKlasor.Parameters.Add("sOnayKodu", OleDb.OleDbType.VarChar, 50).Value = sOnayKodu
-                                
-                                Dim result As Object = cmdKlasor.ExecuteScalar()
-                                If result IsNot Nothing AndAlso Not IsDBNull(result) Then
-                                    klasor = result.ToString().Trim()
-                                End If
-                            End Using
-                        End Using
-                    Catch ex As Exception
-                        ' Remote server'a bağlanamazsa boş kalır
-                        klasor = ""
+                        ' API ile lisans bilgisini al
+                        Dim licenseResult = ApiClient.VerifyLicense(sOnayKodu, Form1.Netzwerk(3))
+                        If licenseResult.IsValid AndAlso Not String.IsNullOrEmpty(licenseResult.OzelNot) Then
+                            klasor = licenseResult.OzelNot.Trim()
+                        End If
+                    Catch apiEx As Exception
+                        Debug.WriteLine("[GetR2Klasor] API hatası: " & apiEx.Message)
                     End Try
                 End If
             Catch ex As Exception
@@ -10338,25 +10304,11 @@ End Sub
         End If
     End Function
 
-    ' Firma klasör adını al (REMOTE SERVER)
+    ' Firma klasör adını al (API üzerinden - güvenli yöntem)
     Private Async Function GetFirmaKlasoru() As Task(Of String)
         Dim klasor As String = ""
         Try
-            ' 1. LOCAL DB'den Server IP'sini al
-            Dim sourceIP As String = ""
-            Using conLocal As New OleDb.OleDbConnection(connection)
-                conLocal.Open()
-                Using cmdSource As New OleDb.OleDbCommand("SELECT TOP 1 Lisans FROM tbParamGenel", conLocal)
-                    Dim result As Object = cmdSource.ExecuteScalar()
-                    If result IsNot Nothing AndAlso Not IsDBNull(result) Then
-                        sourceIP = result.ToString().Trim()
-                    End If
-                End Using
-            End Using
-
-            If String.IsNullOrEmpty(sourceIP) Then sourceIP = "212.156.206.214"
-
-            ' 2. Registry'den sOnayKodu al
+            ' Registry'den sOnayKodu al
             Dim sOnayKodu As String = ""
             Try
                 sOnayKodu = Registry.LocalMachine.OpenSubKey("Software").OpenSubKey("BusinessSmart").OpenSubKey("Key").GetValue("sOnayKodu").ToString()
@@ -10364,33 +10316,18 @@ End Sub
                 sOnayKodu = ""
             End Try
 
-            ' 3. REMOTE SERVER'a bağlan
+            ' API ile lisans bilgisini al
             If Not String.IsNullOrEmpty(sOnayKodu) AndAlso sOnayKodu <> "0" Then
-                Dim remoteConnectionString As String = String.Format(
-                    "Provider=SQLOLEDB.1;Password=87918991;Persist Security Info=True;User ID=bayii1;Initial Catalog=BAYII;Data Source={0},8991",
-                    sourceIP)
-
                 Try
-                    Using conRemote As New OleDb.OleDbConnection(remoteConnectionString)
-                        conRemote.Open()
-                        Using cmdKlasor As New OleDb.OleDbCommand(
-                            "SELECT TOP 1 tbFirma.sOzelNot " &
-                            "FROM tbFirmaLisans " &
-                            "INNER JOIN tbFirma ON tbFirmaLisans.nFirmaID = tbFirma.nFirmaID " &
-                            "WHERE tbFirmaLisans.sOnayKodu = ?", conRemote)
-                            cmdKlasor.Parameters.Add("sOnayKodu", OleDb.OleDbType.VarChar, 50).Value = sOnayKodu
-
-                            Dim result As Object = cmdKlasor.ExecuteScalar()
-                            If result IsNot Nothing AndAlso Not IsDBNull(result) Then
-                                klasor = result.ToString().Trim()
-                            End If
-                        End Using
-                    End Using
-                Catch
-                    klasor = ""
+                    Dim licenseResult = ApiClient.VerifyLicense(sOnayKodu, Form1.Netzwerk(3))
+                    If licenseResult.IsValid AndAlso Not String.IsNullOrEmpty(licenseResult.OzelNot) Then
+                        klasor = licenseResult.OzelNot.Trim()
+                    End If
+                Catch apiEx As Exception
+                    Debug.WriteLine("[GetFirmaKlasoru] API hatası: " & apiEx.Message)
                 End Try
             End If
-        Catch
+        Catch ex As Exception
             klasor = ""
         End Try
 
@@ -10635,25 +10572,9 @@ End Sub
                             fs.Read(imageBytes, 0, imageBytes.Length)
                         End Using
                         
-                        ' R2'ye upload et - Firma klasör adını al
+                        ' R2'ye upload et - Firma klasör adını API'den al (güvenli yöntem)
                         Dim klasor As String = ""
                         Try
-                            Dim sourceIP As String = ""
-                            Using conLocal As New OleDb.OleDbConnection(connection)
-                                conLocal.Open()
-                                Using cmdSource As New OleDb.OleDbCommand(
-                                    "SELECT TOP 1 Lisans FROM tbParamGenel", conLocal)
-                                    Dim resultLisans As Object = cmdSource.ExecuteScalar()
-                                    If resultLisans IsNot Nothing AndAlso Not IsDBNull(resultLisans) Then
-                                        sourceIP = resultLisans.ToString().Trim()
-                                    End If
-                                End Using
-                            End Using
-                            
-                            If String.IsNullOrEmpty(sourceIP) Then
-                                sourceIP = "212.156.206.214"
-                            End If
-                            
                             Dim sOnayKodu As String = ""
                             Try
                                 sOnayKodu = Registry.LocalMachine.OpenSubKey("Software").OpenSubKey("BusinessSmart").OpenSubKey("Key").GetValue("sOnayKodu").ToString()
@@ -10662,28 +10583,13 @@ End Sub
                             End Try
                             
                             If Not String.IsNullOrEmpty(sOnayKodu) AndAlso sOnayKodu <> "0" Then
-                                Dim remoteConnectionString As String = String.Format(
-                                    "Provider=SQLOLEDB.1;Password=87918991;Persist Security Info=True;User ID=bayii1;Initial Catalog=BAYII;Data Source={0},8991",
-                                    sourceIP)
-                                
                                 Try
-                                    Using conRemote As New OleDb.OleDbConnection(remoteConnectionString)
-                                        conRemote.Open()
-                                        Using cmdKlasor As New OleDb.OleDbCommand(
-                                            "SELECT TOP 1 tbFirma.sOzelNot " &
-                                            "FROM tbFirmaLisans " &
-                                            "INNER JOIN tbFirma ON tbFirmaLisans.nFirmaID = tbFirma.nFirmaID " &
-                                            "WHERE tbFirmaLisans.sOnayKodu = ?", conRemote)
-                                            cmdKlasor.Parameters.Add("sOnayKodu", OleDb.OleDbType.VarChar, 50).Value = sOnayKodu
-                                            
-                                            Dim resultKlasor As Object = cmdKlasor.ExecuteScalar()
-                                            If resultKlasor IsNot Nothing AndAlso Not IsDBNull(resultKlasor) Then
-                                                klasor = resultKlasor.ToString().Trim()
-                                            End If
-                                        End Using
-                                    End Using
-                                Catch ex As Exception
-                                    klasor = ""
+                                    Dim licenseResult = ApiClient.VerifyLicense(sOnayKodu, Form1.Netzwerk(3))
+                                    If licenseResult.IsValid AndAlso Not String.IsNullOrEmpty(licenseResult.OzelNot) Then
+                                        klasor = licenseResult.OzelNot.Trim()
+                                    End If
+                                Catch apiEx As Exception
+                                    Debug.WriteLine("[AI Resim] API hatası: " & apiEx.Message)
                                 End Try
                             End If
                         Catch ex As Exception
