@@ -24344,33 +24344,29 @@ CleanupExcel:
             Using con As New System.Data.OleDb.OleDbConnection(connection)
                 con.Open()
 
-                ' Tüm e-ticaret platformları: (Önek, PazarYeri Adı, Kodu)
-                Dim platformlar As New List(Of Tuple(Of String, String, String))()
-                platformlar.Add(Tuple.Create("ty(", "Trendyol", "TY"))
-                platformlar.Add(Tuple.Create("Hb(", "HepsiBurada", "HB"))
-                platformlar.Add(Tuple.Create("n11", "N11", "N11"))
-                platformlar.Add(Tuple.Create("am(", "Amazon", "AM"))
-                platformlar.Add(Tuple.Create("gg(", "GittiGidiyor", "GG"))
-                platformlar.Add(Tuple.Create("cs(", "CicekSepeti", "CS"))
-                platformlar.Add(Tuple.Create("ky(", "Kitapyurdu", "KY"))
-                platformlar.Add(Tuple.Create("pt(", "Pttavm", "PT"))
-                platformlar.Add(Tuple.Create("mh(", "Morhipo", "MH"))
-                platformlar.Add(Tuple.Create("paz(", "Pazarama", "PAZ"))
+                ' Tüm e-ticaret platformları: Önek, PazarYeri Adı, Kodu
+                Dim platformOnekler() As String = {"ty(", "Hb(", "n11", "am(", "gg(", "cs(", "ky(", "pt(", "mh(", "paz("}
+                Dim platformAdlari() As String = {"Trendyol", "HepsiBurada", "N11", "Amazon", "GittiGidiyor", "CicekSepeti", "Kitapyurdu", "Pttavm", "Morhipo", "Pazarama"}
+                Dim platformKodlari() As String = {"TY", "HB", "N11", "AM", "GG", "CS", "KY", "PT", "MH", "PAZ"}
 
-                For Each platform In platformlar
+                For i As Integer = 0 To platformOnekler.Length - 1
                     Try
+                        Dim onek As String = platformOnekler(i)
+                        Dim pazarYeri As String = platformAdlari(i)
+                        Dim kod As String = platformKodlari(i)
+
                         ' Bu platform için kayıt var mı kontrol et
                         Dim varMi As Boolean = False
                         Using cmdCheck As New System.Data.OleDb.OleDbCommand(
                             "SELECT COUNT(*) FROM tbParamETicaret WHERE sSiparisNoOnek = ?", con)
-                            cmdCheck.Parameters.AddWithValue("?", platform.Item1)
+                            cmdCheck.Parameters.AddWithValue("?", onek)
                             Dim count As Integer = CInt(cmdCheck.ExecuteScalar())
                             varMi = (count > 0)
                         End Using
 
                         If Not varMi Then
                             ' Varsayılan değerlerle kayıt ekle (mevcut kayıtlara benzer şekilde)
-                            Debug.WriteLine($"[tbParamETicaret] {platform.Item2} ({platform.Item1}) kaydı ekleniyor...")
+                            Debug.WriteLine("[tbParamETicaret] " & pazarYeri & " (" & onek & ") kaydı ekleniyor...")
                             
                             Using cmdInsert As New System.Data.OleDb.OleDbCommand(
                                 "INSERT INTO tbParamETicaret (sPazarYeri, sKodu, sSiparisNoOnek, bAktif, " &
@@ -24379,24 +24375,24 @@ CleanupExcel:
                                 "lDigerMasraf1, lDigerMasraf2, dteKayitTarihi) " &
                                 "VALUES (?, ?, ?, 1, 1, 21.00, 0, 80.00, 3.00, 0, 0, 0, 0, 10.00, GETDATE())", con)
                                 
-                                cmdInsert.Parameters.AddWithValue("?", platform.Item2) ' sPazarYeri
-                                cmdInsert.Parameters.AddWithValue("?", platform.Item3) ' sKodu
-                                cmdInsert.Parameters.AddWithValue("?", platform.Item1) ' sSiparisNoOnek
+                                cmdInsert.Parameters.AddWithValue("?", pazarYeri)
+                                cmdInsert.Parameters.AddWithValue("?", kod)
+                                cmdInsert.Parameters.AddWithValue("?", onek)
                                 cmdInsert.ExecuteNonQuery()
                             End Using
                             
-                            Debug.WriteLine($"[tbParamETicaret] ✓ {platform.Item2} kaydı eklendi")
+                            Debug.WriteLine("[tbParamETicaret] " & pazarYeri & " kaydı eklendi")
                         End If
                     Catch platformEx As Exception
-                        Debug.WriteLine($"[tbParamETicaret] ✗ {platform.Item2} hatası: " & platformEx.Message)
+                        Debug.WriteLine("[tbParamETicaret] Platform hatası: " & platformEx.Message)
                         ' Tek platform hatası diğerlerini etkilemesin
                     End Try
                 Next
 
-                Debug.WriteLine("[tbParamETicaret] ✓ Platform parametreleri kontrolü tamamlandı")
+                Debug.WriteLine("[tbParamETicaret] Platform parametreleri kontrolü tamamlandı")
             End Using
         Catch ex As Exception
-            Debug.WriteLine("[tbParamETicaret] ✗ Genel hata: " & ex.Message)
+            Debug.WriteLine("[tbParamETicaret] Genel hata: " & ex.Message)
             ' Hata olsa bile uygulama açılmaya devam etsin
         End Try
     End Sub
