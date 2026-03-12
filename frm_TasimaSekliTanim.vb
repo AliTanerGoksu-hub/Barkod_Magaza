@@ -1,0 +1,297 @@
+Public Class frm_TasimaSekliTanim
+    Public firmano As Integer = 100
+    Public donemno As Integer = 1
+    Public connection
+    Public kullanici
+    Public islem As String = ""
+    Dim conn As New OleDb.OleDbConnection
+    Dim con As New OleDb.OleDbConnection
+    Dim cmd As New OleDb.OleDbCommand
+    Dim adapter As New OleDb.OleDbDataAdapter
+    Dim DS As New DataSet
+    Dim satir
+
+    Private Sub gorunum_yazdir()
+        printlink1.CreateDocument(ps)
+        ps.PreviewRibbonFormEx.Show()
+    End Sub
+
+    Private Sub gorunum_kaydet()
+        GridView1.SaveLayoutToRegistry("SOFTWARE\BusinessSmart\VIEW\MAGAZA\" & Me.Name.ToString & "")
+        MessageBox.Show(Sorgu_sDil("Görünüm Kaydedildi", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+    Private Sub gorunum_yukle()
+        For Each btn As DevExpress.XtraBars.BarItem In BarManager1.Items
+            btn.Caption = Sorgu_sDil(btn.Caption, sDil)
+        Next
+        For Each clmn As DevExpress.XtraGrid.Columns.GridColumn In GridView1.Columns
+            clmn.Caption = Sorgu_sDil(clmn.Caption, sDil)
+        Next
+        SimpleButton3.Text = Sorgu_sDil(SimpleButton3.Text, sDil)
+        SimpleButton4.Text = Sorgu_sDil(SimpleButton4.Text, sDil)
+        GridView1.RestoreLayoutFromRegistry("SOFTWARE\BusinessSmart\VIEW\MAGAZA\" & Me.Name.ToString & "")
+    End Sub
+
+    Private Function sorgu_query(ByVal query As String) As String
+        query = Replace(query, "*!F", "F0" + firmano.ToString)
+        query = Replace(query, "!D", "D000" + donemno.ToString)
+        Return query
+    End Function
+
+    Private Function sorgu(ByVal query As String) As DataSet
+        Dim con As New OleDb.OleDbConnection
+        Dim cmd As New OleDb.OleDbCommand
+        Dim adapter As New OleDb.OleDbDataAdapter
+        con.ConnectionString = connection
+        cmd.CommandTimeout = Nothing
+        adapter.SelectCommand = cmd
+        cmd.CommandText = query
+        cmd.Connection = con
+        con.Open()
+        Dim DS As New DataSet
+        Dim N As Integer = adapter.Fill(DS, "TABLE1")
+        con.Close()
+        Return DS
+    End Function
+
+    Public Sub Dataload_tbTasimaSekilleri()
+        Try
+            ds_tbTasimaSekilleri.Tables(0).Clear()
+        Catch ex As Exception
+        End Try
+        Dim conn As New OleDb.OleDbConnection
+        Dim cmd As New OleDb.OleDbCommand
+        Dim adapter As New OleDb.OleDbDataAdapter
+        conn.ConnectionString = connection
+        adapter.SelectCommand = cmd
+        cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT * FROM tbTasimaSekilleri WHERE sKod <> '' ORDER BY nID")
+        cmd.Connection = conn
+        Dim N As Integer = adapter.Fill(ds_tbTasimaSekilleri, "Table1")
+        conn.Close()
+        GridControl1.Focus()
+        GridControl1.Select()
+    End Sub
+
+    Private Sub tbTasimaSekilleri_kaydet_yeni(ByVal nID As Integer, ByVal sKod As String, ByVal sAciklama As String)
+        Dim cmd As New OleDb.OleDbCommand
+        Dim con As New OleDb.OleDbConnection
+        cmd.Connection = con
+        con.ConnectionString = connection
+        cmd.CommandTimeout = Nothing
+        If con.State = ConnectionState.Closed = True Then
+            con.Open()
+        End If
+        cmd.CommandText = sorgu_query("SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO tbTasimaSekilleri (nID, sKod, sAciklama, bAktif) VALUES (" & nID & ", '" & sKod & "', '" & sAciklama & "', 1)")
+        cmd.ExecuteNonQuery()
+        con.Close()
+    End Sub
+
+    Private Sub tbTasimaSekilleri_kaydet_duzelt(ByVal nID As Integer, ByVal sKod As String, ByVal sAciklama As String)
+        Dim cmd As New OleDb.OleDbCommand
+        Dim con As New OleDb.OleDbConnection
+        cmd.Connection = con
+        con.ConnectionString = connection
+        cmd.CommandTimeout = Nothing
+        If con.State = ConnectionState.Closed = True Then
+            con.Open()
+        End If
+        cmd.CommandText = sorgu_query("SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED UPDATE tbTasimaSekilleri SET sKod = '" & sKod & "', sAciklama = '" & sAciklama & "' WHERE nID = " & nID)
+        cmd.ExecuteNonQuery()
+        con.Close()
+    End Sub
+
+    Private Sub tbTasimaSekilleri_kaydet_sil(ByVal nID As Integer)
+        Dim cmd As New OleDb.OleDbCommand
+        Dim con As New OleDb.OleDbConnection
+        cmd.Connection = con
+        con.ConnectionString = connection
+        cmd.CommandTimeout = Nothing
+        If con.State = ConnectionState.Closed = True Then
+            con.Open()
+        End If
+        cmd.CommandText = sorgu_query("SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED DELETE FROM tbTasimaSekilleri WHERE nID = " & nID)
+        cmd.ExecuteNonQuery()
+        con.Close()
+    End Sub
+
+    Public Function sorgu_nID_kontrol(ByVal nID As Integer) As Boolean
+        Dim kriter
+        Dim pass As Boolean
+        kriter = ""
+        Dim conn As New OleDb.OleDbConnection
+        Dim cmd As New OleDb.OleDbCommand
+        Dim adapter As New OleDb.OleDbDataAdapter
+        conn.ConnectionString = connection
+        cmd.Connection = conn
+        conn.Open()
+        cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT ISNULL(COUNT(nID), 0) AS nKayit FROM tbTasimaSekilleri WHERE nID = " & nID)
+        Dim kayitsayisi = cmd.ExecuteScalar
+        If kayitsayisi = 0 Then
+            pass = True
+        Else
+            pass = False
+        End If
+        Return pass
+    End Function
+
+    Private Sub kayit_ekle()
+        islem = "Ekle"
+        PanelControl3.Visible = True
+        txt_nID.EditValue = ""
+        txt_sKod.EditValue = ""
+        txt_sAciklama.EditValue = ""
+        txt_nID.Focus()
+        txt_nID.SelectAll()
+    End Sub
+
+    Private Sub kayit_duzelt()
+        islem = "Duzelt"
+        PanelControl3.Visible = True
+        txt_nID.EditValue = GridView1.GetFocusedRowCellValue("nID")
+        txt_sKod.EditValue = GridView1.GetFocusedRowCellValue("sKod")
+        txt_sAciklama.EditValue = GridView1.GetFocusedRowCellValue("sAciklama")
+        txt_nID.Enabled = False
+        txt_sAciklama.Focus()
+        txt_sAciklama.SelectAll()
+    End Sub
+
+    Private Sub kayit_sil()
+        If MessageBox.Show(Sorgu_sDil("Seçili Kaydı Silmek İstediğinize Emin misiniz?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+            Dim nID As Integer = GridView1.GetFocusedRowCellValue("nID")
+            tbTasimaSekilleri_kaydet_sil(nID)
+            Dataload_tbTasimaSekilleri()
+        End If
+    End Sub
+
+    Private Sub btn_kaydet_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_kaydet.Click
+        If islem = "Ekle" Then
+            tbTasimaSekilleri_kaydet_yeni(CInt(txt_nID.EditValue), txt_sKod.Text, txt_sAciklama.Text)
+            Dataload_tbTasimaSekilleri()
+            PanelControl3.Visible = False
+        ElseIf islem = "Duzelt" Then
+            Dim nID As Integer = GridView1.GetFocusedRowCellValue("nID")
+            tbTasimaSekilleri_kaydet_duzelt(nID, txt_sKod.Text, txt_sAciklama.Text)
+            Dataload_tbTasimaSekilleri()
+            PanelControl3.Visible = False
+        End If
+        txt_nID.Enabled = True
+    End Sub
+
+    Private Sub btn_vazgec_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_vazgec.Click
+        PanelControl3.Visible = False
+        txt_nID.Enabled = True
+    End Sub
+
+    Private Sub raporla_excel()
+        Dim sfd As New SaveFileDialog()
+        sfd.Filter = "Excel Dosyası|*.xlsx"
+        sfd.Title = "Excel Olarak Kaydet"
+        sfd.FileName = "TasimaSekilleri_" & DateTime.Now.ToString("yyyyMMdd_HHmmss")
+        If sfd.ShowDialog() = DialogResult.OK Then
+            GridView1.ExportToXlsx(sfd.FileName)
+            MessageBox.Show(Sorgu_sDil("Excel dosyası kaydedildi.", sDil), Sorgu_sDil("Bilgi", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
+    End Sub
+
+    Private Sub raporla_pdf()
+        Dim sfd As New SaveFileDialog()
+        sfd.Filter = "PDF Dosyası|*.pdf"
+        sfd.Title = "PDF Olarak Kaydet"
+        sfd.FileName = "TasimaSekilleri_" & DateTime.Now.ToString("yyyyMMdd_HHmmss")
+        If sfd.ShowDialog() = DialogResult.OK Then
+            GridView1.ExportToPdf(sfd.FileName)
+            MessageBox.Show(Sorgu_sDil("PDF dosyası kaydedildi.", sDil), Sorgu_sDil("Bilgi", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
+    End Sub
+
+    Private Sub raporla_text()
+        Dim sfd As New SaveFileDialog()
+        sfd.Filter = "Text Dosyası|*.txt"
+        sfd.Title = "Text Olarak Kaydet"
+        sfd.FileName = "TasimaSekilleri_" & DateTime.Now.ToString("yyyyMMdd_HHmmss")
+        If sfd.ShowDialog() = DialogResult.OK Then
+            GridView1.ExportToText(sfd.FileName)
+            MessageBox.Show(Sorgu_sDil("Text dosyası kaydedildi.", sDil), Sorgu_sDil("Bilgi", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
+    End Sub
+
+    Private Sub txt_sAciklama_TextChanged(sender As Object, e As EventArgs) Handles txt_sAciklama.TextChanged
+        If Len(Trim(txt_nID.EditValue)) > 0 And Len(Trim(txt_sAciklama.EditValue)) > 0 Then
+            btn_kaydet.Enabled = True
+        Else
+            btn_kaydet.Enabled = False
+        End If
+    End Sub
+
+    Private Sub GridView1_CustomDrawRowIndicator(ByVal sender As Object, ByVal e As DevExpress.XtraGrid.Views.Grid.RowIndicatorCustomDrawEventArgs) Handles GridView1.CustomDrawRowIndicator
+        If e.RowHandle >= 0 Then
+            e.Info.DisplayText = e.RowHandle + 1
+        Else
+            e.Info.DisplayText = ""
+        End If
+    End Sub
+
+    Private Sub GridView1_SelectionChanged(ByVal sender As Object, ByVal e As DevExpress.Data.SelectionChangedEventArgs) Handles GridView1.SelectionChanged
+        If GridView1.SelectedRowsCount > 1 Then
+            Label2.Text = Sorgu_sDil("Kayıt Sayısı :", sDil) & GridView1.RowCount & " / " & Sorgu_sDil("Satır :", sDil) & GridView1.FocusedRowHandle + 1 & " / " & Sorgu_sDil("Seçili :", sDil) & GridView1.SelectedRowsCount
+        ElseIf GridView1.SelectedRowsCount = 1 Then
+            Label2.Text = Sorgu_sDil("Kayıt Sayısı :", sDil) & GridView1.RowCount & " / " & Sorgu_sDil("Satır :", sDil) & GridView1.FocusedRowHandle + 1
+        Else
+            Label2.Text = ""
+        End If
+    End Sub
+
+    Private Sub frm_TasimaSekliTanim_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Dataload_tbTasimaSekilleri()
+        Try
+            gorunum_yukle()
+        Catch ex As Exception
+        End Try
+        PanelControl3.Visible = False
+    End Sub
+
+    Private Sub GridControl1_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles GridControl1.KeyDown
+        If e.KeyCode = Keys.Escape Then
+            If MessageBox.Show(Sorgu_sDil("Editör Ekranını Kapatmak İstediğinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+                Me.Close()
+            End If
+        End If
+    End Sub
+
+    Private Sub BarButtonItem1_ItemClick(ByVal sender As System.Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles BarButtonItem1.ItemClick
+        kayit_ekle()
+    End Sub
+
+    Private Sub BarButtonItem4_ItemClick(ByVal sender As System.Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles BarButtonItem4.ItemClick
+        gorunum_yazdir()
+    End Sub
+
+    Private Sub BarButtonItem3_ItemClick(ByVal sender As Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles BarButtonItem3.ItemClick
+        kayit_sil()
+    End Sub
+
+    Private Sub BarButtonItem5_ItemClick(ByVal sender As System.Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles BarButtonItem5.ItemClick
+        raporla_excel()
+    End Sub
+
+    Private Sub BarButtonItem6_ItemClick(ByVal sender As Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles BarButtonItem6.ItemClick
+        raporla_pdf()
+    End Sub
+
+    Private Sub BarButtonItem7_ItemClick(ByVal sender As Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles BarButtonItem7.ItemClick
+        raporla_text()
+    End Sub
+
+    Private Sub BarButtonItem2_ItemClick(sender As Object, e As DevExpress.XtraBars.ItemClickEventArgs) Handles BarButtonItem2.ItemClick
+        kayit_duzelt()
+    End Sub
+
+    Private Sub SimpleButton3_Click(sender As Object, e As EventArgs) Handles SimpleButton3.Click
+        Me.Close()
+    End Sub
+
+    Private Sub SimpleButton4_Click(sender As Object, e As EventArgs) Handles SimpleButton4.Click
+        Me.Close()
+    End Sub
+End Class

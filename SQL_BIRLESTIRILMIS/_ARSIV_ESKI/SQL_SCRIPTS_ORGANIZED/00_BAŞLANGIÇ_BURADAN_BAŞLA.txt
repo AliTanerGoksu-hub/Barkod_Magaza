@@ -1,0 +1,109 @@
+═══════════════════════════════════════════════════════════
+   SQL SCRIPTLER - KURULUM KILAVUZU
+═══════════════════════════════════════════════════════════
+
+📁 Bu klasörde 5 adet SQL script bulunmaktadır.
+📖 Lütfen README.md dosyasını okuyun.
+
+═══════════════════════════════════════════════════════════
+   HIZLI BAŞLANGIÇ
+═══════════════════════════════════════════════════════════
+
+1️⃣  İLK KURULUM (Yeni Veritabanı)
+   ─────────────────────────────────────────────────────
+   ✓ 01_KURULUM_TABLO_ve_KOLON_EKLEMELERI.sql
+   ✓ 03_PARAMETRE_GUNCELLEME.sql
+   ✓ 05_HIZLI_PARAMETRE_GUNCELLEME.sql
+   ✓ 04_TEST_PARAMETRE_OKUMA.sql (kontrol)
+
+2️⃣  MEVCUT VERİTABANI GÜNCELLEME
+   ─────────────────────────────────────────────────────
+   ✓ 01_KURULUM_TABLO_ve_KOLON_EKLEMELERI.sql
+   ✓ 02_MIGRATION_MODEL_BAZLI.sql (⚠️ YEDEK ALIR!)
+   ✓ 03_PARAMETRE_GUNCELLEME.sql
+   ✓ 04_TEST_PARAMETRE_OKUMA.sql (kontrol)
+
+═══════════════════════════════════════════════════════════
+   ⚠️  UYARILAR
+═══════════════════════════════════════════════════════════
+
+🔴 MUTLAKA YEDEK ALIN!
+   Her script'ten önce veritabanı yedeği alın.
+
+🔴 VERİTABANI ADINI DEĞİŞTİRİN!
+   Her script'in başında: USE [Database]
+   Bunu kendi veritabanı adınızla değiştirin!
+
+🔴 PARAMETRELERİ GÜNCELLEYİN!
+   - DefaultImageUrl: Kendi resim URL'niz
+   - E-ticaret parametreleri: Kendi komisyonlarınız
+
+🔴 SIRAYLA ÇALIŞTIRIN!
+   Scriptler birbirine bağımlı, sırayı değiştirmeyin!
+
+═══════════════════════════════════════════════════════════
+   📝 SCRIPT AÇIKLAMALARI
+═══════════════════════════════════════════════════════════
+
+01_KURULUM_TABLO_ve_KOLON_EKLEMELERI.sql
+   ➜ Tüm tablo ve kolonları oluşturur
+   ➜ İdempotent (birden fazla kez çalıştırılabilir)
+   ➜ Mevcut yapıları kontrol eder, sadece eksikleri ekler
+
+02_MIGRATION_MODEL_BAZLI.sql
+   ➜ Verileri model bazlı yapıya dönüştürür
+   ➜ Otomatik yedek alır (tbStokSinifi_BACKUP, tbStokAIIcerik_BACKUP)
+   ➜ Mükerrer kayıtları temizler
+
+03_PARAMETRE_GUNCELLEME.sql
+   ➜ DefaultImageUrl parametresi ekler
+   ➜ E-ticaret parametrelerini ekler (örnek verilerle)
+   ➜ Kontrol eder ve listeler
+
+04_TEST_PARAMETRE_OKUMA.sql
+   ➜ Tüm parametreleri kontrol eder
+   ➜ Örnek maliyet hesaplaması yapar
+   ➜ Eksik platform bildirir
+   ➜ READ-ONLY (veri değiştirmez)
+
+05_HIZLI_PARAMETRE_GUNCELLEME.sql
+   ➜ Sadece DefaultImageUrl'i günceller
+   ➜ Hızlı güncelleme için
+
+═══════════════════════════════════════════════════════════
+   📞 SORUN GİDERME
+═══════════════════════════════════════════════════════════
+
+❓ Script hata veriyor
+   → Veritabanı adını kontrol edin
+   → Yetkinizi kontrol edin
+   → Tablo zaten var mı bakın
+
+❓ Migration sonrası veri kayboldu
+   → Yedek tablolara bakın: tbStokSinifi_BACKUP
+   → Geri dönüş komutları README.md'de
+
+❓ Parametreler güncellenmiyor
+   → Uygulamayı yeniden başlatın
+   → 04_TEST ile kontrol edin
+   → Loglara bakın
+
+═══════════════════════════════════════════════════════════
+   ✅ BAŞARI KONTROL LİSTESİ
+═══════════════════════════════════════════════════════════
+
+☐ README.md okudum
+☐ Veritabanı yedeği aldım
+☐ Veritabanı adını değiştirdim (USE [Database])
+☐ Scriptleri sırayla çalıştırdım
+☐ DefaultImageUrl güncelledim
+☐ E-ticaret parametrelerini güncelledim
+☐ Test script'i ile kontrol ettim
+☐ Uygulama yeniden derlendi
+☐ Test edildi ve çalışıyor ✨
+
+═══════════════════════════════════════════════════════════
+
+Detaylı bilgi için: README.md
+
+═══════════════════════════════════════════════════════════

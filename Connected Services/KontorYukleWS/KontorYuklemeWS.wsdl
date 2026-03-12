@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:tns="http://kontoryuklemeservisi.entegrator.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" name="KontorYuklemeWS" targetNamespace="http://kontoryuklemeservisi.entegrator.com/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xs:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://kontoryuklemeservisi.entegrator.com/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="birimTipiyleYuklemeYap" type="tns:birimTipiyleYuklemeYap" />
+      <xs:element name="birimTipiyleYuklemeYapResponse" type="tns:birimTipiyleYuklemeYapResponse" />
+      <xs:element name="kalanKontorSorgula" type="tns:kalanKontorSorgula" />
+      <xs:element name="kalanKontorSorgulaResponse" type="tns:kalanKontorSorgulaResponse" />
+      <xs:element name="kredileriDevret" type="tns:kredileriDevret" />
+      <xs:element name="kredileriDevretResponse" type="tns:kredileriDevretResponse" />
+      <xs:element name="sozlesmeTurunuDegistir" type="tns:sozlesmeTurunuDegistir" />
+      <xs:element name="sozlesmeTurunuDegistirResponse" type="tns:sozlesmeTurunuDegistirResponse" />
+      <xs:complexType name="kalanKontorSorgula">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="vkn_tckn" type="xs:string" />
+          <xs:element minOccurs="0" name="birimTuru" type="tns:BirimTuru" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="kalanKontorSorgulaResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:EntResponseUser" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="EntResponseUser">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="kod" type="xs:string" />
+          <xs:element minOccurs="0" name="aciklama" type="xs:string" />
+          <xs:element minOccurs="0" name="sebep" type="xs:string" />
+          <xs:element minOccurs="0" name="sonucVerisi" type="tns:KrediSonucu" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="KrediSonucu">
+        <xs:sequence>
+          <xs:element name="toplamFaturaAdedi" type="xs:int" />
+          <xs:element name="toplamAlanBoyutu" type="xs:decimal" />
+          <xs:element minOccurs="0" name="toplamSayfaMiktari" type="xs:decimal" />
+          <xs:element name="harcananGelenFaturaMiktari" type="xs:int" />
+          <xs:element name="harcananGidenFaturaMiktari" type="xs:int" />
+          <xs:element name="harcananEArsivFaturaMiktari" type="xs:int" />
+          <xs:element name="harcananAlanMiktari" type="xs:decimal" />
+          <xs:element minOccurs="0" name="harcananSayfaMiktari" type="xs:decimal" />
+          <xs:element name="harcananEsmmMakbuzMiktari" type="xs:int" />
+          <xs:element name="harcananEmmMakbuzMiktari" type="xs:int" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="birimTipiyleYuklemeYap">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="vkn_tckn" type="xs:string" />
+          <xs:element minOccurs="0" name="birimTuru" type="tns:BirimTuru" />
+          <xs:element minOccurs="0" name="krediTuru" type="tns:KrediTuru" />
+          <xs:element minOccurs="0" name="islemTuru" type="tns:IslemTuru" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="KrediTuru">
+        <xs:sequence>
+          <xs:element name="odemeTuru" type="tns:OdemeTuru" />
+          <xs:element name="taksitSayisi" type="xs:int" />
+          <xs:element name="birimMiktari" type="xs:int" />
+          <xs:element minOccurs="0" name="baslangicTarihi" type="xs:string" />
+          <xs:element minOccurs="0" name="sonKullanimTarihi" type="xs:string" />
+          <xs:element minOccurs="0" name="faturaNo" type="xs:string" />
+          <xs:element minOccurs="0" name="fiyat" type="xs:decimal" />
+          <xs:element minOccurs="0" name="talepEdilenFiyat" type="xs:decimal" />
+          <xs:element minOccurs="0" name="aciklama" type="xs:string" />
+          <xs:element minOccurs="0" name="hediyeTuru" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="birimTipiyleYuklemeYapResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:EntResponseUser" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="sozlesmeTurunuDegistir">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="vknTckn" type="xs:string" />
+          <xs:element minOccurs="0" name="hizmetTuru" type="tns:Hizmet" />
+          <xs:element minOccurs="0" name="sozlesmeTuru" type="tns:TarifeTuru" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="sozlesmeTurunuDegistirResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:EntResponseUser" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="kredileriDevret">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="kaynak_vkn_tckn" type="xs:string" />
+          <xs:element minOccurs="0" name="hedef_vkn_tckn" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="kredileriDevretResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:EntResponseUser" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="BirimTuru">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="FaturaAdedi" />
+          <xs:enumeration value="AlanBoyutu" />
+          <xs:enumeration value="ArsivKasa" />
+          <xs:enumeration value="Sayfa" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="OdemeTuru">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Pesin" />
+          <xs:enumeration value="Taksit" />
+          <xs:enumeration value="Ucretsiz" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="IslemTuru">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Satinalma" />
+          <xs:enumeration value="Hediye" />
+          <xs:enumeration value="Transfer" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="Hizmet">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Hepsi" />
+          <xs:enumeration value="EArsiv" />
+          <xs:enumeration value="EFatura" />
+          <xs:enumeration value="EDefter" />
+          <xs:enumeration value="EDefterSaklama" />
+          <xs:enumeration value="EIrsaliye" />
+          <xs:enumeration value="ESerbestMeslek" />
+          <xs:enumeration value="EMustahsil" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="TarifeTuru">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Faturali" />
+          <xs:enumeration value="Kontorlu" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+  </types>
+  <message name="sozlesmeTurunuDegistir">
+    <part name="parameters" element="tns:sozlesmeTurunuDegistir" />
+  </message>
+  <message name="birimTipiyleYuklemeYap">
+    <part name="parameters" element="tns:birimTipiyleYuklemeYap" />
+  </message>
+  <message name="kalanKontorSorgulaResponse">
+    <part name="parameters" element="tns:kalanKontorSorgulaResponse" />
+  </message>
+  <message name="kredileriDevretResponse">
+    <part name="parameters" element="tns:kredileriDevretResponse" />
+  </message>
+  <message name="sozlesmeTurunuDegistirResponse">
+    <part name="parameters" element="tns:sozlesmeTurunuDegistirResponse" />
+  </message>
+  <message name="kredileriDevret">
+    <part name="parameters" element="tns:kredileriDevret" />
+  </message>
+  <message name="birimTipiyleYuklemeYapResponse">
+    <part name="parameters" element="tns:birimTipiyleYuklemeYapResponse" />
+  </message>
+  <message name="kalanKontorSorgula">
+    <part name="parameters" element="tns:kalanKontorSorgula" />
+  </message>
+  <portType name="KontorYuklemeWS">
+    <operation name="sozlesmeTurunuDegistir">
+      <input wsam:Action="http://kontoryuklemeservisi.entegrator.com/KontorYuklemeWS/sozlesmeTurunuDegistirRequest" message="tns:sozlesmeTurunuDegistir" />
+      <output wsam:Action="http://kontoryuklemeservisi.entegrator.com/KontorYuklemeWS/sozlesmeTurunuDegistirResponse" message="tns:sozlesmeTurunuDegistirResponse" />
+    </operation>
+    <operation name="birimTipiyleYuklemeYap">
+      <input wsam:Action="http://kontoryuklemeservisi.entegrator.com/KontorYuklemeWS/birimTipiyleYuklemeYapRequest" message="tns:birimTipiyleYuklemeYap" />
+      <output wsam:Action="http://kontoryuklemeservisi.entegrator.com/KontorYuklemeWS/birimTipiyleYuklemeYapResponse" message="tns:birimTipiyleYuklemeYapResponse" />
+    </operation>
+    <operation name="kalanKontorSorgula">
+      <input wsam:Action="http://kontoryuklemeservisi.entegrator.com/KontorYuklemeWS/kalanKontorSorgulaRequest" message="tns:kalanKontorSorgula" />
+      <output wsam:Action="http://kontoryuklemeservisi.entegrator.com/KontorYuklemeWS/kalanKontorSorgulaResponse" message="tns:kalanKontorSorgulaResponse" />
+    </operation>
+    <operation name="kredileriDevret">
+      <input wsam:Action="http://kontoryuklemeservisi.entegrator.com/KontorYuklemeWS/kredileriDevretRequest" message="tns:kredileriDevret" />
+      <output wsam:Action="http://kontoryuklemeservisi.entegrator.com/KontorYuklemeWS/kredileriDevretResponse" message="tns:kredileriDevretResponse" />
+    </operation>
+  </portType>
+  <binding name="KontorYuklemeWSPortBinding" type="tns:KontorYuklemeWS">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="sozlesmeTurunuDegistir">
+      <soap12:operation soapAction="" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="birimTipiyleYuklemeYap">
+      <soap12:operation soapAction="" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="kalanKontorSorgula">
+      <soap12:operation soapAction="" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="kredileriDevret">
+      <soap12:operation soapAction="" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <service name="KontorYuklemeWS">
+    <port name="KontorYuklemeWSPort" binding="tns:KontorYuklemeWSPortBinding">
+      <soap12:address location="https://servis.smartdonusum.com/KontorYuklemeServisi/KontorYuklemeWS" />
+    </port>
+  </service>
+</definitions>

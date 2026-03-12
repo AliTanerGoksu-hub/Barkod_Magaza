@@ -1,0 +1,55 @@
+===========================================
+AI BUTONLARI - frm_stok_kart.vb İÇİN
+===========================================
+
+ADIM 1: Class seviyesinde (en üstte) ekleyin:
+-------------------------------------------
+
+    ' AI BUTONLARI
+    Private WithEvents btnAIAyarlari As DevExpress.XtraEditors.SimpleButton
+    Private aiInitialized As Boolean = False
+
+
+ADIM 2: Form_Load içine ekleyin:
+-------------------------------------------
+
+    ' AI butonunu ekle
+    If Not aiInitialized Then
+        InitializeAIButton()
+        aiInitialized = True
+    End If
+
+
+ADIM 3: End Class'tan ÖNCE bu fonksiyonları ekleyin:
+-------------------------------------------
+
+    Private Sub InitializeAIButton()
+        Try
+            btnAIAyarlari = New DevExpress.XtraEditors.SimpleButton()
+            btnAIAyarlari.Text = "🤖 AI"
+            btnAIAyarlari.Location = New Point(Me.Width - 100, 10)
+            btnAIAyarlari.Size = New Size(80, 30)
+            btnAIAyarlari.Appearance.BackColor = Color.Orange
+            btnAIAyarlari.Appearance.ForeColor = Color.White
+            btnAIAyarlari.Appearance.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+            Me.Controls.Add(btnAIAyarlari)
+            btnAIAyarlari.BringToFront()
+        Catch ex As Exception
+        End Try
+    End Sub
+    
+    Private Sub btnAIAyarlari_Click(sender As Object, e As EventArgs) Handles btnAIAyarlari.Click
+        Try
+            Dim frm As New frm_AIAyarlari()
+            frm.ShowDialog()
+        Catch ex As Exception
+            MessageBox.Show("Hata: " & ex.Message)
+        End Try
+    End Sub
+
+
+===========================================
+İLERİ SEVİYE: Daha fazla buton eklemek için
+===========================================
+
+AI_INTEGRATION_STOK_KART.vb dosyasındaki tüm kodu kopyalayın!

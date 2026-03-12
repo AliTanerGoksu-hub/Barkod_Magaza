@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:tns="http://invoiceloadingservice.entegrator.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" name="LoadInvoiceWS" targetNamespace="http://invoiceloadingservice.entegrator.com/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xs:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://invoiceloadingservice.entegrator.com/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="LoadInboxInvoice" type="tns:LoadInboxInvoice" />
+      <xs:element name="LoadInboxInvoiceResponse" type="tns:LoadInboxInvoiceResponse" />
+      <xs:element name="LoadOutboxInvoice" type="tns:LoadOutboxInvoice" />
+      <xs:element name="LoadOutboxInvoiceResponse" type="tns:LoadOutboxInvoiceResponse" />
+      <xs:element name="QueryInboxDocument" type="tns:QueryInboxDocument" />
+      <xs:element name="QueryInboxDocumentResponse" type="tns:QueryInboxDocumentResponse" />
+      <xs:element name="QueryInboxDocumentsWithDocumentDate" type="tns:QueryInboxDocumentsWithDocumentDate" />
+      <xs:element name="QueryInboxDocumentsWithDocumentDateResponse" type="tns:QueryInboxDocumentsWithDocumentDateResponse" />
+      <xs:element name="QueryOutboxDocument" type="tns:QueryOutboxDocument" />
+      <xs:element name="QueryOutboxDocumentResponse" type="tns:QueryOutboxDocumentResponse" />
+      <xs:element name="QueryOutboxDocumentsWithDocumentDate" type="tns:QueryOutboxDocumentsWithDocumentDate" />
+      <xs:element name="QueryOutboxDocumentsWithDocumentDateResponse" type="tns:QueryOutboxDocumentsWithDocumentDateResponse" />
+      <xs:complexType name="QueryInboxDocument">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="paramType" type="xs:string" />
+          <xs:element minOccurs="0" name="parameter" type="xs:string" />
+          <xs:element minOccurs="0" name="withXML" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="QueryInboxDocumentResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:DocumentQueryResponse" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="DocumentQueryResponse">
+        <xs:sequence>
+          <xs:element name="queryState" type="xs:int" />
+          <xs:element minOccurs="0" name="stateExplanation" type="xs:string" />
+          <xs:element name="documentsCount" type="xs:int" />
+          <xs:element name="maxRecordIdinList" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="documents" type="tns:ResponseDocument" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ResponseDocument">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="document_uuid" type="xs:string" />
+          <xs:element minOccurs="0" name="document_id" type="xs:string" />
+          <xs:element minOccurs="0" name="envelope_uuid" type="xs:string" />
+          <xs:element minOccurs="0" name="document_profile" type="xs:string" />
+          <xs:element minOccurs="0" name="system_creation_time" type="xs:string" />
+          <xs:element minOccurs="0" name="document_issue_date" type="xs:string" />
+          <xs:element minOccurs="0" name="source_id" type="xs:string" />
+          <xs:element minOccurs="0" name="destination_id" type="xs:string" />
+          <xs:element minOccurs="0" name="source_urn" type="xs:string" />
+          <xs:element minOccurs="0" name="source_title" type="xs:string" />
+          <xs:element minOccurs="0" name="destination_urn" type="xs:string" />
+          <xs:element minOccurs="0" name="currency_code" type="xs:string" />
+          <xs:element minOccurs="0" name="invoice_total" type="xs:string" />
+          <xs:element minOccurs="0" name="state_code" type="xs:string" />
+          <xs:element minOccurs="0" name="state_explanation" type="xs:string" />
+          <xs:element minOccurs="0" name="cause" type="xs:string" />
+          <xs:element minOccurs="0" name="content_type" type="xs:string" />
+          <xs:element minOccurs="0" name="document_content" type="xs:base64Binary" />
+          <xs:element name="emailSent" type="xs:int" />
+          <xs:element minOccurs="0" name="emailSentDate" type="xs:string" />
+          <xs:element minOccurs="0" name="cancelled" type="xs:string" />
+          <xs:element minOccurs="0" name="cancel_date" type="xs:string" />
+          <xs:element minOccurs="0" name="reference_document_uuid" type="xs:string" />
+          <xs:element minOccurs="0" name="response_document_uuid" type="xs:string" />
+          <xs:element minOccurs="0" name="response_code" type="xs:string" />
+          <xs:element minOccurs="0" name="response_validation_state" type="xs:string" />
+          <xs:element minOccurs="0" name="response_received_date" type="xs:string" />
+          <xs:element minOccurs="0" name="gtb_reference_no" type="xs:string" />
+          <xs:element minOccurs="0" name="gtb_gcb_tescil_no" type="xs:string" />
+          <xs:element minOccurs="0" name="gtb_fiili_ihracat_tarihi" type="xs:string" />
+          <xs:element minOccurs="0" name="reserved1" type="xs:string" />
+          <xs:element minOccurs="0" name="reserved2" type="xs:string" />
+          <xs:element minOccurs="0" name="reserved3" type="xs:string" />
+          <xs:element minOccurs="0" name="document_type_code" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="notes" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="despatchInfo" type="tns:DocumentInfo" />
+          <xs:element minOccurs="0" name="orderInfo" type="tns:DocumentInfo" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="taxInfo" type="tns:TaxInfo" />
+          <xs:element minOccurs="0" name="taxInclusiveAmount" type="xs:string" />
+          <xs:element minOccurs="0" name="taxExlusiveAmount" type="xs:string" />
+          <xs:element minOccurs="0" name="allowanceTotalAmount" type="xs:string" />
+          <xs:element minOccurs="0" name="taxAmount0015" type="xs:string" />
+          <xs:element minOccurs="0" name="lineExtensionAmount" type="xs:string" />
+          <xs:element minOccurs="0" name="suplierPersonName" type="xs:string" />
+          <xs:element minOccurs="0" name="supplierPersonMiddleName" type="xs:string" />
+          <xs:element minOccurs="0" name="supplierPersonFamilyName" type="xs:string" />
+          <xs:element minOccurs="0" name="customerPersonName" type="xs:string" />
+          <xs:element minOccurs="0" name="customerPersonMiddleName" type="xs:string" />
+          <xs:element minOccurs="0" name="customerPersonFamilyName" type="xs:string" />
+          <xs:element minOccurs="0" name="destination_title" type="xs:string" />
+          <xs:element minOccurs="0" name="is_read" type="xs:string" />
+          <xs:element minOccurs="0" name="is_archieved" type="xs:string" />
+          <xs:element minOccurs="0" name="is_accounted" type="xs:string" />
+          <xs:element minOccurs="0" name="is_transferred" type="xs:string" />
+          <xs:element minOccurs="0" name="is_printed" type="xs:string" />
+          <xs:element minOccurs="0" name="local_id" type="xs:string" />
+          <xs:element minOccurs="0" name="sendingType" type="xs:string" />
+          <xs:element minOccurs="0" name="buyerCustomerPartyName" type="xs:string" />
+          <xs:element minOccurs="0" name="buyerCustomerPersonName" type="xs:string" />
+          <xs:element minOccurs="0" name="buyerCustomerPersonFamilyName" type="xs:string" />
+          <xs:element minOccurs="0" name="report_no" type="xs:string" />
+          <xs:element minOccurs="0" name="cancel_report_no" type="xs:string" />
+          <xs:element minOccurs="0" name="objected" type="xs:string" />
+          <xs:element minOccurs="0" name="objectionReason" type="xs:string" />
+          <xs:element minOccurs="0" name="objectionDate" type="xs:string" />
+          <xs:element minOccurs="0" name="objectionReportNo" type="xs:string" />
+          <xs:element minOccurs="0" name="objectionType" type="xs:string" />
+          <xs:element minOccurs="0" name="objectionDocumentNo" type="xs:string" />
+          <xs:element minOccurs="0" name="destinationEmail" type="xs:string" />
+          <xs:element minOccurs="0" name="destinationMobile" type="xs:string" />
+          <xs:element minOccurs="0" name="smsSentDate" type="xs:string" />
+          <xs:element minOccurs="0" name="cancelPortalStatus" type="xs:int" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="DocumentInfo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="documentDate" type="xs:string" />
+          <xs:element minOccurs="0" name="documentNo" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TaxInfo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="taxtTypeCode" type="xs:string" />
+          <xs:element minOccurs="0" name="taxtTypeName" type="xs:string" />
+          <xs:element minOccurs="0" name="taxAmount" type="xs:string" />
+          <xs:element minOccurs="0" name="taxPercentage" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="QueryOutboxDocumentsWithDocumentDate">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="startDate" type="xs:string" />
+          <xs:element minOccurs="0" name="endDate" type="xs:string" />
+          <xs:element minOccurs="0" name="withXML" type="xs:string" />
+          <xs:element minOccurs="0" name="minRecordId" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="QueryOutboxDocumentsWithDocumentDateResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:DocumentQueryResponse" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="LoadOutboxInvoice">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="inputDocumentList" type="tns:InputDocument" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="InputDocument">
+        <xs:sequence>
+          <xs:element name="documentUUID" type="xs:string" />
+          <xs:element name="xmlContent" type="xs:string" />
+          <xs:element name="sourceUrn" type="xs:string" />
+          <xs:element name="destinationUrn" type="xs:string" />
+          <xs:element minOccurs="0" name="documentNoPrefix" type="xs:string" />
+          <xs:element minOccurs="0" name="localId" type="xs:string" />
+          <xs:element minOccurs="0" name="documentId" type="xs:string" />
+          <xs:element minOccurs="0" name="submitForApproval" type="xs:boolean" />
+          <xs:element name="documentDate" type="xs:string" />
+          <xs:element minOccurs="0" name="note" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="LoadOutboxInvoiceResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="return" type="tns:EntResponse" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="EntResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="documentUUID" type="xs:string" />
+          <xs:element minOccurs="0" name="documentID" type="xs:string" />
+          <xs:element minOccurs="0" name="code" type="xs:string" />
+          <xs:element minOccurs="0" name="explanation" type="xs:string" />
+          <xs:element minOccurs="0" name="cause" type="xs:string" />
+          <xs:element minOccurs="0" name="content" type="xs:base64Binary" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="QueryInboxDocumentsWithDocumentDate">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="startDate" type="xs:string" />
+          <xs:element minOccurs="0" name="endDate" type="xs:string" />
+          <xs:element minOccurs="0" name="withXML" type="xs:string" />
+          <xs:element minOccurs="0" name="minRecordId" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="QueryInboxDocumentsWithDocumentDateResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:DocumentQueryResponse" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="LoadInboxInvoice">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="inputDocumentList" type="tns:InputDocument" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="LoadInboxInvoiceResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="return" type="tns:EntResponse" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="QueryOutboxDocument">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="paramType" type="xs:string" />
+          <xs:element minOccurs="0" name="parameter" type="xs:string" />
+          <xs:element minOccurs="0" name="withXML" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="QueryOutboxDocumentResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:DocumentQueryResponse" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </types>
+  <message name="QueryInboxDocumentResponse">
+    <part name="parameters" element="tns:QueryInboxDocumentResponse" />
+  </message>
+  <message name="QueryOutboxDocumentResponse">
+    <part name="parameters" element="tns:QueryOutboxDocumentResponse" />
+  </message>
+  <message name="LoadInboxInvoiceResponse">
+    <part name="parameters" element="tns:LoadInboxInvoiceResponse" />
+  </message>
+  <message name="LoadOutboxInvoice">
+    <part name="parameters" element="tns:LoadOutboxInvoice" />
+  </message>
+  <message name="LoadOutboxInvoiceResponse">
+    <part name="parameters" element="tns:LoadOutboxInvoiceResponse" />
+  </message>
+  <message name="QueryInboxDocumentsWithDocumentDate">
+    <part name="parameters" element="tns:QueryInboxDocumentsWithDocumentDate" />
+  </message>
+  <message name="QueryOutboxDocument">
+    <part name="parameters" element="tns:QueryOutboxDocument" />
+  </message>
+  <message name="LoadInboxInvoice">
+    <part name="parameters" element="tns:LoadInboxInvoice" />
+  </message>
+  <message name="QueryInboxDocumentsWithDocumentDateResponse">
+    <part name="parameters" element="tns:QueryInboxDocumentsWithDocumentDateResponse" />
+  </message>
+  <message name="QueryInboxDocument">
+    <part name="parameters" element="tns:QueryInboxDocument" />
+  </message>
+  <message name="QueryOutboxDocumentsWithDocumentDateResponse">
+    <part name="parameters" element="tns:QueryOutboxDocumentsWithDocumentDateResponse" />
+  </message>
+  <message name="QueryOutboxDocumentsWithDocumentDate">
+    <part name="parameters" element="tns:QueryOutboxDocumentsWithDocumentDate" />
+  </message>
+  <portType name="LoadInvoiceWS">
+    <operation name="LoadOutboxInvoice">
+      <input wsam:Action="http://invoiceloadingservice.entegrator.com/LoadInvoiceWS/LoadOutboxInvoiceRequest" message="tns:LoadOutboxInvoice" />
+      <output wsam:Action="http://invoiceloadingservice.entegrator.com/LoadInvoiceWS/LoadOutboxInvoiceResponse" message="tns:LoadOutboxInvoiceResponse" />
+    </operation>
+    <operation name="LoadInboxInvoice">
+      <input wsam:Action="http://invoiceloadingservice.entegrator.com/LoadInvoiceWS/LoadInboxInvoiceRequest" message="tns:LoadInboxInvoice" />
+      <output wsam:Action="http://invoiceloadingservice.entegrator.com/LoadInvoiceWS/LoadInboxInvoiceResponse" message="tns:LoadInboxInvoiceResponse" />
+    </operation>
+    <operation name="QueryInboxDocument">
+      <input wsam:Action="http://invoiceloadingservice.entegrator.com/LoadInvoiceWS/QueryInboxDocumentRequest" message="tns:QueryInboxDocument" />
+      <output wsam:Action="http://invoiceloadingservice.entegrator.com/LoadInvoiceWS/QueryInboxDocumentResponse" message="tns:QueryInboxDocumentResponse" />
+    </operation>
+    <operation name="QueryInboxDocumentsWithDocumentDate">
+      <input wsam:Action="http://invoiceloadingservice.entegrator.com/LoadInvoiceWS/QueryInboxDocumentsWithDocumentDateRequest" message="tns:QueryInboxDocumentsWithDocumentDate" />
+      <output wsam:Action="http://invoiceloadingservice.entegrator.com/LoadInvoiceWS/QueryInboxDocumentsWithDocumentDateResponse" message="tns:QueryInboxDocumentsWithDocumentDateResponse" />
+    </operation>
+    <operation name="QueryOutboxDocument">
+      <input wsam:Action="http://invoiceloadingservice.entegrator.com/LoadInvoiceWS/QueryOutboxDocumentRequest" message="tns:QueryOutboxDocument" />
+      <output wsam:Action="http://invoiceloadingservice.entegrator.com/LoadInvoiceWS/QueryOutboxDocumentResponse" message="tns:QueryOutboxDocumentResponse" />
+    </operation>
+    <operation name="QueryOutboxDocumentsWithDocumentDate">
+      <input wsam:Action="http://invoiceloadingservice.entegrator.com/LoadInvoiceWS/QueryOutboxDocumentsWithDocumentDateRequest" message="tns:QueryOutboxDocumentsWithDocumentDate" />
+      <output wsam:Action="http://invoiceloadingservice.entegrator.com/LoadInvoiceWS/QueryOutboxDocumentsWithDocumentDateResponse" message="tns:QueryOutboxDocumentsWithDocumentDateResponse" />
+    </operation>
+  </portType>
+  <binding name="LoadInvoiceWSPortBinding" type="tns:LoadInvoiceWS">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="LoadOutboxInvoice">
+      <soap12:operation soapAction="" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="LoadInboxInvoice">
+      <soap12:operation soapAction="" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="QueryInboxDocument">
+      <soap12:operation soapAction="" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="QueryInboxDocumentsWithDocumentDate">
+      <soap12:operation soapAction="" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="QueryOutboxDocument">
+      <soap12:operation soapAction="" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="QueryOutboxDocumentsWithDocumentDate">
+      <soap12:operation soapAction="" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <service name="LoadInvoiceWS">
+    <port name="LoadInvoiceWSPort" binding="tns:LoadInvoiceWSPortBinding">
+      <soap12:address location="https://servis.kolayentegrasyon.net/InvoiceLoadingService/LoadInvoiceWS" />
+    </port>
+  </service>
+</definitions>

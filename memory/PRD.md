@@ -1,110 +1,77 @@
-# PRD - Business Smart Barkod Magaza
+# BARKOD MAGAZA - Product Requirements Document
 
 ## Original Problem Statement
-VB.NET Windows Forms tabanlı e-ticaret ve perakende yönetim uygulaması. Ana özellikler:
-- Quka API üzerinden sipariş senkronizasyonu
-- Pazaryeri entegrasyonları (Trendyol, Hepsiburada)
-- GİB e-Fatura/e-Arşiv entegrasyonu (Kolaysoft)
-- Stok ve fiyat yönetimi
-- POS satış işlemleri
-- AI tabanlı ürün içerik oluşturma
+Visual Basic .NET Windows Forms uygulaması için kategori yönetimi ve akıllı eşleştirme sisteminin geliştirilmesi.
 
-## Implemented Features (2025-03)
+## Core Requirements
 
-### Bug Fixes (Completed)
-1. **POS Ödeme Donma Hatası** - `frm_perakende_odeme.vb`
-   - Ödeme isteği bekleme sırasını düzeltildi
+### P0 - Critical (Tamamlandı)
+1. **Smart Category Matching** - Akıllı kategori eşleştirme
+   - String varyasyonları ve yazım hatalarını tanıma
+   - ANNE KIZ / BABA OĞUL ürünleri için özel mantık (-S suffix)
+   - Marka bazlı gruplama (RP, US gibi prefix'ler)
+   - Yetişkin/Çocuk ayrımı
 
-2. **Gece Yarısı lic.dat Dosya Kilidi Çökmesi** - `Form1.vb`
-   - Try...Finally bloğu ile dosya kapatma garantilendi
+2. **Duplicate Category Prevention** - Tekrarlanan kategori filtreleme
+   - Veritabanına kayıt sırasında filtreleme
+   - Web platformuna gönderirken filtreleme
 
-3. **Toplu Resim Yükleme Duplikasyon Hatası** - `frm_TopluResimYukleme.vb`, `frm_stok_kart.vb`
-   - Model+Renk bazlı kontrol (Size bazlı yerine)
+3. **Compilation Fixes** - Derleme hataları düzeltildi
+   - BC30456, BC30201, BC30451 gibi hatalar çözüldü
 
-4. **Excel Import Hataları** - `frm_fatura.vb`
-   - Varyant veri kalıcılığı ve COM exception düzeltmeleri
+### P1 - High (Kısmen Tamamlandı)
+1. **Find Category Inconsistencies** - ✅ Eklendi, test bekliyor
+   - "🔍 Yanlış Kategorileri Bul" butonu
+   - Aynı grup içindeki tutarsız kategorileri tespit
 
-5. **✅ Quka API Müşteri Bilgisi Kaydedilmiyor (2025-03-10)** - `frm_qukaGonder.vb`
-   - **Kök Neden:** GetIlName fonksiyonu sadece plaka kodu ile arama yapıyordu
-   - **Çözüm:** 
-     - GetIlName: Plaka + İl adı + Türkçe karakter toleranslı arama
-     - GetVarsayilanIl: Veritabanından gerçek varsayılan il değeri
-     - NormalizeTurkishChars: Türkçe karakter dönüşümü
-   - **Dosya:** frm_qukaGonder.vb (satır 81-172, 3270-3300, 9925-9945)
+2. **Configurable Fixed Category** - ✅ Eklendi, test bekliyor
+   - "Sabit Ana Kategori Ekle" checkbox'ı
+   - Excel import sırasında opsiyonel
 
-6. **✅ POS JSON Veri Duplikasyonu (2025-03)** - `frm_Perakende_Satis.vb`, `frm_Perakende_Satis_Pesin.vb`
-   - Bireysel müşteri adı `currentTitle` alanında tekrarlanıyordu - düzeltildi
+3. **UI Layout Fix** - ✅ Tamamlandı (14 Şubat 2025)
+   - btnSiniflariSil ve btnKategoriKontrol butonları alt alta konumlandırıldı
+   - Form taşması sorunu çözüldü
 
-7. **✅ AI Kategori/Marka Eşleme Hatası (2025-03)** - `frm_AIUrunIsle.vb`
-   - Yanlış varsayılan değerler düzeltildi
+4. **Cleared Classes Display Issue** - ⏳ Bekliyor
+   - frm_stok_liste_fiyat.vb'de INNER JOIN → LEFT JOIN düzeltmesi gerekli
 
-8. **✅ FTP Başlangıç Hatası (2025-03)** - `Form1.vb`
-   - "530 Not logged in" hatası bastırıldı
+### P2 - Medium (Bekliyor)
+1. **Barcode Data Mix-up** - Barkod/beden karışıklığı
+   - frm_qukagonder.vb dosyasında sorun
+   - Ek bilgi bekleniyor
 
-### Completed Features (2025-03)
-1. **✅ Trendyol Fatura Entegrasyonu** - `frm_PazaryeriFaturaGonderim.vb`
-   - shipmentPackageId dinamik olarak alınıyor
-   - Fatura linki doğru endpoint'e gönderiliyor
+## Technical Architecture
+- **Language:** Visual Basic .NET
+- **UI Framework:** Windows Forms + DevExpress
+- **Database:** SQL Server
+- **Version Control:** Git/GitHub
 
-2. **✅ Pazaryeri Fatura Gönderim UI** - `frm_PazaryeriFaturaGonderim.vb`
-   - "Gönderilenleri de Göster" checkbox
-   - Renk kodlaması ile gönderilmiş faturaları gösterme
+## Key Files
+- `/app/AkilliKategoriSecici.vb` - Akıllı eşleştirme mantığı
+- `/app/frm_TrendyolKategoriEslestir.vb` - Ana kategori eşleştirme formu
+- `/app/frm_UrunTipiKategoriSec.vb` - Ürün tipi seçim formu
+- `/app/TrendyolExcelMatcher.vb` - Excel eşleştirme
+- `/app/frm_qukaGonder.vb` - Web gönderim
+- `/app/frm_stok_liste_fiyat.vb` - Stok listesi (LEFT JOIN düzeltmesi bekliyor)
 
-3. **✅ Toplu Tarih Değiştir** - `frm_fatura_liste.vb`
-   - Context menü ile toplu tarih değişikliği
+## Completed Work
 
-4. **✅ GİB Ön Gönderim Kontrolü** - `frm_fatura_liste.vb`
-   - Pazaryerine göndermeden önce GİB'e gönderim kontrolü
+### 10 Aralık 2025
+- [x] **Trigger Sayfa Ayarları Düzeltmesi** - `frm_qukaGonder.vb`
+  - `chkTriggerAktif`, `chkTriggerStok`, `chkTriggerFiyat`, `chkTriggerResim`, `chkTriggerKategori` checkbox ayarları artık veritabanına kaydediliyor
+  - `SenkronAyarlariniYukle()` ve `SenkronAyarlariniKaydet()` fonksiyonlarına trigger ayarları eklendi
+  - Form kapanıp açıldığında ayarlar korunacak
 
-5. **✅ AI Formu 5 Kategori Desteği (2025-12)** - `frm_AIUrunIsle.vb`
-   - Kategori yolu artık 5 seviye kullanıyor: Kat1 > Kat2 > Kat3 > Kat4 > Kat5
-   - `GetModelsWithoutAI` fonksiyonu 5 kategori okuyor
-   - Tüm SQL sorguları güncellendi
+### Önceki Çalışmalar
+- [x] Smart Category Matching mantığı güncellendi (daha granüler gruplama)
+- [x] Kategori değişiklikleri için SQL trigger eklendi (`trg_StokSinifi_WebSync`)
+- [x] Resim sync trigger'ı düzeltildi ve `UpdateProductImages` fonksiyonu eklendi
+- [x] "Kategorileri Güncelle" ve "Resimleri Güncelle" butonları eklendi
+- [x] UI düzeni ve "Tümünü Seç" butonu sorunları giderildi
+- [x] Buton düzeni düzeltmesi (btnSiniflariSil, btnKategoriKontrol)
+- [x] GitHub push başarılı
 
-9. **✅ Otomatik Güncelleme "Access is denied" Hatası Düzeltildi (2025-12)** - `Form1.vb`
-   - **Kök Neden:** OtoGuncelleme fonksiyonu dosyaları `%TEMP%\BusinessSmartUpdate` klasörüne indirirken, Form1_Closing fonksiyonu dosyaları `C:\Program Files\...\Util\` klasöründen okumaya çalışıyordu
-   - **Çözüm:** 
-     - Form1_Closing fonksiyonu artık TEMP klasöründen dosyaları okuyacak şekilde güncellendi
-     - Tüm exe'ler için (business_smart, MANAGE, LICENSE, POS) tutarlı TEMP klasör kullanımı
-   - **Sonuç:** Program artık admin hakları olmadan da güncellenebilir
-
-### In Progress / Blocked Features
-1. **🔴 Hepsiburada Fatura Entegrasyonu (BLOKE)** - `frm_PazaryeriFaturaGonderim.vb`
-   - HTTP 403 Forbidden hatası
-   - Hepsiburada/Quka ile iletişim gerekli (IP whitelist veya entegratör izinleri)
-
-## Key Database Schema
-- `tbStokFisiMaster`: Fatura header (nFisNo, GibFaturaNo, nFirmaID)
-- `tbStokFisiAciklamasi`: Sipariş kodu (sAciklama3)
-- `tbPazaryeriAyar`: API credentials (sSaticiID, sApiKey, sApiSecret)
-- `tbPazaryeriFaturaGonderim`: Fatura gönderim log
-- `tbFirma`: Müşteri bilgileri (sIl FK -> tbIl.sIl)
-- `tbIl`: İl tablosu (sPlaka, sIl)
-- `tbSistemAyar`: Sistem ayarları (ETICARET_SINIF_MARKA, ETICARET_SINIF_KAT1-5)
-- `tbStok`: Stok kartları (sSinifKodu3-8 parametrik sınıf kodları)
-- `tbSSinif3-8`: Parametrik sınıf tanımları
-- `tbStokAIIcerik`: AI oluşturulan içerikler
-
-## Architecture
-- VB.NET Windows Forms
-- SQL Server (FURKAN2026)
-- OleDb bağlantı
-- DevExpress UI
-- External APIs: Quka, Kolaysoft, Trendyol, Hepsiburada, OpenAI (AI içerik)
-
-## Files of Reference
-- `/app/Barkod_Magaza_Git/frm_qukaGonder.vb` - Sipariş senkronizasyonu
-- `/app/Barkod_Magaza_Git/frm_PazaryeriFaturaGonderim.vb` - Pazaryeri fatura gönderim
-- `/app/Barkod_Magaza_Git/frm_fatura_liste.vb` - Fatura listesi
-- `/app/Barkod_Magaza_Git/Form1.vb` - Ana form
-- `/app/Barkod_Magaza_Git/frm_AIUrunIsle.vb` - AI ürün işleme (5 kategori desteği)
-- `/app/Barkod_Magaza_Git/frm_SinifEsleme.vb` - Parametrik sınıf eşleştirme
-
-## Known Issues
-- **Hepsiburada API 403 Forbidden**: IP whitelist veya entegratör izin sorunu. Kullanıcı Hepsiburada/Quka ile iletişime geçmeli.
-
-## Backlog (P2)
-1. POS Email alanı veritabanı veri kontrolü (muhtemelen veri girişi sorunu)
-2. **VB.NET İstemcisini Yeni API'ye Taşıma** - `desktop.barkodyazilimevi.com` API'sine geçiş
-   - FTP ve doğrudan SQL bağlantılarını API çağrılarıyla değiştirmek
-   - Port 21 (FTP) ve Port 8991 (SQL) kapatılabilecek
+## Next Steps
+1. **Kullanıcı testi:** Trigger sayfası ayarlarının kaydedildiğini doğrulamalı
+2. **P1:** Temizlenen sınıflar UI sorunu - `frm_stok_liste_fiyat.vb`'de `LEFT JOIN` düzeltmesi
+3. **P2:** Barkod/beden verisi karışıklığı sorununu araştır
