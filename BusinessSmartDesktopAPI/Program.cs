@@ -355,13 +355,17 @@ string SanitizeFolderName(string name)
     return name;
 }
 
+// Port ayarı - environment variable veya appsettings'den al
+var port = Environment.GetEnvironmentVariable("API_PORT") ?? config["Port"] ?? "5080";
+var listenUrl = $"http://0.0.0.0:{port}";
+
 // Uygulamayı başlat
 Console.WriteLine("===========================================");
 Console.WriteLine("  Business Smart Desktop API");
 Console.WriteLine("===========================================");
-Console.WriteLine($"  Listening on: http://0.0.0.0:8080");
+Console.WriteLine($"  Listening on: {listenUrl}");
 Console.WriteLine($"  Updates Path: {updatesPath}");
 Console.WriteLine($"  Backups Path: {backupsPath}");
 Console.WriteLine("===========================================");
 
-app.Run("http://0.0.0.0:8080");
+app.Run(listenUrl);
