@@ -107,6 +107,8 @@ app.MapGet("/", (HttpContext context) =>
             "POST /api/license/verify",
             "POST /api/license/activate",
             "GET  /api/license/list",
+            "GET  /api/license/details?key=xxx - Lisans detayları",
+            "GET  /api/license/bayii?id=xxx - Bayii bilgisi",
             "GET  /api/files/list?folder=xxx",
             "GET  /api/files/download?file=xxx",
             "POST /api/files/upload?folder=xxx",
