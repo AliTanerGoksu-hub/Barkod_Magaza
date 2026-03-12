@@ -334,22 +334,68 @@ app.MapPost("/api/license/verify", async (HttpContext context) =>
         if (string.IsNullOrEmpty(licenseKey))
             return Results.Json(new { success = false, message = "License key required" }, statusCode: 400);
 
-        // TODO: Kendi lisans doğrulama mantığınızı ekleyin
-        // Şimdilik basit bir kontrol
-        var isValid = licenseKey.Length >= 10;
-
+        // BAYII veritabanına bağlan ve lisans kontrolü yap
+        var licenseConnStr = config["LicenseConnectionString"] ?? 
+            "Provider=SQLOLEDB.1;Password=87918991;Persist Security Info=True;User ID=bayii1;Initial Catalog=BAYII;Data Source=SERVER\\SERVER,8991";
+        
+        using var conn = new System.Data.OleDb.OleDbConnection(licenseConnStr);
+        await conn.OpenAsync();
+        
+        using var cmd = new System.Data.OleDb.OleDbCommand(
+            @"SELECT tbFirmaLisans.sOnayKodu, tbFirmaLisans.sMacID, tbFirmaLisans.dteGecerlilikTarihi, 
+                     tbFirmaLisans.sParametre1, tbFirmaLisans.sParametre2, tbFirmaLisans.nFirmaID,
+                     tbFirma.sKodu, tbFirma.sAciklama, tbFirma.sOzelNot
+              FROM tbFirmaLisans 
+              INNER JOIN tbFirma ON tbFirmaLisans.nFirmaID = tbFirma.nFirmaID 
+              WHERE tbFirmaLisans.sOnayKodu = ?", conn);
+        cmd.Parameters.AddWithValue("?", licenseKey);
+        
+        using var reader = await cmd.ExecuteReaderAsync();
+        
+        if (!reader.Read())
+        {
+            return Results.Json(new { 
+                success = false, 
+                message = "Lisans bulunamadı",
+                isValid = false 
+            });
+        }
+        
+        var dbMacId = reader["sMacID"]?.ToString() ?? "";
+        var expiryDate = reader["dteGecerlilikTarihi"] as DateTime?;
+        var firmaKodu = reader["sKodu"]?.ToString() ?? "";
+        var firmaAdi = reader["sAciklama"]?.ToString() ?? "";
+        var ozelNot = reader["sOzelNot"]?.ToString() ?? "";
+        var parametre1 = reader["sParametre1"]?.ToString() ?? "";
+        var parametre2 = reader["sParametre2"]?.ToString() ?? "";
+        
+        // MAC ID kontrolü (opsiyonel - boş değilse kontrol et)
+        bool macValid = string.IsNullOrEmpty(dbMacId) || string.IsNullOrEmpty(machineId) || 
+                        dbMacId.Equals(machineId, StringComparison.OrdinalIgnoreCase);
+        
+        // Tarih kontrolü
+        bool dateValid = !expiryDate.HasValue || expiryDate.Value >= DateTime.Now;
+        
+        bool isValid = macValid && dateValid;
+        
         return Results.Json(new
         {
-            success = isValid,
-            message = isValid ? "License valid" : "Invalid license key",
-            expiryDate = isValid ? DateTime.Now.AddYears(1).ToString("yyyy-MM-dd") : null,
-            features = isValid ? "full" : null,
-            maxUsers = isValid ? 10 : 0
+            success = true,
+            isValid = isValid,
+            message = isValid ? "Lisans geçerli" : (macValid ? "Lisans süresi dolmuş" : "Bu lisans başka bir bilgisayara kayıtlı"),
+            licenseKey = licenseKey,
+            firmaKodu = firmaKodu,
+            firmaAdi = firmaAdi,
+            expiryDate = expiryDate?.ToString("yyyy-MM-dd"),
+            ozelNot = ozelNot,
+            parametre1 = parametre1,
+            parametre2 = parametre2,
+            macIdMatch = macValid
         });
     }
     catch (Exception ex)
     {
-        return Results.Json(new { success = false, message = ex.Message }, statusCode: 500);
+        return Results.Json(new { success = false, message = "Veritabanı hatası: " + ex.Message }, statusCode: 500);
     }
 });
 
