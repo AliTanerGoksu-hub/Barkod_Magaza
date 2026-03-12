@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -30,46 +31,390 @@ var apiKey = config["ApiKey"] ?? "BSmart2024Desktop!@#";
 var updatesPath = config["UpdatesPath"] ?? @"C:\BusinessSmartFiles\Updates";
 var backupsPath = config["BackupsPath"] ?? @"C:\BusinessSmartFiles\Backups";
 var filesPath = config["FilesPath"] ?? @"C:\BusinessSmartFiles\SharedFiles";
+var downloadsPath = config["DownloadsPath"] ?? @"D:\ftp"; // Bayii indirme klasörü
+
+// Bayii kullanıcı bilgileri
+var bayiiUsername = config["BayiiUsername"] ?? "bayii";
+var bayiiPassword = config["BayiiPassword"] ?? "BusinessSmart4909";
 
 // Klasörleri oluştur
 Directory.CreateDirectory(updatesPath);
 Directory.CreateDirectory(backupsPath);
 Directory.CreateDirectory(filesPath);
+Directory.CreateDirectory(downloadsPath);
 
 app.UseCors("AllowAll");
 
-// API Key doğrulama
+// API Key doğrulama (internal API için)
 bool ValidateApiKey(HttpContext context)
 {
     var requestKey = context.Request.Headers["X-Api-Key"].FirstOrDefault();
     return !string.IsNullOrEmpty(requestKey) && requestKey == apiKey;
 }
 
-// ==================== ANA SAYFA ====================
-app.MapGet("/", () => Results.Ok(new
+// Bayii kullanıcı doğrulama (download portal için)
+bool ValidateBayiiUser(HttpContext context, out string? username)
 {
-    service = "Business Smart Desktop API",
-    status = "online",
-    version = "1.0.0",
-    serverTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-    endpoints = new[]
+    username = null;
+    var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+    if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Basic "))
+        return false;
+    
+    try
     {
-        "GET  /api/update/check",
-        "GET  /api/update/download?file=xxx",
-        "GET  /api/update/info?file=xxx",
-        "POST /api/backup/upload",
-        "GET  /api/backup/list",
-        "GET  /api/backup/download?file=xxx",
-        "POST /api/license/verify",
-        "POST /api/license/activate",
-        "GET  /api/license/list",
-        "GET  /api/files/list?folder=xxx",
-        "GET  /api/files/download?file=xxx",
-        "POST /api/files/upload?folder=xxx",
-        "DELETE /api/files/delete?file=xxx",
-        "POST /api/files/mkdir?folder=xxx"
+        var base64 = authHeader.Substring(6);
+        var credentials = Encoding.UTF8.GetString(Convert.FromBase64String(base64));
+        var parts = credentials.Split(':');
+        if (parts.Length != 2) return false;
+        
+        username = parts[0];
+        var password = parts[1];
+        
+        return username == bayiiUsername && password == bayiiPassword;
     }
-}));
+    catch
+    {
+        return false;
+    }
+}
+
+// ==================== ANA SAYFA ====================
+app.MapGet("/", (HttpContext context) => 
+{
+    var host = context.Request.Host.Host.ToLower();
+    
+    // ftp.barkodyazilimevi.com adresinden gelenlere download portal göster
+    if (host.Contains("ftp.barkodyazilimevi.com") || host.Contains("ftp."))
+    {
+        return Results.Redirect("/download");
+    }
+    
+    // Normal API ana sayfası
+    return Results.Ok(new
+    {
+        service = "Business Smart Desktop API",
+        status = "online",
+        version = "1.1.0",
+        serverTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+        endpoints = new[]
+        {
+            "GET  /api/update/check",
+            "GET  /api/update/download?file=xxx",
+            "GET  /api/update/info?file=xxx",
+            "POST /api/backup/upload",
+            "GET  /api/backup/list",
+            "GET  /api/backup/download?file=xxx",
+            "POST /api/license/verify",
+            "POST /api/license/activate",
+            "GET  /api/license/list",
+            "GET  /api/license/details?key=xxx - Lisans detayları",
+            "GET  /api/license/bayii?id=xxx - Bayii bilgisi",
+            "GET  /api/files/list?folder=xxx",
+            "GET  /api/files/download?file=xxx",
+            "POST /api/files/upload?folder=xxx",
+            "DELETE /api/files/delete?file=xxx",
+            "POST /api/files/mkdir?folder=xxx",
+            "GET  /download - Bayii Download Portal (Web UI)",
+            "GET  /api/download/list - Bayii dosya listesi",
+            "GET  /api/download/file?name=xxx - Bayii dosya indirme"
+        }
+    });
+});
+
+// ==================== BAYİİ DOWNLOAD PORTAL (WEB UI) ====================
+
+app.MapGet("/download", (HttpContext context) =>
+{
+    // HTML sayfa döndür
+    var html = @"<!DOCTYPE html>
+<html lang='tr'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Barkod Yazılım - İndirme Portalı</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            min-height: 100vh;
+            color: #fff;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .header .logo-wrapper {
+            display: inline-block;
+            background: linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 100%);
+            padding: 25px 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(180,212,85,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
+            border: 1px solid rgba(180,212,85,0.2);
+            margin-bottom: 20px;
+        }
+        .header img { 
+            max-width: 220px; 
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+        .header p { color: #b4d455; font-size: 1.1em; letter-spacing: 2px; text-transform: uppercase; }
+        .login-box {
+            background: rgba(180,212,85,0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(180,212,85,0.3);
+        }
+        .login-box h2 { margin-bottom: 20px; color: #b4d455; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #aaa; }
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(180,212,85,0.3);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.5);
+            color: #fff;
+            font-size: 16px;
+        }
+        .form-group input:focus { outline: none; border-color: #b4d455; }
+        .btn {
+            background: linear-gradient(135deg, #b4d455 0%, #8fb33a 100%);
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(180,212,85,0.4); }
+        .file-list { display: none; }
+        .file-list.active { display: block; }
+        .file-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: background 0.2s;
+        }
+        .file-item:hover { background: rgba(255,255,255,0.1); }
+        .file-info h3 { margin-bottom: 5px; }
+        .file-info span { color: #888; font-size: 14px; }
+        .download-btn {
+            background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        .download-btn:hover { transform: scale(1.05); }
+        .error { color: #ff4444; margin-top: 10px; display: none; }
+        .loading { text-align: center; padding: 40px; color: #888; }
+        .icon { font-size: 24px; margin-right: 15px; }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <div class='logo-wrapper'>
+                <img src='https://customer-assets.emergentagent.com/job_219c0f73-95be-426c-9147-3f613dde92c2/artifacts/n7zeyh71_JPG.jpg' alt='Barkod Yazılım'>
+            </div>
+            <p>İndirme Portalı</p>
+        </div>
+        
+        <div class='login-box' id='loginBox'>
+            <h2>Giriş Yap</h2>
+            <div class='form-group'>
+                <label>Kullanıcı Adı</label>
+                <input type='text' id='username' placeholder='Kullanıcı adınızı girin'>
+            </div>
+            <div class='form-group'>
+                <label>Şifre</label>
+                <input type='password' id='password' placeholder='Şifrenizi girin'>
+            </div>
+            <button class='btn' onclick='login()'>Giriş Yap</button>
+            <p class='error' id='loginError'>Kullanıcı adı veya şifre hatalı!</p>
+        </div>
+        
+        <div class='file-list' id='fileList'>
+            <h2 style='margin-bottom: 20px; color: #b4d455;'>İndirilebilir Dosyalar</h2>
+            <div id='files' class='loading'>Dosyalar yükleniyor...</div>
+        </div>
+    </div>
+    
+    <script>
+        let authToken = '';
+        
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            authToken = btoa(username + ':' + password);
+            
+            fetch('/api/download/list', {
+                headers: { 'Authorization': 'Basic ' + authToken }
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('loginBox').style.display = 'none';
+                    document.getElementById('fileList').classList.add('active');
+                    renderFiles(data.files);
+                } else {
+                    document.getElementById('loginError').style.display = 'block';
+                }
+            })
+            .catch(() => {
+                document.getElementById('loginError').style.display = 'block';
+            });
+        }
+        
+        function renderFiles(files) {
+            const container = document.getElementById('files');
+            if (files.length === 0) {
+                container.innerHTML = '<p>Henüz indirilebilir dosya bulunmuyor.</p>';
+                return;
+            }
+            
+            container.innerHTML = files.map(f => `
+                <div class='file-item'>
+                    <div class='file-info'>
+                        <h3><span class='icon'>${getIcon(f.name)}</span>${f.name}</h3>
+                        <span>${formatSize(f.size)} • ${f.lastModified}</span>
+                    </div>
+                    <a href='/api/download/file?name=${encodeURIComponent(f.name)}' 
+                       class='download-btn'
+                       onclick='return downloadFile(event, ""${f.name}"")'>
+                       ⬇️ İndir
+                    </a>
+                </div>
+            `).join('');
+        }
+        
+        function downloadFile(event, filename) {
+            event.preventDefault();
+            const link = document.createElement('a');
+            link.href = '/api/download/file?name=' + encodeURIComponent(filename);
+            
+            // Auth header ile fetch yap
+            fetch(link.href, {
+                headers: { 'Authorization': 'Basic ' + authToken }
+            })
+            .then(r => r.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                window.URL.revokeObjectURL(url);
+            });
+            
+            return false;
+        }
+        
+        function getIcon(filename) {
+            if (filename.endsWith('.exe')) return '💿';
+            if (filename.endsWith('.msi')) return '📦';
+            if (filename.endsWith('.zip')) return '🗜️';
+            if (filename.endsWith('.pdf')) return '📄';
+            return '📁';
+        }
+        
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
+            if (bytes < 1024*1024*1024) return (bytes/1024/1024).toFixed(1) + ' MB';
+            return (bytes/1024/1024/1024).toFixed(1) + ' GB';
+        }
+        
+        // Enter tuşu ile giriş
+        document.getElementById('password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') login();
+        });
+    </script>
+</body>
+</html>";
+    
+    context.Response.ContentType = "text/html; charset=utf-8";
+    return Results.Content(html, "text/html");
+});
+
+// Bayii dosya listesi API
+app.MapGet("/api/download/list", (HttpContext context) =>
+{
+    if (!ValidateBayiiUser(context, out var username))
+    {
+        return Results.Json(new { success = false, message = "Yetkisiz erişim" }, statusCode: 401);
+    }
+    
+    var files = new List<object>();
+    
+    if (Directory.Exists(downloadsPath))
+    {
+        foreach (var file in Directory.GetFiles(downloadsPath))
+        {
+            var fi = new FileInfo(file);
+            files.Add(new
+            {
+                name = fi.Name,
+                size = fi.Length,
+                lastModified = fi.LastWriteTime.ToString("dd.MM.yyyy HH:mm")
+            });
+        }
+    }
+    
+    return Results.Json(new
+    {
+        success = true,
+        user = username,
+        fileCount = files.Count,
+        files = files.OrderByDescending(f => ((dynamic)f).lastModified).ToList()
+    });
+});
+
+// Bayii dosya indirme API
+app.MapGet("/api/download/file", async (HttpContext context) =>
+{
+    if (!ValidateBayiiUser(context, out var username))
+    {
+        context.Response.StatusCode = 401;
+        await context.Response.WriteAsJsonAsync(new { success = false, message = "Yetkisiz erişim" });
+        return;
+    }
+    
+    var fileName = context.Request.Query["name"].FirstOrDefault();
+    
+    if (string.IsNullOrEmpty(fileName))
+    {
+        context.Response.StatusCode = 400;
+        await context.Response.WriteAsJsonAsync(new { success = false, message = "Dosya adı gerekli" });
+        return;
+    }
+    
+    // Güvenlik: Path traversal engelle
+    fileName = Path.GetFileName(fileName);
+    var filePath = Path.Combine(downloadsPath, fileName);
+    
+    if (!File.Exists(filePath))
+    {
+        context.Response.StatusCode = 404;
+        await context.Response.WriteAsJsonAsync(new { success = false, message = "Dosya bulunamadı" });
+        return;
+    }
+    
+    var fi = new FileInfo(filePath);
+    context.Response.ContentType = "application/octet-stream";
+    context.Response.Headers.Append("Content-Disposition", $"attachment; filename=\"{fi.Name}\"");
+    context.Response.ContentLength = fi.Length;
+    
+    await context.Response.SendFileAsync(filePath);
+});;
 
 // ==================== GÜNCELLEME API ====================
 
@@ -424,6 +769,12 @@ app.MapPost("/api/license/activate", async (HttpContext context) =>
         var manufacturer = data.GetValueOrDefault("manufacturer", "");
         var model = data.GetValueOrDefault("model", "");
         var systemType = data.GetValueOrDefault("systemType", "");
+        var parametre1 = data.GetValueOrDefault("parametre1", "");
+        var parametre2 = data.GetValueOrDefault("parametre2", "");
+        var country = data.GetValueOrDefault("country", "");
+        var region = data.GetValueOrDefault("region", "");
+        var installedBy = data.GetValueOrDefault("installedBy", "");
+        var bayiiId = data.GetValueOrDefault("bayiiId", "");
 
         if (string.IsNullOrEmpty(licenseKey) || string.IsNullOrEmpty(machineId))
             return Results.Json(new { success = false, message = "Lisans anahtarı ve MAC ID gerekli" }, statusCode: 400);
@@ -444,22 +795,14 @@ app.MapPost("/api/license/activate", async (HttpContext context) =>
             return Results.Json(new { success = false, message = "Lisans bulunamadı" });
         }
         
-        // Zaten başka MAC'e kayıtlıysa
-        if (!string.IsNullOrEmpty(existingMac) && !existingMac.Equals(machineId, StringComparison.OrdinalIgnoreCase))
-        {
-            return Results.Json(new { 
-                success = false, 
-                message = "Bu lisans başka bir bilgisayara kayıtlı",
-                registeredMac = existingMac
-            });
-        }
-        
-        // MAC ID ve diğer bilgileri güncelle
+        // MAC ID ve diğer bilgileri güncelle (BARKOD_INSTALL'dan gelen tüm alanlar)
         using var updateCmd = new System.Data.OleDb.OleDbCommand(
             @"UPDATE tbFirmaLisans SET 
                 sMacID = ?, sBilgisayar = ?, sOturum = ?, sIP = ?, sOS = ?,
                 sCpuID = ?, sHddSerial = ?, sBiosVersion = ?,
-                sManufactor = ?, sModel = ?, sSystemType = ?
+                sManufactor = ?, sModel = ?, sSystemType = ?,
+                sParametre1 = ?, sParametre2 = ?,
+                sUlke = ?, sBolge = ?, sSifreyiAlan = ?
               WHERE sOnayKodu = ?", conn);
         
         updateCmd.Parameters.AddWithValue("?", machineId);
@@ -473,6 +816,11 @@ app.MapPost("/api/license/activate", async (HttpContext context) =>
         updateCmd.Parameters.AddWithValue("?", manufacturer);
         updateCmd.Parameters.AddWithValue("?", model);
         updateCmd.Parameters.AddWithValue("?", systemType);
+        updateCmd.Parameters.AddWithValue("?", parametre1);
+        updateCmd.Parameters.AddWithValue("?", parametre2);
+        updateCmd.Parameters.AddWithValue("?", country);
+        updateCmd.Parameters.AddWithValue("?", region);
+        updateCmd.Parameters.AddWithValue("?", installedBy);
         updateCmd.Parameters.AddWithValue("?", licenseKey);
         
         await updateCmd.ExecuteNonQueryAsync();
@@ -550,6 +898,131 @@ string SanitizeFolderName(string name)
         name = name.Replace(c, '_');
     return name;
 }
+
+// ==================== LİSANS DETAY API (BARKOD_INSTALL için) ====================
+
+// Lisans detayları - Firma bilgileri dahil
+app.MapGet("/api/license/details", async (HttpContext context) =>
+{
+    if (!ValidateApiKey(context))
+        return Results.Json(new { success = false, message = "Invalid API Key" }, statusCode: 401);
+
+    try
+    {
+        var licenseKey = context.Request.Query["key"].FirstOrDefault();
+        
+        if (string.IsNullOrEmpty(licenseKey))
+            return Results.Json(new { success = false, message = "License key required" }, statusCode: 400);
+
+        var licenseConnStr = config["LicenseConnectionString"];
+        
+        using var conn = new System.Data.OleDb.OleDbConnection(licenseConnStr);
+        await conn.OpenAsync();
+        
+        using var cmd = new System.Data.OleDb.OleDbCommand(
+            @"SELECT tbFirma.nFirmaID, tbFirma.sKodu, tbFirma.sAciklama, tbFirma.sAdres1, tbFirma.sAdres2, 
+                     tbFirma.sSemt, tbFirma.sIl, tbFirma.sUlke, tbFirma.sOzelNot,
+                     tbFirmaLisans.sOnayKodu, tbFirmaLisans.dteGecerlilikTarihi,
+                     tbFirmaLisans.sParametre1, tbFirmaLisans.sParametre2, 
+                     tbFirmaLisans.sManufactor, tbFirmaLisans.sModel, tbFirmaLisans.sSystemType, 
+                     tbFirmaLisans.sCpuID, tbFirmaLisans.sBiosVersion, tbFirmaLisans.sHddSerial, tbFirmaLisans.sMacID,
+                     (SELECT TOP 1 sIletisimAdresi FROM tbFirmaIletisimi WHERE nFirmaId = tbFirma.nFirmaID AND sIletisimAraci = 'E-Mail') AS Email,
+                     (SELECT TOP 1 sIletisimAdresi FROM tbFirmaIletisimi WHERE nFirmaId = tbFirma.nFirmaID AND sIletisimAraci = 'Telefon') AS Telefon,
+                     (SELECT TOP 1 sIletisimAdresi FROM tbFirmaIletisimi WHERE nFirmaId = tbFirma.nFirmaID AND sIletisimAraci = 'Gsm') AS Gsm,
+                     (SELECT TOP 1 sIletisimAdresi FROM tbFirmaIletisimi WHERE nFirmaId = tbFirma.nFirmaID AND sIletisimAraci = 'Yetkili') AS Yetkili
+              FROM tbFirmaLisans 
+              INNER JOIN tbFirma ON tbFirmaLisans.nFirmaID = tbFirma.nFirmaID 
+              WHERE tbFirmaLisans.sOnayKodu = ?", conn);
+        cmd.Parameters.AddWithValue("?", licenseKey);
+        
+        using var reader = await cmd.ExecuteReaderAsync();
+        
+        if (!reader.Read())
+            return Results.Json(new { success = false, message = "Lisans bulunamadı" });
+
+        return Results.Json(new
+        {
+            success = true,
+            firmaId = reader["nFirmaID"]?.ToString(),
+            firmaKodu = reader["sKodu"]?.ToString(),
+            firmaAdi = reader["sAciklama"]?.ToString(),
+            adres1 = reader["sAdres1"]?.ToString(),
+            adres2 = reader["sAdres2"]?.ToString(),
+            semt = reader["sSemt"]?.ToString(),
+            il = reader["sIl"]?.ToString(),
+            ulke = reader["sUlke"]?.ToString(),
+            ozelNot = reader["sOzelNot"]?.ToString(),
+            expiryDate = reader["dteGecerlilikTarihi"]?.ToString(),
+            parametre1 = reader["sParametre1"]?.ToString(),
+            parametre2 = reader["sParametre2"]?.ToString(),
+            manufacturer = reader["sManufactor"]?.ToString(),
+            model = reader["sModel"]?.ToString(),
+            systemType = reader["sSystemType"]?.ToString(),
+            cpuId = reader["sCpuID"]?.ToString(),
+            biosVersion = reader["sBiosVersion"]?.ToString(),
+            hddSerial = reader["sHddSerial"]?.ToString(),
+            macId = reader["sMacID"]?.ToString(),
+            email = reader["Email"]?.ToString(),
+            telefon = reader["Telefon"]?.ToString(),
+            gsm = reader["Gsm"]?.ToString(),
+            yetkili = reader["Yetkili"]?.ToString()
+        });
+    }
+    catch (Exception ex)
+    {
+        return Results.Json(new { success = false, message = ex.Message }, statusCode: 500);
+    }
+});
+
+// Bayii bilgisi al
+app.MapGet("/api/license/bayii", async (HttpContext context) =>
+{
+    if (!ValidateApiKey(context))
+        return Results.Json(new { success = false, message = "Invalid API Key" }, statusCode: 401);
+
+    try
+    {
+        var bayiiId = context.Request.Query["id"].FirstOrDefault();
+        
+        if (string.IsNullOrEmpty(bayiiId))
+            return Results.Json(new { success = false, message = "Bayii ID required" }, statusCode: 400);
+
+        var licenseConnStr = config["LicenseConnectionString"];
+        
+        using var conn = new System.Data.OleDb.OleDbConnection(licenseConnStr);
+        await conn.OpenAsync();
+        
+        // nFirmaID ile ara, sKodu 320 ile başlayanlar bayii
+        using var cmd = new System.Data.OleDb.OleDbCommand(
+            @"SELECT nFirmaID, sKodu, sAciklama, sAdres1, sAdres2,
+                     (SELECT TOP 1 sIletisimAdresi FROM tbFirmaIletisimi WHERE nFirmaId = tbFirma.nFirmaID AND sIletisimAraci = 'Telefon') AS Telefon,
+                     (SELECT TOP 1 sIletisimAdresi FROM tbFirmaIletisimi WHERE nFirmaId = tbFirma.nFirmaID AND sIletisimAraci = 'Web') AS Web
+              FROM tbFirma 
+              WHERE nFirmaID = ? AND sKodu LIKE '320%'", conn);
+        cmd.Parameters.AddWithValue("?", int.Parse(bayiiId));
+        
+        using var reader = await cmd.ExecuteReaderAsync();
+        
+        if (!reader.Read())
+            return Results.Json(new { success = false, message = "Bayii bulunamadı" });
+
+        return Results.Json(new
+        {
+            success = true,
+            bayiiId = reader["nFirmaID"]?.ToString(),
+            bayiiKodu = reader["sKodu"]?.ToString(),
+            bayiiAdi = reader["sAciklama"]?.ToString(),
+            adres1 = reader["sAdres1"]?.ToString(),
+            adres2 = reader["sAdres2"]?.ToString(),
+            telefon = reader["Telefon"]?.ToString(),
+            web = reader["Web"]?.ToString()
+        });
+    }
+    catch (Exception ex)
+    {
+        return Results.Json(new { success = false, message = ex.Message }, statusCode: 500);
+    }
+});
 
 // ==================== DOSYA YÖNETİMİ API (FTP YERİNE) ====================
 
