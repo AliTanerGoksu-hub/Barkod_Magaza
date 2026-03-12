@@ -129,42 +129,42 @@ app.MapGet("/download", (HttpContext context) =>
 <head>
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <title>Business Smart - İndirme Portalı</title>
+    <title>Barkod Yazılım - İndirme Portalı</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: #000;
             min-height: 100vh;
             color: #fff;
         }
         .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
         .header { text-align: center; margin-bottom: 40px; }
-        .header h1 { font-size: 2.5em; margin-bottom: 10px; color: #00d4ff; }
-        .header p { color: #888; }
+        .header img { max-width: 280px; margin-bottom: 15px; }
+        .header p { color: #b4d455; font-size: 1.2em; }
         .login-box {
-            background: rgba(255,255,255,0.05);
+            background: rgba(180,212,85,0.05);
             border-radius: 15px;
             padding: 30px;
             margin-bottom: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(180,212,85,0.3);
         }
-        .login-box h2 { margin-bottom: 20px; color: #00d4ff; }
+        .login-box h2 { margin-bottom: 20px; color: #b4d455; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; color: #aaa; }
         .form-group input {
             width: 100%;
             padding: 12px 15px;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(180,212,85,0.3);
             border-radius: 8px;
-            background: rgba(0,0,0,0.3);
+            background: rgba(0,0,0,0.5);
             color: #fff;
             font-size: 16px;
         }
-        .form-group input:focus { outline: none; border-color: #00d4ff; }
+        .form-group input:focus { outline: none; border-color: #b4d455; }
         .btn {
-            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
-            color: #fff;
+            background: linear-gradient(135deg, #b4d455 0%, #8fb33a 100%);
+            color: #000;
             border: none;
             padding: 12px 30px;
             border-radius: 8px;
@@ -173,7 +173,7 @@ app.MapGet("/download", (HttpContext context) =>
             font-weight: 600;
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(0,212,255,0.4); }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(180,212,85,0.4); }
         .file-list { display: none; }
         .file-list.active { display: block; }
         .file-item {
@@ -208,12 +208,12 @@ app.MapGet("/download", (HttpContext context) =>
 <body>
     <div class='container'>
         <div class='header'>
-            <h1>📦 Business Smart</h1>
+            <img src='https://customer-assets.emergentagent.com/job_219c0f73-95be-426c-9147-3f613dde92c2/artifacts/n7zeyh71_JPG.jpg' alt='Barkod Yazılım'>
             <p>İndirme Portalı - Kurulum Dosyaları</p>
         </div>
         
         <div class='login-box' id='loginBox'>
-            <h2>🔐 Giriş Yap</h2>
+            <h2>Giriş Yap</h2>
             <div class='form-group'>
                 <label>Kullanıcı Adı</label>
                 <input type='text' id='username' placeholder='Kullanıcı adınızı girin'>
@@ -227,7 +227,7 @@ app.MapGet("/download", (HttpContext context) =>
         </div>
         
         <div class='file-list' id='fileList'>
-            <h2 style='margin-bottom: 20px; color: #00d4ff;'>📁 İndirilebilir Dosyalar</h2>
+            <h2 style='margin-bottom: 20px; color: #b4d455;'>İndirilebilir Dosyalar</h2>
             <div id='files' class='loading'>Dosyalar yükleniyor...</div>
         </div>
     </div>
