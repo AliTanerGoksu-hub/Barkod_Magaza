@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -914,12 +915,12 @@ app.MapGet("/api/license/details", async (HttpContext context) =>
         if (string.IsNullOrEmpty(licenseKey))
             return Results.Json(new { success = false, message = "License key required" }, statusCode: 400);
 
-        var licenseConnStr = config["LicenseConnectionString"];
+        var sqlConnStr = config["SqlConnectionString"] ?? "Data Source=localhost,8991;Initial Catalog=BAYII;User ID=sa;Password=87918991";
         
-        using var conn = new System.Data.OleDb.OleDbConnection(licenseConnStr);
+        using var conn = new SqlConnection(sqlConnStr);
         await conn.OpenAsync();
         
-        using var cmd = new System.Data.OleDb.OleDbCommand(
+        using var cmd = new SqlCommand(
             @"SELECT tbFirma.nFirmaID, tbFirma.sKodu, tbFirma.sAciklama, tbFirma.sAdres1, tbFirma.sAdres2, 
                      tbFirma.sSemt, tbFirma.sIl, tbFirma.sUlke, tbFirma.sOzelNot,
                      tbFirmaLisans.sOnayKodu, tbFirmaLisans.dteGecerlilikTarihi,
@@ -932,8 +933,8 @@ app.MapGet("/api/license/details", async (HttpContext context) =>
                      (SELECT TOP 1 sIletisimAdresi FROM tbFirmaIletisimi WHERE nFirmaId = tbFirma.nFirmaID AND sIletisimAraci = 'Yetkili') AS Yetkili
               FROM tbFirmaLisans 
               INNER JOIN tbFirma ON tbFirmaLisans.nFirmaID = tbFirma.nFirmaID 
-              WHERE tbFirmaLisans.sOnayKodu = ?", conn);
-        cmd.Parameters.AddWithValue("?", licenseKey);
+              WHERE tbFirmaLisans.sOnayKodu = @licenseKey", conn);
+        cmd.Parameters.AddWithValue("@licenseKey", licenseKey);
         
         using var reader = await cmd.ExecuteReaderAsync();
         
@@ -987,19 +988,20 @@ app.MapGet("/api/license/bayii", async (HttpContext context) =>
         if (string.IsNullOrEmpty(bayiiId))
             return Results.Json(new { success = false, message = "Bayii ID required" }, statusCode: 400);
 
-        var licenseConnStr = config["LicenseConnectionString"];
+        // SqlClient bağlantı stringi
+        var sqlConnStr = config["SqlConnectionString"] ?? "Data Source=localhost,8991;Initial Catalog=BAYII;User ID=sa;Password=87918991";
         
-        using var conn = new System.Data.OleDb.OleDbConnection(licenseConnStr);
+        using var conn = new SqlConnection(sqlConnStr);
         await conn.OpenAsync();
         
         // nFirmaID ile ara, sKodu 320 ile başlayanlar bayii
-        using var cmd = new System.Data.OleDb.OleDbCommand(
+        using var cmd = new SqlCommand(
             @"SELECT nFirmaID, sKodu, sAciklama, sAdres1, sAdres2,
                      (SELECT TOP 1 sIletisimAdresi FROM tbFirmaIletisimi WHERE nFirmaId = tbFirma.nFirmaID AND sIletisimAraci = 'Telefon') AS Telefon,
                      (SELECT TOP 1 sIletisimAdresi FROM tbFirmaIletisimi WHERE nFirmaId = tbFirma.nFirmaID AND sIletisimAraci = 'Web') AS Web
               FROM tbFirma 
-              WHERE nFirmaID = ? AND sKodu LIKE '320%'", conn);
-        cmd.Parameters.AddWithValue("?", int.Parse(bayiiId));
+              WHERE nFirmaID = @bayiiId AND sKodu LIKE '320%'", conn);
+        cmd.Parameters.AddWithValue("@bayiiId", int.Parse(bayiiId));
         
         using var reader = await cmd.ExecuteReaderAsync();
         
