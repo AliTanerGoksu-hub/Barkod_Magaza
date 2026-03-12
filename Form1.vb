@@ -9584,8 +9584,9 @@ Public Class Form1
                 ftpRequest.UseBinary = True
                 ftpRequest.Credentials = New NetworkCredential("Administrator", "!!AliTaner01018991!!")
                 ftpRequest.Method = WebRequestMethods.Ftp.GetDateTimestamp
-                Dim response As FtpWebResponse = ftpRequest.GetResponse()
-                güncelVersionTarih = response.LastModified
+                Using response As FtpWebResponse = ftpRequest.GetResponse()
+                    güncelVersionTarih = response.LastModified
+                End Using
             Catch ex As Exception
                 ' FTP bağlantı hatası - sessizce geç, güncelleme yapılmaz
                 Debug.WriteLine("[OtoGuncelleme] FTP hata: " & ex.Message)
@@ -9640,9 +9641,9 @@ Public Class Form1
                 ftpRequest.UseBinary = True
                 ftpRequest.Credentials = New NetworkCredential("Administrator", "!!alitaner01018991!!")
                 ftpRequest.Method = WebRequestMethods.Ftp.GetDateTimestamp
-                Dim response As FtpWebResponse = ftpRequest.GetResponse()
-                guncelVersionTarihManage = response.LastModified
-
+                Using response As FtpWebResponse = ftpRequest.GetResponse()
+                    guncelVersionTarihManage = response.LastModified
+                End Using
             Catch ex As Exception
                 ' FTP bağlantı hatası - sessizce geç
                 Debug.WriteLine("[OtoGuncelleme-Manage] FTP hata: " & ex.Message)
