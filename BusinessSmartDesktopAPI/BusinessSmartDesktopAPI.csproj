@@ -8,4 +8,8 @@
     <AssemblyName>BusinessSmartDesktopAPI</AssemblyName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Data.OleDb" Version="6.0.0" />
+  </ItemGroup>
+
 </Project>
