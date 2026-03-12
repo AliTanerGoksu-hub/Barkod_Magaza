@@ -992,16 +992,14 @@ app.MapGet("/api/license/bayii", async (HttpContext context) =>
         using var conn = new System.Data.OleDb.OleDbConnection(licenseConnStr);
         await conn.OpenAsync();
         
-        // Bayii kodu ile ara (320 ile başlayan kodlarda)
+        // nFirmaID ile ara, sKodu 320 ile başlayanlar bayii
         using var cmd = new System.Data.OleDb.OleDbCommand(
             @"SELECT nFirmaID, sKodu, sAciklama, sAdres1, sAdres2,
                      (SELECT TOP 1 sIletisimAdresi FROM tbFirmaIletisimi WHERE nFirmaId = tbFirma.nFirmaID AND sIletisimAraci = 'Telefon') AS Telefon,
                      (SELECT TOP 1 sIletisimAdresi FROM tbFirmaIletisimi WHERE nFirmaId = tbFirma.nFirmaID AND sIletisimAraci = 'Web') AS Web
               FROM tbFirma 
-              WHERE (nFirmaID = ? OR sKodu = ? OR sKodu = '320' + ?) AND sKodu LIKE '320%'", conn);
-        cmd.Parameters.AddWithValue("?", bayiiId);
-        cmd.Parameters.AddWithValue("?", bayiiId);
-        cmd.Parameters.AddWithValue("?", bayiiId);
+              WHERE nFirmaID = ? AND sKodu LIKE '320%'", conn);
+        cmd.Parameters.AddWithValue("?", int.Parse(bayiiId));
         
         using var reader = await cmd.ExecuteReaderAsync();
         
