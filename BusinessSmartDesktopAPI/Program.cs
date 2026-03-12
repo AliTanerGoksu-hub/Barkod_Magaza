@@ -140,8 +140,20 @@ app.MapGet("/download", (HttpContext context) =>
         }
         .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
         .header { text-align: center; margin-bottom: 40px; }
-        .header img { max-width: 280px; margin-bottom: 15px; }
-        .header p { color: #b4d455; font-size: 1.2em; }
+        .header .logo-wrapper {
+            display: inline-block;
+            background: linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 100%);
+            padding: 25px 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(180,212,85,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
+            border: 1px solid rgba(180,212,85,0.2);
+            margin-bottom: 20px;
+        }
+        .header img { 
+            max-width: 220px; 
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+        .header p { color: #b4d455; font-size: 1.1em; letter-spacing: 2px; text-transform: uppercase; }
         .login-box {
             background: rgba(180,212,85,0.05);
             border-radius: 15px;
@@ -208,8 +220,10 @@ app.MapGet("/download", (HttpContext context) =>
 <body>
     <div class='container'>
         <div class='header'>
-            <img src='https://customer-assets.emergentagent.com/job_219c0f73-95be-426c-9147-3f613dde92c2/artifacts/n7zeyh71_JPG.jpg' alt='Barkod Yazılım'>
-            <p>İndirme Portalı - Kurulum Dosyaları</p>
+            <div class='logo-wrapper'>
+                <img src='https://customer-assets.emergentagent.com/job_219c0f73-95be-426c-9147-3f613dde92c2/artifacts/n7zeyh71_JPG.jpg' alt='Barkod Yazılım'>
+            </div>
+            <p>İndirme Portalı</p>
         </div>
         
         <div class='login-box' id='loginBox'>
