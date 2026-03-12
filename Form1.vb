@@ -9600,7 +9600,7 @@ Public Class Form1
                         If File.Exists("C:\Program Files (x86)\Business Smart\Util\business_smart.exe") Then
                             System.IO.File.Delete("C:\Program Files (x86)\Business Smart\Util\business_smart.exe")
                         End If
-                        My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x64/business_smart.exe", "C:\Program Files (x86)\Business Smart\Util\business_smart.exe", "administrator", "!!AliTaner01018991!!")
+                        My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x64/business_smart.exe", "C:\Program Files (x86)\Business Smart\Util\business_smart.exe", "Administrator", "!!AliTaner01018991!!")
                         guncellemeYapildiMi = True
                     Catch ex As Exception
                         MessageBox.Show(ex.Message.ToString())
@@ -9612,7 +9612,7 @@ Public Class Form1
                         If File.Exists("C:\Program Files\Business Smart\Util\business_smart.exe") Then
                             System.IO.File.Delete("C:\Program Files\Business Smart\Util\business_smart.exe")
                         End If
-                        My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x86/business_smart.exe", "C:\Program Files\Business Smart\Util\business_smart.exe", "backup", "Backup0555")
+                        My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x86/business_smart.exe", "C:\Program Files\Business Smart\Util\business_smart.exe", "Administrator", "!!AliTaner01018991!!")
                         guncellemeYapildiMi = True
 
                     Catch ex As Exception
@@ -9657,7 +9657,7 @@ Public Class Form1
                         If File.Exists("C:\Program Files (x86)\Business Smart\Util\BUSINESS_SMART_MANAGE.exe") Then
                             System.IO.File.Delete("C:\Program Files (x86)\Business Smart\Util\BUSINESS_SMART_MANAGE.exe")
                         End If
-                        My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x64/BUSINESS_SMART_MANAGE.exe", "C:\Program Files (x86)\Business Smart\Util\BUSINESS_SMART_MANAGE.exe", "backup", "Backup0555")
+                        My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x64/BUSINESS_SMART_MANAGE.exe", "C:\Program Files (x86)\Business Smart\Util\BUSINESS_SMART_MANAGE.exe", "Administrator", "!!AliTaner01018991!!")
                         guncellemeYapildiMiManage = True
                     Catch ex As Exception
                         MessageBox.Show(ex.Message.ToString())
@@ -9669,7 +9669,7 @@ Public Class Form1
                         If File.Exists("C:\Program Files\Business Smart\Util\BUSINESS_SMART_MANAGE.exe") Then
                             System.IO.File.Delete("C:\Program Files\Business Smart\Util\BUSINESS_SMART_MANAGE.exe")
                         End If
-                        My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x86/BUSINESS_SMART_MANAGE.exe", "C:\Program Files\Business Smart\Util\BUSINESS_SMART_MANAGE.exe", "backup", "Backup0555")
+                        My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x86/BUSINESS_SMART_MANAGE.exe", "C:\Program Files\Business Smart\Util\BUSINESS_SMART_MANAGE.exe", "Administrator", "!!AliTaner01018991!!")
                         guncellemeYapildiMiManage = True
 
                     Catch ex As Exception
