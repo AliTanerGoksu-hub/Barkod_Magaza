@@ -9,7 +9,7 @@ Imports System.Text
 Public Class ApiClient
     
     Private Shared ReadOnly API_BASE_URL As String = "https://desktop.barkodyazilimevi.com"
-    Private Shared ReadOnly API_KEY As String = "BSmart2024Desktop!@#"
+    Private Shared ReadOnly API_KEY As String = "BSmart2024Desktop!@#SecureKey"
     
     ''' <summary>
     ''' Güncelleme dosyasının bilgisini API'den alır (FTP GetDateTimestamp yerine)
