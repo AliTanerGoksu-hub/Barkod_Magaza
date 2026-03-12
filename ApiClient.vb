@@ -19,6 +19,9 @@ Public Class ApiClient
         result.Success = False
         
         Try
+            ' TLS 1.2 kullan
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+            
             Dim url As String = $"{API_BASE_URL}/api/update/info?file={platform}/{fileName}"
             Dim request As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
             request.Method = "GET"
@@ -71,6 +74,9 @@ Public Class ApiClient
     ''' </summary>
     Public Shared Function DownloadUpdateFile(fileName As String, platform As String, localPath As String) As Boolean
         Try
+            ' TLS 1.2 kullan
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+            
             Dim url As String = $"{API_BASE_URL}/api/update/download?file={platform}/{fileName}"
             Dim request As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
             request.Method = "GET"
@@ -109,6 +115,9 @@ Public Class ApiClient
             If Not File.Exists(localFilePath) Then
                 Return False
             End If
+            
+            ' TLS 1.2 kullan
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
             
             Dim url As String = $"{API_BASE_URL}/api/backup/upload"
             Dim boundary As String = "----" & DateTime.Now.Ticks.ToString("x")
@@ -156,6 +165,9 @@ Public Class ApiClient
         result.IsValid = False
         
         Try
+            ' TLS 1.2 kullan
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+            
             Dim url As String = $"{API_BASE_URL}/api/license/verify"
             Dim request As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
             request.Method = "POST"
@@ -178,23 +190,22 @@ Public Class ApiClient
                     result.IsValid = json.Contains("""isValid"":true") OrElse json.Contains("""isValid"": true")
                     
                     ' Firma adını parse et
-                    Dim firmaStart As Integer = json.IndexOf("""firmaAdi"":")
-                    If firmaStart > 0 Then
-                        Dim valueStart As Integer = json.IndexOf("""", firmaStart + 11) + 1
-                        Dim valueEnd As Integer = json.IndexOf("""", valueStart)
-                        If valueEnd > valueStart Then
-                            result.FirmaAdi = json.Substring(valueStart, valueEnd - valueStart)
-                        End If
-                    End If
+                    result.FirmaAdi = ParseJsonString(json, "firmaAdi")
                     
                     ' Mesajı parse et
-                    Dim msgStart As Integer = json.IndexOf("""message"":")
-                    If msgStart > 0 Then
-                        Dim valueStart As Integer = json.IndexOf("""", msgStart + 10) + 1
-                        Dim valueEnd As Integer = json.IndexOf("""", valueStart)
-                        If valueEnd > valueStart Then
-                            result.Message = json.Substring(valueStart, valueEnd - valueStart)
-                        End If
+                    result.Message = ParseJsonString(json, "message")
+                    
+                    ' OzelNot parse et
+                    result.OzelNot = ParseJsonString(json, "ozelNot")
+                    
+                    ' Parametre1, Parametre2 parse et
+                    result.Parametre1 = ParseJsonString(json, "parametre1")
+                    result.Parametre2 = ParseJsonString(json, "parametre2")
+                    
+                    ' ExpiryDate parse et
+                    Dim expiryStr As String = ParseJsonString(json, "expiryDate")
+                    If Not String.IsNullOrEmpty(expiryStr) Then
+                        DateTime.TryParse(expiryStr, result.ExpiryDate)
                     End If
                 End Using
             End Using
@@ -209,10 +220,56 @@ Public Class ApiClient
     End Function
     
     ''' <summary>
+    ''' Helper: JSON string parse - null değerleri boş string olarak döndürür
+    ''' </summary>
+    Private Shared Function ParseJsonString(json As String, fieldName As String) As String
+        Dim searchKey As String = """" & fieldName & """:"
+        Dim startIdx As Integer = json.IndexOf(searchKey)
+        If startIdx < 0 Then Return ""
+
+        startIdx += searchKey.Length
+        ' Skip whitespace
+        While startIdx < json.Length AndAlso json(startIdx) = " "c
+            startIdx += 1
+        End While
+
+        If startIdx >= json.Length Then Return ""
+
+        ' Check for null value
+        If startIdx + 4 <= json.Length AndAlso json.Substring(startIdx, 4) = "null" Then
+            Return ""
+        End If
+        
+        ' Check if it's a string value (starts with quote)
+        If json(startIdx) = """"c Then
+            startIdx += 1 ' Skip opening quote
+            Dim endIdx As Integer = json.IndexOf(""""c, startIdx)
+            If endIdx > startIdx Then
+                Return json.Substring(startIdx, endIdx - startIdx)
+            ElseIf endIdx = startIdx Then
+                Return "" ' Empty string ""
+            End If
+        Else
+            ' Non-string value (number, boolean)
+            Dim endIdx As Integer = json.IndexOfAny(New Char() {","c, "}"c}, startIdx)
+            If endIdx > startIdx Then
+                Dim value As String = json.Substring(startIdx, endIdx - startIdx).Trim()
+                If value = "null" Then Return ""
+                Return value
+            End If
+        End If
+
+        Return ""
+    End Function
+    
+    ''' <summary>
     ''' Lisans aktivasyonu - MAC ID kaydet
     ''' </summary>
     Public Shared Function ActivateLicense(licenseKey As String, machineId As String, computerName As String) As Boolean
         Try
+            ' TLS 1.2 kullan
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+            
             Dim url As String = $"{API_BASE_URL}/api/license/activate"
             Dim request As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
             request.Method = "POST"
@@ -250,6 +307,9 @@ Public Class ApiClient
     ''' </summary>
     Public Shared Function IsApiAvailable() As Boolean
         Try
+            ' TLS 1.2 kullan
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+            
             Dim request As HttpWebRequest = CType(WebRequest.Create(API_BASE_URL), HttpWebRequest)
             request.Method = "GET"
             request.Timeout = 5000
@@ -283,4 +343,7 @@ Public Class LicenseInfo
     Public Property FirmaAdi As String
     Public Property Message As String
     Public Property ExpiryDate As DateTime
+    Public Property OzelNot As String
+    Public Property Parametre1 As String
+    Public Property Parametre2 As String
 End Class
