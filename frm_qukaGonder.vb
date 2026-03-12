@@ -2940,6 +2940,8 @@ Public Class frm_qukaGonder
                 siparisOnek = "pt("
             ElseIf siparisNoUpper.StartsWith("MH") Then
                 siparisOnek = "mh("
+            ElseIf siparisNoUpper.StartsWith("PAZ") Then
+                siparisOnek = "paz("
             Else
                 Log("WARNING", "HesaplaEkMaliyet", $"Bilinmeyen sipariş öneki: {siparisNo} (İlk 2-3 karakter: {If(siparisNo.Length >= 3, siparisNo.Substring(0, 3), siparisNo)})")
                 Return 0
