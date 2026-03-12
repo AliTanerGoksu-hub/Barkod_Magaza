@@ -9700,7 +9700,7 @@ Public Class Form1
                 Try
                     ftpRequest = FtpWebRequest.Create(New Uri(ftpPathPos))
                     ftpRequest.UseBinary = True
-                    ftpRequest.Credentials = New NetworkCredential("Administrator", "!!alitaner01018991!!")
+                    ftpRequest.Credentials = New NetworkCredential("Administrator", "!!AliTaner01018991!!")
                     ftpRequest.Method = WebRequestMethods.Ftp.GetDateTimestamp
                     Dim responsePos As FtpWebResponse = ftpRequest.GetResponse()
                     guncelVersionTarihPos = responsePos.LastModified
@@ -9715,7 +9715,7 @@ Public Class Form1
                             If File.Exists("C:\Program Files (x86)\Business Smart\Util\BUSINESS_SMART_POS.exe") Then
                                 System.IO.File.Delete("C:\Program Files (x86)\Business Smart\Util\BUSINESS_SMART_POS.exe")
                             End If
-                            My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x64/BUSINESS_SMART_POS.exe", "C:\Program Files (x86)\Business Smart\Util\BUSINESS_SMART_POS.exe", "backup", "Backup0555")
+                            My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x64/BUSINESS_SMART_POS.exe", "C:\Program Files (x86)\Business Smart\Util\BUSINESS_SMART_POS.exe", "Administrator", "!!AliTaner01018991!!")
                         Catch ex As Exception
                             MessageBox.Show(ex.Message.ToString())
                         End Try
@@ -9726,7 +9726,7 @@ Public Class Form1
                             If File.Exists("C:\Program Files\Business Smart\Util\BUSINESS_SMART_POS.exe") Then
                                 System.IO.File.Delete("C:\Program Files\Business Smart\Util\BUSINESS_SMART_POS.exe")
                             End If
-                            My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x86/BUSINESS_SMART_POS.exe", "C:\Program Files\Business Smart\Util\BUSINESS_SMART_POS.exe", "backup", "Backup0555")
+                            My.Computer.Network.DownloadFile("ftp://" & Ftp & "/BusinessSmart/x86/BUSINESS_SMART_POS.exe", "C:\Program Files\Business Smart\Util\BUSINESS_SMART_POS.exe", "Administrator", "!!AliTaner01018991!!")
                         Catch ex As Exception
                             MessageBox.Show(ex.Message.ToString())
                         End Try
@@ -19653,7 +19653,7 @@ Public Class Form1
                         
                         ' Gelişmiş yedekleme: 7z sıkıştırma + parçalı FTP upload
                         If Not String.IsNullOrEmpty(Ftp) Then
-                            GelismisYedekVeGonder(sDatabaseGenel, localYedekPath, Ftp, "backup", "Backup0555")
+                            GelismisYedekVeGonder(sDatabaseGenel, localYedekPath, Ftp, "Administrator", "!!AliTaner01018991!!")
                         Else
                             ' FTP yoksa sadece yerel yedek al
                             yedekle(sDatabaseGenel, localYedekPath, bOtomatikYedekRar)
@@ -19686,7 +19686,7 @@ Public Class Form1
                                 Dim dosyaAdi As String = Path.GetFileName(sFtpYedekDosya)
                                 Dim ftpHedef As String = "ftp://" & Ftp & "/backup/" & dosyaAdi
                                 
-                                If ParcaliFtpUpload(sFtpYedekDosya, ftpHedef, "backup", "Backup0555") Then
+                                If ParcaliFtpUpload(sFtpYedekDosya, ftpHedef, "Administrator", "!!AliTaner01018991!!") Then
                                     logla("[02:00 Retry] FTP upload başarılı!")
                                     bFtpYedekBasarisiz = False
                                     sFtpYedekDosya = ""
