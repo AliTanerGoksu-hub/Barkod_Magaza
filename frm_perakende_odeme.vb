@@ -3386,7 +3386,15 @@ Public Class frm_perakende_odeme
                 If bPosEntegre AndAlso Muhasebe AndAlso Not String.IsNullOrEmpty(posBelgeNo) AndAlso toplamTahsilat > 0D Then
                     VeresiyeOdemeAl(nId, cash, credit1, credit2, eft)
                 Else
-                    LogYaz("tamamla.Veresiye", "Atlandı. PosEntegre=" & bPosEntegre &
+                    ' Detaylı log - hangi koşul sağlanmadı?
+                    Dim sebep As String = ""
+                    If Not bPosEntegre Then sebep &= "POS entegre kapalı. "
+                    If Not Muhasebe Then sebep &= "Muhasebe işlenmemiş (PosFisNo alınamamış olabilir). "
+                    If String.IsNullOrEmpty(posBelgeNo) Then sebep &= "PosFisNo boş (e-belge numarası yok). "
+                    If toplamTahsilat <= 0D Then sebep &= "Tahsilat tutarı 0. "
+                    
+                    LogYaz("tamamla.Veresiye", "Atlandı. Sebep: " & sebep & vbCrLf &
+                                       "PosEntegre=" & bPosEntegre &
                                        ", Muhasebe=" & Muhasebe &
                                        ", PosFisNo=" & If(String.IsNullOrEmpty(posBelgeNo), "(boş)", posBelgeNo) &
                                        ", ToplamTahsilat=" & toplamTahsilat.ToString("0.00"))
@@ -3533,11 +3541,28 @@ Public Class frm_perakende_odeme
                 responseContent = New StreamReader(wex.Response.GetResponseStream()).ReadToEnd()
             End If
             LogYaz("VeresiyeOdemeAl", "Hata: " & wex.Message & vbCrLf & "Yanıt: " & responseContent)
-            MessageBox.Show("❌ Cari tahsilat hatası: " & wex.Message)
+            
+            ' ===== KULLANICI DOSTU HATA MESAJLARI =====
+            Dim kullaniciMesaji As String = "Cari tahsilat hatası"
+            If responseContent.Contains("kalan tutardan daha büyük") Then
+                kullaniciMesaji = "Girilen tutar kalan borçtan fazla!" & vbCrLf & vbCrLf &
+                    "Lütfen tutarı kontrol edin."
+            ElseIf responseContent.Contains("veresiye ödeme talebi bulunmaktadır") Then
+                kullaniciMesaji = "Bu satış için zaten bir ödeme talebi var!" & vbCrLf & vbCrLf &
+                    "Önceki talebin tamamlanmasını bekleyin veya iptal edin."
+            ElseIf responseContent.Contains("Tckn") AndAlso responseContent.Contains("uyumsuz") Then
+                kullaniciMesaji = "TC Kimlik numarası uyuşmuyor!" & vbCrLf & vbCrLf &
+                    "Müşteri kartındaki TC'yi kontrol edin."
+            ElseIf responseContent.Contains("401") OrElse responseContent.Contains("Unauthorized") Then
+                kullaniciMesaji = "Oturum süresi dolmuş. Programı yeniden başlatın."
+            Else
+                kullaniciMesaji = "Cari tahsilat hatası: " & wex.Message
+            End If
+            MessageBox.Show("❌ " & kullaniciMesaji, "Kolaysoft Hatası", MessageBoxButtons.OK, MessageBoxIcon.Warning)
 
         Catch ex As Exception
             LogYaz("VeresiyeOdemeAl", "Hata: " & ex.Message & vbCrLf & "Yanıt: " & responseContent)
-            MessageBox.Show("❌ Cari tahsilat hatası: " & ex.Message)
+            MessageBox.Show("❌ Cari tahsilat hatası: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
     Public Sub InitKolaysoftTokenVeCihaz(sDepo As String)
@@ -4347,10 +4372,13 @@ Public Class frm_perakende_odeme
                 ' Belge numarası oluştur
                 Dim documentNo As String = "PRKND-" & DateTime.Now.ToString("yyyyMMdd-HHmmss")
                 
+                ' Şube kodu - sDepo'dan al
+                Dim branchCode As String = If(String.IsNullOrEmpty(sDepo), "", sDepo)
+                
                 ' POS'a ödeme gönder
                 Dim body As New Dictionary(Of String, Object) From {
                     {"companyId", KolaysoftFirmaId},
-                    {"branchCode", ""},
+                    {"branchCode", branchCode},
                     {"documentNo", documentNo},
                     {"creditCardFirstAmount", kkTutar}
                 }
