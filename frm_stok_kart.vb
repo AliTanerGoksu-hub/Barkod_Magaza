@@ -7467,7 +7467,9 @@ Public Class frm_stok_kart
         If con.State = ConnectionState.Closed = True Then
             con.Open()
         End If
-        cmd.CommandText = sorgu_query("SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO tbStokUzunNot (sModel, sUzunNot, sSonKullaniciAdi, dteSonUpdateTarihi) VALUES     ('" & sModel & "', '" & sUzunNot & "', '" & sSonKullaniciAdi & "', '" & dteSonUpdateTarihi & "')")
+        ' SQL Injection ve tek tırnak hatası önleme
+        Dim escapedUzunNot As String = sUzunNot.Replace("'", "''")
+        cmd.CommandText = sorgu_query("SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO tbStokUzunNot (sModel, sUzunNot, sSonKullaniciAdi, dteSonUpdateTarihi) VALUES     ('" & sModel & "', N'" & escapedUzunNot & "', '" & sSonKullaniciAdi & "', '" & dteSonUpdateTarihi & "')")
         cmd.ExecuteNonQuery()
         con.Close()
     End Sub
@@ -7477,7 +7479,9 @@ Public Class frm_stok_kart
         If con.State = ConnectionState.Closed = True Then
             con.Open()
         End If
-        cmd.CommandText = sorgu_query("SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED UPDATE    tbStokUzunNot SET              sUzunNot = N'" & sUzunNot & "', dteSonUpdateTarihi = N'" & dteSonUpdateTarihi & "' Where sModel = N'" & sModel & "'")
+        ' SQL Injection ve tek tırnak hatası önleme
+        Dim escapedUzunNot As String = sUzunNot.Replace("'", "''")
+        cmd.CommandText = sorgu_query("SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED UPDATE    tbStokUzunNot SET              sUzunNot = N'" & escapedUzunNot & "', dteSonUpdateTarihi = N'" & dteSonUpdateTarihi & "' Where sModel = N'" & sModel & "'")
         cmd.ExecuteNonQuery()
         con.Close()
     End Sub
