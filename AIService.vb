@@ -2568,10 +2568,26 @@ SADECE JSON döndür!"
         End If
         
         ' ===== TAKI =====
+        ' ÖNEMLİ: Giyim ürünlerinde "altın", "gümüş" renk olarak kullanılabilir
+        ' Bu yüzden önce giyim kategorisini kontrol et
+        Dim giyimKelimeleri As Boolean = urun.Contains("takım") OrElse urun.Contains("takim") OrElse _
+            urun.Contains("pijama") OrElse urun.Contains("kapri") OrElse urun.Contains("pantolon") OrElse _
+            urun.Contains("elbise") OrElse urun.Contains("gömlek") OrElse urun.Contains("tişört") OrElse _
+            urun.Contains("kazak") OrElse urun.Contains("ceket") OrElse urun.Contains("mont") OrElse _
+            urun.Contains("sweatshirt") OrElse urun.Contains("bluz") OrElse urun.Contains("etek") OrElse _
+            urun.Contains("şort") OrElse urun.Contains("eşofman")
+            
+        ' Eğer giyim kelimesi varsa, TAKI olarak algılama
+        If giyimKelimeleri Then
+            Log("INFO", "TespitSektor", $"Giyim tespit edildi (giyim kelimeleri öncelikli): {urunAdi}")
+            Return "Giyim"
+        End If
+        
+        ' Takı tespiti - sadece gerçek takı ürünleri için
         If kat.Contains("takı") OrElse kat.Contains("taki") OrElse kat.Contains("mücevher") OrElse _
            urun.Contains("kolye") OrElse urun.Contains("küpe") OrElse urun.Contains("bileklik") OrElse _
            urun.Contains("yüzük") OrElse urun.Contains("broş") OrElse urun.Contains("pandora") OrElse _
-           urun.Contains("altın") OrElse urun.Contains("gümüş") OrElse urun.Contains("pırlanta") Then
+           urun.Contains("pırlanta") OrElse urun.Contains("elmas") OrElse urun.Contains("zümrüt") Then
             Return "Takı"
         End If
         
