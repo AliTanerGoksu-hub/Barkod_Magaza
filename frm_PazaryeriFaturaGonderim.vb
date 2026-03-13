@@ -81,7 +81,7 @@ Public Class frm_PazaryeriFaturaGonderim
         cmbPazaryeri = New ComboBoxEdit()
         cmbPazaryeri.Location = New Point(80, 12)
         cmbPazaryeri.Size = New Size(150, 26)
-        cmbPazaryeri.Properties.Items.AddRange(New String() {"Tümü", "Trendyol", "Hepsiburada", "N11"})
+        cmbPazaryeri.Properties.Items.AddRange(New String() {"Tümü", "Trendyol", "Hepsiburada", "N11", "Pazarama"})
         cmbPazaryeri.SelectedIndex = 0
         cmbPazaryeri.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor
         PanelControl1.Controls.Add(cmbPazaryeri)
@@ -224,6 +224,8 @@ Public Class frm_PazaryeriFaturaGonderim
                     pazaryeriFiltre = " AND A.sAciklama3 LIKE 'HB%' "
                 Case 3 ' N11
                     pazaryeriFiltre = " AND A.sAciklama3 LIKE 'N11%' "
+                Case 4 ' Pazarama
+                    pazaryeriFiltre = " AND A.sAciklama3 LIKE 'PAZ%' "
             End Select
 
             Dim sql As String = "SELECT " &
@@ -239,6 +241,7 @@ Public Class frm_PazaryeriFaturaGonderim
                 "   WHEN A.sAciklama3 LIKE 'TY%' THEN 'Trendyol' " &
                 "   WHEN A.sAciklama3 LIKE 'HB%' THEN 'Hepsiburada' " &
                 "   WHEN A.sAciklama3 LIKE 'N11%' THEN 'N11' " &
+                "   WHEN A.sAciklama3 LIKE 'PAZ%' THEN 'Pazarama' " &
                 "   ELSE 'Bilinmiyor' " &
                 "END AS Pazaryeri, " &
                 "ISNULL(P.bGonderildi, 0) AS bGonderildi, " &
@@ -250,7 +253,7 @@ Public Class frm_PazaryeriFaturaGonderim
                 "LEFT JOIN tbPazaryeriFaturaGonderim P ON M.nStokFisiID = P.nStokFisiID " &
                 "WHERE M.dteFisTarihi >= ? AND M.dteFisTarihi <= ? " &
                 "AND M.GibFaturaNo IS NOT NULL AND M.GibFaturaNo <> '' " &
-                "AND (A.sAciklama3 LIKE 'TY%' OR A.sAciklama3 LIKE 'HB%' OR A.sAciklama3 LIKE 'N11%') " &
+                "AND (A.sAciklama3 LIKE 'TY%' OR A.sAciklama3 LIKE 'HB%' OR A.sAciklama3 LIKE 'N11%' OR A.sAciklama3 LIKE 'PAZ%') " &
                 If(chkGonderilenleriGoster.Checked, "", "AND ISNULL(P.bGonderildi, 0) = 0 ") &
                 pazaryeriFiltre &
                 "ORDER BY ISNULL(P.bGonderildi, 0) ASC, M.dteFisTarihi DESC"
@@ -396,6 +399,8 @@ Public Class frm_PazaryeriFaturaGonderim
                         sonuc = GonderHepsiburada(siparisNo, gibFaturaNo, faturaGuid, hataMesaji)
                     Case "N11"
                         sonuc = GonderN11(siparisNo, gibFaturaNo, faturaGuid, hataMesaji)
+                    Case "PAZARAMA"
+                        sonuc = GonderPazarama(siparisNo, gibFaturaNo, faturaGuid, hataMesaji)
                     Case Else
                         hataMesaji = "Bilinmeyen pazaryeri: " & pazaryeri
                 End Select
@@ -1033,12 +1038,259 @@ Public Class frm_PazaryeriFaturaGonderim
     
 
     ''' <summary>
-    ''' N11'e fatura gönder
+    ''' N11'e fatura linki gönder
+    ''' SOAP API: https://api.n11.com/ws/SellerInvoiceService.wsdl
+    ''' Metod: saveLinkSellerInvoice
     ''' </summary>
     Private Function GonderN11(siparisNo As String, gibFaturaNo As String, faturaGuid As String, ByRef hataMesaji As String) As Boolean
-        ' TODO: N11 API entegrasyonu eklenecek
-        hataMesaji = "N11 entegrasyonu henüz aktif değil"
-        Return False
+        Try
+            If Not pazaryeriApis.ContainsKey("N11") Then
+                hataMesaji = "N11 API ayarları bulunamadı"
+                Return False
+            End If
+
+            Dim api = pazaryeriApis("N11")
+            
+            Debug.WriteLine("[N11] ===== N11 FATURA GÖNDERME =====")
+            Debug.WriteLine("[N11] Sipariş No: " & siparisNo)
+            Debug.WriteLine("[N11] GİB Fatura No: " & gibFaturaNo)
+            Debug.WriteLine("[N11] API Key: " & If(String.IsNullOrEmpty(api.ApiKey), "BOŞ", api.ApiKey.Substring(0, Math.Min(10, api.ApiKey.Length)) & "..."))
+
+            ' Sipariş numarasını temizle (N11 prefix varsa kaldır)
+            Dim orderNumber As String = siparisNo.Replace("N11", "").Replace("n11", "").Trim()
+            Debug.WriteLine("[N11] Order Number: " & orderNumber)
+            
+            ' Fatura linki al - N11 sadece pdf, png, jpeg kabul ediyor
+            Dim invoiceLink As String = GetKolaysoftFaturaLink(gibFaturaNo, faturaGuid)
+            If String.IsNullOrEmpty(invoiceLink) Then
+                hataMesaji = "Fatura linki alınamadı"
+                Debug.WriteLine("[N11] HATA: Fatura linki alınamadı")
+                Return False
+            End If
+            Debug.WriteLine("[N11] Fatura Link: " & invoiceLink)
+            
+            ' N11 SOAP API endpoint
+            Dim soapUrl As String = "https://api.n11.com/ws/SellerInvoiceService.wsdl"
+            Dim soapAction As String = "http://www.n11.com/ws/SellerInvoiceService/saveLinkSellerInvoice"
+            
+            ' SOAP XML Request oluştur
+            ' ÖNEMLİ: URL'deki & karakterini &amp; olarak encode et
+            Dim encodedUrl As String = invoiceLink.Replace("&", "&amp;")
+            
+            Dim soapRequest As String = "<?xml version=""1.0"" encoding=""utf-8""?>" &
+                "<soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:sch=""http://www.n11.com/ws/schemas"">" &
+                "<soapenv:Header/>" &
+                "<soapenv:Body>" &
+                "<sch:SaveLinkSellerInvoiceRequest>" &
+                "<auth>" &
+                "<appKey>" & api.ApiKey & "</appKey>" &
+                "<appSecret>" & api.ApiSecret & "</appSecret>" &
+                "</auth>" &
+                "<url>" & encodedUrl & "</url>" &
+                "<orderNumber>" & orderNumber & "</orderNumber>" &
+                "</sch:SaveLinkSellerInvoiceRequest>" &
+                "</soapenv:Body>" &
+                "</soapenv:Envelope>"
+            
+            Debug.WriteLine("[N11] SOAP Request (preview): " & soapRequest.Substring(0, Math.Min(500, soapRequest.Length)))
+            
+            ' HTTP Request gönder
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+            
+            Dim req As HttpWebRequest = CType(WebRequest.Create("https://api.n11.com/ws/SellerInvoiceService"), HttpWebRequest)
+            req.Method = "POST"
+            req.ContentType = "text/xml; charset=utf-8"
+            req.Accept = "text/xml"
+            req.Headers.Add("SOAPAction", soapAction)
+            req.Timeout = 30000
+            
+            Dim data As Byte() = Encoding.UTF8.GetBytes(soapRequest)
+            req.ContentLength = data.Length
+            
+            Using stream = req.GetRequestStream()
+                stream.Write(data, 0, data.Length)
+            End Using
+            
+            Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
+                Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
+                    Dim responseXml As String = reader.ReadToEnd()
+                    Debug.WriteLine("[N11] Response: " & responseXml)
+                    
+                    ' Response'u parse et
+                    If responseXml.Contains("<status>success</status>") Then
+                        Debug.WriteLine("[N11] BAŞARILI!")
+                        Return True
+                    ElseIf responseXml.Contains("<status>failure</status>") Then
+                        ' Hata mesajını çıkar
+                        Dim errorMatch As System.Text.RegularExpressions.Match = 
+                            System.Text.RegularExpressions.Regex.Match(responseXml, "<errorMessage>(.*?)</errorMessage>")
+                        If errorMatch.Success Then
+                            hataMesaji = errorMatch.Groups(1).Value
+                        Else
+                            hataMesaji = "N11 API hatası (failure)"
+                        End If
+                        Debug.WriteLine("[N11] HATA: " & hataMesaji)
+                        Return False
+                    Else
+                        hataMesaji = "Beklenmeyen yanıt formatı"
+                        Return False
+                    End If
+                End Using
+            End Using
+            
+        Catch wex As WebException
+            If wex.Response IsNot Nothing Then
+                Try
+                    Dim resp As HttpWebResponse = CType(wex.Response, HttpWebResponse)
+                    Dim statusCode As Integer = CInt(resp.StatusCode)
+                    Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
+                        Dim errorBody As String = reader.ReadToEnd()
+                        Debug.WriteLine("[N11] WebException (" & statusCode & "): " & errorBody)
+                        
+                        ' SOAP Fault mesajını çıkarmaya çalış
+                        Dim faultMatch As System.Text.RegularExpressions.Match = 
+                            System.Text.RegularExpressions.Regex.Match(errorBody, "<faultstring>(.*?)</faultstring>")
+                        If faultMatch.Success Then
+                            hataMesaji = faultMatch.Groups(1).Value
+                        Else
+                            hataMesaji = "HTTP " & statusCode & ": " & If(errorBody.Length > 200, errorBody.Substring(0, 200), errorBody)
+                        End If
+                    End Using
+                Catch
+                    hataMesaji = wex.Message
+                End Try
+            Else
+                hataMesaji = wex.Message
+                Debug.WriteLine("[N11] WebException (no response): " & hataMesaji)
+            End If
+            Return False
+        Catch ex As Exception
+            hataMesaji = ex.Message
+            Debug.WriteLine("[N11] Exception: " & hataMesaji)
+            Return False
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Pazarama'ya fatura linki gönder
+    ''' API: https://isortagim.pazarama.com
+    ''' NOT: Pazarama resmi fatura API dokümantasyonu bulunamadı.
+    ''' Bu fonksiyon placeholder olarak eklenmiştir.
+    ''' </summary>
+    Private Function GonderPazarama(siparisNo As String, gibFaturaNo As String, faturaGuid As String, ByRef hataMesaji As String) As Boolean
+        Try
+            If Not pazaryeriApis.ContainsKey("PAZARAMA") Then
+                hataMesaji = "Pazarama API ayarları bulunamadı"
+                Return False
+            End If
+
+            Dim api = pazaryeriApis("PAZARAMA")
+            
+            Debug.WriteLine("[PAZ] ===== PAZARAMA FATURA GÖNDERME =====")
+            Debug.WriteLine("[PAZ] Sipariş No: " & siparisNo)
+            Debug.WriteLine("[PAZ] GİB Fatura No: " & gibFaturaNo)
+            
+            ' Sipariş numarasını temizle (PAZ prefix varsa kaldır)
+            Dim orderNumber As String = siparisNo.Replace("PAZ", "").Replace("paz", "").Trim()
+            Debug.WriteLine("[PAZ] Order Number: " & orderNumber)
+            
+            ' Fatura linki al
+            Dim invoiceLink As String = GetKolaysoftFaturaLink(gibFaturaNo, faturaGuid)
+            If String.IsNullOrEmpty(invoiceLink) Then
+                hataMesaji = "Fatura linki alınamadı"
+                Debug.WriteLine("[PAZ] HATA: Fatura linki alınamadı")
+                Return False
+            End If
+            Debug.WriteLine("[PAZ] Fatura Link: " & invoiceLink)
+            
+            ' Pazarama API bilgileri
+            Dim baseUrl As String = If(String.IsNullOrEmpty(api.BaseUrl), "https://isortagim.pazarama.com", api.BaseUrl.TrimEnd("/"c))
+            Dim apiKey As String = api.ApiKey
+            Dim apiSecret As String = api.ApiSecret
+            
+            If String.IsNullOrEmpty(apiKey) OrElse String.IsNullOrEmpty(apiSecret) Then
+                hataMesaji = "Pazarama API Key veya Secret eksik"
+                Return False
+            End If
+            
+            ' ===== PAZARAMA FATURA GÖNDERİM ENDPOINTİ =====
+            ' Pazarama'nın resmi fatura gönderim API'si dokümantasyonu bulunamadı.
+            ' Aşağıdaki endpoint tahminidir ve test edilmelidir.
+            ' Doğru endpoint için Pazarama destek ile iletişime geçilmesi önerilir.
+            
+            ' Tahmini endpoint: PUT /api/v1/orders/{orderNumber}/invoice
+            Dim url As String = baseUrl & "/api/v1/orders/" & orderNumber & "/invoice"
+            Debug.WriteLine("[PAZ] URL (tahmini): " & url)
+            
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+            
+            Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
+            req.Method = "PUT"
+            req.ContentType = "application/json"
+            req.Accept = "application/json"
+            req.Timeout = 30000
+            
+            ' Pazarama genellikle Header'da API Key kullanıyor
+            req.Headers.Add("X-API-KEY", apiKey)
+            req.Headers.Add("X-API-SECRET", apiSecret)
+            
+            ' Body
+            Dim payload As String = "{""invoiceLink"": """ & invoiceLink.Replace("""", "\""") & """, ""invoiceNumber"": """ & gibFaturaNo & """}"
+            Debug.WriteLine("[PAZ] Payload: " & payload)
+            
+            Dim data As Byte() = Encoding.UTF8.GetBytes(payload)
+            req.ContentLength = data.Length
+            
+            Using stream = req.GetRequestStream()
+                stream.Write(data, 0, data.Length)
+            End Using
+            
+            Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
+                Dim statusCode As Integer = CInt(resp.StatusCode)
+                Debug.WriteLine("[PAZ] Response Status: " & statusCode)
+                
+                If statusCode >= 200 AndAlso statusCode < 300 Then
+                    Debug.WriteLine("[PAZ] BAŞARILI!")
+                    Return True
+                Else
+                    hataMesaji = "HTTP " & statusCode & ": " & resp.StatusDescription
+                    Debug.WriteLine("[PAZ] HATA: " & hataMesaji)
+                    Return False
+                End If
+            End Using
+            
+        Catch wex As WebException
+            If wex.Response IsNot Nothing Then
+                Try
+                    Dim resp As HttpWebResponse = CType(wex.Response, HttpWebResponse)
+                    Dim statusCode As Integer = CInt(resp.StatusCode)
+                    Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
+                        Dim errorBody As String = reader.ReadToEnd()
+                        Debug.WriteLine("[PAZ] WebException (" & statusCode & "): " & errorBody)
+                        
+                        ' Özel hata mesajları
+                        Select Case statusCode
+                            Case 401
+                                hataMesaji = "Yetkilendirme hatası (401). API Key ve Secret'ı kontrol edin."
+                            Case 404
+                                hataMesaji = "Endpoint bulunamadı (404). Pazarama fatura API'si farklı olabilir."
+                            Case Else
+                                hataMesaji = "HTTP " & statusCode & ": " & If(errorBody.Length > 200, errorBody.Substring(0, 200), errorBody)
+                        End Select
+                    End Using
+                Catch
+                    hataMesaji = wex.Message
+                End Try
+            Else
+                hataMesaji = wex.Message
+                Debug.WriteLine("[PAZ] WebException (no response): " & hataMesaji)
+            End If
+            Return False
+        Catch ex As Exception
+            hataMesaji = ex.Message
+            Debug.WriteLine("[PAZ] Exception: " & hataMesaji)
+            Return False
+        End Try
     End Function
 
     ''' <summary>
