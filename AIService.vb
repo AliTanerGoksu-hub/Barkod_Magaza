@@ -683,6 +683,10 @@ HTML formatında:
             ' JSON yanıtı parse et
             result = ParseCompleteContentResponse(response)
             
+            ' ===== YASAKLI KELİMELERİ FİLTRELE (Pazaryeri Kuralları) =====
+            result = FilterForbiddenWords(result)
+            Log("INFO", "GenerateCompleteContent", "Yasaklı kelime filtresi uygulandı")
+            
             If result.ContainsKey("description") AndAlso Not String.IsNullOrEmpty(result("description")) Then
                 result("success") = "true"
                 Log("SUCCESS", "GenerateCompleteContent", $"İçerik başarıyla oluşturuldu: {urunAdi}")
@@ -4024,6 +4028,99 @@ Malzeme: {If(String.IsNullOrEmpty(materyal), "[Ahşap/Metal/Cam - tahmin et]", m
 }}
 
 SADECE JSON döndür!"
+    End Function
+    
+    ' ========================================================================
+    ' YASAKLI KELİME FİLTRESİ (Pazaryeri Kuralları)
+    ' ========================================================================
+    ' Pazaryerlerinin (Trendyol, Hepsiburada vb.) yasakladığı ifadeleri kaldırır
+    ' Bu kelimeler ürün açıklamalarında kullanıldığında ceza veya liste dışı kalma riski var
+    ' ========================================================================
+    
+    ''' <summary>
+    ''' AI tarafından üretilen içeriklerden yasaklı kelimeleri filtreler
+    ''' Pazaryeri kurallarına uyum için gereklidir
+    ''' </summary>
+    Private Function FilterForbiddenWords(content As Dictionary(Of String, String)) As Dictionary(Of String, String)
+        Try
+            ' ===== YASAKLI KELİMELER LİSTESİ =====
+            ' Bu kelimeler pazaryerleri tarafından yasaklanmıştır
+            ' Kaynak: Trendyol Satıcı Politikaları, Hepsiburada Ürün Kuralları
+            Dim forbiddenWords As String() = {
+                "%100 Orijinal",
+                "%100 orijinal",
+                "100% Orijinal",
+                "100% orijinal",
+                "kapıda ödeme",
+                "Kapıda Ödeme",
+                "kapıda iade",
+                "Kapıda İade",
+                "nakit kapıda",
+                "Nakit Kapıda",
+                "en ucuz",
+                "En Ucuz",
+                "en uygun fiyat",
+                "En Uygun Fiyat",
+                "piyasanın en ucuzu",
+                "fiyat garantisi",
+                "Fiyat Garantisi",
+                "rakipsiz fiyat",
+                "benzersiz fiyat",
+                "eşsiz fiyat",
+                "indirimli fiyat garantisi",
+                "taklitlerinden sakının",
+                "taklit ürün",
+                "sahte ürün",
+                "bire bir kopya",
+                "replika",
+                "Replika",
+                "A kalite kopya",
+                "1.kalite kopya",
+                "orjinal kutulu",
+                "Orjinal Kutulu"
+            }
+            
+            ' ===== TÜM İÇERİK ALANLARINI FİLTRELE =====
+            Dim fieldsToFilter As String() = {
+                "description",
+                "shortDescription", 
+                "featuresHtml",
+                "careInstructions",
+                "seoTitle",
+                "metaDescription",
+                "keywords",
+                "yikamaTalimati",
+                "bakimTalimati",
+                "guvenlikUyari"
+            }
+            
+            For Each field As String In fieldsToFilter
+                If content.ContainsKey(field) AndAlso Not String.IsNullOrEmpty(content(field)) Then
+                    Dim originalValue As String = content(field)
+                    Dim filteredValue As String = originalValue
+                    
+                    For Each forbiddenWord As String In forbiddenWords
+                        If filteredValue.Contains(forbiddenWord) Then
+                            ' Yasaklı kelimeyi kaldır ve log'a yaz
+                            filteredValue = filteredValue.Replace(forbiddenWord, "")
+                            Log("WARNING", "FilterForbiddenWords", $"Yasaklı kelime kaldırıldı: '{forbiddenWord}' (Alan: {field})")
+                        End If
+                    Next
+                    
+                    ' Fazla boşlukları temizle
+                    filteredValue = Regex.Replace(filteredValue, "\s+", " ").Trim()
+                    
+                    content(field) = filteredValue
+                End If
+            Next
+            
+            Log("INFO", "FilterForbiddenWords", "Yasaklı kelime filtresi tamamlandı")
+            Return content
+            
+        Catch ex As Exception
+            Log("ERROR", "FilterForbiddenWords", $"Filtreleme hatası: {ex.Message}")
+            Return content
+        End Try
     End Function
     
 End Class
