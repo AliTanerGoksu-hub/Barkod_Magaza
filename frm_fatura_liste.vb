@@ -419,6 +419,7 @@ Public Class frm_fatura_liste
         Me.MenuItem45 = New System.Windows.Forms.MenuItem()
         Me.MenuItem57 = New System.Windows.Forms.MenuItem()
         Me.MenuItem58 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem59 = New System.Windows.Forms.MenuItem()
         Me.MenuItem56 = New System.Windows.Forms.MenuItem()
         Me.MenuItem15 = New System.Windows.Forms.MenuItem()
         Me.MenuItem19 = New System.Windows.Forms.MenuItem()
@@ -1648,7 +1649,7 @@ Public Class frm_fatura_liste
         '
         'ContextMenu1
         '
-        Me.ContextMenu1.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuItem21, Me.MenuItem23, Me.MenuItem46, Me.MenuItem47, Me.MenuItem24, Me.MenuItem18, Me.MenuItem13, Me.MenuItem39, Me.MenuItem48, Me.MenuItem50, Me.MenuItem52, Me.MenuItem43, Me.MenuItem56, Me.MenuItem58, Me.MenuItem15, Me.MenuItem19, Me.MenuItem16, Me.MenuItem17, Me.MenuItem22, Me.MenuItem42, Me.MenuItem20, Me.MenuItem1, Me.MenuItem2, Me.MenuItem3, Me.MenuItem4, Me.MenuItem10, Me.MenuItem25, Me.MenuItem36, Me.MenuItem32, Me.MenuItem37, Me.MenuItem14, Me.MenuItem5, Me.MenuItem6, Me.MenuItem11, Me.MenuItem7, Me.MenuItem8, Me.MenuItem12, Me.MenuItem9})
+        Me.ContextMenu1.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuItem21, Me.MenuItem23, Me.MenuItem46, Me.MenuItem47, Me.MenuItem24, Me.MenuItem18, Me.MenuItem13, Me.MenuItem39, Me.MenuItem48, Me.MenuItem50, Me.MenuItem52, Me.MenuItem43, Me.MenuItem56, Me.MenuItem58, Me.MenuItem59, Me.MenuItem15, Me.MenuItem19, Me.MenuItem16, Me.MenuItem17, Me.MenuItem22, Me.MenuItem42, Me.MenuItem20, Me.MenuItem1, Me.MenuItem2, Me.MenuItem3, Me.MenuItem4, Me.MenuItem10, Me.MenuItem25, Me.MenuItem36, Me.MenuItem32, Me.MenuItem37, Me.MenuItem14, Me.MenuItem5, Me.MenuItem6, Me.MenuItem11, Me.MenuItem7, Me.MenuItem8, Me.MenuItem12, Me.MenuItem9})
         '
         'MenuItem21
         '
@@ -1774,6 +1775,11 @@ Public Class frm_fatura_liste
         '
         Me.MenuItem58.Index = 13
         Me.MenuItem58.Text = "Toplu Tarih Değiştir"
+        '
+        'MenuItem59
+        '
+        Me.MenuItem59.Index = 14
+        Me.MenuItem59.Text = "Toplu Maliyet Güncelle"
         '
         'MenuItem56
         '
@@ -7314,6 +7320,7 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
     Friend WithEvents MenuItem56 As MenuItem
     Friend WithEvents MenuItem57 As MenuItem ' Pazaryeri Fatura Gönder
     Friend WithEvents MenuItem58 As MenuItem ' Toplu Tarih Değiştir
+    Friend WithEvents MenuItem59 As MenuItem ' Toplu Maliyet Güncelle
     Private Sub MenuItem56_Click(sender As Object, e As EventArgs) Handles MenuItem56.Click
         Dim selectedRows() As Integer = GridView1.GetSelectedRows()
         If selectedRows.Length = 0 Then
@@ -7541,6 +7548,280 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
             
         Catch ex As Exception
             MsgBox("Tarih değiştirme hatası: " & ex.Message, MsgBoxStyle.Critical)
+        End Try
+    End Sub
+    
+    ' Toplu Maliyet Güncelle - seçilen faturalar için stok maliyet fiyatlarını günceller
+    ' KDV dahil/hariç kontrolü yapılır
+    Private Sub MenuItem59_Click(sender As Object, e As EventArgs) Handles MenuItem59.Click
+        Dim selectedRows() As Integer = GridView1.GetSelectedRows()
+        If selectedRows.Length = 0 Then
+            MsgBox("Lütfen en az bir fatura seçin!", MsgBoxStyle.Exclamation)
+            Exit Sub
+        End If
+        
+        ' Onay al
+        If MsgBox(selectedRows.Length & " adet fatura için stok maliyetleri güncellenecek." & vbCrLf & vbCrLf & _
+                  "Alış fiyatı KDV dahil/hariç durumuna göre maliyet hesaplaması yapılacaktır." & vbCrLf & vbCrLf & _
+                  "Devam etmek istiyor musunuz?", MsgBoxStyle.YesNo + MsgBoxStyle.Question, "Toplu Maliyet Güncelle") = MsgBoxResult.No Then
+            Exit Sub
+        End If
+        
+        Try
+            Dim toplamGuncellenen As Integer = 0
+            Dim toplamHata As Integer = 0
+            
+            ' Progress göster
+            Dim frmProgress As New Form()
+            frmProgress.Text = "Maliyetler Güncelleniyor..."
+            frmProgress.Size = New Size(400, 150)
+            frmProgress.StartPosition = FormStartPosition.CenterParent
+            frmProgress.FormBorderStyle = FormBorderStyle.FixedDialog
+            frmProgress.MaximizeBox = False
+            frmProgress.MinimizeBox = False
+            frmProgress.ControlBox = False
+            
+            Dim lblDurum As New Label()
+            lblDurum.Location = New Point(20, 20)
+            lblDurum.Size = New Size(350, 60)
+            lblDurum.Text = "Hazırlanıyor..."
+            frmProgress.Controls.Add(lblDurum)
+            
+            Dim progressBar As New ProgressBar()
+            progressBar.Location = New Point(20, 80)
+            progressBar.Size = New Size(350, 25)
+            progressBar.Maximum = selectedRows.Length
+            progressBar.Value = 0
+            frmProgress.Controls.Add(progressBar)
+            
+            frmProgress.Show()
+            Application.DoEvents()
+            
+            Using con As New OleDbConnection(connection)
+                con.Open()
+                
+                Dim sayac As Integer = 0
+                For Each rowHandle As Integer In selectedRows
+                    sayac += 1
+                    Dim nStokFisiID As Long = CLng(GridView1.GetRowCellValue(rowHandle, "nStokFisiID"))
+                    Dim sFisTipi As String = GridView1.GetRowCellValue(rowHandle, "sFisTipi").ToString()
+                    Dim lFisNo As String = GridView1.GetRowCellValue(rowHandle, "lFisNo").ToString()
+                    
+                    lblDurum.Text = "İşleniyor: " & sayac & "/" & selectedRows.Length & vbCrLf & "Fiş No: " & lFisNo
+                    progressBar.Value = sayac
+                    Application.DoEvents()
+                    
+                    Try
+                        ' Bu fatura için maliyet güncelle
+                        Dim guncellendi As Integer = TopluMaliyetGuncelle_Fatura(con, nStokFisiID, sFisTipi)
+                        toplamGuncellenen += guncellendi
+                    Catch ex As Exception
+                        toplamHata += 1
+                    End Try
+                Next
+            End Using
+            
+            frmProgress.Close()
+            frmProgress.Dispose()
+            
+            MsgBox("Toplu maliyet güncelleme tamamlandı." & vbCrLf & vbCrLf & _
+                   "İşlenen Fatura: " & selectedRows.Length & vbCrLf & _
+                   "Güncellenen Stok: " & toplamGuncellenen & vbCrLf & _
+                   "Hata: " & toplamHata, MsgBoxStyle.Information, "Sonuç")
+            
+        Catch ex As Exception
+            MsgBox("Maliyet güncelleme hatası: " & ex.Message, MsgBoxStyle.Critical)
+        End Try
+    End Sub
+    
+    ' Tek bir fatura için maliyet güncelleme işlemi
+    Private Function TopluMaliyetGuncelle_Fatura(ByVal con As OleDbConnection, ByVal nStokFisiID As Long, ByVal sFisTipi As String) As Integer
+        Dim guncellenenSatir As Integer = 0
+        
+        ' Fatura master bilgilerini al
+        Dim dsFaturaMaster As New DataSet()
+        Using cmdMaster As New OleDbCommand("SELECT * FROM tbStokFisiMaster WHERE nStokFisiID = " & nStokFisiID, con)
+            Dim daMaster As New OleDbDataAdapter(cmdMaster)
+            daMaster.Fill(dsFaturaMaster, "Master")
+        End Using
+        
+        If dsFaturaMaster.Tables(0).Rows.Count = 0 Then
+            Return 0
+        End If
+        
+        Dim drMaster As DataRow = dsFaturaMaster.Tables(0).Rows(0)
+        Dim dteFisTarihi As DateTime = CType(drMaster("dteFisTarihi"), DateTime)
+        
+        ' Ek maliyet bilgilerini al
+        Dim lEkmaliyet1 As Decimal = sorgu_sayi(drMaster("lEkmaliyet1"), 0)
+        Dim lEkmaliyet3 As Decimal = sorgu_sayi(drMaster("lEkmaliyet3"), 0)
+        Dim lEkmaliyet4 As Decimal = sorgu_sayi(drMaster("lEkmaliyet4"), 0)
+        Dim lNetTutar As Decimal = sorgu_sayi(drMaster("lNetTutar"), 0)
+        
+        ' Alış fiyatı KDV dahil mi kontrolü (tbFiyatTipi tablosundan)
+        Dim bAlisKdvDahil As Boolean = False
+        Try
+            Using cmdKdv As New OleDbCommand("SELECT bKdvDahilmi FROM tbFiyatTipi WHERE sFiyatTipi = '" & sFiyatA & "'", con)
+                Dim result = cmdKdv.ExecuteScalar()
+                If result IsNot Nothing AndAlso result IsNot DBNull.Value Then
+                    bAlisKdvDahil = Convert.ToBoolean(result)
+                End If
+            End Using
+        Catch
+            bAlisKdvDahil = False
+        End Try
+        
+        ' Fatura detaylarını al
+        Dim dsFaturaDetay As New DataSet()
+        Using cmdDetay As New OleDbCommand("SELECT * FROM tbStokFisiDetayi WHERE nStokFisiID = " & nStokFisiID, con)
+            Dim daDetay As New OleDbDataAdapter(cmdDetay)
+            daDetay.Fill(dsFaturaDetay, "Detay")
+        End Using
+        
+        For Each drDetay As DataRow In dsFaturaDetay.Tables(0).Rows
+            Try
+                Dim nMasrafSatiri As Integer = sorgu_sayi(drDetay("nMasrafSatiri"), 0)
+                Dim lBrutFiyat As Decimal = sorgu_sayi(drDetay("lBrutFiyat"), 0)
+                
+                If nMasrafSatiri = 0 And lBrutFiyat > 0.01 Then
+                    Dim nStokID As Long = CLng(drDetay("nStokID"))
+                    Dim lGirisMiktar1 As Decimal = sorgu_sayi(drDetay("lGirisMiktar1"), 1)
+                    Dim lGirisTutar As Decimal = sorgu_sayi(drDetay("lGirisTutar"), 0)
+                    Dim nKdvOrani As Decimal = sorgu_sayi(drDetay("nKdvOrani"), 0)
+                    Dim lIlaveMaliyetTutar As Decimal = sorgu_sayi(drDetay("lIlaveMaliyetTutar"), 0)
+                    Dim lEkIlaveMaliyetTutar As Decimal = sorgu_sayi(drDetay("lEkIlaveMaliyetTutar"), 0)
+                    
+                    ' Stok bilgilerini al
+                    Dim dsStok As New DataSet()
+                    Using cmdStok As New OleDbCommand("SELECT nStokID, nStokTipi, nFiyatlandirma, sModel, sRenk, sBeden, nKdvOrani FROM tbStok WHERE nStokID = " & nStokID, con)
+                        Dim daStok As New OleDbDataAdapter(cmdStok)
+                        daStok.Fill(dsStok, "Stok")
+                    End Using
+                    
+                    If dsStok.Tables(0).Rows.Count > 0 Then
+                        Dim drStok As DataRow = dsStok.Tables(0).Rows(0)
+                        Dim nStokKdvOrani As Decimal = sorgu_sayi(drStok("nKdvOrani"), 0)
+                        
+                        ' Maliyet hesapla
+                        Dim maliyet As Decimal = lGirisTutar / lGirisMiktar1
+                        
+                        ' KDV hesaplaması
+                        If nKdvOrani <> nStokKdvOrani Then
+                            If bKdvKontrolluMaliyet = True Then
+                                maliyet = maliyet * ((nStokKdvOrani + 100) / 100)
+                            Else
+                                maliyet = maliyet * ((nKdvOrani + 100) / 100)
+                            End If
+                        Else
+                            maliyet = maliyet * ((nKdvOrani + 100) / 100)
+                        End If
+                        
+                        ' İlave maliyet düşümü
+                        maliyet = maliyet - (Math.Abs((lIlaveMaliyetTutar + lEkIlaveMaliyetTutar) / lGirisMiktar1))
+                        
+                        ' Oran ek maliyet hesabı
+                        Try
+                            If (lEkmaliyet1 + lEkmaliyet3 + lEkmaliyet4) <> 0 Then
+                                Dim oranekmaliyet As Decimal = (lEkmaliyet1 + lEkmaliyet3 + lEkmaliyet4) / (lNetTutar - lEkmaliyet1)
+                                maliyet = maliyet + (maliyet * oranekmaliyet)
+                            End If
+                        Catch
+                        End Try
+                        
+                        ' İkinci KDV hesaplaması
+                        If nKdvOrani <> nStokKdvOrani Then
+                            If bKdvKontrolluMaliyet = True Then
+                                maliyet = maliyet * ((nStokKdvOrani + 100) / 100)
+                            Else
+                                maliyet = maliyet * ((nKdvOrani + 100) / 100)
+                            End If
+                        Else
+                            maliyet = maliyet * ((nKdvOrani + 100) / 100)
+                        End If
+                        
+                        ' Alış fiyatını hesapla - bKdvDahilmi kontrolü ile
+                        Dim alis As Decimal = lBrutFiyat
+                        
+                        ' Eğer alış fiyat tipi KDV dahil DEĞİLSE, KDV ekle
+                        ' Eğer alış fiyat tipi KDV dahil ise, KDV ekleme (zaten dahil)
+                        If bAlisKdvDahil = False Then
+                            ' KDV dahil değil, KDV ekle
+                            alis = alis * ((nKdvOrani + 100) / 100)
+                        End If
+                        ' Eğer bAlisKdvDahil = True ise, fiyat zaten KDV dahil, ekleme yapma
+                        
+                        ' Mevcut fiyatları sorgula
+                        Dim fiyatMaliyet As Decimal = sorgu_stok_fiyat(sFiyatM, nStokID, "")
+                        Dim fiyatAlis As Decimal = sorgu_stok_fiyat(sFiyatA, nStokID, "")
+                        
+                        Dim nFiyatlandirma As Integer = sorgu_sayi(drStok("nFiyatlandirma"), 0)
+                        Dim sModel As String = Trim(drStok("sModel").ToString())
+                        Dim sRenk As String = Trim(drStok("sRenk").ToString())
+                        Dim sBeden As String = Trim(drStok("sBeden").ToString())
+                        
+                        ' Maliyetleri güncelle
+                        If fiyatMaliyet = 0 Then
+                            ekle_fiyat(nStokID, sFiyatM, maliyet, dteFisTarihi, kullaniciadi)
+                            guncellenenSatir += 1
+                        ElseIf fiyatMaliyet <> maliyet Then
+                            TopluMaliyet_FiyatDuzelt(con, nFiyatlandirma, sModel, sRenk, sBeden, sFiyatM, maliyet, dteFisTarihi, nStokID)
+                            guncellenenSatir += 1
+                        End If
+                        
+                        ' Alışları güncelle
+                        If fiyatAlis = 0 Then
+                            ekle_fiyat(nStokID, sFiyatA, alis, dteFisTarihi, kullaniciadi)
+                        ElseIf fiyatAlis <> alis Then
+                            TopluMaliyet_FiyatDuzelt(con, nFiyatlandirma, sModel, sRenk, sBeden, sFiyatA, alis, dteFisTarihi, nStokID)
+                        End If
+                    End If
+                End If
+            Catch
+            End Try
+        Next
+        
+        Return guncellenenSatir
+    End Function
+    
+    ' Fiyat düzeltme yardımcı fonksiyonu
+    Private Sub TopluMaliyet_FiyatDuzelt(ByVal con As OleDbConnection, ByVal nFiyatlandirma As Integer, ByVal sModel As String, ByVal sRenk As String, ByVal sBeden As String, ByVal sFiyatTipi As String, ByVal lFiyat As Decimal, ByVal dteFiyatTespitTarihi As DateTime, ByVal nStokID As Long)
+        Try
+            ' Boşlukları temizle
+            sModel = Trim(Replace(sModel, " ", ""))
+            sRenk = Trim(Replace(sRenk, " ", ""))
+            sBeden = Trim(Replace(sBeden, " ", ""))
+            
+            Dim sql As String = ""
+            
+            If lFiyat = 0 Then
+                If nFiyatlandirma = 0 Then
+                    sql = "DELETE tbStokFiyati FROM tbStok WHERE tbStok.nStokID = tbStokFiyati.nStokID AND sFiyatTipi = '" & sFiyatTipi & "' AND RTRIM(LTRIM(sModel)) = '" & sModel & "'"
+                ElseIf nFiyatlandirma = 1 Then
+                    sql = "DELETE tbStokFiyati FROM tbStok WHERE tbStok.nStokID = tbStokFiyati.nStokID AND sFiyatTipi = '" & sFiyatTipi & "' AND RTRIM(LTRIM(sModel)) = '" & sModel & "' AND RTRIM(LTRIM(sRenk)) = '" & sRenk & "'"
+                ElseIf nFiyatlandirma = 2 Then
+                    sql = "DELETE tbStokFiyati FROM tbStok WHERE tbStok.nStokID = tbStokFiyati.nStokID AND sFiyatTipi = '" & sFiyatTipi & "' AND RTRIM(LTRIM(sModel)) = '" & sModel & "' AND RTRIM(LTRIM(sRenk)) = '" & sRenk & "' AND RTRIM(LTRIM(sBeden)) = '" & sBeden & "'"
+                End If
+            Else
+                If nFiyatlandirma = 0 Then
+                    sql = "UPDATE tbStokFiyati SET lFiyat = " & lFiyat.ToString().Replace(",", ".") & ", dteFiyatTespitTarihi = '" & dteFiyatTespitTarihi.ToString("yyyy-MM-dd") & "', dteKayitTarihi = GETDATE() FROM tbStok WHERE tbStok.nStokID = tbStokFiyati.nStokID AND sFiyatTipi = '" & sFiyatTipi & "' AND RTRIM(LTRIM(sModel)) = '" & sModel & "'"
+                ElseIf nFiyatlandirma = 1 Then
+                    sql = "UPDATE tbStokFiyati SET lFiyat = " & lFiyat.ToString().Replace(",", ".") & ", dteFiyatTespitTarihi = '" & dteFiyatTespitTarihi.ToString("yyyy-MM-dd") & "', dteKayitTarihi = GETDATE() FROM tbStok WHERE tbStok.nStokID = tbStokFiyati.nStokID AND sFiyatTipi = '" & sFiyatTipi & "' AND RTRIM(LTRIM(sModel)) = '" & sModel & "' AND RTRIM(LTRIM(sRenk)) = '" & sRenk & "'"
+                ElseIf nFiyatlandirma = 2 Then
+                    sql = "UPDATE tbStokFiyati SET lFiyat = " & lFiyat.ToString().Replace(",", ".") & ", dteFiyatTespitTarihi = '" & dteFiyatTespitTarihi.ToString("yyyy-MM-dd") & "', dteKayitTarihi = GETDATE() FROM tbStok WHERE tbStok.nStokID = tbStokFiyati.nStokID AND sFiyatTipi = '" & sFiyatTipi & "' AND RTRIM(LTRIM(sModel)) = '" & sModel & "' AND RTRIM(LTRIM(sRenk)) = '" & sRenk & "' AND RTRIM(LTRIM(sBeden)) = '" & sBeden & "'"
+                End If
+            End If
+            
+            If sql <> "" Then
+                Using cmd As New OleDbCommand(sql, con)
+                    cmd.ExecuteNonQuery()
+                End Using
+            End If
+            
+            ' Ayrıca doğrudan stok fiyatını da güncelle
+            duzelt_fiyat(nStokID, sFiyatTipi, lFiyat, dteFiyatTespitTarihi)
+            
+        Catch ex As Exception
+            ' Hata varsa sessizce devam et
         End Try
     End Sub
 End Class
