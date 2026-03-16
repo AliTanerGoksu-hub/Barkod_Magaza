@@ -10331,9 +10331,22 @@ Public Class frm_Perakende_Satis
         Return query
     End Function
     Private Sub gorunum_kaydet()
-        XtraMessageBox.Show(Sorgu_sDil("Görünüm Kaydedildi", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Try
+            VGrid_baslik.SaveLayoutToRegistry("SOFTWARE\BusinessSmart\VIEW\MAGAZA\PERAKENDE\" & Trim(sFisTipi) & "\BASLIK\" & Me.Name.ToString & "")
+            VGrid_toplam.SaveLayoutToRegistry("SOFTWARE\BusinessSmart\VIEW\MAGAZA\PERAKENDE\" & Trim(sFisTipi) & "\TOPLAM\" & Me.Name.ToString & "")
+            GridView1.SaveLayoutToRegistry("SOFTWARE\BusinessSmart\VIEW\MAGAZA\PERAKENDE\" & Trim(sFisTipi) & "\HAREKET\" & Me.Name.ToString & "")
+        Catch ex As Exception
+        End Try
+        XtraMessageBox.Show(Sorgu_sDil("Gorunum Kaydedildi", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
     Private Sub gorunum_yukle()
+        ' Registry'den gorunum yukle
+        Try
+            VGrid_baslik.RestoreLayoutFromRegistry("SOFTWARE\BusinessSmart\VIEW\MAGAZA\PERAKENDE\" & Trim(sFisTipi) & "\BASLIK\" & Me.Name.ToString & "")
+            VGrid_toplam.RestoreLayoutFromRegistry("SOFTWARE\BusinessSmart\VIEW\MAGAZA\PERAKENDE\" & Trim(sFisTipi) & "\TOPLAM\" & Me.Name.ToString & "")
+            GridView1.RestoreLayoutFromRegistry("SOFTWARE\BusinessSmart\VIEW\MAGAZA\PERAKENDE\" & Trim(sFisTipi) & "\HAREKET\" & Me.Name.ToString & "")
+        Catch
+        End Try
         Try
             If nFontSize > 0 Then
                 Dim sayi As Single = nFontSize
