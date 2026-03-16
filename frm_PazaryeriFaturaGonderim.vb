@@ -252,7 +252,6 @@ Public Class frm_PazaryeriFaturaGonderim
                 "INNER JOIN tbStokFisiAciklamasi A ON M.nStokFisiID = A.nStokFisiID " &
                 "LEFT JOIN tbPazaryeriFaturaGonderim P ON M.nStokFisiID = P.nStokFisiID " &
                 "WHERE M.dteFisTarihi >= ? AND M.dteFisTarihi <= ? " &
-                "AND M.GibFaturaNo IS NOT NULL AND M.GibFaturaNo <> '' " &
                 "AND (A.sAciklama3 LIKE 'TY%' OR A.sAciklama3 LIKE 'HB%' OR A.sAciklama3 LIKE 'N11%' OR A.sAciklama3 LIKE 'PAZ%') " &
                 If(chkGonderilenleriGoster.Checked, "", "AND ISNULL(P.bGonderildi, 0) = 0 ") &
                 pazaryeriFiltre &
@@ -374,6 +373,7 @@ Public Class frm_PazaryeriFaturaGonderim
 
             Dim basarili As Integer = 0
             Dim basarisiz As Integer = 0
+            Dim gibGonderilen As Integer = 0
 
             For i As Integer = 0 To rows.Length - 1
                 Dim rowIndex As Integer = rows(i)
@@ -389,6 +389,47 @@ Public Class frm_PazaryeriFaturaGonderim
 
                 lblDurum.Text = "Gönderiliyor: " & siparisNo & " (" & pazaryeri & ") - " & (i + 1) & "/" & rows.Length
                 Application.DoEvents()
+
+                ' ===== GİB'E GÖNDERİLMEMİŞSE ÖNCE GİB'E GÖNDER =====
+                If String.IsNullOrEmpty(gibFaturaNo) Then
+                    lblDurum.Text = "GİB'e gönderiliyor: " & siparisNo & " - " & (i + 1) & "/" & rows.Length
+                    Application.DoEvents()
+                    Try
+                        Dim gibSonuc As String = mod_EFatura.FaturaGonder(nStokFisiID)
+                        If Not String.IsNullOrEmpty(gibSonuc) AndAlso Not gibSonuc.ToLower().Contains("hata") Then
+                            gibFaturaNo = gibSonuc
+                            gibGonderilen += 1
+                            Debug.WriteLine("[GIB] Fatura GİB'e gönderildi: " & gibFaturaNo)
+                            
+                            ' faturaGuid'i de güncellemek için veritabanından tekrar oku
+                            Try
+                                Using con As New OleDbConnection(connection)
+                                    con.Open()
+                                    Using cmd As New OleDbCommand("SELECT sEfaturaGuid, dteFisTarihi FROM tbStokFisiMaster WHERE nStokFisiID = ?", con)
+                                        cmd.Parameters.AddWithValue("@p0", nStokFisiID)
+                                        Using rdr = cmd.ExecuteReader()
+                                            If rdr.Read() Then
+                                                faturaGuid = If(IsDBNull(rdr("sEfaturaGuid")), "", rdr("sEfaturaGuid").ToString().Trim())
+                                                faturaTarihi = If(IsDBNull(rdr("dteFisTarihi")), DateTime.Now, CDate(rdr("dteFisTarihi")))
+                                            End If
+                                        End Using
+                                    End Using
+                                End Using
+                            Catch
+                            End Try
+                        Else
+                            Debug.WriteLine("[GIB] GİB gönderim hatası: " & If(gibSonuc, "boş yanıt"))
+                            basarisiz += 1
+                            KaydetGonderimSonucu(nStokFisiID, pazaryeri, siparisNo, "", "", False, "GİB'e gönderilemedi: " & If(gibSonuc, "boş yanıt"))
+                            Continue For
+                        End If
+                    Catch ex As Exception
+                        Debug.WriteLine("[GIB] GİB gönderim exception: " & ex.Message)
+                        basarisiz += 1
+                        KaydetGonderimSonucu(nStokFisiID, pazaryeri, siparisNo, "", "", False, "GİB gönderim hatası: " & ex.Message)
+                        Continue For
+                    End Try
+                End If
 
                 Dim sonuc As Boolean = False
                 Dim hataMesaji As String = ""
@@ -419,11 +460,14 @@ Public Class frm_PazaryeriFaturaGonderim
                 Application.DoEvents()
             Next
 
-            lblDurum.Text = "Tamamlandı! Başarılı: " & basarili & ", Başarısız: " & basarisiz
-            MessageBox.Show("Gönderim tamamlandı!" & vbCrLf & vbCrLf &
-                           "Başarılı: " & basarili & vbCrLf &
-                           "Başarısız: " & basarisiz,
-                           "Sonuç", MessageBoxButtons.OK,
+            lblDurum.Text = "Tamamlandı! Başarılı: " & basarili & ", Başarısız: " & basarisiz & If(gibGonderilen > 0, ", GİB'e gönderilen: " & gibGonderilen, "")
+            Dim mesaj As String = "Gönderim tamamlandı!" & vbCrLf & vbCrLf &
+                           "Pazaryerine Başarılı: " & basarili & vbCrLf &
+                           "Başarısız: " & basarisiz
+            If gibGonderilen > 0 Then
+                mesaj &= vbCrLf & "GİB'e otomatik gönderilen: " & gibGonderilen
+            End If
+            MessageBox.Show(mesaj, "Sonuç", MessageBoxButtons.OK,
                            If(basarisiz = 0, MessageBoxIcon.Information, MessageBoxIcon.Warning))
 
             ' Listeyi yenile
