@@ -507,25 +507,37 @@ Public Class frm_PazaryeriFaturaGonderim
                     Try
                         Dim gibSonuc As String = mod_EFatura.FaturaGonder(nStokFisiID)
                         If Not String.IsNullOrEmpty(gibSonuc) AndAlso Not gibSonuc.ToLower().Contains("hata") Then
-                            gibFaturaNo = gibSonuc
                             gibGonderilen += 1
                             
-                            ' faturaGuid'i de güncellemek için veritabanından tekrar oku
+                            ' GİB'e gönderim başarılı - veritabanından GibFaturaNo, sEfaturaGuid ve dteFisTarihi'yi oku
+                            ' FaturaGonder fonksiyonu veritabanını günceller, sonra biz okuyoruz
                             Try
                                 Using con As New OleDbConnection(connection)
                                     con.Open()
-                                    Using cmd As New OleDbCommand("SELECT sEfaturaGuid, dteFisTarihi FROM tbStokFisiMaster WHERE nStokFisiID = ?", con)
+                                    Using cmd As New OleDbCommand("SELECT GibFaturaNo, sEfaturaGuid, dteFisTarihi FROM tbStokFisiMaster WHERE nStokFisiID = ?", con)
                                         cmd.Parameters.AddWithValue("@p0", nStokFisiID)
                                         Using rdr = cmd.ExecuteReader()
                                             If rdr.Read() Then
+                                                ' GibFaturaNo'yu veritabanından al - bu gerçek fatura numarası
+                                                gibFaturaNo = If(IsDBNull(rdr("GibFaturaNo")), "", rdr("GibFaturaNo").ToString().Trim())
                                                 faturaGuid = If(IsDBNull(rdr("sEfaturaGuid")), "", rdr("sEfaturaGuid").ToString().Trim())
                                                 faturaTarihi = If(IsDBNull(rdr("dteFisTarihi")), DateTime.Now, CDate(rdr("dteFisTarihi")))
                                             End If
                                         End Using
                                     End Using
                                 End Using
-                            Catch
+                            Catch dbEx As Exception
+                                basarisiz += 1
+                                KaydetGonderimSonucu(nStokFisiID, pazaryeri, siparisNo, "", "", False, "GİB sonrası DB okuma hatası: " & dbEx.Message)
+                                Continue For
                             End Try
+                            
+                            ' GibFaturaNo hala boş veya "0" ise, GİB'e gönderim başarısız demektir
+                            If String.IsNullOrEmpty(gibFaturaNo) OrElse gibFaturaNo.Trim() = "" OrElse gibFaturaNo.Trim() = "0" Then
+                                basarisiz += 1
+                                KaydetGonderimSonucu(nStokFisiID, pazaryeri, siparisNo, "", "", False, "GİB fatura numarası oluşmadı")
+                                Continue For
+                            End If
                         Else
                             basarisiz += 1
                             KaydetGonderimSonucu(nStokFisiID, pazaryeri, siparisNo, "", "", False, "GİB'e gönderilemedi: " & If(gibSonuc, "boş yanıt"))
