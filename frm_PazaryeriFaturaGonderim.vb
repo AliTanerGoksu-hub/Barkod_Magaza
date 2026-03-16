@@ -1646,6 +1646,9 @@ Public Class frm_PazaryeriFaturaGonderim
         If Not String.IsNullOrEmpty(connection) Then
             LoadPazaryeriApis()
             ListeleFaturalar()
+            
+            ' Form açılışında teslim durumlarını otomatik güncelle
+            TeslimDurumlariniGuncelle()
         Else
             lblDurum.Text = "Hata: Veritabanı bağlantısı yok!"
         End If
