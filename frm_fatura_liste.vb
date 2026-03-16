@@ -7653,15 +7653,15 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
         Dim dteFisTarihi As DateTime = CType(drMaster("dteFisTarihi"), DateTime)
         
         ' Ek maliyet bilgilerini al
-        Dim lEkmaliyet1 As Decimal = sorgu_sayi(drMaster("lEkmaliyet1"), 0)
-        Dim lEkmaliyet3 As Decimal = sorgu_sayi(drMaster("lEkmaliyet3"), 0)
-        Dim lEkmaliyet4 As Decimal = sorgu_sayi(drMaster("lEkmaliyet4"), 0)
-        Dim lNetTutar As Decimal = sorgu_sayi(drMaster("lNetTutar"), 0)
+        Dim lEkmaliyet1 As Decimal = KeyCode.sorgu_sayi(drMaster("lEkmaliyet1"), 0)
+        Dim lEkmaliyet3 As Decimal = KeyCode.sorgu_sayi(drMaster("lEkmaliyet3"), 0)
+        Dim lEkmaliyet4 As Decimal = KeyCode.sorgu_sayi(drMaster("lEkmaliyet4"), 0)
+        Dim lNetTutar As Decimal = KeyCode.sorgu_sayi(drMaster("lNetTutar"), 0)
         
         ' Alış fiyatı KDV dahil mi kontrolü (tbFiyatTipi tablosundan)
         Dim bAlisKdvDahil As Boolean = False
         Try
-            Using cmdKdv As New OleDbCommand("SELECT bKdvDahilmi FROM tbFiyatTipi WHERE sFiyatTipi = '" & sFiyatA & "'", con)
+            Using cmdKdv As New OleDbCommand("SELECT bKdvDahilmi FROM tbFiyatTipi WHERE sFiyatTipi = '" & KeyCode.sFiyatA & "'", con)
                 Dim result = cmdKdv.ExecuteScalar()
                 If result IsNot Nothing AndAlso result IsNot DBNull.Value Then
                     bAlisKdvDahil = Convert.ToBoolean(result)
@@ -7680,16 +7680,16 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
         
         For Each drDetay As DataRow In dsFaturaDetay.Tables(0).Rows
             Try
-                Dim nMasrafSatiri As Integer = sorgu_sayi(drDetay("nMasrafSatiri"), 0)
-                Dim lBrutFiyat As Decimal = sorgu_sayi(drDetay("lBrutFiyat"), 0)
+                Dim nMasrafSatiri As Integer = KeyCode.sorgu_sayi(drDetay("nMasrafSatiri"), 0)
+                Dim lBrutFiyat As Decimal = KeyCode.sorgu_sayi(drDetay("lBrutFiyat"), 0)
                 
                 If nMasrafSatiri = 0 And lBrutFiyat > 0.01 Then
                     Dim nStokID As Long = CLng(drDetay("nStokID"))
-                    Dim lGirisMiktar1 As Decimal = sorgu_sayi(drDetay("lGirisMiktar1"), 1)
-                    Dim lGirisTutar As Decimal = sorgu_sayi(drDetay("lGirisTutar"), 0)
-                    Dim nKdvOrani As Decimal = sorgu_sayi(drDetay("nKdvOrani"), 0)
-                    Dim lIlaveMaliyetTutar As Decimal = sorgu_sayi(drDetay("lIlaveMaliyetTutar"), 0)
-                    Dim lEkIlaveMaliyetTutar As Decimal = sorgu_sayi(drDetay("lEkIlaveMaliyetTutar"), 0)
+                    Dim lGirisMiktar1 As Decimal = KeyCode.sorgu_sayi(drDetay("lGirisMiktar1"), 1)
+                    Dim lGirisTutar As Decimal = KeyCode.sorgu_sayi(drDetay("lGirisTutar"), 0)
+                    Dim nKdvOrani As Decimal = KeyCode.sorgu_sayi(drDetay("nKdvOrani"), 0)
+                    Dim lIlaveMaliyetTutar As Decimal = KeyCode.sorgu_sayi(drDetay("lIlaveMaliyetTutar"), 0)
+                    Dim lEkIlaveMaliyetTutar As Decimal = KeyCode.sorgu_sayi(drDetay("lEkIlaveMaliyetTutar"), 0)
                     
                     ' Stok bilgilerini al
                     Dim dsStok As New DataSet()
@@ -7700,14 +7700,14 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                     
                     If dsStok.Tables(0).Rows.Count > 0 Then
                         Dim drStok As DataRow = dsStok.Tables(0).Rows(0)
-                        Dim nStokKdvOrani As Decimal = sorgu_sayi(drStok("nKdvOrani"), 0)
+                        Dim nStokKdvOrani As Decimal = KeyCode.sorgu_sayi(drStok("nKdvOrani"), 0)
                         
                         ' Maliyet hesapla
                         Dim maliyet As Decimal = lGirisTutar / lGirisMiktar1
                         
                         ' KDV hesaplaması
                         If nKdvOrani <> nStokKdvOrani Then
-                            If bKdvKontrolluMaliyet = True Then
+                            If KeyCode.bKdvKontrolluMaliyet = True Then
                                 maliyet = maliyet * ((nStokKdvOrani + 100) / 100)
                             Else
                                 maliyet = maliyet * ((nKdvOrani + 100) / 100)
@@ -7730,7 +7730,7 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                         
                         ' İkinci KDV hesaplaması
                         If nKdvOrani <> nStokKdvOrani Then
-                            If bKdvKontrolluMaliyet = True Then
+                            If KeyCode.bKdvKontrolluMaliyet = True Then
                                 maliyet = maliyet * ((nStokKdvOrani + 100) / 100)
                             Else
                                 maliyet = maliyet * ((nKdvOrani + 100) / 100)
@@ -7751,28 +7751,28 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                         ' Eğer bAlisKdvDahil = True ise, fiyat zaten KDV dahil, ekleme yapma
                         
                         ' Mevcut fiyatları sorgula
-                        Dim fiyatMaliyet As Decimal = sorgu_stok_fiyat_local(sFiyatM, nStokID, "")
-                        Dim fiyatAlis As Decimal = sorgu_stok_fiyat_local(sFiyatA, nStokID, "")
+                        Dim fiyatMaliyet As Decimal = sorgu_stok_fiyat_local(KeyCode.sFiyatM, nStokID, "")
+                        Dim fiyatAlis As Decimal = sorgu_stok_fiyat_local(KeyCode.sFiyatA, nStokID, "")
                         
-                        Dim nFiyatlandirma As Integer = sorgu_sayi(drStok("nFiyatlandirma"), 0)
+                        Dim nFiyatlandirma As Integer = KeyCode.sorgu_sayi(drStok("nFiyatlandirma"), 0)
                         Dim sModel As String = Trim(drStok("sModel").ToString())
                         Dim sRenk As String = Trim(drStok("sRenk").ToString())
                         Dim sBeden As String = Trim(drStok("sBeden").ToString())
                         
                         ' Maliyetleri güncelle
                         If fiyatMaliyet = 0 Then
-                            ekle_fiyat_local(nStokID, sFiyatM, maliyet, dteFisTarihi, kullaniciadi)
+                            ekle_fiyat_local(nStokID, KeyCode.sFiyatM, maliyet, dteFisTarihi, KeyCode.kullaniciadi)
                             guncellenenSatir += 1
                         ElseIf fiyatMaliyet <> maliyet Then
-                            TopluMaliyet_FiyatDuzelt(con, nFiyatlandirma, sModel, sRenk, sBeden, sFiyatM, maliyet, dteFisTarihi, nStokID)
+                            TopluMaliyet_FiyatDuzelt(con, nFiyatlandirma, sModel, sRenk, sBeden, KeyCode.sFiyatM, maliyet, dteFisTarihi, nStokID)
                             guncellenenSatir += 1
                         End If
                         
                         ' Alışları güncelle
                         If fiyatAlis = 0 Then
-                            ekle_fiyat_local(nStokID, sFiyatA, alis, dteFisTarihi, kullaniciadi)
+                            ekle_fiyat_local(nStokID, KeyCode.sFiyatA, alis, dteFisTarihi, KeyCode.kullaniciadi)
                         ElseIf fiyatAlis <> alis Then
-                            TopluMaliyet_FiyatDuzelt(con, nFiyatlandirma, sModel, sRenk, sBeden, sFiyatA, alis, dteFisTarihi, nStokID)
+                            TopluMaliyet_FiyatDuzelt(con, nFiyatlandirma, sModel, sRenk, sBeden, KeyCode.sFiyatA, alis, dteFisTarihi, nStokID)
                         End If
                     End If
                 End If
