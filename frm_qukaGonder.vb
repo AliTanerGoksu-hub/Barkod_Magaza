@@ -3377,28 +3377,50 @@ Public Class frm_qukaGonder
                 Dim varsayilanIl As String = GetVarsayilanIl(conn)
                 Log("DEBUG", "AddOrder", $"Varsayilan il: {varsayilanIl}")
                 
-                Dim il As String = If(Not String.IsNullOrEmpty(cityName), GetIlName(cityName, conn), varsayilanIl)
+                ' ===== YABANCI ÜLKE KONTROLÜ =====
+                ' Eğer ülke Türkiye değilse, ham şehir adını doğrudan kullan
+                ' SP'de otomatik olarak tbUlke ve tbIl tablolarına eklenecek
+                Dim turkiyeMi As Boolean = (ulke.ToUpper(New CultureInfo("tr-TR")) = "TÜRKİYE" OrElse 
+                                            ulke.ToUpper(New CultureInfo("tr-TR")) = "TURKIYE" OrElse 
+                                            ulke.ToUpper(New CultureInfo("tr-TR")) = "TURKEY" OrElse
+                                            ulke.ToUpper(New CultureInfo("tr-TR")) = "TR")
                 
-                ' GetIlName null veya boş döndüyse varsayılanı kullan
-                If String.IsNullOrEmpty(il) Then
-                    il = varsayilanIl
-                End If
-
-                ' İl validasyonu: tbIl tablosunda var mı kontrol et
-                If String.IsNullOrEmpty(il) OrElse il = "Bilinmeyen" OrElse il = "00" Then
-                    Log("WARNING", "AddOrder", $"Gecersiz sehir: cityName=[{cityName}], orderID={orderID} - Varsayilan: {varsayilanIl}")
-                    il = varsayilanIl
-                Else
-                    ' İlin veritabanında gerçekten var olduğunu kontrol et
-                    Dim checkIlCmd As New OleDb.OleDbCommand("SELECT COUNT(*) FROM tbIl WHERE sIl = ?", conn)
-                    checkIlCmd.Parameters.AddWithValue("?", il)
-                    Dim ilExists As Integer = CInt(checkIlCmd.ExecuteScalar())
-
-                    If ilExists = 0 Then
-                        Log("WARNING", "AddOrder", $"Il tbIl tablosunda bulunamadi: [{il}], orderID={orderID} - Varsayilan: {varsayilanIl}")
+                Dim il As String = ""
+                
+                If turkiyeMi Then
+                    ' Türkiye ise mevcut mantığı kullan - tbIl tablosunda ara
+                    il = If(Not String.IsNullOrEmpty(cityName), GetIlName(cityName, conn), varsayilanIl)
+                    
+                    ' GetIlName null veya boş döndüyse varsayılanı kullan
+                    If String.IsNullOrEmpty(il) Then
                         il = varsayilanIl
                     End If
-                    ' NOT: ToTurkishTitleCase kullanmıyoruz çünkü veritabanındaki değeri aynen kullanmalıyız
+
+                    ' İl validasyonu: tbIl tablosunda var mı kontrol et
+                    If String.IsNullOrEmpty(il) OrElse il = "Bilinmeyen" OrElse il = "00" Then
+                        Log("WARNING", "AddOrder", $"Gecersiz sehir: cityName=[{cityName}], orderID={orderID} - Varsayilan: {varsayilanIl}")
+                        il = varsayilanIl
+                    Else
+                        ' İlin veritabanında gerçekten var olduğunu kontrol et
+                        Dim checkIlCmd As New OleDb.OleDbCommand("SELECT COUNT(*) FROM tbIl WHERE sIl = ?", conn)
+                        checkIlCmd.Parameters.AddWithValue("?", il)
+                        Dim ilExists As Integer = CInt(checkIlCmd.ExecuteScalar())
+
+                        If ilExists = 0 Then
+                            Log("WARNING", "AddOrder", $"Il tbIl tablosunda bulunamadi: [{il}], orderID={orderID} - Varsayilan: {varsayilanIl}")
+                            il = varsayilanIl
+                        End If
+                        ' NOT: ToTurkishTitleCase kullanmıyoruz çünkü veritabanındaki değeri aynen kullanmalıyız
+                    End If
+                    Log("INFO", "AddOrder", $"🇹🇷 TÜRKİYE SİPARİŞİ - İl: [{il}] (tbIl'den alındı)")
+                Else
+                    ' YABANCI ÜLKE - Ham şehir adını doğrudan kullan, tbIl araması YAPMA
+                    ' SP'de otomatik olarak tbUlke ve tbIl tablolarına eklenecek
+                    il = If(Not String.IsNullOrEmpty(cityName), ToTurkishTitleCase(cityName.Trim()), "")
+                    If String.IsNullOrEmpty(il) Then
+                        il = "Bilinmeyen"
+                    End If
+                    Log("INFO", "AddOrder", $"🌍 YABANCI ÜLKE SİPARİŞİ - Ülke: [{ulke}], Ham Şehir: [{il}] (doğrudan SP'ye gönderilecek)")
                 End If
                 
                 ' ===== ILCE: ÖNCELİKLE FATURA BİLGİLERİNDEN AL =====
