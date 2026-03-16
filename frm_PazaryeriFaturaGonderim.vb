@@ -297,6 +297,9 @@ Public Class frm_PazaryeriFaturaGonderim
                 If(chkSadeceTeslimEdilenler.Checked, "AND (ISNULL(M.sTeslimDurumu, '') LIKE '%Teslim Edildi%' OR ISNULL(M.sTeslimDurumu, '') LIKE '%Delivered%') ", "") &
                 pazaryeriFiltre &
                 "ORDER BY ISNULL(P.bGonderildi, 0) ASC, M.dteFisTarihi DESC"
+            
+            Debug.WriteLine("[SQL] Sadece Teslim Edilenler: " & chkSadeceTeslimEdilenler.Checked.ToString())
+            Debug.WriteLine("[SQL] Query: " & sql)
 
             Using con As New OleDbConnection(connection)
                 con.Open()
@@ -1715,6 +1718,7 @@ Public Class frm_PazaryeriFaturaGonderim
     ''' Sadece Teslim Edilenler checkbox değiştiğinde listeyi yenile
     ''' </summary>
     Private Sub chkSadeceTeslimEdilenler_CheckedChanged(sender As Object, e As EventArgs) Handles chkSadeceTeslimEdilenler.CheckedChanged
+        Debug.WriteLine("[CHECKBOX] Sadece Teslim Edilenler: " & chkSadeceTeslimEdilenler.Checked.ToString())
         ListeleFaturalar()
     End Sub
     
