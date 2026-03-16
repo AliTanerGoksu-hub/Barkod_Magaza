@@ -7638,9 +7638,12 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
     Private Function TopluMaliyetGuncelle_Fatura(ByVal con As OleDbConnection, ByVal nStokFisiID As Long, ByVal sFisTipi As String) As Integer
         Dim guncellenenSatir As Integer = 0
         
-        ' Fatura master bilgilerini al
+        ' Fatura master bilgilerini al (lEkMaliyet4 subquery ile hesaplanır)
         Dim dsFaturaMaster As New DataSet()
-        Using cmdMaster As New OleDbCommand("SELECT * FROM tbStokFisiMaster WHERE nStokFisiID = " & nStokFisiID, con)
+        Dim sqlMaster As String = "SELECT *, " & _
+            "(SELECT ISNULL(SUM(lTutar), 0) FROM tbStokFisiEkMaliyet WHERE nStokFisiID = tbStokFisiMaster.nStokFisiID AND nIslemID = 0) AS lEkMaliyet4 " & _
+            "FROM tbStokFisiMaster WHERE nStokFisiID = " & nStokFisiID
+        Using cmdMaster As New OleDbCommand(sqlMaster, con)
             Dim daMaster As New OleDbDataAdapter(cmdMaster)
             daMaster.Fill(dsFaturaMaster, "Master")
         End Using
@@ -7655,7 +7658,7 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
         ' Ek maliyet bilgilerini al
         Dim lEkmaliyet1 As Decimal = KeyCode.sorgu_sayi(drMaster("lEkmaliyet1"), 0)
         Dim lEkmaliyet3 As Decimal = KeyCode.sorgu_sayi(drMaster("lEkmaliyet3"), 0)
-        Dim lEkmaliyet4 As Decimal = KeyCode.sorgu_sayi(drMaster("lEkmaliyet4"), 0)
+        Dim lEkmaliyet4 As Decimal = KeyCode.sorgu_sayi(drMaster("lEkMaliyet4"), 0)
         Dim lNetTutar As Decimal = KeyCode.sorgu_sayi(drMaster("lNetTutar"), 0)
         
         ' Alış fiyatı KDV dahil mi kontrolü (tbFiyatTipi tablosundan)
@@ -7671,9 +7674,12 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
             bAlisKdvDahil = False
         End Try
         
-        ' Fatura detaylarını al
+        ' Fatura detaylarını al (lEkIlaveMaliyetTutar subquery ile hesaplanır)
         Dim dsFaturaDetay As New DataSet()
-        Using cmdDetay As New OleDbCommand("SELECT * FROM tbStokFisiDetayi WHERE nStokFisiID = " & nStokFisiID, con)
+        Dim sqlDetay As String = "SELECT *, " & _
+            "(SELECT ISNULL(SUM(lTutar), 0) FROM tbStokFisiEkMaliyet WHERE nStokFisiID = tbStokFisiDetayi.nStokFisiID AND nIslemID = tbStokFisiDetayi.nIslemID) AS lEkIlaveMaliyetTutar " & _
+            "FROM tbStokFisiDetayi WHERE nStokFisiID = " & nStokFisiID
+        Using cmdDetay As New OleDbCommand(sqlDetay, con)
             Dim daDetay As New OleDbDataAdapter(cmdDetay)
             daDetay.Fill(dsFaturaDetay, "Detay")
         End Using
