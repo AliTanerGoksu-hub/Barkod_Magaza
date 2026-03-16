@@ -32,6 +32,7 @@ Public Class frm_PazaryeriFaturaGonderim
     Private WithEvents ProgressBar1 As ProgressBarControl
     Private WithEvents chkTumunuSec As CheckEdit
     Private WithEvents chkGonderilenleriGoster As CheckEdit
+    Private WithEvents chkSadeceTeslimEdilenler As CheckEdit
     Private WithEvents PanelControl1 As PanelControl
     Private WithEvents GroupControl1 As GroupControl
     
@@ -152,13 +153,21 @@ Public Class frm_PazaryeriFaturaGonderim
         chkGonderilenleriGoster.Location = New Point(120, 50)
         chkGonderilenleriGoster.Size = New Size(180, 25)
         PanelControl1.Controls.Add(chkGonderilenleriGoster)
+        
+        ' Sadece Teslim Edilenler
+        chkSadeceTeslimEdilenler = New CheckEdit()
+        chkSadeceTeslimEdilenler.Text = "Sadece Teslim Edilenler"
+        chkSadeceTeslimEdilenler.Location = New Point(310, 50)
+        chkSadeceTeslimEdilenler.Size = New Size(180, 25)
+        chkSadeceTeslimEdilenler.Checked = True  ' Default olarak işaretli
+        PanelControl1.Controls.Add(chkSadeceTeslimEdilenler)
 
         ' Durum Label
         lblDurum = New LabelControl()
         lblDurum.Text = "Hazır"
-        lblDurum.Location = New Point(650, 50)
+        lblDurum.Location = New Point(500, 50)
         lblDurum.AutoSizeMode = LabelAutoSizeMode.None
-        lblDurum.Size = New Size(400, 20)
+        lblDurum.Size = New Size(500, 20)
         PanelControl1.Controls.Add(lblDurum)
 
         ' Grid
@@ -285,6 +294,7 @@ Public Class frm_PazaryeriFaturaGonderim
                 "WHERE M.dteFisTarihi >= ? AND M.dteFisTarihi <= ? " &
                 "AND (A.sAciklama3 LIKE 'TY%' OR A.sAciklama3 LIKE 'HB%' OR A.sAciklama3 LIKE 'N11%' OR A.sAciklama3 LIKE 'PAZ%') " &
                 If(chkGonderilenleriGoster.Checked, "", "AND ISNULL(P.bGonderildi, 0) = 0 ") &
+                If(chkSadeceTeslimEdilenler.Checked, "AND (ISNULL(M.sTeslimDurumu, '') LIKE '%Teslim Edildi%' OR ISNULL(M.sTeslimDurumu, '') LIKE '%Delivered%') ", "") &
                 pazaryeriFiltre &
                 "ORDER BY ISNULL(P.bGonderildi, 0) ASC, M.dteFisTarihi DESC"
 
@@ -1652,6 +1662,13 @@ Public Class frm_PazaryeriFaturaGonderim
         Else
             lblDurum.Text = "Hata: Veritabanı bağlantısı yok!"
         End If
+    End Sub
+    
+    ''' <summary>
+    ''' Sadece Teslim Edilenler checkbox değiştiğinde listeyi yenile
+    ''' </summary>
+    Private Sub chkSadeceTeslimEdilenler_CheckedChanged(sender As Object, e As EventArgs) Handles chkSadeceTeslimEdilenler.CheckedChanged
+        ListeleFaturalar()
     End Sub
     
     ' ===== CONTEXT MENU EVENT HANDLERS =====
