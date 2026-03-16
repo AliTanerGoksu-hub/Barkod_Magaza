@@ -551,23 +551,20 @@ Public Class frm_PazaryeriFaturaGonderim
             req.Timeout = 30000
 
             ' Body - Trendyol fatura linki formatı
-            ' Micro export siparişleri için invoiceNumber ve invoiceDateTime zorunlu!
-            Dim jsonBody As String
-            If isMicroExport Then
-                ' Micro export için ek alanlar gerekli
-                ' invoiceDateTime: Unix timestamp (saniye cinsinden)
-                Dim invoiceDateTime As Long = CLng((faturaTarihi.ToUniversalTime() - New DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds)
-                jsonBody = "{" &
-                    """shipmentPackageId"": """ & shipmentPackageId & """," &
-                    """invoiceLink"": """ & invoiceLink.Replace("""", "\""") & """," &
-                    """invoiceNumber"": """ & gibFaturaNo & """," &
-                    """invoiceDateTime"": " & invoiceDateTime.ToString() &
-                    "}"
-                Debug.WriteLine("[TY] MICRO EXPORT - invoiceNumber: " & gibFaturaNo & ", invoiceDateTime: " & invoiceDateTime.ToString())
-            Else
-                ' Normal sipariş için sadece link ve packageId
-                jsonBody = "{""shipmentPackageId"": """ & shipmentPackageId & """, ""invoiceLink"": """ & invoiceLink.Replace("""", "\""") & """}"
-            End If
+            ' invoiceNumber ve invoiceDateTime: Micro export için ZORUNLU, normal siparişlerde de gönderilebilir
+            ' Her zaman gönderiyoruz çünkü mikro ihracat tespiti zor olabiliyor
+            Dim invoiceDateTime As Long = CLng((faturaTarihi.ToUniversalTime() - New DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds)
+            
+            ' shipmentPackageId Long olmalı (tırnak olmadan)
+            Dim jsonBody As String = "{" &
+                """shipmentPackageId"": " & shipmentPackageId & "," &
+                """invoiceLink"": """ & invoiceLink.Replace("""", "\""") & """," &
+                """invoiceNumber"": """ & gibFaturaNo & """," &
+                """invoiceDateTime"": " & invoiceDateTime.ToString() &
+                "}"
+            
+            Debug.WriteLine("[TY] isMicroExport: " & isMicroExport.ToString())
+            Debug.WriteLine("[TY] invoiceNumber: " & gibFaturaNo & ", invoiceDateTime: " & invoiceDateTime.ToString())
             Debug.WriteLine("[TY] Body: " & jsonBody)
             
             Dim data As Byte() = Encoding.UTF8.GetBytes(jsonBody)
