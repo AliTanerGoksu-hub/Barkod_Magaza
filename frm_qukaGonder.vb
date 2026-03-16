@@ -3137,6 +3137,88 @@ Public Class frm_qukaGonder
                 ' Bu düzeltme, siparişlerin tekrar tekrar işlenmesini önler
                 If IsOrderAlreadyProcessed(orderID, conn, siparisKodu) Then
                     Log("INFO", "AddOrder", $"Sipariş zaten işlenmiş: orderID={orderID}, siparisKodu={siparisKodu}")
+                    
+                    ' ===== MEVCUT SİPARİŞ İÇİN İHRACAT BİLGİLERİNİ GÜNCELLE =====
+                    ' Sipariş daha önce kaydedilmiş olsa bile, yurt dışı ise ihracat bilgilerini güncelle
+                    Try
+                        ' Ülke bilgisini al
+                        Dim rawUlke As String = "Turkiye"
+                        If custInvoice IsNot Nothing AndAlso custInvoice("country") IsNot Nothing Then
+                            rawUlke = Convert.ToString(custInvoice("country"))
+                        ElseIf custDelivery IsNot Nothing AndAlso custDelivery("country") IsNot Nothing Then
+                            rawUlke = Convert.ToString(custDelivery("country"))
+                        ElseIf cust IsNot Nothing AndAlso cust("country") IsNot Nothing Then
+                            rawUlke = Convert.ToString(cust("country"))
+                        End If
+                        Dim ulkeTmp As String = If(ToTurkishTitleCase(Trunc(If(DecodeApiData(rawUlke), "Turkiye"), 20)), "Turkiye")
+                        
+                        ' Türkiye mi kontrol et
+                        Dim turkiyeMiTmp As Boolean = (ulkeTmp.ToUpper(New CultureInfo("tr-TR")) = "TÜRKİYE" OrElse 
+                                                    ulkeTmp.ToUpper(New CultureInfo("tr-TR")) = "TURKIYE" OrElse 
+                                                    ulkeTmp.ToUpper(New CultureInfo("tr-TR")) = "TURKEY" OrElse
+                                                    ulkeTmp.ToUpper(New CultureInfo("tr-TR")) = "TR")
+                        
+                        If Not turkiyeMiTmp Then
+                            Log("INFO", "AddOrder", $"🌍 MEVCUT YURT DIŞI SİPARİŞ - İhracat bilgileri güncelleniyor: {ulkeTmp}")
+                            
+                            ' Mevcut siparişin nStokFisiID'sini bul
+                            Dim existingStokFisiID As Integer = 0
+                            Using findCmd As New OleDb.OleDbCommand("SELECT TOP 1 nStokFisiID FROM tbStokFisiMaster WHERE sAciklama3 = ?", conn)
+                                findCmd.Parameters.AddWithValue("?", siparisKodu)
+                                If conn.State <> ConnectionState.Open Then conn.Open()
+                                Dim result = findCmd.ExecuteScalar()
+                                If result IsNot Nothing AndAlso result IsNot DBNull.Value Then
+                                    existingStokFisiID = Convert.ToInt32(result)
+                                End If
+                            End Using
+                            
+                            If existingStokFisiID > 0 Then
+                                ' Adres bilgilerini al
+                                Dim adresTmp As String = ""
+                                Dim ilTmp As String = ""
+                                If custDelivery IsNot Nothing Then
+                                    adresTmp = Convert.ToString(custDelivery("address1")) & " " & Convert.ToString(custDelivery("address2"))
+                                    ilTmp = Convert.ToString(custDelivery("city"))
+                                End If
+                                
+                                Dim ulkeKoduTmp As String = GetUlkeKodu(ulkeTmp, conn)
+                                
+                                ' İhracat bilgilerini güncelle
+                                Using updateCmd As New OleDb.OleDbCommand()
+                                    updateCmd.Connection = conn
+                                    updateCmd.CommandText = "UPDATE tbStokFisiMaster SET " &
+                                        "bFaturaTipi = 'İhracat Faturası', " &
+                                        "sKdvMuafiyetKodu = '301', " &
+                                        "sTeslimatAdresi = ?, " &
+                                        "sTeslimatSehir = ?, " &
+                                        "sTeslimatUlke = ?, " &
+                                        "sTeslimatUlkeKodu = ?, " &
+                                        "sIncotermsKodu = 'DAP', " &
+                                        "nTasimaSekli = 3 " &
+                                        "WHERE nStokFisiID = ?"
+                                    
+                                    updateCmd.Parameters.Add("?", OleDbType.VarWChar, 255).Value = If(String.IsNullOrEmpty(adresTmp), "", adresTmp.Trim())
+                                    updateCmd.Parameters.Add("?", OleDbType.VarWChar, 100).Value = If(String.IsNullOrEmpty(ilTmp), "", ilTmp)
+                                    updateCmd.Parameters.Add("?", OleDbType.VarWChar, 100).Value = If(String.IsNullOrEmpty(ulkeTmp), "", ulkeTmp)
+                                    updateCmd.Parameters.Add("?", OleDbType.VarWChar, 10).Value = If(String.IsNullOrEmpty(ulkeKoduTmp), "XX", ulkeKoduTmp)
+                                    updateCmd.Parameters.AddWithValue("?", existingStokFisiID)
+                                    
+                                    Dim rowsUpdated As Integer = updateCmd.ExecuteNonQuery()
+                                    If rowsUpdated > 0 Then
+                                        Log("SUCCESS", "AddOrder", $"✅ MEVCUT SİPARİŞ İHRACAT BİLGİLERİ GÜNCELLENDİ! nStokFisiID: {existingStokFisiID}")
+                                    Else
+                                        Log("WARNING", "AddOrder", $"⚠️ Mevcut sipariş ihracat bilgileri güncellenemedi! nStokFisiID: {existingStokFisiID}")
+                                    End If
+                                End Using
+                            Else
+                                Log("WARNING", "AddOrder", $"⚠️ Mevcut sipariş için nStokFisiID bulunamadı: {siparisKodu}")
+                            End If
+                        End If
+                    Catch exMevcut As Exception
+                        Log("ERROR", "AddOrder", $"❌ Mevcut sipariş ihracat güncelleme hatası: {exMevcut.Message}")
+                    End Try
+                    ' ===== MEVCUT SİPARİŞ İHRACAT GÜNCELLEME SONU =====
+                    
                     Return
                 End If
                 Dim randStr As String = Guid.NewGuid().ToString()
