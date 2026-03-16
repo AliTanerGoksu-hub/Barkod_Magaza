@@ -10290,146 +10290,135 @@ Public Class frm_qukaGonder
                 Log("DEBUG", "GetUlkeKodu", $"Veritabanı sorgusu başarısız: {dbEx.Message}")
             End Try
             
-            ' Bilinen ülke kodları sözlüğü (yaygın ülkeler)
-            Dim ulkeKodlari As New Dictionary(Of String, String)(StringComparer.OrdinalIgnoreCase) From {
+            ' Ülke adını büyük harfe çevir (case-insensitive karşılaştırma için)
+            Dim ulkeUpper As String = ulkeAdi.ToUpper(New System.Globalization.CultureInfo("tr-TR"))
+            
+            ' Yaygın ülke kodları - Select Case ile hızlı eşleşme
+            Select Case ulkeUpper
                 ' Avrupa
-                {"Germany", "DE"}, {"Deutschland", "DE"}, {"Almanya", "DE"},
-                {"France", "FR"}, {"Frankreich", "FR"}, {"Fransa", "FR"},
-                {"Italy", "IT"}, {"Italien", "IT"}, {"İtalya", "IT"},
-                {"Spain", "ES"}, {"Spanien", "ES"}, {"İspanya", "ES"},
-                {"United Kingdom", "GB"}, {"UK", "GB"}, {"England", "GB"}, {"İngiltere", "GB"}, {"Birleşik Krallık", "GB"},
-                {"Netherlands", "NL"}, {"Holland", "NL"}, {"Hollanda", "NL"},
-                {"Belgium", "BE"}, {"Belgien", "BE"}, {"Belçika", "BE"},
-                {"Austria", "AT"}, {"Österreich", "AT"}, {"Avusturya", "AT"},
-                {"Switzerland", "CH"}, {"Schweiz", "CH"}, {"İsviçre", "CH"},
-                {"Poland", "PL"}, {"Polen", "PL"}, {"Polonya", "PL"},
-                {"Sweden", "SE"}, {"Schweden", "SE"}, {"İsveç", "SE"},
-                {"Norway", "NO"}, {"Norwegen", "NO"}, {"Norveç", "NO"},
-                {"Denmark", "DK"}, {"Dänemark", "DK"}, {"Danimarka", "DK"},
-                {"Finland", "FI"}, {"Finnland", "FI"}, {"Finlandiya", "FI"},
-                {"Greece", "GR"}, {"Griechenland", "GR"}, {"Yunanistan", "GR"},
-                {"Portugal", "PT"}, {"Portekiz", "PT"},
-                {"Ireland", "IE"}, {"Irland", "IE"}, {"İrlanda", "IE"},
-                {"Czech Republic", "CZ"}, {"Czechia", "CZ"}, {"Tschechien", "CZ"}, {"Çekya", "CZ"}, {"Çek Cumhuriyeti", "CZ"},
-                {"Hungary", "HU"}, {"Ungarn", "HU"}, {"Macaristan", "HU"},
-                {"Romania", "RO"}, {"Rumänien", "RO"}, {"Romanya", "RO"},
-                {"Bulgaria", "BG"}, {"Bulgarien", "BG"}, {"Bulgaristan", "BG"},
-                {"Croatia", "HR"}, {"Kroatien", "HR"}, {"Hırvatistan", "HR"},
-                {"Slovakia", "SK"}, {"Slowakei", "SK"}, {"Slovakya", "SK"},
-                {"Slovenia", "SI"}, {"Slowenien", "SI"}, {"Slovenya", "SI"},
-                {"Luxembourg", "LU"}, {"Luxemburg", "LU"}, {"Lüksemburg", "LU"},
-                {"Estonia", "EE"}, {"Estland", "EE"}, {"Estonya", "EE"},
-                {"Latvia", "LV"}, {"Lettland", "LV"}, {"Letonya", "LV"},
-                {"Lithuania", "LT"}, {"Litauen", "LT"}, {"Litvanya", "LT"},
-                {"Cyprus", "CY"}, {"Zypern", "CY"}, {"Kıbrıs", "CY"},
-                {"Malta", "MT"},
-                {"Iceland", "IS"}, {"Island", "IS"}, {"İzlanda", "IS"},
-                {"Serbia", "RS"}, {"Serbien", "RS"}, {"Sırbistan", "RS"},
-                {"Montenegro", "ME"}, {"Karadağ", "ME"},
-                {"North Macedonia", "MK"}, {"Nordmazedonien", "MK"}, {"Kuzey Makedonya", "MK"},
-                {"Albania", "AL"}, {"Albanien", "AL"}, {"Arnavutluk", "AL"},
-                {"Bosnia", "BA"}, {"Bosnien", "BA"}, {"Bosna", "BA"}, {"Bosna Hersek", "BA"},
-                {"Kosovo", "XK"}, {"Kosova", "XK"},
-                {"Moldova", "MD"}, {"Moldawien", "MD"}, {"Moldavya", "MD"},
-                {"Ukraine", "UA"}, {"Ukrayna", "UA"},
-                {"Belarus", "BY"}, {"Weißrussland", "BY"}, {"Belarus", "BY"},
-                {"Russia", "RU"}, {"Russland", "RU"}, {"Rusya", "RU"},
+                Case "GERMANY", "DEUTSCHLAND", "ALMANYA" : Return "DE"
+                Case "FRANCE", "FRANKREICH", "FRANSA" : Return "FR"
+                Case "ITALY", "ITALIEN", "İTALYA", "ITALYA" : Return "IT"
+                Case "SPAIN", "SPANIEN", "İSPANYA", "ISPANYA" : Return "ES"
+                Case "UNITED KINGDOM", "UK", "ENGLAND", "İNGİLTERE", "INGILTERE", "BİRLEŞİK KRALLIK" : Return "GB"
+                Case "NETHERLANDS", "HOLLAND", "HOLLANDA" : Return "NL"
+                Case "BELGIUM", "BELGIEN", "BELÇİKA", "BELCIKA" : Return "BE"
+                Case "AUSTRIA", "ÖSTERREICH", "OSTERREICH", "AVUSTURYA" : Return "AT"
+                Case "SWITZERLAND", "SCHWEIZ", "İSVİÇRE", "ISVICRE" : Return "CH"
+                Case "POLAND", "POLEN", "POLONYA" : Return "PL"
+                Case "SWEDEN", "SCHWEDEN", "İSVEÇ", "ISVEC" : Return "SE"
+                Case "NORWAY", "NORWEGEN", "NORVEÇ", "NORVEC" : Return "NO"
+                Case "DENMARK", "DÄNEMARK", "DANEMARK", "DANİMARKA", "DANIMARKA" : Return "DK"
+                Case "FINLAND", "FINNLAND", "FİNLANDİYA", "FINLANDIYA" : Return "FI"
+                Case "GREECE", "GRIECHENLAND", "YUNANİSTAN", "YUNANISTAN" : Return "GR"
+                Case "PORTUGAL", "PORTEKİZ", "PORTEKIZ" : Return "PT"
+                Case "IRELAND", "IRLAND", "İRLANDA", "IRLANDA" : Return "IE"
+                Case "CZECH REPUBLIC", "CZECHIA", "TSCHECHIEN", "ÇEKYA", "CEKYA", "ÇEK CUMHURİYETİ" : Return "CZ"
+                Case "HUNGARY", "UNGARN", "MACARİSTAN", "MACARISTAN" : Return "HU"
+                Case "ROMANIA", "RUMÄNIEN", "RUMANIEN", "ROMANYA" : Return "RO"
+                Case "BULGARIA", "BULGARIEN", "BULGARİSTAN", "BULGARISTAN" : Return "BG"
+                Case "CROATIA", "KROATIEN", "HIRVATİSTAN", "HIRVATISTAN" : Return "HR"
+                Case "SLOVAKIA", "SLOWAKEI", "SLOVAKYA" : Return "SK"
+                Case "SLOVENIA", "SLOWENIEN", "SLOVENYA" : Return "SI"
+                Case "LUXEMBOURG", "LUXEMBURG", "LÜKSEMBURG", "LUKSEMBURG" : Return "LU"
+                Case "ESTONIA", "ESTLAND", "ESTONYA" : Return "EE"
+                Case "LATVIA", "LETTLAND", "LETONYA" : Return "LV"
+                Case "LITHUANIA", "LITAUEN", "LİTVANYA", "LITVANYA" : Return "LT"
+                Case "CYPRUS", "ZYPERN", "KIBRIS", "KUZEY KIBRIS" : Return "CY"
+                Case "MALTA" : Return "MT"
+                Case "ICELAND", "ISLAND", "İZLANDA", "IZLANDA" : Return "IS"
+                Case "SERBIA", "SERBIEN", "SIRBİSTAN", "SIRBISTAN" : Return "RS"
+                Case "MONTENEGRO", "KARADAĞ", "KARADAG" : Return "ME"
+                Case "NORTH MACEDONIA", "NORDMAZEDONIEN", "KUZEY MAKEDONYA" : Return "MK"
+                Case "ALBANIA", "ALBANIEN", "ARNAVUTLUK" : Return "AL"
+                Case "BOSNIA", "BOSNIEN", "BOSNA", "BOSNA HERSEK" : Return "BA"
+                Case "KOSOVO", "KOSOVA" : Return "XK"
+                Case "MOLDOVA", "MOLDAWIEN", "MOLDAVYA" : Return "MD"
+                Case "UKRAINE", "UKRAYNA" : Return "UA"
+                Case "BELARUS", "WEIßRUSSLAND", "WEISSRUSSLAND" : Return "BY"
+                Case "RUSSIA", "RUSSLAND", "RUSYA" : Return "RU"
                 
                 ' Amerika
-                {"United States", "US"}, {"USA", "US"}, {"Amerika", "US"}, {"ABD", "US"},
-                {"Canada", "CA"}, {"Kanada", "CA"},
-                {"Mexico", "MX"}, {"Mexiko", "MX"}, {"Meksika", "MX"},
-                {"Brazil", "BR"}, {"Brasilien", "BR"}, {"Brezilya", "BR"},
-                {"Argentina", "AR"}, {"Argentinien", "AR"}, {"Arjantin", "AR"},
-                {"Chile", "CL"}, {"Şili", "CL"},
-                {"Colombia", "CO"}, {"Kolumbien", "CO"}, {"Kolombiya", "CO"},
-                {"Peru", "PE"},
+                Case "UNITED STATES", "USA", "AMERİKA", "AMERIKA", "ABD" : Return "US"
+                Case "CANADA", "KANADA" : Return "CA"
+                Case "MEXICO", "MEXIKO", "MEKSİKA", "MEKSIKA" : Return "MX"
+                Case "BRAZIL", "BRASILIEN", "BREZİLYA", "BREZILYA" : Return "BR"
+                Case "ARGENTINA", "ARGENTINIEN", "ARJANTİN", "ARJANTIN" : Return "AR"
+                Case "CHILE", "ŞİLİ", "SILI" : Return "CL"
+                Case "COLOMBIA", "KOLUMBIEN", "KOLOMBİYA", "KOLOMBIYA" : Return "CO"
+                Case "PERU" : Return "PE"
                 
                 ' Asya
-                {"China", "CN"}, {"Çin", "CN"},
-                {"Japan", "JP"}, {"Japonya", "JP"},
-                {"South Korea", "KR"}, {"Korea", "KR"}, {"Güney Kore", "KR"},
-                {"India", "IN"}, {"Indien", "IN"}, {"Hindistan", "IN"},
-                {"Indonesia", "ID"}, {"Indonesien", "ID"}, {"Endonezya", "ID"},
-                {"Thailand", "TH"}, {"Tayland", "TH"},
-                {"Vietnam", "VN"},
-                {"Philippines", "PH"}, {"Philippinen", "PH"}, {"Filipinler", "PH"},
-                {"Malaysia", "MY"}, {"Malezya", "MY"},
-                {"Singapore", "SG"}, {"Singapur", "SG"},
-                {"Pakistan", "PK"},
-                {"Bangladesh", "BD"}, {"Bangladesch", "BD"}, {"Bangladeş", "BD"},
-                {"Saudi Arabia", "SA"}, {"Saudiarabien", "SA"}, {"Suudi Arabistan", "SA"},
-                {"United Arab Emirates", "AE"}, {"UAE", "AE"}, {"Birleşik Arap Emirlikleri", "AE"}, {"BAE", "AE"},
-                {"Israel", "IL"}, {"İsrail", "IL"},
-                {"Iran", "IR"}, {"İran", "IR"},
-                {"Iraq", "IQ"}, {"Irak", "IQ"},
-                {"Jordan", "JO"}, {"Jordanien", "JO"}, {"Ürdün", "JO"},
-                {"Lebanon", "LB"}, {"Libanon", "LB"}, {"Lübnan", "LB"},
-                {"Kuwait", "KW"}, {"Kuveyt", "KW"},
-                {"Qatar", "QA"}, {"Katar", "QA"},
-                {"Bahrain", "BH"},
-                {"Oman", "OM"}, {"Umman", "OM"},
-                {"Azerbaijan", "AZ"}, {"Aserbaidschan", "AZ"}, {"Azerbaycan", "AZ"},
-                {"Georgia", "GE"}, {"Georgien", "GE"}, {"Gürcistan", "GE"},
-                {"Armenia", "AM"}, {"Armenien", "AM"}, {"Ermenistan", "AM"},
-                {"Kazakhstan", "KZ"}, {"Kasachstan", "KZ"}, {"Kazakistan", "KZ"},
-                {"Uzbekistan", "UZ"}, {"Usbekistan", "UZ"}, {"Özbekistan", "UZ"},
-                {"Turkmenistan", "TM"}, {"Türkmenistan", "TM"},
-                {"Kyrgyzstan", "KG"}, {"Kirgisistan", "KG"}, {"Kırgızistan", "KG"},
-                {"Tajikistan", "TJ"}, {"Tadschikistan", "TJ"}, {"Tacikistan", "TJ"},
-                {"Afghanistan", "AF"}, {"Afganistan", "AF"},
-                {"Mongolia", "MN"}, {"Mongolei", "MN"}, {"Moğolistan", "MN"},
-                {"Nepal", "NP"},
-                {"Sri Lanka", "LK"},
-                {"Myanmar", "MM"},
-                {"Cambodia", "KH"}, {"Kambodscha", "KH"}, {"Kamboçya", "KH"},
-                {"Laos", "LA"},
-                {"Hong Kong", "HK"},
-                {"Taiwan", "TW"},
-                {"Macau", "MO"},
+                Case "CHINA", "ÇİN", "CIN" : Return "CN"
+                Case "JAPAN", "JAPONYA" : Return "JP"
+                Case "SOUTH KOREA", "KOREA", "GÜNEY KORE", "GUNEY KORE" : Return "KR"
+                Case "INDIA", "INDIEN", "HİNDİSTAN", "HINDISTAN" : Return "IN"
+                Case "INDONESIA", "INDONESIEN", "ENDONEZYA" : Return "ID"
+                Case "THAILAND", "TAYLAND" : Return "TH"
+                Case "VIETNAM" : Return "VN"
+                Case "PHILIPPINES", "PHILIPPINEN", "FİLİPİNLER", "FILIPINLER" : Return "PH"
+                Case "MALAYSIA", "MALEZYA" : Return "MY"
+                Case "SINGAPORE", "SİNGAPUR", "SINGAPUR" : Return "SG"
+                Case "PAKISTAN" : Return "PK"
+                Case "BANGLADESH", "BANGLADESCH", "BANGLADEŞ" : Return "BD"
+                Case "SAUDI ARABIA", "SAUDIARABIEN", "SUUDİ ARABİSTAN", "SUUDI ARABISTAN" : Return "SA"
+                Case "UNITED ARAB EMIRATES", "UAE", "BİRLEŞİK ARAP EMİRLİKLERİ", "BAE" : Return "AE"
+                Case "ISRAEL", "İSRAİL", "ISRAIL" : Return "IL"
+                Case "IRAN", "İRAN" : Return "IR"
+                Case "IRAQ", "IRAK" : Return "IQ"
+                Case "JORDAN", "JORDANIEN", "ÜRDÜN", "URDUN" : Return "JO"
+                Case "LEBANON", "LIBANON", "LÜBNAN", "LUBNAN" : Return "LB"
+                Case "KUWAIT", "KUVEYT" : Return "KW"
+                Case "QATAR", "KATAR" : Return "QA"
+                Case "BAHRAIN" : Return "BH"
+                Case "OMAN", "UMMAN" : Return "OM"
+                Case "AZERBAIJAN", "ASERBAIDSCHAN", "AZERBAYCAN" : Return "AZ"
+                Case "GEORGIA", "GEORGIEN", "GÜRCİSTAN", "GURCISTAN" : Return "GE"
+                Case "ARMENIA", "ARMENIEN", "ERMENİSTAN", "ERMENISTAN" : Return "AM"
+                Case "KAZAKHSTAN", "KASACHSTAN", "KAZAKİSTAN", "KAZAKISTAN" : Return "KZ"
+                Case "UZBEKISTAN", "USBEKISTAN", "ÖZBEKİSTAN", "OZBEKISTAN" : Return "UZ"
+                Case "TURKMENISTAN", "TÜRKMENİSTAN", "TURKMENISTAN" : Return "TM"
+                Case "KYRGYZSTAN", "KIRGISISTAN", "KIRGIZİSTAN", "KIRGIZISTAN" : Return "KG"
+                Case "TAJIKISTAN", "TADSCHIKISTAN", "TACİKİSTAN", "TACIKISTAN" : Return "TJ"
+                Case "AFGHANISTAN", "AFGANİSTAN", "AFGANISTAN" : Return "AF"
+                Case "MONGOLIA", "MONGOLEI", "MOĞOLİSTAN", "MOGOLISTAN" : Return "MN"
+                Case "NEPAL" : Return "NP"
+                Case "SRI LANKA" : Return "LK"
+                Case "MYANMAR" : Return "MM"
+                Case "CAMBODIA", "KAMBODSCHA", "KAMBOÇYA", "KAMBOCYA" : Return "KH"
+                Case "LAOS" : Return "LA"
+                Case "HONG KONG" : Return "HK"
+                Case "TAIWAN" : Return "TW"
+                Case "MACAU", "MACAO" : Return "MO"
                 
                 ' Afrika
-                {"Egypt", "EG"}, {"Ägypten", "EG"}, {"Mısır", "EG"},
-                {"South Africa", "ZA"}, {"Südafrika", "ZA"}, {"Güney Afrika", "ZA"},
-                {"Morocco", "MA"}, {"Marokko", "MA"}, {"Fas", "MA"},
-                {"Algeria", "DZ"}, {"Algerien", "DZ"}, {"Cezayir", "DZ"},
-                {"Tunisia", "TN"}, {"Tunesien", "TN"}, {"Tunus", "TN"},
-                {"Libya", "LY"}, {"Libyen", "LY"}, {"Libya", "LY"},
-                {"Nigeria", "NG"}, {"Nijerya", "NG"},
-                {"Kenya", "KE"},
-                {"Ethiopia", "ET"}, {"Äthiopien", "ET"}, {"Etiyopya", "ET"},
-                {"Ghana", "GH"}, {"Gana", "GH"},
-                {"Tanzania", "TZ"}, {"Tansania", "TZ"}, {"Tanzanya", "TZ"},
-                {"Uganda", "UG"},
-                {"Sudan", "SD"},
-                {"Senegal", "SN"},
-                {"Ivory Coast", "CI"}, {"Elfenbeinküste", "CI"}, {"Fildişi Sahili", "CI"},
-                {"Cameroon", "CM"}, {"Kamerun", "CM"},
-                {"Zimbabwe", "ZW"}, {"Simbabwe", "ZW"},
-                {"Angola", "AO"},
-                {"Mozambique", "MZ"}, {"Mosambik", "MZ"}, {"Mozambik", "MZ"},
+                Case "EGYPT", "ÄGYPTEN", "AGYPTEN", "MISIR" : Return "EG"
+                Case "SOUTH AFRICA", "SÜDAFRIKA", "SUDAFRIKA", "GÜNEY AFRİKA", "GUNEY AFRIKA" : Return "ZA"
+                Case "MOROCCO", "MAROKKO", "FAS" : Return "MA"
+                Case "ALGERIA", "ALGERIEN", "CEZAYİR", "CEZAYIR" : Return "DZ"
+                Case "TUNISIA", "TUNESIEN", "TUNUS" : Return "TN"
+                Case "LIBYA", "LIBYEN", "LİBYA" : Return "LY"
+                Case "NIGERIA", "NİJERYA", "NIJERYA" : Return "NG"
+                Case "KENYA" : Return "KE"
+                Case "ETHIOPIA", "ÄTHIOPIEN", "ATHIOPIEN", "ETİYOPYA", "ETIYOPYA" : Return "ET"
+                Case "GHANA", "GANA" : Return "GH"
+                Case "TANZANIA", "TANSANIA", "TANZANYA" : Return "TZ"
+                Case "UGANDA" : Return "UG"
+                Case "SUDAN" : Return "SD"
+                Case "SENEGAL" : Return "SN"
+                Case "IVORY COAST", "ELFENBEINKÜSTE", "FİLDİŞİ SAHİLİ", "FILDISI SAHILI" : Return "CI"
+                Case "CAMEROON", "KAMERUN" : Return "CM"
+                Case "ZIMBABWE", "SIMBABWE" : Return "ZW"
+                Case "ANGOLA" : Return "AO"
+                Case "MOZAMBIQUE", "MOSAMBIK", "MOZAMBİK", "MOZAMBIK" : Return "MZ"
                 
                 ' Okyanusya
-                {"Australia", "AU"}, {"Australien", "AU"}, {"Avustralya", "AU"},
-                {"New Zealand", "NZ"}, {"Neuseeland", "NZ"}, {"Yeni Zelanda", "NZ"},
+                Case "AUSTRALIA", "AUSTRALIEN", "AVUSTRALYA" : Return "AU"
+                Case "NEW ZEALAND", "NEUSEELAND", "YENİ ZELANDA", "YENI ZELANDA" : Return "NZ"
                 
-                ' Türkiye (referans için)
-                {"Turkey", "TR"}, {"Türkei", "TR"}, {"Türkiye", "TR"}, {"Turkiye", "TR"}
-            }
-            
-            ' Tam eşleşme ara
-            If ulkeKodlari.ContainsKey(ulkeAdi) Then
-                Log("DEBUG", "GetUlkeKodu", $"Sözlükten ülke kodu bulundu: {ulkeAdi} -> {ulkeKodlari(ulkeAdi)}")
-                Return ulkeKodlari(ulkeAdi)
-            End If
-            
-            ' Kısmi eşleşme ara
-            For Each kvp In ulkeKodlari
-                If ulkeAdi.ToUpper().Contains(kvp.Key.ToUpper()) OrElse kvp.Key.ToUpper().Contains(ulkeAdi.ToUpper()) Then
-                    Log("DEBUG", "GetUlkeKodu", $"Kısmi eşleşme bulundu: {ulkeAdi} -> {kvp.Value} (eşleşen: {kvp.Key})")
-                    Return kvp.Value
-                End If
-            Next
+                ' Türkiye
+                Case "TURKEY", "TÜRKEI", "TURKEI", "TÜRKİYE", "TURKIYE" : Return "TR"
+            End Select
             
             ' Bulunamazsa varsayılan XX döndür
             Log("WARNING", "GetUlkeKodu", $"Ülke kodu bulunamadı: {ulkeAdi} -> XX (varsayılan)")
