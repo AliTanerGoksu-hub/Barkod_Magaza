@@ -7774,19 +7774,19 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                         Dim sRenk As String = Trim(drStok("sRenk").ToString())
                         Dim sBeden As String = Trim(drStok("sBeden").ToString())
                         
-                        ' Maliyetleri güncelle
+                        ' Maliyetleri güncelle - orijinal frm_fatura.vb'deki gibi
                         If fiyatMaliyet = 0 Then
                             ekle_fiyat_local(nStokID, KeyCode.sFiyatM, maliyet, dteFisTarihi, KeyCode.kullaniciadi)
                             guncellenenSatir += 1
-                        ElseIf Math.Abs(fiyatMaliyet - maliyet) > 0.01 Then
+                        ElseIf fiyatMaliyet <> maliyet Then
                             duzelt_fiyat_local(nStokID, KeyCode.sFiyatM, maliyet, dteFisTarihi)
                             guncellenenSatir += 1
                         End If
                         
-                        ' Alışları güncelle
+                        ' Alışları güncelle - orijinal frm_fatura.vb'deki gibi
                         If fiyatAlis = 0 Then
                             ekle_fiyat_local(nStokID, KeyCode.sFiyatA, alis, dteFisTarihi, KeyCode.kullaniciadi)
-                        ElseIf Math.Abs(fiyatAlis - alis) > 0.01 Then
+                        ElseIf fiyatAlis <> alis Then
                             duzelt_fiyat_local(nStokID, KeyCode.sFiyatA, alis, dteFisTarihi)
                         End If
                     End If
