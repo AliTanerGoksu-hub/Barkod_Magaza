@@ -7686,7 +7686,13 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
         
         For Each drDetay As DataRow In dsFaturaDetay.Tables(0).Rows
             Try
-                Dim nMasrafSatiri As Integer = KeyCode.sorgu_sayi(drDetay("nMasrafSatiri"), 0)
+                ' nMasrafSatiri kolonu sorguya dahil edilmiyor, varsayılan 0 kabul ediyoruz
+                Dim nMasrafSatiri As Integer = 0
+                Try
+                    nMasrafSatiri = KeyCode.sorgu_sayi(drDetay("nMasrafSatiri"), 0)
+                Catch
+                    nMasrafSatiri = 0
+                End Try
                 Dim lBrutFiyat As Decimal = KeyCode.sorgu_sayi(drDetay("lBrutFiyat"), 0)
                 
                 If nMasrafSatiri = 0 And lBrutFiyat > 0.01 Then
