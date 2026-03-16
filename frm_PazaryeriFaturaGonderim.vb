@@ -453,8 +453,9 @@ Public Class frm_PazaryeriFaturaGonderim
                 End If
 
                 ' ===== GİB'E GÖNDERİLMEMİŞSE ÖNCE GİB'E GÖNDER =====
-                If String.IsNullOrEmpty(gibFaturaNo) OrElse gibFaturaNo.Trim() = "" Then
-                    Debug.WriteLine("[GIB] GibFaturaNo boş - GİB'e gönderilecek: " & siparisNo)
+                ' GibFaturaNo boş, null, "0" veya sadece boşluk ise GİB'e gönder
+                If String.IsNullOrEmpty(gibFaturaNo) OrElse gibFaturaNo.Trim() = "" OrElse gibFaturaNo.Trim() = "0" Then
+                    Debug.WriteLine("[GIB] GibFaturaNo boş/0 - GİB'e gönderilecek: " & siparisNo)
                     MessageBox.Show("GİB'e gönderilecek: " & siparisNo, "DEBUG", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     lblDurum.Text = "GİB'e gönderiliyor: " & siparisNo & " - " & (i + 1) & "/" & rows.Length
                     Application.DoEvents()
