@@ -3141,47 +3141,59 @@ Public Class frm_qukaGonder
                     ' ===== MEVCUT SİPARİŞ İÇİN İHRACAT BİLGİLERİNİ GÜNCELLE =====
                     ' Sipariş daha önce kaydedilmiş olsa bile, yurt dışı ise ihracat bilgilerini güncelle
                     Try
-                        ' Ülke bilgisini al
-                        Dim rawUlke As String = "Turkiye"
-                        If custInvoice IsNot Nothing AndAlso custInvoice("country") IsNot Nothing Then
-                            rawUlke = Convert.ToString(custInvoice("country"))
-                        ElseIf custDelivery IsNot Nothing AndAlso custDelivery("country") IsNot Nothing Then
-                            rawUlke = Convert.ToString(custDelivery("country"))
-                        ElseIf cust IsNot Nothing AndAlso cust("country") IsNot Nothing Then
-                            rawUlke = Convert.ToString(cust("country"))
+                        ' Ülke bilgisini order parametresinden al
+                        Dim ulkeBilgisi As String = "Turkiye"
+                        Dim adresBilgisi As String = ""
+                        Dim sehirBilgisi As String = ""
+                        
+                        ' custInvoice
+                        If order.ContainsKey("customerInvoice") AndAlso order("customerInvoice") IsNot Nothing Then
+                            Dim ci = AsDict(order("customerInvoice"))
+                            If ci IsNot Nothing AndAlso ci.ContainsKey("country") AndAlso ci("country") IsNot Nothing Then
+                                ulkeBilgisi = Convert.ToString(ci("country"))
+                            End If
                         End If
-                        Dim ulkeTmp As String = If(ToTurkishTitleCase(Trunc(If(DecodeApiData(rawUlke), "Turkiye"), 20)), "Turkiye")
+                        ' custDelivery  
+                        If order.ContainsKey("customerDelivery") AndAlso order("customerDelivery") IsNot Nothing Then
+                            Dim cd = AsDict(order("customerDelivery"))
+                            If cd IsNot Nothing Then
+                                If cd.ContainsKey("country") AndAlso cd("country") IsNot Nothing AndAlso ulkeBilgisi = "Turkiye" Then
+                                    ulkeBilgisi = Convert.ToString(cd("country"))
+                                End If
+                                If cd.ContainsKey("address1") Then adresBilgisi = Convert.ToString(cd("address1"))
+                                If cd.ContainsKey("address2") Then adresBilgisi &= " " & Convert.ToString(cd("address2"))
+                                If cd.ContainsKey("city") Then sehirBilgisi = Convert.ToString(cd("city"))
+                            End If
+                        End If
+                        ' cust (zaten yukarıda tanımlı)
+                        If cust IsNot Nothing AndAlso cust.ContainsKey("country") AndAlso cust("country") IsNot Nothing AndAlso ulkeBilgisi = "Turkiye" Then
+                            ulkeBilgisi = Convert.ToString(cust("country"))
+                        End If
+                        
+                        ulkeBilgisi = If(ToTurkishTitleCase(Trunc(If(DecodeApiData(ulkeBilgisi), "Turkiye"), 20)), "Turkiye")
                         
                         ' Türkiye mi kontrol et
-                        Dim turkiyeMiTmp As Boolean = (ulkeTmp.ToUpper(New CultureInfo("tr-TR")) = "TÜRKİYE" OrElse 
-                                                    ulkeTmp.ToUpper(New CultureInfo("tr-TR")) = "TURKIYE" OrElse 
-                                                    ulkeTmp.ToUpper(New CultureInfo("tr-TR")) = "TURKEY" OrElse
-                                                    ulkeTmp.ToUpper(New CultureInfo("tr-TR")) = "TR")
+                        Dim turkiyeMiKontrol As Boolean = (ulkeBilgisi.ToUpper(New CultureInfo("tr-TR")) = "TÜRKİYE" OrElse 
+                                                    ulkeBilgisi.ToUpper(New CultureInfo("tr-TR")) = "TURKIYE" OrElse 
+                                                    ulkeBilgisi.ToUpper(New CultureInfo("tr-TR")) = "TURKEY" OrElse
+                                                    ulkeBilgisi.ToUpper(New CultureInfo("tr-TR")) = "TR")
                         
-                        If Not turkiyeMiTmp Then
-                            Log("INFO", "AddOrder", $"🌍 MEVCUT YURT DIŞI SİPARİŞ - İhracat bilgileri güncelleniyor: {ulkeTmp}")
+                        If Not turkiyeMiKontrol Then
+                            Log("INFO", "AddOrder", $"🌍 MEVCUT YURT DIŞI SİPARİŞ - İhracat bilgileri güncelleniyor: {ulkeBilgisi}")
                             
                             ' Mevcut siparişin nStokFisiID'sini bul
-                            Dim existingStokFisiID As Integer = 0
+                            Dim mevcutStokFisiID As Integer = 0
                             Using findCmd As New OleDb.OleDbCommand("SELECT TOP 1 nStokFisiID FROM tbStokFisiMaster WHERE sAciklama3 = ?", conn)
                                 findCmd.Parameters.AddWithValue("?", siparisKodu)
                                 If conn.State <> ConnectionState.Open Then conn.Open()
                                 Dim result = findCmd.ExecuteScalar()
                                 If result IsNot Nothing AndAlso result IsNot DBNull.Value Then
-                                    existingStokFisiID = Convert.ToInt32(result)
+                                    mevcutStokFisiID = Convert.ToInt32(result)
                                 End If
                             End Using
                             
-                            If existingStokFisiID > 0 Then
-                                ' Adres bilgilerini al
-                                Dim adresTmp As String = ""
-                                Dim ilTmp As String = ""
-                                If custDelivery IsNot Nothing Then
-                                    adresTmp = Convert.ToString(custDelivery("address1")) & " " & Convert.ToString(custDelivery("address2"))
-                                    ilTmp = Convert.ToString(custDelivery("city"))
-                                End If
-                                
-                                Dim ulkeKoduTmp As String = GetUlkeKodu(ulkeTmp, conn)
+                            If mevcutStokFisiID > 0 Then
+                                Dim ulkeKoduBilgi As String = GetUlkeKodu(ulkeBilgisi, conn)
                                 
                                 ' İhracat bilgilerini güncelle
                                 Using updateCmd As New OleDb.OleDbCommand()
@@ -3197,17 +3209,17 @@ Public Class frm_qukaGonder
                                         "nTasimaSekli = 3 " &
                                         "WHERE nStokFisiID = ?"
                                     
-                                    updateCmd.Parameters.Add("?", OleDbType.VarWChar, 255).Value = If(String.IsNullOrEmpty(adresTmp), "", adresTmp.Trim())
-                                    updateCmd.Parameters.Add("?", OleDbType.VarWChar, 100).Value = If(String.IsNullOrEmpty(ilTmp), "", ilTmp)
-                                    updateCmd.Parameters.Add("?", OleDbType.VarWChar, 100).Value = If(String.IsNullOrEmpty(ulkeTmp), "", ulkeTmp)
-                                    updateCmd.Parameters.Add("?", OleDbType.VarWChar, 10).Value = If(String.IsNullOrEmpty(ulkeKoduTmp), "XX", ulkeKoduTmp)
-                                    updateCmd.Parameters.AddWithValue("?", existingStokFisiID)
+                                    updateCmd.Parameters.Add("?", OleDbType.VarWChar, 255).Value = If(String.IsNullOrEmpty(adresBilgisi), "", adresBilgisi.Trim())
+                                    updateCmd.Parameters.Add("?", OleDbType.VarWChar, 100).Value = If(String.IsNullOrEmpty(sehirBilgisi), "", sehirBilgisi)
+                                    updateCmd.Parameters.Add("?", OleDbType.VarWChar, 100).Value = If(String.IsNullOrEmpty(ulkeBilgisi), "", ulkeBilgisi)
+                                    updateCmd.Parameters.Add("?", OleDbType.VarWChar, 10).Value = If(String.IsNullOrEmpty(ulkeKoduBilgi), "XX", ulkeKoduBilgi)
+                                    updateCmd.Parameters.AddWithValue("?", mevcutStokFisiID)
                                     
                                     Dim rowsUpdated As Integer = updateCmd.ExecuteNonQuery()
                                     If rowsUpdated > 0 Then
-                                        Log("SUCCESS", "AddOrder", $"✅ MEVCUT SİPARİŞ İHRACAT BİLGİLERİ GÜNCELLENDİ! nStokFisiID: {existingStokFisiID}")
+                                        Log("SUCCESS", "AddOrder", $"✅ MEVCUT SİPARİŞ İHRACAT BİLGİLERİ GÜNCELLENDİ! nStokFisiID: {mevcutStokFisiID}")
                                     Else
-                                        Log("WARNING", "AddOrder", $"⚠️ Mevcut sipariş ihracat bilgileri güncellenemedi! nStokFisiID: {existingStokFisiID}")
+                                        Log("WARNING", "AddOrder", $"⚠️ Mevcut sipariş ihracat bilgileri güncellenemedi! nStokFisiID: {mevcutStokFisiID}")
                                     End If
                                 End Using
                             Else
