@@ -385,6 +385,7 @@ Public Class frm_PazaryeriFaturaGonderim
                 Dim pazaryeri As String = dr("Pazaryeri").ToString().Trim()
                 Dim gibFaturaNo As String = dr("GibFaturaNo").ToString().Trim()
                 Dim faturaGuid As String = If(dr("sEfaturaGuid") IsNot DBNull.Value, dr("sEfaturaGuid").ToString().Trim(), "")
+                Dim faturaTarihi As DateTime = If(dr("dteFisTarihi") IsNot DBNull.Value, CDate(dr("dteFisTarihi")), DateTime.Now)
 
                 lblDurum.Text = "Gönderiliyor: " & siparisNo & " (" & pazaryeri & ") - " & (i + 1) & "/" & rows.Length
                 Application.DoEvents()
@@ -394,7 +395,7 @@ Public Class frm_PazaryeriFaturaGonderim
 
                 Select Case pazaryeri.ToUpperInvariant()
                     Case "TRENDYOL"
-                        sonuc = GonderTrendyol(siparisNo, gibFaturaNo, faturaGuid, hataMesaji)
+                        sonuc = GonderTrendyol(siparisNo, gibFaturaNo, faturaGuid, faturaTarihi, hataMesaji)
                     Case "HEPSIBURADA"
                         sonuc = GonderHepsiburada(siparisNo, gibFaturaNo, faturaGuid, hataMesaji)
                     Case "N11"
@@ -442,7 +443,7 @@ Public Class frm_PazaryeriFaturaGonderim
     ''' <summary>
     ''' Trendyol'a fatura gönder
     ''' </summary>
-    Private Function GonderTrendyol(siparisNo As String, gibFaturaNo As String, faturaGuid As String, ByRef hataMesaji As String) As Boolean
+    Private Function GonderTrendyol(siparisNo As String, gibFaturaNo As String, faturaGuid As String, faturaTarihi As DateTime, ByRef hataMesaji As String) As Boolean
         Try
             If Not pazaryeriApis.ContainsKey("TRENDYOL") Then
                 hataMesaji = "Trendyol API ayarları bulunamadı"
@@ -467,13 +468,15 @@ Public Class frm_PazaryeriFaturaGonderim
             Dim authBase64 As String = Convert.ToBase64String(authBytes)
             Dim userAgent As String = api.SellerId & " - SelfIntegration"
             
-            ' 1. ADIM: Sipariş numarasıyla Paket ID'yi bul
-            Dim shipmentPackageId As String = GetTrendyolShipmentPackageId(api.SellerId, orderNumber, authBase64, userAgent, hataMesaji)
+            ' 1. ADIM: Sipariş numarasıyla Paket ID'yi bul ve micro export kontrolü yap
+            Dim isMicroExport As Boolean = False
+            Dim shipmentPackageId As String = GetTrendyolShipmentPackageId(api.SellerId, orderNumber, authBase64, userAgent, hataMesaji, isMicroExport)
             If String.IsNullOrEmpty(shipmentPackageId) Then
                 Debug.WriteLine("[TY] HATA: Paket ID bulunamadı - " & hataMesaji)
                 Return False
             End If
             Debug.WriteLine("[TY] Shipment Package ID bulundu: " & shipmentPackageId)
+            Debug.WriteLine("[TY] Is Micro Export: " & isMicroExport.ToString())
 
             ' Fatura linki oluştur (Kolaysoft'tan alınacak)
             Dim invoiceLink As String = GetKolaysoftFaturaLink(gibFaturaNo, faturaGuid)
@@ -504,7 +507,23 @@ Public Class frm_PazaryeriFaturaGonderim
             req.Timeout = 30000
 
             ' Body - Trendyol fatura linki formatı
-            Dim jsonBody As String = "{""shipmentPackageId"": """ & shipmentPackageId & """, ""invoiceLink"": """ & invoiceLink.Replace("""", "\""") & """}"
+            ' Micro export siparişleri için invoiceNumber ve invoiceDateTime zorunlu!
+            Dim jsonBody As String
+            If isMicroExport Then
+                ' Micro export için ek alanlar gerekli
+                ' invoiceDateTime: Unix timestamp (saniye cinsinden)
+                Dim invoiceDateTime As Long = CLng((faturaTarihi.ToUniversalTime() - New DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds)
+                jsonBody = "{" &
+                    """shipmentPackageId"": """ & shipmentPackageId & """," &
+                    """invoiceLink"": """ & invoiceLink.Replace("""", "\""") & """," &
+                    """invoiceNumber"": """ & gibFaturaNo & """," &
+                    """invoiceDateTime"": " & invoiceDateTime.ToString() &
+                    "}"
+                Debug.WriteLine("[TY] MICRO EXPORT - invoiceNumber: " & gibFaturaNo & ", invoiceDateTime: " & invoiceDateTime.ToString())
+            Else
+                ' Normal sipariş için sadece link ve packageId
+                jsonBody = "{""shipmentPackageId"": """ & shipmentPackageId & """, ""invoiceLink"": """ & invoiceLink.Replace("""", "\""") & """}"
+            End If
             Debug.WriteLine("[TY] Body: " & jsonBody)
             
             Dim data As Byte() = Encoding.UTF8.GetBytes(jsonBody)
@@ -558,7 +577,8 @@ Public Class frm_PazaryeriFaturaGonderim
     ''' Trendyol API'den sipariş numarasıyla Shipment Package ID'yi bul
     ''' GET /sapigw/suppliers/{supplierId}/orders?orderNumber={orderNumber}
     ''' </summary>
-    Private Function GetTrendyolShipmentPackageId(sellerId As String, orderNumber As String, authBase64 As String, userAgent As String, ByRef hataMesaji As String) As String
+    Private Function GetTrendyolShipmentPackageId(sellerId As String, orderNumber As String, authBase64 As String, userAgent As String, ByRef hataMesaji As String, ByRef isMicroExport As Boolean) As String
+        isMicroExport = False
         Try
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
             
@@ -592,6 +612,31 @@ Public Class frm_PazaryeriFaturaGonderim
                         Debug.WriteLine("[TY-Search] Content count: " & contentArray.Count)
                         
                         For Each order As JObject In contentArray
+                            ' Micro export kontrolü - deliveryType veya orderType alanlarından
+                            ' Trendyol'da ihracat siparişleri "MICRO_EXPORT" veya benzeri bir değerle gelir
+                            If order("deliveryType") IsNot Nothing Then
+                                Dim deliveryType As String = order("deliveryType").ToString().ToUpperInvariant()
+                                If deliveryType.Contains("MICRO") OrElse deliveryType.Contains("EXPORT") Then
+                                    isMicroExport = True
+                                    Debug.WriteLine("[TY-Search] MICRO EXPORT tespit edildi: deliveryType=" & deliveryType)
+                                End If
+                            End If
+                            
+                            ' orderType kontrolü
+                            If order("orderType") IsNot Nothing Then
+                                Dim orderType As String = order("orderType").ToString().ToUpperInvariant()
+                                If orderType.Contains("MICRO") OrElse orderType.Contains("EXPORT") Then
+                                    isMicroExport = True
+                                    Debug.WriteLine("[TY-Search] MICRO EXPORT tespit edildi: orderType=" & orderType)
+                                End If
+                            End If
+                            
+                            ' isMicroExport alanı direkt kontrol
+                            If order("isMicroExport") IsNot Nothing Then
+                                isMicroExport = Convert.ToBoolean(order("isMicroExport"))
+                                Debug.WriteLine("[TY-Search] isMicroExport=" & isMicroExport.ToString())
+                            End If
+                            
                             ' Her siparişin lines array'i var
                             If order("lines") IsNot Nothing Then
                                 Dim linesArray As JArray = CType(order("lines"), JArray)
