@@ -1732,6 +1732,7 @@ Public Class frm_PazaryeriFaturaGonderim
             
             Dim api = pazaryeriApis("TRENDYOL")
             Dim guncellenen As Integer = 0
+            Dim atlanan As Integer = 0
             Dim hata As Integer = 0
             
             For i As Integer = 0 To dtFaturalar.Rows.Count - 1
@@ -1740,6 +1741,18 @@ Public Class frm_PazaryeriFaturaGonderim
                 
                 ' Sadece Trendyol siparişlerini kontrol et
                 If pazaryeri <> "Trendyol" Then Continue For
+                
+                ' Zaten teslim edilmiş olanları atla
+                Dim mevcutDurum As String = row("TeslimDurumu").ToString().Trim()
+                If mevcutDurum.ToUpperInvariant().Contains("TESLİM EDİLDİ") OrElse 
+                   mevcutDurum.ToUpperInvariant().Contains("TESLIM EDILDI") OrElse
+                   mevcutDurum.ToUpperInvariant().Contains("DELIVERED") OrElse
+                   mevcutDurum.ToUpperInvariant().Contains("İPTAL") OrElse
+                   mevcutDurum.ToUpperInvariant().Contains("IPTAL") OrElse
+                   mevcutDurum.ToUpperInvariant().Contains("CANCELLED") Then
+                    atlanan += 1
+                    Continue For
+                End If
                 
                 Dim siparisNo As String = row("SiparisNo").ToString().Trim()
                 If String.IsNullOrEmpty(siparisNo) Then Continue For
@@ -1769,7 +1782,7 @@ Public Class frm_PazaryeriFaturaGonderim
             Next
             
             GridView1.RefreshData()
-            lblDurum.Text = "Tamamlandı! Güncellenen: " & guncellenen & ", Hata: " & hata
+            lblDurum.Text = "Tamamlandı! Güncellenen: " & guncellenen & ", Atlanan (zaten teslim/iptal): " & atlanan & ", Hata: " & hata
             Cursor = Cursors.Default
             
         Catch ex As Exception
