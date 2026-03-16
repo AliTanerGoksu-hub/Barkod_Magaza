@@ -1974,8 +1974,8 @@ Public Class frm_PazaryeriFaturaGonderim
                                                               "ORADEA", "BUCURESTI", "BUCHAREST", "SOFIA", "ATHENS",
                                                               "BERLIN", "PARIS", "ROMA", "ROME", "MADRID", "AMSTERDAM"}
                             
-                            For Each ulke In yabanciUlkeler
-                                If adres1.Contains(ulke) OrElse adres2.Contains(ulke) OrElse il.Contains(ulke) Then
+                            For Each ulkeAdi As String In yabanciUlkeler
+                                If adres1.Contains(ulkeAdi) OrElse adres2.Contains(ulkeAdi) OrElse il.Contains(ulkeAdi) Then
                                     Return True
                                 End If
                             Next
@@ -2003,8 +2003,8 @@ Public Class frm_PazaryeriFaturaGonderim
                                                               "AZERBAYCAN", "GÜRCİSTAN", "UKRAYNA", "RUSYA", "POLONYA",
                                                               "ORADEA", "BUCURESTI", "BUCHAREST", "SOFIA", "ATHENS"}
                             
-                            For Each ulke In yabanciUlkeler
-                                If aciklama1.Contains(ulke) OrElse aciklama2.Contains(ulke) Then
+                            For Each ulkeAdi As String In yabanciUlkeler
+                                If aciklama1.Contains(ulkeAdi) OrElse aciklama2.Contains(ulkeAdi) Then
                                     Return True
                                 End If
                             Next
