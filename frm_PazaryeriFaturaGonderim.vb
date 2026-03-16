@@ -647,13 +647,15 @@ Public Class frm_PazaryeriFaturaGonderim
 
             ' Body - Trendyol fatura linki formatı
             ' invoiceNumber ve invoiceDateTime: Micro export için ZORUNLU, normal siparişlerde de gönderilebilir
-            ' Her zaman gönderiyoruz çünkü mikro ihracat tespiti zor olabiliyor
             Dim invoiceDateTime As Long = CLng((faturaTarihi.ToUniversalTime() - New DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds)
+            
+            ' invoiceLink içindeki özel karakterleri escape et
+            Dim escapedInvoiceLink As String = invoiceLink.Replace("\", "\\").Replace("""", "\""")
             
             ' shipmentPackageId Long olmalı (tırnak olmadan)
             Dim jsonBody As String = "{" &
                 """shipmentPackageId"": " & shipmentPackageId & "," &
-                """invoiceLink"": """ & invoiceLink.Replace("""", "\""") & """," &
+                """invoiceLink"": """ & escapedInvoiceLink & """," &
                 """invoiceNumber"": """ & gibFaturaNo & """," &
                 """invoiceDateTime"": " & invoiceDateTime.ToString() &
                 "}"
