@@ -3191,8 +3191,12 @@ Public Class frm_qukaGonder
                     Log("WARNING", "AddOrder", $"⚠ INVOICE objesi YOK - delivery kullanılacak")
                 End If
                 
-                ' DEBUG: Customer objesinin tüm anahtarlarını logla
+                ' DEBUG: Customer objesinin tüm anahtarlarını ve değerlerini logla
                 Log("DEBUG", "AddOrder", $"CUSTOMER KEYS: {String.Join(", ", cust.Keys)}")
+                Log("DEBUG", "AddOrder", $"CUSTOMER.NAME: [{If(cust.ContainsKey("name"), cust("name"), "N/A")}]")
+                Log("DEBUG", "AddOrder", $"CUSTOMER.FIRSTNAME: [{If(cust.ContainsKey("firstName"), cust("firstName"), "N/A")}]")
+                Log("DEBUG", "AddOrder", $"CUSTOMER.LASTNAME: [{If(cust.ContainsKey("lastName"), cust("lastName"), "N/A")}]")
+                Log("DEBUG", "AddOrder", $"CUSTOMER.TITLE: [{If(cust.ContainsKey("title"), cust("title"), "N/A")}]")
                 If custDelivery IsNot Nothing Then
                     Log("DEBUG", "AddOrder", $"DELIVERY KEYS: {String.Join(", ", custDelivery.Keys)}")
                     If custDelivery.ContainsKey("name") Then
