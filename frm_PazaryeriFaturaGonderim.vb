@@ -1647,8 +1647,8 @@ Public Class frm_PazaryeriFaturaGonderim
             LoadPazaryeriApis()
             ListeleFaturalar()
             
-            ' Form açılışında teslim durumlarını otomatik güncelle
-            TeslimDurumlariniGuncelle()
+            ' NOT: Teslim durumu güncellemesi kaldırıldı - çok fazla API çağrısı uygulamayı yavaşlatıyordu
+            ' Kullanıcı sağ tık menüsünden "Teslim Durumlarını Güncelle" seçeneğini kullanabilir
         Else
             lblDurum.Text = "Hata: Veritabanı bağlantısı yok!"
         End If
