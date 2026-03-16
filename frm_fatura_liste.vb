@@ -7587,7 +7587,7 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
             lblDurum.Text = "Hazırlanıyor..."
             frmProgress.Controls.Add(lblDurum)
             
-            Dim progressBar As New ProgressBar()
+            Dim progressBar As New System.Windows.Forms.ProgressBar()
             progressBar.Location = New Point(20, 80)
             progressBar.Size = New Size(350, 25)
             progressBar.Maximum = selectedRows.Length
@@ -7751,8 +7751,8 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                         ' Eğer bAlisKdvDahil = True ise, fiyat zaten KDV dahil, ekleme yapma
                         
                         ' Mevcut fiyatları sorgula
-                        Dim fiyatMaliyet As Decimal = sorgu_stok_fiyat(sFiyatM, nStokID, "")
-                        Dim fiyatAlis As Decimal = sorgu_stok_fiyat(sFiyatA, nStokID, "")
+                        Dim fiyatMaliyet As Decimal = sorgu_stok_fiyat_local(sFiyatM, nStokID, "")
+                        Dim fiyatAlis As Decimal = sorgu_stok_fiyat_local(sFiyatA, nStokID, "")
                         
                         Dim nFiyatlandirma As Integer = sorgu_sayi(drStok("nFiyatlandirma"), 0)
                         Dim sModel As String = Trim(drStok("sModel").ToString())
@@ -7761,7 +7761,7 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                         
                         ' Maliyetleri güncelle
                         If fiyatMaliyet = 0 Then
-                            ekle_fiyat(nStokID, sFiyatM, maliyet, dteFisTarihi, kullaniciadi)
+                            ekle_fiyat_local(nStokID, sFiyatM, maliyet, dteFisTarihi, kullaniciadi)
                             guncellenenSatir += 1
                         ElseIf fiyatMaliyet <> maliyet Then
                             TopluMaliyet_FiyatDuzelt(con, nFiyatlandirma, sModel, sRenk, sBeden, sFiyatM, maliyet, dteFisTarihi, nStokID)
@@ -7770,7 +7770,7 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                         
                         ' Alışları güncelle
                         If fiyatAlis = 0 Then
-                            ekle_fiyat(nStokID, sFiyatA, alis, dteFisTarihi, kullaniciadi)
+                            ekle_fiyat_local(nStokID, sFiyatA, alis, dteFisTarihi, kullaniciadi)
                         ElseIf fiyatAlis <> alis Then
                             TopluMaliyet_FiyatDuzelt(con, nFiyatlandirma, sModel, sRenk, sBeden, sFiyatA, alis, dteFisTarihi, nStokID)
                         End If
@@ -7818,10 +7818,58 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
             End If
             
             ' Ayrıca doğrudan stok fiyatını da güncelle
-            duzelt_fiyat(nStokID, sFiyatTipi, lFiyat, dteFiyatTespitTarihi)
+            duzelt_fiyat_local(nStokID, sFiyatTipi, lFiyat, dteFiyatTespitTarihi)
             
         Catch ex As Exception
             ' Hata varsa sessizce devam et
+        End Try
+    End Sub
+    
+    ' Stok fiyat sorgulama - yerel fonksiyon
+    Private Function sorgu_stok_fiyat_local(ByVal fiyattipi As String, ByVal stokno As Int64, ByVal sDovizCinsi As String) As Decimal
+        Dim sonuc As Decimal = 0
+        Try
+            Using con As New OleDbConnection(connection)
+                con.Open()
+                Dim sql As String = "SELECT lFiyat FROM tbStokFiyati WHERE nStokID = " & stokno & " AND sFiyatTipi = '" & fiyattipi & "'"
+                Using cmd As New OleDbCommand(sql, con)
+                    Dim result = cmd.ExecuteScalar()
+                    If result IsNot Nothing AndAlso result IsNot DBNull.Value Then
+                        sonuc = Convert.ToDecimal(result)
+                    End If
+                End Using
+            End Using
+        Catch
+        End Try
+        Return sonuc
+    End Function
+    
+    ' Fiyat ekleme - yerel fonksiyon
+    Private Sub ekle_fiyat_local(ByVal stokno As Int64, ByVal fiyattipi As String, ByVal fiyat As Decimal, ByVal dteTarih As DateTime, ByVal sKullaniciAdi As String)
+        Try
+            Using con As New OleDbConnection(connection)
+                con.Open()
+                Dim sql As String = "INSERT INTO tbStokFiyati (nStokID, sFiyatTipi, lFiyat, dteFiyatTespitTarihi, dteKayitTarihi, sKullaniciAdi) VALUES (" & _
+                                    stokno & ", '" & fiyattipi & "', " & fiyat.ToString().Replace(",", ".") & ", '" & dteTarih.ToString("yyyy-MM-dd") & "', GETDATE(), '" & sKullaniciAdi & "')"
+                Using cmd As New OleDbCommand(sql, con)
+                    cmd.ExecuteNonQuery()
+                End Using
+            End Using
+        Catch
+        End Try
+    End Sub
+    
+    ' Fiyat düzeltme - yerel fonksiyon
+    Private Sub duzelt_fiyat_local(ByVal stokno As Int64, ByVal fiyattipi As String, ByVal fiyat As Decimal, ByVal dteTarih As DateTime)
+        Try
+            Using con As New OleDbConnection(connection)
+                con.Open()
+                Dim sql As String = "UPDATE tbStokFiyati SET lFiyat = " & fiyat.ToString().Replace(",", ".") & ", dteFiyatTespitTarihi = '" & dteTarih.ToString("yyyy-MM-dd") & "', dteKayitTarihi = GETDATE() WHERE nStokID = " & stokno & " AND sFiyatTipi = '" & fiyattipi & "'"
+                Using cmd As New OleDbCommand(sql, con)
+                    cmd.ExecuteNonQuery()
+                End Using
+            End Using
+        Catch
         End Try
     End Sub
 End Class
