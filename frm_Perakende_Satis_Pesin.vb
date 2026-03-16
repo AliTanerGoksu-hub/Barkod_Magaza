@@ -10829,6 +10829,13 @@ Public Class frm_Perakende_Satis_Pesin
         If PosEntegre = True Then
             InitKolaysoftTokenVeCihaz(sDepo)
         End If
+        ' Registry'den gorunum yukle
+        Try
+            VGrid_baslik.RestoreLayoutFromRegistry("SOFTWARE\BusinessSmart\VIEW\MAGAZA\PERAKENDE\" & Trim(sFisTipi) & "\BASLIK\" & Me.Name.ToString & "")
+            VGrid_toplam.RestoreLayoutFromRegistry("SOFTWARE\BusinessSmart\VIEW\MAGAZA\PERAKENDE\" & Trim(sFisTipi) & "\TOPLAM\" & Me.Name.ToString & "")
+            GridView1.RestoreLayoutFromRegistry("SOFTWARE\BusinessSmart\VIEW\MAGAZA\PERAKENDE\" & Trim(sFisTipi) & "\HAREKET\" & Me.Name.ToString & "")
+        Catch
+        End Try
         For Each btn As DevExpress.XtraBars.BarItem In BarManager1.Items
             btn.Caption = Sorgu_sDil(btn.Caption, sDil)
         Next
