@@ -47,6 +47,7 @@ Public Class frm_PazaryeriFaturaGonderim
     ' ===== VERİTABANI =====
     Public connection As String = ""
     Private dtFaturalar As New DataTable()
+    Private formYuklendi As Boolean = False
 
     ' ===== API BİLGİLERİ =====
     Private Class PazaryeriAPI
@@ -159,8 +160,10 @@ Public Class frm_PazaryeriFaturaGonderim
         chkSadeceTeslimEdilenler.Text = "Sadece Teslim Edilenler"
         chkSadeceTeslimEdilenler.Location = New Point(310, 50)
         chkSadeceTeslimEdilenler.Size = New Size(180, 25)
-        chkSadeceTeslimEdilenler.Checked = True  ' Default olarak işaretli
+        ' NOT: Checked değeri event handler eklendikten SONRA ayarlanmalı değil,
+        ' Bu nedenle event tetiklenmeden önce handler'ı kaldırıyoruz
         PanelControl1.Controls.Add(chkSadeceTeslimEdilenler)
+        chkSadeceTeslimEdilenler.Checked = True  ' Default olarak işaretli
 
         ' Durum Label
         lblDurum = New LabelControl()
@@ -1577,15 +1580,18 @@ Public Class frm_PazaryeriFaturaGonderim
         Else
             lblDurum.Text = "Hata: Veritabanı bağlantısı yok!"
         End If
+        
+        formYuklendi = True
     End Sub
     
     ''' <summary>
     ''' Sadece Teslim Edilenler checkbox değiştiğinde listeyi yenile
     ''' </summary>
     Private Sub chkSadeceTeslimEdilenler_CheckedChanged(sender As Object, e As EventArgs) Handles chkSadeceTeslimEdilenler.CheckedChanged
-        If dtFaturalar IsNot Nothing Then
-            ListeleFaturalar()
-        End If
+        ' Form yüklenmediyse işlem yapma
+        If Not formYuklendi Then Return
+        If dtFaturalar Is Nothing Then Return
+        ListeleFaturalar()
     End Sub
     
     ' ===== CONTEXT MENU EVENT HANDLERS =====
