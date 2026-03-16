@@ -440,12 +440,22 @@ Public Class frm_PazaryeriFaturaGonderim
                 lblDurum.Text = "Gönderiliyor: " & siparisNo & " (" & pazaryeri & ") - " & (i + 1) & "/" & rows.Length
                 Application.DoEvents()
                 
-                ' DEBUG: GibFaturaNo değerini logla
+                ' DEBUG: GibFaturaNo değerini logla ve MessageBox ile göster
                 Debug.WriteLine("[DEBUG] Sipariş: " & siparisNo & ", GibFaturaNo: [" & gibFaturaNo & "], IsNullOrEmpty: " & String.IsNullOrEmpty(gibFaturaNo).ToString())
+                
+                ' İlk kayıt için debug mesajı göster
+                If i = 0 Then
+                    MessageBox.Show("Sipariş: " & siparisNo & vbCrLf & 
+                                   "GibFaturaNo: [" & gibFaturaNo & "]" & vbCrLf &
+                                   "Boş mu: " & String.IsNullOrEmpty(gibFaturaNo).ToString() & vbCrLf &
+                                   "Trim sonrası boş mu: " & (gibFaturaNo.Trim() = "").ToString(),
+                                   "DEBUG - GİB Fatura No Kontrolü", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                End If
 
                 ' ===== GİB'E GÖNDERİLMEMİŞSE ÖNCE GİB'E GÖNDER =====
                 If String.IsNullOrEmpty(gibFaturaNo) OrElse gibFaturaNo.Trim() = "" Then
                     Debug.WriteLine("[GIB] GibFaturaNo boş - GİB'e gönderilecek: " & siparisNo)
+                    MessageBox.Show("GİB'e gönderilecek: " & siparisNo, "DEBUG", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     lblDurum.Text = "GİB'e gönderiliyor: " & siparisNo & " - " & (i + 1) & "/" & rows.Length
                     Application.DoEvents()
                     
