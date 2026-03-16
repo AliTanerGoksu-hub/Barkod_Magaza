@@ -3186,6 +3186,24 @@ Public Class frm_qukaGonder
                 Dim custInvoice As Dictionary(Of String, Object) = Nothing
                 If cust.ContainsKey("invoice") AndAlso cust("invoice") IsNot Nothing Then
                     custInvoice = AsDict(cust("invoice"))
+                    Log("INFO", "AddOrder", $"✓ INVOICE objesi BULUNDU")
+                Else
+                    Log("WARNING", "AddOrder", $"⚠ INVOICE objesi YOK - delivery kullanılacak")
+                End If
+                
+                ' DEBUG: Customer objesinin tüm anahtarlarını logla
+                Log("DEBUG", "AddOrder", $"CUSTOMER KEYS: {String.Join(", ", cust.Keys)}")
+                If custDelivery IsNot Nothing Then
+                    Log("DEBUG", "AddOrder", $"DELIVERY KEYS: {String.Join(", ", custDelivery.Keys)}")
+                    If custDelivery.ContainsKey("name") Then
+                        Log("DEBUG", "AddOrder", $"DELIVERY NAME: {custDelivery("name")}")
+                    End If
+                End If
+                If custInvoice IsNot Nothing Then
+                    Log("DEBUG", "AddOrder", $"INVOICE KEYS: {String.Join(", ", custInvoice.Keys)}")
+                    If custInvoice.ContainsKey("name") Then
+                        Log("DEBUG", "AddOrder", $"INVOICE NAME: {custInvoice("name")}")
+                    End If
                 End If
                 
                 ' ===== TC KIMLIK: API v2.2.4 - "nationalId" alanindan =====
