@@ -16937,15 +16937,15 @@ Public Class frm_Perakende_Satis_Pesin
             Dim tempUnvan As String = mus("sUnvan").ToString().Trim()
             Dim adSoyad As String = (ad & " " & soyad).Trim()
             ' sUnvan, ad+soyad ile aynı DEĞİLSE kullan (firma müşterisi)
-            If Not String.IsNullOrEmpty(tempUnvan) AndAlso _
-               tempUnvan.ToUpperInvariant() <> adSoyad.ToUpperInvariant() AndAlso _
-               tempUnvan.ToUpperInvariant() <> ad.ToUpperInvariant() AndAlso _
+            If Not String.IsNullOrEmpty(tempUnvan) AndAlso
+               tempUnvan.ToUpperInvariant() <> adSoyad.ToUpperInvariant() AndAlso
+               tempUnvan.ToUpperInvariant() <> ad.ToUpperInvariant() AndAlso
                tempUnvan.ToUpperInvariant() <> soyad.ToUpperInvariant() Then
                 unvan = tempUnvan
             End If
         End If
 
-                Dim vergiDairesi As String = ""
+        Dim vergiDairesi As String = ""
         ' Vergi Dairesi Kodu
         If mus IsNot Nothing AndAlso Not IsDBNull(mus("sVergiDairesi")) AndAlso mus("sVergiDairesi") IsNot Nothing Then
             vergiDairesi = mus("sVergiDairesi").ToString().Trim()
@@ -17203,14 +17203,14 @@ Public Class frm_Perakende_Satis_Pesin
                 responseContent = New StreamReader(ex.Response.GetResponseStream()).ReadToEnd()
             End If
             LogYaz("SatisiKolaysoftaGonder", "Hata: " & ex.Message & vbCrLf & "Yanıt: " & responseContent)
-            
+
             ' Kullanıcı dostu hata mesajı
             Dim kullaniciMesaji As String = KolaysoftHataCevir(responseContent, ex.Message)
             MessageBox.Show(kullaniciMesaji, "Kolaysoft Fatura Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
         Catch ex As Exception
             LogYaz("SatisiKolaysoftaGonder", "Hata: " & ex.Message & vbCrLf & "Yanıt: " & responseContent)
-            
+
             Dim kullaniciMesaji As String = KolaysoftHataCevir(responseContent, ex.Message)
             MessageBox.Show(kullaniciMesaji, "Kolaysoft Fatura Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try

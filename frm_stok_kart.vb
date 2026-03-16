@@ -1306,7 +1306,7 @@ Public Class frm_stok_kart
         Me.Panel_Alt.Controls.Add(Me.SimpleButton2)
         Me.Panel_Alt.Controls.Add(Me.SimpleButton1)
         Me.Panel_Alt.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel_Alt.Location = New System.Drawing.Point(0, 659)
+        Me.Panel_Alt.Location = New System.Drawing.Point(0, 660)
         Me.Panel_Alt.Name = "Panel_Alt"
         Me.Panel_Alt.Size = New System.Drawing.Size(1367, 70)
         Me.Panel_Alt.TabIndex = 1
@@ -1597,7 +1597,7 @@ Public Class frm_stok_kart
         Me.PanelControl3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelControl3.Location = New System.Drawing.Point(0, 80)
         Me.PanelControl3.Name = "PanelControl3"
-        Me.PanelControl3.Size = New System.Drawing.Size(1367, 579)
+        Me.PanelControl3.Size = New System.Drawing.Size(1367, 580)
         Me.PanelControl3.TabIndex = 0
         '
         'XtraTabControl1
@@ -1610,7 +1610,7 @@ Public Class frm_stok_kart
         Me.XtraTabControl1.Location = New System.Drawing.Point(2, 2)
         Me.XtraTabControl1.Name = "XtraTabControl1"
         Me.XtraTabControl1.SelectedTabPage = Me.XtraTabPage1
-        Me.XtraTabControl1.Size = New System.Drawing.Size(1363, 511)
+        Me.XtraTabControl1.Size = New System.Drawing.Size(1363, 512)
         Me.XtraTabControl1.TabIndex = 1
         Me.XtraTabControl1.TabPages.AddRange(New DevExpress.XtraTab.XtraTabPage() {Me.XtraTabPage1, Me.XtraTabPage2, Me.XtraTabPage3, Me.XtraTabPage4, Me.XtraTabPage6, Me.XtraTabPage5, Me.XtraTabPage8, Me.XtraTabPage7, Me.XtraTabPage9, Me.XtraTabPage10})
         '
@@ -1619,7 +1619,7 @@ Public Class frm_stok_kart
         Me.XtraTabPage1.Controls.Add(Me.GroupControl1)
         Me.XtraTabPage1.Image = CType(resources.GetObject("XtraTabPage1.Image"), System.Drawing.Image)
         Me.XtraTabPage1.Name = "XtraTabPage1"
-        Me.XtraTabPage1.Size = New System.Drawing.Size(1357, 475)
+        Me.XtraTabPage1.Size = New System.Drawing.Size(1361, 471)
         Me.XtraTabPage1.Text = "Genel"
         '
         'GroupControl1
@@ -1689,7 +1689,7 @@ Public Class frm_stok_kart
         Me.GroupControl1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupControl1.Location = New System.Drawing.Point(0, 0)
         Me.GroupControl1.Name = "GroupControl1"
-        Me.GroupControl1.Size = New System.Drawing.Size(1357, 475)
+        Me.GroupControl1.Size = New System.Drawing.Size(1361, 471)
         Me.GroupControl1.TabIndex = 0
         '
         'sec_bTersOran
@@ -2391,22 +2391,22 @@ Public Class frm_stok_kart
         '
         Me.barDockControlBottom.CausesValidation = False
         Me.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.barDockControlBottom.Location = New System.Drawing.Point(0, 729)
-        Me.barDockControlBottom.Size = New System.Drawing.Size(1367, 35)
+        Me.barDockControlBottom.Location = New System.Drawing.Point(0, 730)
+        Me.barDockControlBottom.Size = New System.Drawing.Size(1367, 34)
         '
         'barDockControlLeft
         '
         Me.barDockControlLeft.CausesValidation = False
         Me.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left
         Me.barDockControlLeft.Location = New System.Drawing.Point(0, 0)
-        Me.barDockControlLeft.Size = New System.Drawing.Size(0, 729)
+        Me.barDockControlLeft.Size = New System.Drawing.Size(0, 730)
         '
         'barDockControlRight
         '
         Me.barDockControlRight.CausesValidation = False
         Me.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right
         Me.barDockControlRight.Location = New System.Drawing.Point(1367, 0)
-        Me.barDockControlRight.Size = New System.Drawing.Size(0, 729)
+        Me.barDockControlRight.Size = New System.Drawing.Size(0, 730)
         '
         'LabelControl26
         '
@@ -2995,7 +2995,7 @@ Public Class frm_stok_kart
         Me.XtraTabPage2.Controls.Add(Me.GridControl1)
         Me.XtraTabPage2.Image = CType(resources.GetObject("XtraTabPage2.Image"), System.Drawing.Image)
         Me.XtraTabPage2.Name = "XtraTabPage2"
-        Me.XtraTabPage2.Size = New System.Drawing.Size(1357, 476)
+        Me.XtraTabPage2.Size = New System.Drawing.Size(1361, 470)
         Me.XtraTabPage2.Text = "Sınıflar"
         '
         'GridControl1
@@ -3007,7 +3007,7 @@ Public Class frm_stok_kart
         Me.GridControl1.MainView = Me.GridView1
         Me.GridControl1.Name = "GridControl1"
         Me.GridControl1.RepositoryItems.AddRange(New DevExpress.XtraEditors.Repository.RepositoryItem() {Me.sec_sSinifKodu, Me.sec_Siniflar})
-        Me.GridControl1.Size = New System.Drawing.Size(1357, 476)
+        Me.GridControl1.Size = New System.Drawing.Size(1361, 470)
         Me.GridControl1.TabIndex = 4
         Me.GridControl1.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView1})
         '
@@ -3148,7 +3148,7 @@ Public Class frm_stok_kart
         Me.XtraTabPage3.Controls.Add(Me.GridControl2)
         Me.XtraTabPage3.Image = CType(resources.GetObject("XtraTabPage3.Image"), System.Drawing.Image)
         Me.XtraTabPage3.Name = "XtraTabPage3"
-        Me.XtraTabPage3.Size = New System.Drawing.Size(1357, 476)
+        Me.XtraTabPage3.Size = New System.Drawing.Size(1361, 470)
         Me.XtraTabPage3.Text = "Aylık Toplamlar"
         '
         'GridControl2
@@ -3160,7 +3160,7 @@ Public Class frm_stok_kart
         Me.GridControl2.Location = New System.Drawing.Point(0, 0)
         Me.GridControl2.MainView = Me.GridView2
         Me.GridControl2.Name = "GridControl2"
-        Me.GridControl2.Size = New System.Drawing.Size(1357, 476)
+        Me.GridControl2.Size = New System.Drawing.Size(1361, 470)
         Me.GridControl2.TabIndex = 0
         Me.GridControl2.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView2})
         '
@@ -3335,7 +3335,7 @@ Public Class frm_stok_kart
         Me.XtraTabPage4.Controls.Add(Me.GroupControl4)
         Me.XtraTabPage4.Image = CType(resources.GetObject("XtraTabPage4.Image"), System.Drawing.Image)
         Me.XtraTabPage4.Name = "XtraTabPage4"
-        Me.XtraTabPage4.Size = New System.Drawing.Size(1357, 476)
+        Me.XtraTabPage4.Size = New System.Drawing.Size(1361, 470)
         Me.XtraTabPage4.Text = "R/B/K"
         '
         'GroupControl5
@@ -3344,7 +3344,7 @@ Public Class frm_stok_kart
         Me.GroupControl5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupControl5.Location = New System.Drawing.Point(0, 0)
         Me.GroupControl5.Name = "GroupControl5"
-        Me.GroupControl5.Size = New System.Drawing.Size(1136, 476)
+        Me.GroupControl5.Size = New System.Drawing.Size(1140, 470)
         Me.GroupControl5.TabIndex = 2
         Me.GroupControl5.Text = "Renk/Beden Alm"
         '
@@ -3359,10 +3359,10 @@ Public Class frm_stok_kart
         Me.GridControl3.DataSource = Me.ds_tbStokAcilim
         Me.GridControl3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GridControl3.Fields.AddRange(New DevExpress.XtraPivotGrid.PivotGridField() {Me.fieldnStokID, Me.fieldsModel, Me.fieldsKodu, Me.fieldsRenk, Me.fieldsBeden, Me.fieldsKavala, Me.fieldnMevcut, Me.fieldsRenkAdi})
-        Me.GridControl3.Location = New System.Drawing.Point(2, 27)
+        Me.GridControl3.Location = New System.Drawing.Point(2, 21)
         Me.GridControl3.Name = "GridControl3"
         Me.GridControl3.OptionsDataField.Area = DevExpress.XtraPivotGrid.PivotDataArea.ColumnArea
-        Me.GridControl3.Size = New System.Drawing.Size(1132, 447)
+        Me.GridControl3.Size = New System.Drawing.Size(1136, 447)
         Me.GridControl3.TabIndex = 0
         '
         'kisayol_rbk
@@ -3537,9 +3537,9 @@ Public Class frm_stok_kart
         Me.GroupControl4.Controls.Add(Me.SimpleButton10)
         Me.GroupControl4.Controls.Add(Me.SimpleButton11)
         Me.GroupControl4.Dock = System.Windows.Forms.DockStyle.Right
-        Me.GroupControl4.Location = New System.Drawing.Point(1136, 0)
+        Me.GroupControl4.Location = New System.Drawing.Point(1140, 0)
         Me.GroupControl4.Name = "GroupControl4"
-        Me.GroupControl4.Size = New System.Drawing.Size(221, 476)
+        Me.GroupControl4.Size = New System.Drawing.Size(221, 470)
         Me.GroupControl4.TabIndex = 1
         Me.GroupControl4.Text = "İşlemler"
         '
@@ -3621,7 +3621,7 @@ Public Class frm_stok_kart
         Me.XtraTabPage6.Controls.Add(Me.GroupControl2)
         Me.XtraTabPage6.Image = CType(resources.GetObject("XtraTabPage6.Image"), System.Drawing.Image)
         Me.XtraTabPage6.Name = "XtraTabPage6"
-        Me.XtraTabPage6.Size = New System.Drawing.Size(1357, 476)
+        Me.XtraTabPage6.Size = New System.Drawing.Size(1361, 470)
         Me.XtraTabPage6.Text = "Barkodlar"
         '
         'GroupControl3
@@ -3631,7 +3631,7 @@ Public Class frm_stok_kart
         Me.GroupControl3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupControl3.Location = New System.Drawing.Point(0, 0)
         Me.GroupControl3.Name = "GroupControl3"
-        Me.GroupControl3.Size = New System.Drawing.Size(1136, 476)
+        Me.GroupControl3.Size = New System.Drawing.Size(1140, 470)
         Me.GroupControl3.TabIndex = 2
         Me.GroupControl3.Text = "Barkod Listesi"
         '
@@ -3823,11 +3823,11 @@ Public Class frm_stok_kart
         Me.GridControl4.DataMember = "Table1"
         Me.GridControl4.DataSource = Me.ds_tbStokBarkodu
         Me.GridControl4.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GridControl4.Location = New System.Drawing.Point(2, 27)
+        Me.GridControl4.Location = New System.Drawing.Point(2, 21)
         Me.GridControl4.MainView = Me.GridView3
         Me.GridControl4.Name = "GridControl4"
         Me.GridControl4.RepositoryItems.AddRange(New DevExpress.XtraEditors.Repository.RepositoryItem() {Me.sec_sBarkod, Me.sec_nKisim, Me.sec_sBirimCinsi})
-        Me.GridControl4.Size = New System.Drawing.Size(1132, 447)
+        Me.GridControl4.Size = New System.Drawing.Size(1136, 447)
         Me.GridControl4.TabIndex = 0
         Me.GridControl4.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView3})
         '
@@ -4122,9 +4122,9 @@ Public Class frm_stok_kart
         Me.GroupControl2.Controls.Add(Me.btn_BarkodAtaEan8)
         Me.GroupControl2.Controls.Add(Me.btn_BarkodAtaEan13)
         Me.GroupControl2.Dock = System.Windows.Forms.DockStyle.Right
-        Me.GroupControl2.Location = New System.Drawing.Point(1136, 0)
+        Me.GroupControl2.Location = New System.Drawing.Point(1140, 0)
         Me.GroupControl2.Name = "GroupControl2"
-        Me.GroupControl2.Size = New System.Drawing.Size(221, 476)
+        Me.GroupControl2.Size = New System.Drawing.Size(221, 470)
         Me.GroupControl2.TabIndex = 1
         Me.GroupControl2.Text = "lemler"
         '
@@ -4215,7 +4215,7 @@ Public Class frm_stok_kart
         Me.XtraTabPage5.Controls.Add(Me.txt_sUzunNot)
         Me.XtraTabPage5.Image = CType(resources.GetObject("XtraTabPage5.Image"), System.Drawing.Image)
         Me.XtraTabPage5.Name = "XtraTabPage5"
-        Me.XtraTabPage5.Size = New System.Drawing.Size(1357, 476)
+        Me.XtraTabPage5.Size = New System.Drawing.Size(1361, 470)
         Me.XtraTabPage5.Text = "Not"
         '
         'btnAIAciklamaEkle
@@ -4278,7 +4278,7 @@ Public Class frm_stok_kart
         Me.XtraTabPage8.Controls.Add(Me.PanelControl2)
         Me.XtraTabPage8.Image = CType(resources.GetObject("XtraTabPage8.Image"), System.Drawing.Image)
         Me.XtraTabPage8.Name = "XtraTabPage8"
-        Me.XtraTabPage8.Size = New System.Drawing.Size(1357, 476)
+        Me.XtraTabPage8.Size = New System.Drawing.Size(1361, 470)
         Me.XtraTabPage8.Text = "Dökümanlar"
         '
         'PanelControl5
@@ -4287,7 +4287,7 @@ Public Class frm_stok_kart
         Me.PanelControl5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelControl5.Location = New System.Drawing.Point(0, 0)
         Me.PanelControl5.Name = "PanelControl5"
-        Me.PanelControl5.Size = New System.Drawing.Size(1357, 416)
+        Me.PanelControl5.Size = New System.Drawing.Size(1361, 410)
         Me.PanelControl5.TabIndex = 2
         '
         'GridControl6
@@ -4300,7 +4300,7 @@ Public Class frm_stok_kart
         Me.GridControl6.MenuManager = Me.BarManager1
         Me.GridControl6.Name = "GridControl6"
         Me.GridControl6.RepositoryItems.AddRange(New DevExpress.XtraEditors.Repository.RepositoryItem() {Me.sec_pResim})
-        Me.GridControl6.Size = New System.Drawing.Size(1353, 412)
+        Me.GridControl6.Size = New System.Drawing.Size(1357, 406)
         Me.GridControl6.TabIndex = 1
         Me.GridControl6.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView6})
         '
@@ -4489,9 +4489,9 @@ Public Class frm_stok_kart
         Me.PanelControl2.Controls.Add(Me.SimpleButton9)
         Me.PanelControl2.Controls.Add(Me.SimpleButton12)
         Me.PanelControl2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelControl2.Location = New System.Drawing.Point(0, 416)
+        Me.PanelControl2.Location = New System.Drawing.Point(0, 410)
         Me.PanelControl2.Name = "PanelControl2"
-        Me.PanelControl2.Size = New System.Drawing.Size(1357, 60)
+        Me.PanelControl2.Size = New System.Drawing.Size(1361, 60)
         Me.PanelControl2.TabIndex = 1
         '
         'btnAIResimEkle
@@ -4512,7 +4512,7 @@ Public Class frm_stok_kart
         '
         Me.SimpleButton13.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SimpleButton13.Image = CType(resources.GetObject("SimpleButton13.Image"), System.Drawing.Image)
-        Me.SimpleButton13.Location = New System.Drawing.Point(314, 9)
+        Me.SimpleButton13.Location = New System.Drawing.Point(318, 9)
         Me.SimpleButton13.Name = "SimpleButton13"
         Me.SimpleButton13.Size = New System.Drawing.Size(120, 34)
         Me.SimpleButton13.TabIndex = 16
@@ -4522,7 +4522,7 @@ Public Class frm_stok_kart
         '
         Me.SimpleButton9.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SimpleButton9.Image = CType(resources.GetObject("SimpleButton9.Image"), System.Drawing.Image)
-        Me.SimpleButton9.Location = New System.Drawing.Point(194, 9)
+        Me.SimpleButton9.Location = New System.Drawing.Point(198, 9)
         Me.SimpleButton9.Name = "SimpleButton9"
         Me.SimpleButton9.Size = New System.Drawing.Size(120, 34)
         Me.SimpleButton9.TabIndex = 15
@@ -4532,7 +4532,7 @@ Public Class frm_stok_kart
         '
         Me.SimpleButton12.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SimpleButton12.Image = CType(resources.GetObject("SimpleButton12.Image"), System.Drawing.Image)
-        Me.SimpleButton12.Location = New System.Drawing.Point(74, 9)
+        Me.SimpleButton12.Location = New System.Drawing.Point(78, 9)
         Me.SimpleButton12.Name = "SimpleButton12"
         Me.SimpleButton12.Size = New System.Drawing.Size(120, 34)
         Me.SimpleButton12.TabIndex = 14
@@ -4544,7 +4544,7 @@ Public Class frm_stok_kart
         Me.XtraTabPage7.Controls.Add(Me.GroupControl7)
         Me.XtraTabPage7.Image = CType(resources.GetObject("XtraTabPage7.Image"), System.Drawing.Image)
         Me.XtraTabPage7.Name = "XtraTabPage7"
-        Me.XtraTabPage7.Size = New System.Drawing.Size(1357, 476)
+        Me.XtraTabPage7.Size = New System.Drawing.Size(1361, 470)
         Me.XtraTabPage7.Text = "Hareketler"
         '
         'GridControl5
@@ -4553,7 +4553,7 @@ Public Class frm_stok_kart
         Me.GridControl5.Location = New System.Drawing.Point(0, 71)
         Me.GridControl5.MainView = Me.GridView4
         Me.GridControl5.Name = "GridControl5"
-        Me.GridControl5.Size = New System.Drawing.Size(1357, 405)
+        Me.GridControl5.Size = New System.Drawing.Size(1361, 399)
         Me.GridControl5.TabIndex = 0
         Me.GridControl5.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView4})
         '
@@ -4850,7 +4850,7 @@ Public Class frm_stok_kart
         Me.GroupControl7.Dock = System.Windows.Forms.DockStyle.Top
         Me.GroupControl7.Location = New System.Drawing.Point(0, 0)
         Me.GroupControl7.Name = "GroupControl7"
-        Me.GroupControl7.Size = New System.Drawing.Size(1357, 71)
+        Me.GroupControl7.Size = New System.Drawing.Size(1361, 71)
         Me.GroupControl7.TabIndex = 1
         Me.GroupControl7.Text = "Ara"
         '
@@ -4902,7 +4902,7 @@ Public Class frm_stok_kart
         Me.XtraTabPage9.Controls.Add(Me.PanelControl6)
         Me.XtraTabPage9.Image = Global.business_smart.My.Resources.Resources.signpost
         Me.XtraTabPage9.Name = "XtraTabPage9"
-        Me.XtraTabPage9.Size = New System.Drawing.Size(1357, 476)
+        Me.XtraTabPage9.Size = New System.Drawing.Size(1361, 470)
         Me.XtraTabPage9.Text = "Alternatif"
         '
         'GridControl7
@@ -4911,7 +4911,7 @@ Public Class frm_stok_kart
         Me.GridControl7.Location = New System.Drawing.Point(0, 0)
         Me.GridControl7.MainView = Me.GridView5
         Me.GridControl7.Name = "GridControl7"
-        Me.GridControl7.Size = New System.Drawing.Size(1357, 416)
+        Me.GridControl7.Size = New System.Drawing.Size(1361, 410)
         Me.GridControl7.TabIndex = 3
         Me.GridControl7.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView5})
         '
@@ -5012,16 +5012,16 @@ Public Class frm_stok_kart
         Me.PanelControl6.Controls.Add(Me.btn_Alternatif_Sil)
         Me.PanelControl6.Controls.Add(Me.btn_Alternatif_Ekle)
         Me.PanelControl6.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelControl6.Location = New System.Drawing.Point(0, 416)
+        Me.PanelControl6.Location = New System.Drawing.Point(0, 410)
         Me.PanelControl6.Name = "PanelControl6"
-        Me.PanelControl6.Size = New System.Drawing.Size(1357, 60)
+        Me.PanelControl6.Size = New System.Drawing.Size(1361, 60)
         Me.PanelControl6.TabIndex = 2
         '
         'SimpleButton14
         '
         Me.SimpleButton14.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SimpleButton14.Image = CType(resources.GetObject("SimpleButton14.Image"), System.Drawing.Image)
-        Me.SimpleButton14.Location = New System.Drawing.Point(434, 9)
+        Me.SimpleButton14.Location = New System.Drawing.Point(438, 9)
         Me.SimpleButton14.Name = "SimpleButton14"
         Me.SimpleButton14.Size = New System.Drawing.Size(120, 34)
         Me.SimpleButton14.TabIndex = 17
@@ -5031,7 +5031,7 @@ Public Class frm_stok_kart
         '
         Me.btn_Alternatif_Yazdir.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btn_Alternatif_Yazdir.Image = CType(resources.GetObject("btn_Alternatif_Yazdir.Image"), System.Drawing.Image)
-        Me.btn_Alternatif_Yazdir.Location = New System.Drawing.Point(314, 9)
+        Me.btn_Alternatif_Yazdir.Location = New System.Drawing.Point(318, 9)
         Me.btn_Alternatif_Yazdir.Name = "btn_Alternatif_Yazdir"
         Me.btn_Alternatif_Yazdir.Size = New System.Drawing.Size(120, 34)
         Me.btn_Alternatif_Yazdir.TabIndex = 16
@@ -5041,7 +5041,7 @@ Public Class frm_stok_kart
         '
         Me.btn_Alternatif_Sil.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btn_Alternatif_Sil.Image = CType(resources.GetObject("btn_Alternatif_Sil.Image"), System.Drawing.Image)
-        Me.btn_Alternatif_Sil.Location = New System.Drawing.Point(194, 9)
+        Me.btn_Alternatif_Sil.Location = New System.Drawing.Point(198, 9)
         Me.btn_Alternatif_Sil.Name = "btn_Alternatif_Sil"
         Me.btn_Alternatif_Sil.Size = New System.Drawing.Size(120, 34)
         Me.btn_Alternatif_Sil.TabIndex = 15
@@ -5051,7 +5051,7 @@ Public Class frm_stok_kart
         '
         Me.btn_Alternatif_Ekle.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btn_Alternatif_Ekle.Image = CType(resources.GetObject("btn_Alternatif_Ekle.Image"), System.Drawing.Image)
-        Me.btn_Alternatif_Ekle.Location = New System.Drawing.Point(74, 9)
+        Me.btn_Alternatif_Ekle.Location = New System.Drawing.Point(78, 9)
         Me.btn_Alternatif_Ekle.Name = "btn_Alternatif_Ekle"
         Me.btn_Alternatif_Ekle.Size = New System.Drawing.Size(120, 34)
         Me.btn_Alternatif_Ekle.TabIndex = 14
@@ -5062,7 +5062,7 @@ Public Class frm_stok_kart
         Me.XtraTabPage10.Controls.Add(Me.GridControl8)
         Me.XtraTabPage10.Image = Global.business_smart.My.Resources.Resources.help
         Me.XtraTabPage10.Name = "XtraTabPage10"
-        Me.XtraTabPage10.Size = New System.Drawing.Size(1357, 476)
+        Me.XtraTabPage10.Size = New System.Drawing.Size(1361, 470)
         Me.XtraTabPage10.Text = "Muhasebe"
         '
         'GridControl8
@@ -5074,7 +5074,7 @@ Public Class frm_stok_kart
         Me.GridControl8.MainView = Me.GridView7
         Me.GridControl8.Name = "GridControl8"
         Me.GridControl8.RepositoryItems.AddRange(New DevExpress.XtraEditors.Repository.RepositoryItem() {Me.sec_sHesapPlani})
-        Me.GridControl8.Size = New System.Drawing.Size(1357, 476)
+        Me.GridControl8.Size = New System.Drawing.Size(1361, 470)
         Me.GridControl8.TabIndex = 5
         Me.GridControl8.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView7})
         '
@@ -5195,7 +5195,7 @@ Public Class frm_stok_kart
         Me.PanelControl4.Controls.Add(Me.SimpleButton5)
         Me.PanelControl4.Controls.Add(Me.SimpleButton6)
         Me.PanelControl4.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelControl4.Location = New System.Drawing.Point(2, 513)
+        Me.PanelControl4.Location = New System.Drawing.Point(2, 514)
         Me.PanelControl4.LookAndFeel.Style = DevExpress.LookAndFeel.LookAndFeelStyle.Style3D
         Me.PanelControl4.LookAndFeel.UseDefaultLookAndFeel = False
         Me.PanelControl4.Name = "PanelControl4"

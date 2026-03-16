@@ -293,7 +293,6 @@ Public Class frm_perakende
     Friend WithEvents txt_KartNo As DevExpress.XtraEditors.ButtonEdit
     Friend WithEvents Panel_islem As DevExpress.XtraEditors.PanelControl
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
         Dim SuperToolTip8 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
         Dim ToolTipTitleItem8 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
         Dim ToolTipItem8 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
@@ -324,7 +323,7 @@ Public Class frm_perakende
         Me.Panel_Kasiyer = New DevExpress.XtraEditors.PanelControl()
         Me.LabelControl35 = New DevExpress.XtraEditors.LabelControl()
         Me.TextEdit1 = New DevExpress.XtraEditors.TextEdit()
-        Me.BarManager1 = New DevExpress.XtraBars.BarManager(Me.components)
+        Me.BarManager1 = New DevExpress.XtraBars.BarManager()
         Me.Bar2 = New DevExpress.XtraBars.Bar()
         Me.BarSubItem1 = New DevExpress.XtraBars.BarSubItem()
         Me.BarButtonItem5 = New DevExpress.XtraBars.BarButtonItem()
@@ -367,7 +366,7 @@ Public Class frm_perakende
         Me.txt_kasiyer_kod = New DevExpress.XtraEditors.ButtonEdit()
         Me.LabelControl2 = New DevExpress.XtraEditors.LabelControl()
         Me.LabelControl1 = New DevExpress.XtraEditors.LabelControl()
-        Me.ToolTipController1 = New DevExpress.Utils.ToolTipController(Me.components)
+        Me.ToolTipController1 = New DevExpress.Utils.ToolTipController()
         Me.Panel_Baslik = New DevExpress.XtraEditors.PanelControl()
         Me.txt_KartNo = New DevExpress.XtraEditors.ButtonEdit()
         Me.ds_Musteri = New System.Data.DataSet()
@@ -556,7 +555,7 @@ Public Class frm_perakende
         Me.colKASIYER = New DevExpress.XtraGrid.Columns.GridColumn()
         Me.colKAYIT = New DevExpress.XtraGrid.Columns.GridColumn()
         Me.collBakiye = New DevExpress.XtraGrid.Columns.GridColumn()
-        Me.ýmageList1 = New System.Windows.Forms.ImageList(Me.components)
+        Me.ýmageList1 = New System.Windows.Forms.ImageList()
         Me.ds_taksitler = New System.Data.DataSet()
         Me.Panel_islem = New DevExpress.XtraEditors.PanelControl()
         Me.GroupControl7 = New DevExpress.XtraEditors.GroupControl()
@@ -967,22 +966,22 @@ Public Class frm_perakende
         '
         Me.barDockControlBottom.CausesValidation = False
         Me.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.barDockControlBottom.Location = New System.Drawing.Point(0, 1007)
-        Me.barDockControlBottom.Size = New System.Drawing.Size(1365, 31)
+        Me.barDockControlBottom.Location = New System.Drawing.Point(0, 1008)
+        Me.barDockControlBottom.Size = New System.Drawing.Size(1365, 30)
         '
         'barDockControlLeft
         '
         Me.barDockControlLeft.CausesValidation = False
         Me.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left
         Me.barDockControlLeft.Location = New System.Drawing.Point(0, 32)
-        Me.barDockControlLeft.Size = New System.Drawing.Size(0, 975)
+        Me.barDockControlLeft.Size = New System.Drawing.Size(0, 976)
         '
         'barDockControlRight
         '
         Me.barDockControlRight.CausesValidation = False
         Me.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right
         Me.barDockControlRight.Location = New System.Drawing.Point(1365, 32)
-        Me.barDockControlRight.Size = New System.Drawing.Size(0, 975)
+        Me.barDockControlRight.Size = New System.Drawing.Size(0, 976)
         '
         'sec_magaza
         '
@@ -1025,7 +1024,7 @@ Public Class frm_perakende
         Me.DateEdit1.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.DateEdit1.Properties.NullText = "[Tarih]"
         Me.DateEdit1.Properties.VistaTimeProperties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
-        Me.DateEdit1.Size = New System.Drawing.Size(215, 26)
+        Me.DateEdit1.Size = New System.Drawing.Size(215, 28)
         Me.DateEdit1.TabIndex = 8
         Me.DateEdit1.ToolTip = "Aktif Ýþlem Tarihi"
         '
@@ -1787,7 +1786,7 @@ Public Class frm_perakende
         Me.txt_dteDogumTarihi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.txt_dteDogumTarihi.Properties.ReadOnly = True
         Me.txt_dteDogumTarihi.Properties.VistaTimeProperties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
-        Me.txt_dteDogumTarihi.Size = New System.Drawing.Size(272, 26)
+        Me.txt_dteDogumTarihi.Size = New System.Drawing.Size(272, 28)
         Me.txt_dteDogumTarihi.TabIndex = 8
         '
         'LabelControl27
@@ -1816,7 +1815,7 @@ Public Class frm_perakende
         Me.txt_dteEvlilikTarihi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.txt_dteEvlilikTarihi.Properties.ReadOnly = True
         Me.txt_dteEvlilikTarihi.Properties.VistaTimeProperties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
-        Me.txt_dteEvlilikTarihi.Size = New System.Drawing.Size(160, 26)
+        Me.txt_dteEvlilikTarihi.Size = New System.Drawing.Size(160, 28)
         Me.txt_dteEvlilikTarihi.TabIndex = 18
         '
         'LabelControl29
@@ -2566,7 +2565,7 @@ Public Class frm_perakende
         Me.Panel_Taksitler.Dock = System.Windows.Forms.DockStyle.Right
         Me.Panel_Taksitler.Location = New System.Drawing.Point(690, 400)
         Me.Panel_Taksitler.Name = "Panel_Taksitler"
-        Me.Panel_Taksitler.Size = New System.Drawing.Size(403, 510)
+        Me.Panel_Taksitler.Size = New System.Drawing.Size(403, 511)
         Me.Panel_Taksitler.TabIndex = 3
         '
         'GroupControl1
@@ -2580,17 +2579,17 @@ Public Class frm_perakende
         Me.GroupControl1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupControl1.Location = New System.Drawing.Point(2, 2)
         Me.GroupControl1.Name = "GroupControl1"
-        Me.GroupControl1.Size = New System.Drawing.Size(399, 506)
+        Me.GroupControl1.Size = New System.Drawing.Size(399, 507)
         Me.GroupControl1.TabIndex = 1
         Me.GroupControl1.Text = "Kalan Ödemeler"
         '
         'GridControl3
         '
         Me.GridControl3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GridControl3.Location = New System.Drawing.Point(2, 29)
+        Me.GridControl3.Location = New System.Drawing.Point(2, 23)
         Me.GridControl3.MainView = Me.GridView3
         Me.GridControl3.Name = "GridControl3"
-        Me.GridControl3.Size = New System.Drawing.Size(395, 442)
+        Me.GridControl3.Size = New System.Drawing.Size(395, 449)
         Me.GridControl3.TabIndex = 0
         Me.GridControl3.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView3})
         '
@@ -2664,7 +2663,7 @@ Public Class frm_perakende
         Me.btn_Odemeler.Appearance.ForeColor = System.Drawing.Color.Purple
         Me.btn_Odemeler.Appearance.Options.UseForeColor = True
         Me.btn_Odemeler.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.btn_Odemeler.Location = New System.Drawing.Point(2, 471)
+        Me.btn_Odemeler.Location = New System.Drawing.Point(2, 472)
         Me.btn_Odemeler.Name = "btn_Odemeler"
         Me.btn_Odemeler.Size = New System.Drawing.Size(395, 33)
         Me.btn_Odemeler.TabIndex = 1
@@ -2816,7 +2815,7 @@ Public Class frm_perakende
         Me.GroupControl3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupControl3.Location = New System.Drawing.Point(2, 535)
         Me.GroupControl3.Name = "GroupControl3"
-        Me.GroupControl3.Size = New System.Drawing.Size(688, 375)
+        Me.GroupControl3.Size = New System.Drawing.Size(688, 376)
         Me.GroupControl3.TabIndex = 2
         Me.GroupControl3.Text = "Hesap Hareketleri"
         '
@@ -2825,10 +2824,10 @@ Public Class frm_perakende
         Me.GridControl2.DataMember = "Table1"
         Me.GridControl2.DataSource = Me.ds_odemeler
         Me.GridControl2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GridControl2.Location = New System.Drawing.Point(2, 29)
+        Me.GridControl2.Location = New System.Drawing.Point(2, 23)
         Me.GridControl2.MainView = Me.GridView2
         Me.GridControl2.Name = "GridControl2"
-        Me.GridControl2.Size = New System.Drawing.Size(684, 344)
+        Me.GridControl2.Size = New System.Drawing.Size(684, 351)
         Me.GridControl2.TabIndex = 0
         Me.GridControl2.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView2})
         '
@@ -3049,7 +3048,7 @@ Public Class frm_perakende
         Me.Panel_islem.Enabled = False
         Me.Panel_islem.Location = New System.Drawing.Point(0, 95)
         Me.Panel_islem.Name = "Panel_islem"
-        Me.Panel_islem.Size = New System.Drawing.Size(270, 912)
+        Me.Panel_islem.Size = New System.Drawing.Size(270, 913)
         Me.Panel_islem.TabIndex = 15
         '
         'GroupControl7
@@ -3067,7 +3066,7 @@ Public Class frm_perakende
         Me.GroupControl7.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupControl7.Location = New System.Drawing.Point(2, 566)
         Me.GroupControl7.Name = "GroupControl7"
-        Me.GroupControl7.Size = New System.Drawing.Size(266, 344)
+        Me.GroupControl7.Size = New System.Drawing.Size(266, 345)
         Me.GroupControl7.TabIndex = 3
         Me.GroupControl7.Text = "Analiz"
         '
@@ -3388,7 +3387,7 @@ Public Class frm_perakende
         Me.panel_bilgi.Dock = System.Windows.Forms.DockStyle.Fill
         Me.panel_bilgi.Location = New System.Drawing.Point(270, 95)
         Me.panel_bilgi.Name = "panel_bilgi"
-        Me.panel_bilgi.Size = New System.Drawing.Size(1095, 912)
+        Me.panel_bilgi.Size = New System.Drawing.Size(1095, 913)
         Me.panel_bilgi.TabIndex = 16
         '
         'frm_perakende

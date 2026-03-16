@@ -418,9 +418,9 @@ Public Class frm_fatura_liste
         Me.MenuItem44 = New System.Windows.Forms.MenuItem()
         Me.MenuItem45 = New System.Windows.Forms.MenuItem()
         Me.MenuItem57 = New System.Windows.Forms.MenuItem()
+        Me.MenuItem56 = New System.Windows.Forms.MenuItem()
         Me.MenuItem58 = New System.Windows.Forms.MenuItem()
         Me.MenuItem59 = New System.Windows.Forms.MenuItem()
-        Me.MenuItem56 = New System.Windows.Forms.MenuItem()
         Me.MenuItem15 = New System.Windows.Forms.MenuItem()
         Me.MenuItem19 = New System.Windows.Forms.MenuItem()
         Me.MenuItem16 = New System.Windows.Forms.MenuItem()
@@ -919,22 +919,22 @@ Public Class frm_fatura_liste
         '
         Me.barDockControlBottom.CausesValidation = False
         Me.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.barDockControlBottom.Location = New System.Drawing.Point(0, 1158)
-        Me.barDockControlBottom.Size = New System.Drawing.Size(2156, 31)
+        Me.barDockControlBottom.Location = New System.Drawing.Point(0, 1159)
+        Me.barDockControlBottom.Size = New System.Drawing.Size(2156, 30)
         '
         'barDockControlLeft
         '
         Me.barDockControlLeft.CausesValidation = False
         Me.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left
         Me.barDockControlLeft.Location = New System.Drawing.Point(0, 0)
-        Me.barDockControlLeft.Size = New System.Drawing.Size(0, 1158)
+        Me.barDockControlLeft.Size = New System.Drawing.Size(0, 1159)
         '
         'barDockControlRight
         '
         Me.barDockControlRight.CausesValidation = False
         Me.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right
         Me.barDockControlRight.Location = New System.Drawing.Point(2156, 0)
-        Me.barDockControlRight.Size = New System.Drawing.Size(0, 1158)
+        Me.barDockControlRight.Size = New System.Drawing.Size(0, 1159)
         '
         'BarButtonItem4
         '
@@ -1439,7 +1439,7 @@ Public Class frm_fatura_liste
         Me.PanelControl2.Controls.Add(Me.SimpleButton2)
         Me.PanelControl2.Controls.Add(Me.SimpleButton1)
         Me.PanelControl2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelControl2.Location = New System.Drawing.Point(0, 1090)
+        Me.PanelControl2.Location = New System.Drawing.Point(0, 1091)
         Me.PanelControl2.Name = "PanelControl2"
         Me.PanelControl2.Size = New System.Drawing.Size(2156, 68)
         Me.PanelControl2.TabIndex = 1
@@ -1501,7 +1501,7 @@ Public Class frm_fatura_liste
         Me.PanelControl3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelControl3.Location = New System.Drawing.Point(0, 214)
         Me.PanelControl3.Name = "PanelControl3"
-        Me.PanelControl3.Size = New System.Drawing.Size(2156, 876)
+        Me.PanelControl3.Size = New System.Drawing.Size(2156, 877)
         Me.PanelControl3.TabIndex = 0
         '
         'Group_Muhasebelestir
@@ -1643,7 +1643,7 @@ Public Class frm_fatura_liste
         Me.GridControl1.Location = New System.Drawing.Point(2, 2)
         Me.GridControl1.MainView = Me.GridView1
         Me.GridControl1.Name = "GridControl1"
-        Me.GridControl1.Size = New System.Drawing.Size(2152, 872)
+        Me.GridControl1.Size = New System.Drawing.Size(2152, 873)
         Me.GridControl1.TabIndex = 0
         Me.GridControl1.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView1})
         '
@@ -1771,6 +1771,11 @@ Public Class frm_fatura_liste
         Me.MenuItem57.Index = 4
         Me.MenuItem57.Text = "Pazaryeri Fatura Gönder"
         '
+        'MenuItem56
+        '
+        Me.MenuItem56.Index = 12
+        Me.MenuItem56.Text = "Gib Fatura Önizle"
+        '
         'MenuItem58
         '
         Me.MenuItem58.Index = 13
@@ -1781,80 +1786,75 @@ Public Class frm_fatura_liste
         Me.MenuItem59.Index = 14
         Me.MenuItem59.Text = "Toplu Maliyet Güncelle"
         '
-        'MenuItem56
-        '
-        Me.MenuItem56.Index = 12
-        Me.MenuItem56.Text = "Gib Fatura Önizle"
-        '
         'MenuItem15
         '
-        Me.MenuItem15.Index = 13
+        Me.MenuItem15.Index = 15
         Me.MenuItem15.Text = "-"
         '
         'MenuItem19
         '
-        Me.MenuItem19.Index = 14
+        Me.MenuItem19.Index = 16
         Me.MenuItem19.Shortcut = System.Windows.Forms.Shortcut.CtrlF4
         Me.MenuItem19.Text = "Firma Kartı"
         '
         'MenuItem16
         '
-        Me.MenuItem16.Index = 15
+        Me.MenuItem16.Index = 17
         Me.MenuItem16.Shortcut = System.Windows.Forms.Shortcut.F8
         Me.MenuItem16.Text = "İletişim Bilgileri"
         '
         'MenuItem17
         '
-        Me.MenuItem17.Index = 16
+        Me.MenuItem17.Index = 18
         Me.MenuItem17.Shortcut = System.Windows.Forms.Shortcut.F7
         Me.MenuItem17.Text = "Firma Hareketleri"
         '
         'MenuItem22
         '
-        Me.MenuItem22.Index = 17
+        Me.MenuItem22.Index = 19
         Me.MenuItem22.Shortcut = System.Windows.Forms.Shortcut.F6
         Me.MenuItem22.Text = "Firma Bakiyesi"
         '
         'MenuItem42
         '
-        Me.MenuItem42.Index = 18
+        Me.MenuItem42.Index = 20
         Me.MenuItem42.Shortcut = System.Windows.Forms.Shortcut.F9
         Me.MenuItem42.Text = "Notlar"
         '
         'MenuItem20
         '
-        Me.MenuItem20.Index = 19
+        Me.MenuItem20.Index = 21
         Me.MenuItem20.Text = "-"
         '
         'MenuItem1
         '
-        Me.MenuItem1.Index = 20
+        Me.MenuItem1.Index = 22
         Me.MenuItem1.Text = "Görünümü Düzenle"
         '
         'MenuItem2
         '
-        Me.MenuItem2.Index = 21
+        Me.MenuItem2.Index = 23
         Me.MenuItem2.Text = "Başlık Değiştir"
         '
         'MenuItem3
         '
-        Me.MenuItem3.Index = 22
+        Me.MenuItem3.Index = 24
         Me.MenuItem3.Text = "Görünümü Kaydet"
         '
         'MenuItem4
         '
-        Me.MenuItem4.Index = 23
+        Me.MenuItem4.Index = 25
         Me.MenuItem4.Shortcut = System.Windows.Forms.Shortcut.CtrlP
         Me.MenuItem4.Text = "Görünümü Yazdır"
         '
         'MenuItem10
         '
-        Me.MenuItem10.Index = 24
+        Me.MenuItem10.Index = 26
         Me.MenuItem10.Text = "-"
         '
         'MenuItem25
         '
-        Me.MenuItem25.Index = 25
+        Me.MenuItem25.Index = 27
         Me.MenuItem25.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuItem28, Me.MenuItem29, Me.MenuItem30, Me.MenuItem31, Me.MenuItem26, Me.MenuItem27})
         Me.MenuItem25.Text = "Raporla"
         '
@@ -1890,12 +1890,12 @@ Public Class frm_fatura_liste
         '
         'MenuItem36
         '
-        Me.MenuItem36.Index = 26
+        Me.MenuItem36.Index = 28
         Me.MenuItem36.Text = "-"
         '
         'MenuItem32
         '
-        Me.MenuItem32.Index = 27
+        Me.MenuItem32.Index = 29
         Me.MenuItem32.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuItem33, Me.MenuItem34, Me.MenuItem35, Me.MenuItem38})
         Me.MenuItem32.Text = "Döküm"
         '
@@ -1921,47 +1921,47 @@ Public Class frm_fatura_liste
         '
         'MenuItem37
         '
-        Me.MenuItem37.Index = 28
+        Me.MenuItem37.Index = 30
         Me.MenuItem37.Text = "-"
         '
         'MenuItem14
         '
-        Me.MenuItem14.Index = 29
+        Me.MenuItem14.Index = 31
         Me.MenuItem14.Text = "Hızlı Filtre"
         '
         'MenuItem5
         '
-        Me.MenuItem5.Index = 30
+        Me.MenuItem5.Index = 32
         Me.MenuItem5.Text = "Filtrele"
         '
         'MenuItem6
         '
-        Me.MenuItem6.Index = 31
+        Me.MenuItem6.Index = 33
         Me.MenuItem6.Text = "Gruplandır"
         '
         'MenuItem11
         '
-        Me.MenuItem11.Index = 32
+        Me.MenuItem11.Index = 34
         Me.MenuItem11.Text = "-"
         '
         'MenuItem7
         '
-        Me.MenuItem7.Index = 33
+        Me.MenuItem7.Index = 35
         Me.MenuItem7.Text = "Satırları Aç"
         '
         'MenuItem8
         '
-        Me.MenuItem8.Index = 34
+        Me.MenuItem8.Index = 36
         Me.MenuItem8.Text = "Satırları Kapat"
         '
         'MenuItem12
         '
-        Me.MenuItem12.Index = 35
+        Me.MenuItem12.Index = 37
         Me.MenuItem12.Text = "-"
         '
         'MenuItem9
         '
-        Me.MenuItem9.Index = 36
+        Me.MenuItem9.Index = 38
         Me.MenuItem9.Shortcut = System.Windows.Forms.Shortcut.F12
         Me.MenuItem9.Text = "Ekranı Kapla"
         '
@@ -7378,35 +7378,35 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
             MsgBox("Lütfen fatura seçin!", MsgBoxStyle.Exclamation)
             Exit Sub
         End If
-        
+
         Try
             Dim basarili As Integer = 0
             Dim basarisiz As Integer = 0
             Dim gibGonderilen As Integer = 0
-            
+
             For Each rowHandle As Integer In selectedRows
                 Dim nStokFisiID As Long = CLng(GridView1.GetRowCellValue(rowHandle, "nStokFisiID"))
                 Dim gibFaturaNo As String = ""
                 Dim siparisNo As String = ""
-                
+
                 ' GİB Fatura No'yu kontrol et
                 Dim gibFaturaNoObj As Object = GridView1.GetRowCellValue(rowHandle, "GibFaturaNo")
                 If gibFaturaNoObj IsNot Nothing AndAlso gibFaturaNoObj IsNot DBNull.Value Then
                     gibFaturaNo = gibFaturaNoObj.ToString().Trim()
                 End If
-                
+
                 ' Sipariş No'yu al (pazaryeri siparişi mi kontrol et)
                 Dim siparisNoObj As Object = GridView1.GetRowCellValue(rowHandle, "sAciklama3")
                 If siparisNoObj IsNot Nothing AndAlso siparisNoObj IsNot DBNull.Value Then
                     siparisNo = siparisNoObj.ToString().Trim()
                 End If
-                
+
                 ' Pazaryeri siparişi değilse atla
                 If String.IsNullOrEmpty(siparisNo) OrElse
                    (Not siparisNo.StartsWith("TY") AndAlso Not siparisNo.StartsWith("HB") AndAlso Not siparisNo.StartsWith("N11")) Then
                     Continue For
                 End If
-                
+
                 ' GİB'e gönderilmemişse önce GİB'e gönder
                 If String.IsNullOrEmpty(gibFaturaNo) Then
                     Try
@@ -7423,28 +7423,28 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                         Continue For
                     End Try
                 End If
-                
+
                 basarili += 1
             Next
-            
+
             ' Pazaryeri gönderim formunu aç
             Dim frm As New frm_PazaryeriFaturaGonderim()
             frm.connection = Me.connection
             frm.ShowDialog()
-            
+
             ' Listeyi yenile (ara fonksiyonu ile)
             ara()
-            
+
             If gibGonderilen > 0 Then
                 MsgBox("GİB'e gönderilen: " & gibGonderilen & vbCrLf &
                        "İşlem tamamlandı.", MsgBoxStyle.Information)
             End If
-            
+
         Catch ex As Exception
             MsgBox("Pazaryeri Fatura Gönderim hatası: " & ex.Message, MsgBoxStyle.Critical)
         End Try
     End Sub
-    
+
     ''' <summary>
     ''' Toplu Tarih Değiştir menü öğesi tıklandığında
     ''' Seçili faturaların dteFisTarihi, dteValorTarihi, dteTeslimTarihi alanlarını değiştirir
@@ -7455,7 +7455,7 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
             MsgBox("Lütfen en az bir fatura seçin!", MsgBoxStyle.Exclamation)
             Exit Sub
         End If
-        
+
         Try
             ' Tarih seçim formu oluştur
             Using frmTarih As New Form()
@@ -7465,92 +7465,92 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                 frmTarih.FormBorderStyle = FormBorderStyle.FixedDialog
                 frmTarih.MaximizeBox = False
                 frmTarih.MinimizeBox = False
-                
+
                 Dim lblBilgi As New Label()
                 lblBilgi.Text = selectedRows.Length & " adet fatura seçildi." & vbCrLf & "Yeni tarihi seçin:"
                 lblBilgi.Location = New Point(20, 20)
                 lblBilgi.Size = New Size(300, 40)
                 frmTarih.Controls.Add(lblBilgi)
-                
+
                 Dim dtpYeniTarih As New DateTimePicker()
                 dtpYeniTarih.Location = New Point(20, 70)
                 dtpYeniTarih.Size = New Size(200, 25)
                 dtpYeniTarih.Format = DateTimePickerFormat.Short
                 dtpYeniTarih.Value = DateTime.Today
                 frmTarih.Controls.Add(dtpYeniTarih)
-                
+
                 Dim btnUygula As New Button()
                 btnUygula.Text = "Uygula"
                 btnUygula.Location = New Point(20, 110)
                 btnUygula.Size = New Size(100, 30)
                 btnUygula.DialogResult = DialogResult.OK
                 frmTarih.Controls.Add(btnUygula)
-                
+
                 Dim btnIptal As New Button()
                 btnIptal.Text = "İptal"
                 btnIptal.Location = New Point(130, 110)
                 btnIptal.Size = New Size(100, 30)
                 btnIptal.DialogResult = DialogResult.Cancel
                 frmTarih.Controls.Add(btnIptal)
-                
+
                 frmTarih.AcceptButton = btnUygula
                 frmTarih.CancelButton = btnIptal
-                
+
                 If frmTarih.ShowDialog() = DialogResult.OK Then
                     Dim yeniTarih As DateTime = dtpYeniTarih.Value.Date
                     Dim guncellenen As Integer = 0
-                    
+
                     Using con As New OleDbConnection(connection)
                         con.Open()
-                        
+
                         For Each rowHandle As Integer In selectedRows
                             Dim nStokFisiID As Long = CLng(GridView1.GetRowCellValue(rowHandle, "nStokFisiID"))
-                            
+
                             ' 1. tbStokFisiMaster güncelle
                             Using cmd As New OleDbCommand("UPDATE tbStokFisiMaster SET " &
                                 "dteFisTarihi = ?, " &
                                 "dteValorTarihi = ?, " &
                                 "dteTeslimTarihi = ? " &
                                 "WHERE nStokFisiID = ?", con)
-                                
+
                                 cmd.Parameters.Add("@dteFisTarihi", OleDbType.Date).Value = yeniTarih
                                 cmd.Parameters.Add("@dteValorTarihi", OleDbType.Date).Value = yeniTarih
                                 cmd.Parameters.Add("@dteTeslimTarihi", OleDbType.Date).Value = yeniTarih
                                 cmd.Parameters.Add("@nStokFisiID", OleDbType.BigInt).Value = nStokFisiID
-                                
+
                                 If cmd.ExecuteNonQuery() > 0 Then
                                     guncellenen += 1
                                 End If
                             End Using
-                            
+
                             ' 2. tbStokFisiDetayi güncelle
                             Using cmdDetay As New OleDbCommand("UPDATE tbStokFisiDetayi SET " &
                                 "dteIslemTarihi = ?, " &
                                 "dteFisTarihi = ? " &
                                 "WHERE nStokFisiID = ?", con)
-                                
+
                                 cmdDetay.Parameters.Add("@dteIslemTarihi", OleDbType.Date).Value = yeniTarih
                                 cmdDetay.Parameters.Add("@dteFisTarihi", OleDbType.Date).Value = yeniTarih
                                 cmdDetay.Parameters.Add("@nStokFisiID", OleDbType.BigInt).Value = nStokFisiID
-                                
+
                                 cmdDetay.ExecuteNonQuery()
                             End Using
                         Next
-                        
+
                     End Using
-                    
+
                     ' Listeyi yenile (ara fonksiyonu ile)
                     ara()
-                    
+
                     MsgBox(guncellenen & " adet faturanın tarihi güncellendi.", MsgBoxStyle.Information)
                 End If
             End Using
-            
+
         Catch ex As Exception
             MsgBox("Tarih değiştirme hatası: " & ex.Message, MsgBoxStyle.Critical)
         End Try
     End Sub
-    
+
     ' Toplu Maliyet Güncelle - seçilen faturalar için stok maliyet fiyatlarını günceller
     ' KDV dahil/hariç kontrolü yapılır
     Private Sub MenuItem59_Click(sender As Object, e As EventArgs) Handles MenuItem59.Click
@@ -7559,18 +7559,18 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
             MsgBox("Lütfen en az bir fatura seçin!", MsgBoxStyle.Exclamation)
             Exit Sub
         End If
-        
+
         ' Onay al
-        If MsgBox(selectedRows.Length & " adet fatura için stok maliyetleri güncellenecek." & vbCrLf & vbCrLf & _
-                  "Alış fiyatı KDV dahil/hariç durumuna göre maliyet hesaplaması yapılacaktır." & vbCrLf & vbCrLf & _
+        If MsgBox(selectedRows.Length & " adet fatura için stok maliyetleri güncellenecek." & vbCrLf & vbCrLf &
+                  "Alış fiyatı KDV dahil/hariç durumuna göre maliyet hesaplaması yapılacaktır." & vbCrLf & vbCrLf &
                   "Devam etmek istiyor musunuz?", MsgBoxStyle.YesNo + MsgBoxStyle.Question, "Toplu Maliyet Güncelle") = MsgBoxResult.No Then
             Exit Sub
         End If
-        
+
         Try
             Dim toplamGuncellenen As Integer = 0
             Dim toplamHata As Integer = 0
-            
+
             ' Progress göster
             Dim frmProgress As New Form()
             frmProgress.Text = "Maliyetler Güncelleniyor..."
@@ -7580,37 +7580,37 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
             frmProgress.MaximizeBox = False
             frmProgress.MinimizeBox = False
             frmProgress.ControlBox = False
-            
+
             Dim lblDurum As New Label()
             lblDurum.Location = New Point(20, 20)
             lblDurum.Size = New Size(350, 60)
             lblDurum.Text = "Hazırlanıyor..."
             frmProgress.Controls.Add(lblDurum)
-            
+
             Dim progressBar As New System.Windows.Forms.ProgressBar()
             progressBar.Location = New Point(20, 80)
             progressBar.Size = New Size(350, 25)
             progressBar.Maximum = selectedRows.Length
             progressBar.Value = 0
             frmProgress.Controls.Add(progressBar)
-            
+
             frmProgress.Show()
             Application.DoEvents()
-            
+
             Using con As New OleDbConnection(connection)
                 con.Open()
-                
+
                 Dim sayac As Integer = 0
                 For Each rowHandle As Integer In selectedRows
                     sayac += 1
                     Dim nStokFisiID As Long = CLng(GridView1.GetRowCellValue(rowHandle, "nStokFisiID"))
                     Dim sFisTipi As String = GridView1.GetRowCellValue(rowHandle, "sFisTipi").ToString()
                     Dim lFisNo As String = GridView1.GetRowCellValue(rowHandle, "lFisNo").ToString()
-                    
+
                     lblDurum.Text = "İşleniyor: " & sayac & "/" & selectedRows.Length & vbCrLf & "Fiş No: " & lFisNo
                     progressBar.Value = sayac
                     Application.DoEvents()
-                    
+
                     Try
                         ' Bu fatura için maliyet güncelle
                         Dim guncellendi As Integer = TopluMaliyetGuncelle_Fatura(con, nStokFisiID, sFisTipi)
@@ -7620,47 +7620,47 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                     End Try
                 Next
             End Using
-            
+
             frmProgress.Close()
             frmProgress.Dispose()
-            
-            MsgBox("Toplu maliyet güncelleme tamamlandı." & vbCrLf & vbCrLf & _
-                   "İşlenen Fatura: " & selectedRows.Length & vbCrLf & _
-                   "Güncellenen Stok: " & toplamGuncellenen & vbCrLf & _
+
+            MsgBox("Toplu maliyet güncelleme tamamlandı." & vbCrLf & vbCrLf &
+                   "İşlenen Fatura: " & selectedRows.Length & vbCrLf &
+                   "Güncellenen Stok: " & toplamGuncellenen & vbCrLf &
                    "Hata: " & toplamHata, MsgBoxStyle.Information, "Sonuç")
-            
+
         Catch ex As Exception
             MsgBox("Maliyet güncelleme hatası: " & ex.Message, MsgBoxStyle.Critical)
         End Try
     End Sub
-    
+
     ' Tek bir fatura için maliyet güncelleme işlemi
     Private Function TopluMaliyetGuncelle_Fatura(ByVal con As OleDbConnection, ByVal nStokFisiID As Long, ByVal sFisTipi As String) As Integer
         Dim guncellenenSatir As Integer = 0
-        
+
         ' Fatura master bilgilerini al (lEkMaliyet4 subquery ile hesaplanır)
         Dim dsFaturaMaster As New DataSet()
-        Dim sqlMaster As String = "SELECT *, " & _
-            "(SELECT ISNULL(SUM(lTutar), 0) FROM tbStokFisiEkMaliyet WHERE nStokFisiID = tbStokFisiMaster.nStokFisiID AND nIslemID = 0) AS lEkMaliyet4 " & _
+        Dim sqlMaster As String = "SELECT *, " &
+            "(SELECT ISNULL(SUM(lTutar), 0) FROM tbStokFisiEkMaliyet WHERE nStokFisiID = tbStokFisiMaster.nStokFisiID AND nIslemID = 0) AS lEkMaliyet4 " &
             "FROM tbStokFisiMaster WHERE nStokFisiID = " & nStokFisiID
         Using cmdMaster As New OleDbCommand(sqlMaster, con)
             Dim daMaster As New OleDbDataAdapter(cmdMaster)
             daMaster.Fill(dsFaturaMaster, "Master")
         End Using
-        
+
         If dsFaturaMaster.Tables(0).Rows.Count = 0 Then
             Return 0
         End If
-        
+
         Dim drMaster As DataRow = dsFaturaMaster.Tables(0).Rows(0)
         Dim dteFisTarihi As DateTime = CType(drMaster("dteFisTarihi"), DateTime)
-        
+
         ' Ek maliyet bilgilerini al
         Dim lEkmaliyet1 As Decimal = KeyCode.sorgu_sayi(drMaster("lEkmaliyet1"), 0)
         Dim lEkmaliyet3 As Decimal = KeyCode.sorgu_sayi(drMaster("lEkmaliyet3"), 0)
         Dim lEkmaliyet4 As Decimal = KeyCode.sorgu_sayi(drMaster("lEkMaliyet4"), 0)
         Dim lNetTutar As Decimal = KeyCode.sorgu_sayi(drMaster("lNetTutar"), 0)
-        
+
         ' Alış fiyatı KDV dahil mi kontrolü (tbFiyatTipi tablosundan)
         Dim bAlisKdvDahil As Boolean = False
         Try
@@ -7673,17 +7673,17 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
         Catch
             bAlisKdvDahil = False
         End Try
-        
+
         ' Fatura detaylarını al (lEkIlaveMaliyetTutar subquery ile hesaplanır)
         Dim dsFaturaDetay As New DataSet()
-        Dim sqlDetay As String = "SELECT *, " & _
-            "(SELECT ISNULL(SUM(lTutar), 0) FROM tbStokFisiEkMaliyet WHERE nStokFisiID = tbStokFisiDetayi.nStokFisiID AND nIslemID = tbStokFisiDetayi.nIslemID) AS lEkIlaveMaliyetTutar " & _
+        Dim sqlDetay As String = "SELECT *, " &
+            "(SELECT ISNULL(SUM(lTutar), 0) FROM tbStokFisiEkMaliyet WHERE nStokFisiID = tbStokFisiDetayi.nStokFisiID AND nIslemID = tbStokFisiDetayi.nIslemID) AS lEkIlaveMaliyetTutar " &
             "FROM tbStokFisiDetayi WHERE nStokFisiID = " & nStokFisiID
         Using cmdDetay As New OleDbCommand(sqlDetay, con)
             Dim daDetay As New OleDbDataAdapter(cmdDetay)
             daDetay.Fill(dsFaturaDetay, "Detay")
         End Using
-        
+
         For Each drDetay As DataRow In dsFaturaDetay.Tables(0).Rows
             Try
                 ' nMasrafSatiri kolonu sorguya dahil edilmiyor, varsayılan 0 kabul ediyoruz
@@ -7694,7 +7694,7 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                     nMasrafSatiri = 0
                 End Try
                 Dim lBrutFiyat As Decimal = KeyCode.sorgu_sayi(drDetay("lBrutFiyat"), 0)
-                
+
                 If nMasrafSatiri = 0 And lBrutFiyat > 0.01 Then
                     Dim nStokID As Long = CLng(drDetay("nStokID"))
                     Dim lGirisMiktar1 As Decimal = KeyCode.sorgu_sayi(drDetay("lGirisMiktar1"), 1)
@@ -7702,27 +7702,27 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                     Dim nKdvOrani As Decimal = KeyCode.sorgu_sayi(drDetay("nKdvOrani"), 0)
                     Dim lIlaveMaliyetTutar As Decimal = KeyCode.sorgu_sayi(drDetay("lIlaveMaliyetTutar"), 0)
                     Dim lEkIlaveMaliyetTutar As Decimal = KeyCode.sorgu_sayi(drDetay("lEkIlaveMaliyetTutar"), 0)
-                    
+
                     ' Stok bilgilerini al
                     Dim dsStok As New DataSet()
-                    Dim sqlStok As String = "SELECT nStokID, nStokTipi, nFiyatlandirma, sModel, sRenk, sBeden, sKdvTipi, " & _
-                        "(SELECT nKdvOrani FROM tbKdv WHERE sKdvTipi = tbStok.sKdvTipi) AS nStokKdvOrani " & _
+                    Dim sqlStok As String = "SELECT nStokID, nStokTipi, nFiyatlandirma, sModel, sRenk, sBeden, sKdvTipi, " &
+                        "(SELECT nKdvOrani FROM tbKdv WHERE sKdvTipi = tbStok.sKdvTipi) AS nStokKdvOrani " &
                         "FROM tbStok WHERE nStokID = " & nStokID
                     Using cmdStok As New OleDbCommand(sqlStok, con)
                         Dim daStok As New OleDbDataAdapter(cmdStok)
                         daStok.Fill(dsStok, "Stok")
                     End Using
-                    
+
                     If dsStok.Tables(0).Rows.Count > 0 Then
                         Dim drStok As DataRow = dsStok.Tables(0).Rows(0)
                         Dim nStokKdvOrani As Decimal = KeyCode.sorgu_sayi(drStok("nStokKdvOrani"), 0)
-                        
+
                         ' Maliyet ve Alış fiyatı hesapla - BASİT MANTIK
                         ' bAlisKdvDahil = True ise → maliyet = lBrutFiyat (KDV dahil alış fiyatı)
                         ' bAlisKdvDahil = False ise → maliyet = lBrutFiyat × (1 + KDV/100)
                         Dim maliyet As Decimal = 0
                         Dim alis As Decimal = 0
-                        
+
                         If bAlisKdvDahil = True Then
                             ' Alış fiyatı KDV dahil → maliyet = alış fiyatı
                             maliyet = lBrutFiyat
@@ -7732,16 +7732,16 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                             maliyet = lBrutFiyat * ((nKdvOrani + 100) / 100)
                             alis = lBrutFiyat * ((nKdvOrani + 100) / 100)
                         End If
-                        
+
                         ' Mevcut fiyatları sorgula
                         Dim fiyatMaliyet As Decimal = sorgu_stok_fiyat_local(KeyCode.sFiyatM, nStokID, "")
                         Dim fiyatAlis As Decimal = sorgu_stok_fiyat_local(KeyCode.sFiyatA, nStokID, "")
-                        
+
                         Dim nFiyatlandirma As Integer = KeyCode.sorgu_sayi(drStok("nFiyatlandirma"), 0)
                         Dim sModel As String = Trim(drStok("sModel").ToString())
                         Dim sRenk As String = Trim(drStok("sRenk").ToString())
                         Dim sBeden As String = Trim(drStok("sBeden").ToString())
-                        
+
                         ' Maliyetleri güncelle - orijinal frm_fatura.vb'deki gibi
                         If fiyatMaliyet = 0 Then
                             ekle_fiyat_local(nStokID, KeyCode.sFiyatM, maliyet, dteFisTarihi, KeyCode.kullaniciadi)
@@ -7750,7 +7750,7 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                             duzelt_fiyat_local(nStokID, KeyCode.sFiyatM, maliyet, dteFisTarihi)
                             guncellenenSatir += 1
                         End If
-                        
+
                         ' Alışları güncelle - orijinal frm_fatura.vb'deki gibi
                         If fiyatAlis = 0 Then
                             ekle_fiyat_local(nStokID, KeyCode.sFiyatA, alis, dteFisTarihi, KeyCode.kullaniciadi)
@@ -7762,10 +7762,10 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
             Catch
             End Try
         Next
-        
+
         Return guncellenenSatir
     End Function
-    
+
     ' Fiyat düzeltme yardımcı fonksiyonu
     Private Sub TopluMaliyet_FiyatDuzelt(ByVal con As OleDbConnection, ByVal nFiyatlandirma As Integer, ByVal sModel As String, ByVal sRenk As String, ByVal sBeden As String, ByVal sFiyatTipi As String, ByVal lFiyat As Decimal, ByVal dteFiyatTespitTarihi As DateTime, ByVal nStokID As Long)
         Try
@@ -7773,9 +7773,9 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
             sModel = Trim(Replace(sModel, " ", ""))
             sRenk = Trim(Replace(sRenk, " ", ""))
             sBeden = Trim(Replace(sBeden, " ", ""))
-            
+
             Dim sql As String = ""
-            
+
             If lFiyat = 0 Then
                 If nFiyatlandirma = 0 Then
                     sql = "DELETE tbStokFiyati FROM tbStok WHERE tbStok.nStokID = tbStokFiyati.nStokID AND sFiyatTipi = '" & sFiyatTipi & "' AND RTRIM(LTRIM(sModel)) = '" & sModel & "'"
@@ -7793,21 +7793,21 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                     sql = "UPDATE tbStokFiyati SET lFiyat = " & lFiyat.ToString().Replace(",", ".") & ", dteFiyatTespitTarihi = '" & dteFiyatTespitTarihi.ToString("yyyy-MM-dd") & "', dteKayitTarihi = GETDATE() FROM tbStok WHERE tbStok.nStokID = tbStokFiyati.nStokID AND sFiyatTipi = '" & sFiyatTipi & "' AND RTRIM(LTRIM(sModel)) = '" & sModel & "' AND RTRIM(LTRIM(sRenk)) = '" & sRenk & "' AND RTRIM(LTRIM(sBeden)) = '" & sBeden & "'"
                 End If
             End If
-            
+
             If sql <> "" Then
                 Using cmd As New OleDbCommand(sql, con)
                     cmd.ExecuteNonQuery()
                 End Using
             End If
-            
+
             ' Ayrıca doğrudan stok fiyatını da güncelle
             duzelt_fiyat_local(nStokID, sFiyatTipi, lFiyat, dteFiyatTespitTarihi)
-            
+
         Catch ex As Exception
             ' Hata varsa sessizce devam et
         End Try
     End Sub
-    
+
     ' Stok fiyat sorgulama - frm_fatura.vb'den alındı
     Private Function sorgu_stok_fiyat_local(ByVal fiyattipi As String, ByVal stokno As Int64, ByVal sDovizCinsi As String) As Decimal
         Dim kriter
@@ -7833,7 +7833,7 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
         cmd = Nothing
         Return sonuc
     End Function
-    
+
     ' Fiyat ekleme - frm_fatura.vb'den alındı
     Private Sub ekle_fiyat_local(ByVal stokno As Int64, ByVal fiyattipi As String, ByVal fiyat As Decimal, ByVal dteFiyatTespittarihi As DateTime, ByVal sKullaniciAdi As String)
         Dim cmd As New OleDb.OleDbCommand
@@ -7855,7 +7855,7 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
         con = Nothing
         cmd = Nothing
     End Sub
-    
+
     ' Fiyat düzeltme - frm_fatura.vb'den alındı
     Private Sub duzelt_fiyat_local(ByVal stokno As Int64, ByVal fiyattipi As String, ByVal fiyat As Decimal, ByVal dteFiyatTespittarihi As DateTime)
         Dim cmd As New OleDb.OleDbCommand

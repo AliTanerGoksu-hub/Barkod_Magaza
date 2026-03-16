@@ -497,22 +497,22 @@ Public Class frm_tbSiparis_liste
         '
         Me.barDockControlBottom.CausesValidation = False
         Me.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.barDockControlBottom.Location = New System.Drawing.Point(0, 831)
-        Me.barDockControlBottom.Size = New System.Drawing.Size(1564, 31)
+        Me.barDockControlBottom.Location = New System.Drawing.Point(0, 832)
+        Me.barDockControlBottom.Size = New System.Drawing.Size(1564, 30)
         '
         'barDockControlLeft
         '
         Me.barDockControlLeft.CausesValidation = False
         Me.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left
         Me.barDockControlLeft.Location = New System.Drawing.Point(0, 0)
-        Me.barDockControlLeft.Size = New System.Drawing.Size(0, 831)
+        Me.barDockControlLeft.Size = New System.Drawing.Size(0, 832)
         '
         'barDockControlRight
         '
         Me.barDockControlRight.CausesValidation = False
         Me.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right
         Me.barDockControlRight.Location = New System.Drawing.Point(1564, 0)
-        Me.barDockControlRight.Size = New System.Drawing.Size(0, 831)
+        Me.barDockControlRight.Size = New System.Drawing.Size(0, 832)
         '
         'sec_bYuklenenler
         '
@@ -893,7 +893,7 @@ Public Class frm_tbSiparis_liste
         Me.PanelControl2.Controls.Add(Me.SimpleButton1)
         Me.PanelControl2.Controls.Add(Me.Label3)
         Me.PanelControl2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelControl2.Location = New System.Drawing.Point(0, 764)
+        Me.PanelControl2.Location = New System.Drawing.Point(0, 765)
         Me.PanelControl2.Name = "PanelControl2"
         Me.PanelControl2.Size = New System.Drawing.Size(1564, 67)
         Me.PanelControl2.TabIndex = 1
@@ -943,7 +943,7 @@ Public Class frm_tbSiparis_liste
         Me.PanelControl3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelControl3.Location = New System.Drawing.Point(0, 223)
         Me.PanelControl3.Name = "PanelControl3"
-        Me.PanelControl3.Size = New System.Drawing.Size(1564, 541)
+        Me.PanelControl3.Size = New System.Drawing.Size(1564, 542)
         Me.PanelControl3.TabIndex = 0
         '
         'GridControl1
@@ -956,7 +956,7 @@ Public Class frm_tbSiparis_liste
         Me.GridControl1.Location = New System.Drawing.Point(2, 2)
         Me.GridControl1.MainView = Me.GridView1
         Me.GridControl1.Name = "GridControl1"
-        Me.GridControl1.Size = New System.Drawing.Size(1560, 537)
+        Me.GridControl1.Size = New System.Drawing.Size(1560, 538)
         Me.GridControl1.TabIndex = 0
         Me.GridControl1.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView1})
         '
