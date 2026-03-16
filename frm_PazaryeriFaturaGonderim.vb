@@ -159,7 +159,7 @@ Public Class frm_PazaryeriFaturaGonderim
         chkSadeceTeslimEdilenler.Text = "Sadece Teslim Edilenler"
         chkSadeceTeslimEdilenler.Location = New Point(310, 50)
         chkSadeceTeslimEdilenler.Size = New Size(180, 25)
-        chkSadeceTeslimEdilenler.Checked = True  ' Default olarak işaretli
+        chkSadeceTeslimEdilenler.Checked = False  ' Default olarak kapalı - tüm faturalar görünsün
         PanelControl1.Controls.Add(chkSadeceTeslimEdilenler)
 
         ' Durum Label
@@ -433,15 +433,19 @@ Public Class frm_PazaryeriFaturaGonderim
                 Dim nStokFisiID As Integer = CInt(dr("nStokFisiID"))
                 Dim siparisNo As String = dr("SiparisNo").ToString().Trim()
                 Dim pazaryeri As String = dr("Pazaryeri").ToString().Trim()
-                Dim gibFaturaNo As String = dr("GibFaturaNo").ToString().Trim()
-                Dim faturaGuid As String = If(dr("sEfaturaGuid") IsNot DBNull.Value, dr("sEfaturaGuid").ToString().Trim(), "")
+                Dim gibFaturaNo As String = If(dr("GibFaturaNo") IsNot DBNull.Value AndAlso dr("GibFaturaNo") IsNot Nothing, dr("GibFaturaNo").ToString().Trim(), "")
+                Dim faturaGuid As String = If(dr("sEfaturaGuid") IsNot DBNull.Value AndAlso dr("sEfaturaGuid") IsNot Nothing, dr("sEfaturaGuid").ToString().Trim(), "")
                 Dim faturaTarihi As DateTime = If(dr("dteFisTarihi") IsNot DBNull.Value, CDate(dr("dteFisTarihi")), DateTime.Now)
 
                 lblDurum.Text = "Gönderiliyor: " & siparisNo & " (" & pazaryeri & ") - " & (i + 1) & "/" & rows.Length
                 Application.DoEvents()
+                
+                ' DEBUG: GibFaturaNo değerini logla
+                Debug.WriteLine("[DEBUG] Sipariş: " & siparisNo & ", GibFaturaNo: [" & gibFaturaNo & "], IsNullOrEmpty: " & String.IsNullOrEmpty(gibFaturaNo).ToString())
 
                 ' ===== GİB'E GÖNDERİLMEMİŞSE ÖNCE GİB'E GÖNDER =====
-                If String.IsNullOrEmpty(gibFaturaNo) Then
+                If String.IsNullOrEmpty(gibFaturaNo) OrElse gibFaturaNo.Trim() = "" Then
+                    Debug.WriteLine("[GIB] GibFaturaNo boş - GİB'e gönderilecek: " & siparisNo)
                     lblDurum.Text = "GİB'e gönderiliyor: " & siparisNo & " - " & (i + 1) & "/" & rows.Length
                     Application.DoEvents()
                     
