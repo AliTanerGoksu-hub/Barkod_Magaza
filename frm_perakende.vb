@@ -293,6 +293,7 @@ Public Class frm_perakende
     Friend WithEvents txt_KartNo As DevExpress.XtraEditors.ButtonEdit
     Friend WithEvents Panel_islem As DevExpress.XtraEditors.PanelControl
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim SuperToolTip8 As DevExpress.Utils.SuperToolTip = New DevExpress.Utils.SuperToolTip()
         Dim ToolTipTitleItem8 As DevExpress.Utils.ToolTipTitleItem = New DevExpress.Utils.ToolTipTitleItem()
         Dim ToolTipItem8 As DevExpress.Utils.ToolTipItem = New DevExpress.Utils.ToolTipItem()
@@ -323,7 +324,7 @@ Public Class frm_perakende
         Me.Panel_Kasiyer = New DevExpress.XtraEditors.PanelControl()
         Me.LabelControl35 = New DevExpress.XtraEditors.LabelControl()
         Me.TextEdit1 = New DevExpress.XtraEditors.TextEdit()
-        Me.BarManager1 = New DevExpress.XtraBars.BarManager()
+        Me.BarManager1 = New DevExpress.XtraBars.BarManager(Me.components)
         Me.Bar2 = New DevExpress.XtraBars.Bar()
         Me.BarSubItem1 = New DevExpress.XtraBars.BarSubItem()
         Me.BarButtonItem5 = New DevExpress.XtraBars.BarButtonItem()
@@ -366,7 +367,7 @@ Public Class frm_perakende
         Me.txt_kasiyer_kod = New DevExpress.XtraEditors.ButtonEdit()
         Me.LabelControl2 = New DevExpress.XtraEditors.LabelControl()
         Me.LabelControl1 = New DevExpress.XtraEditors.LabelControl()
-        Me.ToolTipController1 = New DevExpress.Utils.ToolTipController()
+        Me.ToolTipController1 = New DevExpress.Utils.ToolTipController(Me.components)
         Me.Panel_Baslik = New DevExpress.XtraEditors.PanelControl()
         Me.txt_KartNo = New DevExpress.XtraEditors.ButtonEdit()
         Me.ds_Musteri = New System.Data.DataSet()
@@ -555,7 +556,7 @@ Public Class frm_perakende
         Me.colKASIYER = New DevExpress.XtraGrid.Columns.GridColumn()
         Me.colKAYIT = New DevExpress.XtraGrid.Columns.GridColumn()
         Me.collBakiye = New DevExpress.XtraGrid.Columns.GridColumn()
-        Me.ýmageList1 = New System.Windows.Forms.ImageList()
+        Me.ýmageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.ds_taksitler = New System.Data.DataSet()
         Me.Panel_islem = New DevExpress.XtraEditors.PanelControl()
         Me.GroupControl7 = New DevExpress.XtraEditors.GroupControl()
@@ -1024,7 +1025,7 @@ Public Class frm_perakende
         Me.DateEdit1.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.DateEdit1.Properties.NullText = "[Tarih]"
         Me.DateEdit1.Properties.VistaTimeProperties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
-        Me.DateEdit1.Size = New System.Drawing.Size(215, 28)
+        Me.DateEdit1.Size = New System.Drawing.Size(215, 26)
         Me.DateEdit1.TabIndex = 8
         Me.DateEdit1.ToolTip = "Aktif Ýþlem Tarihi"
         '
@@ -1786,7 +1787,7 @@ Public Class frm_perakende
         Me.txt_dteDogumTarihi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.txt_dteDogumTarihi.Properties.ReadOnly = True
         Me.txt_dteDogumTarihi.Properties.VistaTimeProperties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
-        Me.txt_dteDogumTarihi.Size = New System.Drawing.Size(272, 28)
+        Me.txt_dteDogumTarihi.Size = New System.Drawing.Size(272, 26)
         Me.txt_dteDogumTarihi.TabIndex = 8
         '
         'LabelControl27
@@ -1815,7 +1816,7 @@ Public Class frm_perakende
         Me.txt_dteEvlilikTarihi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.txt_dteEvlilikTarihi.Properties.ReadOnly = True
         Me.txt_dteEvlilikTarihi.Properties.VistaTimeProperties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
-        Me.txt_dteEvlilikTarihi.Size = New System.Drawing.Size(160, 28)
+        Me.txt_dteEvlilikTarihi.Size = New System.Drawing.Size(160, 26)
         Me.txt_dteEvlilikTarihi.TabIndex = 18
         '
         'LabelControl29
@@ -2690,10 +2691,10 @@ Public Class frm_perakende
         Me.GridControl1.DataMember = "Table1"
         Me.GridControl1.DataSource = Me.ds_sinif
         Me.GridControl1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GridControl1.Location = New System.Drawing.Point(2, 29)
+        Me.GridControl1.Location = New System.Drawing.Point(2, 23)
         Me.GridControl1.MainView = Me.GridView1
         Me.GridControl1.Name = "GridControl1"
-        Me.GridControl1.Size = New System.Drawing.Size(684, 104)
+        Me.GridControl1.Size = New System.Drawing.Size(684, 110)
         Me.GridControl1.TabIndex = 0
         Me.GridControl1.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView1})
         '

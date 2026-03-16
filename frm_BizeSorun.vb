@@ -619,7 +619,7 @@ Public Class frm_BizeSorun
         Using smtpServer As New SmtpClient()
             ' SMTP Ayarları
             smtpServer.Credentials = New NetworkCredential("destek@barkodyazilim.com.tr", "Jnx~evm4rlF_")
-            smtpServer.Port = 587
+            smtpServer.Port = 465
             smtpServer.Host = "mail.barkodyazilim.com.tr"
             smtpServer.EnableSsl = True
             smtpServer.Timeout = 60000 ' 60 saniye timeout
