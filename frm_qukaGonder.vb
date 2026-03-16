@@ -2629,10 +2629,23 @@ Public Class frm_qukaGonder
             result = result.Replace("{220}", "Ü")
             result = result.Replace("{252}", "ü")
             
-            ' Azerbaycan karakterleri
-            result = result.Replace("{601}", "ə")  ' Azerbaycan schwa karakteri
-            result = result.Replace("{399}", "Ə")  ' Büyük schwa
-
+            ' Azerbaycan karakterleri - SQL Server desteklemediği için Latin karşılıklarına çevir
+            result = result.Replace("{601}", "e")  ' ə -> e
+            result = result.Replace("{399}", "E")  ' Ə -> E
+            result = result.Replace("ə", "e")      ' Doğrudan karakter varsa (UTF-8)
+            result = result.Replace("Ə", "E")      ' Büyük harf (UTF-8)
+            
+            ' Encoding bozulması durumunda oluşabilecek karakterler
+            ' UTF-8 ə (U+0259) yanlış yorumlanınca: É™ veya benzer
+            result = result.Replace("É™", "e")     ' UTF-8 -> Latin1 bozulması
+            result = result.Replace("Æ™", "e")     ' Alternatif bozulma
+            result = result.Replace(ChrW(&H259), "e")  ' Unicode code point olarak
+            result = result.Replace(ChrW(&H18F), "E")  ' Büyük Ə code point
+            
+            ' Soru işareti olarak görünen karakterleri düzelt (son çare)
+            ' Sadece tek karakter soru işaretleri için (kelime ortasında)
+            ' Bu işlem diğer tüm replace'lerden SONRA yapılmalı
+            
             Log("DEBUG", "DecodeApiData", $"Girdi: [{encodedText}] -> Çıktı: [{result}]")
             Return result
         Catch ex As Exception
