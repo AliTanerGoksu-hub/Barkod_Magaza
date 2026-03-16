@@ -262,10 +262,10 @@ Public Class frm_PazaryeriFaturaGonderim
                 "M.lNetTutar, " &
                 "A.sAciklama2 AS MusteriAdi, " &
                 "A.sAciklama3 AS SiparisNo, " &
-                "ISNULL(F.sAdi, '') AS FirmaAdi, " &
-                "ISNULL(F.sSoyadi, '') AS FirmaSoyadi, " &
-                "ISNULL(F.sTelefon, '') AS Telefon, " &
+                "ISNULL(F.sAciklama, '') AS FirmaAdi, " &
                 "ISNULL(F.sIl, '') AS Il, " &
+                "ISNULL(F.sSemt, '') AS Semt, " &
+                "(SELECT TOP 1 sIletisimAdresi FROM tbFirmaIletisimi WHERE nFirmaId = F.nFirmaID AND sIletisimAraci = 'Telefon') AS Telefon, " &
                 "CASE " &
                 "   WHEN A.sAciklama3 LIKE 'TY%' THEN 'Trendyol' " &
                 "   WHEN A.sAciklama3 LIKE 'HB%' THEN 'Hepsiburada' " &
@@ -314,10 +314,10 @@ Public Class frm_PazaryeriFaturaGonderim
                     Case "lNetTutar" : col.Caption = "Net Tutar" : col.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric : col.DisplayFormat.FormatString = "N2"
                     Case "MusteriAdi" : col.Caption = "Müşteri (Sipariş)"
                     Case "SiparisNo" : col.Caption = "Sipariş No"
-                    Case "FirmaAdi" : col.Caption = "Müşteri Adı"
-                    Case "FirmaSoyadi" : col.Caption = "Müşteri Soyadı"
+                    Case "FirmaAdi" : col.Caption = "Cari Adı"
                     Case "Telefon" : col.Caption = "Telefon"
                     Case "Il" : col.Caption = "İl"
+                    Case "Semt" : col.Caption = "Semt"
                     Case "Pazaryeri" : col.Caption = "Pazaryeri"
                     Case "bGonderildi" : col.Caption = "Fatura Gönderildi" : col.Visible = True
                     Case "dteGonderimTarihi" : col.Caption = "Gönderim Tarihi"
