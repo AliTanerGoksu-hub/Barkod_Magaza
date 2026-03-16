@@ -3137,7 +3137,7 @@ Public Class frm_qukaGonder
                 ' Bu düzeltme, siparişlerin tekrar tekrar işlenmesini önler
                 If IsOrderAlreadyProcessed(orderID, conn, siparisKodu) Then
                     Log("INFO", "AddOrder", $"Sipariş zaten işlenmiş: orderID={orderID}, siparisKodu={siparisKodu}")
-                    
+
                     ' ===== MEVCUT SİPARİŞ İÇİN İHRACAT BİLGİLERİNİ GÜNCELLE =====
                     ' Sipariş daha önce kaydedilmiş olsa bile, yurt dışı ise ihracat bilgilerini güncelle
                     Try
@@ -3145,7 +3145,7 @@ Public Class frm_qukaGonder
                         Dim ulkeBilgisi As String = "Turkiye"
                         Dim adresBilgisi As String = ""
                         Dim sehirBilgisi As String = ""
-                        
+
                         ' custInvoice
                         If order.ContainsKey("customerInvoice") AndAlso order("customerInvoice") IsNot Nothing Then
                             Dim ci = AsDict(order("customerInvoice"))
@@ -3169,18 +3169,18 @@ Public Class frm_qukaGonder
                         If cust IsNot Nothing AndAlso cust.ContainsKey("country") AndAlso cust("country") IsNot Nothing AndAlso ulkeBilgisi = "Turkiye" Then
                             ulkeBilgisi = Convert.ToString(cust("country"))
                         End If
-                        
+
                         ulkeBilgisi = If(ToTurkishTitleCase(Trunc(If(DecodeApiData(ulkeBilgisi), "Turkiye"), 20)), "Turkiye")
-                        
+
                         ' Türkiye mi kontrol et
-                        Dim turkiyeMiKontrol As Boolean = (ulkeBilgisi.ToUpper(New CultureInfo("tr-TR")) = "TÜRKİYE" OrElse 
-                                                    ulkeBilgisi.ToUpper(New CultureInfo("tr-TR")) = "TURKIYE" OrElse 
+                        Dim turkiyeMiKontrol As Boolean = (ulkeBilgisi.ToUpper(New CultureInfo("tr-TR")) = "TÜRKİYE" OrElse
+                                                    ulkeBilgisi.ToUpper(New CultureInfo("tr-TR")) = "TURKIYE" OrElse
                                                     ulkeBilgisi.ToUpper(New CultureInfo("tr-TR")) = "TURKEY" OrElse
                                                     ulkeBilgisi.ToUpper(New CultureInfo("tr-TR")) = "TR")
-                        
+
                         If Not turkiyeMiKontrol Then
                             Log("INFO", "AddOrder", $"🌍 MEVCUT YURT DIŞI SİPARİŞ - İhracat bilgileri güncelleniyor: {ulkeBilgisi}")
-                            
+
                             ' Mevcut siparişin nStokFisiID'sini bul
                             Dim mevcutStokFisiID As Integer = 0
                             Using findCmd As New OleDb.OleDbCommand("SELECT TOP 1 nStokFisiID FROM tbStokFisiMaster WHERE sAciklama3 = ?", conn)
@@ -3191,10 +3191,10 @@ Public Class frm_qukaGonder
                                     mevcutStokFisiID = Convert.ToInt32(result)
                                 End If
                             End Using
-                            
+
                             If mevcutStokFisiID > 0 Then
                                 Dim ulkeKoduBilgi As String = GetUlkeKodu(ulkeBilgisi, conn)
-                                
+
                                 ' İhracat bilgilerini güncelle
                                 Using updateCmd As New OleDb.OleDbCommand()
                                     updateCmd.Connection = conn
@@ -3208,13 +3208,13 @@ Public Class frm_qukaGonder
                                         "sIncotermsKodu = 'DAP', " &
                                         "nTasimaSekli = 3 " &
                                         "WHERE nStokFisiID = ?"
-                                    
+
                                     updateCmd.Parameters.Add("?", OleDbType.VarWChar, 255).Value = If(String.IsNullOrEmpty(adresBilgisi), "", adresBilgisi.Trim())
                                     updateCmd.Parameters.Add("?", OleDbType.VarWChar, 100).Value = If(String.IsNullOrEmpty(sehirBilgisi), "", sehirBilgisi)
                                     updateCmd.Parameters.Add("?", OleDbType.VarWChar, 100).Value = If(String.IsNullOrEmpty(ulkeBilgisi), "", ulkeBilgisi)
                                     updateCmd.Parameters.Add("?", OleDbType.VarWChar, 10).Value = If(String.IsNullOrEmpty(ulkeKoduBilgi), "XX", ulkeKoduBilgi)
                                     updateCmd.Parameters.AddWithValue("?", mevcutStokFisiID)
-                                    
+
                                     Dim rowsUpdated As Integer = updateCmd.ExecuteNonQuery()
                                     If rowsUpdated > 0 Then
                                         Log("SUCCESS", "AddOrder", $"✅ MEVCUT SİPARİŞ İHRACAT BİLGİLERİ GÜNCELLENDİ! nStokFisiID: {mevcutStokFisiID}")
@@ -3230,11 +3230,11 @@ Public Class frm_qukaGonder
                         Log("ERROR", "AddOrder", $"❌ Mevcut sipariş ihracat güncelleme hatası: {exMevcut.Message}")
                     End Try
                     ' ===== MEVCUT SİPARİŞ İHRACAT GÜNCELLEME SONU =====
-                    
+
                     Return
                 End If
                 Dim randStr As String = Guid.NewGuid().ToString()
-                
+
                 ' Orders tablosu SQL Server'da - ayrı bağlantı kullan
                 Dim rowsAffectedOrders As Integer = 0
                 Try
@@ -3250,17 +3250,17 @@ Public Class frm_qukaGonder
                             Next
                             sqlConnStr = String.Join(";", cleanParts)
                         End If
-                        
+
                         Using sqlConn As New SqlClient.SqlConnection(sqlConnStr)
                             sqlConn.Open()
-                            
+
                             ' Sipariş zaten varsa UPDATE yap, yoksa INSERT yap
                             Dim orderExists As Integer = 0
                             Using checkCmd As New SqlClient.SqlCommand("SELECT COUNT(*) FROM orders WHERE ID = @orderID", sqlConn)
                                 checkCmd.Parameters.AddWithValue("@orderID", orderID)
                                 orderExists = CInt(checkCmd.ExecuteScalar())
                             End Using
-                            
+
                             If orderExists > 0 Then
                                 Using updateCmd As New SqlClient.SqlCommand("UPDATE orders SET randStr = @randStr, status = 1, updated_at = GETDATE() WHERE ID = @orderID", sqlConn)
                                     updateCmd.Parameters.AddWithValue("@randStr", randStr)
@@ -3292,13 +3292,13 @@ Public Class frm_qukaGonder
                     Dim rowsAffectedFisDetay As Integer = insertFisDetay.ExecuteNonQuery()
                     Log("DEBUG", "AddOrder", $"fis_detay tablosuna ekleme: fisID={fisID}, productID={productID}, Etkilenen satır: {rowsAffectedFisDetay}")
                 Next
-                
+
                 ' ===== API v2.2.4: customer icindeki delivery objesini al =====
                 Dim custDelivery As Dictionary(Of String, Object) = Nothing
                 If cust.ContainsKey("delivery") AndAlso cust("delivery") IsNot Nothing Then
                     custDelivery = AsDict(cust("delivery"))
                 End If
-                
+
                 ' ===== API v2.2.4: customer icindeki invoice (fatura) objesini al =====
                 ' İHRACAT SİPARİŞLERİNDE FATURA BİLGİLERİ KULLANILMALI (teslimat değil)
                 Dim custInvoice As Dictionary(Of String, Object) = Nothing
@@ -3308,7 +3308,7 @@ Public Class frm_qukaGonder
                 Else
                     Log("WARNING", "AddOrder", $"⚠ INVOICE objesi YOK - delivery kullanılacak")
                 End If
-                
+
                 ' DEBUG: Customer objesinin tüm anahtarlarını ve değerlerini logla
                 Log("DEBUG", "AddOrder", $"CUSTOMER KEYS: {String.Join(", ", cust.Keys)}")
                 Log("DEBUG", "AddOrder", $"CUSTOMER.NAME: [{If(cust.ContainsKey("name"), cust("name"), "N/A")}]")
@@ -3327,12 +3327,12 @@ Public Class frm_qukaGonder
                         Log("DEBUG", "AddOrder", $"INVOICE NAME: {custInvoice("name")}")
                     End If
                 End If
-                
+
                 ' DEBUG: customer.title değerini logla
                 If cust.ContainsKey("title") AndAlso cust("title") IsNot Nothing Then
                     Log("DEBUG", "AddOrder", $"CUSTOMER.TITLE: [{cust("title")}]")
                 End If
-                
+
                 ' ===== TC KIMLIK: API v2.2.4 - "nationalId" alanindan =====
                 Dim tc As String = "0"
                 If cust.ContainsKey("nationalId") AndAlso cust("nationalId") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(cust("nationalId").ToString()) Then
@@ -3344,7 +3344,7 @@ Public Class frm_qukaGonder
                 If String.IsNullOrWhiteSpace(tc) OrElse tc = "0" Then
                     tc = "11111111111"
                 End If
-                
+
                 ' ===== VERGI NO: API v2.2.4 - "taxId" alanindan =====
                 Dim sVergiNo As String = "0"
                 If cust.ContainsKey("taxId") AndAlso cust("taxId") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(cust("taxId").ToString()) Then
@@ -3364,20 +3364,20 @@ Public Class frm_qukaGonder
                 ' 3. customer.invoice.name (nested - genelde boş)
                 ' 4. customer.name (fallback - teslimat firması olabilir)
                 Dim rawName As String = ""
-                
+
                 ' Önce order root'taki invoiceName'i kontrol et
                 If order.ContainsKey("invoiceName") AndAlso order("invoiceName") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(order("invoiceName").ToString()) Then
                     rawName = order("invoiceName").ToString()
                     Log("INFO", "AddOrder", $"🔍 İSİM ORDER.INVOICENAME'DEN ALINDI: [{rawName}]")
-                ' Sonra customer.title kontrol et (fatura unvanı)
+                    ' Sonra customer.title kontrol et (fatura unvanı)
                 ElseIf cust.ContainsKey("title") AndAlso cust("title") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(cust("title").ToString()) Then
                     rawName = cust("title").ToString()
                     Log("INFO", "AddOrder", $"🔍 İSİM CUSTOMER.TITLE'DAN ALINDI: [{rawName}]")
-                ' Sonra customer.invoice.name kontrol et
+                    ' Sonra customer.invoice.name kontrol et
                 ElseIf custInvoice IsNot Nothing AndAlso custInvoice.ContainsKey("name") AndAlso custInvoice("name") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(custInvoice("name").ToString()) Then
                     rawName = custInvoice("name").ToString()
                     Log("INFO", "AddOrder", $"🔍 İSİM CUSTOMER.INVOICE.NAME'DEN ALINDI: [{rawName}]")
-                ' Son olarak customer.name fallback
+                    ' Son olarak customer.name fallback
                 ElseIf cust.ContainsKey("name") AndAlso cust("name") IsNot Nothing Then
                     rawName = cust("name").ToString()
                     Log("INFO", "AddOrder", $"🔍 İSİM CUSTOMER.NAME'DEN ALINDI (FALLBACK): [{rawName}]")
@@ -3466,25 +3466,25 @@ Public Class frm_qukaGonder
                 ElseIf cust.ContainsKey("city_code") AndAlso cust("city_code") IsNot Nothing Then
                     cityName = cust("city_code").ToString().Trim()
                 End If
-                
+
                 ' Varsayılan il değerini veritabanından al (İstanbul için plaka 34)
                 Dim varsayilanIl As String = GetVarsayilanIl(conn)
                 Log("DEBUG", "AddOrder", $"Varsayilan il: {varsayilanIl}")
-                
+
                 ' ===== YABANCI ÜLKE KONTROLÜ =====
                 ' Eğer ülke Türkiye değilse, ham şehir adını doğrudan kullan
                 ' SP'de otomatik olarak tbUlke ve tbIl tablolarına eklenecek
-                Dim turkiyeMi As Boolean = (ulke.ToUpper(New CultureInfo("tr-TR")) = "TÜRKİYE" OrElse 
-                                            ulke.ToUpper(New CultureInfo("tr-TR")) = "TURKIYE" OrElse 
+                Dim turkiyeMi As Boolean = (ulke.ToUpper(New CultureInfo("tr-TR")) = "TÜRKİYE" OrElse
+                                            ulke.ToUpper(New CultureInfo("tr-TR")) = "TURKIYE" OrElse
                                             ulke.ToUpper(New CultureInfo("tr-TR")) = "TURKEY" OrElse
                                             ulke.ToUpper(New CultureInfo("tr-TR")) = "TR")
-                
+
                 Dim il As String = ""
-                
+
                 If turkiyeMi Then
                     ' Türkiye ise mevcut mantığı kullan - tbIl tablosunda ara
                     il = If(Not String.IsNullOrEmpty(cityName), GetIlName(cityName, conn), varsayilanIl)
-                    
+
                     ' GetIlName null veya boş döndüyse varsayılanı kullan
                     If String.IsNullOrEmpty(il) Then
                         il = varsayilanIl
@@ -3516,7 +3516,7 @@ Public Class frm_qukaGonder
                     End If
                     Log("INFO", "AddOrder", $"🌍 YABANCI ÜLKE SİPARİŞİ - Ülke: [{ulke}], Ham Şehir: [{il}] (doğrudan SP'ye gönderilecek)")
                 End If
-                
+
                 ' ===== ILCE: ÖNCELİKLE FATURA BİLGİLERİNDEN AL =====
                 ' API v2.2.4: 1. order.invoiceDistrict 2. customer.invoice.district 3. customer.delivery.district
                 Dim rawIlce As String = ""
@@ -4148,10 +4148,10 @@ Public Class frm_qukaGonder
                                 Try
                                     Log("INFO", "AddOrder", $"🌍 YURT DIŞI SİPARİŞ TESPİT EDİLDİ - İhracat bilgileri güncelleniyor...")
                                     Log("INFO", "AddOrder", $"📦 nStokFisiID: {realStokFisiID}, Ülke: {ulke}, Şehir: {il}")
-                                    
+
                                     ' Ülke kodunu ISO 3166-1 alpha-2 formatına dönüştür
                                     Dim ulkeKodu As String = GetUlkeKodu(ulke, conn)
-                                    
+
                                     ' İhracat alanlarını güncelle
                                     Dim updateIhracatCmd As New OleDb.OleDbCommand()
                                     updateIhracatCmd.Connection = conn
@@ -4165,7 +4165,7 @@ Public Class frm_qukaGonder
                                         "sIncotermsKodu = 'DAP', " &
                                         "nTasimaSekli = 3 " &
                                         "WHERE nStokFisiID = ?"
-                                    
+
                                     ' Teslimat adresi (API'den gelen adres)
                                     updateIhracatCmd.Parameters.Add("?", OleDbType.VarWChar, 255).Value = If(String.IsNullOrEmpty(adres), "", adres)
                                     ' Teslimat şehri
@@ -4176,10 +4176,10 @@ Public Class frm_qukaGonder
                                     updateIhracatCmd.Parameters.Add("?", OleDbType.VarWChar, 10).Value = If(String.IsNullOrEmpty(ulkeKodu), "XX", ulkeKodu)
                                     ' nStokFisiID
                                     updateIhracatCmd.Parameters.AddWithValue("?", realStokFisiID)
-                                    
+
                                     If conn.State <> ConnectionState.Open Then conn.Open()
                                     Dim ihracatRowsAffected As Integer = updateIhracatCmd.ExecuteNonQuery()
-                                    
+
                                     If ihracatRowsAffected > 0 Then
                                         Log("SUCCESS", "AddOrder", $"✅ İHRACAT BİLGİLERİ GÜNCELLENDİ!")
                                         Log("INFO", "AddOrder", $"   - bFaturaTipi: İhracat Faturası")
@@ -4191,7 +4191,7 @@ Public Class frm_qukaGonder
                                     Else
                                         Log("WARNING", "AddOrder", $"⚠️ İhracat bilgileri güncellenemedi! nStokFisiID: {realStokFisiID}")
                                     End If
-                                    
+
                                 Catch ihracatEx As Exception
                                     Log("ERROR", "AddOrder", $"❌ İhracat bilgileri güncelleme hatası: {ihracatEx.Message}")
                                     LogError($"İhracat bilgileri güncelleme hatası: {ihracatEx.Message}, nStokFisiID={realStokFisiID}")
@@ -10166,7 +10166,7 @@ Public Class frm_qukaGonder
                         If cust.ContainsKey("delivery") AndAlso cust("delivery") IsNot Nothing Then
                             custDelivery = AsDict(cust("delivery"))
                         End If
-                        
+
                         ' customer icindeki invoice (fatura) objesini al
                         ' İhracat siparişlerinde fatura bilgileri kullanılmalı
                         Dim custInvoice As Dictionary(Of String, Object) = Nothing
@@ -10228,7 +10228,7 @@ Public Class frm_qukaGonder
                         ElseIf custDelivery IsNot Nothing AndAlso custDelivery.ContainsKey("city") AndAlso custDelivery("city") IsNot Nothing Then
                             rawIlSource = custDelivery("city").ToString().Trim()
                         End If
-                        
+
                         If Not String.IsNullOrEmpty(rawIlSource) Then
                             ' GetIlName ile veritabanındaki gerçek değeri al
                             Using oleConn As New OleDb.OleDbConnection(connection)
@@ -10246,7 +10246,7 @@ Public Class frm_qukaGonder
                                 End If
                             End Using
                         End If
-                        
+
                         ' ===== API'DEN GELEN VERİLERİ LOGLA =====
                         Log("INFO", "EksikBilgi", $"[{siparisKodu}] API VERİLERİ:")
                         Log("INFO", "EksikBilgi", $"  - TC (nationalId): {tc}")
@@ -10305,7 +10305,7 @@ Public Class frm_qukaGonder
                             If updateFields.Count > 0 Then
                                 Dim sqlUpdate As String = "UPDATE tbFirma SET " & String.Join(", ", updateFields) & " WHERE nFirmaID = @firmaid"
                                 updateParams.Add(New SqlClient.SqlParameter("@firmaid", firmaId))
-                                
+
                                 Log("DEBUG", "EksikBilgi", $"[{siparisKodu}] UPDATE SQL: {sqlUpdate}")
                                 Log("DEBUG", "EksikBilgi", $"[{siparisKodu}] Güncellenecek alan sayısı: {updateFields.Count}")
 
@@ -10365,7 +10365,7 @@ Public Class frm_qukaGonder
     ''' <returns>ISO 3166-1 alpha-2 ülke kodu (örn: "DE")</returns>
     Private Function GetUlkeKodu(ulkeAdi As String, conn As OleDb.OleDbConnection) As String
         If String.IsNullOrEmpty(ulkeAdi) Then Return "XX"
-        
+
         Try
             ' Önce veritabanındaki tbUlke tablosunda ara (sUlkeKodu alanı varsa)
             Try
@@ -10383,10 +10383,10 @@ Public Class frm_qukaGonder
                 ' tbUlke tablosunda sUlkeKodu alanı olmayabilir, devam et
                 Log("DEBUG", "GetUlkeKodu", $"Veritabanı sorgusu başarısız: {dbEx.Message}")
             End Try
-            
+
             ' Ülke adını büyük harfe çevir (case-insensitive karşılaştırma için)
             Dim ulkeUpper As String = ulkeAdi.ToUpper(New System.Globalization.CultureInfo("tr-TR"))
-            
+
             ' Yaygın ülke kodları - Select Case ile hızlı eşleşme
             Select Case ulkeUpper
                 ' Avrupa
@@ -10431,7 +10431,7 @@ Public Class frm_qukaGonder
                 Case "UKRAINE", "UKRAYNA" : Return "UA"
                 Case "BELARUS", "WEIßRUSSLAND", "WEISSRUSSLAND" : Return "BY"
                 Case "RUSSIA", "RUSSLAND", "RUSYA" : Return "RU"
-                
+
                 ' Amerika
                 Case "UNITED STATES", "USA", "AMERİKA", "AMERIKA", "ABD" : Return "US"
                 Case "CANADA", "KANADA" : Return "CA"
@@ -10441,7 +10441,7 @@ Public Class frm_qukaGonder
                 Case "CHILE", "ŞİLİ", "SILI" : Return "CL"
                 Case "COLOMBIA", "KOLUMBIEN", "KOLOMBİYA", "KOLOMBIYA" : Return "CO"
                 Case "PERU" : Return "PE"
-                
+
                 ' Asya
                 Case "CHINA", "ÇİN", "CIN" : Return "CN"
                 Case "JAPAN", "JAPONYA" : Return "JP"
@@ -10484,7 +10484,7 @@ Public Class frm_qukaGonder
                 Case "HONG KONG" : Return "HK"
                 Case "TAIWAN" : Return "TW"
                 Case "MACAU", "MACAO" : Return "MO"
-                
+
                 ' Afrika
                 Case "EGYPT", "ÄGYPTEN", "AGYPTEN", "MISIR" : Return "EG"
                 Case "SOUTH AFRICA", "SÜDAFRIKA", "SUDAFRIKA", "GÜNEY AFRİKA", "GUNEY AFRIKA" : Return "ZA"
@@ -10505,15 +10505,15 @@ Public Class frm_qukaGonder
                 Case "ZIMBABWE", "SIMBABWE" : Return "ZW"
                 Case "ANGOLA" : Return "AO"
                 Case "MOZAMBIQUE", "MOSAMBIK", "MOZAMBİK", "MOZAMBIK" : Return "MZ"
-                
+
                 ' Okyanusya
                 Case "AUSTRALIA", "AUSTRALIEN", "AVUSTRALYA" : Return "AU"
                 Case "NEW ZEALAND", "NEUSEELAND", "YENİ ZELANDA", "YENI ZELANDA" : Return "NZ"
-                
+
                 ' Türkiye
                 Case "TURKEY", "TÜRKEI", "TURKEI", "TÜRKİYE", "TURKIYE" : Return "TR"
             End Select
-            
+
             ' Bulunamazsa varsayılan XX döndür
             Log("WARNING", "GetUlkeKodu", $"Ülke kodu bulunamadı: {ulkeAdi} -> XX (varsayılan)")
             Return "XX"
