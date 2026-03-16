@@ -7705,14 +7705,17 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                     
                     ' Stok bilgilerini al
                     Dim dsStok As New DataSet()
-                    Using cmdStok As New OleDbCommand("SELECT nStokID, nStokTipi, nFiyatlandirma, sModel, sRenk, sBeden, nKdvOrani FROM tbStok WHERE nStokID = " & nStokID, con)
+                    Dim sqlStok As String = "SELECT nStokID, nStokTipi, nFiyatlandirma, sModel, sRenk, sBeden, sKdvTipi, " & _
+                        "(SELECT nKdvOrani FROM tbKdv WHERE sKdvTipi = tbStok.sKdvTipi) AS nStokKdvOrani " & _
+                        "FROM tbStok WHERE nStokID = " & nStokID
+                    Using cmdStok As New OleDbCommand(sqlStok, con)
                         Dim daStok As New OleDbDataAdapter(cmdStok)
                         daStok.Fill(dsStok, "Stok")
                     End Using
                     
                     If dsStok.Tables(0).Rows.Count > 0 Then
                         Dim drStok As DataRow = dsStok.Tables(0).Rows(0)
-                        Dim nStokKdvOrani As Decimal = KeyCode.sorgu_sayi(drStok("nKdvOrani"), 0)
+                        Dim nStokKdvOrani As Decimal = KeyCode.sorgu_sayi(drStok("nStokKdvOrani"), 0)
                         
                         ' Maliyet hesapla
                         Dim maliyet As Decimal = lGirisTutar / lGirisMiktar1
