@@ -34,6 +34,14 @@ Public Class frm_PazaryeriFaturaGonderim
     Private WithEvents chkGonderilenleriGoster As CheckEdit
     Private WithEvents PanelControl1 As PanelControl
     Private WithEvents GroupControl1 As GroupControl
+    
+    ' ===== CONTEXT MENU =====
+    Private WithEvents ContextMenu1 As ContextMenu
+    Private WithEvents mnuSutunOzellestir As MenuItem
+    Private WithEvents mnuGorunumKaydet As MenuItem
+    Private WithEvents mnuFiltrele As MenuItem
+    Private WithEvents mnuSep1 As MenuItem
+    Private WithEvents mnuTeslimDurumuGuncelle As MenuItem
 
     ' ===== VERİTABANI =====
     Public connection As String = ""
@@ -166,6 +174,22 @@ Public Class frm_PazaryeriFaturaGonderim
         ' Grid sütunları
         GridView1.OptionsView.ShowGroupPanel = False
         GridView1.OptionsSelection.MultiSelect = True
+        GridView1.OptionsView.ShowAutoFilterRow = True
+        GridView1.OptionsView.ShowFilterPanelMode = DevExpress.XtraGrid.Views.Base.ShowFilterPanelMode.Default
+        GridView1.OptionsCustomization.AllowFilter = True
+        GridView1.OptionsCustomization.AllowColumnMoving = True
+        GridView1.OptionsCustomization.AllowColumnResizing = True
+        GridView1.OptionsCustomization.AllowSort = True
+        
+        ' Context Menu
+        ContextMenu1 = New ContextMenu()
+        mnuSutunOzellestir = New MenuItem("Sütun Özelleştir")
+        mnuGorunumKaydet = New MenuItem("Görünümü Kaydet")
+        mnuFiltrele = New MenuItem("Filtreleme Aç/Kapat")
+        mnuSep1 = New MenuItem("-")
+        mnuTeslimDurumuGuncelle = New MenuItem("Teslim Durumlarını Güncelle (Trendyol)")
+        ContextMenu1.MenuItems.AddRange(New MenuItem() {mnuSutunOzellestir, mnuGorunumKaydet, mnuFiltrele, mnuSep1, mnuTeslimDurumuGuncelle})
+        GridControl1.ContextMenu = ContextMenu1
 
         ' Progress Bar
         ProgressBar1 = New ProgressBarControl()
@@ -236,7 +260,12 @@ Public Class frm_PazaryeriFaturaGonderim
                 "M.sEfaturaGuid, " &
                 "M.sEfaturaTipi, " &
                 "M.lNetTutar, " &
+                "A.sAciklama2 AS MusteriAdi, " &
                 "A.sAciklama3 AS SiparisNo, " &
+                "ISNULL(F.sAdi, '') AS FirmaAdi, " &
+                "ISNULL(F.sSoyadi, '') AS FirmaSoyadi, " &
+                "ISNULL(F.sTelefon, '') AS Telefon, " &
+                "ISNULL(F.sIl, '') AS Il, " &
                 "CASE " &
                 "   WHEN A.sAciklama3 LIKE 'TY%' THEN 'Trendyol' " &
                 "   WHEN A.sAciklama3 LIKE 'HB%' THEN 'Hepsiburada' " &
@@ -247,9 +276,11 @@ Public Class frm_PazaryeriFaturaGonderim
                 "ISNULL(P.bGonderildi, 0) AS bGonderildi, " &
                 "P.dteGonderimTarihi, " &
                 "P.sGonderimSonucu, " &
-                "P.sHataMesaji " &
+                "P.sHataMesaji, " &
+                "ISNULL(P.sTeslimDurumu, '') AS TeslimDurumu " &
                 "FROM tbStokFisiMaster M " &
                 "INNER JOIN tbStokFisiAciklamasi A ON M.nStokFisiID = A.nStokFisiID " &
+                "LEFT JOIN tbFirma F ON M.nFirmaID = F.nFirmaID " &
                 "LEFT JOIN tbPazaryeriFaturaGonderim P ON M.nStokFisiID = P.nStokFisiID " &
                 "WHERE M.dteFisTarihi >= ? AND M.dteFisTarihi <= ? " &
                 "AND (A.sAciklama3 LIKE 'TY%' OR A.sAciklama3 LIKE 'HB%' OR A.sAciklama3 LIKE 'N11%' OR A.sAciklama3 LIKE 'PAZ%') " &
@@ -278,17 +309,26 @@ Public Class frm_PazaryeriFaturaGonderim
                     Case "dteFisTarihi" : col.Caption = "Fatura Tarihi"
                     Case "lFisNo" : col.Caption = "Fiş No"
                     Case "GibFaturaNo" : col.Caption = "GİB Fatura No"
-                    Case "sEfaturaGuid" : col.Caption = "Fatura UUID"
+                    Case "sEfaturaGuid" : col.Caption = "Fatura UUID" : col.Visible = False
                     Case "sEfaturaTipi" : col.Caption = "Fatura Tipi"
                     Case "lNetTutar" : col.Caption = "Net Tutar" : col.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric : col.DisplayFormat.FormatString = "N2"
+                    Case "MusteriAdi" : col.Caption = "Müşteri (Sipariş)"
                     Case "SiparisNo" : col.Caption = "Sipariş No"
+                    Case "FirmaAdi" : col.Caption = "Müşteri Adı"
+                    Case "FirmaSoyadi" : col.Caption = "Müşteri Soyadı"
+                    Case "Telefon" : col.Caption = "Telefon"
+                    Case "Il" : col.Caption = "İl"
                     Case "Pazaryeri" : col.Caption = "Pazaryeri"
-                    Case "bGonderildi" : col.Caption = "Durum" : col.Visible = True
+                    Case "bGonderildi" : col.Caption = "Fatura Gönderildi" : col.Visible = True
                     Case "dteGonderimTarihi" : col.Caption = "Gönderim Tarihi"
                     Case "sGonderimSonucu" : col.Caption = "Sonuç"
                     Case "sHataMesaji" : col.Caption = "Hata"
+                    Case "TeslimDurumu" : col.Caption = "Teslim Durumu"
                 End Select
             Next
+            
+            ' Görünümü registry'den yükle
+            gorunum_yukle()
             
             ' Satır renklendirme için event handler ekle
             AddHandler GridView1.RowStyle, AddressOf GridView1_RowStyle
@@ -1610,4 +1650,259 @@ Public Class frm_PazaryeriFaturaGonderim
             lblDurum.Text = "Hata: Veritabanı bağlantısı yok!"
         End If
     End Sub
+    
+    ' ===== CONTEXT MENU EVENT HANDLERS =====
+    
+    ''' <summary>
+    ''' Sütun özelleştirme dialogunu aç
+    ''' </summary>
+    Private Sub mnuSutunOzellestir_Click(sender As Object, e As EventArgs) Handles mnuSutunOzellestir.Click
+        GridView1.ColumnsCustomization()
+    End Sub
+    
+    ''' <summary>
+    ''' Görünümü registry'ye kaydet
+    ''' </summary>
+    Private Sub mnuGorunumKaydet_Click(sender As Object, e As EventArgs) Handles mnuGorunumKaydet.Click
+        gorunum_kaydet()
+    End Sub
+    
+    ''' <summary>
+    ''' Filtreleme satırını aç/kapat
+    ''' </summary>
+    Private Sub mnuFiltrele_Click(sender As Object, e As EventArgs) Handles mnuFiltrele.Click
+        GridView1.OptionsView.ShowAutoFilterRow = Not GridView1.OptionsView.ShowAutoFilterRow
+        GridView1.OptionsView.ShowFilterPanelMode = DevExpress.XtraGrid.Views.Base.ShowFilterPanelMode.Default
+        GridView1.OptionsCustomization.AllowFilter = True
+    End Sub
+    
+    ''' <summary>
+    ''' Trendyol'dan teslim durumlarını güncelle
+    ''' </summary>
+    Private Sub mnuTeslimDurumuGuncelle_Click(sender As Object, e As EventArgs) Handles mnuTeslimDurumuGuncelle.Click
+        TeslimDurumlariniGuncelle()
+    End Sub
+    
+    ' ===== GÖRÜNÜM FONKSİYONLARI =====
+    
+    ''' <summary>
+    ''' Görünümü registry'ye kaydet
+    ''' </summary>
+    Private Sub gorunum_kaydet()
+        Try
+            GridView1.SaveLayoutToRegistry("SOFTWARE\BusinessSmart\VIEW\MAGAZA\" & Me.Name.ToString())
+            MessageBox.Show("Görünüm kaydedildi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Catch ex As Exception
+            MessageBox.Show("Görünüm kaydedilirken hata: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+    
+    ''' <summary>
+    ''' Görünümü registry'den yükle
+    ''' </summary>
+    Private Sub gorunum_yukle()
+        Try
+            GridView1.RestoreLayoutFromRegistry("SOFTWARE\BusinessSmart\VIEW\MAGAZA\" & Me.Name.ToString())
+        Catch ex As Exception
+            ' İlk açılışta registry kaydı olmayabilir, sessizce geç
+            Debug.WriteLine("Görünüm yüklenemedi: " & ex.Message)
+        End Try
+    End Sub
+    
+    ' ===== TESLİM DURUMU FONKSİYONLARI =====
+    
+    ''' <summary>
+    ''' Seçili Trendyol siparişlerinin teslim durumlarını API'den çekip günceller
+    ''' </summary>
+    Private Sub TeslimDurumlariniGuncelle()
+        Try
+            Cursor = Cursors.WaitCursor
+            lblDurum.Text = "Teslim durumları güncelleniyor..."
+            Application.DoEvents()
+            
+            ' Trendyol API bilgilerini al
+            If Not pazaryeriApis.ContainsKey("TRENDYOL") Then
+                MessageBox.Show("Trendyol API ayarları bulunamadı!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Cursor = Cursors.Default
+                Return
+            End If
+            
+            Dim api = pazaryeriApis("TRENDYOL")
+            Dim guncellenen As Integer = 0
+            Dim hata As Integer = 0
+            
+            For i As Integer = 0 To dtFaturalar.Rows.Count - 1
+                Dim row As DataRow = dtFaturalar.Rows(i)
+                Dim pazaryeri As String = row("Pazaryeri").ToString()
+                
+                ' Sadece Trendyol siparişlerini kontrol et
+                If pazaryeri <> "Trendyol" Then Continue For
+                
+                Dim siparisNo As String = row("SiparisNo").ToString().Trim()
+                If String.IsNullOrEmpty(siparisNo) Then Continue For
+                
+                ' Sipariş numarasından TY prefix'ini kaldır
+                Dim orderNumber As String = siparisNo
+                If orderNumber.StartsWith("TY") Then
+                    orderNumber = orderNumber.Substring(2)
+                End If
+                
+                lblDurum.Text = "Kontrol ediliyor: " & siparisNo & " (" & (i + 1) & "/" & dtFaturalar.Rows.Count & ")"
+                Application.DoEvents()
+                
+                Try
+                    Dim teslimDurumu As String = GetTrendyolTeslimDurumu(api, orderNumber)
+                    If Not String.IsNullOrEmpty(teslimDurumu) Then
+                        row("TeslimDurumu") = teslimDurumu
+                        
+                        ' Veritabanına kaydet
+                        KaydetTeslimDurumu(CInt(row("nStokFisiID")), teslimDurumu)
+                        guncellenen += 1
+                    End If
+                Catch ex As Exception
+                    Debug.WriteLine("Teslim durumu alınamadı: " & siparisNo & " - " & ex.Message)
+                    hata += 1
+                End Try
+            Next
+            
+            GridView1.RefreshData()
+            lblDurum.Text = "Tamamlandı! Güncellenen: " & guncellenen & ", Hata: " & hata
+            Cursor = Cursors.Default
+            
+        Catch ex As Exception
+            Cursor = Cursors.Default
+            lblDurum.Text = "Hata: " & ex.Message
+            MessageBox.Show("Teslim durumları güncellenirken hata: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+    
+    ''' <summary>
+    ''' Trendyol API'den sipariş teslim durumunu çeker
+    ''' </summary>
+    Private Function GetTrendyolTeslimDurumu(api As PazaryeriAPI, orderNumber As String) As String
+        Try
+            ' Trendyol sipariş detayı API'si
+            Dim url As String = api.BaseUrl & "/integration/order/sellers/" & api.SellerId & "/orders?orderNumber=" & orderNumber
+            
+            Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
+            req.Method = "GET"
+            req.ContentType = "application/json"
+            req.Accept = "application/json"
+            req.Timeout = 30000
+            
+            ' Basic Auth
+            Dim credentials As String = api.ApiKey & ":" & api.ApiSecret
+            Dim base64Credentials As String = Convert.ToBase64String(Encoding.ASCII.GetBytes(credentials))
+            req.Headers.Add("Authorization", "Basic " & base64Credentials)
+            
+            Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
+                Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
+                    Dim json As String = reader.ReadToEnd()
+                    Dim obj As JObject = JObject.Parse(json)
+                    
+                    If obj("content") IsNot Nothing Then
+                        Dim contentArray As JArray = CType(obj("content"), JArray)
+                        If contentArray.Count > 0 Then
+                            Dim order As JObject = CType(contentArray(0), JObject)
+                            
+                            ' Sipariş durumu
+                            Dim status As String = ""
+                            If order("status") IsNot Nothing Then
+                                status = order("status").ToString()
+                            End If
+                            
+                            ' Kargo durumu
+                            Dim cargoTrackingNumber As String = ""
+                            Dim cargoProviderName As String = ""
+                            
+                            If order("cargoTrackingNumber") IsNot Nothing Then
+                                cargoTrackingNumber = order("cargoTrackingNumber").ToString()
+                            End If
+                            If order("cargoProviderName") IsNot Nothing Then
+                                cargoProviderName = order("cargoProviderName").ToString()
+                            End If
+                            
+                            ' lines içinden deliveredDate kontrol et
+                            Dim deliveredDate As String = ""
+                            If order("lines") IsNot Nothing Then
+                                Dim lines As JArray = CType(order("lines"), JArray)
+                                For Each line As JObject In lines
+                                    If line("deliveredDate") IsNot Nothing Then
+                                        deliveredDate = line("deliveredDate").ToString()
+                                        Exit For
+                                    End If
+                                Next
+                            End If
+                            
+                            ' Durum metnini oluştur
+                            Dim durumMetni As String = status
+                            If Not String.IsNullOrEmpty(deliveredDate) Then
+                                durumMetni = "Teslim Edildi"
+                            ElseIf status.ToUpperInvariant() = "DELIVERED" Then
+                                durumMetni = "Teslim Edildi"
+                            ElseIf status.ToUpperInvariant() = "SHIPPED" Then
+                                durumMetni = "Kargoda"
+                            ElseIf status.ToUpperInvariant() = "PICKING" Then
+                                durumMetni = "Hazırlanıyor"
+                            ElseIf status.ToUpperInvariant() = "INVOICED" Then
+                                durumMetni = "Faturalandı"
+                            ElseIf status.ToUpperInvariant() = "CANCELLED" Then
+                                durumMetni = "İptal"
+                            End If
+                            
+                            If Not String.IsNullOrEmpty(cargoTrackingNumber) Then
+                                durumMetni &= " (" & cargoProviderName & ": " & cargoTrackingNumber & ")"
+                            End If
+                            
+                            Return durumMetni
+                        End If
+                    End If
+                End Using
+            End Using
+            
+            Return ""
+        Catch ex As Exception
+            Debug.WriteLine("GetTrendyolTeslimDurumu hata: " & ex.Message)
+            Return ""
+        End Try
+    End Function
+    
+    ''' <summary>
+    ''' Teslim durumunu veritabanına kaydet
+    ''' </summary>
+    Private Sub KaydetTeslimDurumu(nStokFisiID As Integer, teslimDurumu As String)
+        Try
+            Using con As New OleDbConnection(connection)
+                con.Open()
+                
+                ' Önce kayıt var mı kontrol et
+                Dim sqlCheck As String = "SELECT COUNT(*) FROM tbPazaryeriFaturaGonderim WHERE nStokFisiID = ?"
+                Using cmdCheck As New OleDbCommand(sqlCheck, con)
+                    cmdCheck.Parameters.AddWithValue("@p0", nStokFisiID)
+                    Dim count As Integer = CInt(cmdCheck.ExecuteScalar())
+                    
+                    If count > 0 Then
+                        ' Güncelle
+                        Dim sqlUpdate As String = "UPDATE tbPazaryeriFaturaGonderim SET sTeslimDurumu = ? WHERE nStokFisiID = ?"
+                        Using cmdUpdate As New OleDbCommand(sqlUpdate, con)
+                            cmdUpdate.Parameters.AddWithValue("@p0", teslimDurumu)
+                            cmdUpdate.Parameters.AddWithValue("@p1", nStokFisiID)
+                            cmdUpdate.ExecuteNonQuery()
+                        End Using
+                    Else
+                        ' Yeni kayıt ekle
+                        Dim sqlInsert As String = "INSERT INTO tbPazaryeriFaturaGonderim (nStokFisiID, sTeslimDurumu) VALUES (?, ?)"
+                        Using cmdInsert As New OleDbCommand(sqlInsert, con)
+                            cmdInsert.Parameters.AddWithValue("@p0", nStokFisiID)
+                            cmdInsert.Parameters.AddWithValue("@p1", teslimDurumu)
+                            cmdInsert.ExecuteNonQuery()
+                        End Using
+                    End If
+                End Using
+            End Using
+        Catch ex As Exception
+            Debug.WriteLine("KaydetTeslimDurumu hata: " & ex.Message)
+        End Try
+    End Sub
+    
 End Class
