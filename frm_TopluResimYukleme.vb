@@ -25,6 +25,7 @@ Public Class frm_TopluResimYukleme
     Private lblDurum As LabelControl
     Private lblDetay As LabelControl
     Private memoSonuc As MemoEdit
+    Private chkSadeceResimsiz As DevExpress.XtraEditors.CheckEdit
     
     Public Sub New()
         MyBase.New()
@@ -33,6 +34,7 @@ Public Class frm_TopluResimYukleme
     
     Private Sub InitializeComponent()
         Me.lblKlasorYolu = New LabelControl()
+        Me.chkSadeceResimsiz = New DevExpress.XtraEditors.CheckEdit()
         Me.txtKlasorYolu = New TextEdit()
         Me.btnKlasorSec = New SimpleButton()
         Me.btnYuklemeBaslat = New SimpleButton()
@@ -68,28 +70,38 @@ Public Class frm_TopluResimYukleme
         Me.btnKlasorSec.Text = "Klasör Seç..."
         AddHandler Me.btnKlasorSec.Click, AddressOf btnKlasorSec_Click
         
+        ' chkSadeceResimsiz
+        CType(Me.chkSadeceResimsiz.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.chkSadeceResimsiz.Location = New System.Drawing.Point(20, 45)
+        Me.chkSadeceResimsiz.Name = "chkSadeceResimsiz"
+        Me.chkSadeceResimsiz.Properties.Caption = "Sadece resmi olmayanları yükle"
+        Me.chkSadeceResimsiz.Size = New System.Drawing.Size(200, 19)
+        Me.chkSadeceResimsiz.TabIndex = 9
+        Me.chkSadeceResimsiz.Checked = True
+        CType(Me.chkSadeceResimsiz.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+        
         ' lblDurum
-        Me.lblDurum.Location = New System.Drawing.Point(20, 60)
+        Me.lblDurum.Location = New System.Drawing.Point(20, 70)
         Me.lblDurum.Name = "lblDurum"
         Me.lblDurum.Size = New System.Drawing.Size(250, 13)
         Me.lblDurum.TabIndex = 3
         Me.lblDurum.Text = "Hazır. Lütfen klasör seçin."
         
         ' progressBar
-        Me.progressBar.Location = New System.Drawing.Point(20, 85)
+        Me.progressBar.Location = New System.Drawing.Point(20, 95)
         Me.progressBar.Name = "progressBar"
         Me.progressBar.Size = New System.Drawing.Size(660, 25)
         Me.progressBar.TabIndex = 4
         
         ' lblDetay
-        Me.lblDetay.Location = New System.Drawing.Point(20, 120)
+        Me.lblDetay.Location = New System.Drawing.Point(20, 130)
         Me.lblDetay.Name = "lblDetay"
         Me.lblDetay.Size = New System.Drawing.Size(200, 13)
         Me.lblDetay.TabIndex = 5
         Me.lblDetay.Text = ""
         
         ' memoSonuc
-        Me.memoSonuc.Location = New System.Drawing.Point(20, 145)
+        Me.memoSonuc.Location = New System.Drawing.Point(20, 155)
         Me.memoSonuc.Name = "memoSonuc"
         Me.memoSonuc.Properties.ReadOnly = True
         Me.memoSonuc.Properties.ScrollBars = System.Windows.Forms.ScrollBars.Both
@@ -98,7 +110,7 @@ Public Class frm_TopluResimYukleme
         
         ' btnYuklemeBaslat
         Me.btnYuklemeBaslat.Enabled = False
-        Me.btnYuklemeBaslat.Location = New System.Drawing.Point(480, 380)
+        Me.btnYuklemeBaslat.Location = New System.Drawing.Point(480, 400)
         Me.btnYuklemeBaslat.Name = "btnYuklemeBaslat"
         Me.btnYuklemeBaslat.Size = New System.Drawing.Size(100, 30)
         Me.btnYuklemeBaslat.TabIndex = 7
@@ -106,7 +118,7 @@ Public Class frm_TopluResimYukleme
         AddHandler Me.btnYuklemeBaslat.Click, AddressOf btnYuklemeBaslat_Click
         
         ' btnKapat
-        Me.btnKapat.Location = New System.Drawing.Point(590, 380)
+        Me.btnKapat.Location = New System.Drawing.Point(590, 400)
         Me.btnKapat.Name = "btnKapat"
         Me.btnKapat.Size = New System.Drawing.Size(90, 30)
         Me.btnKapat.TabIndex = 8
@@ -116,13 +128,14 @@ Public Class frm_TopluResimYukleme
         ' Form
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(700, 430)
+        Me.ClientSize = New System.Drawing.Size(700, 450)
         Me.Controls.Add(Me.btnKapat)
         Me.Controls.Add(Me.btnYuklemeBaslat)
         Me.Controls.Add(Me.memoSonuc)
         Me.Controls.Add(Me.lblDetay)
         Me.Controls.Add(Me.progressBar)
         Me.Controls.Add(Me.lblDurum)
+        Me.Controls.Add(Me.chkSadeceResimsiz)
         Me.Controls.Add(Me.btnKlasorSec)
         Me.Controls.Add(Me.txtKlasorYolu)
         Me.Controls.Add(Me.lblKlasorYolu)
@@ -276,6 +289,15 @@ Public Class frm_TopluResimYukleme
             ' Çünkü resimler tüm bedenler için ortaktır
             Dim uploadedToAnyStok As Boolean = False
             Dim firstStokID As Integer = stokIDs(0) ' Sadece ilk stoğu kullan
+            
+            ' Sadece resimsizleri yükle seçeneği işaretli ise resim kontrolü yap
+            If chkSadeceResimsiz.Checked Then
+                If StokResimVarMi(sModel, sRenkKodu) Then
+                    skippedCount += 1
+                    AppendLog($"  ⊘ Model '{sModel}' + Renk '{sRenkKodu}' zaten resimli - atlandı")
+                    Continue For
+                End If
+            End If
             
             lblDetay.Text = $"Model: {sModel}, Varyant: {lRenkNo} → Renk: {sRenkKodu}"
             Application.DoEvents()
@@ -859,6 +881,24 @@ Public Class frm_TopluResimYukleme
             End Using
         Catch
             Return 1
+        End Try
+    End Function
+    
+    ' Stokun resmi var mı kontrol et (tbStokResim tablosundan)
+    Private Function StokResimVarMi(ByVal sModel As String, ByVal sRenk As String) As Boolean
+        Try
+            Using con As New OleDbConnection(connection)
+                con.Open()
+                Dim sql As String = "SELECT COUNT(*) FROM tbStokResim WHERE sModel = @sModel AND sRenk = @sRenk"
+                Using cmd As New OleDbCommand(sql, con)
+                    cmd.Parameters.AddWithValue("@sModel", sModel)
+                    cmd.Parameters.AddWithValue("@sRenk", sRenk)
+                    Dim count As Integer = Convert.ToInt32(cmd.ExecuteScalar())
+                    Return count > 0
+                End Using
+            End Using
+        Catch
+            Return False
         End Try
     End Function
     
