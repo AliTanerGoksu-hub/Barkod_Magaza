@@ -7769,6 +7769,17 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                         Dim fiyatMaliyet As Decimal = sorgu_stok_fiyat_local(KeyCode.sFiyatM, nStokID, "")
                         Dim fiyatAlis As Decimal = sorgu_stok_fiyat_local(KeyCode.sFiyatA, nStokID, "")
                         
+                        ' DEBUG: İlk stok için hesaplanan değerleri göster
+                        If guncellenenSatir = 0 Then
+                            MsgBox("StokID: " & nStokID & vbCrLf & _
+                                   "Hesaplanan Maliyet: " & maliyet.ToString("N4") & vbCrLf & _
+                                   "Kayıtlı Maliyet: " & fiyatMaliyet.ToString("N4") & vbCrLf & _
+                                   "Hesaplanan Alış: " & alis.ToString("N4") & vbCrLf & _
+                                   "Kayıtlı Alış: " & fiyatAlis.ToString("N4") & vbCrLf & _
+                                   "KDV Oranı: " & nKdvOrani & vbCrLf & _
+                                   "bAlisKdvDahil: " & bAlisKdvDahil.ToString(), MsgBoxStyle.Information, "DEBUG - Fiyat Karşılaştırma")
+                        End If
+                        
                         Dim nFiyatlandirma As Integer = KeyCode.sorgu_sayi(drStok("nFiyatlandirma"), 0)
                         Dim sModel As String = Trim(drStok("sModel").ToString())
                         Dim sRenk As String = Trim(drStok("sRenk").ToString())
