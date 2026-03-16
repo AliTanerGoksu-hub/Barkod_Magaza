@@ -444,6 +444,30 @@ Public Class frm_PazaryeriFaturaGonderim
                 If String.IsNullOrEmpty(gibFaturaNo) Then
                     lblDurum.Text = "GİB'e gönderiliyor: " & siparisNo & " - " & (i + 1) & "/" & rows.Length
                     Application.DoEvents()
+                    
+                    ' ===== MİKRO İHRACAT KONTROLÜ - GİB'E GÖNDERMEDEN ÖNCE =====
+                    ' Trendyol siparişi ise mikro ihracat kontrolü yap
+                    If pazaryeri = "Trendyol" Then
+                        Try
+                            Dim isMicroExportCheck As Boolean = False
+                            Dim orderNumber As String = siparisNo
+                            If orderNumber.StartsWith("TY") Then orderNumber = orderNumber.Substring(2)
+                            
+                            If pazaryeriApis.ContainsKey("TRENDYOL") Then
+                                Dim api = pazaryeriApis("TRENDYOL")
+                                Dim pkgId As String = GetTrendyolShipmentPackageId(api, orderNumber, isMicroExportCheck)
+                                
+                                If isMicroExportCheck Then
+                                    ' Mikro ihracat - faturayı ihracat faturası olarak işaretle
+                                    Debug.WriteLine("[IHRACAT] Mikro ihracat tespit edildi: " & siparisNo)
+                                    IhracatFaturasıOlarakIsaretle(nStokFisiID)
+                                End If
+                            End If
+                        Catch ex As Exception
+                            Debug.WriteLine("[IHRACAT] Mikro ihracat kontrolü hatası: " & ex.Message)
+                        End Try
+                    End If
+                    
                     Try
                         Dim gibSonuc As String = mod_EFatura.FaturaGonder(nStokFisiID)
                         If Not String.IsNullOrEmpty(gibSonuc) AndAlso Not gibSonuc.ToLower().Contains("hata") Then
@@ -1918,6 +1942,58 @@ Public Class frm_PazaryeriFaturaGonderim
             End Using
         Catch ex As Exception
             Debug.WriteLine("KaydetTeslimDurumu hata: " & ex.Message)
+        End Try
+    End Sub
+    
+    ''' <summary>
+    ''' Faturayı ihracat faturası olarak işaretler (KDV %0, istisna kodu 301)
+    ''' 3065 sayılı KDV Kanunu 11/1-a maddesi gereği ihracat istisnası
+    ''' </summary>
+    Private Sub IhracatFaturasıOlarakIsaretle(nStokFisiID As Integer)
+        Try
+            Using con As New OleDbConnection(connection)
+                con.Open()
+                
+                ' 1. Fatura tipini İhracat Faturası olarak ayarla
+                ' 2. KDV muafiyet kodunu 301 (ihracat istisnası) olarak ayarla
+                ' 3. KDV oranlarını %0 yap
+                Dim sqlUpdate As String = "UPDATE tbStokFisiMaster SET " &
+                    "bFaturaTipi = 'İhracat Faturası', " &
+                    "nKdvMuafiyetKodu = '301' " &
+                    "WHERE nStokFisiID = ?"
+                    
+                Using cmdUpdate As New OleDbCommand(sqlUpdate, con)
+                    cmdUpdate.Parameters.AddWithValue("@p0", nStokFisiID)
+                    cmdUpdate.ExecuteNonQuery()
+                End Using
+                
+                ' Fatura detaylarındaki KDV oranlarını da sıfırla
+                Dim sqlDetay As String = "UPDATE tbStokFisiDetayi SET " &
+                    "nKdvOrani = 0, " &
+                    "lKdvTutari = 0 " &
+                    "WHERE nStokFisiID = ?"
+                    
+                Using cmdDetay As New OleDbCommand(sqlDetay, con)
+                    cmdDetay.Parameters.AddWithValue("@p0", nStokFisiID)
+                    cmdDetay.ExecuteNonQuery()
+                End Using
+                
+                ' Master tablosundaki toplam KDV'yi de sıfırla
+                Dim sqlMaster As String = "UPDATE tbStokFisiMaster SET " &
+                    "lToplamKdv = 0 " &
+                    "WHERE nStokFisiID = ?"
+                    
+                Using cmdMaster As New OleDbCommand(sqlMaster, con)
+                    cmdMaster.Parameters.AddWithValue("@p0", nStokFisiID)
+                    cmdMaster.ExecuteNonQuery()
+                End Using
+                
+                Debug.WriteLine("[IHRACAT] Fatura ihracat olarak işaretlendi: nStokFisiID=" & nStokFisiID)
+                Debug.WriteLine("[IHRACAT] bFaturaTipi='İhracat Faturası', nKdvMuafiyetKodu='301', KDV=%0")
+                
+            End Using
+        Catch ex As Exception
+            Debug.WriteLine("[IHRACAT] İhracat faturası işaretleme hatası: " & ex.Message)
         End Try
     End Sub
     
