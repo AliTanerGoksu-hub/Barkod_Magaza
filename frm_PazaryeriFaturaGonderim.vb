@@ -1935,18 +1935,53 @@ Public Class frm_PazaryeriFaturaGonderim
                         Dim ulke As String = result.ToString().Trim().ToUpperInvariant()
                         
                         ' Türkiye veya boş değilse ihracat
+                        ' Türkiye'nin farklı yazılış şekilleri
                         If Not String.IsNullOrEmpty(ulke) AndAlso 
                            ulke <> "TÜRKİYE" AndAlso 
                            ulke <> "TURKIYE" AndAlso 
                            ulke <> "TURKEY" AndAlso 
                            ulke <> "TR" AndAlso
-                           ulke <> "TUR" Then
+                           ulke <> "TUR" AndAlso
+                           ulke <> "TÜRKIYE" AndAlso
+                           ulke <> "TÜRKİYE" Then
                             Return True
                         End If
                     End If
                 End Using
                 
-                ' Alternatif: sAciklama2 (sipariş müşteri bilgisi) içinde yabancı ülke adı arama
+                ' Alternatif 1: tbFirma.sAdres1, sAdres2 alanlarında yabancı ülke kontrolü
+                Dim sqlAdres As String = "SELECT F.sAdres1, F.sAdres2, F.sIl FROM tbStokFisiMaster M " &
+                                        "INNER JOIN tbFirma F ON M.nFirmaID = F.nFirmaID " &
+                                        "WHERE M.nStokFisiID = ?"
+                Using cmdAdres As New OleDbCommand(sqlAdres, con)
+                    cmdAdres.Parameters.AddWithValue("@p0", nStokFisiID)
+                    Using reader = cmdAdres.ExecuteReader()
+                        If reader.Read() Then
+                            Dim adres1 As String = If(reader("sAdres1") IsNot DBNull.Value, reader("sAdres1").ToString().ToUpperInvariant(), "")
+                            Dim adres2 As String = If(reader("sAdres2") IsNot DBNull.Value, reader("sAdres2").ToString().ToUpperInvariant(), "")
+                            Dim il As String = If(reader("sIl") IsNot DBNull.Value, reader("sIl").ToString().ToUpperInvariant(), "")
+                            
+                            ' Yabancı ülke isimleri kontrolü (adres ve il alanlarında)
+                            Dim yabanciUlkeler() As String = {"ROMANIA", "BULGARIA", "GREECE", "GERMANY", "FRANCE", 
+                                                              "ITALY", "SPAIN", "NETHERLANDS", "BELGIUM", "AUSTRIA",
+                                                              "AZERBAIJAN", "GEORGIA", "UKRAINE", "RUSSIA", "POLAND",
+                                                              "CZECH", "HUNGARY", "SLOVAKIA", "CROATIA", "SERBIA",
+                                                              "ROMANYA", "BULGARİSTAN", "YUNANİSTAN", "ALMANYA", "FRANSA",
+                                                              "İTALYA", "İSPANYA", "HOLLANDA", "BELÇİKA", "AVUSTURYA",
+                                                              "AZERBAYCAN", "GÜRCİSTAN", "UKRAYNA", "RUSYA", "POLONYA",
+                                                              "ORADEA", "BUCURESTI", "BUCHAREST", "SOFIA", "ATHENS",
+                                                              "BERLIN", "PARIS", "ROMA", "ROME", "MADRID", "AMSTERDAM"}
+                            
+                            For Each ulke In yabanciUlkeler
+                                If adres1.Contains(ulke) OrElse adres2.Contains(ulke) OrElse il.Contains(ulke) Then
+                                    Return True
+                                End If
+                            Next
+                        End If
+                    End Using
+                End Using
+                
+                ' Alternatif 2: sAciklama alanlarında yabancı ülke adı arama
                 Dim sqlAciklama As String = "SELECT A.sAciklama1, A.sAciklama2 FROM tbStokFisiAciklamasi A " &
                                            "WHERE A.nStokFisiID = ?"
                 Using cmdAciklama As New OleDbCommand(sqlAciklama, con)
@@ -1963,7 +1998,8 @@ Public Class frm_PazaryeriFaturaGonderim
                                                               "CZECH", "HUNGARY", "SLOVAKIA", "CROATIA", "SERBIA",
                                                               "ROMANYA", "BULGARİSTAN", "YUNANİSTAN", "ALMANYA", "FRANSA",
                                                               "İTALYA", "İSPANYA", "HOLLANDA", "BELÇİKA", "AVUSTURYA",
-                                                              "AZERBAYCAN", "GÜRCİSTAN", "UKRAYNA", "RUSYA", "POLONYA"}
+                                                              "AZERBAYCAN", "GÜRCİSTAN", "UKRAYNA", "RUSYA", "POLONYA",
+                                                              "ORADEA", "BUCURESTI", "BUCHAREST", "SOFIA", "ATHENS"}
                             
                             For Each ulke In yabanciUlkeler
                                 If aciklama1.Contains(ulke) OrElse aciklama2.Contains(ulke) Then
