@@ -298,12 +298,16 @@ Public Class frm_PazaryeriFaturaGonderim
                 "LEFT JOIN tbPazaryeriFaturaGonderim P ON M.nStokFisiID = P.nStokFisiID " &
                 "WHERE M.dteFisTarihi >= ? AND M.dteFisTarihi <= ? " &
                 "AND (A.sAciklama3 LIKE 'TY%' OR A.sAciklama3 LIKE 'HB%' OR A.sAciklama3 LIKE 'N11%' OR A.sAciklama3 LIKE 'PAZ%') " &
-                If(chkGonderilenleriGoster.Checked, "", "AND ISNULL(P.bGonderildi, 0) = 0 ") &
-                If(chkSadeceTeslimEdilenler.Checked, "AND (ISNULL(M.sTeslimDurumu, '') LIKE '%Teslim Edildi%' OR ISNULL(M.sTeslimDurumu, '') LIKE '%Delivered%') ", "") &
+                If(chkGonderilenleriGoster IsNot Nothing AndAlso chkGonderilenleriGoster.Checked, "", "AND ISNULL(P.bGonderildi, 0) = 0 ") &
+                If(chkSadeceTeslimEdilenler IsNot Nothing AndAlso chkSadeceTeslimEdilenler.Checked, "AND (ISNULL(M.sTeslimDurumu, '') LIKE '%Teslim Edildi%' OR ISNULL(M.sTeslimDurumu, '') LIKE '%Delivered%') ", "") &
                 pazaryeriFiltre &
                 "ORDER BY ISNULL(P.bGonderildi, 0) ASC, M.dteFisTarihi DESC"
             
-            Debug.WriteLine("[SQL] Sadece Teslim Edilenler: " & chkSadeceTeslimEdilenler.Checked.ToString())
+            Debug.WriteLine("[SQL] chkSadeceTeslimEdilenler null mu: " & (chkSadeceTeslimEdilenler Is Nothing).ToString())
+            Debug.WriteLine("[SQL] chkGonderilenleriGoster null mu: " & (chkGonderilenleriGoster Is Nothing).ToString())
+            If chkSadeceTeslimEdilenler IsNot Nothing Then
+                Debug.WriteLine("[SQL] Sadece Teslim Edilenler: " & chkSadeceTeslimEdilenler.Checked.ToString())
+            End If
             Debug.WriteLine("[SQL] Query: " & sql)
 
             Using con As New OleDbConnection(connection)
