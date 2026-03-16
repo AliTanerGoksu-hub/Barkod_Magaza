@@ -2708,8 +2708,15 @@ Public Class frm_qukaGonder
     Private Function ToTurkishTitleCase(ByVal input As String) As String
         If String.IsNullOrEmpty(input) Then Return input
         Try
+            ' Önce Azerbaycan karakterlerini geçici olarak değiştir (ToLower bozmasın diye)
+            Dim processed As String = input
+            processed = processed.Replace(ChrW(&H259), "e")  ' ə -> e
+            processed = processed.Replace(ChrW(&H18F), "E")  ' Ə -> E
+            processed = processed.Replace("ə", "e")
+            processed = processed.Replace("Ə", "E")
+            
             Dim culture As New CultureInfo("tr-TR")
-            Dim words As String() = input.ToLower(culture).Split(" "c)
+            Dim words As String() = processed.ToLower(culture).Split(" "c)
             Dim titleWords As New List(Of String)
             For Each word As String In words
                 If String.IsNullOrEmpty(word) Then Continue For

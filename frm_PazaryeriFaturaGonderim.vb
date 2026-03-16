@@ -611,9 +611,12 @@ Public Class frm_PazaryeriFaturaGonderim
                         Dim contentArray As JArray = CType(obj("content"), JArray)
                         Debug.WriteLine("[TY-Search] Content count: " & contentArray.Count)
                         
+                        ' Önce shipmentPackageId'yi bulalım, sonra return edeceğiz
+                        Dim foundPackageId As String = Nothing
+                        
                         For Each order As JObject In contentArray
-                            ' Micro export kontrolü - deliveryType veya orderType alanlarından
-                            ' Trendyol'da ihracat siparişleri "MICRO_EXPORT" veya benzeri bir değerle gelir
+                            ' === MICRO EXPORT KONTROLÜ ===
+                            ' 1. deliveryType kontrolü
                             If order("deliveryType") IsNot Nothing Then
                                 Dim deliveryType As String = order("deliveryType").ToString().ToUpperInvariant()
                                 If deliveryType.Contains("MICRO") OrElse deliveryType.Contains("EXPORT") Then
@@ -622,7 +625,7 @@ Public Class frm_PazaryeriFaturaGonderim
                                 End If
                             End If
                             
-                            ' orderType kontrolü
+                            ' 2. orderType kontrolü
                             If order("orderType") IsNot Nothing Then
                                 Dim orderType As String = order("orderType").ToString().ToUpperInvariant()
                                 If orderType.Contains("MICRO") OrElse orderType.Contains("EXPORT") Then
@@ -631,30 +634,79 @@ Public Class frm_PazaryeriFaturaGonderim
                                 End If
                             End If
                             
-                            ' isMicroExport alanı direkt kontrol
+                            ' 3. isMicroExport alanı direkt kontrol (boolean)
                             If order("isMicroExport") IsNot Nothing Then
-                                isMicroExport = Convert.ToBoolean(order("isMicroExport"))
-                                Debug.WriteLine("[TY-Search] isMicroExport=" & isMicroExport.ToString())
+                                Try
+                                    isMicroExport = Convert.ToBoolean(order("isMicroExport"))
+                                    Debug.WriteLine("[TY-Search] order.isMicroExport=" & isMicroExport.ToString())
+                                Catch
+                                    ' Boolean parse edilemezse string olarak kontrol et
+                                    Dim microVal As String = order("isMicroExport").ToString().ToUpperInvariant()
+                                    If microVal = "TRUE" OrElse microVal = "1" OrElse microVal = "YES" Then
+                                        isMicroExport = True
+                                        Debug.WriteLine("[TY-Search] order.isMicroExport (string)=" & microVal)
+                                    End If
+                                End Try
                             End If
                             
+                            ' 4. cargoProviderName kontrolü - yurtdışı kargo şirketleri
+                            If order("cargoProviderName") IsNot Nothing Then
+                                Dim cargoProvider As String = order("cargoProviderName").ToString().ToUpperInvariant()
+                                If cargoProvider.Contains("EXPORT") OrElse cargoProvider.Contains("INTERNATIONAL") OrElse cargoProvider.Contains("YURTDISI") Then
+                                    isMicroExport = True
+                                    Debug.WriteLine("[TY-Search] MICRO EXPORT tespit edildi: cargoProviderName=" & cargoProvider)
+                                End If
+                            End If
+                            
+                            ' 5. shipmentAddress ülke kontrolü - Türkiye dışı = ihracat
+                            If order("shipmentAddress") IsNot Nothing Then
+                                Dim shipAddr As JObject = CType(order("shipmentAddress"), JObject)
+                                If shipAddr("countryCode") IsNot Nothing Then
+                                    Dim countryCode As String = shipAddr("countryCode").ToString().ToUpperInvariant()
+                                    If countryCode <> "TR" AndAlso countryCode <> "TUR" AndAlso countryCode <> "TURKEY" Then
+                                        isMicroExport = True
+                                        Debug.WriteLine("[TY-Search] MICRO EXPORT tespit edildi: countryCode=" & countryCode)
+                                    End If
+                                End If
+                            End If
+                            
+                            ' === SHIPMENT PACKAGE ID BULMA ===
                             ' Her siparişin lines array'i var
                             If order("lines") IsNot Nothing Then
                                 Dim linesArray As JArray = CType(order("lines"), JArray)
                                 For Each line As JObject In linesArray
+                                    ' Line seviyesinde de isMicroExport olabilir
+                                    If line("isMicroExport") IsNot Nothing Then
+                                        Try
+                                            Dim lineMicro As Boolean = Convert.ToBoolean(line("isMicroExport"))
+                                            If lineMicro Then
+                                                isMicroExport = True
+                                                Debug.WriteLine("[TY-Search] line.isMicroExport=True")
+                                            End If
+                                        Catch
+                                        End Try
+                                    End If
+                                    
                                     ' shipmentPackageId burada
-                                    If line("shipmentPackageId") IsNot Nothing Then
-                                        Dim pkgId As String = line("shipmentPackageId").ToString()
-                                        Debug.WriteLine("[TY-Search] Found shipmentPackageId: " & pkgId)
-                                        Return pkgId
+                                    If line("shipmentPackageId") IsNot Nothing AndAlso foundPackageId Is Nothing Then
+                                        foundPackageId = line("shipmentPackageId").ToString()
+                                        Debug.WriteLine("[TY-Search] Found shipmentPackageId in line: " & foundPackageId)
                                     End If
                                 Next
                             End If
                             
                             ' Veya direkt shipmentPackageId olabilir
-                            If order("shipmentPackageId") IsNot Nothing Then
-                                Return order("shipmentPackageId").ToString()
+                            If order("shipmentPackageId") IsNot Nothing AndAlso foundPackageId Is Nothing Then
+                                foundPackageId = order("shipmentPackageId").ToString()
+                                Debug.WriteLine("[TY-Search] Found shipmentPackageId in order: " & foundPackageId)
                             End If
                         Next
+                        
+                        ' Tüm kontroller bittikten sonra return et
+                        Debug.WriteLine("[TY-Search] SONUÇ - isMicroExport: " & isMicroExport.ToString() & ", packageId: " & If(foundPackageId, "NULL"))
+                        If foundPackageId IsNot Nothing Then
+                            Return foundPackageId
+                        End If
                     End If
                     
                     hataMesaji = "Sipariş bulundu ama shipmentPackageId bulunamadı"
