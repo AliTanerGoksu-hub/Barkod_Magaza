@@ -248,6 +248,11 @@ Public Class frm_PazaryeriFaturaGonderim
             Application.DoEvents()
 
             dtFaturalar.Clear()
+            
+            ' Tarih değerlerini debug için logla
+            Dim basDate As DateTime = CDate(dtBaslangic.EditValue)
+            Dim bitDate As DateTime = CDate(dtBitis.EditValue)
+            Debug.WriteLine("[TARIH] Başlangıç: " & basDate.ToString("yyyy-MM-dd") & ", Bitiş: " & bitDate.ToString("yyyy-MM-dd"))
 
             Dim pazaryeriFiltre As String = ""
             Select Case cmbPazaryeri.SelectedIndex
@@ -304,13 +309,20 @@ Public Class frm_PazaryeriFaturaGonderim
             Using con As New OleDbConnection(connection)
                 con.Open()
                 Using cmd As New OleDbCommand(sql, con)
-                    cmd.Parameters.Add("@bas", OleDbType.Date).Value = CDate(dtBaslangic.EditValue)
-                    cmd.Parameters.Add("@bit", OleDbType.Date).Value = CDate(dtBitis.EditValue)
+                    ' OleDb ? parametreleri sıralı eklenmeli
+                    cmd.Parameters.AddWithValue("@p0", basDate.Date)
+                    cmd.Parameters.AddWithValue("@p1", bitDate.Date.AddDays(1).AddSeconds(-1)) ' Gün sonuna kadar
+                    
+                    Debug.WriteLine("[SQL] Param @p0: " & basDate.Date.ToString("yyyy-MM-dd"))
+                    Debug.WriteLine("[SQL] Param @p1: " & bitDate.Date.AddDays(1).AddSeconds(-1).ToString("yyyy-MM-dd HH:mm:ss"))
+                    
                     Using adapter As New OleDbDataAdapter(cmd)
                         adapter.Fill(dtFaturalar)
                     End Using
                 End Using
             End Using
+            
+            Debug.WriteLine("[SQL] Sonuç sayısı: " & dtFaturalar.Rows.Count)
 
             GridControl1.DataSource = dtFaturalar
             GridView1.BestFitColumns()
