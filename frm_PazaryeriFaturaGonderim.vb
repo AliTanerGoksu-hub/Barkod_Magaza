@@ -249,10 +249,9 @@ Public Class frm_PazaryeriFaturaGonderim
 
             dtFaturalar.Clear()
             
-            ' Tarih değerlerini debug için logla
+            ' Tarih değerlerini al
             Dim basDate As DateTime = CDate(dtBaslangic.EditValue)
             Dim bitDate As DateTime = CDate(dtBitis.EditValue)
-            Debug.WriteLine("[TARIH] Başlangıç: " & basDate.ToString("yyyy-MM-dd") & ", Bitiş: " & bitDate.ToString("yyyy-MM-dd"))
 
             Dim pazaryeriFiltre As String = ""
             Select Case cmbPazaryeri.SelectedIndex
@@ -302,13 +301,6 @@ Public Class frm_PazaryeriFaturaGonderim
                 If(chkSadeceTeslimEdilenler IsNot Nothing AndAlso chkSadeceTeslimEdilenler.Checked, "AND (ISNULL(M.sTeslimDurumu, '') LIKE '%Teslim Edildi%' OR ISNULL(M.sTeslimDurumu, '') LIKE '%Delivered%') ", "") &
                 pazaryeriFiltre &
                 "ORDER BY ISNULL(P.bGonderildi, 0) ASC, M.dteFisTarihi DESC"
-            
-            Debug.WriteLine("[SQL] chkSadeceTeslimEdilenler null mu: " & (chkSadeceTeslimEdilenler Is Nothing).ToString())
-            Debug.WriteLine("[SQL] chkGonderilenleriGoster null mu: " & (chkGonderilenleriGoster Is Nothing).ToString())
-            If chkSadeceTeslimEdilenler IsNot Nothing Then
-                Debug.WriteLine("[SQL] Sadece Teslim Edilenler: " & chkSadeceTeslimEdilenler.Checked.ToString())
-            End If
-            Debug.WriteLine("[SQL] Query: " & sql)
 
             Using con As New OleDbConnection(connection)
                 con.Open()
@@ -317,16 +309,11 @@ Public Class frm_PazaryeriFaturaGonderim
                     cmd.Parameters.AddWithValue("@p0", basDate.Date)
                     cmd.Parameters.AddWithValue("@p1", bitDate.Date.AddDays(1).AddSeconds(-1)) ' Gün sonuna kadar
                     
-                    Debug.WriteLine("[SQL] Param @p0: " & basDate.Date.ToString("yyyy-MM-dd"))
-                    Debug.WriteLine("[SQL] Param @p1: " & bitDate.Date.AddDays(1).AddSeconds(-1).ToString("yyyy-MM-dd HH:mm:ss"))
-                    
                     Using adapter As New OleDbDataAdapter(cmd)
                         adapter.Fill(dtFaturalar)
                     End Using
                 End Using
             End Using
-            
-            Debug.WriteLine("[SQL] Sonuç sayısı: " & dtFaturalar.Rows.Count)
 
             GridControl1.DataSource = dtFaturalar
             GridView1.BestFitColumns()
@@ -458,24 +445,10 @@ Public Class frm_PazaryeriFaturaGonderim
 
                 lblDurum.Text = "Gönderiliyor: " & siparisNo & " (" & pazaryeri & ") - " & (i + 1) & "/" & rows.Length
                 Application.DoEvents()
-                
-                ' DEBUG: GibFaturaNo değerini logla ve MessageBox ile göster
-                Debug.WriteLine("[DEBUG] Sipariş: " & siparisNo & ", GibFaturaNo: [" & gibFaturaNo & "], IsNullOrEmpty: " & String.IsNullOrEmpty(gibFaturaNo).ToString())
-                
-                ' İlk kayıt için debug mesajı göster
-                If i = 0 Then
-                    MessageBox.Show("Sipariş: " & siparisNo & vbCrLf & 
-                                   "GibFaturaNo: [" & gibFaturaNo & "]" & vbCrLf &
-                                   "Boş mu: " & String.IsNullOrEmpty(gibFaturaNo).ToString() & vbCrLf &
-                                   "Trim sonrası boş mu: " & (gibFaturaNo.Trim() = "").ToString(),
-                                   "DEBUG - GİB Fatura No Kontrolü", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                End If
 
                 ' ===== GİB'E GÖNDERİLMEMİŞSE ÖNCE GİB'E GÖNDER =====
                 ' GibFaturaNo boş, null, "0" veya sadece boşluk ise GİB'e gönder
                 If String.IsNullOrEmpty(gibFaturaNo) OrElse gibFaturaNo.Trim() = "" OrElse gibFaturaNo.Trim() = "0" Then
-                    Debug.WriteLine("[GIB] GibFaturaNo boş/0 - GİB'e gönderilecek: " & siparisNo)
-                    MessageBox.Show("GİB'e gönderilecek: " & siparisNo, "DEBUG", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     lblDurum.Text = "GİB'e gönderiliyor: " & siparisNo & " - " & (i + 1) & "/" & rows.Length
                     Application.DoEvents()
                     
@@ -500,12 +473,11 @@ Public Class frm_PazaryeriFaturaGonderim
                                 
                                 If isMicroExportCheck Then
                                     ' Mikro ihracat - faturayı ihracat faturası olarak işaretle
-                                    Debug.WriteLine("[IHRACAT] Mikro ihracat tespit edildi: " & siparisNo)
                                     IhracatFaturasıOlarakIsaretle(nStokFisiID)
                                 End If
                             End If
                         Catch ex As Exception
-                            Debug.WriteLine("[IHRACAT] Mikro ihracat kontrolü hatası: " & ex.Message)
+                            ' Mikro ihracat kontrolü hatası - sessizce devam et
                         End Try
                     End If
                     
@@ -514,7 +486,6 @@ Public Class frm_PazaryeriFaturaGonderim
                         If Not String.IsNullOrEmpty(gibSonuc) AndAlso Not gibSonuc.ToLower().Contains("hata") Then
                             gibFaturaNo = gibSonuc
                             gibGonderilen += 1
-                            Debug.WriteLine("[GIB] Fatura GİB'e gönderildi: " & gibFaturaNo)
                             
                             ' faturaGuid'i de güncellemek için veritabanından tekrar oku
                             Try
@@ -533,13 +504,11 @@ Public Class frm_PazaryeriFaturaGonderim
                             Catch
                             End Try
                         Else
-                            Debug.WriteLine("[GIB] GİB gönderim hatası: " & If(gibSonuc, "boş yanıt"))
                             basarisiz += 1
                             KaydetGonderimSonucu(nStokFisiID, pazaryeri, siparisNo, "", "", False, "GİB'e gönderilemedi: " & If(gibSonuc, "boş yanıt"))
                             Continue For
                         End If
                     Catch ex As Exception
-                        Debug.WriteLine("[GIB] GİB gönderim exception: " & ex.Message)
                         basarisiz += 1
                         KaydetGonderimSonucu(nStokFisiID, pazaryeri, siparisNo, "", "", False, "GİB gönderim hatası: " & ex.Message)
                         Continue For
@@ -611,15 +580,9 @@ Public Class frm_PazaryeriFaturaGonderim
 
             Dim api = pazaryeriApis("TRENDYOL")
             
-            Debug.WriteLine("[TY] ===== TRENDYOL FATURA GÖNDERME =====")
-            Debug.WriteLine("[TY] Sipariş No: " & siparisNo)
-            Debug.WriteLine("[TY] GİB Fatura No: " & gibFaturaNo)
-            Debug.WriteLine("[TY] Satıcı ID: " & api.SellerId)
-            Debug.WriteLine("[TY] API Key: " & api.ApiKey)
 
             ' Sipariş numarasını temizle (TY11035907594 -> 11035907594)
             Dim orderNumber As String = siparisNo.Replace("TY", "").Replace("ty", "").Trim()
-            Debug.WriteLine("[TY] Order Number: " & orderNumber)
             
             ' Auth bilgileri
             Dim authRaw As String = api.ApiKey & ":" & api.ApiSecret
@@ -631,27 +594,21 @@ Public Class frm_PazaryeriFaturaGonderim
             Dim isMicroExport As Boolean = False
             Dim shipmentPackageId As String = GetTrendyolShipmentPackageId(api.SellerId, orderNumber, authBase64, userAgent, hataMesaji, isMicroExport)
             If String.IsNullOrEmpty(shipmentPackageId) Then
-                Debug.WriteLine("[TY] HATA: Paket ID bulunamadı - " & hataMesaji)
                 Return False
             End If
-            Debug.WriteLine("[TY] Shipment Package ID bulundu: " & shipmentPackageId)
-            Debug.WriteLine("[TY] Is Micro Export: " & isMicroExport.ToString())
 
             ' Fatura linki oluştur (Kolaysoft'tan alınacak)
             Dim invoiceLink As String = GetKolaysoftFaturaLink(gibFaturaNo, faturaGuid)
             If String.IsNullOrEmpty(invoiceLink) Then
                 hataMesaji = "Fatura linki alınamadı"
-                Debug.WriteLine("[TY] HATA: Fatura linki alınamadı")
                 Return False
             End If
-            Debug.WriteLine("[TY] Fatura Link: " & invoiceLink)
 
             ' 2. ADIM: Fatura linkini gönder
             ' POST https://apigw.trendyol.com/integration/sellers/{sellerId}/seller-invoice-links
             Dim baseUrl As String = "https://apigw.trendyol.com"
             
             Dim url As String = baseUrl & "/integration/sellers/" & api.SellerId & "/seller-invoice-links"
-            Debug.WriteLine("[TY] URL: " & url)
 
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
             
@@ -678,9 +635,6 @@ Public Class frm_PazaryeriFaturaGonderim
                 """invoiceDateTime"": " & invoiceDateTime.ToString() &
                 "}"
             
-            Debug.WriteLine("[TY] isMicroExport: " & isMicroExport.ToString())
-            Debug.WriteLine("[TY] invoiceNumber: " & gibFaturaNo & ", invoiceDateTime: " & invoiceDateTime.ToString())
-            Debug.WriteLine("[TY] Body: " & jsonBody)
             
             Dim data As Byte() = Encoding.UTF8.GetBytes(jsonBody)
             req.ContentLength = data.Length
@@ -691,14 +645,11 @@ Public Class frm_PazaryeriFaturaGonderim
 
             Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
                 Dim statusCode As Integer = CInt(resp.StatusCode)
-                Debug.WriteLine("[TY] Response Status: " & statusCode)
                 
                 If statusCode >= 200 AndAlso statusCode < 300 Then
-                    Debug.WriteLine("[TY] BAŞARILI!")
                     Return True
                 Else
                     hataMesaji = "HTTP " & statusCode & ": " & resp.StatusDescription
-                    Debug.WriteLine("[TY] HATA: " & hataMesaji)
                     Return False
                 End If
             End Using
@@ -711,20 +662,16 @@ Public Class frm_PazaryeriFaturaGonderim
                     Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
                         Dim errorBody As String = reader.ReadToEnd()
                         hataMesaji = "HTTP " & statusCode & ": " & If(errorBody.Length > 300, errorBody.Substring(0, 300), errorBody)
-                        Debug.WriteLine("[TY] WebException: " & hataMesaji)
                     End Using
                 Catch
                     hataMesaji = wex.Message
-                    Debug.WriteLine("[TY] WebException: " & hataMesaji)
                 End Try
             Else
                 hataMesaji = wex.Message
-                Debug.WriteLine("[TY] WebException (no response): " & hataMesaji)
             End If
             Return False
         Catch ex As Exception
             hataMesaji = ex.Message
-            Debug.WriteLine("[TY] Exception: " & hataMesaji)
             Return False
         End Try
     End Function
@@ -741,7 +688,6 @@ Public Class frm_PazaryeriFaturaGonderim
             ' Sipariş detayını çek
             ' GET /sapigw/suppliers/{supplierId}/orders?orderNumber={orderNumber}
             Dim url As String = "https://api.trendyol.com/sapigw/suppliers/" & sellerId & "/orders?orderNumber=" & orderNumber
-            Debug.WriteLine("[TY-Search] URL: " & url)
             
             Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
             req.Method = "GET"
@@ -753,10 +699,8 @@ Public Class frm_PazaryeriFaturaGonderim
             Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
                 Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
                     Dim json As String = reader.ReadToEnd()
-                    Debug.WriteLine("[TY-Search] Response length: " & json.Length)
                     
                     If json.Length > 0 Then
-                        Debug.WriteLine("[TY-Search] Response preview: " & If(json.Length > 500, json.Substring(0, 500), json))
                     End If
                     
                     ' JSON parse et
@@ -765,42 +709,34 @@ Public Class frm_PazaryeriFaturaGonderim
                     ' content array içinde siparişler var
                     If obj("content") IsNot Nothing Then
                         Dim contentArray As JArray = CType(obj("content"), JArray)
-                        Debug.WriteLine("[TY-Search] Content count: " & contentArray.Count)
                         
                         ' Önce shipmentPackageId'yi bulalım, sonra return edeceğiz
                         Dim foundPackageId As String = Nothing
                         
                         For Each order As JObject In contentArray
                             ' === TÜM ORDER ALANLARINI LOGLA (DEBUG) ===
-                            Debug.WriteLine("[TY-Search] === ORDER ALANLARI ===")
                             For Each jprop As JProperty In order.Properties()
                                 Dim valStr As String = ""
                                 If jprop.Value IsNot Nothing Then
                                     valStr = jprop.Value.ToString()
                                     If valStr.Length > 100 Then valStr = valStr.Substring(0, 100) & "..."
                                 End If
-                                Debug.WriteLine("[TY-Search] " & jprop.Name & " = " & valStr)
                             Next
-                            Debug.WriteLine("[TY-Search] === ORDER ALANLARI SONU ===")
                             
                             ' === MICRO EXPORT KONTROLÜ ===
                             ' 1. deliveryType kontrolü
                             If order("deliveryType") IsNot Nothing Then
                                 Dim deliveryType As String = order("deliveryType").ToString().ToUpperInvariant()
-                                Debug.WriteLine("[TY-Search] deliveryType=" & deliveryType)
                                 If deliveryType.Contains("MICRO") OrElse deliveryType.Contains("EXPORT") Then
                                     isMicroExport = True
-                                    Debug.WriteLine("[TY-Search] MICRO EXPORT tespit edildi: deliveryType=" & deliveryType)
                                 End If
                             End If
                             
                             ' 2. orderType kontrolü
                             If order("orderType") IsNot Nothing Then
                                 Dim orderType As String = order("orderType").ToString().ToUpperInvariant()
-                                Debug.WriteLine("[TY-Search] orderType=" & orderType)
                                 If orderType.Contains("MICRO") OrElse orderType.Contains("EXPORT") Then
                                     isMicroExport = True
-                                    Debug.WriteLine("[TY-Search] MICRO EXPORT tespit edildi: orderType=" & orderType)
                                 End If
                             End If
                             
@@ -808,13 +744,11 @@ Public Class frm_PazaryeriFaturaGonderim
                             If order("isMicroExport") IsNot Nothing Then
                                 Try
                                     isMicroExport = Convert.ToBoolean(order("isMicroExport"))
-                                    Debug.WriteLine("[TY-Search] order.isMicroExport=" & isMicroExport.ToString())
                                 Catch
                                     ' Boolean parse edilemezse string olarak kontrol et
                                     Dim microVal As String = order("isMicroExport").ToString().ToUpperInvariant()
                                     If microVal = "TRUE" OrElse microVal = "1" OrElse microVal = "YES" Then
                                         isMicroExport = True
-                                        Debug.WriteLine("[TY-Search] order.isMicroExport (string)=" & microVal)
                                     End If
                                 End Try
                             End If
@@ -825,13 +759,11 @@ Public Class frm_PazaryeriFaturaGonderim
                                     Dim microFlag As Boolean = Convert.ToBoolean(order("micro"))
                                     If microFlag Then
                                         isMicroExport = True
-                                        Debug.WriteLine("[TY-Search] order.micro=True")
                                     End If
                                 Catch
                                     Dim microVal As String = order("micro").ToString().ToUpperInvariant()
                                     If microVal = "TRUE" OrElse microVal = "1" Then
                                         isMicroExport = True
-                                        Debug.WriteLine("[TY-Search] order.micro (string)=" & microVal)
                                     End If
                                 End Try
                             End If
@@ -839,26 +771,21 @@ Public Class frm_PazaryeriFaturaGonderim
                             ' 4. exportType kontrolü
                             If order("exportType") IsNot Nothing Then
                                 Dim exportType As String = order("exportType").ToString().ToUpperInvariant()
-                                Debug.WriteLine("[TY-Search] exportType=" & exportType)
                                 If exportType.Contains("MICRO") OrElse Not String.IsNullOrEmpty(exportType) Then
                                     isMicroExport = True
-                                    Debug.WriteLine("[TY-Search] MICRO EXPORT tespit edildi: exportType=" & exportType)
                                 End If
                             End If
                             
                             ' 5. microExportInfo kontrolü
                             If order("microExportInfo") IsNot Nothing Then
                                 isMicroExport = True
-                                Debug.WriteLine("[TY-Search] MICRO EXPORT tespit edildi: microExportInfo mevcut")
                             End If
                             
                             ' 6. cargoProviderName kontrolü - yurtdışı kargo şirketleri
                             If order("cargoProviderName") IsNot Nothing Then
                                 Dim cargoProvider As String = order("cargoProviderName").ToString().ToUpperInvariant()
-                                Debug.WriteLine("[TY-Search] cargoProviderName=" & cargoProvider)
                                 If cargoProvider.Contains("EXPORT") OrElse cargoProvider.Contains("INTERNATIONAL") OrElse cargoProvider.Contains("YURTDISI") Then
                                     isMicroExport = True
-                                    Debug.WriteLine("[TY-Search] MICRO EXPORT tespit edildi: cargoProviderName=" & cargoProvider)
                                 End If
                             End If
                             
@@ -867,18 +794,14 @@ Public Class frm_PazaryeriFaturaGonderim
                                 Dim shipAddr As JObject = CType(order("shipmentAddress"), JObject)
                                 If shipAddr("countryCode") IsNot Nothing Then
                                     Dim countryCode As String = shipAddr("countryCode").ToString().ToUpperInvariant()
-                                    Debug.WriteLine("[TY-Search] shipmentAddress.countryCode=" & countryCode)
                                     If countryCode <> "TR" AndAlso countryCode <> "TUR" AndAlso countryCode <> "TURKEY" AndAlso Not String.IsNullOrEmpty(countryCode) Then
                                         isMicroExport = True
-                                        Debug.WriteLine("[TY-Search] MICRO EXPORT tespit edildi: countryCode=" & countryCode)
                                     End If
                                 End If
                                 If shipAddr("country") IsNot Nothing Then
                                     Dim country As String = shipAddr("country").ToString().ToUpperInvariant()
-                                    Debug.WriteLine("[TY-Search] shipmentAddress.country=" & country)
                                     If country <> "TÜRKİYE" AndAlso country <> "TURKIYE" AndAlso country <> "TURKEY" AndAlso Not String.IsNullOrEmpty(country) Then
                                         isMicroExport = True
-                                        Debug.WriteLine("[TY-Search] MICRO EXPORT tespit edildi: country=" & country)
                                     End If
                                 End If
                             End If
@@ -894,7 +817,6 @@ Public Class frm_PazaryeriFaturaGonderim
                                             Dim lineMicro As Boolean = Convert.ToBoolean(line("isMicroExport"))
                                             If lineMicro Then
                                                 isMicroExport = True
-                                                Debug.WriteLine("[TY-Search] line.isMicroExport=True")
                                             End If
                                         Catch
                                         End Try
@@ -903,13 +825,11 @@ Public Class frm_PazaryeriFaturaGonderim
                                     ' Line'da exportType kontrolü
                                     If line("exportType") IsNot Nothing Then
                                         isMicroExport = True
-                                        Debug.WriteLine("[TY-Search] line.exportType mevcut")
                                     End If
                                     
                                     ' shipmentPackageId burada
                                     If line("shipmentPackageId") IsNot Nothing AndAlso foundPackageId Is Nothing Then
                                         foundPackageId = line("shipmentPackageId").ToString()
-                                        Debug.WriteLine("[TY-Search] Found shipmentPackageId in line: " & foundPackageId)
                                     End If
                                 Next
                             End If
@@ -917,12 +837,10 @@ Public Class frm_PazaryeriFaturaGonderim
                             ' Veya direkt shipmentPackageId olabilir
                             If order("shipmentPackageId") IsNot Nothing AndAlso foundPackageId Is Nothing Then
                                 foundPackageId = order("shipmentPackageId").ToString()
-                                Debug.WriteLine("[TY-Search] Found shipmentPackageId in order: " & foundPackageId)
                             End If
                         Next
                         
                         ' Tüm kontroller bittikten sonra return et
-                        Debug.WriteLine("[TY-Search] SONUÇ - isMicroExport: " & isMicroExport.ToString() & ", packageId: " & If(foundPackageId, "NULL"))
                         If foundPackageId IsNot Nothing Then
                             Return foundPackageId
                         End If
@@ -941,7 +859,6 @@ Public Class frm_PazaryeriFaturaGonderim
                     Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
                         Dim errorBody As String = reader.ReadToEnd()
                         hataMesaji = "HTTP " & statusCode & ": " & If(errorBody.Length > 200, errorBody.Substring(0, 200), errorBody)
-                        Debug.WriteLine("[TY-Search] WebException: " & hataMesaji)
                     End Using
                 Catch
                     hataMesaji = wex.Message
@@ -952,7 +869,6 @@ Public Class frm_PazaryeriFaturaGonderim
             Return Nothing
         Catch ex As Exception
             hataMesaji = "Paket arama hatası: " & ex.Message
-            Debug.WriteLine("[TY-Search] Exception: " & ex.Message)
             Return Nothing
         End Try
     End Function
@@ -1009,11 +925,6 @@ Public Class frm_PazaryeriFaturaGonderim
             Dim authBytes As Byte() = Encoding.UTF8.GetBytes(authRaw)
             Dim authBase64 As String = Convert.ToBase64String(authBytes)
             
-            Debug.WriteLine("[HB-Invoice] ===== FATURA GÖNDERME =====")
-            Debug.WriteLine("[HB-Invoice] Sipariş No: " & orderNumber)
-            Debug.WriteLine("[HB-Invoice] MerchantId: " & merchantId)
-            Debug.WriteLine("[HB-Invoice] Entegratör: " & entegratorAdi)
-            Debug.WriteLine("[HB-Invoice] Fatura Link: " & invoiceLink)
             
             ' 1. ADIM: Package Number'ı bul
             Dim baseUrl As String = "https://oms-external.hepsiburada.com"
@@ -1023,18 +934,15 @@ Public Class frm_PazaryeriFaturaGonderim
             packageNumber = GetHepsiburadaPackageNumber(baseUrl, merchantId, orderNumber, authBase64, apiHataMesaji)
             
             If String.IsNullOrEmpty(packageNumber) Then
-                Debug.WriteLine("[HB-Invoice] Paket numarası bulunamadı: " & apiHataMesaji)
                 hataMesaji = apiHataMesaji
                 Return False
             End If
             
-            Debug.WriteLine("[HB-Invoice] Paket numarası bulundu: " & packageNumber)
             
             ' 2. ADIM: Fatura linkini gönder
             ' PUT /packages/merchantid/{merchantId}/packagenumber/{packageNumber}/invoice
             Dim url As String = baseUrl & "/packages/merchantid/" & merchantId & "/packagenumber/" & packageNumber & "/invoice"
             
-            Debug.WriteLine("[HB-Invoice] URL: " & url)
             
             ' TLS 1.2 zorla
             ServicePointManager.SecurityProtocol = CType(3072, SecurityProtocolType) ' TLS 1.2
@@ -1049,7 +957,6 @@ Public Class frm_PazaryeriFaturaGonderim
             
             ' Body: invoiceLink
             Dim payload As String = "{""invoiceLink"": """ & invoiceLink.Replace("""", "\""") & """}"
-            Debug.WriteLine("[HB-Invoice] Payload: " & payload)
             
             Dim data As Byte() = Encoding.UTF8.GetBytes(payload)
             req.ContentLength = data.Length
@@ -1060,7 +967,6 @@ Public Class frm_PazaryeriFaturaGonderim
 
             Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
                 Dim statusCode As Integer = CInt(resp.StatusCode)
-                Debug.WriteLine("[HB-Invoice] Response Status: " & statusCode)
                 
                 ' 204 No Content = Başarılı
                 If statusCode = 204 OrElse (statusCode >= 200 AndAlso statusCode < 300) Then
@@ -1078,7 +984,6 @@ Public Class frm_PazaryeriFaturaGonderim
                     Dim statusCode As Integer = CInt(resp.StatusCode)
                     Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
                         Dim errorResponse As String = reader.ReadToEnd()
-                        Debug.WriteLine("[HB-Invoice] Error (" & statusCode & "): " & errorResponse)
                         
                         ' Detaylı hata mesajları
                         Select Case statusCode
@@ -1126,65 +1031,49 @@ Public Class frm_PazaryeriFaturaGonderim
             ' Yöntem 1: Teslim Edilen Siparişler (Delivered)
             ' GET /packages/merchantid/{merchantId}/delivered?beginDate=...&endDate=...
             Try
-                Debug.WriteLine("[HB-Search] Yöntem 1: Teslim Edilenler (Delivered)")
                 Dim deliveredUrl As String = baseUrl & "/packages/merchantid/" & merchantId & "/delivered?beginDate=" & beginDate & "&endDate=" & endDate & "&limit=50&offset=0"
-                Debug.WriteLine("[HB-Search] URL: " & deliveredUrl)
                 
                 packageNumber = TryGetPackageFromUrl(deliveredUrl, authBase64, orderNumber)
                 If Not String.IsNullOrEmpty(packageNumber) Then
-                    Debug.WriteLine("[HB-Search] Yöntem 1 başarılı! PackageNumber: " & packageNumber)
                     Return packageNumber
                 End If
             Catch ex As Exception
-                Debug.WriteLine("[HB-Search] Yöntem 1 hatası: " & ex.Message)
             End Try
             
             ' Yöntem 2: Kargoda Olanlar (Shipped/InTransit)
             ' GET /packages/merchantid/{merchantId}/shipped?beginDate=...&endDate=...
             Try
-                Debug.WriteLine("[HB-Search] Yöntem 2: Kargoda Olanlar (Shipped)")
                 Dim shippedUrl As String = baseUrl & "/packages/merchantid/" & merchantId & "/shipped?beginDate=" & beginDate & "&endDate=" & endDate & "&limit=50&offset=0"
-                Debug.WriteLine("[HB-Search] URL: " & shippedUrl)
                 
                 packageNumber = TryGetPackageFromUrl(shippedUrl, authBase64, orderNumber)
                 If Not String.IsNullOrEmpty(packageNumber) Then
-                    Debug.WriteLine("[HB-Search] Yöntem 2 başarılı! PackageNumber: " & packageNumber)
                     Return packageNumber
                 End If
             Catch ex As Exception
-                Debug.WriteLine("[HB-Search] Yöntem 2 hatası: " & ex.Message)
             End Try
             
             ' Yöntem 3: Açık Paketler (Open) - timespan ile son 24 saat
             ' GET /packages/merchantid/{merchantId}?timespan=24&limit=50&offset=0
             Try
-                Debug.WriteLine("[HB-Search] Yöntem 3: Açık Paketler (Open)")
                 Dim openUrl As String = baseUrl & "/packages/merchantid/" & merchantId & "?timespan=24&limit=50&offset=0"
-                Debug.WriteLine("[HB-Search] URL: " & openUrl)
                 
                 packageNumber = TryGetPackageFromUrl(openUrl, authBase64, orderNumber)
                 If Not String.IsNullOrEmpty(packageNumber) Then
-                    Debug.WriteLine("[HB-Search] Yöntem 3 başarılı! PackageNumber: " & packageNumber)
                     Return packageNumber
                 End If
             Catch ex As Exception
-                Debug.WriteLine("[HB-Search] Yöntem 3 hatası: " & ex.Message)
             End Try
             
             ' Yöntem 4: Sipariş Detayı
             ' GET /orders/merchantid/{merchantId}/{orderNumber}
             Try
-                Debug.WriteLine("[HB-Search] Yöntem 4: Sipariş Detayı")
                 Dim orderUrl As String = baseUrl & "/orders/merchantid/" & merchantId & "/" & orderNumber
-                Debug.WriteLine("[HB-Search] URL: " & orderUrl)
                 
                 packageNumber = TryGetPackageFromOrderDetail(orderUrl, authBase64)
                 If Not String.IsNullOrEmpty(packageNumber) Then
-                    Debug.WriteLine("[HB-Search] Yöntem 4 başarılı! PackageNumber: " & packageNumber)
                     Return packageNumber
                 End If
             Catch ex As Exception
-                Debug.WriteLine("[HB-Search] Yöntem 4 hatası: " & ex.Message)
             End Try
             
             hataMesaji = "Sipariş için paket numarası bulunamadı: " & orderNumber & ". Tüm API endpointleri denendi."
@@ -1211,7 +1100,6 @@ Public Class frm_PazaryeriFaturaGonderim
             Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
                 Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
                     Dim json As String = reader.ReadToEnd()
-                    Debug.WriteLine("[HB-Search] Order detail response: " & If(json.Length > 500, json.Substring(0, 500), json))
                     
                     If json.Trim().StartsWith("{") Then
                         Dim obj As JObject = JObject.Parse(json)
@@ -1244,10 +1132,8 @@ Public Class frm_PazaryeriFaturaGonderim
             
             Return Nothing
         Catch wex As WebException
-            Debug.WriteLine("[HB-Search] Order detail WebException: " & wex.Message)
             Return Nothing
         Catch ex As Exception
-            Debug.WriteLine("[HB-Search] Order detail Exception: " & ex.Message)
             Return Nothing
         End Try
     End Function
@@ -1267,10 +1153,8 @@ Public Class frm_PazaryeriFaturaGonderim
             Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
                 Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
                     Dim json As String = reader.ReadToEnd()
-                    Debug.WriteLine("[HB-Search] Response length: " & json.Length)
                     
                     If json.Length > 0 Then
-                        Debug.WriteLine("[HB-Search] Response preview: " & If(json.Length > 300, json.Substring(0, 300), json))
                     End If
                     
                     ' JSON array ise
@@ -1286,7 +1170,6 @@ Public Class frm_PazaryeriFaturaGonderim
                                 itemOrderNo = item("OrderNumber").ToString()
                             End If
                             
-                            Debug.WriteLine("[HB-Search] Checking order: " & itemOrderNo & " vs " & orderNumber)
                             
                             If itemOrderNo = orderNumber OrElse itemOrderNo.EndsWith(orderNumber) OrElse orderNumber.EndsWith(itemOrderNo) Then
                                 Dim pkgNo As String = ""
@@ -1337,17 +1220,13 @@ Public Class frm_PazaryeriFaturaGonderim
                     Dim statusCode As Integer = CInt(resp.StatusCode)
                     Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
                         Dim errorResponse As String = reader.ReadToEnd()
-                        Debug.WriteLine("[HB-Search] HTTP " & statusCode & ": " & If(errorResponse.Length > 200, errorResponse.Substring(0, 200), errorResponse))
                     End Using
                 Catch
-                    Debug.WriteLine("[HB-Search] WebException: " & wex.Message)
                 End Try
             Else
-                Debug.WriteLine("[HB-Search] WebException (no response): " & wex.Message)
             End If
             Return Nothing
         Catch ex As Exception
-            Debug.WriteLine("[HB-Search] Exception: " & ex.Message)
             Return Nothing
         End Try
     End Function
@@ -1367,23 +1246,16 @@ Public Class frm_PazaryeriFaturaGonderim
 
             Dim api = pazaryeriApis("N11")
             
-            Debug.WriteLine("[N11] ===== N11 FATURA GÖNDERME =====")
-            Debug.WriteLine("[N11] Sipariş No: " & siparisNo)
-            Debug.WriteLine("[N11] GİB Fatura No: " & gibFaturaNo)
-            Debug.WriteLine("[N11] API Key: " & If(String.IsNullOrEmpty(api.ApiKey), "BOŞ", api.ApiKey.Substring(0, Math.Min(10, api.ApiKey.Length)) & "..."))
 
             ' Sipariş numarasını temizle (N11 prefix varsa kaldır)
             Dim orderNumber As String = siparisNo.Replace("N11", "").Replace("n11", "").Trim()
-            Debug.WriteLine("[N11] Order Number: " & orderNumber)
             
             ' Fatura linki al - N11 sadece pdf, png, jpeg kabul ediyor
             Dim invoiceLink As String = GetKolaysoftFaturaLink(gibFaturaNo, faturaGuid)
             If String.IsNullOrEmpty(invoiceLink) Then
                 hataMesaji = "Fatura linki alınamadı"
-                Debug.WriteLine("[N11] HATA: Fatura linki alınamadı")
                 Return False
             End If
-            Debug.WriteLine("[N11] Fatura Link: " & invoiceLink)
             
             ' N11 SOAP API endpoint
             Dim soapUrl As String = "https://api.n11.com/ws/SellerInvoiceService.wsdl"
@@ -1408,7 +1280,6 @@ Public Class frm_PazaryeriFaturaGonderim
                 "</soapenv:Body>" &
                 "</soapenv:Envelope>"
             
-            Debug.WriteLine("[N11] SOAP Request (preview): " & soapRequest.Substring(0, Math.Min(500, soapRequest.Length)))
             
             ' HTTP Request gönder
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
@@ -1430,11 +1301,9 @@ Public Class frm_PazaryeriFaturaGonderim
             Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
                 Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
                     Dim responseXml As String = reader.ReadToEnd()
-                    Debug.WriteLine("[N11] Response: " & responseXml)
                     
                     ' Response'u parse et
                     If responseXml.Contains("<status>success</status>") Then
-                        Debug.WriteLine("[N11] BAŞARILI!")
                         Return True
                     ElseIf responseXml.Contains("<status>failure</status>") Then
                         ' Hata mesajını çıkar
@@ -1445,7 +1314,6 @@ Public Class frm_PazaryeriFaturaGonderim
                         Else
                             hataMesaji = "N11 API hatası (failure)"
                         End If
-                        Debug.WriteLine("[N11] HATA: " & hataMesaji)
                         Return False
                     Else
                         hataMesaji = "Beklenmeyen yanıt formatı"
@@ -1461,7 +1329,6 @@ Public Class frm_PazaryeriFaturaGonderim
                     Dim statusCode As Integer = CInt(resp.StatusCode)
                     Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
                         Dim errorBody As String = reader.ReadToEnd()
-                        Debug.WriteLine("[N11] WebException (" & statusCode & "): " & errorBody)
                         
                         ' SOAP Fault mesajını çıkarmaya çalış
                         Dim faultMatch As System.Text.RegularExpressions.Match = 
@@ -1477,12 +1344,10 @@ Public Class frm_PazaryeriFaturaGonderim
                 End Try
             Else
                 hataMesaji = wex.Message
-                Debug.WriteLine("[N11] WebException (no response): " & hataMesaji)
             End If
             Return False
         Catch ex As Exception
             hataMesaji = ex.Message
-            Debug.WriteLine("[N11] Exception: " & hataMesaji)
             Return False
         End Try
     End Function
@@ -1502,22 +1367,16 @@ Public Class frm_PazaryeriFaturaGonderim
 
             Dim api = pazaryeriApis("PAZARAMA")
             
-            Debug.WriteLine("[PAZ] ===== PAZARAMA FATURA GÖNDERME =====")
-            Debug.WriteLine("[PAZ] Sipariş No: " & siparisNo)
-            Debug.WriteLine("[PAZ] GİB Fatura No: " & gibFaturaNo)
             
             ' Sipariş numarasını temizle (PAZ prefix varsa kaldır)
             Dim orderNumber As String = siparisNo.Replace("PAZ", "").Replace("paz", "").Trim()
-            Debug.WriteLine("[PAZ] Order Number: " & orderNumber)
             
             ' Fatura linki al
             Dim invoiceLink As String = GetKolaysoftFaturaLink(gibFaturaNo, faturaGuid)
             If String.IsNullOrEmpty(invoiceLink) Then
                 hataMesaji = "Fatura linki alınamadı"
-                Debug.WriteLine("[PAZ] HATA: Fatura linki alınamadı")
                 Return False
             End If
-            Debug.WriteLine("[PAZ] Fatura Link: " & invoiceLink)
             
             ' Pazarama API bilgileri
             Dim baseUrl As String = If(String.IsNullOrEmpty(api.BaseUrl), "https://isortagim.pazarama.com", api.BaseUrl.TrimEnd("/"c))
@@ -1536,7 +1395,6 @@ Public Class frm_PazaryeriFaturaGonderim
             
             ' Tahmini endpoint: PUT /api/v1/orders/{orderNumber}/invoice
             Dim url As String = baseUrl & "/api/v1/orders/" & orderNumber & "/invoice"
-            Debug.WriteLine("[PAZ] URL (tahmini): " & url)
             
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
             
@@ -1552,7 +1410,6 @@ Public Class frm_PazaryeriFaturaGonderim
             
             ' Body
             Dim payload As String = "{""invoiceLink"": """ & invoiceLink.Replace("""", "\""") & """, ""invoiceNumber"": """ & gibFaturaNo & """}"
-            Debug.WriteLine("[PAZ] Payload: " & payload)
             
             Dim data As Byte() = Encoding.UTF8.GetBytes(payload)
             req.ContentLength = data.Length
@@ -1563,14 +1420,11 @@ Public Class frm_PazaryeriFaturaGonderim
             
             Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
                 Dim statusCode As Integer = CInt(resp.StatusCode)
-                Debug.WriteLine("[PAZ] Response Status: " & statusCode)
                 
                 If statusCode >= 200 AndAlso statusCode < 300 Then
-                    Debug.WriteLine("[PAZ] BAŞARILI!")
                     Return True
                 Else
                     hataMesaji = "HTTP " & statusCode & ": " & resp.StatusDescription
-                    Debug.WriteLine("[PAZ] HATA: " & hataMesaji)
                     Return False
                 End If
             End Using
@@ -1582,7 +1436,6 @@ Public Class frm_PazaryeriFaturaGonderim
                     Dim statusCode As Integer = CInt(resp.StatusCode)
                     Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
                         Dim errorBody As String = reader.ReadToEnd()
-                        Debug.WriteLine("[PAZ] WebException (" & statusCode & "): " & errorBody)
                         
                         ' Özel hata mesajları
                         Select Case statusCode
@@ -1599,12 +1452,10 @@ Public Class frm_PazaryeriFaturaGonderim
                 End Try
             Else
                 hataMesaji = wex.Message
-                Debug.WriteLine("[PAZ] WebException (no response): " & hataMesaji)
             End If
             Return False
         Catch ex As Exception
             hataMesaji = ex.Message
-            Debug.WriteLine("[PAZ] Exception: " & hataMesaji)
             Return False
         End Try
     End Function
@@ -1651,7 +1502,6 @@ Public Class frm_PazaryeriFaturaGonderim
             Return faturaUrl
             
         Catch ex As Exception
-            Debug.WriteLine("Fatura link hatası: " & ex.Message)
             Return ""
         End Try
     End Function
@@ -1704,7 +1554,6 @@ Public Class frm_PazaryeriFaturaGonderim
                 End If
             End Using
         Catch ex As Exception
-            Debug.WriteLine("Gönderim sonucu kayıt hatası: " & ex.Message)
         End Try
     End Sub
 
@@ -1734,7 +1583,6 @@ Public Class frm_PazaryeriFaturaGonderim
     ''' Sadece Teslim Edilenler checkbox değiştiğinde listeyi yenile
     ''' </summary>
     Private Sub chkSadeceTeslimEdilenler_CheckedChanged(sender As Object, e As EventArgs) Handles chkSadeceTeslimEdilenler.CheckedChanged
-        Debug.WriteLine("[CHECKBOX] Sadece Teslim Edilenler: " & chkSadeceTeslimEdilenler.Checked.ToString())
         ListeleFaturalar()
     End Sub
     
@@ -1792,7 +1640,6 @@ Public Class frm_PazaryeriFaturaGonderim
             GridView1.RestoreLayoutFromRegistry("SOFTWARE\BusinessSmart\VIEW\MAGAZA\" & Me.Name.ToString())
         Catch ex As Exception
             ' İlk açılışta registry kaydı olmayabilir, sessizce geç
-            Debug.WriteLine("Görünüm yüklenemedi: " & ex.Message)
         End Try
     End Sub
     
@@ -1860,7 +1707,6 @@ Public Class frm_PazaryeriFaturaGonderim
                         guncellenen += 1
                     End If
                 Catch ex As Exception
-                    Debug.WriteLine("Teslim durumu alınamadı: " & siparisNo & " - " & ex.Message)
                     hata += 1
                 End Try
             Next
@@ -1962,7 +1808,6 @@ Public Class frm_PazaryeriFaturaGonderim
             
             Return ""
         Catch ex As Exception
-            Debug.WriteLine("GetTrendyolTeslimDurumu hata: " & ex.Message)
             Return ""
         End Try
     End Function
@@ -1984,7 +1829,6 @@ Public Class frm_PazaryeriFaturaGonderim
                 End Using
             End Using
         Catch ex As Exception
-            Debug.WriteLine("KaydetTeslimDurumu hata: " & ex.Message)
         End Try
     End Sub
     
@@ -2031,12 +1875,9 @@ Public Class frm_PazaryeriFaturaGonderim
                     cmdMaster.ExecuteNonQuery()
                 End Using
                 
-                Debug.WriteLine("[IHRACAT] Fatura ihracat olarak işaretlendi: nStokFisiID=" & nStokFisiID)
-                Debug.WriteLine("[IHRACAT] bFaturaTipi='İhracat Faturası', nKdvMuafiyetKodu='301', KDV=%0")
                 
             End Using
         Catch ex As Exception
-            Debug.WriteLine("[IHRACAT] İhracat faturası işaretleme hatası: " & ex.Message)
         End Try
     End Sub
     
