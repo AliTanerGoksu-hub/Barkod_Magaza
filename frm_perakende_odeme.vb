@@ -4372,14 +4372,30 @@ Public Class frm_perakende_odeme
                 ' Belge numarası oluştur
                 Dim documentNo As String = "PRKND-" & DateTime.Now.ToString("yyyyMMdd-HHmmss")
                 
-                ' Şube kodu - sDepo'dan al
-                Dim branchCode As String = If(String.IsNullOrEmpty(sDepo), "", sDepo)
+                ' Musteri TC/VKN - varsa al, yoksa nihai tuketici
+                Dim currentIdentifier As String = "11111111111"
+                Try
+                    If nMusteriID > 0 Then
+                        Dim dtMus = SQLCalistir("SELECT m.sVergiNo, ISNULL(n.sCuzdanKayitNo,'') AS TC FROM tbMusteri m LEFT JOIN tbMusteriNufusu n ON m.nMusteriID=n.nMusteriID WHERE m.nMusteriID=" & nMusteriID)
+                        If dtMus IsNot Nothing AndAlso dtMus.Rows.Count > 0 Then
+                            Dim r = dtMus.Rows(0)
+                            If Not IsDBNull(r("sVergiNo")) AndAlso r("sVergiNo") IsNot Nothing Then currentIdentifier = r("sVergiNo").ToString().Trim()
+                            If String.IsNullOrEmpty(currentIdentifier) Then
+                                If Not IsDBNull(r("TC")) AndAlso r("TC") IsNot Nothing Then currentIdentifier = r("TC").ToString().Trim()
+                            End If
+                        End If
+                    End If
+                    If String.IsNullOrEmpty(currentIdentifier) Then currentIdentifier = "11111111111"
+                Catch
+                    currentIdentifier = "11111111111"
+                End Try
                 
-                ' POS'a ödeme gönder
+                ' POS odeme gonder - API v1.0.3 formati
                 Dim body As New Dictionary(Of String, Object) From {
-                    {"companyId", KolaysoftFirmaId},
-                    {"branchCode", branchCode},
                     {"documentNo", documentNo},
+                    {"amount", kkTutar},
+                    {"currentIdentifier", currentIdentifier},
+                    {"companyId", KolaysoftFirmaId},
                     {"creditCardFirstAmount", kkTutar}
                 }
                 Dim jsonBody As String = JsonConvert.SerializeObject(body, Formatting.None)
