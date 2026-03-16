@@ -3230,14 +3230,25 @@ Public Class frm_qukaGonder
                     sVergiNo = "1111111111"
                 End If
 
-                ' ===== İSİM: ÖNCELİKLE FATURA BİLGİLERİNDEN AL (invoice.name) =====
-                ' İhracat siparişlerinde teslimat adresi kargo firmasına ait olabilir
-                ' Bu yüzden fatura bilgilerini kullanmalıyız
+                ' ===== İSİM: ÖNCELİKLE FATURA BİLGİLERİNDEN AL =====
+                ' API v2.2.4'te fatura bilgileri:
+                ' 1. order.invoiceName (root seviyede)
+                ' 2. customer.invoice.name (nested)
+                ' 3. customer.name (fallback)
                 Dim rawName As String = ""
-                If custInvoice IsNot Nothing AndAlso custInvoice.ContainsKey("name") AndAlso custInvoice("name") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(custInvoice("name").ToString()) Then
+                
+                ' Önce order root'taki invoiceName'i kontrol et
+                If order.ContainsKey("invoiceName") AndAlso order("invoiceName") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(order("invoiceName").ToString()) Then
+                    rawName = order("invoiceName").ToString()
+                    Log("INFO", "AddOrder", $"🔍 İSİM ORDER.INVOICENAME'DEN ALINDI: [{rawName}]")
+                ' Sonra customer.invoice.name kontrol et
+                ElseIf custInvoice IsNot Nothing AndAlso custInvoice.ContainsKey("name") AndAlso custInvoice("name") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(custInvoice("name").ToString()) Then
                     rawName = custInvoice("name").ToString()
-                    Log("INFO", "AddOrder", $"🔍 İSİM FATURA BİLGİLERİNDEN ALINDI (invoice.name)")
+                    Log("INFO", "AddOrder", $"🔍 İSİM CUSTOMER.INVOICE.NAME'DEN ALINDI: [{rawName}]")
+                ' Son olarak customer.name fallback
                 ElseIf cust.ContainsKey("name") AndAlso cust("name") IsNot Nothing Then
+                    rawName = cust("name").ToString()
+                    Log("INFO", "AddOrder", $"🔍 İSİM CUSTOMER.NAME'DEN ALINDI (FALLBACK): [{rawName}]")
                     rawName = cust("name").ToString()
                     Log("INFO", "AddOrder", $"🔍 İSİM CUSTOMER'DAN ALINDI (customer.name)")
                 End If
@@ -3273,12 +3284,15 @@ Public Class frm_qukaGonder
                 Log("INFO", "AddOrder", $"🔍 İŞLENMİŞ SOYADI: [{soyadi}]")
                 Log("INFO", "AddOrder", $"🔍 ADI BYTE ARRAY: {String.Join(",", System.Text.Encoding.UTF8.GetBytes(If(adi, "")).Select(Function(b) b.ToString()))}")
 
-                ' ===== ADRES: ÖNCELİKLE FATURA BİLGİLERİNDEN AL (invoice.address) =====
-                ' İhracat siparişlerinde fatura adresi kullanılmalı
+                ' ===== ADRES: ÖNCELİKLE FATURA BİLGİLERİNDEN AL =====
+                ' API v2.2.4: 1. order.invoiceAddress 2. customer.invoice.address 3. customer.delivery.address
                 Dim rawAddress As String = ""
-                If custInvoice IsNot Nothing AndAlso custInvoice.ContainsKey("address") AndAlso custInvoice("address") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(custInvoice("address").ToString()) Then
+                If order.ContainsKey("invoiceAddress") AndAlso order("invoiceAddress") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(order("invoiceAddress").ToString()) Then
+                    rawAddress = Convert.ToString(order("invoiceAddress"))
+                    Log("INFO", "AddOrder", $"🔍 ADRES ORDER.INVOICEADDRESS'DEN ALINDI")
+                ElseIf custInvoice IsNot Nothing AndAlso custInvoice.ContainsKey("address") AndAlso custInvoice("address") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(custInvoice("address").ToString()) Then
                     rawAddress = Convert.ToString(custInvoice("address"))
-                    Log("INFO", "AddOrder", $"🔍 ADRES FATURA BİLGİLERİNDEN ALINDI (invoice.address)")
+                    Log("INFO", "AddOrder", $"🔍 ADRES CUSTOMER.INVOICE.ADDRESS'DEN ALINDI")
                 ElseIf custDelivery IsNot Nothing AndAlso custDelivery.ContainsKey("address") AndAlso custDelivery("address") IsNot Nothing Then
                     rawAddress = Convert.ToString(custDelivery("address"))
                 ElseIf cust.ContainsKey("address") AndAlso cust("address") IsNot Nothing Then
@@ -3294,11 +3308,10 @@ Public Class frm_qukaGonder
                 Next
                 adres = String.Join(" ", addressParts)
 
-                ' ===== ULKE: ÖNCELİKLE FATURA BİLGİLERİNDEN AL (invoice.country) =====
+                ' ===== ULKE: customer.invoice.country veya customer.delivery.country =====
                 Dim rawUlke As String = "Turkiye"
                 If custInvoice IsNot Nothing AndAlso custInvoice.ContainsKey("country") AndAlso custInvoice("country") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(custInvoice("country").ToString()) Then
                     rawUlke = Convert.ToString(custInvoice("country"))
-                    Log("INFO", "AddOrder", $"🔍 ÜLKE FATURA BİLGİLERİNDEN ALINDI (invoice.country)")
                 ElseIf custDelivery IsNot Nothing AndAlso custDelivery.ContainsKey("country") AndAlso custDelivery("country") IsNot Nothing Then
                     rawUlke = Convert.ToString(custDelivery("country"))
                 ElseIf cust.ContainsKey("country") AndAlso cust("country") IsNot Nothing Then
@@ -3306,11 +3319,16 @@ Public Class frm_qukaGonder
                 End If
                 Dim ulke As String = If(ToTurkishTitleCase(Trunc(If(DecodeApiData(rawUlke), "Turkiye"), 20)), "Turkiye")
 
-                ' ===== SEHIR: ÖNCELİKLE FATURA BİLGİLERİNDEN AL (invoice.city) =====
+                ' ===== SEHIR: ÖNCELİKLE FATURA BİLGİLERİNDEN AL =====
+                ' API v2.2.4: 1. order.invoiceCity 2. customer.invoice.city 3. customer.delivery.city
                 Dim cityName As String = ""
-                If custInvoice IsNot Nothing AndAlso custInvoice.ContainsKey("city") AndAlso custInvoice("city") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(custInvoice("city").ToString()) Then
+                ' API v2.2.4: 1. order.invoiceCity 2. customer.invoice.city 3. customer.delivery.city
+                If order.ContainsKey("invoiceCity") AndAlso order("invoiceCity") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(order("invoiceCity").ToString()) Then
+                    cityName = order("invoiceCity").ToString().Trim()
+                    Log("INFO", "AddOrder", $"🔍 ŞEHİR ORDER.INVOICECITY'DEN ALINDI: [{cityName}]")
+                ElseIf custInvoice IsNot Nothing AndAlso custInvoice.ContainsKey("city") AndAlso custInvoice("city") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(custInvoice("city").ToString()) Then
                     cityName = custInvoice("city").ToString().Trim()
-                    Log("INFO", "AddOrder", $"🔍 ŞEHİR FATURA BİLGİLERİNDEN ALINDI (invoice.city)")
+                    Log("INFO", "AddOrder", $"🔍 ŞEHİR CUSTOMER.INVOICE.CITY'DEN ALINDI: [{cityName}]")
                 ElseIf custDelivery IsNot Nothing AndAlso custDelivery.ContainsKey("city") AndAlso custDelivery("city") IsNot Nothing Then
                     cityName = custDelivery("city").ToString().Trim()
                 ElseIf cust.ContainsKey("city_code") AndAlso cust("city_code") IsNot Nothing Then
@@ -3344,11 +3362,16 @@ Public Class frm_qukaGonder
                     End If
                     ' NOT: ToTurkishTitleCase kullanmıyoruz çünkü veritabanındaki değeri aynen kullanmalıyız
                 End If
-                ' ===== ILCE: ÖNCELİKLE FATURA BİLGİLERİNDEN AL (invoice.district) =====
+                
+                ' ===== ILCE: ÖNCELİKLE FATURA BİLGİLERİNDEN AL =====
+                ' API v2.2.4: 1. order.invoiceDistrict 2. customer.invoice.district 3. customer.delivery.district
                 Dim rawIlce As String = ""
-                If custInvoice IsNot Nothing AndAlso custInvoice.ContainsKey("district") AndAlso custInvoice("district") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(custInvoice("district").ToString()) Then
+                If order.ContainsKey("invoiceDistrict") AndAlso order("invoiceDistrict") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(order("invoiceDistrict").ToString()) Then
+                    rawIlce = Convert.ToString(order("invoiceDistrict"))
+                    Log("INFO", "AddOrder", $"🔍 İLÇE ORDER.INVOICEDISTRICT'TEN ALINDI: [{rawIlce}]")
+                ElseIf custInvoice IsNot Nothing AndAlso custInvoice.ContainsKey("district") AndAlso custInvoice("district") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(custInvoice("district").ToString()) Then
                     rawIlce = Convert.ToString(custInvoice("district"))
-                    Log("INFO", "AddOrder", $"🔍 İLÇE FATURA BİLGİLERİNDEN ALINDI (invoice.district)")
+                    Log("INFO", "AddOrder", $"🔍 İLÇE CUSTOMER.INVOICE.DISTRICT'TEN ALINDI: [{rawIlce}]")
                 ElseIf custDelivery IsNot Nothing AndAlso custDelivery.ContainsKey("district") AndAlso custDelivery("district") IsNot Nothing Then
                     rawIlce = Convert.ToString(custDelivery("district"))
                 ElseIf cust.ContainsKey("district") AndAlso cust("district") IsNot Nothing Then
