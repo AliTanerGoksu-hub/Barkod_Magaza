@@ -2628,6 +2628,10 @@ Public Class frm_qukaGonder
             result = result.Replace("{254}", "ş")
             result = result.Replace("{220}", "Ü")
             result = result.Replace("{252}", "ü")
+            
+            ' Azerbaycan karakterleri
+            result = result.Replace("{601}", "ə")  ' Azerbaycan schwa karakteri
+            result = result.Replace("{399}", "Ə")  ' Büyük schwa
 
             Log("DEBUG", "DecodeApiData", $"Girdi: [{encodedText}] -> Çıktı: [{result}]")
             Return result
