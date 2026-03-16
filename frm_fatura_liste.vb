@@ -7769,16 +7769,16 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                         If fiyatMaliyet = 0 Then
                             ekle_fiyat_local(nStokID, KeyCode.sFiyatM, maliyet, dteFisTarihi, KeyCode.kullaniciadi)
                             guncellenenSatir += 1
-                        ElseIf fiyatMaliyet <> maliyet Then
-                            TopluMaliyet_FiyatDuzelt(con, nFiyatlandirma, sModel, sRenk, sBeden, KeyCode.sFiyatM, maliyet, dteFisTarihi, nStokID)
+                        ElseIf Math.Abs(fiyatMaliyet - maliyet) > 0.01 Then
+                            duzelt_fiyat_local(nStokID, KeyCode.sFiyatM, maliyet, dteFisTarihi)
                             guncellenenSatir += 1
                         End If
                         
                         ' Alışları güncelle
                         If fiyatAlis = 0 Then
                             ekle_fiyat_local(nStokID, KeyCode.sFiyatA, alis, dteFisTarihi, KeyCode.kullaniciadi)
-                        ElseIf fiyatAlis <> alis Then
-                            TopluMaliyet_FiyatDuzelt(con, nFiyatlandirma, sModel, sRenk, sBeden, KeyCode.sFiyatA, alis, dteFisTarihi, nStokID)
+                        ElseIf Math.Abs(fiyatAlis - alis) > 0.01 Then
+                            duzelt_fiyat_local(nStokID, KeyCode.sFiyatA, alis, dteFisTarihi)
                         End If
                     End If
                 End If
