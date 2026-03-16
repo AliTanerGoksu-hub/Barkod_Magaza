@@ -658,8 +658,13 @@ Public Class frm_PazaryeriFaturaGonderim
                         For Each order As JObject In contentArray
                             ' === TÜM ORDER ALANLARINI LOGLA (DEBUG) ===
                             Debug.WriteLine("[TY-Search] === ORDER ALANLARI ===")
-                            For Each prop In order.Properties()
-                                Debug.WriteLine("[TY-Search] " & prop.Name & " = " & If(prop.Value IsNot Nothing, prop.Value.ToString().Substring(0, Math.Min(100, prop.Value.ToString().Length)), "NULL"))
+                            For Each jprop As JProperty In order.Properties()
+                                Dim valStr As String = ""
+                                If jprop.Value IsNot Nothing Then
+                                    valStr = jprop.Value.ToString()
+                                    If valStr.Length > 100 Then valStr = valStr.Substring(0, 100) & "..."
+                                End If
+                                Debug.WriteLine("[TY-Search] " & jprop.Name & " = " & valStr)
                             Next
                             Debug.WriteLine("[TY-Search] === ORDER ALANLARI SONU ===")
                             
