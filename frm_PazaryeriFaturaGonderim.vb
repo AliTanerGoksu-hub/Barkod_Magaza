@@ -104,7 +104,7 @@ Public Class frm_PazaryeriFaturaGonderim
         dtBaslangic = New DevExpress.XtraEditors.DateEdit()
         dtBaslangic.Location = New Point(320, 12)
         dtBaslangic.Size = New Size(120, 26)
-        dtBaslangic.EditValue = DateTime.Today.AddDays(-30)
+        dtBaslangic.EditValue = DateTime.Today.AddDays(-10)  ' Son 10 gün
         PanelControl1.Controls.Add(dtBaslangic)
 
         Dim lblBitis As New LabelControl()
@@ -159,7 +159,7 @@ Public Class frm_PazaryeriFaturaGonderim
         chkSadeceTeslimEdilenler.Text = "Sadece Teslim Edilenler"
         chkSadeceTeslimEdilenler.Location = New Point(310, 50)
         chkSadeceTeslimEdilenler.Size = New Size(180, 25)
-        chkSadeceTeslimEdilenler.Checked = False  ' Default olarak kapalı - tüm faturalar görünsün
+        chkSadeceTeslimEdilenler.Checked = True  ' Default olarak işaretli
         PanelControl1.Controls.Add(chkSadeceTeslimEdilenler)
 
         ' Durum Label
