@@ -449,22 +449,30 @@ Public Class frm_PazaryeriFaturaGonderim
                 lblDurum.Text = "Gönderiliyor: " & siparisNo & " (" & pazaryeri & ") - " & (i + 1) & "/" & rows.Length
                 Application.DoEvents()
 
-                ' ===== GİB'E GÖNDERİLMEMİŞSE ÖNCE GİB'E GÖNDER =====
-                ' GibFaturaNo boş, null, "0" veya sadece boşluk ise GİB'e gönder
+                ' ===== İHRACAT KONTROLÜ - GİB'E GÖNDERMEDEN ÖNCE =====
+                ' İki farklı kontrol yapılıyor:
+                ' 1. Veritabanındaki ülke bilgisi (Türkiye dışı = ihracat)
+                ' 2. Trendyol API mikro ihracat kontrolü
                 If String.IsNullOrEmpty(gibFaturaNo) OrElse gibFaturaNo.Trim() = "" OrElse gibFaturaNo.Trim() = "0" Then
-                    lblDurum.Text = "GİB'e gönderiliyor: " & siparisNo & " - " & (i + 1) & "/" & rows.Length
-                    Application.DoEvents()
+                    Dim ihracatTespit As Boolean = False
                     
-                    ' ===== MİKRO İHRACAT KONTROLÜ - GİB'E GÖNDERMEDEN ÖNCE =====
-                    ' Trendyol siparişi ise mikro ihracat kontrolü yap
-                    If pazaryeri = "Trendyol" Then
+                    ' KONTROL 1: Veritabanındaki ülke bilgisine bak
+                    Try
+                        If IhracatSiparisiMi(nStokFisiID) Then
+                            ihracatTespit = True
+                        End If
+                    Catch
+                    End Try
+                    
+                    ' KONTROL 2: Trendyol API mikro ihracat kontrolü
+                    If Not ihracatTespit AndAlso pazaryeri = "Trendyol" Then
                         Try
                             Dim isMicroExportCheck As Boolean = False
                             Dim hataMesajiCheck As String = ""
                             Dim orderNumber As String = siparisNo
                             If orderNumber.StartsWith("TY") Then orderNumber = orderNumber.Substring(2)
                             
-                            If pazaryeriApis.ContainsKey("TRENDYOL") Then
+                            If pazaryeriApis IsNot Nothing AndAlso pazaryeriApis.ContainsKey("TRENDYOL") Then
                                 Dim api = pazaryeriApis("TRENDYOL")
                                 
                                 ' API credentials hazırla
@@ -475,14 +483,26 @@ Public Class frm_PazaryeriFaturaGonderim
                                 Dim pkgId As String = GetTrendyolShipmentPackageId(api.SellerId, orderNumber, authBase64, userAgent, hataMesajiCheck, isMicroExportCheck)
                                 
                                 If isMicroExportCheck Then
-                                    ' Mikro ihracat - faturayı ihracat faturası olarak işaretle
-                                    IhracatFaturasıOlarakIsaretle(nStokFisiID)
+                                    ihracatTespit = True
                                 End If
                             End If
-                        Catch ex As Exception
-                            ' Mikro ihracat kontrolü hatası - sessizce devam et
+                        Catch
                         End Try
                     End If
+                    
+                    ' İhracat tespit edildiyse faturayı işaretle
+                    If ihracatTespit Then
+                        lblDurum.Text = "İHRACAT TESPİT EDİLDİ - KDV sıfırlanıyor: " & siparisNo
+                        Application.DoEvents()
+                        IhracatFaturasıOlarakIsaretle(nStokFisiID)
+                    End If
+                End If
+
+                ' ===== GİB'E GÖNDERİLMEMİŞSE ÖNCE GİB'E GÖNDER =====
+                ' GibFaturaNo boş, null, "0" veya sadece boşluk ise GİB'e gönder
+                If String.IsNullOrEmpty(gibFaturaNo) OrElse gibFaturaNo.Trim() = "" OrElse gibFaturaNo.Trim() = "0" Then
+                    lblDurum.Text = "GİB'e gönderiliyor: " & siparisNo & " - " & (i + 1) & "/" & rows.Length
+                    Application.DoEvents()
                     
                     Try
                         Dim gibSonuc As String = mod_EFatura.FaturaGonder(nStokFisiID)
@@ -1892,5 +1912,73 @@ Public Class frm_PazaryeriFaturaGonderim
         Catch ex As Exception
         End Try
     End Sub
+    
+    ''' <summary>
+    ''' Veritabanındaki ülke bilgisine bakarak ihracat siparişi mi kontrol eder
+    ''' Türkiye dışı bir ülke varsa True döner
+    ''' </summary>
+    Private Function IhracatSiparisiMi(nStokFisiID As Integer) As Boolean
+        Try
+            Using con As New OleDbConnection(connection)
+                con.Open()
+                
+                ' Fatura ile ilişkili firma bilgisinden ülke kontrolü
+                Dim sql As String = "SELECT F.sUlke FROM tbStokFisiMaster M " &
+                                   "INNER JOIN tbFirma F ON M.nFirmaID = F.nFirmaID " &
+                                   "WHERE M.nStokFisiID = ?"
+                                   
+                Using cmd As New OleDbCommand(sql, con)
+                    cmd.Parameters.AddWithValue("@p0", nStokFisiID)
+                    Dim result = cmd.ExecuteScalar()
+                    
+                    If result IsNot Nothing AndAlso result IsNot DBNull.Value Then
+                        Dim ulke As String = result.ToString().Trim().ToUpperInvariant()
+                        
+                        ' Türkiye veya boş değilse ihracat
+                        If Not String.IsNullOrEmpty(ulke) AndAlso 
+                           ulke <> "TÜRKİYE" AndAlso 
+                           ulke <> "TURKIYE" AndAlso 
+                           ulke <> "TURKEY" AndAlso 
+                           ulke <> "TR" AndAlso
+                           ulke <> "TUR" Then
+                            Return True
+                        End If
+                    End If
+                End Using
+                
+                ' Alternatif: sAciklama2 (sipariş müşteri bilgisi) içinde yabancı ülke adı arama
+                Dim sqlAciklama As String = "SELECT A.sAciklama1, A.sAciklama2 FROM tbStokFisiAciklamasi A " &
+                                           "WHERE A.nStokFisiID = ?"
+                Using cmdAciklama As New OleDbCommand(sqlAciklama, con)
+                    cmdAciklama.Parameters.AddWithValue("@p0", nStokFisiID)
+                    Using reader = cmdAciklama.ExecuteReader()
+                        If reader.Read() Then
+                            Dim aciklama1 As String = If(reader("sAciklama1") IsNot DBNull.Value, reader("sAciklama1").ToString().ToUpperInvariant(), "")
+                            Dim aciklama2 As String = If(reader("sAciklama2") IsNot DBNull.Value, reader("sAciklama2").ToString().ToUpperInvariant(), "")
+                            
+                            ' Yabancı ülke isimleri kontrolü
+                            Dim yabanciUlkeler() As String = {"ROMANIA", "BULGARIA", "GREECE", "GERMANY", "FRANCE", 
+                                                              "ITALY", "SPAIN", "NETHERLANDS", "BELGIUM", "AUSTRIA",
+                                                              "AZERBAIJAN", "GEORGIA", "UKRAINE", "RUSSIA", "POLAND",
+                                                              "CZECH", "HUNGARY", "SLOVAKIA", "CROATIA", "SERBIA",
+                                                              "ROMANYA", "BULGARİSTAN", "YUNANİSTAN", "ALMANYA", "FRANSA",
+                                                              "İTALYA", "İSPANYA", "HOLLANDA", "BELÇİKA", "AVUSTURYA",
+                                                              "AZERBAYCAN", "GÜRCİSTAN", "UKRAYNA", "RUSYA", "POLONYA"}
+                            
+                            For Each ulke In yabanciUlkeler
+                                If aciklama1.Contains(ulke) OrElse aciklama2.Contains(ulke) Then
+                                    Return True
+                                End If
+                            Next
+                        End If
+                    End Using
+                End Using
+            End Using
+            
+            Return False
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
     
 End Class
