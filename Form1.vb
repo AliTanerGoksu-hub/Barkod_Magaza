@@ -9727,6 +9727,14 @@ Public Class Form1
             Debug.WriteLine("sEfaturaUrl sütun kontrolü hatası: " & ex.Message)
         End Try
         ' ==================================================================
+        
+        ' ============ sTeslimDurumu SÜTUNU KONTROLÜ VE OLUŞTURMA ============
+        Try
+            EnsureTeslimDurumuColumnExists()
+        Catch ex As Exception
+            Debug.WriteLine("sTeslimDurumu sütun kontrolü hatası: " & ex.Message)
+        End Try
+        ' ==================================================================
 
         ' ============ PAZARYERİ BASE URL GÜNCELLEMESİ ============
         Try
@@ -23821,6 +23829,40 @@ CleanupExcel:
             End Using
         Catch ex As Exception
             Debug.WriteLine("[sEfaturaUrl] ✗ Hata: " & ex.Message)
+        End Try
+    End Sub
+    
+    ''' <summary>
+    ''' tbStokFisiMaster tablosuna sTeslimDurumu sütununu ekler (yoksa)
+    ''' Pazaryeri sipariş teslim durumunu saklamak için
+    ''' </summary>
+    Public Sub EnsureTeslimDurumuColumnExists()
+        Try
+            Using con As New OleDb.OleDbConnection(connection)
+                con.Open()
+
+                ' Sütun var mı kontrol et
+                Dim checkCmd As New OleDb.OleDbCommand(
+                    "SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'tbStokFisiMaster' AND COLUMN_NAME = 'sTeslimDurumu'", con)
+                Dim columnExists As Integer = CInt(checkCmd.ExecuteScalar())
+
+                If columnExists = 0 Then
+                    Debug.WriteLine("[sTeslimDurumu] Sütun bulunamadı, ekleniyor...")
+                    Try
+                        ' Sütunu ekle
+                        Dim alterCmd As New OleDb.OleDbCommand(
+                            "ALTER TABLE tbStokFisiMaster ADD sTeslimDurumu NVARCHAR(200) NULL", con)
+                        alterCmd.ExecuteNonQuery()
+                        Debug.WriteLine("[sTeslimDurumu] ✓ Sütun başarıyla eklendi")
+                    Catch alterEx As Exception
+                        Debug.WriteLine("[sTeslimDurumu] ✗ Ekleme hatası: " & alterEx.Message)
+                    End Try
+                Else
+                    Debug.WriteLine("[sTeslimDurumu] ✓ Sütun mevcut")
+                End If
+            End Using
+        Catch ex As Exception
+            Debug.WriteLine("[sTeslimDurumu] ✗ Hata: " & ex.Message)
         End Try
     End Sub
 

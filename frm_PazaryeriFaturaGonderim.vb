@@ -277,7 +277,7 @@ Public Class frm_PazaryeriFaturaGonderim
                 "P.dteGonderimTarihi, " &
                 "P.sGonderimSonucu, " &
                 "P.sHataMesaji, " &
-                "ISNULL(P.sTeslimDurumu, '') AS TeslimDurumu " &
+                "ISNULL(M.sTeslimDurumu, '') AS TeslimDurumu " &
                 "FROM tbStokFisiMaster M " &
                 "INNER JOIN tbStokFisiAciklamasi A ON M.nStokFisiID = A.nStokFisiID " &
                 "LEFT JOIN tbFirma F ON M.nFirmaID = F.nFirmaID " &
@@ -1871,36 +1871,19 @@ Public Class frm_PazaryeriFaturaGonderim
     End Function
     
     ''' <summary>
-    ''' Teslim durumunu veritabanına kaydet
+    ''' Teslim durumunu tbStokFisiMaster tablosuna kaydet
     ''' </summary>
     Private Sub KaydetTeslimDurumu(nStokFisiID As Integer, teslimDurumu As String)
         Try
             Using con As New OleDbConnection(connection)
                 con.Open()
                 
-                ' Önce kayıt var mı kontrol et
-                Dim sqlCheck As String = "SELECT COUNT(*) FROM tbPazaryeriFaturaGonderim WHERE nStokFisiID = ?"
-                Using cmdCheck As New OleDbCommand(sqlCheck, con)
-                    cmdCheck.Parameters.AddWithValue("@p0", nStokFisiID)
-                    Dim count As Integer = CInt(cmdCheck.ExecuteScalar())
-                    
-                    If count > 0 Then
-                        ' Güncelle
-                        Dim sqlUpdate As String = "UPDATE tbPazaryeriFaturaGonderim SET sTeslimDurumu = ? WHERE nStokFisiID = ?"
-                        Using cmdUpdate As New OleDbCommand(sqlUpdate, con)
-                            cmdUpdate.Parameters.AddWithValue("@p0", teslimDurumu)
-                            cmdUpdate.Parameters.AddWithValue("@p1", nStokFisiID)
-                            cmdUpdate.ExecuteNonQuery()
-                        End Using
-                    Else
-                        ' Yeni kayıt ekle
-                        Dim sqlInsert As String = "INSERT INTO tbPazaryeriFaturaGonderim (nStokFisiID, sTeslimDurumu) VALUES (?, ?)"
-                        Using cmdInsert As New OleDbCommand(sqlInsert, con)
-                            cmdInsert.Parameters.AddWithValue("@p0", nStokFisiID)
-                            cmdInsert.Parameters.AddWithValue("@p1", teslimDurumu)
-                            cmdInsert.ExecuteNonQuery()
-                        End Using
-                    End If
+                ' tbStokFisiMaster tablosunda güncelle
+                Dim sqlUpdate As String = "UPDATE tbStokFisiMaster SET sTeslimDurumu = ? WHERE nStokFisiID = ?"
+                Using cmdUpdate As New OleDbCommand(sqlUpdate, con)
+                    cmdUpdate.Parameters.AddWithValue("@p0", teslimDurumu)
+                    cmdUpdate.Parameters.AddWithValue("@p1", nStokFisiID)
+                    cmdUpdate.ExecuteNonQuery()
                 End Using
             End Using
         Catch ex As Exception
