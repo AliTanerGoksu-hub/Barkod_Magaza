@@ -1583,7 +1583,9 @@ Public Class frm_PazaryeriFaturaGonderim
     ''' Sadece Teslim Edilenler checkbox değiştiğinde listeyi yenile
     ''' </summary>
     Private Sub chkSadeceTeslimEdilenler_CheckedChanged(sender As Object, e As EventArgs) Handles chkSadeceTeslimEdilenler.CheckedChanged
-        ListeleFaturalar()
+        If dtFaturalar IsNot Nothing Then
+            ListeleFaturalar()
+        End If
     End Sub
     
     ' ===== CONTEXT MENU EVENT HANDLERS =====
@@ -1650,13 +1652,17 @@ Public Class frm_PazaryeriFaturaGonderim
     ''' </summary>
     Private Sub TeslimDurumlariniGuncelle()
         Try
+            ' dtFaturalar null veya boş ise çık
+            If dtFaturalar Is Nothing OrElse dtFaturalar.Rows.Count = 0 Then
+                Return
+            End If
+            
             Cursor = Cursors.WaitCursor
             lblDurum.Text = "Teslim durumları güncelleniyor..."
             Application.DoEvents()
             
             ' Trendyol API bilgilerini al
-            If Not pazaryeriApis.ContainsKey("TRENDYOL") Then
-                MessageBox.Show("Trendyol API ayarları bulunamadı!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            If pazaryeriApis Is Nothing OrElse Not pazaryeriApis.ContainsKey("TRENDYOL") Then
                 Cursor = Cursors.Default
                 Return
             End If
@@ -1668,13 +1674,13 @@ Public Class frm_PazaryeriFaturaGonderim
             
             For i As Integer = 0 To dtFaturalar.Rows.Count - 1
                 Dim row As DataRow = dtFaturalar.Rows(i)
-                Dim pazaryeri As String = row("Pazaryeri").ToString()
+                Dim pazaryeri As String = If(row("Pazaryeri") IsNot DBNull.Value, row("Pazaryeri").ToString(), "")
                 
                 ' Sadece Trendyol siparişlerini kontrol et
                 If pazaryeri <> "Trendyol" Then Continue For
                 
                 ' Zaten teslim edilmiş olanları atla
-                Dim mevcutDurum As String = row("TeslimDurumu").ToString().Trim()
+                Dim mevcutDurum As String = If(row("TeslimDurumu") IsNot DBNull.Value, row("TeslimDurumu").ToString().Trim(), "")
                 If mevcutDurum.ToUpperInvariant().Contains("TESLİM EDİLDİ") OrElse 
                    mevcutDurum.ToUpperInvariant().Contains("TESLIM EDILDI") OrElse
                    mevcutDurum.ToUpperInvariant().Contains("DELIVERED") OrElse
@@ -1685,7 +1691,7 @@ Public Class frm_PazaryeriFaturaGonderim
                     Continue For
                 End If
                 
-                Dim siparisNo As String = row("SiparisNo").ToString().Trim()
+                Dim siparisNo As String = If(row("SiparisNo") IsNot DBNull.Value, row("SiparisNo").ToString().Trim(), "")
                 If String.IsNullOrEmpty(siparisNo) Then Continue For
                 
                 ' Sipariş numarasından TY prefix'ini kaldır
