@@ -3206,6 +3206,11 @@ Public Class frm_qukaGonder
                     End If
                 End If
                 
+                ' DEBUG: customer.title değerini logla
+                If cust.ContainsKey("title") AndAlso cust("title") IsNot Nothing Then
+                    Log("DEBUG", "AddOrder", $"CUSTOMER.TITLE: [{cust("title")}]")
+                End If
+                
                 ' ===== TC KIMLIK: API v2.2.4 - "nationalId" alanindan =====
                 Dim tc As String = "0"
                 If cust.ContainsKey("nationalId") AndAlso cust("nationalId") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(cust("nationalId").ToString()) Then
@@ -3231,16 +3236,21 @@ Public Class frm_qukaGonder
                 End If
 
                 ' ===== İSİM: ÖNCELİKLE FATURA BİLGİLERİNDEN AL =====
-                ' API v2.2.4'te fatura bilgileri:
+                ' API v2.2.4'te fatura ismi sırası:
                 ' 1. order.invoiceName (root seviyede)
-                ' 2. customer.invoice.name (nested)
-                ' 3. customer.name (fallback)
+                ' 2. customer.title (fatura unvanı)
+                ' 3. customer.invoice.name (nested - genelde boş)
+                ' 4. customer.name (fallback - teslimat firması olabilir)
                 Dim rawName As String = ""
                 
                 ' Önce order root'taki invoiceName'i kontrol et
                 If order.ContainsKey("invoiceName") AndAlso order("invoiceName") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(order("invoiceName").ToString()) Then
                     rawName = order("invoiceName").ToString()
                     Log("INFO", "AddOrder", $"🔍 İSİM ORDER.INVOICENAME'DEN ALINDI: [{rawName}]")
+                ' Sonra customer.title kontrol et (fatura unvanı)
+                ElseIf cust.ContainsKey("title") AndAlso cust("title") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(cust("title").ToString()) Then
+                    rawName = cust("title").ToString()
+                    Log("INFO", "AddOrder", $"🔍 İSİM CUSTOMER.TITLE'DAN ALINDI: [{rawName}]")
                 ' Sonra customer.invoice.name kontrol et
                 ElseIf custInvoice IsNot Nothing AndAlso custInvoice.ContainsKey("name") AndAlso custInvoice("name") IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(custInvoice("name").ToString()) Then
                     rawName = custInvoice("name").ToString()
