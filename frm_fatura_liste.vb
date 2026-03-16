@@ -7717,53 +7717,69 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                         Dim drStok As DataRow = dsStok.Tables(0).Rows(0)
                         Dim nStokKdvOrani As Decimal = KeyCode.sorgu_sayi(drStok("nStokKdvOrani"), 0)
                         
-                        ' Maliyet hesapla
-                        Dim maliyet As Decimal = lGirisTutar / lGirisMiktar1
-                        
-                        ' KDV hesaplaması
-                        If nKdvOrani <> nStokKdvOrani Then
-                            If KeyCode.bKdvKontrolluMaliyet = True Then
-                                maliyet = maliyet * ((nStokKdvOrani + 100) / 100)
-                            Else
-                                maliyet = maliyet * ((nKdvOrani + 100) / 100)
-                            End If
-                        Else
-                            maliyet = maliyet * ((nKdvOrani + 100) / 100)
-                        End If
-                        
-                        ' İlave maliyet düşümü
-                        maliyet = maliyet - (Math.Abs((lIlaveMaliyetTutar + lEkIlaveMaliyetTutar) / lGirisMiktar1))
-                        
-                        ' Oran ek maliyet hesabı
-                        Try
-                            If (lEkmaliyet1 + lEkmaliyet3 + lEkmaliyet4) <> 0 Then
-                                Dim oranekmaliyet As Decimal = (lEkmaliyet1 + lEkmaliyet3 + lEkmaliyet4) / (lNetTutar - lEkmaliyet1)
-                                maliyet = maliyet + (maliyet * oranekmaliyet)
-                            End If
-                        Catch
-                        End Try
-                        
-                        ' İkinci KDV hesaplaması
-                        If nKdvOrani <> nStokKdvOrani Then
-                            If KeyCode.bKdvKontrolluMaliyet = True Then
-                                maliyet = maliyet * ((nStokKdvOrani + 100) / 100)
-                            Else
-                                maliyet = maliyet * ((nKdvOrani + 100) / 100)
-                            End If
-                        Else
-                            maliyet = maliyet * ((nKdvOrani + 100) / 100)
-                        End If
-                        
-                        ' Alış fiyatını hesapla - bKdvDahilmi kontrolü ile
+                        ' Maliyet ve Alış fiyatı hesapla
+                        Dim maliyet As Decimal = 0
                         Dim alis As Decimal = lBrutFiyat
                         
-                        ' Eğer alış fiyat tipi KDV dahil DEĞİLSE, KDV ekle
-                        ' Eğer alış fiyat tipi KDV dahil ise, KDV ekleme (zaten dahil)
-                        If bAlisKdvDahil = False Then
-                            ' KDV dahil değil, KDV ekle
-                            alis = alis * ((nKdvOrani + 100) / 100)
+                        ' Ek maliyet var mı kontrol et
+                        Dim ekMaliyetVar As Boolean = (lIlaveMaliyetTutar + lEkIlaveMaliyetTutar + lEkmaliyet1 + lEkmaliyet3 + lEkmaliyet4) <> 0
+                        
+                        If ekMaliyetVar Then
+                            ' Ek maliyet varsa orijinal karmaşık hesaplama
+                            maliyet = lGirisTutar / lGirisMiktar1
+                            
+                            ' KDV hesaplaması
+                            If nKdvOrani <> nStokKdvOrani Then
+                                If KeyCode.bKdvKontrolluMaliyet = True Then
+                                    maliyet = maliyet * ((nStokKdvOrani + 100) / 100)
+                                Else
+                                    maliyet = maliyet * ((nKdvOrani + 100) / 100)
+                                End If
+                            Else
+                                maliyet = maliyet * ((nKdvOrani + 100) / 100)
+                            End If
+                            
+                            ' İlave maliyet düşümü
+                            maliyet = maliyet - (Math.Abs((lIlaveMaliyetTutar + lEkIlaveMaliyetTutar) / lGirisMiktar1))
+                            
+                            ' Oran ek maliyet hesabı
+                            Try
+                                If (lEkmaliyet1 + lEkmaliyet3 + lEkmaliyet4) <> 0 Then
+                                    Dim oranekmaliyet As Decimal = (lEkmaliyet1 + lEkmaliyet3 + lEkmaliyet4) / (lNetTutar - lEkmaliyet1)
+                                    maliyet = maliyet + (maliyet * oranekmaliyet)
+                                End If
+                            Catch
+                            End Try
+                            
+                            ' İkinci KDV hesaplaması
+                            If nKdvOrani <> nStokKdvOrani Then
+                                If KeyCode.bKdvKontrolluMaliyet = True Then
+                                    maliyet = maliyet * ((nStokKdvOrani + 100) / 100)
+                                Else
+                                    maliyet = maliyet * ((nKdvOrani + 100) / 100)
+                                End If
+                            Else
+                                maliyet = maliyet * ((nKdvOrani + 100) / 100)
+                            End If
+                            
+                            ' Alış fiyatı - KDV dahil değilse ekle
+                            If bAlisKdvDahil = False Then
+                                alis = alis * ((nKdvOrani + 100) / 100)
+                            End If
+                        Else
+                            ' Ek maliyet yoksa basit hesaplama
+                            ' Alış fiyatı KDV dahil ise → maliyet = alış fiyatı
+                            ' Alış fiyatı KDV hariç ise → maliyet = alış fiyatı × (1 + KDV/100)
+                            If bAlisKdvDahil = True Then
+                                ' KDV dahil alış fiyatı = maliyet
+                                maliyet = lBrutFiyat
+                                alis = lBrutFiyat
+                            Else
+                                ' KDV hariç, KDV ekle
+                                maliyet = lBrutFiyat * ((nKdvOrani + 100) / 100)
+                                alis = lBrutFiyat * ((nKdvOrani + 100) / 100)
+                            End If
                         End If
-                        ' Eğer bAlisKdvDahil = True ise, fiyat zaten KDV dahil, ekleme yapma
                         
                         ' Mevcut fiyatları sorgula
                         Dim fiyatMaliyet As Decimal = sorgu_stok_fiyat_local(KeyCode.sFiyatM, nStokID, "")
