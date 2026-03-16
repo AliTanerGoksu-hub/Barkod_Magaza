@@ -464,12 +464,19 @@ Public Class frm_PazaryeriFaturaGonderim
                     If pazaryeri = "Trendyol" Then
                         Try
                             Dim isMicroExportCheck As Boolean = False
+                            Dim hataMesajiCheck As String = ""
                             Dim orderNumber As String = siparisNo
                             If orderNumber.StartsWith("TY") Then orderNumber = orderNumber.Substring(2)
                             
                             If pazaryeriApis.ContainsKey("TRENDYOL") Then
                                 Dim api = pazaryeriApis("TRENDYOL")
-                                Dim pkgId As String = GetTrendyolShipmentPackageId(api, orderNumber, isMicroExportCheck)
+                                
+                                ' API credentials hazırla
+                                Dim credentials As String = api.ApiKey & ":" & api.ApiSecret
+                                Dim authBase64 As String = Convert.ToBase64String(Encoding.ASCII.GetBytes(credentials))
+                                Dim userAgent As String = api.SellerId & " - SelfIntegration"
+                                
+                                Dim pkgId As String = GetTrendyolShipmentPackageId(api.SellerId, orderNumber, authBase64, userAgent, hataMesajiCheck, isMicroExportCheck)
                                 
                                 If isMicroExportCheck Then
                                     ' Mikro ihracat - faturayı ihracat faturası olarak işaretle
