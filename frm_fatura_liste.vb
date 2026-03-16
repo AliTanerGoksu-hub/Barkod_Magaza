@@ -7837,51 +7837,69 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
         End Try
     End Sub
     
-    ' Stok fiyat sorgulama - yerel fonksiyon
+    ' Stok fiyat sorgulama - frm_fatura.vb'den alındı
     Private Function sorgu_stok_fiyat_local(ByVal fiyattipi As String, ByVal stokno As Int64, ByVal sDovizCinsi As String) As Decimal
+        Dim kriter
+        kriter = "WHERE     (sFiyatTipi = '" & fiyattipi & "') AND (nStokID = " & stokno & ")"
+        Dim con As New OleDb.OleDbConnection
+        Dim cmd As New OleDb.OleDbCommand
+        con.ConnectionString = connection
+        cmd.Connection = con
+        If con.State = ConnectionState.Closed = True Then
+            con.Open()
+        End If
+        cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     lFiyat FROM         tbStokFiyati " & kriter & "")
         Dim sonuc As Decimal = 0
         Try
-            Using con As New OleDbConnection(connection)
-                con.Open()
-                Dim sql As String = "SELECT lFiyat FROM tbStokFiyati WHERE nStokID = " & stokno & " AND sFiyatTipi = '" & fiyattipi & "'"
-                Using cmd As New OleDbCommand(sql, con)
-                    Dim result = cmd.ExecuteScalar()
-                    If result IsNot Nothing AndAlso result IsNot DBNull.Value Then
-                        sonuc = Convert.ToDecimal(result)
-                    End If
-                End Using
-            End Using
-        Catch
+            sonuc = Convert.ToDecimal(cmd.ExecuteScalar())
+        Catch ex As Exception
+            sonuc = 0
         End Try
+        con.Close()
+        con.Dispose()
+        cmd.Dispose()
+        con = Nothing
+        cmd = Nothing
         Return sonuc
     End Function
     
-    ' Fiyat ekleme - yerel fonksiyon
-    Private Sub ekle_fiyat_local(ByVal stokno As Int64, ByVal fiyattipi As String, ByVal fiyat As Decimal, ByVal dteTarih As DateTime, ByVal sKullaniciAdi As String)
-        Try
-            Using con As New OleDbConnection(connection)
-                con.Open()
-                Dim sql As String = "INSERT INTO tbStokFiyati (nStokID, sFiyatTipi, lFiyat, dteFiyatTespitTarihi, dteKayitTarihi, sKullaniciAdi) VALUES (" & _
-                                    stokno & ", '" & fiyattipi & "', " & fiyat.ToString().Replace(",", ".") & ", '" & dteTarih.ToString("yyyy-MM-dd") & "', GETDATE(), '" & sKullaniciAdi & "')"
-                Using cmd As New OleDbCommand(sql, con)
-                    cmd.ExecuteNonQuery()
-                End Using
-            End Using
-        Catch
-        End Try
+    ' Fiyat ekleme - frm_fatura.vb'den alındı
+    Private Sub ekle_fiyat_local(ByVal stokno As Int64, ByVal fiyattipi As String, ByVal fiyat As Decimal, ByVal dteFiyatTespittarihi As DateTime, ByVal sKullaniciAdi As String)
+        Dim cmd As New OleDb.OleDbCommand
+        Dim con As New OleDb.OleDbConnection
+        cmd.Connection = con
+        con.ConnectionString = connection
+        If con.State = ConnectionState.Closed = True Then
+            con.Open()
+        End If
+        If fiyat = 0 Then
+            cmd.CommandText = sorgu_query("DELETE FROM tbStokFiyati Where sFiyatTipi ='" & fiyattipi & "' and nStokID = " & stokno & " ")
+        Else
+            cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO tbStokFiyati (nStokID, sFiyatTipi, lFiyat, dteFiyatTespitTarihi, sKullaniciAdi, dteKayitTarihi) VALUES (" & stokno & ", '" & fiyattipi & "', " & fiyat & " ,'" & dteFiyatTespittarihi & "', '" & sKullaniciAdi & "', GETDATE())")
+        End If
+        cmd.ExecuteNonQuery()
+        con.Close()
+        con.Dispose()
+        cmd.Dispose()
+        con = Nothing
+        cmd = Nothing
     End Sub
     
-    ' Fiyat düzeltme - yerel fonksiyon
-    Private Sub duzelt_fiyat_local(ByVal stokno As Int64, ByVal fiyattipi As String, ByVal fiyat As Decimal, ByVal dteTarih As DateTime)
-        Try
-            Using con As New OleDbConnection(connection)
-                con.Open()
-                Dim sql As String = "UPDATE tbStokFiyati SET lFiyat = " & fiyat.ToString().Replace(",", ".") & ", dteFiyatTespitTarihi = '" & dteTarih.ToString("yyyy-MM-dd") & "', dteKayitTarihi = GETDATE() WHERE nStokID = " & stokno & " AND sFiyatTipi = '" & fiyattipi & "'"
-                Using cmd As New OleDbCommand(sql, con)
-                    cmd.ExecuteNonQuery()
-                End Using
-            End Using
-        Catch
-        End Try
+    ' Fiyat düzeltme - frm_fatura.vb'den alındı
+    Private Sub duzelt_fiyat_local(ByVal stokno As Int64, ByVal fiyattipi As String, ByVal fiyat As Decimal, ByVal dteFiyatTespittarihi As DateTime)
+        Dim cmd As New OleDb.OleDbCommand
+        Dim con As New OleDb.OleDbConnection
+        cmd.Connection = con
+        con.ConnectionString = connection
+        If con.State = ConnectionState.Closed = True Then
+            con.Open()
+        End If
+        cmd.CommandText = sorgu_query("SET DATEFORMAT DMY UPDATE tbStokFiyati SET lFiyat =" & fiyat & " , dteFiyatTespittarihi = '" & dteFiyatTespittarihi & "' where nStokID =" & stokno & " AND sFiyatTipi ='" & fiyattipi & "'")
+        cmd.ExecuteNonQuery()
+        con.Close()
+        con.Dispose()
+        cmd.Dispose()
+        con = Nothing
+        cmd = Nothing
     End Sub
 End Class
