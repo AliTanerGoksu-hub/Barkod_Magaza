@@ -9736,6 +9736,14 @@ Public Class Form1
         End Try
         ' ==================================================================
 
+        ' ============ sIncotermsKodu SÜTUNU KONTROLÜ VE OLUŞTURMA (İHRACAT FATURASI) ============
+        Try
+            EnsureIncotermsKoduColumnExists()
+        Catch ex As Exception
+            Debug.WriteLine("sIncotermsKodu sütun kontrolü hatası: " & ex.Message)
+        End Try
+        ' ==================================================================
+
         ' ============ PAZARYERİ BASE URL GÜNCELLEMESİ ============
         Try
             UpdatePazaryeriBaseUrls()
@@ -23863,6 +23871,41 @@ CleanupExcel:
             End Using
         Catch ex As Exception
             Debug.WriteLine("[sTeslimDurumu] ✗ Hata: " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' tbStokFisiMaster tablosuna sIncotermsKodu sütununu ekler (yoksa)
+    ''' İhracat faturaları için INCOTERMS kodunu saklamak için (EXW, DAP, DDP vb.)
+    ''' GİB e-fatura schematron kuralları gereği zorunlu alan
+    ''' </summary>
+    Public Sub EnsureIncotermsKoduColumnExists()
+        Try
+            Using con As New OleDb.OleDbConnection(connection)
+                con.Open()
+
+                ' Sütun var mı kontrol et
+                Dim checkCmd As New OleDb.OleDbCommand(
+                    "SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'tbStokFisiMaster' AND COLUMN_NAME = 'sIncotermsKodu'", con)
+                Dim columnExists As Integer = CInt(checkCmd.ExecuteScalar())
+
+                If columnExists = 0 Then
+                    Debug.WriteLine("[sIncotermsKodu] Sütun bulunamadı, ekleniyor...")
+                    Try
+                        ' Sütunu ekle - VARCHAR(10) INCOTERMS kodları için yeterli (EXW, FOB, CIF, DAP, DDP vb.)
+                        Dim alterCmd As New OleDb.OleDbCommand(
+                            "ALTER TABLE tbStokFisiMaster ADD sIncotermsKodu VARCHAR(10) NULL", con)
+                        alterCmd.ExecuteNonQuery()
+                        Debug.WriteLine("[sIncotermsKodu] ✓ Sütun başarıyla eklendi (İhracat faturası için)")
+                    Catch alterEx As Exception
+                        Debug.WriteLine("[sIncotermsKodu] ✗ Ekleme hatası: " & alterEx.Message)
+                    End Try
+                Else
+                    Debug.WriteLine("[sIncotermsKodu] ✓ Sütun mevcut")
+                End If
+            End Using
+        Catch ex As Exception
+            Debug.WriteLine("[sIncotermsKodu] ✗ Hata: " & ex.Message)
         End Try
     End Sub
 

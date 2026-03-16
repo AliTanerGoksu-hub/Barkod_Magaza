@@ -4048,6 +4048,63 @@ Public Class frm_qukaGonder
                             ' Orders tablosunu güncelle - nStokFisiID, nFirmaID, sAciklama3 ile
                             UpdateOrderStatus(orderID, conn, realStokFisiID, realFirmaID, sAciklama3)
 
+                            ' ===== YURT DIŞI SİPARİŞ İÇİN İHRACAT BİLGİLERİNİ GÜNCELLE =====
+                            ' Eğer ülke Türkiye değilse, tbStokFisiMaster tablosundaki ihracat alanlarını doldur
+                            If Not turkiyeMi AndAlso realStokFisiID > 0 Then
+                                Try
+                                    Log("INFO", "AddOrder", $"🌍 YURT DIŞI SİPARİŞ TESPİT EDİLDİ - İhracat bilgileri güncelleniyor...")
+                                    Log("INFO", "AddOrder", $"📦 nStokFisiID: {realStokFisiID}, Ülke: {ulke}, Şehir: {il}")
+                                    
+                                    ' Ülke kodunu ISO 3166-1 alpha-2 formatına dönüştür
+                                    Dim ulkeKodu As String = GetUlkeKodu(ulke, conn)
+                                    
+                                    ' İhracat alanlarını güncelle
+                                    Dim updateIhracatCmd As New OleDb.OleDbCommand()
+                                    updateIhracatCmd.Connection = conn
+                                    updateIhracatCmd.CommandText = "UPDATE tbStokFisiMaster SET " &
+                                        "bFaturaTipi = 'İhracat Faturası', " &
+                                        "sKdvMuafiyetKodu = '301', " &
+                                        "sTeslimatAdresi = ?, " &
+                                        "sTeslimatSehir = ?, " &
+                                        "sTeslimatUlke = ?, " &
+                                        "sTeslimatUlkeKodu = ?, " &
+                                        "sIncotermsKodu = 'DAP', " &
+                                        "nTasimaSekli = 3 " &
+                                        "WHERE nStokFisiID = ?"
+                                    
+                                    ' Teslimat adresi (API'den gelen adres)
+                                    updateIhracatCmd.Parameters.Add("?", OleDbType.VarWChar, 255).Value = If(String.IsNullOrEmpty(adres), "", adres)
+                                    ' Teslimat şehri
+                                    updateIhracatCmd.Parameters.Add("?", OleDbType.VarWChar, 100).Value = If(String.IsNullOrEmpty(il), "", il)
+                                    ' Teslimat ülkesi
+                                    updateIhracatCmd.Parameters.Add("?", OleDbType.VarWChar, 100).Value = If(String.IsNullOrEmpty(ulke), "", ulke)
+                                    ' Teslimat ülke kodu (ISO)
+                                    updateIhracatCmd.Parameters.Add("?", OleDbType.VarWChar, 10).Value = If(String.IsNullOrEmpty(ulkeKodu), "XX", ulkeKodu)
+                                    ' nStokFisiID
+                                    updateIhracatCmd.Parameters.AddWithValue("?", realStokFisiID)
+                                    
+                                    If conn.State <> ConnectionState.Open Then conn.Open()
+                                    Dim ihracatRowsAffected As Integer = updateIhracatCmd.ExecuteNonQuery()
+                                    
+                                    If ihracatRowsAffected > 0 Then
+                                        Log("SUCCESS", "AddOrder", $"✅ İHRACAT BİLGİLERİ GÜNCELLENDİ!")
+                                        Log("INFO", "AddOrder", $"   - bFaturaTipi: İhracat Faturası")
+                                        Log("INFO", "AddOrder", $"   - sKdvMuafiyetKodu: 301 (İhracat İstisnası)")
+                                        Log("INFO", "AddOrder", $"   - sTeslimatUlke: {ulke}")
+                                        Log("INFO", "AddOrder", $"   - sTeslimatUlkeKodu: {ulkeKodu}")
+                                        Log("INFO", "AddOrder", $"   - sIncotermsKodu: DAP (Kargo Teslim)")
+                                        Log("INFO", "AddOrder", $"   - nTasimaSekli: 3 (Kara Yolu)")
+                                    Else
+                                        Log("WARNING", "AddOrder", $"⚠️ İhracat bilgileri güncellenemedi! nStokFisiID: {realStokFisiID}")
+                                    End If
+                                    
+                                Catch ihracatEx As Exception
+                                    Log("ERROR", "AddOrder", $"❌ İhracat bilgileri güncelleme hatası: {ihracatEx.Message}")
+                                    LogError($"İhracat bilgileri güncelleme hatası: {ihracatEx.Message}, nStokFisiID={realStokFisiID}")
+                                End Try
+                            End If
+                            ' ===== YURT DIŞI SİPARİŞ GÜNCELLEME SONU =====
+
                             ' Not: WhatsApp bildirimi zaten SP'den önce gönderildi
 
                         ElseIf rowsAffected = 0 Then
@@ -10204,5 +10261,184 @@ Public Class frm_qukaGonder
             SafeUpdateUI(Sub() MessageBox.Show($"Hata: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error))
         End Try
     End Sub
+
+    ''' <summary>
+    ''' Ülke adını ISO 3166-1 alpha-2 ülke koduna dönüştürür
+    ''' Önce veritabanındaki tbUlke tablosunu kontrol eder, bulamazsa bilinen ülke kodlarını kullanır
+    ''' </summary>
+    ''' <param name="ulkeAdi">Ülke adı (örn: "Germany", "Deutschland", "Almanya")</param>
+    ''' <param name="conn">Veritabanı bağlantısı</param>
+    ''' <returns>ISO 3166-1 alpha-2 ülke kodu (örn: "DE")</returns>
+    Private Function GetUlkeKodu(ulkeAdi As String, conn As OleDb.OleDbConnection) As String
+        If String.IsNullOrEmpty(ulkeAdi) Then Return "XX"
+        
+        Try
+            ' Önce veritabanındaki tbUlke tablosunda ara (sUlkeKodu alanı varsa)
+            Try
+                If conn.State <> ConnectionState.Open Then conn.Open()
+                Dim ulkeCmd As New OleDb.OleDbCommand(
+                    "SELECT TOP 1 sUlkeKodu FROM tbUlke WHERE sUlke LIKE ? OR sUlke LIKE ?", conn)
+                ulkeCmd.Parameters.AddWithValue("?", ulkeAdi)
+                ulkeCmd.Parameters.AddWithValue("?", "%" & ulkeAdi & "%")
+                Dim result = ulkeCmd.ExecuteScalar()
+                If result IsNot Nothing AndAlso result IsNot DBNull.Value AndAlso Not String.IsNullOrEmpty(result.ToString()) Then
+                    Log("DEBUG", "GetUlkeKodu", $"Veritabanından ülke kodu bulundu: {ulkeAdi} -> {result}")
+                    Return result.ToString().Trim().ToUpper()
+                End If
+            Catch dbEx As Exception
+                ' tbUlke tablosunda sUlkeKodu alanı olmayabilir, devam et
+                Log("DEBUG", "GetUlkeKodu", $"Veritabanı sorgusu başarısız: {dbEx.Message}")
+            End Try
+            
+            ' Bilinen ülke kodları sözlüğü (yaygın ülkeler)
+            Dim ulkeKodlari As New Dictionary(Of String, String)(StringComparer.OrdinalIgnoreCase) From {
+                ' Avrupa
+                {"Germany", "DE"}, {"Deutschland", "DE"}, {"Almanya", "DE"},
+                {"France", "FR"}, {"Frankreich", "FR"}, {"Fransa", "FR"},
+                {"Italy", "IT"}, {"Italien", "IT"}, {"İtalya", "IT"},
+                {"Spain", "ES"}, {"Spanien", "ES"}, {"İspanya", "ES"},
+                {"United Kingdom", "GB"}, {"UK", "GB"}, {"England", "GB"}, {"İngiltere", "GB"}, {"Birleşik Krallık", "GB"},
+                {"Netherlands", "NL"}, {"Holland", "NL"}, {"Hollanda", "NL"},
+                {"Belgium", "BE"}, {"Belgien", "BE"}, {"Belçika", "BE"},
+                {"Austria", "AT"}, {"Österreich", "AT"}, {"Avusturya", "AT"},
+                {"Switzerland", "CH"}, {"Schweiz", "CH"}, {"İsviçre", "CH"},
+                {"Poland", "PL"}, {"Polen", "PL"}, {"Polonya", "PL"},
+                {"Sweden", "SE"}, {"Schweden", "SE"}, {"İsveç", "SE"},
+                {"Norway", "NO"}, {"Norwegen", "NO"}, {"Norveç", "NO"},
+                {"Denmark", "DK"}, {"Dänemark", "DK"}, {"Danimarka", "DK"},
+                {"Finland", "FI"}, {"Finnland", "FI"}, {"Finlandiya", "FI"},
+                {"Greece", "GR"}, {"Griechenland", "GR"}, {"Yunanistan", "GR"},
+                {"Portugal", "PT"}, {"Portekiz", "PT"},
+                {"Ireland", "IE"}, {"Irland", "IE"}, {"İrlanda", "IE"},
+                {"Czech Republic", "CZ"}, {"Czechia", "CZ"}, {"Tschechien", "CZ"}, {"Çekya", "CZ"}, {"Çek Cumhuriyeti", "CZ"},
+                {"Hungary", "HU"}, {"Ungarn", "HU"}, {"Macaristan", "HU"},
+                {"Romania", "RO"}, {"Rumänien", "RO"}, {"Romanya", "RO"},
+                {"Bulgaria", "BG"}, {"Bulgarien", "BG"}, {"Bulgaristan", "BG"},
+                {"Croatia", "HR"}, {"Kroatien", "HR"}, {"Hırvatistan", "HR"},
+                {"Slovakia", "SK"}, {"Slowakei", "SK"}, {"Slovakya", "SK"},
+                {"Slovenia", "SI"}, {"Slowenien", "SI"}, {"Slovenya", "SI"},
+                {"Luxembourg", "LU"}, {"Luxemburg", "LU"}, {"Lüksemburg", "LU"},
+                {"Estonia", "EE"}, {"Estland", "EE"}, {"Estonya", "EE"},
+                {"Latvia", "LV"}, {"Lettland", "LV"}, {"Letonya", "LV"},
+                {"Lithuania", "LT"}, {"Litauen", "LT"}, {"Litvanya", "LT"},
+                {"Cyprus", "CY"}, {"Zypern", "CY"}, {"Kıbrıs", "CY"},
+                {"Malta", "MT"},
+                {"Iceland", "IS"}, {"Island", "IS"}, {"İzlanda", "IS"},
+                {"Serbia", "RS"}, {"Serbien", "RS"}, {"Sırbistan", "RS"},
+                {"Montenegro", "ME"}, {"Karadağ", "ME"},
+                {"North Macedonia", "MK"}, {"Nordmazedonien", "MK"}, {"Kuzey Makedonya", "MK"},
+                {"Albania", "AL"}, {"Albanien", "AL"}, {"Arnavutluk", "AL"},
+                {"Bosnia", "BA"}, {"Bosnien", "BA"}, {"Bosna", "BA"}, {"Bosna Hersek", "BA"},
+                {"Kosovo", "XK"}, {"Kosova", "XK"},
+                {"Moldova", "MD"}, {"Moldawien", "MD"}, {"Moldavya", "MD"},
+                {"Ukraine", "UA"}, {"Ukrayna", "UA"},
+                {"Belarus", "BY"}, {"Weißrussland", "BY"}, {"Belarus", "BY"},
+                {"Russia", "RU"}, {"Russland", "RU"}, {"Rusya", "RU"},
+                
+                ' Amerika
+                {"United States", "US"}, {"USA", "US"}, {"Amerika", "US"}, {"ABD", "US"},
+                {"Canada", "CA"}, {"Kanada", "CA"},
+                {"Mexico", "MX"}, {"Mexiko", "MX"}, {"Meksika", "MX"},
+                {"Brazil", "BR"}, {"Brasilien", "BR"}, {"Brezilya", "BR"},
+                {"Argentina", "AR"}, {"Argentinien", "AR"}, {"Arjantin", "AR"},
+                {"Chile", "CL"}, {"Şili", "CL"},
+                {"Colombia", "CO"}, {"Kolumbien", "CO"}, {"Kolombiya", "CO"},
+                {"Peru", "PE"},
+                
+                ' Asya
+                {"China", "CN"}, {"Çin", "CN"},
+                {"Japan", "JP"}, {"Japonya", "JP"},
+                {"South Korea", "KR"}, {"Korea", "KR"}, {"Güney Kore", "KR"},
+                {"India", "IN"}, {"Indien", "IN"}, {"Hindistan", "IN"},
+                {"Indonesia", "ID"}, {"Indonesien", "ID"}, {"Endonezya", "ID"},
+                {"Thailand", "TH"}, {"Tayland", "TH"},
+                {"Vietnam", "VN"},
+                {"Philippines", "PH"}, {"Philippinen", "PH"}, {"Filipinler", "PH"},
+                {"Malaysia", "MY"}, {"Malezya", "MY"},
+                {"Singapore", "SG"}, {"Singapur", "SG"},
+                {"Pakistan", "PK"},
+                {"Bangladesh", "BD"}, {"Bangladesch", "BD"}, {"Bangladeş", "BD"},
+                {"Saudi Arabia", "SA"}, {"Saudiarabien", "SA"}, {"Suudi Arabistan", "SA"},
+                {"United Arab Emirates", "AE"}, {"UAE", "AE"}, {"Birleşik Arap Emirlikleri", "AE"}, {"BAE", "AE"},
+                {"Israel", "IL"}, {"İsrail", "IL"},
+                {"Iran", "IR"}, {"İran", "IR"},
+                {"Iraq", "IQ"}, {"Irak", "IQ"},
+                {"Jordan", "JO"}, {"Jordanien", "JO"}, {"Ürdün", "JO"},
+                {"Lebanon", "LB"}, {"Libanon", "LB"}, {"Lübnan", "LB"},
+                {"Kuwait", "KW"}, {"Kuveyt", "KW"},
+                {"Qatar", "QA"}, {"Katar", "QA"},
+                {"Bahrain", "BH"},
+                {"Oman", "OM"}, {"Umman", "OM"},
+                {"Azerbaijan", "AZ"}, {"Aserbaidschan", "AZ"}, {"Azerbaycan", "AZ"},
+                {"Georgia", "GE"}, {"Georgien", "GE"}, {"Gürcistan", "GE"},
+                {"Armenia", "AM"}, {"Armenien", "AM"}, {"Ermenistan", "AM"},
+                {"Kazakhstan", "KZ"}, {"Kasachstan", "KZ"}, {"Kazakistan", "KZ"},
+                {"Uzbekistan", "UZ"}, {"Usbekistan", "UZ"}, {"Özbekistan", "UZ"},
+                {"Turkmenistan", "TM"}, {"Türkmenistan", "TM"},
+                {"Kyrgyzstan", "KG"}, {"Kirgisistan", "KG"}, {"Kırgızistan", "KG"},
+                {"Tajikistan", "TJ"}, {"Tadschikistan", "TJ"}, {"Tacikistan", "TJ"},
+                {"Afghanistan", "AF"}, {"Afganistan", "AF"},
+                {"Mongolia", "MN"}, {"Mongolei", "MN"}, {"Moğolistan", "MN"},
+                {"Nepal", "NP"},
+                {"Sri Lanka", "LK"},
+                {"Myanmar", "MM"},
+                {"Cambodia", "KH"}, {"Kambodscha", "KH"}, {"Kamboçya", "KH"},
+                {"Laos", "LA"},
+                {"Hong Kong", "HK"},
+                {"Taiwan", "TW"},
+                {"Macau", "MO"},
+                
+                ' Afrika
+                {"Egypt", "EG"}, {"Ägypten", "EG"}, {"Mısır", "EG"},
+                {"South Africa", "ZA"}, {"Südafrika", "ZA"}, {"Güney Afrika", "ZA"},
+                {"Morocco", "MA"}, {"Marokko", "MA"}, {"Fas", "MA"},
+                {"Algeria", "DZ"}, {"Algerien", "DZ"}, {"Cezayir", "DZ"},
+                {"Tunisia", "TN"}, {"Tunesien", "TN"}, {"Tunus", "TN"},
+                {"Libya", "LY"}, {"Libyen", "LY"}, {"Libya", "LY"},
+                {"Nigeria", "NG"}, {"Nijerya", "NG"},
+                {"Kenya", "KE"},
+                {"Ethiopia", "ET"}, {"Äthiopien", "ET"}, {"Etiyopya", "ET"},
+                {"Ghana", "GH"}, {"Gana", "GH"},
+                {"Tanzania", "TZ"}, {"Tansania", "TZ"}, {"Tanzanya", "TZ"},
+                {"Uganda", "UG"},
+                {"Sudan", "SD"},
+                {"Senegal", "SN"},
+                {"Ivory Coast", "CI"}, {"Elfenbeinküste", "CI"}, {"Fildişi Sahili", "CI"},
+                {"Cameroon", "CM"}, {"Kamerun", "CM"},
+                {"Zimbabwe", "ZW"}, {"Simbabwe", "ZW"},
+                {"Angola", "AO"},
+                {"Mozambique", "MZ"}, {"Mosambik", "MZ"}, {"Mozambik", "MZ"},
+                
+                ' Okyanusya
+                {"Australia", "AU"}, {"Australien", "AU"}, {"Avustralya", "AU"},
+                {"New Zealand", "NZ"}, {"Neuseeland", "NZ"}, {"Yeni Zelanda", "NZ"},
+                
+                ' Türkiye (referans için)
+                {"Turkey", "TR"}, {"Türkei", "TR"}, {"Türkiye", "TR"}, {"Turkiye", "TR"}
+            }
+            
+            ' Tam eşleşme ara
+            If ulkeKodlari.ContainsKey(ulkeAdi) Then
+                Log("DEBUG", "GetUlkeKodu", $"Sözlükten ülke kodu bulundu: {ulkeAdi} -> {ulkeKodlari(ulkeAdi)}")
+                Return ulkeKodlari(ulkeAdi)
+            End If
+            
+            ' Kısmi eşleşme ara
+            For Each kvp In ulkeKodlari
+                If ulkeAdi.ToUpper().Contains(kvp.Key.ToUpper()) OrElse kvp.Key.ToUpper().Contains(ulkeAdi.ToUpper()) Then
+                    Log("DEBUG", "GetUlkeKodu", $"Kısmi eşleşme bulundu: {ulkeAdi} -> {kvp.Value} (eşleşen: {kvp.Key})")
+                    Return kvp.Value
+                End If
+            Next
+            
+            ' Bulunamazsa varsayılan XX döndür
+            Log("WARNING", "GetUlkeKodu", $"Ülke kodu bulunamadı: {ulkeAdi} -> XX (varsayılan)")
+            Return "XX"
+            
+        Catch ex As Exception
+            Log("ERROR", "GetUlkeKodu", $"Hata: {ex.Message}, Ülke: {ulkeAdi}")
+            Return "XX"
+        End Try
+    End Function
 
 End Class
