@@ -1603,6 +1603,9 @@ Public Class frm_PazaryeriFaturaGonderim
     End Sub
 
     Private Sub frm_PazaryeriFaturaGonderim_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Önce checkbox ayarlarını yükle (listeleme öncesi)
+        CheckboxAyarlariYukle()
+        
         ' Connection atandıktan sonra API'leri yükle
         If Not String.IsNullOrEmpty(connection) Then
             LoadPazaryeriApis()
@@ -1625,6 +1628,7 @@ Public Class frm_PazaryeriFaturaGonderim
         ' Form yüklenmediyse işlem yapma
         If Not formYuklendi Then Return
         If dtFaturalar Is Nothing Then Return
+        CheckboxAyarlariKaydet()
         ListeleFaturalar()
     End Sub
     
@@ -1635,6 +1639,7 @@ Public Class frm_PazaryeriFaturaGonderim
         ' Form yüklenmediyse işlem yapma
         If Not formYuklendi Then Return
         If dtFaturalar Is Nothing Then Return
+        CheckboxAyarlariKaydet()
         ListeleFaturalar()
     End Sub
     
@@ -1692,6 +1697,42 @@ Public Class frm_PazaryeriFaturaGonderim
             GridView1.RestoreLayoutFromRegistry("SOFTWARE\BusinessSmart\VIEW\MAGAZA\" & Me.Name.ToString())
         Catch ex As Exception
             ' İlk açılışta registry kaydı olmayabilir, sessizce geç
+        End Try
+    End Sub
+    
+    ''' <summary>
+    ''' Checkbox ayarlarını registry'ye kaydet
+    ''' </summary>
+    Private Sub CheckboxAyarlariKaydet()
+        Try
+            Dim regKey As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.CurrentUser.CreateSubKey("SOFTWARE\BusinessSmart\SETTINGS\" & Me.Name.ToString())
+            If regKey IsNot Nothing Then
+                regKey.SetValue("chkGonderilenleriGoster", If(chkGonderilenleriGoster IsNot Nothing AndAlso chkGonderilenleriGoster.Checked, 1, 0))
+                regKey.SetValue("chkSadeceTeslimEdilenler", If(chkSadeceTeslimEdilenler IsNot Nothing AndAlso chkSadeceTeslimEdilenler.Checked, 1, 0))
+                regKey.Close()
+            End If
+        Catch ex As Exception
+            ' Sessizce geç
+        End Try
+    End Sub
+    
+    ''' <summary>
+    ''' Checkbox ayarlarını registry'den yükle
+    ''' </summary>
+    Private Sub CheckboxAyarlariYukle()
+        Try
+            Dim regKey As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\BusinessSmart\SETTINGS\" & Me.Name.ToString())
+            If regKey IsNot Nothing Then
+                Dim gonderilenleriGoster As Integer = CInt(regKey.GetValue("chkGonderilenleriGoster", 0))
+                Dim sadeceTeslimEdilenler As Integer = CInt(regKey.GetValue("chkSadeceTeslimEdilenler", 0))
+                
+                If chkGonderilenleriGoster IsNot Nothing Then chkGonderilenleriGoster.Checked = (gonderilenleriGoster = 1)
+                If chkSadeceTeslimEdilenler IsNot Nothing Then chkSadeceTeslimEdilenler.Checked = (sadeceTeslimEdilenler = 1)
+                
+                regKey.Close()
+            End If
+        Catch ex As Exception
+            ' İlk açılışta kayıt olmayabilir, sessizce geç
         End Try
     End Sub
     
