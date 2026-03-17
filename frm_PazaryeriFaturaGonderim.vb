@@ -2491,19 +2491,20 @@ Public Class frm_PazaryeriFaturaGonderim
                         cmdUpdate.ExecuteNonQuery()
                     End Using
                 Else
-                    ' Yeni kayıt ekle
+                    ' Yeni kayıt ekle - Tablo yapısına uygun alanlar
                     Dim sqlInsert As String = "INSERT INTO tbPazaryeriFaturaGonderim " &
-                        "(nStokFisiID, sPazaryeri, sSiparisNo, sGibFaturaNo, sFaturaGuid, bGonderildi, dteGonderimTarihi, sGonderimSonucu, sHataMesaji) " &
-                        "VALUES (?, ?, ?, ?, ?, 1, ?, ?, '')"
+                        "(nStokFisiID, sPazaryeri, sSiparisNo, sFaturaNo, sFaturaUUID, bGonderildi, dteGonderimTarihi, sGonderimSonucu, sHataMesaji, nDenemeAdet, dteOlusturma) " &
+                        "VALUES (?, ?, ?, ?, ?, 1, ?, ?, '', 1, ?)"
                     
                     Using cmdInsert As New OleDbCommand(sqlInsert, con)
                         cmdInsert.Parameters.AddWithValue("@p0", nStokFisiID)
                         cmdInsert.Parameters.AddWithValue("@p1", pazaryeri)
                         cmdInsert.Parameters.AddWithValue("@p2", siparisNo)
-                        cmdInsert.Parameters.AddWithValue("@p3", invoiceNumber)
+                        cmdInsert.Parameters.AddWithValue("@p3", If(String.IsNullOrEmpty(invoiceNumber), "", invoiceNumber))
                         cmdInsert.Parameters.AddWithValue("@p4", "")
                         cmdInsert.Parameters.AddWithValue("@p5", DateTime.Now)
                         cmdInsert.Parameters.AddWithValue("@p6", "Pazaryerinden otomatik tespit")
+                        cmdInsert.Parameters.AddWithValue("@p7", DateTime.Now)
                         cmdInsert.ExecuteNonQuery()
                     End Using
                 End If
