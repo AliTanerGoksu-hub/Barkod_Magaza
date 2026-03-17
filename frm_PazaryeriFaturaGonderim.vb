@@ -1848,15 +1848,7 @@ Public Class frm_PazaryeriFaturaGonderim
             Next
             
             GridView1.RefreshData()
-            lblDurum.Text = "API: " & apiSorgusu & ", Fatura işaretlenen: " & faturaIsaretlenen & ", InvoiceLink boş: " & invoiceLinkBos & ", Atlanan: " & atlanan & ", Hata: " & hata
-            
-            ' Debug MessageBox
-            MessageBox.Show("API Sorgusu: " & apiSorgusu & vbCrLf & 
-                           "Fatura İşaretlenen: " & faturaIsaretlenen & vbCrLf & 
-                           "InvoiceLink Boş: " & invoiceLinkBos & vbCrLf & 
-                           "Atlanan: " & atlanan & vbCrLf & 
-                           "Hata: " & hata, "Debug Bilgisi", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            
+            lblDurum.Text = "Tamamlandı! Fatura işaretlenen: " & faturaIsaretlenen & ", Atlanan: " & atlanan & ", Hata: " & hata
             Cursor = Cursors.Default
             
             ' Fatura işaretlenen varsa ve "Gönderilenleri Göster" checkbox'ı işaretli değilse listeyi yenile
