@@ -1698,7 +1698,7 @@ Public Class frm_PazaryeriFaturaGonderim
             End If
             
             Cursor = Cursors.WaitCursor
-            lblDurum.Text = "Teslim durumları güncelleniyor..."
+            lblDurum.Text = "Teslim ve fatura durumları güncelleniyor..."
             Application.DoEvents()
             
             ' Trendyol API bilgilerini al
@@ -1708,9 +1708,16 @@ Public Class frm_PazaryeriFaturaGonderim
             End If
             
             Dim api = pazaryeriApis("TRENDYOL")
-            Dim guncellenen As Integer = 0
+            Dim teslimGuncellenen As Integer = 0
+            Dim faturaIsaretlenen As Integer = 0
             Dim atlanan As Integer = 0
             Dim hata As Integer = 0
+            
+            ' Auth bilgileri (fatura sorgusu için)
+            Dim authRaw As String = api.ApiKey & ":" & api.ApiSecret
+            Dim authBytes As Byte() = Encoding.UTF8.GetBytes(authRaw)
+            Dim authBase64 As String = Convert.ToBase64String(authBytes)
+            Dim userAgent As String = api.SellerId & " - SelfIntegration"
             
             For i As Integer = 0 To dtFaturalar.Rows.Count - 1
                 Dim row As DataRow = dtFaturalar.Rows(i)
@@ -1719,20 +1726,30 @@ Public Class frm_PazaryeriFaturaGonderim
                 ' Sadece Trendyol siparişlerini kontrol et
                 If pazaryeri <> "Trendyol" Then Continue For
                 
-                ' Zaten teslim edilmiş olanları atla
+                Dim nStokFisiID As Integer = CInt(row("nStokFisiID"))
+                Dim siparisNo As String = If(row("SiparisNo") IsNot DBNull.Value, row("SiparisNo").ToString().Trim(), "")
+                If String.IsNullOrEmpty(siparisNo) Then Continue For
+                
+                ' Fatura gönderildi mi kontrol et - ZATEN İŞARETLİ OLANLARI ATLA
+                Dim bGonderildi As Boolean = False
+                If row("bGonderildi") IsNot DBNull.Value Then
+                    bGonderildi = CBool(row("bGonderildi"))
+                End If
+                
+                ' Zaten teslim edilmiş VE fatura gönderilmiş olanları atla (sorgulamaya gerek yok)
                 Dim mevcutDurum As String = If(row("TeslimDurumu") IsNot DBNull.Value, row("TeslimDurumu").ToString().Trim(), "")
-                If mevcutDurum.ToUpperInvariant().Contains("TESLİM EDİLDİ") OrElse 
-                   mevcutDurum.ToUpperInvariant().Contains("TESLIM EDILDI") OrElse
-                   mevcutDurum.ToUpperInvariant().Contains("DELIVERED") OrElse
-                   mevcutDurum.ToUpperInvariant().Contains("İPTAL") OrElse
-                   mevcutDurum.ToUpperInvariant().Contains("IPTAL") OrElse
-                   mevcutDurum.ToUpperInvariant().Contains("CANCELLED") Then
+                Dim teslimTamamlandi As Boolean = mevcutDurum.ToUpperInvariant().Contains("TESLİM EDİLDİ") OrElse 
+                                                   mevcutDurum.ToUpperInvariant().Contains("TESLIM EDILDI") OrElse
+                                                   mevcutDurum.ToUpperInvariant().Contains("DELIVERED") OrElse
+                                                   mevcutDurum.ToUpperInvariant().Contains("İPTAL") OrElse
+                                                   mevcutDurum.ToUpperInvariant().Contains("IPTAL") OrElse
+                                                   mevcutDurum.ToUpperInvariant().Contains("CANCELLED")
+                
+                ' Her ikisi de tamamlandıysa atla
+                If teslimTamamlandi AndAlso bGonderildi Then
                     atlanan += 1
                     Continue For
                 End If
-                
-                Dim siparisNo As String = If(row("SiparisNo") IsNot DBNull.Value, row("SiparisNo").ToString().Trim(), "")
-                If String.IsNullOrEmpty(siparisNo) Then Continue For
                 
                 ' Sipariş numarasından TY prefix'ini kaldır
                 Dim orderNumber As String = siparisNo
@@ -1744,48 +1761,63 @@ Public Class frm_PazaryeriFaturaGonderim
                 Application.DoEvents()
                 
                 Try
-                    Dim teslimDurumu As String = GetTrendyolTeslimDurumu(api, orderNumber)
-                    If Not String.IsNullOrEmpty(teslimDurumu) Then
+                    ' Trendyol API'den hem teslim durumunu hem fatura durumunu al
+                    Dim teslimDurumu As String = ""
+                    Dim invoiceLink As String = ""
+                    Dim invoiceNumber As String = ""
+                    
+                    GetTrendyolSiparisDurumu(api, orderNumber, authBase64, userAgent, teslimDurumu, invoiceLink, invoiceNumber)
+                    
+                    ' Teslim durumunu güncelle (eğer henüz güncellenmemişse)
+                    If Not teslimTamamlandi AndAlso Not String.IsNullOrEmpty(teslimDurumu) Then
                         row("TeslimDurumu") = teslimDurumu
-                        
-                        ' Veritabanına kaydet
-                        KaydetTeslimDurumu(CInt(row("nStokFisiID")), teslimDurumu)
-                        guncellenen += 1
+                        KaydetTeslimDurumu(nStokFisiID, teslimDurumu)
+                        teslimGuncellenen += 1
                     End If
+                    
+                    ' Fatura gönderildi mi kontrol et ve işaretle (eğer henüz işaretlenmemişse)
+                    If Not bGonderildi AndAlso Not String.IsNullOrEmpty(invoiceLink) Then
+                        FaturaGonderildiOlarakIsaretle(nStokFisiID, "Trendyol", siparisNo, invoiceNumber, invoiceLink)
+                        row("bGonderildi") = True
+                        faturaIsaretlenen += 1
+                    End If
+                    
                 Catch ex As Exception
                     hata += 1
                 End Try
             Next
             
             GridView1.RefreshData()
-            lblDurum.Text = "Tamamlandı! Güncellenen: " & guncellenen & ", Atlanan (zaten teslim/iptal): " & atlanan & ", Hata: " & hata
+            lblDurum.Text = "Tamamlandı! Teslim güncellenen: " & teslimGuncellenen & ", Fatura işaretlenen: " & faturaIsaretlenen & ", Atlanan: " & atlanan & ", Hata: " & hata
             Cursor = Cursors.Default
             
         Catch ex As Exception
             Cursor = Cursors.Default
             lblDurum.Text = "Hata: " & ex.Message
-            MessageBox.Show("Teslim durumları güncellenirken hata: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
     
     ''' <summary>
-    ''' Trendyol API'den sipariş teslim durumunu çeker
+    ''' Trendyol API'den sipariş durumunu, teslim durumunu ve fatura durumunu çeker
+    ''' Tek API çağrısıyla hem teslim hem fatura bilgisi alınır
     ''' </summary>
-    Private Function GetTrendyolTeslimDurumu(api As PazaryeriAPI, orderNumber As String) As String
+    Private Sub GetTrendyolSiparisDurumu(api As PazaryeriAPI, orderNumber As String, authBase64 As String, userAgent As String,
+                                          ByRef teslimDurumu As String, ByRef invoiceLink As String, ByRef invoiceNumber As String)
+        teslimDurumu = ""
+        invoiceLink = ""
+        invoiceNumber = ""
+        
         Try
-            ' Trendyol sipariş detayı API'si
-            Dim url As String = api.BaseUrl & "/integration/order/sellers/" & api.SellerId & "/orders?orderNumber=" & orderNumber
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+            
+            Dim url As String = "https://api.trendyol.com/sapigw/suppliers/" & api.SellerId & "/orders?orderNumber=" & orderNumber
             
             Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
             req.Method = "GET"
-            req.ContentType = "application/json"
             req.Accept = "application/json"
+            req.UserAgent = userAgent
+            req.Headers.Add("Authorization", "Basic " & authBase64)
             req.Timeout = 30000
-            
-            ' Basic Auth
-            Dim credentials As String = api.ApiKey & ":" & api.ApiSecret
-            Dim base64Credentials As String = Convert.ToBase64String(Encoding.ASCII.GetBytes(credentials))
-            req.Headers.Add("Authorization", "Basic " & base64Credentials)
             
             Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
                 Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
@@ -1797,16 +1829,14 @@ Public Class frm_PazaryeriFaturaGonderim
                         If contentArray.Count > 0 Then
                             Dim order As JObject = CType(contentArray(0), JObject)
                             
-                            ' Sipariş durumu
+                            ' ===== TESLİM DURUMU =====
                             Dim status As String = ""
                             If order("status") IsNot Nothing Then
                                 status = order("status").ToString()
                             End If
                             
-                            ' Kargo durumu
                             Dim cargoTrackingNumber As String = ""
                             Dim cargoProviderName As String = ""
-                            
                             If order("cargoTrackingNumber") IsNot Nothing Then
                                 cargoTrackingNumber = order("cargoTrackingNumber").ToString()
                             End If
@@ -1821,7 +1851,13 @@ Public Class frm_PazaryeriFaturaGonderim
                                 For Each line As JObject In lines
                                     If line("deliveredDate") IsNot Nothing Then
                                         deliveredDate = line("deliveredDate").ToString()
-                                        Exit For
+                                    End If
+                                    ' Line'da invoiceLink kontrolü
+                                    If line("invoiceLink") IsNot Nothing AndAlso Not String.IsNullOrEmpty(line("invoiceLink").ToString()) Then
+                                        invoiceLink = line("invoiceLink").ToString()
+                                    End If
+                                    If line("invoiceNumber") IsNot Nothing AndAlso Not String.IsNullOrEmpty(line("invoiceNumber").ToString()) Then
+                                        invoiceNumber = line("invoiceNumber").ToString()
                                     End If
                                 Next
                             End If
@@ -1846,17 +1882,25 @@ Public Class frm_PazaryeriFaturaGonderim
                                 durumMetni &= " (" & cargoProviderName & ": " & cargoTrackingNumber & ")"
                             End If
                             
-                            Return durumMetni
+                            teslimDurumu = durumMetni
+                            
+                            ' ===== FATURA DURUMU =====
+                            ' Sipariş seviyesinde invoiceLink kontrolü
+                            If order("invoiceLink") IsNot Nothing AndAlso Not String.IsNullOrEmpty(order("invoiceLink").ToString()) Then
+                                invoiceLink = order("invoiceLink").ToString()
+                            End If
+                            If order("invoiceNumber") IsNot Nothing AndAlso Not String.IsNullOrEmpty(order("invoiceNumber").ToString()) Then
+                                invoiceNumber = order("invoiceNumber").ToString()
+                            End If
                         End If
                     End If
                 End Using
             End Using
             
-            Return ""
         Catch ex As Exception
-            Return ""
+            ' Hata durumunda boş değerler dönecek
         End Try
-    End Function
+    End Sub
     
     ''' <summary>
     ''' Teslim durumunu tbStokFisiMaster tablosuna kaydet
