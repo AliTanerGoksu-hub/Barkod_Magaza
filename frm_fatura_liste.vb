@@ -7702,6 +7702,10 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                     Dim nKdvOrani As Decimal = KeyCode.sorgu_sayi(drDetay("nKdvOrani"), 0)
                     Dim lIlaveMaliyetTutar As Decimal = KeyCode.sorgu_sayi(drDetay("lIlaveMaliyetTutar"), 0)
                     Dim lEkIlaveMaliyetTutar As Decimal = KeyCode.sorgu_sayi(drDetay("lEkIlaveMaliyetTutar"), 0)
+                    
+                    ' İskonto tutarını al - Maliyet hesabında kullanılacak
+                    Dim lIskontoTutari As Decimal = KeyCode.sorgu_sayi(drDetay("lIskontoTutari"), 0)
+                    Dim lBrutTutar As Decimal = KeyCode.sorgu_sayi(drDetay("lBrutTutar"), 0)
 
                     ' Stok bilgilerini al
                     Dim dsStok As New DataSet()
@@ -7717,20 +7721,48 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                         Dim drStok As DataRow = dsStok.Tables(0).Rows(0)
                         Dim nStokKdvOrani As Decimal = KeyCode.sorgu_sayi(drStok("nStokKdvOrani"), 0)
 
-                        ' Maliyet ve Alış fiyatı hesapla - BASİT MANTIK
-                        ' bAlisKdvDahil = True ise → maliyet = lBrutFiyat (KDV dahil alış fiyatı)
-                        ' bAlisKdvDahil = False ise → maliyet = lBrutFiyat × (1 + KDV/100)
+                        ' Maliyet ve Alış fiyatı hesapla - İSKONTO VE EK MALİYET DAHİL
+                        ' 1. Net Tutar = Brüt Tutar - İskonto Tutarı
+                        ' 2. Satır Ek Maliyet = lIlaveMaliyetTutar + lEkIlaveMaliyetTutar
+                        ' 3. Master Ek Maliyet Payı = (Satır Net Tutar / Fatura Net Tutar) * Toplam Ek Maliyet
+                        ' 4. Toplam Maliyet Tutar = Net Tutar + Satır Ek Maliyet + Master Ek Maliyet Payı
+                        ' 5. Net Birim Fiyat = Toplam Maliyet Tutar / Miktar
                         Dim maliyet As Decimal = 0
                         Dim alis As Decimal = 0
+                        
+                        ' İskontoyu düşerek net tutarı hesapla
+                        Dim lNetTutarDetay As Decimal = lBrutTutar - lIskontoTutari
+                        
+                        ' Satır bazlı ek maliyetleri ekle
+                        Dim lSatirEkMaliyet As Decimal = lIlaveMaliyetTutar + lEkIlaveMaliyetTutar
+                        
+                        ' Master seviyesindeki ek maliyetlerin bu satıra düşen payını hesapla
+                        ' Pay oranı = Satır Net Tutar / Fatura Toplam Net Tutar
+                        Dim lMasterEkMaliyetToplam As Decimal = lEkmaliyet1 + lEkmaliyet3 + lEkmaliyet4
+                        Dim lMasterEkMaliyetPay As Decimal = 0
+                        If lNetTutar > 0 AndAlso lMasterEkMaliyetToplam > 0 Then
+                            lMasterEkMaliyetPay = (lNetTutarDetay / lNetTutar) * lMasterEkMaliyetToplam
+                        End If
+                        
+                        ' Toplam maliyet tutarı = Net Tutar + Satır Ek Maliyet + Master Ek Maliyet Payı
+                        Dim lToplamMaliyetTutar As Decimal = lNetTutarDetay + lSatirEkMaliyet + lMasterEkMaliyetPay
+                        
+                        ' Net birim fiyatı hesapla (iskontolu + ek maliyetli)
+                        Dim lNetBirimFiyat As Decimal = 0
+                        If lGirisMiktar1 > 0 Then
+                            lNetBirimFiyat = lToplamMaliyetTutar / lGirisMiktar1
+                        Else
+                            lNetBirimFiyat = lBrutFiyat ' Miktar yoksa brüt fiyatı kullan
+                        End If
 
                         If bAlisKdvDahil = True Then
-                            ' Alış fiyatı KDV dahil → maliyet = alış fiyatı
-                            maliyet = lBrutFiyat
-                            alis = lBrutFiyat
+                            ' Alış fiyatı KDV dahil → maliyet = net birim fiyat (iskontolu + ek maliyetli)
+                            maliyet = lNetBirimFiyat
+                            alis = lNetBirimFiyat
                         Else
                             ' Alış fiyatı KDV hariç → KDV ekle
-                            maliyet = lBrutFiyat * ((nKdvOrani + 100) / 100)
-                            alis = lBrutFiyat * ((nKdvOrani + 100) / 100)
+                            maliyet = lNetBirimFiyat * ((nKdvOrani + 100) / 100)
+                            alis = lNetBirimFiyat * ((nKdvOrani + 100) / 100)
                         End If
 
                         ' Mevcut fiyatları sorgula
