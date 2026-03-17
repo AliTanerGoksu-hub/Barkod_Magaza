@@ -2509,7 +2509,8 @@ Public Class frm_PazaryeriFaturaGonderim
                 End If
             End Using
         Catch ex As Exception
-            ' Sessizce devam et
+            ' DEBUG: Hata mesajını göster
+            MessageBox.Show("Fatura işaretleme hatası: " & ex.Message & vbCrLf & "nStokFisiID: " & nStokFisiID, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
     
