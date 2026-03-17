@@ -2166,14 +2166,6 @@ Public Class frm_PazaryeriFaturaGonderim
     End Function
     
     ''' <summary>
-    ''' Context Menu - Trendyol Fatura Durumu Güncelle
-    ''' Pazaryerinden fatura gönderim durumunu sorgular ve işaretler
-    ''' </summary>
-    Private Sub mnuTeslimDurumuGuncelle_Click(sender As Object, e As EventArgs) Handles mnuTeslimDurumuGuncelle.Click
-        TrendyolFaturaDurumlariniGuncelle()
-    End Sub
-    
-    ''' <summary>
     ''' Trendyol'dan fatura durumlarını sorgula ve "Fatura Gönderildi" olarak işaretle
     ''' Trendyol API'den invoiceLink dolu olan siparişleri bulur
     ''' </summary>
