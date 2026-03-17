@@ -1830,7 +1830,21 @@ Public Class frm_PazaryeriFaturaGonderim
                     End If
                     
                     ' Fatura gönderildi mi kontrol et ve işaretle (eğer henüz işaretlenmemişse)
-                    If Not bGonderildi AndAlso Not String.IsNullOrEmpty(invoiceLink) Then
+                    ' Yöntem 1: API'den invoiceLink geldi mi?
+                    ' Yöntem 2: Teslim durumu "Teslim Edildi" içeriyorsa fatura kesinlikle kesilmiştir
+                    Dim faturaGonderilmis As Boolean = Not String.IsNullOrEmpty(invoiceLink)
+                    
+                    ' Teslim edilmiş siparişlerde fatura kesinlikle kesilmiştir
+                    If Not faturaGonderilmis AndAlso Not String.IsNullOrEmpty(teslimDurumu) Then
+                        Dim durumUpper As String = teslimDurumu.ToUpperInvariant()
+                        If durumUpper.Contains("TESLİM EDİLDİ") OrElse durumUpper.Contains("TESLIM EDILDI") OrElse 
+                           durumUpper.Contains("DELIVERED") Then
+                            faturaGonderilmis = True
+                            invoiceLink = "TESLIM_EDILDI"
+                        End If
+                    End If
+                    
+                    If Not bGonderildi AndAlso faturaGonderilmis Then
                         FaturaGonderildiOlarakIsaretle(nStokFisiID, "Trendyol", siparisNo, invoiceNumber, invoiceLink)
                         row("bGonderildi") = True
                         faturaIsaretlenen += 1
