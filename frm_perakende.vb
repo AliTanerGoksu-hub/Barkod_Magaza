@@ -1025,7 +1025,7 @@ Public Class frm_perakende
         Me.DateEdit1.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.DateEdit1.Properties.NullText = "[Tarih]"
         Me.DateEdit1.Properties.VistaTimeProperties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
-        Me.DateEdit1.Size = New System.Drawing.Size(215, 26)
+        Me.DateEdit1.Size = New System.Drawing.Size(215, 28)
         Me.DateEdit1.TabIndex = 8
         Me.DateEdit1.ToolTip = "Aktif Ýþlem Tarihi"
         '
@@ -1787,7 +1787,7 @@ Public Class frm_perakende
         Me.txt_dteDogumTarihi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.txt_dteDogumTarihi.Properties.ReadOnly = True
         Me.txt_dteDogumTarihi.Properties.VistaTimeProperties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
-        Me.txt_dteDogumTarihi.Size = New System.Drawing.Size(272, 26)
+        Me.txt_dteDogumTarihi.Size = New System.Drawing.Size(272, 28)
         Me.txt_dteDogumTarihi.TabIndex = 8
         '
         'LabelControl27
@@ -1816,7 +1816,7 @@ Public Class frm_perakende
         Me.txt_dteEvlilikTarihi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.txt_dteEvlilikTarihi.Properties.ReadOnly = True
         Me.txt_dteEvlilikTarihi.Properties.VistaTimeProperties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
-        Me.txt_dteEvlilikTarihi.Size = New System.Drawing.Size(160, 26)
+        Me.txt_dteEvlilikTarihi.Size = New System.Drawing.Size(160, 28)
         Me.txt_dteEvlilikTarihi.TabIndex = 18
         '
         'LabelControl29
@@ -2691,10 +2691,10 @@ Public Class frm_perakende
         Me.GridControl1.DataMember = "Table1"
         Me.GridControl1.DataSource = Me.ds_sinif
         Me.GridControl1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GridControl1.Location = New System.Drawing.Point(2, 23)
+        Me.GridControl1.Location = New System.Drawing.Point(2, 29)
         Me.GridControl1.MainView = Me.GridView1
         Me.GridControl1.Name = "GridControl1"
-        Me.GridControl1.Size = New System.Drawing.Size(684, 110)
+        Me.GridControl1.Size = New System.Drawing.Size(684, 104)
         Me.GridControl1.TabIndex = 0
         Me.GridControl1.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView1})
         '
