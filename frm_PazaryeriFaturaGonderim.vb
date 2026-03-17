@@ -1793,7 +1793,7 @@ Public Class frm_PazaryeriFaturaGonderim
                     Continue For
                 End If
                 
-                ' Teslim durumu kontrolü
+                ' Teslim durumu kontrolü (sadece teslim güncellemesi için kullanılacak)
                 Dim mevcutDurum As String = If(row("TeslimDurumu") IsNot DBNull.Value, row("TeslimDurumu").ToString().Trim(), "")
                 Dim teslimTamamlandi As Boolean = mevcutDurum.ToUpperInvariant().Contains("TESLİM EDİLDİ") OrElse 
                                                    mevcutDurum.ToUpperInvariant().Contains("TESLIM EDILDI") OrElse
@@ -1802,11 +1802,8 @@ Public Class frm_PazaryeriFaturaGonderim
                                                    mevcutDurum.ToUpperInvariant().Contains("IPTAL") OrElse
                                                    mevcutDurum.ToUpperInvariant().Contains("CANCELLED")
                 
-                ' Teslim de tamamlandıysa API sorgulamaya gerek yok
-                If teslimTamamlandi Then
-                    atlanan += 1
-                    Continue For
-                End If
+                ' NOT: teslimTamamlandi olsa bile fatura durumu için API'ye sormamız gerekiyor!
+                ' Çünkü teslim edilmiş ama fatura henüz işaretlenmemiş olabilir
                 
                 ' Sipariş numarasından TY prefix'ini kaldır
                 Dim orderNumber As String = siparisNo
