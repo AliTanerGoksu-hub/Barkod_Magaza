@@ -1763,6 +1763,8 @@ Public Class frm_PazaryeriFaturaGonderim
             Dim faturaIsaretlenen As Integer = 0
             Dim atlanan As Integer = 0
             Dim hata As Integer = 0
+            Dim apiSorgusu As Integer = 0
+            Dim invoiceLinkBos As Integer = 0
             
             ' Auth bilgileri (fatura sorgusu için)
             Dim authRaw As String = api.ApiKey & ":" & api.ApiSecret
@@ -1820,6 +1822,7 @@ Public Class frm_PazaryeriFaturaGonderim
                     Dim invoiceLink As String = ""
                     Dim invoiceNumber As String = ""
                     
+                    apiSorgusu += 1
                     GetTrendyolSiparisDurumu(api, orderNumber, authBase64, userAgent, teslimDurumu, invoiceLink, invoiceNumber)
                     
                     ' Teslim durumunu güncelle (eğer henüz güncellenmemişse)
@@ -1830,24 +1833,13 @@ Public Class frm_PazaryeriFaturaGonderim
                     End If
                     
                     ' Fatura gönderildi mi kontrol et ve işaretle (eğer henüz işaretlenmemişse)
-                    ' Yöntem 1: API'den invoiceLink geldi mi?
-                    ' Yöntem 2: Teslim durumu "Teslim Edildi" içeriyorsa fatura kesinlikle kesilmiştir
-                    Dim faturaGonderilmis As Boolean = Not String.IsNullOrEmpty(invoiceLink)
-                    
-                    ' Teslim edilmiş siparişlerde fatura kesinlikle kesilmiştir
-                    If Not faturaGonderilmis AndAlso Not String.IsNullOrEmpty(teslimDurumu) Then
-                        Dim durumUpper As String = teslimDurumu.ToUpperInvariant()
-                        If durumUpper.Contains("TESLİM EDİLDİ") OrElse durumUpper.Contains("TESLIM EDILDI") OrElse 
-                           durumUpper.Contains("DELIVERED") Then
-                            faturaGonderilmis = True
-                            invoiceLink = "TESLIM_EDILDI"
-                        End If
-                    End If
-                    
-                    If Not bGonderildi AndAlso faturaGonderilmis Then
+                    ' API'den invoiceLink veya status=Invoiced/Shipped/Delivered geldi mi?
+                    If Not bGonderildi AndAlso Not String.IsNullOrEmpty(invoiceLink) Then
                         FaturaGonderildiOlarakIsaretle(nStokFisiID, "Trendyol", siparisNo, invoiceNumber, invoiceLink)
                         row("bGonderildi") = True
                         faturaIsaretlenen += 1
+                    ElseIf Not bGonderildi Then
+                        invoiceLinkBos += 1
                     End If
                     
                 Catch ex As Exception
@@ -1856,7 +1848,7 @@ Public Class frm_PazaryeriFaturaGonderim
             Next
             
             GridView1.RefreshData()
-            lblDurum.Text = "Tamamlandı! Teslim güncellenen: " & teslimGuncellenen & ", Fatura işaretlenen: " & faturaIsaretlenen & ", Atlanan: " & atlanan & ", Hata: " & hata
+            lblDurum.Text = "API: " & apiSorgusu & ", Fatura işaretlenen: " & faturaIsaretlenen & ", InvoiceLink boş: " & invoiceLinkBos & ", Atlanan: " & atlanan & ", Hata: " & hata
             Cursor = Cursors.Default
             
             ' Fatura işaretlenen varsa ve "Gönderilenleri Göster" checkbox'ı işaretli değilse listeyi yenile
