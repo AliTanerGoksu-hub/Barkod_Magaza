@@ -1903,6 +1903,96 @@ Public Class frm_PazaryeriFaturaGonderim
     End Sub
     
     ''' <summary>
+    ''' Trendyol API'den sipariş teslim durumunu çeker
+    ''' </summary>
+    Private Function GetTrendyolTeslimDurumu(api As PazaryeriAPI, orderNumber As String) As String
+        Try
+            ' Trendyol sipariş detayı API'si
+            Dim url As String = api.BaseUrl & "/integration/order/sellers/" & api.SellerId & "/orders?orderNumber=" & orderNumber
+            
+            Dim req As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
+            req.Method = "GET"
+            req.ContentType = "application/json"
+            req.Accept = "application/json"
+            req.Timeout = 30000
+            
+            ' Basic Auth
+            Dim credentials As String = api.ApiKey & ":" & api.ApiSecret
+            Dim base64Credentials As String = Convert.ToBase64String(Encoding.ASCII.GetBytes(credentials))
+            req.Headers.Add("Authorization", "Basic " & base64Credentials)
+            
+            Using resp As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
+                Using reader As New StreamReader(resp.GetResponseStream(), Encoding.UTF8)
+                    Dim json As String = reader.ReadToEnd()
+                    Dim obj As JObject = JObject.Parse(json)
+                    
+                    If obj("content") IsNot Nothing Then
+                        Dim contentArray As JArray = CType(obj("content"), JArray)
+                        If contentArray.Count > 0 Then
+                            Dim order As JObject = CType(contentArray(0), JObject)
+                            
+                            ' Sipariş durumu
+                            Dim status As String = ""
+                            If order("status") IsNot Nothing Then
+                                status = order("status").ToString()
+                            End If
+                            
+                            ' Kargo durumu
+                            Dim cargoTrackingNumber As String = ""
+                            Dim cargoProviderName As String = ""
+                            
+                            If order("cargoTrackingNumber") IsNot Nothing Then
+                                cargoTrackingNumber = order("cargoTrackingNumber").ToString()
+                            End If
+                            If order("cargoProviderName") IsNot Nothing Then
+                                cargoProviderName = order("cargoProviderName").ToString()
+                            End If
+                            
+                            ' lines içinden deliveredDate kontrol et
+                            Dim deliveredDate As String = ""
+                            If order("lines") IsNot Nothing Then
+                                Dim lines As JArray = CType(order("lines"), JArray)
+                                For Each line As JObject In lines
+                                    If line("deliveredDate") IsNot Nothing Then
+                                        deliveredDate = line("deliveredDate").ToString()
+                                        Exit For
+                                    End If
+                                Next
+                            End If
+                            
+                            ' Durum metnini oluştur
+                            Dim durumMetni As String = status
+                            If Not String.IsNullOrEmpty(deliveredDate) Then
+                                durumMetni = "Teslim Edildi"
+                            ElseIf status.ToUpperInvariant() = "DELIVERED" Then
+                                durumMetni = "Teslim Edildi"
+                            ElseIf status.ToUpperInvariant() = "SHIPPED" Then
+                                durumMetni = "Kargoda"
+                            ElseIf status.ToUpperInvariant() = "PICKING" Then
+                                durumMetni = "Hazırlanıyor"
+                            ElseIf status.ToUpperInvariant() = "INVOICED" Then
+                                durumMetni = "Faturalandı"
+                            ElseIf status.ToUpperInvariant() = "CANCELLED" Then
+                                durumMetni = "İptal"
+                            End If
+                            
+                            If Not String.IsNullOrEmpty(cargoTrackingNumber) Then
+                                durumMetni &= " (" & cargoProviderName & ": " & cargoTrackingNumber & ")"
+                            End If
+                            
+                            Return durumMetni
+                        End If
+                    End If
+                End Using
+            End Using
+            
+            Return ""
+        Catch ex As Exception
+            Return ""
+        End Try
+    End Function
+    
+    ''' <summary>
     ''' Teslim durumunu tbStokFisiMaster tablosuna kaydet
     ''' </summary>
     Private Sub KaydetTeslimDurumu(nStokFisiID As Integer, teslimDurumu As String)
