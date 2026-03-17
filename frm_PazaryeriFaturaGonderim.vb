@@ -1628,6 +1628,16 @@ Public Class frm_PazaryeriFaturaGonderim
         ListeleFaturalar()
     End Sub
     
+    ''' <summary>
+    ''' Gönderilenleri de Göster checkbox değiştiğinde listeyi yenile
+    ''' </summary>
+    Private Sub chkGonderilenleriGoster_CheckedChanged(sender As Object, e As EventArgs) Handles chkGonderilenleriGoster.CheckedChanged
+        ' Form yüklenmediyse işlem yapma
+        If Not formYuklendi Then Return
+        If dtFaturalar Is Nothing Then Return
+        ListeleFaturalar()
+    End Sub
+    
     ' ===== CONTEXT MENU EVENT HANDLERS =====
     
     ''' <summary>
