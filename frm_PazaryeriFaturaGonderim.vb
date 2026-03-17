@@ -1781,13 +1781,19 @@ Public Class frm_PazaryeriFaturaGonderim
                 Dim siparisNo As String = If(row("SiparisNo") IsNot DBNull.Value, row("SiparisNo").ToString().Trim(), "")
                 If String.IsNullOrEmpty(siparisNo) Then Continue For
                 
-                ' Fatura gönderildi mi kontrol et - ZATEN İŞARETLİ OLANLARI ATLA
+                ' Fatura gönderildi mi kontrol et - ZATEN İŞARETLİ OLANLARI ATLA (API sorgulamaya gerek yok)
                 Dim bGonderildi As Boolean = False
                 If row("bGonderildi") IsNot DBNull.Value Then
                     bGonderildi = CBool(row("bGonderildi"))
                 End If
                 
-                ' Zaten teslim edilmiş VE fatura gönderilmiş olanları atla (sorgulamaya gerek yok)
+                ' Zaten fatura gönderilmiş olanları kesinlikle atla - BU KRİTİK
+                If bGonderildi Then
+                    atlanan += 1
+                    Continue For
+                End If
+                
+                ' Teslim durumu kontrolü
                 Dim mevcutDurum As String = If(row("TeslimDurumu") IsNot DBNull.Value, row("TeslimDurumu").ToString().Trim(), "")
                 Dim teslimTamamlandi As Boolean = mevcutDurum.ToUpperInvariant().Contains("TESLİM EDİLDİ") OrElse 
                                                    mevcutDurum.ToUpperInvariant().Contains("TESLIM EDILDI") OrElse
@@ -1796,8 +1802,8 @@ Public Class frm_PazaryeriFaturaGonderim
                                                    mevcutDurum.ToUpperInvariant().Contains("IPTAL") OrElse
                                                    mevcutDurum.ToUpperInvariant().Contains("CANCELLED")
                 
-                ' Her ikisi de tamamlandıysa atla
-                If teslimTamamlandi AndAlso bGonderildi Then
+                ' Teslim de tamamlandıysa API sorgulamaya gerek yok
+                If teslimTamamlandi Then
                     atlanan += 1
                     Continue For
                 End If
@@ -1841,6 +1847,12 @@ Public Class frm_PazaryeriFaturaGonderim
             GridView1.RefreshData()
             lblDurum.Text = "Tamamlandı! Teslim güncellenen: " & teslimGuncellenen & ", Fatura işaretlenen: " & faturaIsaretlenen & ", Atlanan: " & atlanan & ", Hata: " & hata
             Cursor = Cursors.Default
+            
+            ' Fatura işaretlenen varsa ve "Gönderilenleri Göster" checkbox'ı işaretli değilse listeyi yenile
+            ' Böylece işaretlenen satırlar listeden kaldırılır
+            If faturaIsaretlenen > 0 AndAlso (chkGonderilenleriGoster Is Nothing OrElse Not chkGonderilenleriGoster.Checked) Then
+                ListeleFaturalar()
+            End If
             
         Catch ex As Exception
             Cursor = Cursors.Default
