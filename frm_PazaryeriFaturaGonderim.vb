@@ -1945,7 +1945,33 @@ Public Class frm_PazaryeriFaturaGonderim
                             teslimDurumu = durumMetni
                             
                             ' ===== FATURA DURUMU =====
-                            ' Sipariş seviyesinde invoiceLink kontrolü
+                            ' Trendyol'da fatura gönderildi mi kontrolü:
+                            ' 1. Status "Invoiced", "Shipped" veya "Delivered" ise fatura kesilmiş demektir
+                            ' 2. packageHistories içinde "Invoiced" durumu varsa fatura gönderilmiş
+                            
+                            Dim statusUpper As String = status.ToUpperInvariant()
+                            If statusUpper = "INVOICED" OrElse statusUpper = "SHIPPED" OrElse statusUpper = "DELIVERED" OrElse 
+                               statusUpper = "UNSUPPLIED" OrElse statusUpper = "RETURNED" OrElse statusUpper = "REPACK" OrElse
+                               statusUpper = "AT_TRENDYOL_DISTRIBUTION_CENTER" OrElse statusUpper = "AT_CARRIER" Then
+                                ' Bu durumlar faturanın kesildiğini gösterir
+                                invoiceLink = "INVOICED_" & status
+                            End If
+                            
+                            ' packageHistories içinde Invoiced kontrolü
+                            If String.IsNullOrEmpty(invoiceLink) AndAlso order("packageHistories") IsNot Nothing Then
+                                Dim histArray As JArray = CType(order("packageHistories"), JArray)
+                                For Each hist As JObject In histArray
+                                    If hist("status") IsNot Nothing Then
+                                        Dim histStatus As String = hist("status").ToString().ToUpperInvariant()
+                                        If histStatus = "INVOICED" Then
+                                            invoiceLink = "INVOICED_FROM_HISTORY"
+                                            Exit For
+                                        End If
+                                    End If
+                                Next
+                            End If
+                            
+                            ' Sipariş seviyesinde invoiceLink kontrolü (varsa)
                             If order("invoiceLink") IsNot Nothing AndAlso Not String.IsNullOrEmpty(order("invoiceLink").ToString()) Then
                                 invoiceLink = order("invoiceLink").ToString()
                             End If
