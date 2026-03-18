@@ -7722,21 +7722,21 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                         Dim nStokKdvOrani As Decimal = KeyCode.sorgu_sayi(drStok("nStokKdvOrani"), 0)
 
                         ' Maliyet ve Alış fiyatı hesapla - İSKONTO VE EK MALİYET DAHİL
-                        ' 1. Net Tutar = Brüt Tutar - İskonto Tutarı
-                        ' 2. Satır Ek Maliyet = lIlaveMaliyetTutar + lEkIlaveMaliyetTutar
-                        ' 3. Master Ek Maliyet Payı = (Satır Net Tutar / Fatura Net Tutar) * Toplam Ek Maliyet
-                        ' 4. Toplam Maliyet Tutar = Net Tutar + Satır Ek Maliyet + Master Ek Maliyet Payı
-                        ' 5. Net Birim Fiyat = Toplam Maliyet Tutar / Miktar
+                        ' KDV DAHİL/HARİÇ KONTROLÜ İLE
+                        ' ============================================================
+                        ' bAlisKdvDahil = True  → Faturadaki tutarlar KDV DAHİL girilmiş, KDV EKLEME
+                        ' bAlisKdvDahil = False → Faturadaki tutarlar KDV HARİÇ girilmiş, KDV EKLE
+                        ' ============================================================
                         Dim maliyet As Decimal = 0
                         Dim alis As Decimal = 0
                         
-                        ' İskontoyu düşerek net tutarı hesapla
+                        ' 1. İskontoyu düşerek net tutarı hesapla
                         Dim lNetTutarDetay As Decimal = lBrutTutar - lIskontoTutari
                         
-                        ' Satır bazlı ek maliyetleri ekle
+                        ' 2. Satır bazlı ek maliyetleri hesapla
                         Dim lSatirEkMaliyet As Decimal = lIlaveMaliyetTutar + lEkIlaveMaliyetTutar
                         
-                        ' Master seviyesindeki ek maliyetlerin bu satıra düşen payını hesapla
+                        ' 3. Master seviyesindeki ek maliyetlerin bu satıra düşen payını hesapla
                         ' Pay oranı = Satır Net Tutar / Fatura Toplam Net Tutar
                         Dim lMasterEkMaliyetToplam As Decimal = lEkmaliyet1 + lEkmaliyet3 + lEkmaliyet4
                         Dim lMasterEkMaliyetPay As Decimal = 0
@@ -7744,25 +7744,35 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                             lMasterEkMaliyetPay = (lNetTutarDetay / lNetTutar) * lMasterEkMaliyetToplam
                         End If
                         
-                        ' Toplam maliyet tutarı = Net Tutar + Satır Ek Maliyet + Master Ek Maliyet Payı
+                        ' 4. Toplam maliyet tutarı = Net Tutar + Satır Ek Maliyet + Master Ek Maliyet Payı
                         Dim lToplamMaliyetTutar As Decimal = lNetTutarDetay + lSatirEkMaliyet + lMasterEkMaliyetPay
                         
-                        ' Net birim fiyatı hesapla (iskontolu + ek maliyetli)
-                        Dim lNetBirimFiyat As Decimal = 0
-                        If lGirisMiktar1 > 0 Then
-                            lNetBirimFiyat = lToplamMaliyetTutar / lGirisMiktar1
-                        Else
-                            lNetBirimFiyat = lBrutFiyat ' Miktar yoksa brüt fiyatı kullan
-                        End If
-
+                        ' 5. KDV DAHİL/HARİÇ KONTROLÜ
                         If bAlisKdvDahil = True Then
-                            ' Alış fiyatı KDV dahil → maliyet = net birim fiyat (iskontolu + ek maliyetli)
-                            maliyet = lNetBirimFiyat
-                            alis = lNetBirimFiyat
+                            ' Alış fiyatı KDV DAHİL girilmiş
+                            ' Tutarlar zaten KDV dahil, tekrar KDV EKLEME
+                            ' Maliyet = (Net Tutar + Ek Maliyetler) / Miktar
+                            If lGirisMiktar1 > 0 Then
+                                maliyet = lToplamMaliyetTutar / lGirisMiktar1
+                                alis = maliyet
+                            Else
+                                maliyet = lBrutFiyat
+                                alis = lBrutFiyat
+                            End If
                         Else
-                            ' Alış fiyatı KDV hariç → KDV ekle
+                            ' Alış fiyatı KDV HARİÇ girilmiş
+                            ' Tutarlar KDV hariç, KDV EKLENMELİ
+                            ' Maliyet = ((Net Tutar + Ek Maliyetler) / Miktar) * (1 + KDV%)
+                            Dim lNetBirimFiyat As Decimal = 0
+                            If lGirisMiktar1 > 0 Then
+                                lNetBirimFiyat = lToplamMaliyetTutar / lGirisMiktar1
+                            Else
+                                lNetBirimFiyat = lBrutFiyat
+                            End If
+                            
+                            ' KDV ekle
                             maliyet = lNetBirimFiyat * ((nKdvOrani + 100) / 100)
-                            alis = lNetBirimFiyat * ((nKdvOrani + 100) / 100)
+                            alis = maliyet
                         End If
 
                         ' Mevcut fiyatları sorgula
