@@ -5317,7 +5317,7 @@ Public Class frm_personel
             'duzelt(txt_kullanici.Text, txt_sifre.Text, txt_ad.Text, txt_soyad.Text, sec_firma.EditValue, sec_donem.EditValue, sec_depo.EditValue, kayitno)
         End If
         'B2B Ayarlarini Kaydet
-        B2B_SaveCariGorunumAyari(txt_kod.EditValue.ToString())
+        B2B_SaveCariGorunumAyari(btn_hesap.EditValue.ToString())
 
     End Sub
     Private Sub kayit_duzelt()
@@ -5450,7 +5450,7 @@ Public Class frm_personel
             islem = "duzelt"
         End If
             'B2B Ayarlarini Yukle
-            B2B_LoadCariGorunumAyari(txt_kod.EditValue.ToString())
+            B2B_LoadCariGorunumAyari(btn_hesap.EditValue.ToString())
 
     End Sub
     Private Function sorgu_sayi(ByVal deger As Object, ByVal sonuc As Int64) As Decimal
