@@ -286,6 +286,41 @@ Public Class frm_personel
     Friend WithEvents txt_nTaksitGun As DevExpress.XtraEditors.SpinEdit
     Friend WithEvents sec_bOtomatikTaksit As DevExpress.XtraEditors.CheckEdit
     Friend WithEvents XtraTabPage7 As DevExpress.XtraTab.XtraTabPage
+    'B2B Cari Gorunum Ayarlari
+    Friend WithEvents XtraTabPageB2B As DevExpress.XtraTab.XtraTabPage
+    Friend WithEvents GroupControlB2BUrun As DevExpress.XtraEditors.GroupControl
+    Friend WithEvents GroupControlB2BDetay As DevExpress.XtraEditors.GroupControl
+    Friend WithEvents GroupControlB2BPdf As DevExpress.XtraEditors.GroupControl
+    Friend WithEvents GroupControlB2BSepet As DevExpress.XtraEditors.GroupControl
+    Friend WithEvents sec_bUrunBarkodGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bUrunStokKoduGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bUrunKategoriGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bUrunMarkaGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bUrunStokMiktariGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bUrunBirimFiyatGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bUrunListeFiyatiGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bUrunIskontoOraniGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bUrunRenkGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bUrunBedenGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bUrunResimGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bDetayBarkodGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bDetayStokKoduGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bDetayRenkKoduGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bDetayBedenKoduGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bDetayBirimCinsiGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bDetayKdvOraniGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bPdfBarkodGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bPdfStokKoduGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bPdfRenkKoduGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bPdfBedenKoduGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bPdfBirimCinsiGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bPdfKategoriGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bPdfMarkaGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bPdfResimGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bSepetBarkodGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bSepetStokKoduGoster As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_bSepetResimGoster As DevExpress.XtraEditors.CheckEdit
+
     Friend WithEvents Label50 As DevExpress.XtraEditors.LabelControl
     Friend WithEvents Label44 As DevExpress.XtraEditors.LabelControl
     Friend WithEvents sec_bNamazVaktiGosterme As DevExpress.XtraEditors.CheckEdit
@@ -703,6 +738,41 @@ Public Class frm_personel
         Me.sec_sSaticiRumuzu = New DevExpress.XtraEditors.LookUpEdit()
         Me.sec_bCalcVadeDagilim = New DevExpress.XtraEditors.CheckEdit()
         Me.XtraTabPage7 = New DevExpress.XtraTab.XtraTabPage()
+        'B2B Controls
+        Me.XtraTabPageB2B = New DevExpress.XtraTab.XtraTabPage()
+        Me.GroupControlB2BUrun = New DevExpress.XtraEditors.GroupControl()
+        Me.GroupControlB2BDetay = New DevExpress.XtraEditors.GroupControl()
+        Me.GroupControlB2BPdf = New DevExpress.XtraEditors.GroupControl()
+        Me.GroupControlB2BSepet = New DevExpress.XtraEditors.GroupControl()
+        Me.sec_bUrunBarkodGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bUrunStokKoduGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bUrunKategoriGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bUrunMarkaGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bUrunStokMiktariGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bUrunBirimFiyatGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bUrunListeFiyatiGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bUrunIskontoOraniGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bUrunRenkGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bUrunBedenGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bUrunResimGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bDetayBarkodGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bDetayStokKoduGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bDetayRenkKoduGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bDetayBedenKoduGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bDetayBirimCinsiGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bDetayKdvOraniGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bPdfBarkodGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bPdfStokKoduGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bPdfRenkKoduGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bPdfBedenKoduGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bPdfBirimCinsiGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bPdfKategoriGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bPdfMarkaGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bPdfResimGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bSepetBarkodGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bSepetStokKoduGoster = New DevExpress.XtraEditors.CheckEdit()
+        Me.sec_bSepetResimGoster = New DevExpress.XtraEditors.CheckEdit()
+
         Me.sec_bSatirKendiEnvanteri = New DevExpress.XtraEditors.CheckEdit()
         Me.sec_bPerYerelMuh = New DevExpress.XtraEditors.CheckEdit()
         Me.sec_bPerOtoMuh = New DevExpress.XtraEditors.CheckEdit()
@@ -1833,7 +1903,7 @@ Public Class frm_personel
         Me.XtraTabControl2.SelectedTabPage = Me.XtraTabPage3
         Me.XtraTabControl2.Size = New System.Drawing.Size(906, 282)
         Me.XtraTabControl2.TabIndex = 1
-        Me.XtraTabControl2.TabPages.AddRange(New DevExpress.XtraTab.XtraTabPage() {Me.XtraTabPage3, Me.XtraTabPage4, Me.XtraTabPage5, Me.XtraTabPage6, Me.XtraTabPage7})
+        Me.XtraTabControl2.TabPages.AddRange(New DevExpress.XtraTab.XtraTabPage() {Me.XtraTabPage3, Me.XtraTabPage4, Me.XtraTabPage5, Me.XtraTabPage6, Me.XtraTabPage7, Me.XtraTabPageB2B})
         '
         'XtraTabPage3
         '
@@ -3694,6 +3764,333 @@ Public Class frm_personel
         Me.XtraTabPage7.Size = New System.Drawing.Size(565, 114)
         Me.XtraTabPage7.Text = "GenelTanýmlar"
         '
+        'XtraTabPageB2B
+        '
+        Me.XtraTabPageB2B.Controls.Add(Me.GroupControlB2BUrun)
+        Me.XtraTabPageB2B.Controls.Add(Me.GroupControlB2BDetay)
+        Me.XtraTabPageB2B.Controls.Add(Me.GroupControlB2BPdf)
+        Me.XtraTabPageB2B.Controls.Add(Me.GroupControlB2BSepet)
+        Me.XtraTabPageB2B.Name = "XtraTabPageB2B"
+        Me.XtraTabPageB2B.Size = New System.Drawing.Size(904, 249)
+        Me.XtraTabPageB2B.Text = "B2B Ayarlari"
+        '
+        'GroupControlB2BUrun
+        '
+        Me.GroupControlB2BUrun.Controls.Add(Me.sec_bUrunBarkodGoster)
+        Me.GroupControlB2BUrun.Controls.Add(Me.sec_bUrunStokKoduGoster)
+        Me.GroupControlB2BUrun.Controls.Add(Me.sec_bUrunKategoriGoster)
+        Me.GroupControlB2BUrun.Controls.Add(Me.sec_bUrunMarkaGoster)
+        Me.GroupControlB2BUrun.Controls.Add(Me.sec_bUrunStokMiktariGoster)
+        Me.GroupControlB2BUrun.Controls.Add(Me.sec_bUrunBirimFiyatGoster)
+        Me.GroupControlB2BUrun.Controls.Add(Me.sec_bUrunListeFiyatiGoster)
+        Me.GroupControlB2BUrun.Controls.Add(Me.sec_bUrunIskontoOraniGoster)
+        Me.GroupControlB2BUrun.Controls.Add(Me.sec_bUrunRenkGoster)
+        Me.GroupControlB2BUrun.Controls.Add(Me.sec_bUrunBedenGoster)
+        Me.GroupControlB2BUrun.Controls.Add(Me.sec_bUrunResimGoster)
+        Me.GroupControlB2BUrun.Dock = System.Windows.Forms.DockStyle.None
+        Me.GroupControlB2BUrun.Location = New System.Drawing.Point(3, 3)
+        Me.GroupControlB2BUrun.Name = "GroupControlB2BUrun"
+        Me.GroupControlB2BUrun.Size = New System.Drawing.Size(220, 240)
+        Me.GroupControlB2BUrun.TabIndex = 0
+        Me.GroupControlB2BUrun.Text = "Urun Gorunum"
+        '
+        'GroupControlB2BDetay
+        '
+        Me.GroupControlB2BDetay.Controls.Add(Me.sec_bDetayBarkodGoster)
+        Me.GroupControlB2BDetay.Controls.Add(Me.sec_bDetayStokKoduGoster)
+        Me.GroupControlB2BDetay.Controls.Add(Me.sec_bDetayRenkKoduGoster)
+        Me.GroupControlB2BDetay.Controls.Add(Me.sec_bDetayBedenKoduGoster)
+        Me.GroupControlB2BDetay.Controls.Add(Me.sec_bDetayBirimCinsiGoster)
+        Me.GroupControlB2BDetay.Controls.Add(Me.sec_bDetayKdvOraniGoster)
+        Me.GroupControlB2BDetay.Dock = System.Windows.Forms.DockStyle.None
+        Me.GroupControlB2BDetay.Location = New System.Drawing.Point(226, 3)
+        Me.GroupControlB2BDetay.Name = "GroupControlB2BDetay"
+        Me.GroupControlB2BDetay.Size = New System.Drawing.Size(220, 150)
+        Me.GroupControlB2BDetay.TabIndex = 1
+        Me.GroupControlB2BDetay.Text = "Detay Gorunum"
+        '
+        'GroupControlB2BPdf
+        '
+        Me.GroupControlB2BPdf.Controls.Add(Me.sec_bPdfBarkodGoster)
+        Me.GroupControlB2BPdf.Controls.Add(Me.sec_bPdfStokKoduGoster)
+        Me.GroupControlB2BPdf.Controls.Add(Me.sec_bPdfRenkKoduGoster)
+        Me.GroupControlB2BPdf.Controls.Add(Me.sec_bPdfBedenKoduGoster)
+        Me.GroupControlB2BPdf.Controls.Add(Me.sec_bPdfBirimCinsiGoster)
+        Me.GroupControlB2BPdf.Controls.Add(Me.sec_bPdfKategoriGoster)
+        Me.GroupControlB2BPdf.Controls.Add(Me.sec_bPdfMarkaGoster)
+        Me.GroupControlB2BPdf.Controls.Add(Me.sec_bPdfResimGoster)
+        Me.GroupControlB2BPdf.Dock = System.Windows.Forms.DockStyle.None
+        Me.GroupControlB2BPdf.Location = New System.Drawing.Point(449, 3)
+        Me.GroupControlB2BPdf.Name = "GroupControlB2BPdf"
+        Me.GroupControlB2BPdf.Size = New System.Drawing.Size(220, 180)
+        Me.GroupControlB2BPdf.TabIndex = 2
+        Me.GroupControlB2BPdf.Text = "PDF Gorunum"
+        '
+        'GroupControlB2BSepet
+        '
+        Me.GroupControlB2BSepet.Controls.Add(Me.sec_bSepetBarkodGoster)
+        Me.GroupControlB2BSepet.Controls.Add(Me.sec_bSepetStokKoduGoster)
+        Me.GroupControlB2BSepet.Controls.Add(Me.sec_bSepetResimGoster)
+        Me.GroupControlB2BSepet.Dock = System.Windows.Forms.DockStyle.None
+        Me.GroupControlB2BSepet.Location = New System.Drawing.Point(672, 3)
+        Me.GroupControlB2BSepet.Name = "GroupControlB2BSepet"
+        Me.GroupControlB2BSepet.Size = New System.Drawing.Size(220, 90)
+        Me.GroupControlB2BSepet.TabIndex = 3
+        Me.GroupControlB2BSepet.Text = "Sepet Gorunum"
+        '
+        'sec_bUrunBarkodGoster
+        '
+        Me.sec_bUrunBarkodGoster.EditValue = False
+        Me.sec_bUrunBarkodGoster.Location = New System.Drawing.Point(10, 20)
+        Me.sec_bUrunBarkodGoster.Name = "sec_bUrunBarkodGoster"
+        Me.sec_bUrunBarkodGoster.Properties.Caption = "Urun Barkod Goster"
+        Me.sec_bUrunBarkodGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bUrunBarkodGoster.TabIndex = 0
+        '
+        'sec_bUrunStokKoduGoster
+        '
+        Me.sec_bUrunStokKoduGoster.EditValue = False
+        Me.sec_bUrunStokKoduGoster.Location = New System.Drawing.Point(10, 40)
+        Me.sec_bUrunStokKoduGoster.Name = "sec_bUrunStokKoduGoster"
+        Me.sec_bUrunStokKoduGoster.Properties.Caption = "Urun Stok Kodu Goster"
+        Me.sec_bUrunStokKoduGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bUrunStokKoduGoster.TabIndex = 1
+        '
+        'sec_bUrunKategoriGoster
+        '
+        Me.sec_bUrunKategoriGoster.EditValue = False
+        Me.sec_bUrunKategoriGoster.Location = New System.Drawing.Point(10, 60)
+        Me.sec_bUrunKategoriGoster.Name = "sec_bUrunKategoriGoster"
+        Me.sec_bUrunKategoriGoster.Properties.Caption = "Urun Kategori Goster"
+        Me.sec_bUrunKategoriGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bUrunKategoriGoster.TabIndex = 2
+        '
+        'sec_bUrunMarkaGoster
+        '
+        Me.sec_bUrunMarkaGoster.EditValue = False
+        Me.sec_bUrunMarkaGoster.Location = New System.Drawing.Point(10, 80)
+        Me.sec_bUrunMarkaGoster.Name = "sec_bUrunMarkaGoster"
+        Me.sec_bUrunMarkaGoster.Properties.Caption = "Urun Marka Goster"
+        Me.sec_bUrunMarkaGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bUrunMarkaGoster.TabIndex = 3
+        '
+        'sec_bUrunStokMiktariGoster
+        '
+        Me.sec_bUrunStokMiktariGoster.EditValue = False
+        Me.sec_bUrunStokMiktariGoster.Location = New System.Drawing.Point(10, 100)
+        Me.sec_bUrunStokMiktariGoster.Name = "sec_bUrunStokMiktariGoster"
+        Me.sec_bUrunStokMiktariGoster.Properties.Caption = "Urun Stok Miktari Goster"
+        Me.sec_bUrunStokMiktariGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bUrunStokMiktariGoster.TabIndex = 4
+        '
+        'sec_bUrunBirimFiyatGoster
+        '
+        Me.sec_bUrunBirimFiyatGoster.EditValue = False
+        Me.sec_bUrunBirimFiyatGoster.Location = New System.Drawing.Point(10, 120)
+        Me.sec_bUrunBirimFiyatGoster.Name = "sec_bUrunBirimFiyatGoster"
+        Me.sec_bUrunBirimFiyatGoster.Properties.Caption = "Urun Birim Fiyat Goster"
+        Me.sec_bUrunBirimFiyatGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bUrunBirimFiyatGoster.TabIndex = 5
+        '
+        'sec_bUrunListeFiyatiGoster
+        '
+        Me.sec_bUrunListeFiyatiGoster.EditValue = False
+        Me.sec_bUrunListeFiyatiGoster.Location = New System.Drawing.Point(10, 140)
+        Me.sec_bUrunListeFiyatiGoster.Name = "sec_bUrunListeFiyatiGoster"
+        Me.sec_bUrunListeFiyatiGoster.Properties.Caption = "Urun Liste Fiyati Goster"
+        Me.sec_bUrunListeFiyatiGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bUrunListeFiyatiGoster.TabIndex = 6
+        '
+        'sec_bUrunIskontoOraniGoster
+        '
+        Me.sec_bUrunIskontoOraniGoster.EditValue = False
+        Me.sec_bUrunIskontoOraniGoster.Location = New System.Drawing.Point(10, 160)
+        Me.sec_bUrunIskontoOraniGoster.Name = "sec_bUrunIskontoOraniGoster"
+        Me.sec_bUrunIskontoOraniGoster.Properties.Caption = "Urun Iskonto Orani Goster"
+        Me.sec_bUrunIskontoOraniGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bUrunIskontoOraniGoster.TabIndex = 7
+        '
+        'sec_bUrunRenkGoster
+        '
+        Me.sec_bUrunRenkGoster.EditValue = False
+        Me.sec_bUrunRenkGoster.Location = New System.Drawing.Point(10, 180)
+        Me.sec_bUrunRenkGoster.Name = "sec_bUrunRenkGoster"
+        Me.sec_bUrunRenkGoster.Properties.Caption = "Urun Renk Goster"
+        Me.sec_bUrunRenkGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bUrunRenkGoster.TabIndex = 8
+        '
+        'sec_bUrunBedenGoster
+        '
+        Me.sec_bUrunBedenGoster.EditValue = False
+        Me.sec_bUrunBedenGoster.Location = New System.Drawing.Point(10, 200)
+        Me.sec_bUrunBedenGoster.Name = "sec_bUrunBedenGoster"
+        Me.sec_bUrunBedenGoster.Properties.Caption = "Urun Beden Goster"
+        Me.sec_bUrunBedenGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bUrunBedenGoster.TabIndex = 9
+        '
+        'sec_bUrunResimGoster
+        '
+        Me.sec_bUrunResimGoster.EditValue = False
+        Me.sec_bUrunResimGoster.Location = New System.Drawing.Point(10, 220)
+        Me.sec_bUrunResimGoster.Name = "sec_bUrunResimGoster"
+        Me.sec_bUrunResimGoster.Properties.Caption = "Urun Resim Goster"
+        Me.sec_bUrunResimGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bUrunResimGoster.TabIndex = 10
+        '
+        'sec_bDetayBarkodGoster
+        '
+        Me.sec_bDetayBarkodGoster.EditValue = False
+        Me.sec_bDetayBarkodGoster.Location = New System.Drawing.Point(10, 20)
+        Me.sec_bDetayBarkodGoster.Name = "sec_bDetayBarkodGoster"
+        Me.sec_bDetayBarkodGoster.Properties.Caption = "Detay Barkod Goster"
+        Me.sec_bDetayBarkodGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bDetayBarkodGoster.TabIndex = 11
+        '
+        'sec_bDetayStokKoduGoster
+        '
+        Me.sec_bDetayStokKoduGoster.EditValue = False
+        Me.sec_bDetayStokKoduGoster.Location = New System.Drawing.Point(10, 40)
+        Me.sec_bDetayStokKoduGoster.Name = "sec_bDetayStokKoduGoster"
+        Me.sec_bDetayStokKoduGoster.Properties.Caption = "Detay Stok Kodu Goster"
+        Me.sec_bDetayStokKoduGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bDetayStokKoduGoster.TabIndex = 12
+        '
+        'sec_bDetayRenkKoduGoster
+        '
+        Me.sec_bDetayRenkKoduGoster.EditValue = False
+        Me.sec_bDetayRenkKoduGoster.Location = New System.Drawing.Point(10, 60)
+        Me.sec_bDetayRenkKoduGoster.Name = "sec_bDetayRenkKoduGoster"
+        Me.sec_bDetayRenkKoduGoster.Properties.Caption = "Detay Renk Kodu Goster"
+        Me.sec_bDetayRenkKoduGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bDetayRenkKoduGoster.TabIndex = 13
+        '
+        'sec_bDetayBedenKoduGoster
+        '
+        Me.sec_bDetayBedenKoduGoster.EditValue = False
+        Me.sec_bDetayBedenKoduGoster.Location = New System.Drawing.Point(10, 80)
+        Me.sec_bDetayBedenKoduGoster.Name = "sec_bDetayBedenKoduGoster"
+        Me.sec_bDetayBedenKoduGoster.Properties.Caption = "Detay Beden Kodu Goster"
+        Me.sec_bDetayBedenKoduGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bDetayBedenKoduGoster.TabIndex = 14
+        '
+        'sec_bDetayBirimCinsiGoster
+        '
+        Me.sec_bDetayBirimCinsiGoster.EditValue = False
+        Me.sec_bDetayBirimCinsiGoster.Location = New System.Drawing.Point(10, 100)
+        Me.sec_bDetayBirimCinsiGoster.Name = "sec_bDetayBirimCinsiGoster"
+        Me.sec_bDetayBirimCinsiGoster.Properties.Caption = "Detay Birim Cinsi Goster"
+        Me.sec_bDetayBirimCinsiGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bDetayBirimCinsiGoster.TabIndex = 15
+        '
+        'sec_bDetayKdvOraniGoster
+        '
+        Me.sec_bDetayKdvOraniGoster.EditValue = False
+        Me.sec_bDetayKdvOraniGoster.Location = New System.Drawing.Point(10, 120)
+        Me.sec_bDetayKdvOraniGoster.Name = "sec_bDetayKdvOraniGoster"
+        Me.sec_bDetayKdvOraniGoster.Properties.Caption = "Detay Kdv Orani Goster"
+        Me.sec_bDetayKdvOraniGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bDetayKdvOraniGoster.TabIndex = 16
+        '
+        'sec_bPdfBarkodGoster
+        '
+        Me.sec_bPdfBarkodGoster.EditValue = False
+        Me.sec_bPdfBarkodGoster.Location = New System.Drawing.Point(10, 20)
+        Me.sec_bPdfBarkodGoster.Name = "sec_bPdfBarkodGoster"
+        Me.sec_bPdfBarkodGoster.Properties.Caption = "PDF Barkod Goster"
+        Me.sec_bPdfBarkodGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bPdfBarkodGoster.TabIndex = 17
+        '
+        'sec_bPdfStokKoduGoster
+        '
+        Me.sec_bPdfStokKoduGoster.EditValue = False
+        Me.sec_bPdfStokKoduGoster.Location = New System.Drawing.Point(10, 40)
+        Me.sec_bPdfStokKoduGoster.Name = "sec_bPdfStokKoduGoster"
+        Me.sec_bPdfStokKoduGoster.Properties.Caption = "PDF Stok Kodu Goster"
+        Me.sec_bPdfStokKoduGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bPdfStokKoduGoster.TabIndex = 18
+        '
+        'sec_bPdfRenkKoduGoster
+        '
+        Me.sec_bPdfRenkKoduGoster.EditValue = False
+        Me.sec_bPdfRenkKoduGoster.Location = New System.Drawing.Point(10, 60)
+        Me.sec_bPdfRenkKoduGoster.Name = "sec_bPdfRenkKoduGoster"
+        Me.sec_bPdfRenkKoduGoster.Properties.Caption = "PDF Renk Kodu Goster"
+        Me.sec_bPdfRenkKoduGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bPdfRenkKoduGoster.TabIndex = 19
+        '
+        'sec_bPdfBedenKoduGoster
+        '
+        Me.sec_bPdfBedenKoduGoster.EditValue = False
+        Me.sec_bPdfBedenKoduGoster.Location = New System.Drawing.Point(10, 80)
+        Me.sec_bPdfBedenKoduGoster.Name = "sec_bPdfBedenKoduGoster"
+        Me.sec_bPdfBedenKoduGoster.Properties.Caption = "PDF Beden Kodu Goster"
+        Me.sec_bPdfBedenKoduGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bPdfBedenKoduGoster.TabIndex = 20
+        '
+        'sec_bPdfBirimCinsiGoster
+        '
+        Me.sec_bPdfBirimCinsiGoster.EditValue = False
+        Me.sec_bPdfBirimCinsiGoster.Location = New System.Drawing.Point(10, 100)
+        Me.sec_bPdfBirimCinsiGoster.Name = "sec_bPdfBirimCinsiGoster"
+        Me.sec_bPdfBirimCinsiGoster.Properties.Caption = "PDF Birim Cinsi Goster"
+        Me.sec_bPdfBirimCinsiGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bPdfBirimCinsiGoster.TabIndex = 21
+        '
+        'sec_bPdfKategoriGoster
+        '
+        Me.sec_bPdfKategoriGoster.EditValue = False
+        Me.sec_bPdfKategoriGoster.Location = New System.Drawing.Point(10, 120)
+        Me.sec_bPdfKategoriGoster.Name = "sec_bPdfKategoriGoster"
+        Me.sec_bPdfKategoriGoster.Properties.Caption = "PDF Kategori Goster"
+        Me.sec_bPdfKategoriGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bPdfKategoriGoster.TabIndex = 22
+        '
+        'sec_bPdfMarkaGoster
+        '
+        Me.sec_bPdfMarkaGoster.EditValue = False
+        Me.sec_bPdfMarkaGoster.Location = New System.Drawing.Point(10, 140)
+        Me.sec_bPdfMarkaGoster.Name = "sec_bPdfMarkaGoster"
+        Me.sec_bPdfMarkaGoster.Properties.Caption = "PDF Marka Goster"
+        Me.sec_bPdfMarkaGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bPdfMarkaGoster.TabIndex = 23
+        '
+        'sec_bPdfResimGoster
+        '
+        Me.sec_bPdfResimGoster.EditValue = False
+        Me.sec_bPdfResimGoster.Location = New System.Drawing.Point(10, 160)
+        Me.sec_bPdfResimGoster.Name = "sec_bPdfResimGoster"
+        Me.sec_bPdfResimGoster.Properties.Caption = "PDF Resim Goster"
+        Me.sec_bPdfResimGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bPdfResimGoster.TabIndex = 24
+        '
+        'sec_bSepetBarkodGoster
+        '
+        Me.sec_bSepetBarkodGoster.EditValue = False
+        Me.sec_bSepetBarkodGoster.Location = New System.Drawing.Point(10, 20)
+        Me.sec_bSepetBarkodGoster.Name = "sec_bSepetBarkodGoster"
+        Me.sec_bSepetBarkodGoster.Properties.Caption = "Sepet Barkod Goster"
+        Me.sec_bSepetBarkodGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bSepetBarkodGoster.TabIndex = 25
+        '
+        'sec_bSepetStokKoduGoster
+        '
+        Me.sec_bSepetStokKoduGoster.EditValue = False
+        Me.sec_bSepetStokKoduGoster.Location = New System.Drawing.Point(10, 40)
+        Me.sec_bSepetStokKoduGoster.Name = "sec_bSepetStokKoduGoster"
+        Me.sec_bSepetStokKoduGoster.Properties.Caption = "Sepet Stok Kodu Goster"
+        Me.sec_bSepetStokKoduGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bSepetStokKoduGoster.TabIndex = 26
+        '
+        'sec_bSepetResimGoster
+        '
+        Me.sec_bSepetResimGoster.EditValue = False
+        Me.sec_bSepetResimGoster.Location = New System.Drawing.Point(10, 60)
+        Me.sec_bSepetResimGoster.Name = "sec_bSepetResimGoster"
+        Me.sec_bSepetResimGoster.Properties.Caption = "Sepet Resim Goster"
+        Me.sec_bSepetResimGoster.Size = New System.Drawing.Size(200, 19)
+        Me.sec_bSepetResimGoster.TabIndex = 27
+
+        '
         'sec_bSatirKendiEnvanteri
         '
         Me.sec_bSatirKendiEnvanteri.Location = New System.Drawing.Point(6, 219)
@@ -4668,6 +5065,9 @@ Public Class frm_personel
         sec_sDil.EditValue = "TR"
         sec_bKendiFisNo.EditValue = 0
         sec_bDovizliFatura.EditValue = 0
+        'B2B Ayarlarini Temizle
+        B2B_ClearCariGorunumAyari()
+
     End Sub
     Private Sub ekle(ByVal PERSONELKODU As String, ByVal PERSONELADI As String, ByVal SIFRE As String, ByVal ONAY As String, ByVal BABAADI As String, ByVal ANNEADI As String, ByVal REFADI As String, ByVal ADRES As String, ByVal TELEFON1 As String, ByVal TELEFON2 As String, ByVal TELEFON3 As String, ByVal DEPARTMAN As String, ByVal GOREV As String, ByVal isegiris As DateTime, ByVal aktif As Integer, ByVal MobileAktif As Integer, ByVal brutmaas As Decimal, ByVal eklenti1 As Decimal, ByVal eklenti2 As Decimal, ByVal eklenti3 As Decimal, ByVal eklenti4 As Decimal, ByVal eklenti5 As Decimal, ByVal kesinti1 As Decimal, ByVal kesinti2 As Decimal, ByVal kesinti3 As Decimal, ByVal kesinti4 As Decimal, ByVal kesinti5 As Decimal, ByVal netmaas As Decimal, ByVal kullanici As Integer, ByVal saticirumuzu As String, ByVal magaza As String, ByVal hesapkodu As String, ByVal durum As String, ByVal sCariSinirla As String, ByVal sStokSinirla As String, ByVal sBankaSinirla As String, ByVal sFihristSinirla As String, ByVal sGiderSinirla As String, ByVal sDepo As String, ByVal sSubeMagaza As String, ByVal sHareketTipi As String, ByVal sCariSinifKoduSinirla As String, ByVal sAltFiyatTipi As String, ByVal sFiyat1 As String, ByVal sFiyat2 As String, ByVal sFiyat3 As String, ByVal sFiyat4 As String, ByVal sFiyat5 As String, ByVal sFiyatA As String, ByVal sFiyatM As String, ByVal sAktifFiyatTipi As String, ByVal EsFiyat1 As String, ByVal EsFiyat2 As String, ByVal EsFiyat3 As String, ByVal EsFiyat4 As String, ByVal EsFiyat5 As String, ByVal EsFiyatA As String, ByVal EsFiyatM As String, ByVal bCalcVadeDagilim As Integer, ByVal bOtomatikTaksit As Integer, ByVal bOtomatikPesinatDuzelt As Integer, ByVal bKdvKontrolluMaliyet As Integer, ByVal bSatirKontrol As Integer, ByVal bOtomatikMaliyetFiyati As Integer, ByVal bOtomatikAlisFiyati As Integer, ByVal bAlisFiyatiUyar As Integer, ByVal dteSonFaturaTarihi As DateTime, ByVal dteSonIrsaliyeTarihi As DateTime, ByVal dteSonStokFisiTarihi As DateTime, ByVal dteSonNakitKasaTarihi As DateTime, ByVal nFirmaGrupKodUzunlugu As Int64, ByVal nTaksitGun As Int64, ByVal nTaksitBaslangic As Int64, ByVal nTaksitSayi As Int64, ByVal sKrediliFiyatTipi As String, ByVal sPesinFiyatTipi As String, ByVal bMessageCheck As Integer, ByVal bNamazVaktiGosterme As Integer, ByVal bMagazalarChart As Integer, ByVal sSaticiRumuzu As String, ByVal PrinterTermal As String, ByVal PrinterDepo As String, ByVal FontSize As Decimal, ByVal bFiyatKdvHaric As Integer, ByVal bFaturaKdvDahil As Integer, ByVal bFaturaKdvSiz As Integer, ByVal bFaturaIskontosuz As Integer, ByVal nFaturaCiktiSatirSayisi As Int64, ByVal bIrsaliyeKdvSiz As Integer, ByVal bIrsaliyeIskontosuz As Integer, ByVal nIrsaliyeCiktiSatirSayisi As Int64, ByVal bStokFisiKdvSiz As Integer, ByVal bStokFisiIskontosuz As Integer, ByVal nStokFisiCiktiSatirSayisi As Integer, ByVal bTransferEnvanterKontrol As Integer, ByVal sRaporUzanti As String, ByVal sYaziIle As String, ByVal sBacodeStd As Integer, ByVal sDil As String, ByVal bKendiFisNo As Integer, ByVal bDovizliFatura As Integer, ByVal bAlisFatOtoMuh As Integer, ByVal bSatFatOtoMuh As Integer, ByVal bPerOtoMuh As Integer, ByVal bPerYerelMuh As Integer, ByVal bSatirKendiEnvanteri As Byte)
         Dim cmd As New OleDb.OleDbCommand
@@ -4916,6 +5316,9 @@ Public Class frm_personel
             duzelt(kayitno, txt_kod.EditValue, txt_ad.EditValue, txt_sifre.EditValue, txt_onayla.EditValue, txt_baba.EditValue, txt_anne.EditValue, txt_ref.EditValue, txt_adres.EditValue, txt_tel1.EditValue, txt_tel2.EditValue, txt_gsm.EditValue, sec_dept.EditValue, txt_gorev.EditValue, txt_isegiris.EditValue, sec_aktif.EditValue, sec_sMobileKullan.EditValue, txt_brutmaas.EditValue, txt_eklenti1.EditValue, txt_eklenti2.EditValue, txt_eklenti3.EditValue, txt_eklenti4.EditValue, txt_eklenti5.EditValue, txt_kesinti1.EditValue, txt_kesinti2.EditValue, txt_kesinti3.EditValue, txt_kesinti4.EditValue, txt_kesinti5.EditValue, txt_netmaas.EditValue, sec_kullanici.EditValue, sec_satici.EditValue, sec_depo.EditValue, btn_hesap.EditValue, sec_durum.Text, txt_sCariSinirla.Text, txt_sStokSinirla.Text, txt_sBankaSinirla.Text, txt_sFihristSinirla.Text, txt_sGiderSinirla.Text, sec_sDepo.EditValue, sec_sSubeMagaza.EditValue, sec_sHareketTipi.EditValue, sec_sSinifKodu.EditValue, sec_sFiyatTipi.EditValue, sec_sFiyatTipi1.EditValue, sec_sFiyatTipi2.EditValue, sec_sFiyatTipi3.EditValue, sec_sFiyatTipi4.EditValue, sec_sFiyatTipi5.EditValue, sec_sFiyatTipiA.EditValue, sec_sFiyatTipiM.EditValue, sec_sAktifFiyatTipi.EditValue, sec_sEFiyatTipi1.EditValue, sec_sEFiyatTipi2.EditValue, sec_sEFiyatTipi3.EditValue, sec_sEFiyatTipi4.EditValue, sec_sEFiyatTipi5.EditValue, sec_sEFiyatTipiA.EditValue, sec_sEFiyatTipiM.EditValue, sec_bCalcVadeDagilim.EditValue, sec_bOtomatikTaksit.EditValue, sec_bOtomatikPesinatDuzelt.EditValue, sec_bKdvKontrolluMaliyet.EditValue, sec_bSatirKontrol.EditValue, sec_bOtomatikMaliyetFiyati.EditValue, sec_bOtomatikAlisFiyati.EditValue, sec_bAlisFiyatiUyar.EditValue, sec_dteSonFaturaTarihi.EditValue, sec_dteSonIrsaliyeTarihi.EditValue, sec_dteSonStokFisiTarihi.EditValue, sec_dteSonNakitKasaTarihi.EditValue, sec_nFirmaGrupKodUzunlugu.EditValue, txt_nTaksitGun.EditValue, txt_nTaksitBaslangic.EditValue, txt_nTaksitSayi.EditValue, sec_sKrediliFiyatTipi.EditValue, sec_sPesinFiyatTipi.EditValue, sec_bMessageCheck.EditValue, sec_bNamazVaktiGosterme.EditValue, sec_bMagazalarChart.EditValue, sec_sSaticiRumuzu.EditValue, txt_PrinterTermal.EditValue, txt_PrinterDepo.EditValue, sec_FontSize.EditValue, sec_bFiyatKdvHaric.EditValue, sec_bFaturaKdvDahil.EditValue, sec_bFaturaKdvSiz.EditValue, sec_bFaturaIskontosuz.EditValue, txt_nFaturaCiktiSatirSayisi.EditValue, sec_bIrsaliyeKdvSiz.EditValue, sec_bIrsaliyeIskontosuz.EditValue, txt_nIrsaliyeCiktiSatirSayisi.EditValue, sec_bStokFisiKdvSiz.EditValue, sec_bStokFisiIskontosuz.EditValue, txt_nStokFisiCiktiSatirSayisi.EditValue, sec_bTransferEnvanterKontrol.EditValue, sec_sRaporUzanti.EditValue, sec_sYaziIle.EditValue, txt_sBacodeStd.EditValue, sec_sDil.EditValue, sec_bKendiFisNo.EditValue, sec_bDovizliFatura.EditValue, sec_bAlisFatOtoMuh.EditValue, sec_bSatFatOtoMuh.EditValue, sec_bPerOtoMuh.EditValue, sec_bPerYerelMuh.EditValue, CType(sec_bSatirKendiEnvanteri.EditValue, Byte))
             'duzelt(txt_kullanici.Text, txt_sifre.Text, txt_ad.Text, txt_soyad.Text, sec_firma.EditValue, sec_donem.EditValue, sec_depo.EditValue, kayitno)
         End If
+        'B2B Ayarlarini Kaydet
+        B2B_SaveCariGorunumAyari(txt_kod.EditValue.ToString())
+
     End Sub
     Private Sub kayit_duzelt()
         If GridView1.RowCount > 0 Then
@@ -5046,6 +5449,9 @@ Public Class frm_personel
             txt_kod.Select()
             islem = "duzelt"
         End If
+            'B2B Ayarlarini Yukle
+            B2B_LoadCariGorunumAyari(txt_kod.EditValue.ToString())
+
     End Sub
     Private Function sorgu_sayi(ByVal deger As Object, ByVal sonuc As Int64) As Decimal
         If deger.ToString = "" Then
@@ -5481,6 +5887,179 @@ Public Class frm_personel
             End If
         Catch ex As Exception
             MessageBox.Show("Bildirim tercihleri acilamadi: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+
+    'B2B Cari Gorunum Ayarlari Functions
+    Private Sub B2B_LoadCariGorunumAyari(ByVal sCariKodu As String)
+        Try
+            Dim ds As DataSet = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT * FROM tbB2BCariGorunumAyari WHERE sCariKodu = '" & sCariKodu & "'"))
+            If ds.Tables(0).Rows.Count > 0 Then
+                Dim dr As DataRow = ds.Tables(0).Rows(0)
+                sec_bUrunBarkodGoster.Checked = IIf(IsDBNull(dr("bUrunBarkodGoster")), False, dr("bUrunBarkodGoster"))
+                sec_bUrunStokKoduGoster.Checked = IIf(IsDBNull(dr("bUrunStokKoduGoster")), False, dr("bUrunStokKoduGoster"))
+                sec_bUrunKategoriGoster.Checked = IIf(IsDBNull(dr("bUrunKategoriGoster")), False, dr("bUrunKategoriGoster"))
+                sec_bUrunMarkaGoster.Checked = IIf(IsDBNull(dr("bUrunMarkaGoster")), False, dr("bUrunMarkaGoster"))
+                sec_bUrunStokMiktariGoster.Checked = IIf(IsDBNull(dr("bUrunStokMiktariGoster")), False, dr("bUrunStokMiktariGoster"))
+                sec_bUrunBirimFiyatGoster.Checked = IIf(IsDBNull(dr("bUrunBirimFiyatGoster")), False, dr("bUrunBirimFiyatGoster"))
+                sec_bUrunListeFiyatiGoster.Checked = IIf(IsDBNull(dr("bUrunListeFiyatiGoster")), False, dr("bUrunListeFiyatiGoster"))
+                sec_bUrunIskontoOraniGoster.Checked = IIf(IsDBNull(dr("bUrunIskontoOraniGoster")), False, dr("bUrunIskontoOraniGoster"))
+                sec_bUrunRenkGoster.Checked = IIf(IsDBNull(dr("bUrunRenkGoster")), False, dr("bUrunRenkGoster"))
+                sec_bUrunBedenGoster.Checked = IIf(IsDBNull(dr("bUrunBedenGoster")), False, dr("bUrunBedenGoster"))
+                sec_bUrunResimGoster.Checked = IIf(IsDBNull(dr("bUrunResimGoster")), False, dr("bUrunResimGoster"))
+                sec_bDetayBarkodGoster.Checked = IIf(IsDBNull(dr("bDetayBarkodGoster")), False, dr("bDetayBarkodGoster"))
+                sec_bDetayStokKoduGoster.Checked = IIf(IsDBNull(dr("bDetayStokKoduGoster")), False, dr("bDetayStokKoduGoster"))
+                sec_bDetayRenkKoduGoster.Checked = IIf(IsDBNull(dr("bDetayRenkKoduGoster")), False, dr("bDetayRenkKoduGoster"))
+                sec_bDetayBedenKoduGoster.Checked = IIf(IsDBNull(dr("bDetayBedenKoduGoster")), False, dr("bDetayBedenKoduGoster"))
+                sec_bDetayBirimCinsiGoster.Checked = IIf(IsDBNull(dr("bDetayBirimCinsiGoster")), False, dr("bDetayBirimCinsiGoster"))
+                sec_bDetayKdvOraniGoster.Checked = IIf(IsDBNull(dr("bDetayKdvOraniGoster")), False, dr("bDetayKdvOraniGoster"))
+                sec_bPdfBarkodGoster.Checked = IIf(IsDBNull(dr("bPdfBarkodGoster")), False, dr("bPdfBarkodGoster"))
+                sec_bPdfStokKoduGoster.Checked = IIf(IsDBNull(dr("bPdfStokKoduGoster")), False, dr("bPdfStokKoduGoster"))
+                sec_bPdfRenkKoduGoster.Checked = IIf(IsDBNull(dr("bPdfRenkKoduGoster")), False, dr("bPdfRenkKoduGoster"))
+                sec_bPdfBedenKoduGoster.Checked = IIf(IsDBNull(dr("bPdfBedenKoduGoster")), False, dr("bPdfBedenKoduGoster"))
+                sec_bPdfBirimCinsiGoster.Checked = IIf(IsDBNull(dr("bPdfBirimCinsiGoster")), False, dr("bPdfBirimCinsiGoster"))
+                sec_bPdfKategoriGoster.Checked = IIf(IsDBNull(dr("bPdfKategoriGoster")), False, dr("bPdfKategoriGoster"))
+                sec_bPdfMarkaGoster.Checked = IIf(IsDBNull(dr("bPdfMarkaGoster")), False, dr("bPdfMarkaGoster"))
+                sec_bPdfResimGoster.Checked = IIf(IsDBNull(dr("bPdfResimGoster")), False, dr("bPdfResimGoster"))
+                sec_bSepetBarkodGoster.Checked = IIf(IsDBNull(dr("bSepetBarkodGoster")), False, dr("bSepetBarkodGoster"))
+                sec_bSepetStokKoduGoster.Checked = IIf(IsDBNull(dr("bSepetStokKoduGoster")), False, dr("bSepetStokKoduGoster"))
+                sec_bSepetResimGoster.Checked = IIf(IsDBNull(dr("bSepetResimGoster")), False, dr("bSepetResimGoster"))
+            Else
+                B2B_ClearCariGorunumAyari()
+            End If
+        Catch ex As Exception
+            XtraMessageBox.Show("B2B Ayarlari yuklenirken hata: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub B2B_ClearCariGorunumAyari()
+        sec_bUrunBarkodGoster.Checked = False
+        sec_bUrunStokKoduGoster.Checked = False
+        sec_bUrunKategoriGoster.Checked = False
+        sec_bUrunMarkaGoster.Checked = False
+        sec_bUrunStokMiktariGoster.Checked = False
+        sec_bUrunBirimFiyatGoster.Checked = False
+        sec_bUrunListeFiyatiGoster.Checked = False
+        sec_bUrunIskontoOraniGoster.Checked = False
+        sec_bUrunRenkGoster.Checked = False
+        sec_bUrunBedenGoster.Checked = False
+        sec_bUrunResimGoster.Checked = False
+        sec_bDetayBarkodGoster.Checked = False
+        sec_bDetayStokKoduGoster.Checked = False
+        sec_bDetayRenkKoduGoster.Checked = False
+        sec_bDetayBedenKoduGoster.Checked = False
+        sec_bDetayBirimCinsiGoster.Checked = False
+        sec_bDetayKdvOraniGoster.Checked = False
+        sec_bPdfBarkodGoster.Checked = False
+        sec_bPdfStokKoduGoster.Checked = False
+        sec_bPdfRenkKoduGoster.Checked = False
+        sec_bPdfBedenKoduGoster.Checked = False
+        sec_bPdfBirimCinsiGoster.Checked = False
+        sec_bPdfKategoriGoster.Checked = False
+        sec_bPdfMarkaGoster.Checked = False
+        sec_bPdfResimGoster.Checked = False
+        sec_bSepetBarkodGoster.Checked = False
+        sec_bSepetStokKoduGoster.Checked = False
+        sec_bSepetResimGoster.Checked = False
+    End Sub
+
+    Private Sub B2B_SaveCariGorunumAyari(ByVal sCariKodu As String)
+        Try
+            Dim cmd As New OleDb.OleDbCommand
+            Dim con As New OleDb.OleDbConnection
+            cmd.Connection = con
+            con.ConnectionString = connection
+            If con.State = ConnectionState.Closed Then
+                con.Open()
+            End If
+
+            'Check if record exists
+            Dim ds As DataSet = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT COUNT(*) as cnt FROM tbB2BCariGorunumAyari WHERE sCariKodu = '" & sCariKodu & "'"))
+            Dim recordExists As Boolean = Convert.ToInt32(ds.Tables(0).Rows(0)("cnt")) > 0
+
+            Dim bUrunBarkod As Integer = IIf(sec_bUrunBarkodGoster.Checked, 1, 0)
+            Dim bUrunStokKodu As Integer = IIf(sec_bUrunStokKoduGoster.Checked, 1, 0)
+            Dim bUrunKategori As Integer = IIf(sec_bUrunKategoriGoster.Checked, 1, 0)
+            Dim bUrunMarka As Integer = IIf(sec_bUrunMarkaGoster.Checked, 1, 0)
+            Dim bUrunStokMiktari As Integer = IIf(sec_bUrunStokMiktariGoster.Checked, 1, 0)
+            Dim bUrunBirimFiyat As Integer = IIf(sec_bUrunBirimFiyatGoster.Checked, 1, 0)
+            Dim bUrunListeFiyati As Integer = IIf(sec_bUrunListeFiyatiGoster.Checked, 1, 0)
+            Dim bUrunIskontoOrani As Integer = IIf(sec_bUrunIskontoOraniGoster.Checked, 1, 0)
+            Dim bUrunRenk As Integer = IIf(sec_bUrunRenkGoster.Checked, 1, 0)
+            Dim bUrunBeden As Integer = IIf(sec_bUrunBedenGoster.Checked, 1, 0)
+            Dim bUrunResim As Integer = IIf(sec_bUrunResimGoster.Checked, 1, 0)
+            Dim bDetayBarkod As Integer = IIf(sec_bDetayBarkodGoster.Checked, 1, 0)
+            Dim bDetayStokKodu As Integer = IIf(sec_bDetayStokKoduGoster.Checked, 1, 0)
+            Dim bDetayRenkKodu As Integer = IIf(sec_bDetayRenkKoduGoster.Checked, 1, 0)
+            Dim bDetayBedenKodu As Integer = IIf(sec_bDetayBedenKoduGoster.Checked, 1, 0)
+            Dim bDetayBirimCinsi As Integer = IIf(sec_bDetayBirimCinsiGoster.Checked, 1, 0)
+            Dim bDetayKdvOrani As Integer = IIf(sec_bDetayKdvOraniGoster.Checked, 1, 0)
+            Dim bPdfBarkod As Integer = IIf(sec_bPdfBarkodGoster.Checked, 1, 0)
+            Dim bPdfStokKodu As Integer = IIf(sec_bPdfStokKoduGoster.Checked, 1, 0)
+            Dim bPdfRenkKodu As Integer = IIf(sec_bPdfRenkKoduGoster.Checked, 1, 0)
+            Dim bPdfBedenKodu As Integer = IIf(sec_bPdfBedenKoduGoster.Checked, 1, 0)
+            Dim bPdfBirimCinsi As Integer = IIf(sec_bPdfBirimCinsiGoster.Checked, 1, 0)
+            Dim bPdfKategori As Integer = IIf(sec_bPdfKategoriGoster.Checked, 1, 0)
+            Dim bPdfMarka As Integer = IIf(sec_bPdfMarkaGoster.Checked, 1, 0)
+            Dim bPdfResim As Integer = IIf(sec_bPdfResimGoster.Checked, 1, 0)
+            Dim bSepetBarkod As Integer = IIf(sec_bSepetBarkodGoster.Checked, 1, 0)
+            Dim bSepetStokKodu As Integer = IIf(sec_bSepetStokKoduGoster.Checked, 1, 0)
+            Dim bSepetResim As Integer = IIf(sec_bSepetResimGoster.Checked, 1, 0)
+
+            If recordExists Then
+                cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED UPDATE tbB2BCariGorunumAyari SET " & _
+                    "bUrunBarkodGoster = " & bUrunBarkod & ", " & _
+                    "bUrunStokKoduGoster = " & bUrunStokKodu & ", " & _
+                    "bUrunKategoriGoster = " & bUrunKategori & ", " & _
+                    "bUrunMarkaGoster = " & bUrunMarka & ", " & _
+                    "bUrunStokMiktariGoster = " & bUrunStokMiktari & ", " & _
+                    "bUrunBirimFiyatGoster = " & bUrunBirimFiyat & ", " & _
+                    "bUrunListeFiyatiGoster = " & bUrunListeFiyati & ", " & _
+                    "bUrunIskontoOraniGoster = " & bUrunIskontoOrani & ", " & _
+                    "bUrunRenkGoster = " & bUrunRenk & ", " & _
+                    "bUrunBedenGoster = " & bUrunBeden & ", " & _
+                    "bUrunResimGoster = " & bUrunResim & ", " & _
+                    "bDetayBarkodGoster = " & bDetayBarkod & ", " & _
+                    "bDetayStokKoduGoster = " & bDetayStokKodu & ", " & _
+                    "bDetayRenkKoduGoster = " & bDetayRenkKodu & ", " & _
+                    "bDetayBedenKoduGoster = " & bDetayBedenKodu & ", " & _
+                    "bDetayBirimCinsiGoster = " & bDetayBirimCinsi & ", " & _
+                    "bDetayKdvOraniGoster = " & bDetayKdvOrani & ", " & _
+                    "bPdfBarkodGoster = " & bPdfBarkod & ", " & _
+                    "bPdfStokKoduGoster = " & bPdfStokKodu & ", " & _
+                    "bPdfRenkKoduGoster = " & bPdfRenkKodu & ", " & _
+                    "bPdfBedenKoduGoster = " & bPdfBedenKodu & ", " & _
+                    "bPdfBirimCinsiGoster = " & bPdfBirimCinsi & ", " & _
+                    "bPdfKategoriGoster = " & bPdfKategori & ", " & _
+                    "bPdfMarkaGoster = " & bPdfMarka & ", " & _
+                    "bPdfResimGoster = " & bPdfResim & ", " & _
+                    "bSepetBarkodGoster = " & bSepetBarkod & ", " & _
+                    "bSepetStokKoduGoster = " & bSepetStokKodu & ", " & _
+                    "bSepetResimGoster = " & bSepetResim & ", " & _
+                    "dtGuncelleme = GETDATE() " & _
+                    "WHERE sCariKodu = '" & sCariKodu & "'")
+            Else
+                cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO tbB2BCariGorunumAyari " & _
+                    "(sCariKodu, bUrunBarkodGoster, bUrunStokKoduGoster, bUrunKategoriGoster, bUrunMarkaGoster, " & _
+                    "bUrunStokMiktariGoster, bUrunBirimFiyatGoster, bUrunListeFiyatiGoster, bUrunIskontoOraniGoster, " & _
+                    "bUrunRenkGoster, bUrunBedenGoster, bUrunResimGoster, bDetayBarkodGoster, bDetayStokKoduGoster, " & _
+                    "bDetayRenkKoduGoster, bDetayBedenKoduGoster, bDetayBirimCinsiGoster, bDetayKdvOraniGoster, " & _
+                    "bPdfBarkodGoster, bPdfStokKoduGoster, bPdfRenkKoduGoster, bPdfBedenKoduGoster, bPdfBirimCinsiGoster, " & _
+                    "bPdfKategoriGoster, bPdfMarkaGoster, bPdfResimGoster, bSepetBarkodGoster, bSepetStokKoduGoster, " & _
+                    "bSepetResimGoster, dtGuncelleme) VALUES ('" & sCariKodu & "', " & _
+                    bUrunBarkod & ", " & bUrunStokKodu & ", " & bUrunKategori & ", " & bUrunMarka & ", " & _
+                    bUrunStokMiktari & ", " & bUrunBirimFiyat & ", " & bUrunListeFiyati & ", " & bUrunIskontoOrani & ", " & _
+                    bUrunRenk & ", " & bUrunBeden & ", " & bUrunResim & ", " & bDetayBarkod & ", " & bDetayStokKodu & ", " & _
+                    bDetayRenkKodu & ", " & bDetayBedenKodu & ", " & bDetayBirimCinsi & ", " & bDetayKdvOrani & ", " & _
+                    bPdfBarkod & ", " & bPdfStokKodu & ", " & bPdfRenkKodu & ", " & bPdfBedenKodu & ", " & bPdfBirimCinsi & ", " & _
+                    bPdfKategori & ", " & bPdfMarka & ", " & bPdfResim & ", " & bSepetBarkod & ", " & bSepetStokKodu & ", " & _
+                    bSepetResim & ", GETDATE())")
+            End If
+            cmd.ExecuteNonQuery()
+            con.Close()
+        Catch ex As Exception
+            XtraMessageBox.Show("B2B Ayarlari kaydedilirken hata: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
