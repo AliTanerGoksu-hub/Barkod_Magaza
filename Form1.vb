@@ -745,6 +745,7 @@ Public Class Form1
     Friend WithEvents BarButtonItem470 As DevExpress.XtraBars.BarButtonItem
     Friend WithEvents BarButtonItem471 As DevExpress.XtraBars.BarButtonItem
     Friend WithEvents btnETicaretParametre As DevExpress.XtraBars.BarButtonItem
+    Friend WithEvents btnB2BAyarlar As DevExpress.XtraBars.BarButtonItem
     Friend WithEvents RibbonControl1 As DevExpress.XtraBars.Ribbon.RibbonControl
     Friend WithEvents RibbonPage1 As DevExpress.XtraBars.Ribbon.RibbonPage
     Friend WithEvents RibbonPageGroup2 As DevExpress.XtraBars.Ribbon.RibbonPageGroup
@@ -1163,6 +1164,7 @@ Public Class Form1
         Me.BarButtonItem450 = New DevExpress.XtraBars.BarButtonItem()
         Me.BarButtonItem471 = New DevExpress.XtraBars.BarButtonItem()
         Me.btnETicaretParametre = New DevExpress.XtraBars.BarButtonItem()
+        Me.btnB2BAyarlar = New DevExpress.XtraBars.BarButtonItem()
         Me.BarSubItem41 = New DevExpress.XtraBars.BarSubItem()
         Me.ctbUlke = New DevExpress.XtraBars.BarButtonItem()
         Me.ctbIl = New DevExpress.XtraBars.BarButtonItem()
@@ -2898,6 +2900,14 @@ Public Class Form1
         Me.btnETicaretParametre.Id = 714
         Me.btnETicaretParametre.ImageIndex = 76
         Me.btnETicaretParametre.Name = "btnETicaretParametre"
+        '
+        'btnB2BAyarlar
+        '
+        Me.btnB2BAyarlar.Caption = "B2B Ayarları"
+        Me.btnB2BAyarlar.Id = 9990
+        Me.btnB2BAyarlar.ImageIndex = 76
+        Me.btnB2BAyarlar.Name = "btnB2BAyarlar"
+
         '
         'BarSubItem41
         '
@@ -7295,6 +7305,7 @@ Public Class Form1
         Me.RibbonPageGroup3.ItemLinks.Add(Me.BarButtonItem264)
         Me.RibbonPageGroup3.ItemLinks.Add(Me.BarButtonItem249)
         Me.RibbonPageGroup3.ItemLinks.Add(Me.btnETicaretParametre)
+        Me.RibbonPageGroup3.ItemLinks.Add(Me.btnB2BAyarlar)
         Me.RibbonPageGroup3.Name = "RibbonPageGroup3"
         Me.RibbonPageGroup3.Text = "Tanımlar"
         '
@@ -10391,18 +10402,6 @@ Public Class Form1
         End Try
 
         ' ==================================================
-        ' B2B AYARLARI BUTONU (Tanimlar menusunde)
-        ' ==================================================
-        Try
-            Dim btnB2BAyarlar As New DevExpress.XtraBars.BarButtonItem()
-            btnB2BAyarlar.Caption = "B2B Ayarları"
-            btnB2BAyarlar.Id = 9990
-            AddHandler btnB2BAyarlar.ItemClick, AddressOf btnB2BAyarlar_Click
-            RibbonControl1.Items.Add(btnB2BAyarlar)
-            RibbonPageGroupTanımlar.ItemLinks.Add(btnB2BAyarlar)
-        Catch ex As Exception
-            Debug.WriteLine("B2B Ayarlari butonu eklenemedi: " & ex.Message)
-        End Try
 
 
         ' ==================================================
@@ -24507,7 +24506,7 @@ CleanupExcel:
     ' tbB2BParametre tablosu üzerinden genel B2B ayarlarını yönetir
     ' ============================================================================
 
-    Private Sub btnB2BAyarlar_Click(ByVal sender As Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs)
+    Private Sub btnB2BAyarlar_Click(sender As Object, e As DevExpress.XtraBars.ItemClickEventArgs) Handles btnB2BAyarlar.ItemClick
         Try
             ShowB2BAyarlarForm()
         Catch ex As Exception
