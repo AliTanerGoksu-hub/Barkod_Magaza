@@ -13,6 +13,8 @@ Public Class frm_tbSinif
     Dim adapter As New OleDb.OleDbDataAdapter
     Dim DS As New DataSet
     Dim satir
+    Private sLogoUrl As String = ""
+    Private WithEvents OpenFileDialog1 As New OpenFileDialog()
     Private Function sorgu_kriter_string(ByVal deger As String, ByVal kriter As String) As String
         Dim sorgu_kriter As String = ""
         If kriter = "Baþlar" Then
@@ -89,7 +91,7 @@ Public Class frm_tbSinif
         GridControl1.Focus()
         GridControl1.Select()
     End Sub
-    Private Sub tbSinif_kaydet_yeni(ByVal table As String, ByVal no As Integer, ByVal sSinifKodu As String, ByVal sAciklama As String, ByVal bSatisYapilamaz As Byte)
+    Private Sub tbSinif_kaydet_yeni(ByVal table As String, ByVal no As Integer, ByVal sSinifKodu As String, ByVal sAciklama As String, ByVal bSatisYapilamaz As Byte, Optional ByVal logoUrl As String = "")
         Dim cmd As New OleDb.OleDbCommand
         Dim con As New OleDb.OleDbConnection
         cmd.Connection = con
@@ -101,11 +103,11 @@ Public Class frm_tbSinif
             cmd.CommandText = sorgu_query("SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO " & table & no & " (sSinifKodu, sAciklama, bSatisYapilamaz) VALUES     ('" & sSinifKodu & "', N'" & sAciklama & "', " & bSatisYapilamaz & ")")
             cmd.ExecuteNonQuery()
         Else
-            cmd.CommandText = sorgu_query("SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO " & table & no & " (sSinifKodu, sAciklama) VALUES     ('" & sSinifKodu & "', '" & sAciklama & "')")
+            cmd.CommandText = sorgu_query("SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO " & table & no & " (sSinifKodu, sAciklama, sLogoUrl) VALUES     ('" & sSinifKodu & "', '" & sAciklama & "', '" & logoUrl & "')")
             cmd.ExecuteNonQuery()
         End If
     End Sub
-    Private Sub tbSinif_kaydet_duzelt(ByVal table As String, ByVal no As Integer, ByVal sSinifKodu As String, ByVal sAciklama As String, ByVal bSatisYapilamaz As Byte)
+    Private Sub tbSinif_kaydet_duzelt(ByVal table As String, ByVal no As Integer, ByVal sSinifKodu As String, ByVal sAciklama As String, ByVal bSatisYapilamaz As Byte, Optional ByVal logoUrl As String = "")
         Dim cmd As New OleDb.OleDbCommand
         Dim con As New OleDb.OleDbConnection
         cmd.Connection = con
@@ -116,9 +118,9 @@ Public Class frm_tbSinif
         If table = "tbMSinif" Then
             cmd.CommandText = sorgu_query("SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED UPDATE " & table & no & " SET sSinifKodu = '" & sSinifKodu & "', sAciklama = N'" & sAciklama & "', bSatisYapilamaz = " & bSatisYapilamaz & " Where sSinifKodu = '" & sSinifKodu & "'")
         ElseIf table = "tbSSinif" Then
-            cmd.CommandText = sorgu_query("SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED UPDATE " & table & no & " SET sSinifKodu = '" & sSinifKodu & "', " & sinif_iliski_sorgu_hazilar() & " sAciklama = '" & sAciklama & "' Where sSinifKodu = '" & sSinifKodu & "'")
+            cmd.CommandText = sorgu_query("SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED UPDATE " & table & no & " SET sSinifKodu = '" & sSinifKodu & "', " & sinif_iliski_sorgu_hazilar() & " sAciklama = '" & sAciklama & "', sLogoUrl = '" & logoUrl & "' Where sSinifKodu = '" & sSinifKodu & "'")
         Else
-            cmd.CommandText = sorgu_query("SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED UPDATE " & table & no & " SET sSinifKodu = '" & sSinifKodu & "', sAciklama = '" & sAciklama & "' Where sSinifKodu = '" & sSinifKodu & "'")
+            cmd.CommandText = sorgu_query("SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED UPDATE " & table & no & " SET sSinifKodu = '" & sSinifKodu & "', sAciklama = '" & sAciklama & "', sLogoUrl = '" & logoUrl & "' Where sSinifKodu = '" & sSinifKodu & "'")
         End If
         cmd.ExecuteNonQuery()
         con.Close()
@@ -209,6 +211,7 @@ Public Class frm_tbSinif
         txt_sSinifKodu.EditValue = ""
         txt_sAciklama.EditValue = ""
         txt_bSatisYapilamaz.EditValue = 0
+        sLogoUrl = ""
         islem = "Ekle"
         txt_sSinifKodu.Focus()
         txt_sSinifKodu.Select()
@@ -277,6 +280,11 @@ Public Class frm_tbSinif
         Dim dr As DataRow = GridView1.GetDataRow(GridView1.FocusedRowHandle)
         txt_sSinifKodu.EditValue = dr("sSinifKodu")
         txt_sAciklama.EditValue = dr("sAciklama")
+        Try
+            sLogoUrl = If(IsDBNull(dr("sLogoUrl")), "", dr("sLogoUrl").ToString())
+        Catch
+            sLogoUrl = ""
+        End Try
         txt_sSinifKodu.Enabled = False
         If Table = "tbMSinif" Then
             txt_bSatisYapilamaz.Visible = True
@@ -391,11 +399,11 @@ Public Class frm_tbSinif
     End Function
     Private Sub kaydet()
         If islem = "Ekle" Then
-            tbSinif_kaydet_yeni(Table, No, txt_sSinifKodu.EditValue, txt_sAciklama.EditValue, txt_bSatisYapilamaz.EditValue)
+            tbSinif_kaydet_yeni(Table, No, txt_sSinifKodu.EditValue, txt_sAciklama.EditValue, txt_bSatisYapilamaz.EditValue, sLogoUrl)
             Dataload_tbSinif(Table, No)
             GridView1.FocusedRowHandle = GridView1.RowCount - 1
         ElseIf islem = "Düzelt" Then
-            tbSinif_kaydet_duzelt(Table, No, txt_sSinifKodu.EditValue, txt_sAciklama.EditValue, txt_bSatisYapilamaz.EditValue)
+            tbSinif_kaydet_duzelt(Table, No, txt_sSinifKodu.EditValue, txt_sAciklama.EditValue, txt_bSatisYapilamaz.EditValue, sLogoUrl)
             Dataload_tbSinif(Table, No)
             GridView1.FocusedRowHandle = satir
         End If
@@ -779,4 +787,73 @@ Public Class frm_tbSinif
     Private Sub sinif15_EditValueChanged(sender As System.Object, e As System.EventArgs) Handles sinif15.EditValueChanged
         sinif_iliskileri(14) = sinif15.Text
     End Sub
+
+    ' ========== R2 RESIM YUKLEME (sLogoUrl icin) ==========
+    Public Async Sub ResimSecVeYukle()
+        Try
+            OpenFileDialog1.Filter = "Resim Dosyalarý|*.jpg;*.jpeg;*.png;*.gif;*.bmp|Tüm Dosyalar|*.*"
+            OpenFileDialog1.Title = "Sýnýf Logo Resmi Seç"
+            
+            If OpenFileDialog1.ShowDialog() <> Windows.Forms.DialogResult.OK Then
+                Exit Sub
+            End If
+            
+            Dim sourcePath As String = OpenFileDialog1.FileName
+            Dim sSinifKodu As String = Trim(txt_sSinifKodu.EditValue.ToString())
+            
+            If String.IsNullOrEmpty(sSinifKodu) Then
+                XtraMessageBox.Show("Lütfen önce sýnýf kodu girin!", "Uyarý", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Exit Sub
+            End If
+            
+            ' Resmi byte array'e çevir
+            Dim imageBytes As Byte()
+            Using fs As New System.IO.FileStream(sourcePath, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                ReDim imageBytes(CInt(fs.Length) - 1)
+                fs.Read(imageBytes, 0, imageBytes.Length)
+            End Using
+            
+            ' Firma klasör adýný al
+            Dim klasor As String = ""
+            Try
+                Dim sOnayKodu As String = ""
+                Try
+                    sOnayKodu = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("Software").OpenSubKey("BusinessSmart").OpenSubKey("Key").GetValue("sOnayKodu").ToString()
+                Catch
+                    sOnayKodu = ""
+                End Try
+                
+                If Not String.IsNullOrEmpty(sOnayKodu) AndAlso sOnayKodu <> "0" Then
+                    Try
+                        Dim licenseResult = ApiClient.VerifyLicense(sOnayKodu, "")
+                        If licenseResult.IsValid AndAlso Not String.IsNullOrEmpty(licenseResult.OzelNot) Then
+                            klasor = licenseResult.OzelNot.Trim()
+                        End If
+                    Catch
+                    End Try
+                End If
+            Catch
+                klasor = ""
+            End Try
+            
+            ' R2'ye upload et
+            Dim fileName As String = Table & No.ToString() & "_" & sSinifKodu.Replace(" ", "_").Replace("/", "_") & "_logo.jpg"
+            Dim objectKey As String = If(String.IsNullOrEmpty(klasor),
+                "sinif_logos/" & fileName,
+                "sinif_logos/" & klasor & "/" & fileName)
+            
+            Dim uploadedUrl As String = Await R2Helpers.R2UploadFromBytesAsync(imageBytes, objectKey, "image/jpeg")
+            
+            If Not String.IsNullOrEmpty(uploadedUrl) Then
+                sLogoUrl = uploadedUrl
+                XtraMessageBox.Show("Resim baþarýyla yüklendi!" & vbCrLf & vbCrLf & "URL: " & uploadedUrl, "Baþarýlý", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Else
+                XtraMessageBox.Show("Resim yüklenemedi!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
+            
+        Catch ex As Exception
+            XtraMessageBox.Show("Resim yükleme hatasý: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
 End Class
