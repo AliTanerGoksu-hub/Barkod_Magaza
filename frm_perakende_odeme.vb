@@ -4440,9 +4440,41 @@ Public Class frm_perakende_odeme
                 End Using
                 
                 LogYaz("PosOdemeOnayBekle", "POS Payment ID: " & If(currentPosPaymentId, "NULL"))
+            Catch wex As System.Net.WebException
+                Dim errorResponse As String = ""
+                Dim hataMesaji As String = wex.Message
+                Try
+                    If wex.Response IsNot Nothing Then
+                        Using reader As New StreamReader(wex.Response.GetResponseStream())
+                            errorResponse = reader.ReadToEnd()
+                        End Using
+                        LogYaz("PosOdemeOnayBekle", "POS API Hata Yaniti: " & errorResponse)
+                        
+                        ' Parse error message from JSON response
+                        Try
+                            Dim errObj As JObject = JObject.Parse(errorResponse)
+                            If errObj.SelectToken("message") IsNot Nothing Then
+                                hataMesaji = errObj.SelectToken("message").ToString()
+                            ElseIf errObj.SelectToken("error") IsNot Nothing Then
+                                hataMesaji = errObj.SelectToken("error").ToString()
+                            ElseIf errObj.SelectToken("errors") IsNot Nothing Then
+                                hataMesaji = errObj.SelectToken("errors").ToString()
+                            End If
+                        Catch
+                            If Not String.IsNullOrEmpty(errorResponse) Then hataMesaji = errorResponse
+                        End Try
+                    End If
+                Catch
+                End Try
+                LogYaz("PosOdemeOnayBekle", "POS gonderme hatasi: " & wex.Message & " - " & errorResponse)
+                
+                Dim sonuc = MessageBox.Show("POS'a odeme gonderilemedi." & vbCrLf & vbCrLf & 
+                    "Hata: " & hataMesaji & vbCrLf & vbCrLf &
+                    "Yine de odemeyi kaydetmek istiyor musunuz?",
+                    "POS Hatasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                Return (sonuc = DialogResult.Yes)
             Catch posEx As Exception
                 LogYaz("PosOdemeOnayBekle", "POS gonderme hatasi: " & posEx.Message)
-                ' POS'a gonderme basarisiz - kullaniciya sor
                 Dim sonuc = MessageBox.Show("POS'a odeme gonderilemedi." & vbCrLf & vbCrLf & 
                     "Hata: " & posEx.Message & vbCrLf & vbCrLf &
                     "Yine de odemeyi kaydetmek istiyor musunuz?",
