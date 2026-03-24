@@ -125,6 +125,10 @@ Partial Class frm_tbSinif
         Me.btn_vazgec = New DevExpress.XtraEditors.SimpleButton()
         Me.btn_kaydet = New DevExpress.XtraEditors.SimpleButton()
         Me.XtraTabPage3 = New DevExpress.XtraTab.XtraTabPage()
+        Me.XtraTabPageLogo = New DevExpress.XtraTab.XtraTabPage()
+        Me.lblLogoInfo = New DevExpress.XtraEditors.LabelControl()
+        Me.picLogo = New DevExpress.XtraEditors.PictureEdit()
+        Me.btnLogoEkle = New DevExpress.XtraEditors.SimpleButton()
         Me.SimpleButton4 = New DevExpress.XtraEditors.SimpleButton()
         Me.SimpleButton3 = New DevExpress.XtraEditors.SimpleButton()
         Me.sec_sSinifKodu2 = New DevExpress.XtraEditors.GridLookUpEdit()
@@ -312,7 +316,7 @@ Partial Class frm_tbSinif
         Me.XtraTabControl1.SelectedTabPage = Me.XtraTabPage1
         Me.XtraTabControl1.Size = New System.Drawing.Size(1232, 396)
         Me.XtraTabControl1.TabIndex = 1
-        Me.XtraTabControl1.TabPages.AddRange(New DevExpress.XtraTab.XtraTabPage() {Me.XtraTabPage1, Me.XtraTabPage2, Me.XtraTabPage3})
+        Me.XtraTabControl1.TabPages.AddRange(New DevExpress.XtraTab.XtraTabPage() {Me.XtraTabPage1, Me.XtraTabPage2, Me.XtraTabPage3, Me.XtraTabPageLogo})
         '
         'XtraTabPage1
         '
@@ -1142,6 +1146,41 @@ Partial Class frm_tbSinif
         Me.XtraTabPage3.Size = New System.Drawing.Size(1230, 357)
         Me.XtraTabPage3.Text = "Kaydýr"
         '
+        'XtraTabPageLogo
+        '
+        Me.XtraTabPageLogo.Controls.Add(Me.picLogo)
+        Me.XtraTabPageLogo.Controls.Add(Me.btnLogoEkle)
+        Me.XtraTabPageLogo.Controls.Add(Me.lblLogoInfo)
+        Me.XtraTabPageLogo.Name = "XtraTabPageLogo"
+        Me.XtraTabPageLogo.Size = New System.Drawing.Size(1058, 489)
+        Me.XtraTabPageLogo.Text = "Logo"
+        '
+        'lblLogoInfo
+        '
+        Me.lblLogoInfo.Location = New System.Drawing.Point(20, 20)
+        Me.lblLogoInfo.Name = "lblLogoInfo"
+        Me.lblLogoInfo.Size = New System.Drawing.Size(200, 13)
+        Me.lblLogoInfo.TabIndex = 0
+        Me.lblLogoInfo.Text = "Sýnýf için logo resmi yükleyebilirsiniz:"
+        '
+        'picLogo
+        '
+        Me.picLogo.Location = New System.Drawing.Point(20, 50)
+        Me.picLogo.Name = "picLogo"
+        Me.picLogo.Properties.ShowMenu = False
+        Me.picLogo.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom
+        Me.picLogo.Size = New System.Drawing.Size(200, 200)
+        Me.picLogo.TabIndex = 1
+        '
+        'btnLogoEkle
+        '
+        Me.btnLogoEkle.Location = New System.Drawing.Point(20, 260)
+        Me.btnLogoEkle.Name = "btnLogoEkle"
+        Me.btnLogoEkle.Size = New System.Drawing.Size(150, 30)
+        Me.btnLogoEkle.TabIndex = 2
+        Me.btnLogoEkle.Text = "Logo Seç ve Yükle"
+
+        '
         'SimpleButton4
         '
         Me.SimpleButton4.Image = CType(resources.GetObject("SimpleButton4.Image"), System.Drawing.Image)
@@ -1588,6 +1627,10 @@ Partial Class frm_tbSinif
     Friend WithEvents barDockControlLeft As DevExpress.XtraBars.BarDockControl
     Friend WithEvents barDockControlRight As DevExpress.XtraBars.BarDockControl
     Friend WithEvents XtraTabPage3 As DevExpress.XtraTab.XtraTabPage
+    Friend WithEvents XtraTabPageLogo As DevExpress.XtraTab.XtraTabPage
+    Friend WithEvents lblLogoInfo As DevExpress.XtraEditors.LabelControl
+    Friend WithEvents picLogo As DevExpress.XtraEditors.PictureEdit
+    Friend WithEvents btnLogoEkle As DevExpress.XtraEditors.SimpleButton
     Friend WithEvents SimpleButton4 As DevExpress.XtraEditors.SimpleButton
     Friend WithEvents SimpleButton3 As DevExpress.XtraEditors.SimpleButton
     Friend WithEvents sec_sSinifKodu2 As DevExpress.XtraEditors.GridLookUpEdit

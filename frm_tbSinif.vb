@@ -15,10 +15,6 @@ Public Class frm_tbSinif
     Dim satir
     Private sLogoUrl As String = ""
     Private WithEvents OpenFileDialog1 As New OpenFileDialog()
-    Private WithEvents XtraTabPageLogo As DevExpress.XtraTab.XtraTabPage
-    Private WithEvents btnLogoEkle As DevExpress.XtraEditors.SimpleButton
-    Private WithEvents picLogo As DevExpress.XtraEditors.PictureEdit
-    Private WithEvents lblLogoInfo As DevExpress.XtraEditors.LabelControl
     Private Function sorgu_kriter_string(ByVal deger As String, ByVal kriter As String) As String
         Dim sorgu_kriter As String = ""
         If kriter = "Baþlar" Then
@@ -359,37 +355,7 @@ Public Class frm_tbSinif
             Dim dr As DataRow = GridView1.GetDataRow(GridView1.FocusedRowHandle)
             tbSinif_kaydet_sil(Table, No, dr("sSinifKodu"))
             Dataload_tbSinif(Table, No)
-        
-        ' ========== LOGO TAB OLUSTUR ==========
-        XtraTabPageLogo = New DevExpress.XtraTab.XtraTabPage()
-        XtraTabPageLogo.Text = "Logo"
-        XtraTabPageLogo.Name = "XtraTabPageLogo"
-        XtraTabControl1.TabPages.Add(XtraTabPageLogo)
         XtraTabPageLogo.PageVisible = False
-        
-        ' Logo bilgi etiketi
-        lblLogoInfo = New DevExpress.XtraEditors.LabelControl()
-        lblLogoInfo.Text = "Sýnýf için logo resmi yükleyebilirsiniz:"
-        lblLogoInfo.Location = New System.Drawing.Point(20, 20)
-        lblLogoInfo.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Default
-        XtraTabPageLogo.Controls.Add(lblLogoInfo)
-        
-        ' Logo onizleme PictureEdit
-        picLogo = New DevExpress.XtraEditors.PictureEdit()
-        picLogo.Size = New System.Drawing.Size(200, 200)
-        picLogo.Location = New System.Drawing.Point(20, 50)
-        picLogo.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom
-        picLogo.Properties.ShowMenu = False
-        picLogo.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple
-        XtraTabPageLogo.Controls.Add(picLogo)
-        
-        ' Logo Ekle butonu
-        btnLogoEkle = New DevExpress.XtraEditors.SimpleButton()
-        btnLogoEkle.Text = "Logo Seç ve Yükle"
-        btnLogoEkle.Size = New System.Drawing.Size(150, 30)
-        btnLogoEkle.Location = New System.Drawing.Point(20, 260)
-        AddHandler btnLogoEkle.Click, AddressOf btnLogoEkle_Click
-        XtraTabPageLogo.Controls.Add(btnLogoEkle)
         
         End If
     End Sub
