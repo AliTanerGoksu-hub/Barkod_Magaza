@@ -15,8 +15,10 @@ Public Class frm_tbSinif
     Dim satir
     Private sLogoUrl As String = ""
     Private WithEvents OpenFileDialog1 As New OpenFileDialog()
+    Private WithEvents XtraTabPageLogo As DevExpress.XtraTab.XtraTabPage
     Private WithEvents btnLogoEkle As DevExpress.XtraEditors.SimpleButton
     Private WithEvents picLogo As DevExpress.XtraEditors.PictureEdit
+    Private WithEvents lblLogoInfo As DevExpress.XtraEditors.LabelControl
     Private Function sorgu_kriter_string(ByVal deger As String, ByVal kriter As String) As String
         Dim sorgu_kriter As String = ""
         If kriter = "Baþlar" Then
@@ -202,6 +204,7 @@ Public Class frm_tbSinif
     Private Sub kayit_ekle()
         XtraTabPage1.PageVisible = False
         XtraTabPage2.PageVisible = True
+        XtraTabPageLogo.PageVisible = True
         XtraTabControl1.SelectedTabPage = XtraTabPage2
         sec_sSinifNo.Enabled = False
         txt_sSinifKodu.Enabled = True
@@ -281,6 +284,7 @@ Public Class frm_tbSinif
         iliski_sinif_isim()
         XtraTabPage1.PageVisible = False
         XtraTabPage2.PageVisible = True
+        XtraTabPageLogo.PageVisible = True
         XtraTabControl1.SelectedTabPage = XtraTabPage2
         sec_sSinifNo.Enabled = False
         satir = GridView1.FocusedRowHandle
@@ -332,6 +336,7 @@ Public Class frm_tbSinif
         XtraTabPage1.PageVisible = False
         XtraTabPage2.PageVisible = False
         XtraTabPage3.PageVisible = True
+        XtraTabPageLogo.PageVisible = False
         XtraTabControl1.SelectedTabPage = XtraTabPage3
         dataload_tbSSinif(Table, No)
         sec_sSinifNo.Enabled = False
@@ -355,21 +360,37 @@ Public Class frm_tbSinif
             tbSinif_kaydet_sil(Table, No, dr("sSinifKodu"))
             Dataload_tbSinif(Table, No)
         
-        ' Logo Ekle butonu dinamik olustur
-        btnLogoEkle = New DevExpress.XtraEditors.SimpleButton()
-        btnLogoEkle.Text = "Logo Ekle"
-        btnLogoEkle.Size = New System.Drawing.Size(100, 23)
-        btnLogoEkle.Location = New System.Drawing.Point(250, 93)
-        AddHandler btnLogoEkle.Click, AddressOf btnLogoEkle_Click
-        XtraTabPage2.Controls.Add(btnLogoEkle)
+        ' ========== LOGO TAB OLUSTUR ==========
+        XtraTabPageLogo = New DevExpress.XtraTab.XtraTabPage()
+        XtraTabPageLogo.Text = "Logo"
+        XtraTabPageLogo.Name = "XtraTabPageLogo"
+        XtraTabControl1.TabPages.Add(XtraTabPageLogo)
+        XtraTabPageLogo.PageVisible = False
+        
+        ' Logo bilgi etiketi
+        lblLogoInfo = New DevExpress.XtraEditors.LabelControl()
+        lblLogoInfo.Text = "Sýnýf için logo resmi yükleyebilirsiniz:"
+        lblLogoInfo.Location = New System.Drawing.Point(20, 20)
+        lblLogoInfo.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Default
+        XtraTabPageLogo.Controls.Add(lblLogoInfo)
         
         ' Logo onizleme PictureEdit
         picLogo = New DevExpress.XtraEditors.PictureEdit()
-        picLogo.Size = New System.Drawing.Size(80, 80)
-        picLogo.Location = New System.Drawing.Point(250, 120)
+        picLogo.Size = New System.Drawing.Size(200, 200)
+        picLogo.Location = New System.Drawing.Point(20, 50)
         picLogo.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom
         picLogo.Properties.ShowMenu = False
-        XtraTabPage2.Controls.Add(picLogo)
+        picLogo.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple
+        XtraTabPageLogo.Controls.Add(picLogo)
+        
+        ' Logo Ekle butonu
+        btnLogoEkle = New DevExpress.XtraEditors.SimpleButton()
+        btnLogoEkle.Text = "Logo Seç ve Yükle"
+        btnLogoEkle.Size = New System.Drawing.Size(150, 30)
+        btnLogoEkle.Location = New System.Drawing.Point(20, 260)
+        AddHandler btnLogoEkle.Click, AddressOf btnLogoEkle_Click
+        XtraTabPageLogo.Controls.Add(btnLogoEkle)
+        
         End If
     End Sub
     Private Sub kayit_sil()
@@ -403,21 +424,6 @@ Public Class frm_tbSinif
                 dr1 = Nothing
                 Dataload_tbSinif(Table, No)
         
-        ' Logo Ekle butonu dinamik olustur
-        btnLogoEkle = New DevExpress.XtraEditors.SimpleButton()
-        btnLogoEkle.Text = "Logo Ekle"
-        btnLogoEkle.Size = New System.Drawing.Size(100, 23)
-        btnLogoEkle.Location = New System.Drawing.Point(250, 93)
-        AddHandler btnLogoEkle.Click, AddressOf btnLogoEkle_Click
-        XtraTabPage2.Controls.Add(btnLogoEkle)
-        
-        ' Logo onizleme PictureEdit
-        picLogo = New DevExpress.XtraEditors.PictureEdit()
-        picLogo.Size = New System.Drawing.Size(80, 80)
-        picLogo.Location = New System.Drawing.Point(250, 120)
-        picLogo.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom
-        picLogo.Properties.ShowMenu = False
-        XtraTabPage2.Controls.Add(picLogo)
             End If
         End If
     End Sub
@@ -450,46 +456,17 @@ Public Class frm_tbSinif
             tbSinif_kaydet_yeni(Table, No, txt_sSinifKodu.EditValue, txt_sAciklama.EditValue, txt_bSatisYapilamaz.EditValue, sLogoUrl)
             Dataload_tbSinif(Table, No)
         
-        ' Logo Ekle butonu dinamik olustur
-        btnLogoEkle = New DevExpress.XtraEditors.SimpleButton()
-        btnLogoEkle.Text = "Logo Ekle"
-        btnLogoEkle.Size = New System.Drawing.Size(100, 23)
-        btnLogoEkle.Location = New System.Drawing.Point(250, 93)
-        AddHandler btnLogoEkle.Click, AddressOf btnLogoEkle_Click
-        XtraTabPage2.Controls.Add(btnLogoEkle)
-        
-        ' Logo onizleme PictureEdit
-        picLogo = New DevExpress.XtraEditors.PictureEdit()
-        picLogo.Size = New System.Drawing.Size(80, 80)
-        picLogo.Location = New System.Drawing.Point(250, 120)
-        picLogo.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom
-        picLogo.Properties.ShowMenu = False
-        XtraTabPage2.Controls.Add(picLogo)
             GridView1.FocusedRowHandle = GridView1.RowCount - 1
         ElseIf islem = "Düzelt" Then
             tbSinif_kaydet_duzelt(Table, No, txt_sSinifKodu.EditValue, txt_sAciklama.EditValue, txt_bSatisYapilamaz.EditValue, sLogoUrl)
             Dataload_tbSinif(Table, No)
         
-        ' Logo Ekle butonu dinamik olustur
-        btnLogoEkle = New DevExpress.XtraEditors.SimpleButton()
-        btnLogoEkle.Text = "Logo Ekle"
-        btnLogoEkle.Size = New System.Drawing.Size(100, 23)
-        btnLogoEkle.Location = New System.Drawing.Point(250, 93)
-        AddHandler btnLogoEkle.Click, AddressOf btnLogoEkle_Click
-        XtraTabPage2.Controls.Add(btnLogoEkle)
-        
-        ' Logo onizleme PictureEdit
-        picLogo = New DevExpress.XtraEditors.PictureEdit()
-        picLogo.Size = New System.Drawing.Size(80, 80)
-        picLogo.Location = New System.Drawing.Point(250, 120)
-        picLogo.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom
-        picLogo.Properties.ShowMenu = False
-        XtraTabPage2.Controls.Add(picLogo)
             GridView1.FocusedRowHandle = satir
         End If
         XtraTabControl1.SelectedTabPageIndex = 0
         XtraTabPage1.PageVisible = True
         XtraTabPage2.PageVisible = False
+        XtraTabPageLogo.PageVisible = False
         sec_sSinifNo.Enabled = True
         XtraTabControl1.SelectedTabPageIndex = 0
         GridControl1.Focus()
@@ -545,21 +522,6 @@ Public Class frm_tbSinif
         Try
             Dataload_tbSinif(Table, No)
         
-        ' Logo Ekle butonu dinamik olustur
-        btnLogoEkle = New DevExpress.XtraEditors.SimpleButton()
-        btnLogoEkle.Text = "Logo Ekle"
-        btnLogoEkle.Size = New System.Drawing.Size(100, 23)
-        btnLogoEkle.Location = New System.Drawing.Point(250, 93)
-        AddHandler btnLogoEkle.Click, AddressOf btnLogoEkle_Click
-        XtraTabPage2.Controls.Add(btnLogoEkle)
-        
-        ' Logo onizleme PictureEdit
-        picLogo = New DevExpress.XtraEditors.PictureEdit()
-        picLogo.Size = New System.Drawing.Size(80, 80)
-        picLogo.Location = New System.Drawing.Point(250, 120)
-        picLogo.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom
-        picLogo.Properties.ShowMenu = False
-        XtraTabPage2.Controls.Add(picLogo)
             dataload_tbSSinif(Table, No)
             lbl_sSinifKodu.Text = sorgu_sSinifTipi_kontrol(Table, No)
         Catch ex As Exception
@@ -568,6 +530,7 @@ Public Class frm_tbSinif
     Private Sub btn_vazgec_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_vazgec.Click
         XtraTabPage1.PageVisible = True
         XtraTabPage2.PageVisible = False
+        XtraTabPageLogo.PageVisible = False
         sec_sSinifNo.Enabled = True
     End Sub
     Private Sub btn_kaydet_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_kaydet.Click
@@ -685,21 +648,6 @@ Public Class frm_tbSinif
     Private Sub frm_tbSinif_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Dataload_tbSinif(Table, No)
         
-        ' Logo Ekle butonu dinamik olustur
-        btnLogoEkle = New DevExpress.XtraEditors.SimpleButton()
-        btnLogoEkle.Text = "Logo Ekle"
-        btnLogoEkle.Size = New System.Drawing.Size(100, 23)
-        btnLogoEkle.Location = New System.Drawing.Point(250, 93)
-        AddHandler btnLogoEkle.Click, AddressOf btnLogoEkle_Click
-        XtraTabPage2.Controls.Add(btnLogoEkle)
-        
-        ' Logo onizleme PictureEdit
-        picLogo = New DevExpress.XtraEditors.PictureEdit()
-        picLogo.Size = New System.Drawing.Size(80, 80)
-        picLogo.Location = New System.Drawing.Point(250, 120)
-        picLogo.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom
-        picLogo.Properties.ShowMenu = False
-        XtraTabPage2.Controls.Add(picLogo)
         If Table = "tbMSinif" Then
             colbSatisYapilamaz.OptionsColumn.ShowInCustomizationForm = True
             colbSatisYapilamaz.Visible = True
@@ -805,6 +753,7 @@ Public Class frm_tbSinif
     Private Sub SimpleButton4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SimpleButton4.Click
         XtraTabPage1.PageVisible = True
         XtraTabPage2.PageVisible = False
+        XtraTabPageLogo.PageVisible = False
         XtraTabPage3.PageVisible = False
         sec_sSinifNo.Enabled = True
     End Sub
