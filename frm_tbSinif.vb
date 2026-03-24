@@ -815,7 +815,7 @@ Public Class frm_tbSinif
         sinif_iliskileri(14) = sinif15.Text
     End Sub
 
-    Private Sub btnLogoEkle_Click(sender As Object, e As EventArgs)
+    Private Sub btnLogoEkle_Click(sender As Object, e As EventArgs) Handles btnLogoEkle.Click
         ResimSecVeYukle()
     End Sub
     
