@@ -746,6 +746,7 @@ Public Class Form1
     Friend WithEvents BarButtonItem471 As DevExpress.XtraBars.BarButtonItem
     Friend WithEvents btnETicaretParametre As DevExpress.XtraBars.BarButtonItem
     Friend WithEvents btnB2BAyarlar As DevExpress.XtraBars.BarButtonItem
+    Friend WithEvents btnFirmaLogo As DevExpress.XtraBars.BarButtonItem
     Friend WithEvents RibbonControl1 As DevExpress.XtraBars.Ribbon.RibbonControl
     Friend WithEvents RibbonPage1 As DevExpress.XtraBars.Ribbon.RibbonPage
     Friend WithEvents RibbonPageGroup2 As DevExpress.XtraBars.Ribbon.RibbonPageGroup
@@ -1165,6 +1166,7 @@ Public Class Form1
         Me.BarButtonItem471 = New DevExpress.XtraBars.BarButtonItem()
         Me.btnETicaretParametre = New DevExpress.XtraBars.BarButtonItem()
         Me.btnB2BAyarlar = New DevExpress.XtraBars.BarButtonItem()
+        Me.btnFirmaLogo = New DevExpress.XtraBars.BarButtonItem()
         Me.BarSubItem41 = New DevExpress.XtraBars.BarSubItem()
         Me.ctbUlke = New DevExpress.XtraBars.BarButtonItem()
         Me.ctbIl = New DevExpress.XtraBars.BarButtonItem()
@@ -2907,6 +2909,13 @@ Public Class Form1
         Me.btnB2BAyarlar.Id = 9990
         Me.btnB2BAyarlar.ImageIndex = 76
         Me.btnB2BAyarlar.Name = "btnB2BAyarlar"
+        '
+        'btnFirmaLogo
+        '
+        Me.btnFirmaLogo.Caption = "Firma Logo"
+        Me.btnFirmaLogo.Id = 9991
+        Me.btnFirmaLogo.ImageIndex = 77
+        Me.btnFirmaLogo.Name = "btnFirmaLogo"
 
         '
         'BarSubItem41
@@ -7306,6 +7315,7 @@ Public Class Form1
         Me.RibbonPageGroup3.ItemLinks.Add(Me.BarButtonItem249)
         Me.RibbonPageGroup3.ItemLinks.Add(Me.btnETicaretParametre)
         Me.RibbonPageGroup3.ItemLinks.Add(Me.btnB2BAyarlar)
+        Me.RibbonPageGroup3.ItemLinks.Add(Me.btnFirmaLogo)
         Me.RibbonPageGroup3.Name = "RibbonPageGroup3"
         Me.RibbonPageGroup3.Text = "Tanımlar"
         '
@@ -25072,6 +25082,188 @@ CleanupExcel:
             con.Close()
         Catch ex As Exception
             Throw New Exception("B2B Gruplama kaydetme hatası: " & ex.Message)
+        End Try
+    End Sub
+
+#End Region
+
+
+
+
+    Private Sub btnFirmaLogo_Click(sender As Object, e As DevExpress.XtraBars.ItemClickEventArgs) Handles btnFirmaLogo.ItemClick
+        FirmaLogoYukle()
+    End Sub
+
+#Region "Firma Logo Yükleme"
+
+    ' ============================================================================
+    ' FİRMA LOGO YÜKLEME - tbParamGenel.sLogoUrl
+    ' ============================================================================
+    
+    Private sParamLogoUrl As String = ""
+    Private WithEvents OpenFileDialogLogo As New OpenFileDialog()
+    
+    Private Sub FirmaLogoYukle()
+        Try
+            ' Logo yükleme formu oluştur
+            Dim frmLogo As New DevExpress.XtraEditors.XtraForm()
+            frmLogo.Text = "Firma Logo Yükleme"
+            frmLogo.Size = New System.Drawing.Size(400, 400)
+            frmLogo.StartPosition = FormStartPosition.CenterScreen
+            frmLogo.FormBorderStyle = FormBorderStyle.FixedDialog
+            frmLogo.MaximizeBox = False
+            frmLogo.MinimizeBox = False
+            
+            ' Mevcut logo URL'yi yükle
+            Try
+                Dim ds As DataSet = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT sLogoUrl FROM tbParamGenel WHERE sMagazaKodu = '" & sDepo & "'"))
+                If ds.Tables(0).Rows.Count > 0 Then
+                    sParamLogoUrl = If(IsDBNull(ds.Tables(0).Rows(0)("sLogoUrl")), "", ds.Tables(0).Rows(0)("sLogoUrl").ToString())
+                End If
+            Catch
+                sParamLogoUrl = ""
+            End Try
+            
+            ' Bilgi etiketi
+            Dim lblInfo As New DevExpress.XtraEditors.LabelControl()
+            lblInfo.Text = "Firma logosu seçin ve yükleyin:"
+            lblInfo.Location = New System.Drawing.Point(20, 20)
+            frmLogo.Controls.Add(lblInfo)
+            
+            ' Logo önizleme
+            Dim picLogoPreview As New DevExpress.XtraEditors.PictureEdit()
+            picLogoPreview.Size = New System.Drawing.Size(200, 200)
+            picLogoPreview.Location = New System.Drawing.Point(100, 50)
+            picLogoPreview.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom
+            picLogoPreview.Properties.ShowMenu = False
+            picLogoPreview.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple
+            frmLogo.Controls.Add(picLogoPreview)
+            
+            ' Mevcut logoyu göster
+            If Not String.IsNullOrEmpty(sParamLogoUrl) Then
+                Try
+                    picLogoPreview.LoadAsync(sParamLogoUrl)
+                Catch
+                End Try
+            End If
+            
+            ' Logo URL etiketi
+            Dim lblUrl As New DevExpress.XtraEditors.LabelControl()
+            lblUrl.Text = If(String.IsNullOrEmpty(sParamLogoUrl), "Logo yüklenmemiş", sParamLogoUrl)
+            lblUrl.Location = New System.Drawing.Point(20, 260)
+            lblUrl.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None
+            lblUrl.Size = New System.Drawing.Size(350, 40)
+            frmLogo.Controls.Add(lblUrl)
+            
+            ' Logo Seç butonu
+            Dim btnLogoSec As New DevExpress.XtraEditors.SimpleButton()
+            btnLogoSec.Text = "Logo Seç ve Yükle"
+            btnLogoSec.Size = New System.Drawing.Size(150, 30)
+            btnLogoSec.Location = New System.Drawing.Point(50, 310)
+            AddHandler btnLogoSec.Click, Async Sub(s, ev)
+                Try
+                    OpenFileDialogLogo.Filter = "Resim Dosyaları|*.jpg;*.jpeg;*.png;*.gif;*.bmp|Tüm Dosyalar|*.*"
+                    OpenFileDialogLogo.Title = "Firma Logo Seç"
+                    
+                    If OpenFileDialogLogo.ShowDialog() <> Windows.Forms.DialogResult.OK Then
+                        Exit Sub
+                    End If
+                    
+                    Dim sourcePath As String = OpenFileDialogLogo.FileName
+                    
+                    ' Resmi byte array'e çevir
+                    Dim imageBytes As Byte()
+                    Using fs As New System.IO.FileStream(sourcePath, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                        ReDim imageBytes(CInt(fs.Length) - 1)
+                        fs.Read(imageBytes, 0, imageBytes.Length)
+                    End Using
+                    
+                    ' Firma klasör adını al
+                    Dim klasor As String = ""
+                    Try
+                        Dim sOnayKodu As String = ""
+                        Try
+                            sOnayKodu = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("Software").OpenSubKey("BusinessSmart").OpenSubKey("Key").GetValue("sOnayKodu").ToString()
+                        Catch
+                            sOnayKodu = ""
+                        End Try
+                        
+                        If Not String.IsNullOrEmpty(sOnayKodu) AndAlso sOnayKodu <> "0" Then
+                            Try
+                                Dim licenseResult = ApiClient.VerifyLicense(sOnayKodu, "")
+                                If licenseResult.IsValid AndAlso Not String.IsNullOrEmpty(licenseResult.OzelNot) Then
+                                    klasor = licenseResult.OzelNot.Trim()
+                                End If
+                            Catch
+                            End Try
+                        End If
+                    Catch
+                        klasor = ""
+                    End Try
+                    
+                    ' R2'ye upload et
+                    Dim fileName As String = "firma_logo_" & sDepo & ".jpg"
+                    Dim objectKey As String = If(String.IsNullOrEmpty(klasor),
+                        "firma_logos/" & fileName,
+                        "firma_logos/" & klasor & "/" & fileName)
+                    
+                    Dim uploadedUrl As String = Await R2Helpers.R2UploadFromBytesAsync(imageBytes, objectKey, "image/jpeg")
+                    
+                    If Not String.IsNullOrEmpty(uploadedUrl) Then
+                        sParamLogoUrl = uploadedUrl
+                        lblUrl.Text = uploadedUrl
+                        Try
+                            picLogoPreview.LoadAsync(uploadedUrl)
+                        Catch
+                        End Try
+                        XtraMessageBox.Show("Logo yüklendi!", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    Else
+                        XtraMessageBox.Show("Logo yüklenemedi!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End If
+                    
+                Catch ex As Exception
+                    XtraMessageBox.Show("Logo yükleme hatası: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+            End Sub
+            frmLogo.Controls.Add(btnLogoSec)
+            
+            ' Kaydet butonu
+            Dim btnLogoKaydet As New DevExpress.XtraEditors.SimpleButton()
+            btnLogoKaydet.Text = "Kaydet"
+            btnLogoKaydet.Size = New System.Drawing.Size(100, 30)
+            btnLogoKaydet.Location = New System.Drawing.Point(210, 310)
+            AddHandler btnLogoKaydet.Click, Sub(s, ev)
+                Try
+                    If String.IsNullOrEmpty(sParamLogoUrl) Then
+                        XtraMessageBox.Show("Önce logo yükleyin!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                        Exit Sub
+                    End If
+                    
+                    Dim cmd As New OleDb.OleDbCommand
+                    Dim con As New OleDb.OleDbConnection
+                    cmd.Connection = con
+                    con.ConnectionString = connection
+                    If con.State = ConnectionState.Closed Then
+                        con.Open()
+                    End If
+                    
+                    cmd.CommandText = sorgu_query("UPDATE tbParamGenel SET sLogoUrl = '" & sParamLogoUrl & "' WHERE sMagazaKodu = '" & sDepo & "'")
+                    cmd.ExecuteNonQuery()
+                    con.Close()
+                    
+                    XtraMessageBox.Show("Firma logosu kaydedildi!", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    frmLogo.Close()
+                    
+                Catch ex As Exception
+                    XtraMessageBox.Show("Kaydetme hatası: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+            End Sub
+            frmLogo.Controls.Add(btnLogoKaydet)
+            
+            frmLogo.ShowDialog()
+            
+        Catch ex As Exception
+            XtraMessageBox.Show("Firma logo yükleme hatası: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
