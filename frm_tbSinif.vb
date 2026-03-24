@@ -819,6 +819,43 @@ Public Class frm_tbSinif
         ResimSecVeYukle()
     End Sub
     
+    Private Sub btnLogoKaydet_Click(sender As Object, e As EventArgs) Handles btnLogoKaydet.Click
+        Try
+            Dim sSinifKodu As String = Trim(txt_sSinifKodu.EditValue.ToString())
+            If String.IsNullOrEmpty(sSinifKodu) Then
+                XtraMessageBox.Show("Sýnýf kodu boþ!", "Uyarý", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Exit Sub
+            End If
+            
+            If String.IsNullOrEmpty(sLogoUrl) Then
+                XtraMessageBox.Show("Önce logo seçin!", "Uyarý", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Exit Sub
+            End If
+            
+            ' Logo URL'yi veritabanýna kaydet
+            Dim cmd As New OleDb.OleDbCommand
+            Dim con As New OleDb.OleDbConnection
+            cmd.Connection = con
+            con.ConnectionString = connection
+            If con.State = ConnectionState.Closed Then
+                con.Open()
+            End If
+            
+            cmd.CommandText = sorgu_query("UPDATE " & Table & No & " SET sLogoUrl = '" & sLogoUrl & "' WHERE sSinifKodu = '" & sSinifKodu & "'")
+            Dim affected As Integer = cmd.ExecuteNonQuery()
+            con.Close()
+            
+            If affected > 0 Then
+                XtraMessageBox.Show("Logo kaydedildi!", "Baþarýlý", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Else
+                XtraMessageBox.Show("Kayýt bulunamadý!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            End If
+            
+        Catch ex As Exception
+            XtraMessageBox.Show("Logo kaydetme hatasý: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+    
     ' ========== R2 RESIM YUKLEME (sLogoUrl icin) ==========
     Public Async Sub ResimSecVeYukle()
         Try

@@ -129,6 +129,7 @@ Partial Class frm_tbSinif
         Me.lblLogoInfo = New DevExpress.XtraEditors.LabelControl()
         Me.picLogo = New DevExpress.XtraEditors.PictureEdit()
         Me.btnLogoEkle = New DevExpress.XtraEditors.SimpleButton()
+        Me.btnLogoKaydet = New DevExpress.XtraEditors.SimpleButton()
         Me.SimpleButton4 = New DevExpress.XtraEditors.SimpleButton()
         Me.SimpleButton3 = New DevExpress.XtraEditors.SimpleButton()
         Me.sec_sSinifKodu2 = New DevExpress.XtraEditors.GridLookUpEdit()
@@ -1150,6 +1151,7 @@ Partial Class frm_tbSinif
         '
         Me.XtraTabPageLogo.Controls.Add(Me.picLogo)
         Me.XtraTabPageLogo.Controls.Add(Me.btnLogoEkle)
+        Me.XtraTabPageLogo.Controls.Add(Me.btnLogoKaydet)
         Me.XtraTabPageLogo.Controls.Add(Me.lblLogoInfo)
         Me.XtraTabPageLogo.Name = "XtraTabPageLogo"
         Me.XtraTabPageLogo.Size = New System.Drawing.Size(1058, 489)
@@ -1179,6 +1181,14 @@ Partial Class frm_tbSinif
         Me.btnLogoEkle.Size = New System.Drawing.Size(150, 30)
         Me.btnLogoEkle.TabIndex = 2
         Me.btnLogoEkle.Text = "Logo Seç ve Yükle"
+        '
+        'btnLogoKaydet
+        '
+        Me.btnLogoKaydet.Location = New System.Drawing.Point(180, 260)
+        Me.btnLogoKaydet.Name = "btnLogoKaydet"
+        Me.btnLogoKaydet.Size = New System.Drawing.Size(100, 30)
+        Me.btnLogoKaydet.TabIndex = 3
+        Me.btnLogoKaydet.Text = "Kaydet"
 
         '
         'SimpleButton4
@@ -1631,6 +1641,7 @@ Partial Class frm_tbSinif
     Friend WithEvents lblLogoInfo As DevExpress.XtraEditors.LabelControl
     Friend WithEvents picLogo As DevExpress.XtraEditors.PictureEdit
     Friend WithEvents btnLogoEkle As DevExpress.XtraEditors.SimpleButton
+    Friend WithEvents btnLogoKaydet As DevExpress.XtraEditors.SimpleButton
     Friend WithEvents SimpleButton4 As DevExpress.XtraEditors.SimpleButton
     Friend WithEvents SimpleButton3 As DevExpress.XtraEditors.SimpleButton
     Friend WithEvents sec_sSinifKodu2 As DevExpress.XtraEditors.GridLookUpEdit
