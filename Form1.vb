@@ -24503,7 +24503,6 @@ CleanupExcel:
 
     ' ============================================================================
     ' B2B PORTAL AYARLARI YÖNETİMİ
-    ' tbB2BParametre tablosu üzerinden genel B2B ayarlarını yönetir
     ' ============================================================================
 
     Private Sub btnB2BAyarlar_Click(sender As Object, e As DevExpress.XtraBars.ItemClickEventArgs) Handles btnB2BAyarlar.ItemClick
@@ -24515,56 +24514,38 @@ CleanupExcel:
     End Sub
 
     Private Sub ShowB2BAyarlarForm()
-        ' B2B Ayarları için yeni form oluştur
         Dim frmB2B As New DevExpress.XtraEditors.XtraForm()
         frmB2B.Text = "B2B Portal Ayarları"
-        frmB2B.Size = New System.Drawing.Size(700, 600)
+        frmB2B.Size = New System.Drawing.Size(750, 650)
         frmB2B.StartPosition = FormStartPosition.CenterScreen
         frmB2B.FormBorderStyle = FormBorderStyle.FixedDialog
         frmB2B.MaximizeBox = False
         frmB2B.MinimizeBox = False
 
-        ' Tab Control
         Dim tabControl As New DevExpress.XtraTab.XtraTabControl()
         tabControl.Dock = DockStyle.Fill
 
-        ' Tab 1: Genel Ayarlar
+        ' ========== TAB 1: GENEL AYARLAR ==========
         Dim tabGenel As New DevExpress.XtraTab.XtraTabPage()
         tabGenel.Text = "Genel Ayarlar"
-        
-        ' Tab 2: Görünüm Ayarları
-        Dim tabGorunum As New DevExpress.XtraTab.XtraTabPage()
-        tabGorunum.Text = "Görünüm Ayarları"
 
-        ' Tab 3: Gruplama Ayarları
-        Dim tabGruplama As New DevExpress.XtraTab.XtraTabPage()
-        tabGruplama.Text = "Gruplama Ayarları"
-
-        tabControl.TabPages.Add(tabGenel)
-        tabControl.TabPages.Add(tabGorunum)
-        tabControl.TabPages.Add(tabGruplama)
-
-        ' ========== GENEL AYARLAR ==========
         Dim grpGenel As New DevExpress.XtraEditors.GroupControl()
         grpGenel.Text = "Genel B2B Parametreleri"
         grpGenel.Location = New System.Drawing.Point(10, 10)
-        grpGenel.Size = New System.Drawing.Size(650, 450)
+        grpGenel.Size = New System.Drawing.Size(700, 500)
 
         Dim yPos As Integer = 30
 
-        ' Checkbox'lar için kontroller
         Dim chkBirimSecimi As New DevExpress.XtraEditors.CheckEdit()
         chkBirimSecimi.Properties.Caption = "Birim Seçimi Aktif"
         chkBirimSecimi.Location = New System.Drawing.Point(20, yPos)
         chkBirimSecimi.Size = New System.Drawing.Size(200, 20)
-        chkBirimSecimi.Name = "chkBirimSecimi"
         grpGenel.Controls.Add(chkBirimSecimi)
 
         Dim chkMiktarGirisi As New DevExpress.XtraEditors.CheckEdit()
         chkMiktarGirisi.Properties.Caption = "Miktar Girişi Aktif"
         chkMiktarGirisi.Location = New System.Drawing.Point(250, yPos)
         chkMiktarGirisi.Size = New System.Drawing.Size(200, 20)
-        chkMiktarGirisi.Name = "chkMiktarGirisi"
         grpGenel.Controls.Add(chkMiktarGirisi)
 
         yPos += 30
@@ -24573,14 +24554,12 @@ CleanupExcel:
         chkRenkSecimi.Properties.Caption = "Renk Seçimi Aktif"
         chkRenkSecimi.Location = New System.Drawing.Point(20, yPos)
         chkRenkSecimi.Size = New System.Drawing.Size(200, 20)
-        chkRenkSecimi.Name = "chkRenkSecimi"
         grpGenel.Controls.Add(chkRenkSecimi)
 
         Dim chkBedenSecimi As New DevExpress.XtraEditors.CheckEdit()
         chkBedenSecimi.Properties.Caption = "Beden Seçimi Aktif"
         chkBedenSecimi.Location = New System.Drawing.Point(250, yPos)
         chkBedenSecimi.Size = New System.Drawing.Size(200, 20)
-        chkBedenSecimi.Name = "chkBedenSecimi"
         grpGenel.Controls.Add(chkBedenSecimi)
 
         yPos += 30
@@ -24589,14 +24568,12 @@ CleanupExcel:
         chkVaryantSecimi.Properties.Caption = "Varyant Seçimi Aktif"
         chkVaryantSecimi.Location = New System.Drawing.Point(20, yPos)
         chkVaryantSecimi.Size = New System.Drawing.Size(200, 20)
-        chkVaryantSecimi.Name = "chkVaryantSecimi"
         grpGenel.Controls.Add(chkVaryantSecimi)
 
         Dim chkStokKontrol As New DevExpress.XtraEditors.CheckEdit()
         chkStokKontrol.Properties.Caption = "Stok Kontrolü Aktif"
         chkStokKontrol.Location = New System.Drawing.Point(250, yPos)
         chkStokKontrol.Size = New System.Drawing.Size(200, 20)
-        chkStokKontrol.Name = "chkStokKontrol"
         grpGenel.Controls.Add(chkStokKontrol)
 
         yPos += 30
@@ -24605,14 +24582,12 @@ CleanupExcel:
         chkFiyatGoster.Properties.Caption = "Fiyat Göster"
         chkFiyatGoster.Location = New System.Drawing.Point(20, yPos)
         chkFiyatGoster.Size = New System.Drawing.Size(200, 20)
-        chkFiyatGoster.Name = "chkFiyatGoster"
         grpGenel.Controls.Add(chkFiyatGoster)
 
         Dim chkStokGoster As New DevExpress.XtraEditors.CheckEdit()
         chkStokGoster.Properties.Caption = "Stok Göster"
         chkStokGoster.Location = New System.Drawing.Point(250, yPos)
         chkStokGoster.Size = New System.Drawing.Size(200, 20)
-        chkStokGoster.Name = "chkStokGoster"
         grpGenel.Controls.Add(chkStokGoster)
 
         yPos += 30
@@ -24621,14 +24596,12 @@ CleanupExcel:
         chkIskontoGoster.Properties.Caption = "İskonto Göster"
         chkIskontoGoster.Location = New System.Drawing.Point(20, yPos)
         chkIskontoGoster.Size = New System.Drawing.Size(200, 20)
-        chkIskontoGoster.Name = "chkIskontoGoster"
         grpGenel.Controls.Add(chkIskontoGoster)
 
         Dim chkMarkaSliderGoster As New DevExpress.XtraEditors.CheckEdit()
         chkMarkaSliderGoster.Properties.Caption = "Marka Slider Göster"
         chkMarkaSliderGoster.Location = New System.Drawing.Point(250, yPos)
         chkMarkaSliderGoster.Size = New System.Drawing.Size(200, 20)
-        chkMarkaSliderGoster.Name = "chkMarkaSliderGoster"
         grpGenel.Controls.Add(chkMarkaSliderGoster)
 
         yPos += 30
@@ -24637,19 +24610,16 @@ CleanupExcel:
         chkKatalogGruplama.Properties.Caption = "Katalog Gruplama Aktif"
         chkKatalogGruplama.Location = New System.Drawing.Point(20, yPos)
         chkKatalogGruplama.Size = New System.Drawing.Size(200, 20)
-        chkKatalogGruplama.Name = "chkKatalogGruplama"
         grpGenel.Controls.Add(chkKatalogGruplama)
 
         Dim chkSepetiKaydet As New DevExpress.XtraEditors.CheckEdit()
         chkSepetiKaydet.Properties.Caption = "Sepeti Kaydet (Kalıcı)"
         chkSepetiKaydet.Location = New System.Drawing.Point(250, yPos)
         chkSepetiKaydet.Size = New System.Drawing.Size(200, 20)
-        chkSepetiKaydet.Name = "chkSepetiKaydet"
         grpGenel.Controls.Add(chkSepetiKaydet)
 
         yPos += 40
 
-        ' Marka Sınıf No
         Dim lblMarkaSinifNo As New DevExpress.XtraEditors.LabelControl()
         lblMarkaSinifNo.Text = "Marka Sınıf No (1-10):"
         lblMarkaSinifNo.Location = New System.Drawing.Point(20, yPos)
@@ -24658,13 +24628,11 @@ CleanupExcel:
         Dim spnMarkaSinifNo As New DevExpress.XtraEditors.SpinEdit()
         spnMarkaSinifNo.Location = New System.Drawing.Point(150, yPos)
         spnMarkaSinifNo.Size = New System.Drawing.Size(80, 20)
-        spnMarkaSinifNo.Name = "spnMarkaSinifNo"
         spnMarkaSinifNo.Properties.MinValue = 1
         spnMarkaSinifNo.Properties.MaxValue = 10
         spnMarkaSinifNo.EditValue = 2
         grpGenel.Controls.Add(spnMarkaSinifNo)
 
-        ' Min Sipariş Tutarı
         Dim lblMinSiparis As New DevExpress.XtraEditors.LabelControl()
         lblMinSiparis.Text = "Min. Sipariş Tutarı:"
         lblMinSiparis.Location = New System.Drawing.Point(250, yPos)
@@ -24673,14 +24641,12 @@ CleanupExcel:
         Dim txtMinSiparisTutar As New DevExpress.XtraEditors.SpinEdit()
         txtMinSiparisTutar.Location = New System.Drawing.Point(380, yPos)
         txtMinSiparisTutar.Size = New System.Drawing.Size(100, 20)
-        txtMinSiparisTutar.Name = "txtMinSiparisTutar"
         txtMinSiparisTutar.Properties.MinValue = 0
         txtMinSiparisTutar.Properties.MaxValue = 999999
         grpGenel.Controls.Add(txtMinSiparisTutar)
 
         yPos += 40
 
-        ' Varsayılan Birim
         Dim lblVarsayilanBirim As New DevExpress.XtraEditors.LabelControl()
         lblVarsayilanBirim.Text = "Varsayılan Birim:"
         lblVarsayilanBirim.Location = New System.Drawing.Point(20, yPos)
@@ -24689,11 +24655,243 @@ CleanupExcel:
         Dim txtVarsayilanBirim As New DevExpress.XtraEditors.TextEdit()
         txtVarsayilanBirim.Location = New System.Drawing.Point(150, yPos)
         txtVarsayilanBirim.Size = New System.Drawing.Size(100, 20)
-        txtVarsayilanBirim.Name = "txtVarsayilanBirim"
         txtVarsayilanBirim.EditValue = "Adet"
         grpGenel.Controls.Add(txtVarsayilanBirim)
 
         tabGenel.Controls.Add(grpGenel)
+
+        ' ========== TAB 2: GÖRÜNÜM AYARLARI ==========
+        Dim tabGorunum As New DevExpress.XtraTab.XtraTabPage()
+        tabGorunum.Text = "Görünüm Ayarları"
+
+        ' Ürün Görünüm Grubu
+        Dim grpUrun As New DevExpress.XtraEditors.GroupControl()
+        grpUrun.Text = "Ürün Listesi Görünümü"
+        grpUrun.Location = New System.Drawing.Point(10, 10)
+        grpUrun.Size = New System.Drawing.Size(340, 220)
+
+        Dim chkUrunBarkod As New DevExpress.XtraEditors.CheckEdit()
+        chkUrunBarkod.Properties.Caption = "Barkod Göster"
+        chkUrunBarkod.Location = New System.Drawing.Point(20, 30)
+        chkUrunBarkod.Size = New System.Drawing.Size(150, 20)
+        grpUrun.Controls.Add(chkUrunBarkod)
+
+        Dim chkUrunStokKodu As New DevExpress.XtraEditors.CheckEdit()
+        chkUrunStokKodu.Properties.Caption = "Stok Kodu Göster"
+        chkUrunStokKodu.Location = New System.Drawing.Point(20, 55)
+        chkUrunStokKodu.Size = New System.Drawing.Size(150, 20)
+        grpUrun.Controls.Add(chkUrunStokKodu)
+
+        Dim chkUrunKategori As New DevExpress.XtraEditors.CheckEdit()
+        chkUrunKategori.Properties.Caption = "Kategori Göster"
+        chkUrunKategori.Location = New System.Drawing.Point(20, 80)
+        chkUrunKategori.Size = New System.Drawing.Size(150, 20)
+        grpUrun.Controls.Add(chkUrunKategori)
+
+        Dim chkUrunMarka As New DevExpress.XtraEditors.CheckEdit()
+        chkUrunMarka.Properties.Caption = "Marka Göster"
+        chkUrunMarka.Location = New System.Drawing.Point(20, 105)
+        chkUrunMarka.Size = New System.Drawing.Size(150, 20)
+        grpUrun.Controls.Add(chkUrunMarka)
+
+        Dim chkUrunStokMiktari As New DevExpress.XtraEditors.CheckEdit()
+        chkUrunStokMiktari.Properties.Caption = "Stok Miktarı Göster"
+        chkUrunStokMiktari.Location = New System.Drawing.Point(20, 130)
+        chkUrunStokMiktari.Size = New System.Drawing.Size(150, 20)
+        grpUrun.Controls.Add(chkUrunStokMiktari)
+
+        Dim chkUrunFiyat As New DevExpress.XtraEditors.CheckEdit()
+        chkUrunFiyat.Properties.Caption = "Fiyat Göster"
+        chkUrunFiyat.Location = New System.Drawing.Point(20, 155)
+        chkUrunFiyat.Size = New System.Drawing.Size(150, 20)
+        grpUrun.Controls.Add(chkUrunFiyat)
+
+        Dim chkUrunResim As New DevExpress.XtraEditors.CheckEdit()
+        chkUrunResim.Properties.Caption = "Resim Göster"
+        chkUrunResim.Location = New System.Drawing.Point(20, 180)
+        chkUrunResim.Size = New System.Drawing.Size(150, 20)
+        grpUrun.Controls.Add(chkUrunResim)
+
+        tabGorunum.Controls.Add(grpUrun)
+
+        ' Sipariş Görünüm Grubu
+        Dim grpSiparis As New DevExpress.XtraEditors.GroupControl()
+        grpSiparis.Text = "Sipariş Görünümü"
+        grpSiparis.Location = New System.Drawing.Point(360, 10)
+        grpSiparis.Size = New System.Drawing.Size(340, 120)
+
+        Dim chkSiparisBarkod As New DevExpress.XtraEditors.CheckEdit()
+        chkSiparisBarkod.Properties.Caption = "Barkod Göster"
+        chkSiparisBarkod.Location = New System.Drawing.Point(20, 30)
+        chkSiparisBarkod.Size = New System.Drawing.Size(150, 20)
+        grpSiparis.Controls.Add(chkSiparisBarkod)
+
+        Dim chkSiparisStokKodu As New DevExpress.XtraEditors.CheckEdit()
+        chkSiparisStokKodu.Properties.Caption = "Stok Kodu Göster"
+        chkSiparisStokKodu.Location = New System.Drawing.Point(20, 55)
+        chkSiparisStokKodu.Size = New System.Drawing.Size(150, 20)
+        grpSiparis.Controls.Add(chkSiparisStokKodu)
+
+        Dim chkSiparisResim As New DevExpress.XtraEditors.CheckEdit()
+        chkSiparisResim.Properties.Caption = "Resim Göster"
+        chkSiparisResim.Location = New System.Drawing.Point(20, 80)
+        chkSiparisResim.Size = New System.Drawing.Size(150, 20)
+        grpSiparis.Controls.Add(chkSiparisResim)
+
+        tabGorunum.Controls.Add(grpSiparis)
+
+        ' Fatura Görünüm Grubu
+        Dim grpFatura As New DevExpress.XtraEditors.GroupControl()
+        grpFatura.Text = "Fatura Görünümü"
+        grpFatura.Location = New System.Drawing.Point(360, 140)
+        grpFatura.Size = New System.Drawing.Size(340, 120)
+
+        Dim chkFaturaBarkod As New DevExpress.XtraEditors.CheckEdit()
+        chkFaturaBarkod.Properties.Caption = "Barkod Göster"
+        chkFaturaBarkod.Location = New System.Drawing.Point(20, 30)
+        chkFaturaBarkod.Size = New System.Drawing.Size(150, 20)
+        grpFatura.Controls.Add(chkFaturaBarkod)
+
+        Dim chkFaturaStokKodu As New DevExpress.XtraEditors.CheckEdit()
+        chkFaturaStokKodu.Properties.Caption = "Stok Kodu Göster"
+        chkFaturaStokKodu.Location = New System.Drawing.Point(20, 55)
+        chkFaturaStokKodu.Size = New System.Drawing.Size(150, 20)
+        grpFatura.Controls.Add(chkFaturaStokKodu)
+
+        Dim chkFaturaResim As New DevExpress.XtraEditors.CheckEdit()
+        chkFaturaResim.Properties.Caption = "Resim Göster"
+        chkFaturaResim.Location = New System.Drawing.Point(20, 80)
+        chkFaturaResim.Size = New System.Drawing.Size(150, 20)
+        grpFatura.Controls.Add(chkFaturaResim)
+
+        tabGorunum.Controls.Add(grpFatura)
+
+        ' Sepet Görünüm Grubu
+        Dim grpSepet As New DevExpress.XtraEditors.GroupControl()
+        grpSepet.Text = "Sepet Görünümü"
+        grpSepet.Location = New System.Drawing.Point(10, 240)
+        grpSepet.Size = New System.Drawing.Size(340, 120)
+
+        Dim chkSepetBarkod As New DevExpress.XtraEditors.CheckEdit()
+        chkSepetBarkod.Properties.Caption = "Barkod Göster"
+        chkSepetBarkod.Location = New System.Drawing.Point(20, 30)
+        chkSepetBarkod.Size = New System.Drawing.Size(150, 20)
+        grpSepet.Controls.Add(chkSepetBarkod)
+
+        Dim chkSepetStokKodu As New DevExpress.XtraEditors.CheckEdit()
+        chkSepetStokKodu.Properties.Caption = "Stok Kodu Göster"
+        chkSepetStokKodu.Location = New System.Drawing.Point(20, 55)
+        chkSepetStokKodu.Size = New System.Drawing.Size(150, 20)
+        grpSepet.Controls.Add(chkSepetStokKodu)
+
+        Dim chkSepetResim As New DevExpress.XtraEditors.CheckEdit()
+        chkSepetResim.Properties.Caption = "Resim Göster"
+        chkSepetResim.Location = New System.Drawing.Point(20, 80)
+        chkSepetResim.Size = New System.Drawing.Size(150, 20)
+        grpSepet.Controls.Add(chkSepetResim)
+
+        tabGorunum.Controls.Add(grpSepet)
+
+        ' Görünüm Açıklama
+        Dim lblGorunumInfo As New DevExpress.XtraEditors.LabelControl()
+        lblGorunumInfo.Text = "Not: Bu ayarlar tüm cariler için varsayılan değerleri belirler. Cari bazlı özelleştirme için Personel Yönetimi > B2B sekmesini kullanın."
+        lblGorunumInfo.Location = New System.Drawing.Point(10, 380)
+        lblGorunumInfo.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None
+        lblGorunumInfo.Size = New System.Drawing.Size(690, 40)
+        lblGorunumInfo.Appearance.ForeColor = System.Drawing.Color.Gray
+        tabGorunum.Controls.Add(lblGorunumInfo)
+
+        ' ========== TAB 3: GRUPLAMA AYARLARI ==========
+        Dim tabGruplama As New DevExpress.XtraTab.XtraTabPage()
+        tabGruplama.Text = "Gruplama Ayarları"
+
+        Dim grpGruplama As New DevExpress.XtraEditors.GroupControl()
+        grpGruplama.Text = "Katalog Gruplama Sınıfları (tbB2BGruplamaSinifi)"
+        grpGruplama.Location = New System.Drawing.Point(10, 10)
+        grpGruplama.Size = New System.Drawing.Size(700, 400)
+
+        Dim lblGruplamaInfo As New DevExpress.XtraEditors.LabelControl()
+        lblGruplamaInfo.Text = "Katalogda ürünlerin hangi sınıflara göre gruplanacağını belirleyin (Marka, Kategori, Sezon vb.)"
+        lblGruplamaInfo.Location = New System.Drawing.Point(20, 30)
+        lblGruplamaInfo.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None
+        lblGruplamaInfo.Size = New System.Drawing.Size(650, 20)
+        grpGruplama.Controls.Add(lblGruplamaInfo)
+
+        ' GridControl for gruplama sınıfları
+        Dim gridGruplama As New DevExpress.XtraGrid.GridControl()
+        gridGruplama.Location = New System.Drawing.Point(20, 60)
+        gridGruplama.Size = New System.Drawing.Size(660, 280)
+        
+        Dim gridViewGruplama As New DevExpress.XtraGrid.Views.Grid.GridView()
+        gridGruplama.MainView = gridViewGruplama
+        gridViewGruplama.OptionsView.ShowGroupPanel = False
+        
+        ' Columns
+        Dim colSinifNo As New DevExpress.XtraGrid.Columns.GridColumn()
+        colSinifNo.FieldName = "nSinifNo"
+        colSinifNo.Caption = "Sınıf No"
+        colSinifNo.VisibleIndex = 0
+        colSinifNo.Width = 80
+        gridViewGruplama.Columns.Add(colSinifNo)
+
+        Dim colBaslik As New DevExpress.XtraGrid.Columns.GridColumn()
+        colBaslik.FieldName = "sBaslik"
+        colBaslik.Caption = "Başlık"
+        colBaslik.VisibleIndex = 1
+        colBaslik.Width = 150
+        gridViewGruplama.Columns.Add(colBaslik)
+
+        Dim colAktif As New DevExpress.XtraGrid.Columns.GridColumn()
+        colAktif.FieldName = "bAktif"
+        colAktif.Caption = "Aktif"
+        colAktif.VisibleIndex = 2
+        colAktif.Width = 60
+        gridViewGruplama.Columns.Add(colAktif)
+
+        Dim colSira As New DevExpress.XtraGrid.Columns.GridColumn()
+        colSira.FieldName = "nSira"
+        colSira.Caption = "Sıra"
+        colSira.VisibleIndex = 3
+        colSira.Width = 60
+        gridViewGruplama.Columns.Add(colSira)
+
+        Dim colSlider As New DevExpress.XtraGrid.Columns.GridColumn()
+        colSlider.FieldName = "bSliderGoster"
+        colSlider.Caption = "Slider"
+        colSlider.VisibleIndex = 4
+        colSlider.Width = 60
+        gridViewGruplama.Columns.Add(colSlider)
+
+        grpGruplama.Controls.Add(gridGruplama)
+
+        ' Gruplama butonları
+        Dim btnGruplamaYenile As New DevExpress.XtraEditors.SimpleButton()
+        btnGruplamaYenile.Text = "Yenile"
+        btnGruplamaYenile.Size = New System.Drawing.Size(80, 25)
+        btnGruplamaYenile.Location = New System.Drawing.Point(20, 350)
+        AddHandler btnGruplamaYenile.Click, Sub(s, ev)
+            B2B_LoadGruplamaSiniflari(gridGruplama)
+        End Sub
+        grpGruplama.Controls.Add(btnGruplamaYenile)
+
+        Dim btnGruplamaKaydet As New DevExpress.XtraEditors.SimpleButton()
+        btnGruplamaKaydet.Text = "Kaydet"
+        btnGruplamaKaydet.Size = New System.Drawing.Size(80, 25)
+        btnGruplamaKaydet.Location = New System.Drawing.Point(110, 350)
+        AddHandler btnGruplamaKaydet.Click, Sub(s, ev)
+            B2B_SaveGruplamaSiniflari(gridGruplama)
+            XtraMessageBox.Show("Gruplama ayarları kaydedildi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End Sub
+        grpGruplama.Controls.Add(btnGruplamaKaydet)
+
+        tabGruplama.Controls.Add(grpGruplama)
+
+        ' Load gruplama data
+        B2B_LoadGruplamaSiniflari(gridGruplama)
+
+        tabControl.TabPages.Add(tabGenel)
+        tabControl.TabPages.Add(tabGorunum)
+        tabControl.TabPages.Add(tabGruplama)
 
         ' ========== BUTONLAR ==========
         Dim pnlButtons As New Panel()
@@ -24703,15 +24901,15 @@ CleanupExcel:
         Dim btnKaydet As New DevExpress.XtraEditors.SimpleButton()
         btnKaydet.Text = "Kaydet"
         btnKaydet.Size = New System.Drawing.Size(100, 30)
-        btnKaydet.Location = New System.Drawing.Point(480, 10)
+        btnKaydet.Location = New System.Drawing.Point(530, 10)
         AddHandler btnKaydet.Click, Sub(s, ev)
             Try
                 B2B_SaveParametre(chkBirimSecimi.Checked, chkMiktarGirisi.Checked, chkRenkSecimi.Checked, _
                     chkBedenSecimi.Checked, chkVaryantSecimi.Checked, chkStokKontrol.Checked, _
                     chkFiyatGoster.Checked, chkStokGoster.Checked, chkIskontoGoster.Checked, _
                     chkMarkaSliderGoster.Checked, CInt(spnMarkaSinifNo.EditValue), chkKatalogGruplama.Checked, _
-                    chkSepetiKaydet.Checked, CDec(txtMinSiparisTutar.EditValue), txtVarsayilanBirim.Text)
-                XtraMessageBox.Show("B2B Ayarları başarıyla kaydedildi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    chkSepetiKaydet.Checked, CDec(txtMinSiparisTutar.EditValue), txtVarsayilanBirim.Text.ToString())
+                XtraMessageBox.Show("B2B Ayarları kaydedildi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Catch ex As Exception
                 XtraMessageBox.Show("Kayıt hatası: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
@@ -24721,7 +24919,7 @@ CleanupExcel:
         Dim btnIptal As New DevExpress.XtraEditors.SimpleButton()
         btnIptal.Text = "Kapat"
         btnIptal.Size = New System.Drawing.Size(100, 30)
-        btnIptal.Location = New System.Drawing.Point(590, 10)
+        btnIptal.Location = New System.Drawing.Point(640, 10)
         AddHandler btnIptal.Click, Sub(s, ev)
             frmB2B.Close()
         End Sub
@@ -24730,7 +24928,7 @@ CleanupExcel:
         frmB2B.Controls.Add(tabControl)
         frmB2B.Controls.Add(pnlButtons)
 
-        ' Verileri yükle
+        ' Load data
         B2B_LoadParametre(chkBirimSecimi, chkMiktarGirisi, chkRenkSecimi, chkBedenSecimi, _
             chkVaryantSecimi, chkStokKontrol, chkFiyatGoster, chkStokGoster, chkIskontoGoster, _
             chkMarkaSliderGoster, spnMarkaSinifNo, chkKatalogGruplama, chkSepetiKaydet, _
@@ -24796,7 +24994,6 @@ CleanupExcel:
                 con.Open()
             End If
 
-            ' Kayıt var mı kontrol et
             Dim ds As DataSet = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT COUNT(*) as cnt FROM tbB2BParametre"))
             Dim recordExists As Boolean = Convert.ToInt32(ds.Tables(0).Rows(0)("cnt")) > 0
 
@@ -24815,22 +25012,13 @@ CleanupExcel:
 
             If recordExists Then
                 cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED UPDATE tbB2BParametre SET " & _
-                    "bBirimSecimi = " & iBirim & ", " & _
-                    "bMiktarGirisi = " & iMiktar & ", " & _
-                    "bRenkSecimi = " & iRenk & ", " & _
-                    "bBedenSecimi = " & iBeden & ", " & _
-                    "bVaryantSecimi = " & iVaryant & ", " & _
-                    "bStokKontrol = " & iStokKontrol & ", " & _
-                    "bFiyatGoster = " & iFiyat & ", " & _
-                    "bStokGoster = " & iStok & ", " & _
-                    "bIskontoGoster = " & iIskonto & ", " & _
-                    "bMarkaSliderGoster = " & iMarkaSlider & ", " & _
-                    "nMarkaSinifNo = " & nMarkaSinifNo & ", " & _
-                    "bKatalogGruplama = " & iKatalog & ", " & _
-                    "bSepetiKaydet = " & iSepet & ", " & _
+                    "bBirimSecimi = " & iBirim & ", bMiktarGirisi = " & iMiktar & ", bRenkSecimi = " & iRenk & ", " & _
+                    "bBedenSecimi = " & iBeden & ", bVaryantSecimi = " & iVaryant & ", bStokKontrol = " & iStokKontrol & ", " & _
+                    "bFiyatGoster = " & iFiyat & ", bStokGoster = " & iStok & ", bIskontoGoster = " & iIskonto & ", " & _
+                    "bMarkaSliderGoster = " & iMarkaSlider & ", nMarkaSinifNo = " & nMarkaSinifNo & ", " & _
+                    "bKatalogGruplama = " & iKatalog & ", bSepetiKaydet = " & iSepet & ", " & _
                     "nMinSiparisTutar = " & nMinSiparisTutar.ToString().Replace(",", ".") & ", " & _
-                    "sVarsayilanBirim = '" & sVarsayilanBirim & "', " & _
-                    "dtGuncelleme = GETDATE()")
+                    "sVarsayilanBirim = '" & sVarsayilanBirim & "', dtGuncelleme = GETDATE()")
             Else
                 cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO tbB2BParametre " & _
                     "(bBirimSecimi, bMiktarGirisi, bRenkSecimi, bBedenSecimi, bVaryantSecimi, bStokKontrol, " & _
@@ -24845,6 +25033,45 @@ CleanupExcel:
             con.Close()
         Catch ex As Exception
             Throw New Exception("B2B Parametre kaydetme hatası: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub B2B_LoadGruplamaSiniflari(ByVal grid As DevExpress.XtraGrid.GridControl)
+        Try
+            Dim ds As DataSet = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT nID, nSinifNo, sBaslik, bAktif, nSira, bSliderGoster FROM tbB2BGruplamaSinifi ORDER BY nSira"))
+            grid.DataSource = ds.Tables(0)
+        Catch ex As Exception
+            Debug.WriteLine("B2B Gruplama yükleme hatası: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub B2B_SaveGruplamaSiniflari(ByVal grid As DevExpress.XtraGrid.GridControl)
+        Try
+            Dim dt As DataTable = CType(grid.DataSource, DataTable)
+            If dt Is Nothing Then Exit Sub
+
+            Dim cmd As New OleDb.OleDbCommand
+            Dim con As New OleDb.OleDbConnection
+            cmd.Connection = con
+            con.ConnectionString = connection
+            If con.State = ConnectionState.Closed Then
+                con.Open()
+            End If
+
+            For Each dr As DataRow In dt.Rows
+                Dim nID As Integer = Convert.ToInt32(dr("nID"))
+                Dim bAktif As Integer = IIf(Convert.ToBoolean(dr("bAktif")), 1, 0)
+                Dim nSira As Integer = Convert.ToInt32(dr("nSira"))
+                Dim bSlider As Integer = IIf(Convert.ToBoolean(dr("bSliderGoster")), 1, 0)
+                Dim sBaslik As String = dr("sBaslik").ToString()
+
+                cmd.CommandText = sorgu_query("UPDATE tbB2BGruplamaSinifi SET sBaslik = '" & sBaslik & "', bAktif = " & bAktif & ", nSira = " & nSira & ", bSliderGoster = " & bSlider & " WHERE nID = " & nID)
+                cmd.ExecuteNonQuery()
+            Next
+
+            con.Close()
+        Catch ex As Exception
+            Throw New Exception("B2B Gruplama kaydetme hatası: " & ex.Message)
         End Try
     End Sub
 
