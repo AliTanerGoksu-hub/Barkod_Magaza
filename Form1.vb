@@ -10391,6 +10391,21 @@ Public Class Form1
         End Try
 
         ' ==================================================
+        ' B2B AYARLARI BUTONU (Tanimlar menusunde)
+        ' ==================================================
+        Try
+            Dim btnB2BAyarlar As New DevExpress.XtraBars.BarButtonItem()
+            btnB2BAyarlar.Caption = "B2B Ayarları"
+            btnB2BAyarlar.Id = 9990
+            AddHandler btnB2BAyarlar.ItemClick, AddressOf btnB2BAyarlar_Click
+            RibbonControl1.Items.Add(btnB2BAyarlar)
+            RibbonPageGroupTanımlar.ItemLinks.Add(btnB2BAyarlar)
+        Catch ex As Exception
+            Debug.WriteLine("B2B Ayarlari butonu eklenemedi: " & ex.Message)
+        End Try
+
+
+        ' ==================================================
         ' SATIN ALMA TALEPLERI BUTONU (rbmStokYonetimi menusunde)
         ' ==================================================
         Try
@@ -24479,6 +24494,358 @@ CleanupExcel:
         Catch ex As Exception
             Debug.WriteLine("[tbParamETicaret] Genel hata: " & ex.Message)
             ' Hata olsa bile uygulama açılmaya devam etsin
+        End Try
+    End Sub
+
+#End Region
+
+
+#Region "B2B Ayarları"
+
+    ' ============================================================================
+    ' B2B PORTAL AYARLARI YÖNETİMİ
+    ' tbB2BParametre tablosu üzerinden genel B2B ayarlarını yönetir
+    ' ============================================================================
+
+    Private Sub btnB2BAyarlar_Click(ByVal sender As Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs)
+        Try
+            ShowB2BAyarlarForm()
+        Catch ex As Exception
+            XtraMessageBox.Show("B2B Ayarları açılırken hata: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub ShowB2BAyarlarForm()
+        ' B2B Ayarları için yeni form oluştur
+        Dim frmB2B As New DevExpress.XtraEditors.XtraForm()
+        frmB2B.Text = "B2B Portal Ayarları"
+        frmB2B.Size = New System.Drawing.Size(700, 600)
+        frmB2B.StartPosition = FormStartPosition.CenterScreen
+        frmB2B.FormBorderStyle = FormBorderStyle.FixedDialog
+        frmB2B.MaximizeBox = False
+        frmB2B.MinimizeBox = False
+
+        ' Tab Control
+        Dim tabControl As New DevExpress.XtraTab.XtraTabControl()
+        tabControl.Dock = DockStyle.Fill
+
+        ' Tab 1: Genel Ayarlar
+        Dim tabGenel As New DevExpress.XtraTab.XtraTabPage()
+        tabGenel.Text = "Genel Ayarlar"
+        
+        ' Tab 2: Görünüm Ayarları
+        Dim tabGorunum As New DevExpress.XtraTab.XtraTabPage()
+        tabGorunum.Text = "Görünüm Ayarları"
+
+        ' Tab 3: Gruplama Ayarları
+        Dim tabGruplama As New DevExpress.XtraTab.XtraTabPage()
+        tabGruplama.Text = "Gruplama Ayarları"
+
+        tabControl.TabPages.Add(tabGenel)
+        tabControl.TabPages.Add(tabGorunum)
+        tabControl.TabPages.Add(tabGruplama)
+
+        ' ========== GENEL AYARLAR ==========
+        Dim grpGenel As New DevExpress.XtraEditors.GroupControl()
+        grpGenel.Text = "Genel B2B Parametreleri"
+        grpGenel.Location = New System.Drawing.Point(10, 10)
+        grpGenel.Size = New System.Drawing.Size(650, 450)
+
+        Dim yPos As Integer = 30
+
+        ' Checkbox'lar için kontroller
+        Dim chkBirimSecimi As New DevExpress.XtraEditors.CheckEdit()
+        chkBirimSecimi.Properties.Caption = "Birim Seçimi Aktif"
+        chkBirimSecimi.Location = New System.Drawing.Point(20, yPos)
+        chkBirimSecimi.Size = New System.Drawing.Size(200, 20)
+        chkBirimSecimi.Name = "chkBirimSecimi"
+        grpGenel.Controls.Add(chkBirimSecimi)
+
+        Dim chkMiktarGirisi As New DevExpress.XtraEditors.CheckEdit()
+        chkMiktarGirisi.Properties.Caption = "Miktar Girişi Aktif"
+        chkMiktarGirisi.Location = New System.Drawing.Point(250, yPos)
+        chkMiktarGirisi.Size = New System.Drawing.Size(200, 20)
+        chkMiktarGirisi.Name = "chkMiktarGirisi"
+        grpGenel.Controls.Add(chkMiktarGirisi)
+
+        yPos += 30
+
+        Dim chkRenkSecimi As New DevExpress.XtraEditors.CheckEdit()
+        chkRenkSecimi.Properties.Caption = "Renk Seçimi Aktif"
+        chkRenkSecimi.Location = New System.Drawing.Point(20, yPos)
+        chkRenkSecimi.Size = New System.Drawing.Size(200, 20)
+        chkRenkSecimi.Name = "chkRenkSecimi"
+        grpGenel.Controls.Add(chkRenkSecimi)
+
+        Dim chkBedenSecimi As New DevExpress.XtraEditors.CheckEdit()
+        chkBedenSecimi.Properties.Caption = "Beden Seçimi Aktif"
+        chkBedenSecimi.Location = New System.Drawing.Point(250, yPos)
+        chkBedenSecimi.Size = New System.Drawing.Size(200, 20)
+        chkBedenSecimi.Name = "chkBedenSecimi"
+        grpGenel.Controls.Add(chkBedenSecimi)
+
+        yPos += 30
+
+        Dim chkVaryantSecimi As New DevExpress.XtraEditors.CheckEdit()
+        chkVaryantSecimi.Properties.Caption = "Varyant Seçimi Aktif"
+        chkVaryantSecimi.Location = New System.Drawing.Point(20, yPos)
+        chkVaryantSecimi.Size = New System.Drawing.Size(200, 20)
+        chkVaryantSecimi.Name = "chkVaryantSecimi"
+        grpGenel.Controls.Add(chkVaryantSecimi)
+
+        Dim chkStokKontrol As New DevExpress.XtraEditors.CheckEdit()
+        chkStokKontrol.Properties.Caption = "Stok Kontrolü Aktif"
+        chkStokKontrol.Location = New System.Drawing.Point(250, yPos)
+        chkStokKontrol.Size = New System.Drawing.Size(200, 20)
+        chkStokKontrol.Name = "chkStokKontrol"
+        grpGenel.Controls.Add(chkStokKontrol)
+
+        yPos += 30
+
+        Dim chkFiyatGoster As New DevExpress.XtraEditors.CheckEdit()
+        chkFiyatGoster.Properties.Caption = "Fiyat Göster"
+        chkFiyatGoster.Location = New System.Drawing.Point(20, yPos)
+        chkFiyatGoster.Size = New System.Drawing.Size(200, 20)
+        chkFiyatGoster.Name = "chkFiyatGoster"
+        grpGenel.Controls.Add(chkFiyatGoster)
+
+        Dim chkStokGoster As New DevExpress.XtraEditors.CheckEdit()
+        chkStokGoster.Properties.Caption = "Stok Göster"
+        chkStokGoster.Location = New System.Drawing.Point(250, yPos)
+        chkStokGoster.Size = New System.Drawing.Size(200, 20)
+        chkStokGoster.Name = "chkStokGoster"
+        grpGenel.Controls.Add(chkStokGoster)
+
+        yPos += 30
+
+        Dim chkIskontoGoster As New DevExpress.XtraEditors.CheckEdit()
+        chkIskontoGoster.Properties.Caption = "İskonto Göster"
+        chkIskontoGoster.Location = New System.Drawing.Point(20, yPos)
+        chkIskontoGoster.Size = New System.Drawing.Size(200, 20)
+        chkIskontoGoster.Name = "chkIskontoGoster"
+        grpGenel.Controls.Add(chkIskontoGoster)
+
+        Dim chkMarkaSliderGoster As New DevExpress.XtraEditors.CheckEdit()
+        chkMarkaSliderGoster.Properties.Caption = "Marka Slider Göster"
+        chkMarkaSliderGoster.Location = New System.Drawing.Point(250, yPos)
+        chkMarkaSliderGoster.Size = New System.Drawing.Size(200, 20)
+        chkMarkaSliderGoster.Name = "chkMarkaSliderGoster"
+        grpGenel.Controls.Add(chkMarkaSliderGoster)
+
+        yPos += 30
+
+        Dim chkKatalogGruplama As New DevExpress.XtraEditors.CheckEdit()
+        chkKatalogGruplama.Properties.Caption = "Katalog Gruplama Aktif"
+        chkKatalogGruplama.Location = New System.Drawing.Point(20, yPos)
+        chkKatalogGruplama.Size = New System.Drawing.Size(200, 20)
+        chkKatalogGruplama.Name = "chkKatalogGruplama"
+        grpGenel.Controls.Add(chkKatalogGruplama)
+
+        Dim chkSepetiKaydet As New DevExpress.XtraEditors.CheckEdit()
+        chkSepetiKaydet.Properties.Caption = "Sepeti Kaydet (Kalıcı)"
+        chkSepetiKaydet.Location = New System.Drawing.Point(250, yPos)
+        chkSepetiKaydet.Size = New System.Drawing.Size(200, 20)
+        chkSepetiKaydet.Name = "chkSepetiKaydet"
+        grpGenel.Controls.Add(chkSepetiKaydet)
+
+        yPos += 40
+
+        ' Marka Sınıf No
+        Dim lblMarkaSinifNo As New DevExpress.XtraEditors.LabelControl()
+        lblMarkaSinifNo.Text = "Marka Sınıf No (1-10):"
+        lblMarkaSinifNo.Location = New System.Drawing.Point(20, yPos)
+        grpGenel.Controls.Add(lblMarkaSinifNo)
+
+        Dim spnMarkaSinifNo As New DevExpress.XtraEditors.SpinEdit()
+        spnMarkaSinifNo.Location = New System.Drawing.Point(150, yPos)
+        spnMarkaSinifNo.Size = New System.Drawing.Size(80, 20)
+        spnMarkaSinifNo.Name = "spnMarkaSinifNo"
+        spnMarkaSinifNo.Properties.MinValue = 1
+        spnMarkaSinifNo.Properties.MaxValue = 10
+        spnMarkaSinifNo.EditValue = 2
+        grpGenel.Controls.Add(spnMarkaSinifNo)
+
+        ' Min Sipariş Tutarı
+        Dim lblMinSiparis As New DevExpress.XtraEditors.LabelControl()
+        lblMinSiparis.Text = "Min. Sipariş Tutarı:"
+        lblMinSiparis.Location = New System.Drawing.Point(250, yPos)
+        grpGenel.Controls.Add(lblMinSiparis)
+
+        Dim txtMinSiparisTutar As New DevExpress.XtraEditors.SpinEdit()
+        txtMinSiparisTutar.Location = New System.Drawing.Point(380, yPos)
+        txtMinSiparisTutar.Size = New System.Drawing.Size(100, 20)
+        txtMinSiparisTutar.Name = "txtMinSiparisTutar"
+        txtMinSiparisTutar.Properties.MinValue = 0
+        txtMinSiparisTutar.Properties.MaxValue = 999999
+        grpGenel.Controls.Add(txtMinSiparisTutar)
+
+        yPos += 40
+
+        ' Varsayılan Birim
+        Dim lblVarsayilanBirim As New DevExpress.XtraEditors.LabelControl()
+        lblVarsayilanBirim.Text = "Varsayılan Birim:"
+        lblVarsayilanBirim.Location = New System.Drawing.Point(20, yPos)
+        grpGenel.Controls.Add(lblVarsayilanBirim)
+
+        Dim txtVarsayilanBirim As New DevExpress.XtraEditors.TextEdit()
+        txtVarsayilanBirim.Location = New System.Drawing.Point(150, yPos)
+        txtVarsayilanBirim.Size = New System.Drawing.Size(100, 20)
+        txtVarsayilanBirim.Name = "txtVarsayilanBirim"
+        txtVarsayilanBirim.EditValue = "Adet"
+        grpGenel.Controls.Add(txtVarsayilanBirim)
+
+        tabGenel.Controls.Add(grpGenel)
+
+        ' ========== BUTONLAR ==========
+        Dim pnlButtons As New Panel()
+        pnlButtons.Dock = DockStyle.Bottom
+        pnlButtons.Height = 50
+
+        Dim btnKaydet As New DevExpress.XtraEditors.SimpleButton()
+        btnKaydet.Text = "Kaydet"
+        btnKaydet.Size = New System.Drawing.Size(100, 30)
+        btnKaydet.Location = New System.Drawing.Point(480, 10)
+        AddHandler btnKaydet.Click, Sub(s, ev)
+            Try
+                B2B_SaveParametre(chkBirimSecimi.Checked, chkMiktarGirisi.Checked, chkRenkSecimi.Checked, _
+                    chkBedenSecimi.Checked, chkVaryantSecimi.Checked, chkStokKontrol.Checked, _
+                    chkFiyatGoster.Checked, chkStokGoster.Checked, chkIskontoGoster.Checked, _
+                    chkMarkaSliderGoster.Checked, CInt(spnMarkaSinifNo.EditValue), chkKatalogGruplama.Checked, _
+                    chkSepetiKaydet.Checked, CDec(txtMinSiparisTutar.EditValue), txtVarsayilanBirim.Text)
+                XtraMessageBox.Show("B2B Ayarları başarıyla kaydedildi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Catch ex As Exception
+                XtraMessageBox.Show("Kayıt hatası: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End Sub
+        pnlButtons.Controls.Add(btnKaydet)
+
+        Dim btnIptal As New DevExpress.XtraEditors.SimpleButton()
+        btnIptal.Text = "Kapat"
+        btnIptal.Size = New System.Drawing.Size(100, 30)
+        btnIptal.Location = New System.Drawing.Point(590, 10)
+        AddHandler btnIptal.Click, Sub(s, ev)
+            frmB2B.Close()
+        End Sub
+        pnlButtons.Controls.Add(btnIptal)
+
+        frmB2B.Controls.Add(tabControl)
+        frmB2B.Controls.Add(pnlButtons)
+
+        ' Verileri yükle
+        B2B_LoadParametre(chkBirimSecimi, chkMiktarGirisi, chkRenkSecimi, chkBedenSecimi, _
+            chkVaryantSecimi, chkStokKontrol, chkFiyatGoster, chkStokGoster, chkIskontoGoster, _
+            chkMarkaSliderGoster, spnMarkaSinifNo, chkKatalogGruplama, chkSepetiKaydet, _
+            txtMinSiparisTutar, txtVarsayilanBirim)
+
+        frmB2B.ShowDialog()
+    End Sub
+
+    Private Sub B2B_LoadParametre(ByVal chkBirimSecimi As DevExpress.XtraEditors.CheckEdit, _
+        ByVal chkMiktarGirisi As DevExpress.XtraEditors.CheckEdit, _
+        ByVal chkRenkSecimi As DevExpress.XtraEditors.CheckEdit, _
+        ByVal chkBedenSecimi As DevExpress.XtraEditors.CheckEdit, _
+        ByVal chkVaryantSecimi As DevExpress.XtraEditors.CheckEdit, _
+        ByVal chkStokKontrol As DevExpress.XtraEditors.CheckEdit, _
+        ByVal chkFiyatGoster As DevExpress.XtraEditors.CheckEdit, _
+        ByVal chkStokGoster As DevExpress.XtraEditors.CheckEdit, _
+        ByVal chkIskontoGoster As DevExpress.XtraEditors.CheckEdit, _
+        ByVal chkMarkaSliderGoster As DevExpress.XtraEditors.CheckEdit, _
+        ByVal spnMarkaSinifNo As DevExpress.XtraEditors.SpinEdit, _
+        ByVal chkKatalogGruplama As DevExpress.XtraEditors.CheckEdit, _
+        ByVal chkSepetiKaydet As DevExpress.XtraEditors.CheckEdit, _
+        ByVal txtMinSiparisTutar As DevExpress.XtraEditors.SpinEdit, _
+        ByVal txtVarsayilanBirim As DevExpress.XtraEditors.TextEdit)
+        
+        Try
+            Dim ds As DataSet = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT TOP 1 * FROM tbB2BParametre"))
+            If ds.Tables(0).Rows.Count > 0 Then
+                Dim dr As DataRow = ds.Tables(0).Rows(0)
+                chkBirimSecimi.Checked = IIf(IsDBNull(dr("bBirimSecimi")), False, dr("bBirimSecimi"))
+                chkMiktarGirisi.Checked = IIf(IsDBNull(dr("bMiktarGirisi")), False, dr("bMiktarGirisi"))
+                chkRenkSecimi.Checked = IIf(IsDBNull(dr("bRenkSecimi")), False, dr("bRenkSecimi"))
+                chkBedenSecimi.Checked = IIf(IsDBNull(dr("bBedenSecimi")), False, dr("bBedenSecimi"))
+                chkVaryantSecimi.Checked = IIf(IsDBNull(dr("bVaryantSecimi")), False, dr("bVaryantSecimi"))
+                chkStokKontrol.Checked = IIf(IsDBNull(dr("bStokKontrol")), False, dr("bStokKontrol"))
+                chkFiyatGoster.Checked = IIf(IsDBNull(dr("bFiyatGoster")), True, dr("bFiyatGoster"))
+                chkStokGoster.Checked = IIf(IsDBNull(dr("bStokGoster")), False, dr("bStokGoster"))
+                chkIskontoGoster.Checked = IIf(IsDBNull(dr("bIskontoGoster")), False, dr("bIskontoGoster"))
+                chkMarkaSliderGoster.Checked = IIf(IsDBNull(dr("bMarkaSliderGoster")), False, dr("bMarkaSliderGoster"))
+                spnMarkaSinifNo.EditValue = IIf(IsDBNull(dr("nMarkaSinifNo")), 2, dr("nMarkaSinifNo"))
+                chkKatalogGruplama.Checked = IIf(IsDBNull(dr("bKatalogGruplama")), False, dr("bKatalogGruplama"))
+                chkSepetiKaydet.Checked = IIf(IsDBNull(dr("bSepetiKaydet")), False, dr("bSepetiKaydet"))
+                txtMinSiparisTutar.EditValue = IIf(IsDBNull(dr("nMinSiparisTutar")), 0, dr("nMinSiparisTutar"))
+                txtVarsayilanBirim.EditValue = IIf(IsDBNull(dr("sVarsayilanBirim")), "Adet", dr("sVarsayilanBirim"))
+            End If
+        Catch ex As Exception
+            Debug.WriteLine("B2B Parametre yükleme hatası: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub B2B_SaveParametre(ByVal bBirimSecimi As Boolean, ByVal bMiktarGirisi As Boolean, _
+        ByVal bRenkSecimi As Boolean, ByVal bBedenSecimi As Boolean, ByVal bVaryantSecimi As Boolean, _
+        ByVal bStokKontrol As Boolean, ByVal bFiyatGoster As Boolean, ByVal bStokGoster As Boolean, _
+        ByVal bIskontoGoster As Boolean, ByVal bMarkaSliderGoster As Boolean, ByVal nMarkaSinifNo As Integer, _
+        ByVal bKatalogGruplama As Boolean, ByVal bSepetiKaydet As Boolean, ByVal nMinSiparisTutar As Decimal, _
+        ByVal sVarsayilanBirim As String)
+        
+        Try
+            Dim cmd As New OleDb.OleDbCommand
+            Dim con As New OleDb.OleDbConnection
+            cmd.Connection = con
+            con.ConnectionString = connection
+            If con.State = ConnectionState.Closed Then
+                con.Open()
+            End If
+
+            ' Kayıt var mı kontrol et
+            Dim ds As DataSet = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT COUNT(*) as cnt FROM tbB2BParametre"))
+            Dim recordExists As Boolean = Convert.ToInt32(ds.Tables(0).Rows(0)("cnt")) > 0
+
+            Dim iBirim As Integer = IIf(bBirimSecimi, 1, 0)
+            Dim iMiktar As Integer = IIf(bMiktarGirisi, 1, 0)
+            Dim iRenk As Integer = IIf(bRenkSecimi, 1, 0)
+            Dim iBeden As Integer = IIf(bBedenSecimi, 1, 0)
+            Dim iVaryant As Integer = IIf(bVaryantSecimi, 1, 0)
+            Dim iStokKontrol As Integer = IIf(bStokKontrol, 1, 0)
+            Dim iFiyat As Integer = IIf(bFiyatGoster, 1, 0)
+            Dim iStok As Integer = IIf(bStokGoster, 1, 0)
+            Dim iIskonto As Integer = IIf(bIskontoGoster, 1, 0)
+            Dim iMarkaSlider As Integer = IIf(bMarkaSliderGoster, 1, 0)
+            Dim iKatalog As Integer = IIf(bKatalogGruplama, 1, 0)
+            Dim iSepet As Integer = IIf(bSepetiKaydet, 1, 0)
+
+            If recordExists Then
+                cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED UPDATE tbB2BParametre SET " & _
+                    "bBirimSecimi = " & iBirim & ", " & _
+                    "bMiktarGirisi = " & iMiktar & ", " & _
+                    "bRenkSecimi = " & iRenk & ", " & _
+                    "bBedenSecimi = " & iBeden & ", " & _
+                    "bVaryantSecimi = " & iVaryant & ", " & _
+                    "bStokKontrol = " & iStokKontrol & ", " & _
+                    "bFiyatGoster = " & iFiyat & ", " & _
+                    "bStokGoster = " & iStok & ", " & _
+                    "bIskontoGoster = " & iIskonto & ", " & _
+                    "bMarkaSliderGoster = " & iMarkaSlider & ", " & _
+                    "nMarkaSinifNo = " & nMarkaSinifNo & ", " & _
+                    "bKatalogGruplama = " & iKatalog & ", " & _
+                    "bSepetiKaydet = " & iSepet & ", " & _
+                    "nMinSiparisTutar = " & nMinSiparisTutar.ToString().Replace(",", ".") & ", " & _
+                    "sVarsayilanBirim = '" & sVarsayilanBirim & "', " & _
+                    "dtGuncelleme = GETDATE()")
+            Else
+                cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO tbB2BParametre " & _
+                    "(bBirimSecimi, bMiktarGirisi, bRenkSecimi, bBedenSecimi, bVaryantSecimi, bStokKontrol, " & _
+                    "bFiyatGoster, bStokGoster, bIskontoGoster, bMarkaSliderGoster, nMarkaSinifNo, " & _
+                    "bKatalogGruplama, bSepetiKaydet, nMinSiparisTutar, sVarsayilanBirim, dtGuncelleme) " & _
+                    "VALUES (" & iBirim & ", " & iMiktar & ", " & iRenk & ", " & iBeden & ", " & iVaryant & ", " & _
+                    iStokKontrol & ", " & iFiyat & ", " & iStok & ", " & iIskonto & ", " & iMarkaSlider & ", " & _
+                    nMarkaSinifNo & ", " & iKatalog & ", " & iSepet & ", " & nMinSiparisTutar.ToString().Replace(",", ".") & ", '" & _
+                    sVarsayilanBirim & "', GETDATE())")
+            End If
+            cmd.ExecuteNonQuery()
+            con.Close()
+        Catch ex As Exception
+            Throw New Exception("B2B Parametre kaydetme hatası: " & ex.Message)
         End Try
     End Sub
 
