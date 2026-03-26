@@ -366,16 +366,23 @@ Public Class LicenseInfo
                 Using reader As New StreamReader(response.GetResponseStream())
                     Dim json As String = reader.ReadToEnd()
                     
-                    If json.StartsWith("[") AndAlso json.EndsWith("]") Then
-                        json = json.Substring(1, json.Length - 2)
-                        Dim files() As String = json.Split(","c)
-                        For Each f As String In files
-                            Dim fileName As String = f.Trim().Trim(Chr(34))
+                    " API Response: {"success":true,"backups":[{"fileName":"x.bck"},...]}
+                    " fileName degerlerini cikar
+                    Dim startPos As Integer = 0
+                    While True
+                        Dim fnPos As Integer = json.IndexOf("""fileName"":""", startPos)
+                        If fnPos < 0 Then Exit While
+                        
+                        Dim valueStart As Integer = fnPos + 12  " fileName":" sonrasi
+                        Dim valueEnd As Integer = json.IndexOf("""", valueStart)
+                        If valueEnd > valueStart Then
+                            Dim fileName As String = json.Substring(valueStart, valueEnd - valueStart)
                             If Not String.IsNullOrEmpty(fileName) Then
                                 result.Add(fileName)
                             End If
-                        Next
-                    End If
+                        End If
+                        startPos = valueEnd + 1
+                    End While
                 End Using
             End Using
             

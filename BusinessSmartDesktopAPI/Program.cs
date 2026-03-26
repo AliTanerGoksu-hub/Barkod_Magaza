@@ -627,6 +627,60 @@ app.MapGet("/api/backup/list", (HttpContext context) =>
 });
 
 // Yedek indirme
+// ==================== BACKUP DELETE ====================
+app.MapPost("/api/backup/delete", async (HttpContext context) =>
+{
+    if (!ValidateApiKey(context))
+    {
+        return Results.Unauthorized();
+    }
+    
+    try
+    {
+        using var reader = new StreamReader(context.Request.Body);
+        var body = await reader.ReadToEndAsync();
+        var json = JsonSerializer.Deserialize<Dictionary<string, string>>(body);
+        
+        if (json == null || !json.ContainsKey("clientId") || !json.ContainsKey("fileName"))
+        {
+            return Results.BadRequest(new { error = "clientId ve fileName gerekli" });
+        }
+        
+        var clientId = json["clientId"];
+        var fileName = json["fileName"];
+        
+        if (string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(fileName))
+        {
+            return Results.BadRequest(new { error = "clientId ve fileName bos olamaz" });
+        }
+        
+        // Güvenlik kontrolü
+        if (fileName.Contains("..") || fileName.Contains("/") || fileName.Contains("\"))
+        {
+            return Results.BadRequest(new { error = "Gecersiz dosya adi" });
+        }
+        
+        var clientPath = Path.Combine(backupsPath, SanitizeFolderName(clientId));
+        var filePath = Path.Combine(clientPath, fileName);
+        
+        if (!File.Exists(filePath))
+        {
+            return Results.NotFound(new { error = "Dosya bulunamadi", fileName });
+        }
+        
+        File.Delete(filePath);
+        
+        Console.WriteLine($"[Backup Delete] Silindi: {clientId}/{fileName}");
+        
+        return Results.Ok(new { success = true, message = "Dosya silindi", fileName });
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[Backup Delete] Hata: {ex.Message}");
+        return Results.Problem($"Silme hatasi: {ex.Message}");
+    }
+});
+
 app.MapGet("/api/backup/download", async (HttpContext context) =>
 {
     if (!ValidateApiKey(context))
