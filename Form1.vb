@@ -19757,16 +19757,14 @@ Public Class Form1
                                                         Dim Source As String = ""
                                                         Dim sOzelNot As String = ""
 
-                                                        ' Yerel DB'den bilgileri al
+                                                        ' Artık FTP kullanılmıyor, API üzerinden yedek gönderiliyor
+                                                        ' api.barkodyazilimevi.com
                                                         con.ConnectionString = connection
                                                         cmd.Connection = con
                                                         con.Open()
                                                         cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT TOP 1 Lisans FROM tbParamGenel")
                                                         Dim sourceResult = cmd.ExecuteScalar()
                                                         Source = If(sourceResult IsNot Nothing, sourceResult.ToString(), "")
-                                                        cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT TOP 1 EticaretFtp FROM tbParamGenel")
-                                                        Dim ftpResult = cmd.ExecuteScalar()
-                                                        Ftp = If(ftpResult IsNot Nothing, ftpResult.ToString(), "")
                                                         con.Close()
 
                                                         ' Firma bilgisini API'den al (güvenli yöntem)
@@ -24011,11 +24009,11 @@ CleanupExcel:
     ''' <summary>
     ''' Gelişmiş FTP Yedekleme - 7z sıkıştırma + parçalı upload
     ''' </summary>
-    Public Sub GelismisYedekVeGonder(veritabani As String, yedekDosya As String, ftpAdres As String, ftpKullanici As String, ftpSifre As String)
+    Public Sub GelismisYedekVeGonder(veritabani As String, yedekDosya As String, Optional ftpAdres As String = "", Optional ftpKullanici As String = "", Optional ftpSifre As String = "")
         Try
             logla("[GelismisYedek] Başlıyor: " & veritabani)
 
-            ' 1. SQL Server yedeği al (sıkıştırmalı)
+            ' 1. SQL Server yedeği al
             If Not File.Exists(yedekDosya) Then
                 logla("[GelismisYedek] Yedek dosyası bulunamadı, yedek alınıyor...")
                 yedekle(veritabani, yedekDosya, False)
@@ -24031,32 +24029,36 @@ CleanupExcel:
             Dim orijinalBoyut As Long = New FileInfo(yedekDosya).Length
             logla("[GelismisYedek] Orijinal boyut: " & FormatBytes(orijinalBoyut))
 
-            ' 2. 7z ile sıkıştır (eğer 7z varsa)
+            ' 2. Sıkıştır (7z veya GZip)
             Dim sikistirilmisDosya As String = yedekDosya & ".7z"
             Dim gonderilecekDosya As String = yedekDosya
 
             If SikistirDosya7z(yedekDosya, sikistirilmisDosya) Then
                 gonderilecekDosya = sikistirilmisDosya
                 Dim sikistirilmisBoyut As Long = New FileInfo(sikistirilmisDosya).Length
-                logla("[GelismisYedek] 7z sıkıştırma başarılı: " & FormatBytes(orijinalBoyut) & " -> " & FormatBytes(sikistirilmisBoyut) & " (%" & Math.Round((1 - sikistirilmisBoyut / orijinalBoyut) * 100, 1) & " küçüldü)")
+                logla("[GelismisYedek] Sıkıştırma başarılı: " & FormatBytes(orijinalBoyut) & " -> " & FormatBytes(sikistirilmisBoyut))
             Else
-                logla("[GelismisYedek] 7z bulunamadı veya sıkıştırma başarısız, orijinal dosya gönderilecek")
+                logla("[GelismisYedek] Sıkıştırma başarısız, orijinal dosya gönderilecek")
             End If
 
-            ' 3. API ile Upload (FTP yerine)
+            ' 3. API ile Upload (api.barkodyazilimevi.com)
             Dim dosyaAdi As String = Path.GetFileName(gonderilecekDosya)
+            Dim clientId As String = If(String.IsNullOrEmpty(sDatabaseGenel), "UnknownClient", sDatabaseGenel)
             
-            ' Client ID olarak firma kodunu kullan
-            Dim clientId As String = If(String.IsNullOrEmpty(sDataBaseGenel), "UnknownClient", sDataBaseGenel)
+            logla("[GelismisYedek] API ile yükleniyor: " & dosyaAdi & " -> api.barkodyazilimevi.com")
             
-            logla("[GelismisYedek] API ile yükleniyor: " & dosyaAdi)
-            Dim uploadBasarili As Boolean = ApiClient.UploadBackup(gonderilecekDosya, clientId)
+            Dim uploadBasarili As Boolean = False
+            Try
+                uploadBasarili = ApiClient.UploadBackup(gonderilecekDosya, clientId)
+            Catch apiEx As Exception
+                logla("[GelismisYedek] API hatası: " & apiEx.Message)
+            End Try
 
             If uploadBasarili Then
                 logla("[GelismisYedek] API upload başarılı: " & dosyaAdi)
                 bFtpYedekBasarisiz = False
 
-                ' Sıkıştırılmış dosyayı sil (orijinal kalsın)
+                ' Sıkıştırılmış dosyayı sil
                 If File.Exists(sikistirilmisDosya) AndAlso sikistirilmisDosya <> yedekDosya Then
                     Try
                         File.Delete(sikistirilmisDosya)
@@ -24067,8 +24069,6 @@ CleanupExcel:
                 logla("[GelismisYedek] API upload BAŞARISIZ - 02:00'da tekrar denenecek")
                 bFtpYedekBasarisiz = True
                 sFtpYedekDosya = gonderilecekDosya
-                sFtpYedekHedef = ""
-                sFtpYedekFtp = ftpAdres
             End If
 
         Catch ex As Exception
