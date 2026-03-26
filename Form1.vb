@@ -9547,22 +9547,17 @@ Public Class Form1
         Dim güncelVersionTarih As DateTime
         Dim simdikiVersionTarihManage As DateTime
         Dim guncelVersionTarihManage As DateTime
-        Dim ftpRequest As FtpWebRequest
+        ' Artik FTP yerine API kullaniliyor
         con.ConnectionString = connection
         cmd.Connection = con
         con.Open()
         cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT TOP 1 otoGuncelleme FROM tbParamGenel")
-        otoGuncelleme = Convert.ToBoolean(cmd.ExecuteScalar().ToString())
-        cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT TOP 1 EticaretFtp FROM tbParamGenel")
-        Ftp = cmd.ExecuteScalar.ToString()
+        Dim otoGuncResult = cmd.ExecuteScalar()
+        otoGuncelleme = If(otoGuncResult IsNot Nothing, Convert.ToBoolean(otoGuncResult.ToString()), False)
         con.Close()
-        If My.Computer.Network.Ping(Ftp) Then
-            Ftp = Ftp
-        Else
-            Ftp = "213.14.187.18"
-        End If
 
-        If My.Computer.Network.Ping(Ftp) Then
+        ' API erisilebilirlik kontrolu
+        If ApiClient.IsApiAvailable() Then
 
             ' Eski _old dosyalarını silmeye çalış - erişim hatası olursa sessizce geç
             Try
@@ -24270,7 +24265,11 @@ CleanupExcel:
     ''' 300MB altı dosyalar direkt gönderilir
     ''' Başarılı upload sonrası eski yedeği siler
     ''' </summary>
+    ' DEPRECATED: Artik API kullaniliyor
     Private Function ParcaliFtpUpload(dosyaYolu As String, ftpHedef As String, kullanici As String, sifre As String) As Boolean
+        logla("[FTP] ParcaliFtpUpload DEVRE DISI")
+        Return False
+        ' Eski kod asagida
         Try
             Dim dosyaBoyut As Long = New FileInfo(dosyaYolu).Length
             Dim parcaBoyut As Long = 150 * 1024 * 1024 ' 150MB parçalar (güvenli boyut)
@@ -24354,7 +24353,11 @@ CleanupExcel:
     ''' <summary>
     ''' Direkt FTP Upload - küçük dosyalar için
     ''' </summary>
+    ' DEPRECATED: Artik API kullaniliyor
     Private Function DirekFtpUpload(dosyaYolu As String, ftpHedef As String, kullanici As String, sifre As String) As Boolean
+        logla("[FTP] DirekFtpUpload DEVRE DISI")
+        Return False
+        ' Eski kod asagida
         Try
             Dim request As FtpWebRequest = CType(WebRequest.Create(ftpHedef), FtpWebRequest)
             request.Method = WebRequestMethods.Ftp.UploadFile
@@ -24399,7 +24402,11 @@ CleanupExcel:
     ''' <summary>
     ''' FTP'den eski yedek dosyalarını sil (bugünkü hariç)
     ''' </summary>
+    ' DEPRECATED: Artik API kullaniliyor
     Private Sub FtpEskiYedekleriSil(ftpAdres As String, kullanici As String, sifre As String, bugunDosyaAdi As String)
+        logla("[FTP] FtpEskiYedekleriSil DEVRE DISI")
+        Exit Sub
+        ' Eski kod asagida
         Try
             logla("[FTP Temizlik] Eski yedekler kontrol ediliyor...")
             
