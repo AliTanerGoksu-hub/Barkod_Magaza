@@ -15913,6 +15913,7 @@ Public Class frm_Perakende_Satis
     End Function
 
     Public Sub SatisiKolaysoftaGonder(nAlisverisID As String, Optional cihazId As String = "")
+        DevExpress.Data.CurrencyDataController.DisableThreadingProblemsDetection = True
         Dim responseContent As String = String.Empty
         Try
             InitKolaysoftTokenVeCihaz(sDepo)
@@ -16008,21 +16009,29 @@ Public Class frm_Perakende_Satis
 
             ' Kullanıcı dostu hata mesajı oluıtur
             Dim kullaniciMesaji As String = KolaysoftHataCevir(responseContent, ex.Message)
-            If Me.InvokeRequired Then
-                Me.BeginInvoke(CType(Sub() MessageBox.Show(kullaniciMesaji, "Kolaysoft Fatura Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error), Action))
-            Else
-                MessageBox.Show(kullaniciMesaji, "Kolaysoft Fatura Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End If
+            Try
+                Dim msg As String = kullaniciMesaji
+                If Application.OpenForms.Count > 0 AndAlso Application.OpenForms(0).IsHandleCreated Then
+                    Application.OpenForms(0).BeginInvoke(CType(Sub() MessageBox.Show(msg, "Kolaysoft Fatura Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error), Action))
+                Else
+                    MessageBox.Show(msg, "Kolaysoft Fatura Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End If
+            Catch
+            End Try
 
         Catch ex As Exception
             LogYaz("SatisiKolaysoftaGonder", "Hata: " & ex.Message & vbCrLf & "Yanıt: " & responseContent)
 
             Dim kullaniciMesaji As String = KolaysoftHataCevir(responseContent, ex.Message)
-            If Me.InvokeRequired Then
-                Me.BeginInvoke(CType(Sub() MessageBox.Show(kullaniciMesaji, "Kolaysoft Fatura Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error), Action))
-            Else
-                MessageBox.Show(kullaniciMesaji, "Kolaysoft Fatura Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End If
+            Try
+                Dim msg As String = kullaniciMesaji
+                If Application.OpenForms.Count > 0 AndAlso Application.OpenForms(0).IsHandleCreated Then
+                    Application.OpenForms(0).BeginInvoke(CType(Sub() MessageBox.Show(msg, "Kolaysoft Fatura Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error), Action))
+                Else
+                    MessageBox.Show(msg, "Kolaysoft Fatura Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End If
+            Catch
+            End Try
         End Try
     End Sub
 
