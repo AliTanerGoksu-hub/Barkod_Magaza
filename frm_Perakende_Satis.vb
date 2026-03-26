@@ -16008,13 +16008,21 @@ Public Class frm_Perakende_Satis
 
             ' Kullanıcı dostu hata mesajı oluıtur
             Dim kullaniciMesaji As String = KolaysoftHataCevir(responseContent, ex.Message)
-            MessageBox.Show(kullaniciMesaji, "Kolaysoft Fatura Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            If Me.InvokeRequired Then
+                Me.BeginInvoke(CType(Sub() MessageBox.Show(kullaniciMesaji, "Kolaysoft Fatura Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error), Action))
+            Else
+                MessageBox.Show(kullaniciMesaji, "Kolaysoft Fatura Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
 
         Catch ex As Exception
             LogYaz("SatisiKolaysoftaGonder", "Hata: " & ex.Message & vbCrLf & "Yanıt: " & responseContent)
 
             Dim kullaniciMesaji As String = KolaysoftHataCevir(responseContent, ex.Message)
-            MessageBox.Show(kullaniciMesaji, "Kolaysoft Fatura Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            If Me.InvokeRequired Then
+                Me.BeginInvoke(CType(Sub() MessageBox.Show(kullaniciMesaji, "Kolaysoft Fatura Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error), Action))
+            Else
+                MessageBox.Show(kullaniciMesaji, "Kolaysoft Fatura Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
         End Try
     End Sub
 
