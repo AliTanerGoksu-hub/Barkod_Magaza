@@ -24402,9 +24402,29 @@ CleanupExcel:
     ''' <summary>
     ''' FTP'den eski yedek dosyalarını sil (bugünkü hariç)
     ''' </summary>
-    ' DEPRECATED: Artik API kullaniliyor
+    ' Eski yedekleri API uzerinden siler
     Private Sub FtpEskiYedekleriSil(ftpAdres As String, kullanici As String, sifre As String, bugunDosyaAdi As String)
-        logla("[FTP] FtpEskiYedekleriSil DEVRE DISI")
+        Try
+            ' Artik API kullaniliyor - FTP parametreleri ignored
+            Dim clientId As String = If(String.IsNullOrEmpty(sDatabaseGenel), "UnknownClient", sDatabaseGenel)
+            
+            logla("[API Temizlik] Eski yedekler kontrol ediliyor...")
+            
+            Dim silinenSayisi As Integer = ApiClient.CleanupOldBackups(clientId, bugunDosyaAdi)
+            
+            If silinenSayisi > 0 Then
+                logla("[API Temizlik] Toplam " & silinenSayisi & " eski yedek silindi")
+            Else
+                logla("[API Temizlik] Silinecek eski yedek bulunamadi")
+            End If
+            
+        Catch ex As Exception
+            logla("[API Temizlik] Hata: " & ex.Message)
+        End Try
+    End Sub
+    
+    ' ESKİ FTP KODU ASAGIDA - KULLANILMIYOR
+    Private Sub FtpEskiYedekleriSil_ESKI()
         Exit Sub
         ' Eski kod asagida
         Try

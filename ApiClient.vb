@@ -346,4 +346,119 @@ Public Class LicenseInfo
     Public Property OzelNot As String
     Public Property Parametre1 As String
     Public Property Parametre2 As String
+
+    ''' <summary>
+    ''' Eski yedek dosyalarini listeler (API uzerinden)
+    ''' </summary>
+    Public Shared Function ListBackups(clientId As String) As List(Of String)
+        Dim result As New List(Of String)
+        
+        Try
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+            
+            Dim url As String = $"{API_BASE_URL}/api/backup/list?clientId={clientId}"
+            Dim request As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
+            request.Method = "GET"
+            request.Headers.Add("X-Api-Key", API_KEY)
+            request.Timeout = 30000
+            
+            Using response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
+                Using reader As New StreamReader(response.GetResponseStream())
+                    Dim json As String = reader.ReadToEnd()
+                    
+                    If json.StartsWith("[") AndAlso json.EndsWith("]") Then
+                        json = json.Substring(1, json.Length - 2)
+                        Dim files() As String = json.Split(","c)
+                        For Each f As String In files
+                            Dim fileName As String = f.Trim().Trim(Chr(34))
+                            If Not String.IsNullOrEmpty(fileName) Then
+                                result.Add(fileName)
+                            End If
+                        Next
+                    End If
+                End Using
+            End Using
+            
+        Catch ex As Exception
+            Debug.WriteLine("[ApiClient.ListBackups] Hata: " & ex.Message)
+        End Try
+        
+        Return result
+    End Function
+    
+    ''' <summary>
+    ''' Belirtilen yedek dosyasini siler (API uzerinden)
+    ''' </summary>
+    Public Shared Function DeleteBackup(clientId As String, fileName As String) As Boolean
+        Try
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+            
+            Dim url As String = $"{API_BASE_URL}/api/backup/delete"
+            Dim request As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
+            request.Method = "POST"
+            request.ContentType = "application/json"
+            request.Headers.Add("X-Api-Key", API_KEY)
+            request.Timeout = 30000
+            
+            Dim postData As String = String.Format("{{{0}clientId{0}:{0}{1}{0},{0}fileName{0}:{0}{2}{0}}}", Chr(34), clientId, fileName)
+            Dim postBytes As Byte() = Encoding.UTF8.GetBytes(postData)
+            request.ContentLength = postBytes.Length
+            
+            Using requestStream As Stream = request.GetRequestStream()
+                requestStream.Write(postBytes, 0, postBytes.Length)
+            End Using
+            
+            Using response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
+                Return response.StatusCode = HttpStatusCode.OK
+            End Using
+            
+        Catch ex As Exception
+            Debug.WriteLine("[ApiClient.DeleteBackup] Hata: " & ex.Message)
+            Return False
+        End Try
+    End Function
+    
+    ''' <summary>
+    ''' Eski yedekleri temizler - bugunku haric tum yedekleri siler
+    ''' </summary>
+    Public Shared Function CleanupOldBackups(clientId As String, bugunDosyaAdi As String) As Integer
+        Dim silinenSayisi As Integer = 0
+        
+        Try
+            Dim dosyaListesi As List(Of String) = ListBackups(clientId)
+            
+            If dosyaListesi.Count = 0 Then
+                Return 0
+            End If
+            
+            Dim bugunTemel As String = ""
+            If bugunDosyaAdi.Contains("_") Then
+                Dim parcalar() As String = bugunDosyaAdi.Split("_"c)
+                If parcalar.Length >= 2 Then
+                    bugunTemel = parcalar(0) & "_" & parcalar(1)
+                End If
+            End If
+            
+            For Each dosya As String In dosyaListesi
+                If dosya = bugunDosyaAdi OrElse dosya.StartsWith(bugunDosyaAdi) Then
+                    Continue For
+                End If
+                
+                If Not String.IsNullOrEmpty(bugunTemel) AndAlso dosya.StartsWith(bugunTemel) Then
+                    If dosya.EndsWith(".BCK") OrElse dosya.EndsWith(".gz") OrElse dosya.EndsWith(".7z") OrElse dosya.EndsWith(".rar") OrElse dosya.Contains(".part") Then
+                        If DeleteBackup(clientId, dosya) Then
+                            silinenSayisi += 1
+                            Debug.WriteLine("[ApiClient.CleanupOldBackups] Silindi: " & dosya)
+                        End If
+                    End If
+                End If
+            Next
+            
+        Catch ex As Exception
+            Debug.WriteLine("[ApiClient.CleanupOldBackups] Hata: " & ex.Message)
+        End Try
+        
+        Return silinenSayisi
+    End Function
+
 End Class
