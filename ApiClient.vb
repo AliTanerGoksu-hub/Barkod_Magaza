@@ -19,7 +19,6 @@ Public Class ApiClient
         result.Success = False
         
         Try
-            ' TLS 1.2 kullan
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
             
             Dim url As String = $"{API_BASE_URL}/api/update/info?file={platform}/{fileName}"
@@ -32,11 +31,9 @@ Public Class ApiClient
                 Using reader As New StreamReader(response.GetResponseStream())
                     Dim json As String = reader.ReadToEnd()
                     
-                    ' Basit JSON parsing
                     If json.Contains("""success"":true") OrElse json.Contains("""success"": true") Then
                         result.Success = True
                         
-                        ' lastModified parse et
                         Dim lastModifiedStart As Integer = json.IndexOf("""lastModified"":")
                         If lastModifiedStart > 0 Then
                             Dim valueStart As Integer = json.IndexOf("""", lastModifiedStart + 15) + 1
@@ -47,7 +44,6 @@ Public Class ApiClient
                             End If
                         End If
                         
-                        ' fileSize parse et
                         Dim fileSizeStart As Integer = json.IndexOf("""fileSize"":")
                         If fileSizeStart > 0 Then
                             Dim valueStart As Integer = fileSizeStart + 11
@@ -74,31 +70,28 @@ Public Class ApiClient
     ''' </summary>
     Public Shared Function DownloadUpdateFile(fileName As String, platform As String, localPath As String) As Boolean
         Try
-            ' TLS 1.2 kullan
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
             
             Dim url As String = $"{API_BASE_URL}/api/update/download?file={platform}/{fileName}"
             Dim request As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
             request.Method = "GET"
             request.Headers.Add("X-Api-Key", API_KEY)
-            request.Timeout = 300000 ' 5 dakika timeout - büyük dosyalar için
+            request.Timeout = 300000
             
             Using response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
                 Using responseStream As Stream = response.GetResponseStream()
-                    ' Hedef klasörü oluştur
                     Dim dir As String = Path.GetDirectoryName(localPath)
                     If Not Directory.Exists(dir) Then
                         Directory.CreateDirectory(dir)
                     End If
                     
-                    ' Dosyayı kaydet
                     Using fileStream As New FileStream(localPath, FileMode.Create, FileAccess.Write)
                         responseStream.CopyTo(fileStream)
                     End Using
                 End Using
             End Using
             
-            Debug.WriteLine("[ApiClient.DownloadUpdateFile] Başarılı: " & fileName)
+            Debug.WriteLine("[ApiClient.DownloadUpdateFile] Basarili: " & fileName)
             Return True
             
         Catch ex As Exception
@@ -116,7 +109,6 @@ Public Class ApiClient
                 Return False
             End If
             
-            ' TLS 1.2 kullan
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
             
             Dim url As String = $"{API_BASE_URL}/api/backup/upload"
@@ -127,13 +119,12 @@ Public Class ApiClient
             request.ContentType = "multipart/form-data; boundary=" & boundary
             request.Headers.Add("X-Api-Key", API_KEY)
             request.Headers.Add("X-Client-Id", clientId)
-            request.Timeout = 600000 ' 10 dakika timeout
+            request.Timeout = 600000
             
             Using requestStream As Stream = request.GetRequestStream()
                 Dim fileBytes As Byte() = File.ReadAllBytes(localFilePath)
                 Dim fileName As String = Path.GetFileName(localFilePath)
                 
-                ' Multipart form data oluştur
                 Dim header As String = $"--{boundary}" & vbCrLf &
                     $"Content-Disposition: form-data; name=""file""; filename=""{fileName}""" & vbCrLf &
                     "Content-Type: application/octet-stream" & vbCrLf & vbCrLf
@@ -147,7 +138,7 @@ Public Class ApiClient
             End Using
             
             Using response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
-                Debug.WriteLine("[ApiClient.UploadBackup] Başarılı: " & Path.GetFileName(localFilePath))
+                Debug.WriteLine("[ApiClient.UploadBackup] Basarili: " & Path.GetFileName(localFilePath))
                 Return response.StatusCode = HttpStatusCode.OK
             End Using
             
@@ -165,7 +156,6 @@ Public Class ApiClient
         result.IsValid = False
         
         Try
-            ' TLS 1.2 kullan
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
             
             Dim url As String = $"{API_BASE_URL}/api/license/verify"
@@ -175,7 +165,6 @@ Public Class ApiClient
             request.Headers.Add("X-Api-Key", API_KEY)
             request.Timeout = 30000
             
-            ' JSON body
             Dim jsonBody As String = "{""licenseKey"":""" & licenseKey & """,""machineId"":""" & machineId & """}"
             Dim bodyBytes As Byte() = Encoding.UTF8.GetBytes(jsonBody)
             
@@ -188,21 +177,12 @@ Public Class ApiClient
                     Dim json As String = reader.ReadToEnd()
                     
                     result.IsValid = json.Contains("""isValid"":true") OrElse json.Contains("""isValid"": true")
-                    
-                    ' Firma adını parse et
                     result.FirmaAdi = ParseJsonString(json, "firmaAdi")
-                    
-                    ' Mesajı parse et
                     result.Message = ParseJsonString(json, "message")
-                    
-                    ' OzelNot parse et
                     result.OzelNot = ParseJsonString(json, "ozelNot")
-                    
-                    ' Parametre1, Parametre2 parse et
                     result.Parametre1 = ParseJsonString(json, "parametre1")
                     result.Parametre2 = ParseJsonString(json, "parametre2")
                     
-                    ' ExpiryDate parse et
                     Dim expiryStr As String = ParseJsonString(json, "expiryDate")
                     If Not String.IsNullOrEmpty(expiryStr) Then
                         DateTime.TryParse(expiryStr, result.ExpiryDate)
@@ -213,14 +193,14 @@ Public Class ApiClient
         Catch ex As Exception
             Debug.WriteLine("[ApiClient.VerifyLicense] Hata: " & ex.Message)
             result.IsValid = False
-            result.Message = "Bağlantı hatası: " & ex.Message
+            result.Message = "Baglanti hatasi: " & ex.Message
         End Try
         
         Return result
     End Function
     
     ''' <summary>
-    ''' Helper: JSON string parse - null değerleri boş string olarak döndürür
+    ''' Helper: JSON string parse
     ''' </summary>
     Private Shared Function ParseJsonString(json As String, fieldName As String) As String
         Dim searchKey As String = """" & fieldName & """:"
@@ -228,29 +208,25 @@ Public Class ApiClient
         If startIdx < 0 Then Return ""
 
         startIdx += searchKey.Length
-        ' Skip whitespace
         While startIdx < json.Length AndAlso json(startIdx) = " "c
             startIdx += 1
         End While
 
         If startIdx >= json.Length Then Return ""
 
-        ' Check for null value
         If startIdx + 4 <= json.Length AndAlso json.Substring(startIdx, 4) = "null" Then
             Return ""
         End If
         
-        ' Check if it's a string value (starts with quote)
         If json(startIdx) = """"c Then
-            startIdx += 1 ' Skip opening quote
+            startIdx += 1
             Dim endIdx As Integer = json.IndexOf(""""c, startIdx)
             If endIdx > startIdx Then
                 Return json.Substring(startIdx, endIdx - startIdx)
             ElseIf endIdx = startIdx Then
-                Return "" ' Empty string ""
+                Return ""
             End If
         Else
-            ' Non-string value (number, boolean)
             Dim endIdx As Integer = json.IndexOfAny(New Char() {","c, "}"c}, startIdx)
             If endIdx > startIdx Then
                 Dim value As String = json.Substring(startIdx, endIdx - startIdx).Trim()
@@ -263,11 +239,10 @@ Public Class ApiClient
     End Function
     
     ''' <summary>
-    ''' Lisans aktivasyonu - MAC ID kaydet
+    ''' Lisans aktivasyonu
     ''' </summary>
     Public Shared Function ActivateLicense(licenseKey As String, machineId As String, computerName As String) As Boolean
         Try
-            ' TLS 1.2 kullan
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
             
             Dim url As String = $"{API_BASE_URL}/api/license/activate"
@@ -277,7 +252,6 @@ Public Class ApiClient
             request.Headers.Add("X-Api-Key", API_KEY)
             request.Timeout = 30000
             
-            ' JSON body
             Dim jsonBody As String = "{" &
                 """licenseKey"":""" & licenseKey & """," &
                 """machineId"":""" & machineId & """," &
@@ -307,7 +281,6 @@ Public Class ApiClient
     ''' </summary>
     Public Shared Function IsApiAvailable() As Boolean
         Try
-            ' TLS 1.2 kullan
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
             
             Dim request As HttpWebRequest = CType(WebRequest.Create(API_BASE_URL), HttpWebRequest)
@@ -321,6 +294,130 @@ Public Class ApiClient
         Catch
             Return False
         End Try
+    End Function
+    
+    ''' <summary>
+    ''' Yedek dosyalarini listeler
+    ''' </summary>
+    Public Shared Function ListBackups(clientId As String) As List(Of String)
+        Dim result As New List(Of String)
+        
+        Try
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+            
+            Dim url As String = $"{API_BASE_URL}/api/backup/list?clientId={clientId}"
+            Dim request As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
+            request.Method = "GET"
+            request.Headers.Add("X-Api-Key", API_KEY)
+            request.Timeout = 30000
+            
+            Using response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
+                Using reader As New StreamReader(response.GetResponseStream())
+                    Dim json As String = reader.ReadToEnd()
+                    
+                    ' Parse fileName values from JSON response
+                    Dim searchStr As String = """fileName"":"""
+                    Dim startPos As Integer = 0
+                    
+                    While True
+                        Dim fnPos As Integer = json.IndexOf(searchStr, startPos)
+                        If fnPos < 0 Then Exit While
+                        
+                        Dim valueStart As Integer = fnPos + searchStr.Length
+                        Dim valueEnd As Integer = json.IndexOf("""", valueStart)
+                        If valueEnd > valueStart Then
+                            Dim fileName As String = json.Substring(valueStart, valueEnd - valueStart)
+                            If Not String.IsNullOrEmpty(fileName) Then
+                                result.Add(fileName)
+                            End If
+                        End If
+                        startPos = valueEnd + 1
+                    End While
+                End Using
+            End Using
+            
+        Catch ex As Exception
+            Debug.WriteLine("[ApiClient.ListBackups] Hata: " & ex.Message)
+        End Try
+        
+        Return result
+    End Function
+    
+    ''' <summary>
+    ''' Yedek dosyasini siler
+    ''' </summary>
+    Public Shared Function DeleteBackup(clientId As String, fileName As String) As Boolean
+        Try
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+            
+            Dim url As String = $"{API_BASE_URL}/api/backup/delete"
+            Dim request As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
+            request.Method = "POST"
+            request.ContentType = "application/json"
+            request.Headers.Add("X-Api-Key", API_KEY)
+            request.Timeout = 30000
+            
+            Dim jsonBody As String = "{""clientId"":""" & clientId & """,""fileName"":""" & fileName & """}"
+            Dim bodyBytes As Byte() = Encoding.UTF8.GetBytes(jsonBody)
+            request.ContentLength = bodyBytes.Length
+            
+            Using requestStream As Stream = request.GetRequestStream()
+                requestStream.Write(bodyBytes, 0, bodyBytes.Length)
+            End Using
+            
+            Using response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
+                Return response.StatusCode = HttpStatusCode.OK
+            End Using
+            
+        Catch ex As Exception
+            Debug.WriteLine("[ApiClient.DeleteBackup] Hata: " & ex.Message)
+            Return False
+        End Try
+    End Function
+    
+    ''' <summary>
+    ''' Eski yedekleri temizler - bugunku haric
+    ''' </summary>
+    Public Shared Function CleanupOldBackups(clientId As String, bugunDosyaAdi As String) As Integer
+        Dim silinenSayisi As Integer = 0
+        
+        Try
+            Dim dosyaListesi As List(Of String) = ListBackups(clientId)
+            
+            If dosyaListesi.Count = 0 Then
+                Return 0
+            End If
+            
+            Dim bugunTemel As String = ""
+            If bugunDosyaAdi.Contains("_") Then
+                Dim parcalar() As String = bugunDosyaAdi.Split("_"c)
+                If parcalar.Length >= 2 Then
+                    bugunTemel = parcalar(0) & "_" & parcalar(1)
+                End If
+            End If
+            
+            For Each dosya As String In dosyaListesi
+                ' Bugunku dosyayi silme
+                If dosya = bugunDosyaAdi OrElse dosya.StartsWith(bugunDosyaAdi) Then
+                    Continue For
+                End If
+                
+                ' Ayni firmaya ait eski yedekleri sil
+                If Not String.IsNullOrEmpty(bugunTemel) AndAlso dosya.StartsWith(bugunTemel) Then
+                    If dosya.EndsWith(".BCK") OrElse dosya.EndsWith(".gz") OrElse dosya.EndsWith(".7z") OrElse dosya.EndsWith(".rar") OrElse dosya.Contains(".part") Then
+                        If DeleteBackup(clientId, dosya) Then
+                            silinenSayisi += 1
+                            Debug.WriteLine("[ApiClient.CleanupOldBackups] Silindi: " & dosya)
+                        End If
+                    End If
+                End If
+            Next
+            
+        Catch ex As Exception
+            Debug.WriteLine("[ApiClient.CleanupOldBackups] Hata: " & ex.Message)
+        End Try
+        
+        Return silinenSayisi
     End Function
     
 End Class
@@ -346,126 +443,4 @@ Public Class LicenseInfo
     Public Property OzelNot As String
     Public Property Parametre1 As String
     Public Property Parametre2 As String
-
-    ''' <summary>
-    ''' Eski yedek dosyalarini listeler (API uzerinden)
-    ''' </summary>
-    Public Shared Function ListBackups(clientId As String) As List(Of String)
-        Dim result As New List(Of String)
-        
-        Try
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-            
-            Dim url As String = $"{API_BASE_URL}/api/backup/list?clientId={clientId}"
-            Dim request As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
-            request.Method = "GET"
-            request.Headers.Add("X-Api-Key", API_KEY)
-            request.Timeout = 30000
-            
-            Using response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
-                Using reader As New StreamReader(response.GetResponseStream())
-                    Dim json As String = reader.ReadToEnd()
-                    
-                    " API Response: {"success":true,"backups":[{"fileName":"x.bck"},...]}
-                    " fileName degerlerini cikar
-                    Dim startPos As Integer = 0
-                    While True
-                        Dim fnPos As Integer = json.IndexOf("""fileName"":""", startPos)
-                        If fnPos < 0 Then Exit While
-                        
-                        Dim valueStart As Integer = fnPos + 12  " fileName":" sonrasi
-                        Dim valueEnd As Integer = json.IndexOf("""", valueStart)
-                        If valueEnd > valueStart Then
-                            Dim fileName As String = json.Substring(valueStart, valueEnd - valueStart)
-                            If Not String.IsNullOrEmpty(fileName) Then
-                                result.Add(fileName)
-                            End If
-                        End If
-                        startPos = valueEnd + 1
-                    End While
-                End Using
-            End Using
-            
-        Catch ex As Exception
-            Debug.WriteLine("[ApiClient.ListBackups] Hata: " & ex.Message)
-        End Try
-        
-        Return result
-    End Function
-    
-    ''' <summary>
-    ''' Belirtilen yedek dosyasini siler (API uzerinden)
-    ''' </summary>
-    Public Shared Function DeleteBackup(clientId As String, fileName As String) As Boolean
-        Try
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-            
-            Dim url As String = $"{API_BASE_URL}/api/backup/delete"
-            Dim request As HttpWebRequest = CType(WebRequest.Create(url), HttpWebRequest)
-            request.Method = "POST"
-            request.ContentType = "application/json"
-            request.Headers.Add("X-Api-Key", API_KEY)
-            request.Timeout = 30000
-            
-            Dim postData As String = String.Format("{{{0}clientId{0}:{0}{1}{0},{0}fileName{0}:{0}{2}{0}}}", Chr(34), clientId, fileName)
-            Dim postBytes As Byte() = Encoding.UTF8.GetBytes(postData)
-            request.ContentLength = postBytes.Length
-            
-            Using requestStream As Stream = request.GetRequestStream()
-                requestStream.Write(postBytes, 0, postBytes.Length)
-            End Using
-            
-            Using response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
-                Return response.StatusCode = HttpStatusCode.OK
-            End Using
-            
-        Catch ex As Exception
-            Debug.WriteLine("[ApiClient.DeleteBackup] Hata: " & ex.Message)
-            Return False
-        End Try
-    End Function
-    
-    ''' <summary>
-    ''' Eski yedekleri temizler - bugunku haric tum yedekleri siler
-    ''' </summary>
-    Public Shared Function CleanupOldBackups(clientId As String, bugunDosyaAdi As String) As Integer
-        Dim silinenSayisi As Integer = 0
-        
-        Try
-            Dim dosyaListesi As List(Of String) = ListBackups(clientId)
-            
-            If dosyaListesi.Count = 0 Then
-                Return 0
-            End If
-            
-            Dim bugunTemel As String = ""
-            If bugunDosyaAdi.Contains("_") Then
-                Dim parcalar() As String = bugunDosyaAdi.Split("_"c)
-                If parcalar.Length >= 2 Then
-                    bugunTemel = parcalar(0) & "_" & parcalar(1)
-                End If
-            End If
-            
-            For Each dosya As String In dosyaListesi
-                If dosya = bugunDosyaAdi OrElse dosya.StartsWith(bugunDosyaAdi) Then
-                    Continue For
-                End If
-                
-                If Not String.IsNullOrEmpty(bugunTemel) AndAlso dosya.StartsWith(bugunTemel) Then
-                    If dosya.EndsWith(".BCK") OrElse dosya.EndsWith(".gz") OrElse dosya.EndsWith(".7z") OrElse dosya.EndsWith(".rar") OrElse dosya.Contains(".part") Then
-                        If DeleteBackup(clientId, dosya) Then
-                            silinenSayisi += 1
-                            Debug.WriteLine("[ApiClient.CleanupOldBackups] Silindi: " & dosya)
-                        End If
-                    End If
-                End If
-            Next
-            
-        Catch ex As Exception
-            Debug.WriteLine("[ApiClient.CleanupOldBackups] Hata: " & ex.Message)
-        End Try
-        
-        Return silinenSayisi
-    End Function
-
 End Class
