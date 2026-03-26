@@ -17119,6 +17119,25 @@ Public Class frm_Perakende_Satis_Pesin
     End Function
     Public Sub SatisiKolaysoftaGonder(nAlisverisID As String, Optional cihazId As String = "")
         DevExpress.Data.CurrencyDataController.DisableThreadingProblemsDetection = True
+
+        ' Iptal veya iade kontrolu - net tutar 0 veya negatifse Kolaysoft'a gonderme
+        Try
+            Dim dtKontrol As DataTable = SQLCalistir("SELECT ISNULL(lNetTutar,0) AS lNet, ISNULL(nGirisCikis,0) AS nGC FROM tbAlisveris WHERE nAlisverisID = '" & nAlisverisID.Replace("'", "''") & "'")
+            If dtKontrol IsNot Nothing AndAlso dtKontrol.Rows.Count > 0 Then
+                Dim lNet As Decimal = CDec(If(IsDBNull(dtKontrol.Rows(0)("lNet")), 0, dtKontrol.Rows(0)("lNet")))
+                Dim nGC As Integer = CInt(If(IsDBNull(dtKontrol.Rows(0)("nGC")), 0, dtKontrol.Rows(0)("nGC")))
+                If lNet <= 0 OrElse nGC = 4 Then
+                    LogYaz("SatisiKolaysoftaGonder", "Iptal/iade belgesi - Kolaysoft'a gonderilmedi. lNetTutar=" & lNet.ToString() & " nGirisCikis=" & nGC.ToString())
+                    Exit Sub
+                End If
+            Else
+                LogYaz("SatisiKolaysoftaGonder", "Alisveris bulunamadi: " & nAlisverisID)
+                Exit Sub
+            End If
+        Catch exKontrol As Exception
+            LogYaz("SatisiKolaysoftaGonder", "Kontrol hatasi: " & exKontrol.Message)
+        End Try
+
         Dim responseContent As String = String.Empty
         Try
             InitKolaysoftTokenVeCihaz(sDepo)
