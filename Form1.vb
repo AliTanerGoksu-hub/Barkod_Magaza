@@ -19711,7 +19711,31 @@ Public Class Form1
     End Sub
     Private Sub OtomatikYedekKontrol()
         'sYedekPath = Directory.GetCurrentDirectory() & "\YEDEK"
-        sYedekPath = Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("BusinessSmart").OpenSubKey("MAGAZA").GetValue("sYedekPath").ToString() & ":\YEDEK"
+        Try
+            Dim regKey = Registry.CurrentUser.OpenSubKey("Software")
+            If regKey IsNot Nothing Then
+                Dim bsKey = regKey.OpenSubKey("BusinessSmart")
+                If bsKey IsNot Nothing Then
+                    Dim magazaKey = bsKey.OpenSubKey("MAGAZA")
+                    If magazaKey IsNot Nothing Then
+                        Dim yedekVal = magazaKey.GetValue("sYedekPath")
+                        If yedekVal IsNot Nothing Then
+                            sYedekPath = yedekVal.ToString() & ":\YEDEK"
+                        Else
+                            sYedekPath = "D:\YEDEK"
+                        End If
+                    Else
+                        sYedekPath = "D:\YEDEK"
+                    End If
+                Else
+                    sYedekPath = "D:\YEDEK"
+                End If
+            Else
+                sYedekPath = "D:\YEDEK"
+            End If
+        Catch
+            sYedekPath = "D:\YEDEK"
+        End Try
         Dim sYedekAciklama As String = ""
         If bOtomatikYedek = True Then
             If Directory.Exists(sYedekPath) = False Then
@@ -19738,9 +19762,11 @@ Public Class Form1
                                                         cmd.Connection = con
                                                         con.Open()
                                                         cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT TOP 1 Lisans FROM tbParamGenel")
-                                                        Source = cmd.ExecuteScalar.ToString()
+                                                        Dim sourceResult = cmd.ExecuteScalar()
+                                                        Source = If(sourceResult IsNot Nothing, sourceResult.ToString(), "")
                                                         cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT TOP 1 EticaretFtp FROM tbParamGenel")
-                                                        Ftp = cmd.ExecuteScalar.ToString()
+                                                        Dim ftpResult = cmd.ExecuteScalar()
+                                                        Ftp = If(ftpResult IsNot Nothing, ftpResult.ToString(), "")
                                                         con.Close()
 
                                                         ' Firma bilgisini API'den al (güvenli yöntem)
@@ -24113,7 +24139,14 @@ CleanupExcel:
             Using proc As Process = Process.Start(psi)
                 proc.WaitForExit(3600000) ' Max 1 saat bekle
                 If proc.ExitCode = 0 AndAlso File.Exists(hedefDosya) Then
-                    Return True
+                    ' Sıkıştırılmış dosya boyutunu kontrol et
+                    Dim sikistirilmisBoyut As Long = New FileInfo(hedefDosya).Length
+                    If sikistirilmisBoyut > 100 Then ' En az 100 byte olmalı
+                        Return True
+                    Else
+                        logla("[7z] Hata: Sıkıştırılmış dosya çok küçük (" & sikistirilmisBoyut & " bytes)")
+                        Return False
+                    End If
                 End If
             End Using
             
@@ -24136,7 +24169,8 @@ CleanupExcel:
                 File.Delete(hedefDosya)
             End If
             
-            Using kaynakStream As New FileStream(kaynakDosya, FileMode.Open, FileAccess.Read)
+            ' FileShare.Read ile diğer işlemlerin okumaya devam etmesine izin ver
+            Using kaynakStream As New FileStream(kaynakDosya, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
                 Using hedefStream As New FileStream(hedefDosya, FileMode.Create, FileAccess.Write)
                     Using gzipStream As New System.IO.Compression.GZipStream(hedefStream, System.IO.Compression.CompressionLevel.Optimal)
                         ' 1MB buffer ile kopyala (bellek dostu)
@@ -24214,7 +24248,14 @@ CleanupExcel:
             Using proc As Process = Process.Start(psi)
                 proc.WaitForExit(3600000)
                 If proc.ExitCode = 0 AndAlso File.Exists(hedefDosya) Then
-                    Return True
+                    ' Sıkıştırılmış dosya boyutunu kontrol et
+                    Dim sikistirilmisBoyut As Long = New FileInfo(hedefDosya).Length
+                    If sikistirilmisBoyut > 100 Then ' En az 100 byte olmalı
+                        Return True
+                    Else
+                        logla("[7z] Hata: Sıkıştırılmış dosya çok küçük (" & sikistirilmisBoyut & " bytes)")
+                        Return False
+                    End If
                 End If
             End Using
             
@@ -24238,6 +24279,18 @@ CleanupExcel:
             ' Dosya 300MB'dan küçükse direkt gönder
             If dosyaBoyut < bolmeEsik Then
                 logla("[FTP] Dosya 300MB altında, direkt gönderiliyor: " & FormatBytes(dosyaBoyut))
+                
+                ' FTP bağlantı parametrelerini kontrol et
+                If String.IsNullOrEmpty(kullanici) OrElse String.IsNullOrEmpty(sifre) Then
+                    logla("[FTP] Hata: FTP kullanıcı adı veya şifre boş!")
+                    Return False
+                End If
+                
+                If String.IsNullOrEmpty(ftpHedef) OrElse Not ftpHedef.StartsWith("ftp://") Then
+                    logla("[FTP] Hata: FTP adresi geçersiz: " & ftpHedef)
+                    Return False
+                End If
+                
                 Return DirekFtpUpload(dosyaYolu, ftpHedef, kullanici, sifre)
             End If
             
