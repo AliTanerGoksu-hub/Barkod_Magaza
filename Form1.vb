@@ -24425,95 +24425,9 @@ CleanupExcel:
     
     ' ESKİ FTP KODU ASAGIDA - KULLANILMIYOR
     Private Sub FtpEskiYedekleriSil_ESKI()
-        Exit Sub
-        ' Eski kod asagida
-        Try
-            logla("[FTP Temizlik] Eski yedekler kontrol ediliyor...")
-            
-            Dim ftpUrl As String = "ftp://" & ftpAdres & "/backup/"
-            
-            ' FTP dizin listesini al
-            Dim request As FtpWebRequest = CType(WebRequest.Create(ftpUrl), FtpWebRequest)
-            request.Method = WebRequestMethods.Ftp.ListDirectory
-            request.Credentials = New NetworkCredential(kullanici, sifre)
-            request.UseBinary = True
-            request.UsePassive = True
-            request.Timeout = 30000
-            
-            Dim dosyaListesi As New System.Collections.Generic.List(Of String)
-            
-            Using response As FtpWebResponse = CType(request.GetResponse(), FtpWebResponse)
-                Using reader As New StreamReader(response.GetResponseStream())
-                    While Not reader.EndOfStream
-                        Dim dosyaAdi As String = reader.ReadLine()
-                        If Not String.IsNullOrEmpty(dosyaAdi) Then
-                            dosyaListesi.Add(dosyaAdi)
-                        End If
-                    End While
-                End Using
-            End Using
-            
-            ' Bugünkü dosya adının temel kısmını al (tarih hariç)
-            ' Örnek: FIRMAADI_VERITABANI_2026_3_10.BCK.gz -> FIRMAADI_VERITABANI
-            Dim bugunTemel As String = ""
-            If bugunDosyaAdi.Contains("_") Then
-                Dim parcalar() As String = bugunDosyaAdi.Split("_"c)
-                If parcalar.Length >= 2 Then
-                    bugunTemel = parcalar(0) & "_" & parcalar(1)
-                End If
-            End If
-            
-            Dim silinenSayisi As Integer = 0
-            
-            For Each ftpDosya As String In dosyaListesi
-                ' Bugünkü dosyayı silme
-                If ftpDosya = bugunDosyaAdi OrElse ftpDosya.StartsWith(bugunDosyaAdi) Then
-                    Continue For
-                End If
-                
-                ' Aynı firma/veritabanına ait eski yedekleri sil
-                If Not String.IsNullOrEmpty(bugunTemel) AndAlso ftpDosya.StartsWith(bugunTemel) Then
-                    ' .BCK, .gz, .7z, .rar veya .part dosyalarını sil
-                    If ftpDosya.EndsWith(".BCK") OrElse ftpDosya.EndsWith(".gz") OrElse ftpDosya.EndsWith(".7z") OrElse ftpDosya.EndsWith(".rar") OrElse ftpDosya.Contains(".part") Then
-                        Try
-                            FtpDosyaSil(ftpAdres, kullanici, sifre, ftpDosya)
-                            silinenSayisi += 1
-                            logla("[FTP Temizlik] Silindi: " & ftpDosya)
-                        Catch silEx As Exception
-                            logla("[FTP Temizlik] Silinemedi: " & ftpDosya & " - " & silEx.Message)
-                        End Try
-                    End If
-                End If
-            Next
-            
-            If silinenSayisi > 0 Then
-                logla("[FTP Temizlik] Toplam " & silinenSayisi & " eski yedek silindi")
-            Else
-                logla("[FTP Temizlik] Silinecek eski yedek bulunamadı")
-            End If
-            
-        Catch ex As Exception
-            logla("[FTP Temizlik] Hata: " & ex.Message)
-        End Try
+        ' Bu metod kullanilmiyor. FTP yedekleme sistemi API ile degistirildi.
     End Sub
 
-    ''' <summary>
-    ''' FTP'den tek dosya sil
-    ''' </summary>
-    Private Sub FtpDosyaSil(ftpAdres As String, kullanici As String, sifre As String, dosyaAdi As String)
-        Dim ftpUrl As String = "ftp://" & ftpAdres & "/backup/" & dosyaAdi
-        
-        Dim request As FtpWebRequest = CType(WebRequest.Create(ftpUrl), FtpWebRequest)
-        request.Method = WebRequestMethods.Ftp.DeleteFile
-        request.Credentials = New NetworkCredential(kullanici, sifre)
-        request.UseBinary = True
-        request.UsePassive = True
-        request.Timeout = 30000
-        
-        Using response As FtpWebResponse = CType(request.GetResponse(), FtpWebResponse)
-            ' Silme başarılı
-        End Using
-    End Sub
 
 #End Region
 
