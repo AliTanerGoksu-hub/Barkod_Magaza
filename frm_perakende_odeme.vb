@@ -4369,8 +4369,22 @@ Public Class frm_perakende_odeme
                     Return True ' POS bilgileri yoksa odemeyi kabul et
                 End If
                 
-                ' Belge numarası oluştur
-                Dim documentNo As String = "PRKND-" & DateTime.Now.ToString("yyyyMMdd-HHmmss")
+                ' Belge numarasini tbAlisveris.PosFisNo'dan al
+                Dim documentNo As String = ""
+                Try
+                    Dim nIdOdeme As String = dr("nAlisverisID").ToString()
+                    Dim nIdSqlOdeme As String = "'" & nIdOdeme.Replace("'", "''") & "'"
+                    Dim dtPosFis As DataTable = SQLCalistir("SELECT ISNULL(PosFisNo,'') AS PosFisNo FROM tbAlisveris WHERE nAlisverisID = " & nIdSqlOdeme)
+                    If dtPosFis IsNot Nothing AndAlso dtPosFis.Rows.Count > 0 Then
+                        documentNo = dtPosFis.Rows(0)("PosFisNo").ToString().Trim()
+                    End If
+                Catch exDoc As Exception
+                    LogYaz("PosOdemeOnayBekle", "PosFisNo alinamadi: " & exDoc.Message)
+                End Try
+                If String.IsNullOrEmpty(documentNo) OrElse documentNo = "0" Then
+                    LogYaz("PosOdemeOnayBekle", "PosFisNo bos - POS odemesi gonderilemez, yerel kayit yapilacak")
+                    Return True
+                End If
                 
                 ' Musteri TC/VKN - varsa al, yoksa nihai tuketici
                 Dim currentIdentifier As String = "11111111111"
