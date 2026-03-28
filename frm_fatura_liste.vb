@@ -7661,16 +7661,20 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
         Dim lEkmaliyet4 As Decimal = KeyCode.sorgu_sayi(drMaster("lEkMaliyet4"), 0)
         Dim lNetTutar As Decimal = KeyCode.sorgu_sayi(drMaster("lNetTutar"), 0)
 
-        ' Alış fiyatı KDV dahil mi kontrolü (tbFiyatTipi tablosundan)
+        ' Alis fiyati KDV dahil mi kontrolu (tbFiyatTipi tablosundan)
         Dim bAlisKdvDahil As Boolean = False
         Try
-            Using cmdKdv As New OleDbCommand("SELECT bKdvDahilmi FROM tbFiyatTipi WHERE sFiyatTipi = '" & KeyCode.sFiyatA & "'", con)
+            Using cmdKdv As New OleDbCommand("SELECT ISNULL(bKdvDahilmi, 0) FROM tbFiyatTipi WHERE RTRIM(sFiyatTipi) = '" & Trim(KeyCode.sFiyatA) & "'", con)
                 Dim result = cmdKdv.ExecuteScalar()
                 If result IsNot Nothing AndAlso result IsNot DBNull.Value Then
-                    bAlisKdvDahil = Convert.ToBoolean(result)
+                    If TypeOf result Is Boolean Then
+                        bAlisKdvDahil = CBool(result)
+                    Else
+                        bAlisKdvDahil = (Convert.ToInt32(result) <> 0)
+                    End If
                 End If
             End Using
-        Catch
+        Catch exKdv As Exception
             bAlisKdvDahil = False
         End Try
 
@@ -7721,57 +7725,45 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                         Dim drStok As DataRow = dsStok.Tables(0).Rows(0)
                         Dim nStokKdvOrani As Decimal = KeyCode.sorgu_sayi(drStok("nStokKdvOrani"), 0)
 
-                        ' Maliyet ve Alış fiyatı hesapla - İSKONTO VE EK MALİYET DAHİL
-                        ' KDV DAHİL/HARİÇ KONTROLÜ İLE
+                        ' Maliyet ve Alis fiyati hesapla
                         ' ============================================================
-                        ' bAlisKdvDahil = True  → Faturadaki tutarlar KDV DAHİL girilmiş, KDV EKLEME
-                        ' bAlisKdvDahil = False → Faturadaki tutarlar KDV HARİÇ girilmiş, KDV EKLE
+                        ' bAlisKdvDahil = True  -> Alis fiyati - Iskonto + EkMaliyet
+                        ' bAlisKdvDahil = False -> Alis fiyati + KDV - Iskonto + EkMaliyet
                         ' ============================================================
                         Dim maliyet As Decimal = 0
                         Dim alis As Decimal = 0
                         
-                        ' 1. İskontoyu düşerek net tutarı hesapla
-                        Dim lNetTutarDetay As Decimal = lBrutTutar - lIskontoTutari
-                        
-                        ' 2. Satır bazlı ek maliyetleri hesapla
+                        ' Satir bazli ek maliyetleri hesapla
                         Dim lSatirEkMaliyet As Decimal = lIlaveMaliyetTutar + lEkIlaveMaliyetTutar
                         
-                        ' 3. Master seviyesindeki ek maliyetlerin bu satıra düşen payını hesapla
-                        ' Pay oranı = Satır Net Tutar / Fatura Toplam Net Tutar
+                        ' Master seviyesindeki ek maliyetlerin bu satira dusen payini hesapla
+                        Dim lNetTutarDetay As Decimal = lBrutTutar - lIskontoTutari
                         Dim lMasterEkMaliyetToplam As Decimal = lEkmaliyet1 + lEkmaliyet3 + lEkmaliyet4
                         Dim lMasterEkMaliyetPay As Decimal = 0
                         If lNetTutar > 0 AndAlso lMasterEkMaliyetToplam > 0 Then
                             lMasterEkMaliyetPay = (lNetTutarDetay / lNetTutar) * lMasterEkMaliyetToplam
                         End If
                         
-                        ' 4. Toplam maliyet tutarı = Net Tutar + Satır Ek Maliyet + Master Ek Maliyet Payı
-                        Dim lToplamMaliyetTutar As Decimal = lNetTutarDetay + lSatirEkMaliyet + lMasterEkMaliyetPay
+                        Dim lToplamEkMaliyet As Decimal = lSatirEkMaliyet + lMasterEkMaliyetPay
                         
-                        ' 5. KDV DAHİL/HARİÇ KONTROLÜ
                         If bAlisKdvDahil = True Then
-                            ' Alış fiyatı KDV DAHİL girilmiş
-                            ' Tutarlar zaten KDV dahil, tekrar KDV EKLEME
-                            ' Maliyet = (Net Tutar + Ek Maliyetler) / Miktar
+                            ' Alis fiyati KDV DAHIL girilmis - KDV ekleme
+                            ' Formul: (AlisTutar - Iskonto + EkMaliyet) / Miktar
                             If lGirisMiktar1 > 0 Then
-                                maliyet = lToplamMaliyetTutar / lGirisMiktar1
-                                alis = maliyet
+                                maliyet = (lBrutTutar - lIskontoTutari + lToplamEkMaliyet) / lGirisMiktar1
                             Else
                                 maliyet = lBrutFiyat
-                                alis = lBrutFiyat
                             End If
+                            alis = maliyet
                         Else
-                            ' Alış fiyatı KDV HARİÇ girilmiş
-                            ' Tutarlar KDV hariç, KDV EKLENMELİ
-                            ' Maliyet = ((Net Tutar + Ek Maliyetler) / Miktar) * (1 + KDV%)
-                            Dim lNetBirimFiyat As Decimal = 0
+                            ' Alis fiyati KDV HARIC girilmis - KDV sadece BrutTutar'a eklenir
+                            ' Formul: (AlisTutar * (1 + KDV/100) - Iskonto + EkMaliyet) / Miktar
+                            Dim lBrutTutarKdvli As Decimal = lBrutTutar * ((nKdvOrani + 100) / 100)
                             If lGirisMiktar1 > 0 Then
-                                lNetBirimFiyat = lToplamMaliyetTutar / lGirisMiktar1
+                                maliyet = (lBrutTutarKdvli - lIskontoTutari + lToplamEkMaliyet) / lGirisMiktar1
                             Else
-                                lNetBirimFiyat = lBrutFiyat
+                                maliyet = lBrutFiyat * ((nKdvOrani + 100) / 100)
                             End If
-                            
-                            ' KDV ekle
-                            maliyet = lNetBirimFiyat * ((nKdvOrani + 100) / 100)
                             alis = maliyet
                         End If
 
