@@ -4383,7 +4383,7 @@ Public Class frm_perakende_odeme
                 End Try
                 If String.IsNullOrEmpty(documentNo) OrElse documentNo = "0" Then
                     LogYaz("PosOdemeOnayBekle", "PosFisNo bos - POS odemesi gonderilemez")
-                    Dim sonucFisNo = MessageBox.Show("Bu satis icin POS belge numarasi (PosFisNo) bulunamadi." & vbCrLf & "POS'a odeme gonderilemeyecek." & vbCrLf & vbCrLf & "Odemeyi POS'a gondermeden yerel olarak kaydetmek istiyor musunuz?" & vbCrLf & "(POS'a elle giris yapmaniz gerekecektir)", "POS Belge Numarasi Bulunamadi", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    Dim sonucFisNo = MessageBox.Show("Bu satis icin POS belge numarasi (PosFisNo) bulunamadi." & vbCrLf & "Sebebi: Satis daha onceden POS'a gonderilememis veya belge numarasi alinamamis." & vbCrLf & vbCrLf & "Odemeyi POS'a gondermeden yerel olarak kaydetmek istiyor musunuz?" & vbCrLf & "(POS'a elle giris yapmaniz gerekecektir)", "POS Belge Numarasi Bulunamadi", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     If sonucFisNo = DialogResult.Yes Then
                         LogYaz("PosOdemeOnayBekle", "Kullanici onayladi - POS'suz yerel kayit yapilacak")
                         Return True
