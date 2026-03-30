@@ -14966,7 +14966,7 @@ Public Class Form1
         frm.firmano = firmano
         frm.donemno = donemno
         frm.connection = connection
-        frm.sText = "SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     sFiyatTipi as sKod,sAciklama as sAciklama FROM         tbFiyatTipi (aktif = 1) and (aktifDepo like '%" & Trim(sDepo) & "%')"
+        frm.sText = "SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     sFiyatTipi as sKod,sAciklama as sAciklama FROM         tbFiyatTipi WHERE (aktif = 1) and (aktifDepo like '%" & Trim(sDepo) & "%')"
         frm.lbl_sKod.Text = "AktifFiyat:"
         If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
             If XtraMessageBox.Show(frm.LookUpEdit1.EditValue & Sorgu_sDil(" FiyatTipini AktifFiyatTipi Olarak Atamak İstediğinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo) = Windows.Forms.DialogResult.Yes Then
