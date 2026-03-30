@@ -3282,6 +3282,33 @@ Public Class frm_perakende_odeme
             End If
         End If
 
+        ' *** VERESIYE POS KONTROLU - Kredi karti disindaki odemeler icin ***
+        If bPosEntegre AndAlso Not OdemedeKrediKartiVar() Then
+            Try
+                Dim nIdVer As String = dr("nAlisverisID").ToString()
+                Dim nIdSqlVer As String = "'" & nIdVer.Replace("'", "''") & "'"
+                Dim dtFisVer As DataTable = SQLCalistir("SELECT ISNULL(PosFisNo,'') AS PosFisNo FROM tbAlisveris WHERE nAlisverisID = " & nIdSqlVer)
+                Dim posFisNoVer As String = ""
+                If dtFisVer IsNot Nothing AndAlso dtFisVer.Rows.Count > 0 Then
+                    posFisNoVer = dtFisVer.Rows(0)("PosFisNo").ToString().Trim()
+                End If
+                If String.IsNullOrEmpty(posFisNoVer) OrElse posFisNoVer = "0" Then
+                    Dim sonucVer = MessageBox.Show("Bu satis icin POS belge numarasi (PosFisNo) bulunamadi." & vbCrLf & "Sebebi: Satis daha onceden POS'a gonderilememis veya belge numarasi alinamamis." & vbCrLf & vbCrLf & "Odemeyi POS'a gondermeden yerel olarak kaydetmek istiyor musunuz?" & vbCrLf & "(POS'a elle giris yapmaniz gerekecektir)", "POS Belge Numarasi Bulunamadi", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    If sonucVer = DialogResult.No Then
+                        LogYaz("tamamla", "Veresiye odeme - Kullanici POS'suz kaydi reddetti")
+                        SimpleButton1.Enabled = True
+                        SimpleButton2.Enabled = True
+                        Cursor.Current = Cursors.Default
+                        Return
+                    Else
+                        LogYaz("tamamla", "Veresiye odeme - Kullanici onayladi, POS'suz yerel kayit")
+                    End If
+                End If
+            Catch exVer As Exception
+                LogYaz("tamamla", "Veresiye POS kontrol hatasi: " & exVer.Message)
+            End Try
+        End If
+
         If nOdemeKodu = 4 Then
             tbOdeme_ekle_Pesinat()
         Else
