@@ -3285,7 +3285,14 @@ Public Class frm_perakende_odeme
         ' *** VERESIYE POS KONTROLU - Kredi karti disindaki odemeler icin ***
         If bPosEntegre AndAlso Not OdemedeKrediKartiVar() Then
             Try
-                Dim nIdVer As String = dr("nAlisverisID").ToString()
+                ' nAlisverisID'yi GridView1'den al (dr bos olabilir)
+                Dim nIdVer As String = ""
+                If GridView1.RowCount > 0 Then
+                    Dim drTaksit As DataRow = GridView1.GetDataRow(GridView1.FocusedRowHandle)
+                    If drTaksit IsNot Nothing Then
+                        nIdVer = drTaksit("nAlisverisID").ToString()
+                    End If
+                End If
                 Dim nIdSqlVer As String = "'" & nIdVer.Replace("'", "''") & "'"
                 Dim dtFisVer As DataTable = SQLCalistir("SELECT ISNULL(PosFisNo,'') AS PosFisNo FROM tbAlisveris WHERE nAlisverisID = " & nIdSqlVer)
                 Dim posFisNoVer As String = ""
@@ -4399,7 +4406,14 @@ Public Class frm_perakende_odeme
                 ' Belge numarasini tbAlisveris.PosFisNo'dan al
                 Dim documentNo As String = ""
                 Try
-                    Dim nIdOdeme As String = dr("nAlisverisID").ToString()
+                    ' nAlisverisID'yi GridView1'den al (dr bos olabilir)
+                    Dim nIdOdeme As String = ""
+                    If GridView1.RowCount > 0 Then
+                        Dim drTaksitPos As DataRow = GridView1.GetDataRow(GridView1.FocusedRowHandle)
+                        If drTaksitPos IsNot Nothing Then
+                            nIdOdeme = drTaksitPos("nAlisverisID").ToString()
+                        End If
+                    End If
                     Dim nIdSqlOdeme As String = "'" & nIdOdeme.Replace("'", "''") & "'"
                     Dim dtPosFis As DataTable = SQLCalistir("SELECT ISNULL(PosFisNo,'') AS PosFisNo FROM tbAlisveris WHERE nAlisverisID = " & nIdSqlOdeme)
                     If dtPosFis IsNot Nothing AndAlso dtPosFis.Rows.Count > 0 Then
