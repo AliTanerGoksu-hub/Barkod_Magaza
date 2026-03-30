@@ -4382,8 +4382,9 @@ Public Class frm_perakende_odeme
                     LogYaz("PosOdemeOnayBekle", "PosFisNo alinamadi: " & exDoc.Message)
                 End Try
                 If String.IsNullOrEmpty(documentNo) OrElse documentNo = "0" Then
-                    LogYaz("PosOdemeOnayBekle", "PosFisNo bos - POS odemesi gonderilemez, yerel kayit yapilacak")
-                    Return True
+                    LogYaz("PosOdemeOnayBekle", "PosFisNo bos - POS odemesi gonderilemez")
+                    MessageBox.Show("Bu satis icin POS belge numarasi (PosFisNo) bulunamadi." & vbCrLf & vbCrLf & "Odeme kaydedilemez. Lutfen once satisi Kolaysoft'a gonderin.", "POS Hatasi", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    Return False
                 End If
                 
                 ' Musteri TC/VKN - varsa al, yoksa nihai tuketici
@@ -4482,18 +4483,12 @@ Public Class frm_perakende_odeme
                 End Try
                 LogYaz("PosOdemeOnayBekle", "POS gonderme hatasi: " & wex.Message & " - " & errorResponse)
                 
-                Dim sonuc = MessageBox.Show("POS'a odeme gonderilemedi." & vbCrLf & vbCrLf & 
-                    "Hata: " & hataMesaji & vbCrLf & vbCrLf &
-                    "Yine de odemeyi kaydetmek istiyor musunuz?",
-                    "POS Hatasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                Return (sonuc = DialogResult.Yes)
+                MessageBox.Show("POS'a odeme gonderilemedi." & vbCrLf & vbCrLf & "Hata: " & hataMesaji & vbCrLf & vbCrLf & "Odeme kaydedilmedi.", "POS Hatasi", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return False
             Catch posEx As Exception
                 LogYaz("PosOdemeOnayBekle", "POS gonderme hatasi: " & posEx.Message)
-                Dim sonuc = MessageBox.Show("POS'a odeme gonderilemedi." & vbCrLf & vbCrLf & 
-                    "Hata: " & posEx.Message & vbCrLf & vbCrLf &
-                    "Yine de odemeyi kaydetmek istiyor musunuz?",
-                    "POS Hatasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                Return (sonuc = DialogResult.Yes)
+                MessageBox.Show("POS'a odeme gonderilemedi." & vbCrLf & vbCrLf & "Hata: " & posEx.Message & vbCrLf & vbCrLf & "Odeme kaydedilmedi.", "POS Hatasi", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return False
             End Try
             ' ===== POS GONDERME BITTI =====
 
@@ -4527,12 +4522,12 @@ Public Class frm_perakende_odeme
                 frmBekle.Controls.Add(lblDurum)
 
                 Dim btnIptal As New Button()
-                btnIptal.Text = "IPTAL (Yine de Kaydet)"
+                btnIptal.Text = "IPTAL"
                 btnIptal.Size = New Size(160, 40)
                 btnIptal.Location = New Point(130, 135)
                 AddHandler btnIptal.Click, Sub(s, ev) 
-                    posOnay = True ' Iptal edilse bile odemeyi kaydet
-                    frmBekle.DialogResult = DialogResult.OK
+                    posOnay = False
+                    frmBekle.DialogResult = DialogResult.Cancel
                 End Sub
                 frmBekle.Controls.Add(btnIptal)
 
@@ -4566,16 +4561,9 @@ Public Class frm_perakende_odeme
                                            ElseIf gecenSure >= maxBekleme Then
                                                ' Zaman asimi - yine de kaydet seçeneği sun
                                                timer.Stop()
-                                               Dim sonuc = MessageBox.Show("POS'tan yanit alinamadi (zaman asimi)." & vbCrLf & vbCrLf &
-                                                   "Yine de odemeyi kaydetmek istiyor musunuz?",
-                                                   "Zaman Asimi", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                                               If sonuc = DialogResult.Yes Then
-                                                   posOnay = True
-                                                   frmBekle.DialogResult = DialogResult.OK
-                                               Else
-                                                   posOnay = False
-                                                   frmBekle.DialogResult = DialogResult.Abort
-                                               End If
+                                               MessageBox.Show("POS'tan yanit alinamadi (zaman asimi)." & vbCrLf & vbCrLf & "Odeme kaydedilmedi.", "Zaman Asimi", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                                               posOnay = False
+                                               frmBekle.DialogResult = DialogResult.Abort
                                            End If
                                        End Sub
 
