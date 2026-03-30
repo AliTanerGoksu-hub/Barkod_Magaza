@@ -6028,7 +6028,7 @@ Public Class frm_Perakende_Satis
 
         Dim nAlisveris As String = ""
 
-        If dr IsNot Nothing AndAlso Not IsDBNull(dr("nAlisVerisID")) Then
+        If dr IsNot Nothing AndAlso dr.Table IsNot Nothing AndAlso dr.RowState <> DataRowState.Deleted AndAlso dr.RowState <> DataRowState.Detached AndAlso Not IsDBNull(dr("nAlisVerisID")) Then
             nAlisveris = Convert.ToString(dr("nAlisVerisID"))
 
             ' Muhasebeye işlendi mi kontrolü
