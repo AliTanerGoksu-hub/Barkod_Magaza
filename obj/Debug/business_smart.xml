@@ -511,17 +511,32 @@ business_smart
 </member>
 <member name="M:business_smart.ApiClient.ParseJsonString(System.String,System.String)">
  <summary>
- Helper: JSON string parse - null değerleri boş string olarak döndürür
+ Helper: JSON string parse
  </summary>
 </member>
 <member name="M:business_smart.ApiClient.ActivateLicense(System.String,System.String,System.String)">
  <summary>
- Lisans aktivasyonu - MAC ID kaydet
+ Lisans aktivasyonu
  </summary>
 </member>
 <member name="M:business_smart.ApiClient.IsApiAvailable">
  <summary>
  API sunucusunun erişilebilir olup olmadığını kontrol eder
+ </summary>
+</member>
+<member name="M:business_smart.ApiClient.ListBackups(System.String)">
+ <summary>
+ Yedek dosyalarini listeler
+ </summary>
+</member>
+<member name="M:business_smart.ApiClient.DeleteBackup(System.String,System.String)">
+ <summary>
+ Yedek dosyasini siler
+ </summary>
+</member>
+<member name="M:business_smart.ApiClient.CleanupOldBackups(System.String,System.String)">
+ <summary>
+ Eski yedekleri temizler - bugunku haric
  </summary>
 </member>
 <member name="T:business_smart.UpdateFileInfo">
@@ -4569,31 +4584,9 @@ Row event argument class
  RAR ile dosya sıkıştır (WinRAR varsa)
  </summary>
 </member>
-<member name="M:business_smart.Form1.ParcaliFtpUpload(System.String,System.String,System.String,System.String)">
- <summary>
- Parçalı FTP Upload - 300MB üzeri dosyaları 150MB parçalar halinde gönderir
- 300MB altı dosyalar direkt gönderilir
- Başarılı upload sonrası eski yedeği siler
- </summary>
-</member>
-<member name="M:business_smart.Form1.DirekFtpUpload(System.String,System.String,System.String,System.String)">
- <summary>
- Direkt FTP Upload - küçük dosyalar için
- </summary>
-</member>
 <member name="M:business_smart.Form1.FormatBytes(System.Int64)">
  <summary>
  Byte formatla (KB, MB, GB)
- </summary>
-</member>
-<member name="M:business_smart.Form1.FtpEskiYedekleriSil(System.String,System.String,System.String,System.String)">
- <summary>
- FTP'den eski yedek dosyalarını sil (bugünkü hariç)
- </summary>
-</member>
-<member name="M:business_smart.Form1.FtpDosyaSil(System.String,System.String,System.String,System.String)">
- <summary>
- FTP'den tek dosya sil
  </summary>
 </member>
 <member name="M:business_smart.Form1.EnsureETicaretPlatformParametreleri">
@@ -4692,6 +4685,11 @@ Row event argument class
  Sadece Teslim Edilenler checkbox değiştiğinde listeyi yenile
  </summary>
 </member>
+<member name="M:business_smart.frm_PazaryeriFaturaGonderim.chkGonderilenleriGoster_CheckedChanged(System.Object,System.EventArgs)">
+ <summary>
+ Gönderilenleri de Göster checkbox değiştiğinde listeyi yenile
+ </summary>
+</member>
 <member name="M:business_smart.frm_PazaryeriFaturaGonderim.mnuSutunOzellestir_Click(System.Object,System.EventArgs)">
  <summary>
  Sütun özelleştirme dialogunu aç
@@ -4722,9 +4720,25 @@ Row event argument class
  Görünümü registry'den yükle
  </summary>
 </member>
+<member name="M:business_smart.frm_PazaryeriFaturaGonderim.CheckboxAyarlariKaydet">
+ <summary>
+ Checkbox ayarlarını registry'ye kaydet
+ </summary>
+</member>
+<member name="M:business_smart.frm_PazaryeriFaturaGonderim.CheckboxAyarlariYukle">
+ <summary>
+ Checkbox ayarlarını registry'den yükle
+ </summary>
+</member>
 <member name="M:business_smart.frm_PazaryeriFaturaGonderim.TeslimDurumlariniGuncelle">
  <summary>
  Seçili Trendyol siparişlerinin teslim durumlarını API'den çekip günceller
+ </summary>
+</member>
+<member name="M:business_smart.frm_PazaryeriFaturaGonderim.GetTrendyolSiparisDurumu(business_smart.frm_PazaryeriFaturaGonderim.PazaryeriAPI,System.String,System.String,System.String,System.String@,System.String@,System.String@)">
+ <summary>
+ Trendyol API'den sipariş durumunu, teslim durumunu ve fatura durumunu çeker
+ Tek API çağrısıyla hem teslim hem fatura bilgisi alınır
  </summary>
 </member>
 <member name="M:business_smart.frm_PazaryeriFaturaGonderim.GetTrendyolTeslimDurumu(business_smart.frm_PazaryeriFaturaGonderim.PazaryeriAPI,System.String)">
@@ -4747,6 +4761,23 @@ Row event argument class
  <summary>
  Veritabanındaki ülke bilgisine bakarak ihracat siparişi mi kontrol eder
  Türkiye dışı bir ülke varsa True döner
+ </summary>
+</member>
+<member name="M:business_smart.frm_PazaryeriFaturaGonderim.TrendyolFaturaDurumlariniGuncelle">
+ <summary>
+ Trendyol'dan fatura durumlarını sorgula ve "Fatura Gönderildi" olarak işaretle
+ Trendyol API'den invoiceLink dolu olan siparişleri bulur
+ </summary>
+</member>
+<member name="M:business_smart.frm_PazaryeriFaturaGonderim.TrendyolFaturaDurumuSorgula(System.String,System.String,System.String,System.String,System.String@,System.String@,System.String@)">
+ <summary>
+ Trendyol API'den siparişin fatura durumunu sorgula
+ invoiceLink dolu ise fatura gönderilmiş demektir
+ </summary>
+</member>
+<member name="M:business_smart.frm_PazaryeriFaturaGonderim.FaturaGonderildiOlarakIsaretle(System.Int32,System.String,System.String,System.String,System.String)">
+ <summary>
+ Veritabanında siparişi "Fatura Gönderildi" olarak işaretle
  </summary>
 </member>
 <member name="M:business_smart.frm_fatura_liste.MenuItem57_Click(System.Object,System.EventArgs)">

@@ -15731,7 +15731,7 @@ Public Class frm_Perakende_Satis
             Dim tempUnvan As String = mus("sUnvan").ToString().Trim()
             Dim adSoyad As String = (ad & " " & soyad).Trim()
             ' sUnvan, ad+soyad ile aynı DEĞİLSE kullan (firma müşterisi)
-            If Not String.IsNullOrEmpty(tempUnvan) AndAlso 
+            If Not String.IsNullOrEmpty(tempUnvan) AndAlso
                tempUnvan.ToUpperInvariant() <> adSoyad.ToUpperInvariant() AndAlso
                tempUnvan.ToUpperInvariant() <> ad.ToUpperInvariant() AndAlso
                tempUnvan.ToUpperInvariant() <> soyad.ToUpperInvariant() Then
