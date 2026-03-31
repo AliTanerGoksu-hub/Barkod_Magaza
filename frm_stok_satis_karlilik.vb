@@ -2598,17 +2598,37 @@ Public Class frm_stok_satis_karlilik
         Dim lToplamMiktar As Decimal = 0
         Dim lToplamMaliyet As Decimal = 0
         Dim lToplamTutar As Decimal = 0
+
+        ' Alis fiyati KDV dahil mi kontrolu
+        Dim bAlisKdvDahil As Boolean = False
+        Try
+            Dim dtKdvKontrol As DataSet = sorgu(sorgu_query("SELECT ISNULL(bKdvDahilmi, 0) AS bKdvDahilmi FROM tbFiyatTipi WHERE RTRIM(sFiyatTipi) = '" & Trim(KeyCode.sFiyatA) & "'"))
+            If dtKdvKontrol IsNot Nothing AndAlso dtKdvKontrol.Tables(0).Rows.Count > 0 Then
+                Dim result = dtKdvKontrol.Tables(0).Rows(0)("bKdvDahilmi")
+                If TypeOf result Is Boolean Then
+                    bAlisKdvDahil = CBool(result)
+                Else
+                    bAlisKdvDahil = (Convert.ToInt32(result) <> 0)
+                End If
+            End If
+        Catch
+        End Try
+
         For Each dr3 In ds_tbAlislar.Tables(0).Rows
             maliyet = (dr3("lGirisTutar")) / dr3("lGirisMiktar1")
-            If dr3("nKdvOrani") <> dr3("nStokKdvOrani") Then
-                If bKdvKontrolluMaliyet = True Then
-                    maliyet = maliyet * ((dr3("nStokKdvOrani") + 100) / 100)
+            If bAlisKdvDahil = False Then
+                ' Alis fiyati KDV HARIC - KDV ekle
+                If dr3("nKdvOrani") <> dr3("nStokKdvOrani") Then
+                    If bKdvKontrolluMaliyet = True Then
+                        maliyet = maliyet * ((dr3("nStokKdvOrani") + 100) / 100)
+                    Else
+                        maliyet = maliyet * ((dr3("nKdvOrani") + 100) / 100)
+                    End If
                 Else
                     maliyet = maliyet * ((dr3("nKdvOrani") + 100) / 100)
                 End If
-            Else
-                maliyet = maliyet * ((dr3("nKdvOrani") + 100) / 100)
             End If
+            ' bAlisKdvDahil = True ise KDV eklenmez, fiyat zaten KDV dahil
             maliyet = (maliyet) - (Math.Abs((dr3("lIlaveMaliyetTutar") + dr3("lEkIlaveMaliyetTutar")) / dr3("lGirisMiktar1")))
             Try
                 If CType(dr3("lEkmaliyet1") + dr3("lEkMaliyet3") + dr3("lEkMaliyet4"), Decimal) <> 0 Then
