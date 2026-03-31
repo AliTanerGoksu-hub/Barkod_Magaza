@@ -1,0 +1,298 @@
+[2026-01-25 15:48:35] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-01-25 15:48:35] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-01-25 15:48:50] [SUCCESS] [GenerateCompleteContent] İçerik başarıyla oluşturuldu: ERKEK BEBEK 2 Lİ UZUN KOLLU BODY SETİ
+[2026-01-25 15:48:50] [INFO] [GenerateSizeChart] Şablondan beden tablosu alındı
+[2026-01-25 15:48:51] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-01-25 15:48:51] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-01-25 15:49:06] [SUCCESS] [GenerateCompleteContent] İçerik başarıyla oluşturuldu: U.S.POLO ASSN. KIZ BEBEK 2Lİ TAKIM
+[2026-01-25 15:49:06] [INFO] [GenerateSizeChart] Şablondan beden tablosu alındı
+[2026-01-25 15:49:08] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-01-25 15:49:08] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-01-25 15:49:21] [SUCCESS] [GenerateCompleteContent] İçerik başarıyla oluşturuldu: U.S.POLO ASSN KIZ BEBEK MONT
+[2026-01-25 15:49:21] [INFO] [GenerateSizeChart] Şablondan beden tablosu alındı
+[2026-02-27 14:36:27] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-02-27 14:39:19] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-02-27 16:00:00] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-02-27 16:04:53] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 20:55:09] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 20:55:09] [INFO] [LoadGoogleApiKeys] Google API Key: AIzaSyC_dO...
+[2026-03-11 20:55:19] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 20:55:19] [INFO] [LoadGoogleApiKeys] Google API Key: AIzaSyC_dO...
+[2026-03-11 20:55:19] [DEBUG] [TespitSektor] Kategori: 'Giyim > Kappa', Ürün: ''
+[2026-03-11 20:55:19] [INFO] [GetProductInfoFromWeb] 🔍 Google'da arama yapılıyor: Erkek Çocuk KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 20:55:20] [INFO] [GetProductInfoFromWeb] ✅ 3 Google sonucu bulundu
+[2026-03-11 20:55:20] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 20:55:20] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 20:55:22] [SUCCESS] [GetProductInfoFromWeb] 🎯 Web bilgisi çıkarıldı: - Malzeme/Materyal: Bulunamadı
+- Boyutlar: Bulunamadı
+- Set içeriği: Bulunamadı
+- Önemli özellikler:...
+[2026-03-11 20:55:22] [SUCCESS] [GenerateCompleteContent] Web'den ürün bilgisi alındı: KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 20:55:22] [DEBUG] [TespitSektor] Kategori: 'Giyim > Kappa', Ürün: 'KAPPA ERKEK ÇOCUK SWEATSHIRT'
+[2026-03-11 20:55:22] [INFO] [CallOpenAI] Rate limit koruması - 795ms bekleniyor...
+[2026-03-11 20:55:23] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 20:55:23] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 20:55:50] [SUCCESS] [GenerateCompleteContent] İçerik başarıyla oluşturuldu: KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 20:55:50] [DEBUG] [TespitSektor] Kategori: 'Giyim > Kappa', Ürün: ''
+[2026-03-11 20:55:50] [INFO] [GetProductInfoFromWeb] 🔍 Google'da arama yapılıyor: Erkek Çocuk KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 20:55:51] [INFO] [GetProductInfoFromWeb] ✅ 3 Google sonucu bulundu
+[2026-03-11 20:55:51] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 20:55:51] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 20:55:53] [SUCCESS] [GetProductInfoFromWeb] 🎯 Web bilgisi çıkarıldı: - Malzeme/Materyal: Bulunamadı
+- Boyutlar: Bulunamadı
+- Set içeriği: Bulunamadı
+- Önemli özellikler:...
+[2026-03-11 20:55:53] [SUCCESS] [GenerateCompleteContent] Web'den ürün bilgisi alındı: KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 20:55:53] [DEBUG] [TespitSektor] Kategori: 'Giyim > Kappa', Ürün: 'KAPPA ERKEK ÇOCUK SWEATSHIRT'
+[2026-03-11 20:55:53] [INFO] [CallOpenAI] Rate limit koruması - 592ms bekleniyor...
+[2026-03-11 20:55:54] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 20:55:54] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 20:56:18] [SUCCESS] [GenerateCompleteContent] İçerik başarıyla oluşturuldu: KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 20:56:19] [DEBUG] [TespitSektor] Kategori: 'Giyim > Kappa', Ürün: ''
+[2026-03-11 20:56:19] [INFO] [GetProductInfoFromWeb] 🔍 Google'da arama yapılıyor: Kız Çocuk KAPPA KIZ ÇOCUK WELSOFT HIRKA 
+[2026-03-11 20:56:20] [INFO] [GetProductInfoFromWeb] ✅ 3 Google sonucu bulundu
+[2026-03-11 20:56:20] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 20:56:20] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 20:56:21] [SUCCESS] [GetProductInfoFromWeb] 🎯 Web bilgisi çıkarıldı: - Malzeme/Materyal: %100 Pamuk Welsoft  
+- Boyutlar: 5-16 yaş arası  
+- Ürün Tipi: Hırka/Ceket...
+[2026-03-11 20:56:21] [SUCCESS] [GenerateCompleteContent] Web'den ürün bilgisi alındı: KAPPA KIZ ÇOCUK WELSOFT HIRKA 
+[2026-03-11 20:56:21] [DEBUG] [TespitSektor] Kategori: 'Giyim > Kappa', Ürün: 'KAPPA KIZ ÇOCUK WELSOFT HIRKA '
+[2026-03-11 20:56:21] [INFO] [CallOpenAI] Rate limit koruması - 1354ms bekleniyor...
+[2026-03-11 20:56:23] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 20:56:23] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 20:58:20] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 20:58:20] [INFO] [LoadGoogleApiKeys] Google API Key: AIzaSyC_dO...
+[2026-03-11 20:58:30] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 20:58:30] [INFO] [LoadGoogleApiKeys] Google API Key: AIzaSyC_dO...
+[2026-03-11 20:58:30] [DEBUG] [TespitSektor] Kategori: 'Giyim > Kappa', Ürün: ''
+[2026-03-11 20:58:30] [INFO] [GetProductInfoFromWeb] 🔍 Google'da arama yapılıyor: Erkek Çocuk KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 20:58:31] [INFO] [GetProductInfoFromWeb] ✅ 3 Google sonucu bulundu
+[2026-03-11 20:58:31] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 20:58:31] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 20:58:33] [SUCCESS] [GetProductInfoFromWeb] 🎯 Web bilgisi çıkarıldı: - Malzeme/Materyal: Bilgi yok
+- Boyutlar: Bilgi yok
+- Set içeriği: Bilgi yok
+- Önemli özellikler: Bi...
+[2026-03-11 20:58:33] [SUCCESS] [GenerateCompleteContent] Web'den ürün bilgisi alındı: KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 20:58:33] [DEBUG] [TespitSektor] Kategori: 'Giyim > Kappa', Ürün: 'KAPPA ERKEK ÇOCUK SWEATSHIRT'
+[2026-03-11 20:58:33] [INFO] [CallOpenAI] Rate limit koruması - 857ms bekleniyor...
+[2026-03-11 20:58:34] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 20:58:34] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 20:58:58] [SUCCESS] [GenerateCompleteContent] İçerik başarıyla oluşturuldu: KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 20:58:58] [DEBUG] [TespitSektor] Kategori: 'Giyim > Kappa', Ürün: ''
+[2026-03-11 20:58:58] [INFO] [GetProductInfoFromWeb] 🔍 Google'da arama yapılıyor: Erkek Çocuk KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 20:58:59] [INFO] [GetProductInfoFromWeb] ✅ 3 Google sonucu bulundu
+[2026-03-11 20:58:59] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 20:58:59] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 20:59:01] [SUCCESS] [GetProductInfoFromWeb] 🎯 Web bilgisi çıkarıldı: - Malzeme/Materyal: Bilgi bulunamadı
+- Boyutlar: Bilgi bulunamadı
+- Set içeriği: Bilgi bulunamadı
+- ...
+[2026-03-11 20:59:01] [SUCCESS] [GenerateCompleteContent] Web'den ürün bilgisi alındı: KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 20:59:01] [DEBUG] [TespitSektor] Kategori: 'Giyim > Kappa', Ürün: 'KAPPA ERKEK ÇOCUK SWEATSHIRT'
+[2026-03-11 20:59:01] [INFO] [CallOpenAI] Rate limit koruması - 1026ms bekleniyor...
+[2026-03-11 20:59:02] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 20:59:02] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 20:59:30] [SUCCESS] [GenerateCompleteContent] İçerik başarıyla oluşturuldu: KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 21:08:34] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:08:34] [INFO] [LoadGoogleApiKeys] Google API Key: AIzaSyC_dO...
+[2026-03-11 21:08:45] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:08:45] [INFO] [LoadGoogleApiKeys] Google API Key: AIzaSyC_dO...
+[2026-03-11 21:08:45] [DEBUG] [TespitSektor] Kategori: 'Giyim > Kappa', Ürün: ''
+[2026-03-11 21:08:45] [INFO] [GetProductInfoFromWeb] 🔍 Google'da arama yapılıyor: Erkek Çocuk KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 21:08:46] [INFO] [GetProductInfoFromWeb] ✅ 3 Google sonucu bulundu
+[2026-03-11 21:08:46] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:08:46] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:08:49] [SUCCESS] [GetProductInfoFromWeb] 🎯 Web bilgisi çıkarıldı: - Malzeme/Materyal: Bulunamadı
+- Boyutlar: Bulunamadı
+- Set içeriği: Bulunamadı
+- Önemli özellikler:...
+[2026-03-11 21:08:49] [SUCCESS] [GenerateCompleteContent] Web'den ürün bilgisi alındı: KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 21:08:49] [DEBUG] [TespitSektor] Kategori: 'Giyim > Kappa', Ürün: 'KAPPA ERKEK ÇOCUK SWEATSHIRT'
+[2026-03-11 21:08:49] [INFO] [CallOpenAI] Rate limit koruması - 880ms bekleniyor...
+[2026-03-11 21:08:49] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:08:49] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:21:19] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:21:19] [INFO] [LoadGoogleApiKeys] Google API Key: AIzaSyC_dO...
+[2026-03-11 21:21:29] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:21:29] [INFO] [LoadGoogleApiKeys] Google API Key: AIzaSyC_dO...
+[2026-03-11 21:21:29] [DEBUG] [TespitSektor] Kategori: 'Giyim > Erkek Çocuk', Ürün: ''
+[2026-03-11 21:21:29] [ERROR] [GetMarkaSitesi] Geçersiz nesne adı 'tbMarkaSiteleri'.
+[2026-03-11 21:21:29] [INFO] [GetProductInfoFromWeb] 🔍 Google'da arama yapılıyor: Kappa KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 21:21:30] [INFO] [GetProductInfoFromWeb] ✅ 3 Google sonucu bulundu
+[2026-03-11 21:21:30] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:21:30] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:21:31] [SUCCESS] [GetProductInfoFromWeb] 🎯 Web bilgisi çıkarıldı: - Malzeme/Materyal: %100 Pamuk
+- Önemli özellikler: Dayanıklı ve şık tasarım...
+[2026-03-11 21:21:31] [SUCCESS] [GenerateCompleteContent] Web'den ürün bilgisi alındı: KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 21:21:31] [DEBUG] [TespitSektor] Kategori: 'Çocuk Giyim', Ürün: 'KAPPA ERKEK ÇOCUK SWEATSHIRT'
+[2026-03-11 21:21:31] [INFO] [CallOpenAI] Rate limit koruması - 1869ms bekleniyor...
+[2026-03-11 21:21:33] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:21:33] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:22:04] [SUCCESS] [GenerateCompleteContent] İçerik başarıyla oluşturuldu: KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 21:22:05] [DEBUG] [TespitSektor] Kategori: 'Giyim > Erkek Çocuk', Ürün: ''
+[2026-03-11 21:22:05] [ERROR] [GetMarkaSitesi] Geçersiz nesne adı 'tbMarkaSiteleri'.
+[2026-03-11 21:22:05] [INFO] [GetProductInfoFromWeb] 🔍 Google'da arama yapılıyor: Kappa KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 21:22:05] [INFO] [GetProductInfoFromWeb] ✅ 3 Google sonucu bulundu
+[2026-03-11 21:22:05] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:22:05] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:22:07] [ERROR] [SaveMarkaSitesi] Geçersiz nesne adı 'tbMarkaSiteleri'.
+[2026-03-11 21:22:07] [SUCCESS] [GetProductInfoFromWeb] 🎯 Web bilgisi çıkarıldı: - Malzeme/Materyal: Bulunamadı
+- Boyutlar: Bulunamadı
+- Set içeriği: Bulunamadı
+- Önemli özellikler:...
+[2026-03-11 21:22:07] [SUCCESS] [GenerateCompleteContent] Web'den ürün bilgisi alındı: KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 21:22:07] [DEBUG] [TespitSektor] Kategori: 'Çocuk Giyim', Ürün: 'KAPPA ERKEK ÇOCUK SWEATSHIRT'
+[2026-03-11 21:22:07] [INFO] [CallOpenAI] Rate limit koruması - 1042ms bekleniyor...
+[2026-03-11 21:22:08] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:22:08] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:22:43] [SUCCESS] [GenerateCompleteContent] İçerik başarıyla oluşturuldu: KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 21:22:44] [DEBUG] [TespitSektor] Kategori: 'Giyim > Kız Çocuk', Ürün: ''
+[2026-03-11 21:22:44] [ERROR] [GetMarkaSitesi] Geçersiz nesne adı 'tbMarkaSiteleri'.
+[2026-03-11 21:22:44] [INFO] [GetProductInfoFromWeb] 🔍 Google'da arama yapılıyor: Kappa KAPPA KIZ ÇOCUK WELSOFT HIRKA 
+[2026-03-11 21:22:44] [INFO] [GetProductInfoFromWeb] ✅ 3 Google sonucu bulundu
+[2026-03-11 21:22:44] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:22:44] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:22:47] [ERROR] [SaveMarkaSitesi] Geçersiz nesne adı 'tbMarkaSiteleri'.
+[2026-03-11 21:22:47] [SUCCESS] [GetProductInfoFromWeb] 🎯 Web bilgisi çıkarıldı: - Malzeme/Materyal: %100 Pamuk Welsoft
+- Boyutlar: Belirtilmemiş
+- Set içeriği: Belirtilmemiş
+- Önem...
+[2026-03-11 21:22:47] [SUCCESS] [GenerateCompleteContent] Web'den ürün bilgisi alındı: KAPPA KIZ ÇOCUK WELSOFT HIRKA 
+[2026-03-11 21:22:47] [DEBUG] [TespitSektor] Kategori: 'Çocuk Giyim', Ürün: 'KAPPA KIZ ÇOCUK WELSOFT HIRKA '
+[2026-03-11 21:22:47] [INFO] [CallOpenAI] Rate limit koruması - 646ms bekleniyor...
+[2026-03-11 21:22:47] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:22:47] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:23:14] [SUCCESS] [GenerateCompleteContent] İçerik başarıyla oluşturuldu: KAPPA KIZ ÇOCUK WELSOFT HIRKA 
+[2026-03-11 21:23:14] [DEBUG] [TespitSektor] Kategori: 'Giyim > Kız Çocuk', Ürün: ''
+[2026-03-11 21:23:14] [ERROR] [GetMarkaSitesi] Geçersiz nesne adı 'tbMarkaSiteleri'.
+[2026-03-11 21:23:14] [INFO] [GetProductInfoFromWeb] 🔍 Google'da arama yapılıyor: Kappa KAPPA KIZ ÇOCUK SWEATSHIRT
+[2026-03-11 21:23:15] [INFO] [GetProductInfoFromWeb] ✅ 3 Google sonucu bulundu
+[2026-03-11 21:23:15] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:23:15] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:23:17] [ERROR] [SaveMarkaSitesi] Geçersiz nesne adı 'tbMarkaSiteleri'.
+[2026-03-11 21:23:17] [SUCCESS] [GetProductInfoFromWeb] 🎯 Web bilgisi çıkarıldı: - Malzeme/Materyal: Bilgi yok
+- Boyutlar: Bilgi yok
+- Set içeriği: Bilgi yok
+- Önemli özellikler: Bi...
+[2026-03-11 21:23:17] [SUCCESS] [GenerateCompleteContent] Web'den ürün bilgisi alındı: KAPPA KIZ ÇOCUK SWEATSHIRT
+[2026-03-11 21:23:17] [DEBUG] [TespitSektor] Kategori: 'Çocuk Giyim', Ürün: 'KAPPA KIZ ÇOCUK SWEATSHIRT'
+[2026-03-11 21:23:17] [INFO] [CallOpenAI] Rate limit koruması - 1498ms bekleniyor...
+[2026-03-11 21:23:18] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:23:18] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:23:47] [SUCCESS] [GenerateCompleteContent] İçerik başarıyla oluşturuldu: KAPPA KIZ ÇOCUK SWEATSHIRT
+[2026-03-11 21:23:47] [DEBUG] [TespitSektor] Kategori: 'Giyim > Erkek Çocuk', Ürün: ''
+[2026-03-11 21:23:47] [ERROR] [GetMarkaSitesi] Geçersiz nesne adı 'tbMarkaSiteleri'.
+[2026-03-11 21:23:47] [INFO] [GetProductInfoFromWeb] 🔍 Google'da arama yapılıyor: Kappa KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 21:23:48] [INFO] [GetProductInfoFromWeb] ✅ 3 Google sonucu bulundu
+[2026-03-11 21:23:48] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:23:48] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:23:49] [SUCCESS] [GetProductInfoFromWeb] 🎯 Web bilgisi çıkarıldı: - Malzeme/Materyal: %100 Pamuk
+- Önemli özellikler: Dayanıklı, şık tasarım...
+[2026-03-11 21:23:49] [SUCCESS] [GenerateCompleteContent] Web'den ürün bilgisi alındı: KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 21:23:49] [DEBUG] [TespitSektor] Kategori: 'Çocuk Giyim', Ürün: 'KAPPA ERKEK ÇOCUK SWEATSHIRT'
+[2026-03-11 21:23:49] [INFO] [CallOpenAI] Rate limit koruması - 1850ms bekleniyor...
+[2026-03-11 21:23:51] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:23:51] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:24:23] [SUCCESS] [GenerateCompleteContent] İçerik başarıyla oluşturuldu: KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 21:24:23] [DEBUG] [TespitSektor] Kategori: 'Giyim > Erkek Çocuk', Ürün: ''
+[2026-03-11 21:24:24] [ERROR] [GetMarkaSitesi] Geçersiz nesne adı 'tbMarkaSiteleri'.
+[2026-03-11 21:24:24] [INFO] [GetProductInfoFromWeb] 🔍 Google'da arama yapılıyor: Kappa KAPPA ERKEK ÇOCUK FULLZIP SWEATSHIRT
+[2026-03-11 21:24:26] [INFO] [GetProductInfoFromWeb] ✅ 3 Google sonucu bulundu
+[2026-03-11 21:24:27] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:24:27] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:24:29] [ERROR] [SaveMarkaSitesi] Geçersiz nesne adı 'tbMarkaSiteleri'.
+[2026-03-11 21:24:30] [SUCCESS] [GetProductInfoFromWeb] 🎯 Web bilgisi çıkarıldı: - Malzeme/Materyal: Bilgi bulunamadı
+- Boyutlar: 7-8 yaş
+- Set içeriği: Bilgi bulunamadı
+- Önemli öz...
+[2026-03-11 21:24:30] [SUCCESS] [GenerateCompleteContent] Web'den ürün bilgisi alındı: KAPPA ERKEK ÇOCUK FULLZIP SWEATSHIRT
+[2026-03-11 21:24:30] [DEBUG] [TespitSektor] Kategori: 'Çocuk Giyim', Ürün: 'KAPPA ERKEK ÇOCUK FULLZIP SWEATSHIRT'
+[2026-03-11 21:24:30] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:24:30] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:25:01] [SUCCESS] [GenerateCompleteContent] İçerik başarıyla oluşturuldu: KAPPA ERKEK ÇOCUK FULLZIP SWEATSHIRT
+[2026-03-11 21:25:02] [DEBUG] [TespitSektor] Kategori: 'Giyim > Kız Çocuk', Ürün: ''
+[2026-03-11 21:25:02] [ERROR] [GetMarkaSitesi] Geçersiz nesne adı 'tbMarkaSiteleri'.
+[2026-03-11 21:25:02] [INFO] [GetProductInfoFromWeb] 🔍 Google'da arama yapılıyor: Kappa KAPPA KIZ ÇOCUK FULLZIP SWEATSHIRT
+[2026-03-11 21:25:03] [INFO] [GetProductInfoFromWeb] ✅ 3 Google sonucu bulundu
+[2026-03-11 21:25:03] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:25:03] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:25:05] [ERROR] [SaveMarkaSitesi] Geçersiz nesne adı 'tbMarkaSiteleri'.
+[2026-03-11 21:25:05] [SUCCESS] [GetProductInfoFromWeb] 🎯 Web bilgisi çıkarıldı: - Malzeme/Materyal: Bilgi yok
+- Boyutlar: Bilgi yok
+- Set içeriği: Bilgi yok
+- Önemli özellikler: Bi...
+[2026-03-11 21:25:05] [SUCCESS] [GenerateCompleteContent] Web'den ürün bilgisi alındı: KAPPA KIZ ÇOCUK FULLZIP SWEATSHIRT
+[2026-03-11 21:25:05] [DEBUG] [TespitSektor] Kategori: 'Çocuk Giyim', Ürün: 'KAPPA KIZ ÇOCUK FULLZIP SWEATSHIRT'
+[2026-03-11 21:25:05] [INFO] [CallOpenAI] Rate limit koruması - 497ms bekleniyor...
+[2026-03-11 21:25:06] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:25:06] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:25:31] [SUCCESS] [GenerateCompleteContent] İçerik başarıyla oluşturuldu: KAPPA KIZ ÇOCUK FULLZIP SWEATSHIRT
+[2026-03-11 21:25:32] [DEBUG] [TespitSektor] Kategori: 'Giyim > Kız Çocuk', Ürün: ''
+[2026-03-11 21:25:32] [ERROR] [GetMarkaSitesi] Geçersiz nesne adı 'tbMarkaSiteleri'.
+[2026-03-11 21:25:32] [INFO] [GetProductInfoFromWeb] 🔍 Google'da arama yapılıyor: Arnetta ARNETTA ANNE KIZ İKİLİ TAKIM
+[2026-03-11 21:25:33] [INFO] [GetProductInfoFromWeb] ✅ 3 Google sonucu bulundu
+[2026-03-11 21:25:33] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:25:33] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:25:34] [ERROR] [SaveMarkaSitesi] Geçersiz nesne adı 'tbMarkaSiteleri'.
+[2026-03-11 21:25:34] [SUCCESS] [GetProductInfoFromWeb] 🎯 Web bilgisi çıkarıldı: - Malzeme/Materyal: Bulunamadı
+- Boyutlar: Bulunamadı
+- Set içeriği: Bulunamadı
+- Önemli özellikler:...
+[2026-03-11 21:25:34] [SUCCESS] [GenerateCompleteContent] Web'den ürün bilgisi alındı: ARNETTA ANNE KIZ İKİLİ TAKIM
+[2026-03-11 21:25:34] [DEBUG] [TespitSektor] Kategori: 'Çocuk Giyim', Ürün: 'ARNETTA ANNE KIZ İKİLİ TAKIM'
+[2026-03-11 21:25:34] [INFO] [CallOpenAI] Rate limit koruması - 1369ms bekleniyor...
+[2026-03-11 21:25:36] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:25:36] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:26:03] [SUCCESS] [GenerateCompleteContent] İçerik başarıyla oluşturuldu: ARNETTA ANNE KIZ İKİLİ TAKIM
+[2026-03-11 21:26:04] [DEBUG] [TespitSektor] Kategori: 'Giyim > Kadın', Ürün: ''
+[2026-03-11 21:26:04] [ERROR] [GetMarkaSitesi] Geçersiz nesne adı 'tbMarkaSiteleri'.
+[2026-03-11 21:26:04] [INFO] [GetProductInfoFromWeb] 🔍 Google'da arama yapılıyor: Arnetta ARNETTA KADIN İKİLİ TAKIM
+[2026-03-11 21:26:06] [INFO] [GetProductInfoFromWeb] ✅ 3 Google sonucu bulundu
+[2026-03-11 21:26:06] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:26:06] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:26:08] [ERROR] [SaveMarkaSitesi] Geçersiz nesne adı 'tbMarkaSiteleri'.
+[2026-03-11 21:26:08] [SUCCESS] [GetProductInfoFromWeb] 🎯 Web bilgisi çıkarıldı: - Malzeme/Materyal: Bilgi yok
+- Boyutlar: Bilgi yok
+- Set içeriği: Bilgi yok
+- Önemli özellikler: Bi...
+[2026-03-11 21:26:09] [SUCCESS] [GenerateCompleteContent] Web'den ürün bilgisi alındı: ARNETTA KADIN İKİLİ TAKIM
+[2026-03-11 21:26:09] [DEBUG] [TespitSektor] Kategori: 'Giyim > Kadın', Ürün: 'ARNETTA KADIN İKİLİ TAKIM'
+[2026-03-11 21:26:09] [INFO] [CallOpenAI] Rate limit koruması - 550ms bekleniyor...
+[2026-03-11 21:26:09] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:26:09] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:26:46] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:26:46] [INFO] [LoadGoogleApiKeys] Google API Key: AIzaSyC_dO...
+[2026-03-11 21:26:54] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:26:54] [INFO] [LoadGoogleApiKeys] Google API Key: AIzaSyC_dO...
+[2026-03-11 21:26:54] [DEBUG] [TespitSektor] Kategori: 'Giyim > Erkek Çocuk > Sweatshirt', Ürün: ''
+[2026-03-11 21:26:54] [ERROR] [GetMarkaSitesi] Geçersiz nesne adı 'tbMarkaSiteleri'.
+[2026-03-11 21:26:54] [INFO] [GetProductInfoFromWeb] 🔍 Google'da arama yapılıyor: Kappa KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 21:26:55] [INFO] [GetProductInfoFromWeb] ✅ 3 Google sonucu bulundu
+[2026-03-11 21:26:55] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:26:55] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:26:57] [SUCCESS] [GetProductInfoFromWeb] 🎯 Web bilgisi çıkarıldı: - Malzeme/Materyal: %100 Pamuk
+- Önemli özellikler: Dayanıklı ve şık tasarım...
+[2026-03-11 21:26:57] [SUCCESS] [GenerateCompleteContent] Web'den ürün bilgisi alındı: KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 21:26:57] [DEBUG] [TespitSektor] Kategori: 'Çocuk Giyim', Ürün: 'KAPPA ERKEK ÇOCUK SWEATSHIRT'
+[2026-03-11 21:26:57] [INFO] [CallOpenAI] Rate limit koruması - 1451ms bekleniyor...
+[2026-03-11 21:26:58] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:26:58] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:27:27] [SUCCESS] [GenerateCompleteContent] İçerik başarıyla oluşturuldu: KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 21:27:28] [DEBUG] [TespitSektor] Kategori: 'Giyim > Erkek Çocuk > Hırka', Ürün: ''
+[2026-03-11 21:27:28] [ERROR] [GetMarkaSitesi] Geçersiz nesne adı 'tbMarkaSiteleri'.
+[2026-03-11 21:27:28] [INFO] [GetProductInfoFromWeb] 🔍 Google'da arama yapılıyor: Kappa KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 21:27:28] [INFO] [GetProductInfoFromWeb] ✅ 3 Google sonucu bulundu
+[2026-03-11 21:27:28] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:27:28] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)
+[2026-03-11 21:27:30] [ERROR] [SaveMarkaSitesi] Geçersiz nesne adı 'tbMarkaSiteleri'.
+[2026-03-11 21:27:30] [SUCCESS] [GetProductInfoFromWeb] 🎯 Web bilgisi çıkarıldı: - Malzeme/Materyal: Bilgi yok
+- Boyutlar: Bilgi yok
+- Set içeriği: Bilgi yok
+- Önemli özellikler: Bi...
+[2026-03-11 21:27:30] [SUCCESS] [GenerateCompleteContent] Web'den ürün bilgisi alındı: KAPPA ERKEK ÇOCUK SWEATSHIRT
+[2026-03-11 21:27:30] [DEBUG] [TespitSektor] Kategori: 'Çocuk Giyim', Ürün: 'KAPPA ERKEK ÇOCUK SWEATSHIRT'
+[2026-03-11 21:27:30] [INFO] [CallOpenAI] Rate limit koruması - 1079ms bekleniyor...
+[2026-03-11 21:27:31] [INFO] [LoadApiKey] EmergentKey: VAR, OpenAIKey: VAR
+[2026-03-11 21:27:31] [INFO] [CallOpenAI] OpenAI key kullanılıyor (model: gpt-4o-mini)

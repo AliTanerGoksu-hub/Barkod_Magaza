@@ -410,9 +410,9 @@ Public Class frm_personel_takip_liste
         Me.PanelControl1.Controls.Add(Me.Label1)
         Me.PanelControl1.Controls.Add(Me.PictureBox1)
         Me.PanelControl1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.PanelControl1.Location = New System.Drawing.Point(0, 22)
+        Me.PanelControl1.Location = New System.Drawing.Point(0, 32)
         Me.PanelControl1.Name = "PanelControl1"
-        Me.PanelControl1.Size = New System.Drawing.Size(818, 117)
+        Me.PanelControl1.Size = New System.Drawing.Size(1649, 168)
         Me.PanelControl1.TabIndex = 2
         '
         'GroupControl1
@@ -432,60 +432,60 @@ Public Class frm_personel_takip_liste
         Me.GroupControl1.Controls.Add(Me.DateEdit2)
         Me.GroupControl1.Controls.Add(Me.DateEdit1)
         Me.GroupControl1.Dock = System.Windows.Forms.DockStyle.Left
-        Me.GroupControl1.Location = New System.Drawing.Point(97, 2)
+        Me.GroupControl1.Location = New System.Drawing.Point(154, 2)
         Me.GroupControl1.Name = "GroupControl1"
-        Me.GroupControl1.Size = New System.Drawing.Size(360, 113)
+        Me.GroupControl1.Size = New System.Drawing.Size(576, 164)
         Me.GroupControl1.TabIndex = 2
         Me.GroupControl1.Text = "Ara"
         '
         'CheckEdit3
         '
-        Me.CheckEdit3.Location = New System.Drawing.Point(192, 87)
+        Me.CheckEdit3.Location = New System.Drawing.Point(307, 124)
         Me.CheckEdit3.Name = "CheckEdit3"
         Me.CheckEdit3.Properties.Caption = "Çýktý?"
-        Me.CheckEdit3.Size = New System.Drawing.Size(64, 19)
+        Me.CheckEdit3.Size = New System.Drawing.Size(103, 24)
         Me.CheckEdit3.TabIndex = 62
         '
         'CheckEdit2
         '
-        Me.CheckEdit2.Location = New System.Drawing.Point(128, 87)
+        Me.CheckEdit2.Location = New System.Drawing.Point(205, 124)
         Me.CheckEdit2.Name = "CheckEdit2"
         Me.CheckEdit2.Properties.Caption = "Gecikti?"
-        Me.CheckEdit2.Size = New System.Drawing.Size(64, 19)
+        Me.CheckEdit2.Size = New System.Drawing.Size(102, 24)
         Me.CheckEdit2.TabIndex = 61
         '
         'CheckEdit1
         '
-        Me.CheckEdit1.Location = New System.Drawing.Point(78, 87)
+        Me.CheckEdit1.Location = New System.Drawing.Point(125, 124)
         Me.CheckEdit1.Name = "CheckEdit1"
         Me.CheckEdit1.Properties.Caption = "Ýzinli?"
-        Me.CheckEdit1.Size = New System.Drawing.Size(48, 19)
+        Me.CheckEdit1.Size = New System.Drawing.Size(77, 24)
         Me.CheckEdit1.TabIndex = 60
         '
         'txt_personel
         '
         Me.txt_personel.EnterMoveNextControl = True
-        Me.txt_personel.Location = New System.Drawing.Point(80, 67)
+        Me.txt_personel.Location = New System.Drawing.Point(128, 96)
         Me.txt_personel.Name = "txt_personel"
         Me.txt_personel.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
-        Me.txt_personel.Size = New System.Drawing.Size(192, 20)
+        Me.txt_personel.Size = New System.Drawing.Size(307, 26)
         Me.txt_personel.TabIndex = 51
         '
         'Label3
         '
         Me.Label3.Appearance.ForeColor = System.Drawing.Color.Black
-        Me.Label3.Location = New System.Drawing.Point(16, 71)
+        Me.Label3.Location = New System.Drawing.Point(26, 101)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(45, 13)
+        Me.Label3.Size = New System.Drawing.Size(66, 19)
         Me.Label3.TabIndex = 58
         Me.Label3.Text = "Personel:"
         '
         'SimpleButton5
         '
         Me.SimpleButton5.Image = CType(resources.GetObject("SimpleButton5.Image"), System.Drawing.Image)
-        Me.SimpleButton5.Location = New System.Drawing.Point(277, 86)
+        Me.SimpleButton5.Location = New System.Drawing.Point(443, 123)
         Me.SimpleButton5.Name = "SimpleButton5"
-        Me.SimpleButton5.Size = New System.Drawing.Size(75, 20)
+        Me.SimpleButton5.Size = New System.Drawing.Size(120, 28)
         Me.SimpleButton5.TabIndex = 57
         Me.SimpleButton5.Text = "&Listele"
         '
@@ -493,54 +493,54 @@ Public Class frm_personel_takip_liste
         '
         Me.txt_kasiyer.Enabled = False
         Me.txt_kasiyer.EnterMoveNextControl = True
-        Me.txt_kasiyer.Location = New System.Drawing.Point(144, 27)
+        Me.txt_kasiyer.Location = New System.Drawing.Point(230, 39)
         Me.txt_kasiyer.Name = "txt_kasiyer"
         Me.txt_kasiyer.Properties.MaxLength = 10
-        Me.txt_kasiyer.Size = New System.Drawing.Size(128, 20)
+        Me.txt_kasiyer.Size = New System.Drawing.Size(205, 26)
         Me.txt_kasiyer.TabIndex = 56
         '
         'txt_kod
         '
-        Me.txt_kod.Location = New System.Drawing.Point(80, 27)
+        Me.txt_kod.Location = New System.Drawing.Point(128, 39)
         Me.txt_kod.Name = "txt_kod"
         Me.txt_kod.Properties.MaxLength = 10
         Me.txt_kod.Properties.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
-        Me.txt_kod.Size = New System.Drawing.Size(67, 20)
+        Me.txt_kod.Size = New System.Drawing.Size(107, 26)
         Me.txt_kod.TabIndex = 55
         '
         'Label4
         '
         Me.Label4.Appearance.ForeColor = System.Drawing.Color.Black
-        Me.Label4.Location = New System.Drawing.Point(16, 28)
+        Me.Label4.Location = New System.Drawing.Point(26, 40)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(31, 13)
+        Me.Label4.Size = New System.Drawing.Size(49, 19)
         Me.Label4.TabIndex = 54
         Me.Label4.Text = "Yetkili:"
         '
         'Label6
         '
         Me.Label6.Appearance.ForeColor = System.Drawing.Color.Black
-        Me.Label6.Location = New System.Drawing.Point(272, 47)
+        Me.Label6.Location = New System.Drawing.Point(435, 67)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(48, 13)
+        Me.Label6.Size = New System.Drawing.Size(71, 19)
         Me.Label6.TabIndex = 53
         Me.Label6.Text = "arasýndaki"
         '
         'Label7
         '
         Me.Label7.Appearance.ForeColor = System.Drawing.Color.Black
-        Me.Label7.Location = New System.Drawing.Point(16, 48)
+        Me.Label7.Location = New System.Drawing.Point(26, 69)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(31, 13)
+        Me.Label7.Size = New System.Drawing.Size(48, 19)
         Me.Label7.TabIndex = 52
         Me.Label7.Text = "Tarih :"
         '
         'Label8
         '
         Me.Label8.Appearance.ForeColor = System.Drawing.Color.Black
-        Me.Label8.Location = New System.Drawing.Point(175, 48)
+        Me.Label8.Location = New System.Drawing.Point(280, 69)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(12, 13)
+        Me.Label8.Size = New System.Drawing.Size(16, 19)
         Me.Label8.TabIndex = 51
         Me.Label8.Text = "ve"
         '
@@ -548,36 +548,36 @@ Public Class frm_personel_takip_liste
         '
         Me.DateEdit2.EditValue = Nothing
         Me.DateEdit2.EnterMoveNextControl = True
-        Me.DateEdit2.Location = New System.Drawing.Point(192, 47)
+        Me.DateEdit2.Location = New System.Drawing.Point(307, 67)
         Me.DateEdit2.Name = "DateEdit2"
         Me.DateEdit2.Properties.Appearance.BackColor = System.Drawing.Color.Transparent
         Me.DateEdit2.Properties.Appearance.Options.UseBackColor = True
         Me.DateEdit2.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.DateEdit2.Properties.ReadOnly = True
         Me.DateEdit2.Properties.VistaTimeProperties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
-        Me.DateEdit2.Size = New System.Drawing.Size(80, 20)
+        Me.DateEdit2.Size = New System.Drawing.Size(128, 26)
         Me.DateEdit2.TabIndex = 50
         '
         'DateEdit1
         '
         Me.DateEdit1.EditValue = Nothing
         Me.DateEdit1.EnterMoveNextControl = True
-        Me.DateEdit1.Location = New System.Drawing.Point(80, 47)
+        Me.DateEdit1.Location = New System.Drawing.Point(128, 67)
         Me.DateEdit1.Name = "DateEdit1"
         Me.DateEdit1.Properties.Appearance.BackColor = System.Drawing.Color.Transparent
         Me.DateEdit1.Properties.Appearance.Options.UseBackColor = True
         Me.DateEdit1.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.DateEdit1.Properties.ReadOnly = True
         Me.DateEdit1.Properties.VistaTimeProperties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
-        Me.DateEdit1.Size = New System.Drawing.Size(90, 20)
+        Me.DateEdit1.Size = New System.Drawing.Size(144, 26)
         Me.DateEdit1.TabIndex = 49
         '
         'Label1
         '
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label1.Location = New System.Drawing.Point(97, 2)
+        Me.Label1.Location = New System.Drawing.Point(154, 2)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(177, 13)
+        Me.Label1.Size = New System.Drawing.Size(268, 19)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Personel Giriþ Çýkýþ Listesi Aþaðýdadýr."
         '
@@ -587,7 +587,7 @@ Public Class frm_personel_takip_liste
         Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
         Me.PictureBox1.Location = New System.Drawing.Point(2, 2)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(95, 113)
+        Me.PictureBox1.Size = New System.Drawing.Size(152, 164)
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
         Me.PictureBox1.TabIndex = 0
         Me.PictureBox1.TabStop = False
@@ -602,43 +602,43 @@ Public Class frm_personel_takip_liste
         Me.PanelControl2.Controls.Add(Me.SimpleButton2)
         Me.PanelControl2.Controls.Add(Me.SimpleButton1)
         Me.PanelControl2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelControl2.Location = New System.Drawing.Point(0, 380)
+        Me.PanelControl2.Location = New System.Drawing.Point(0, 940)
         Me.PanelControl2.Name = "PanelControl2"
-        Me.PanelControl2.Size = New System.Drawing.Size(818, 43)
+        Me.PanelControl2.Size = New System.Drawing.Size(1649, 61)
         Me.PanelControl2.TabIndex = 1
         '
         'SimpleButton7
         '
         Me.SimpleButton7.Image = Global.business_smart.My.Resources.Resources.replace2
-        Me.SimpleButton7.Location = New System.Drawing.Point(233, 8)
+        Me.SimpleButton7.Location = New System.Drawing.Point(373, 11)
         Me.SimpleButton7.Name = "SimpleButton7"
-        Me.SimpleButton7.Size = New System.Drawing.Size(75, 24)
+        Me.SimpleButton7.Size = New System.Drawing.Size(120, 35)
         Me.SimpleButton7.TabIndex = 6
         Me.SimpleButton7.Text = "&Toplamlar"
         '
         'SimpleButton6
         '
         Me.SimpleButton6.Image = Global.business_smart.My.Resources.Resources.nav_up_red
-        Me.SimpleButton6.Location = New System.Drawing.Point(158, 8)
+        Me.SimpleButton6.Location = New System.Drawing.Point(253, 11)
         Me.SimpleButton6.Name = "SimpleButton6"
-        Me.SimpleButton6.Size = New System.Drawing.Size(75, 24)
+        Me.SimpleButton6.Size = New System.Drawing.Size(120, 35)
         Me.SimpleButton6.TabIndex = 5
         Me.SimpleButton6.Text = "&Çýkýþ"
         '
         'SimpleButton4
         '
         Me.SimpleButton4.Image = Global.business_smart.My.Resources.Resources.nav_down_green
-        Me.SimpleButton4.Location = New System.Drawing.Point(83, 8)
+        Me.SimpleButton4.Location = New System.Drawing.Point(133, 11)
         Me.SimpleButton4.Name = "SimpleButton4"
-        Me.SimpleButton4.Size = New System.Drawing.Size(75, 24)
+        Me.SimpleButton4.Size = New System.Drawing.Size(120, 35)
         Me.SimpleButton4.TabIndex = 4
         Me.SimpleButton4.Text = "&Giriþ"
         '
         'Label2
         '
-        Me.Label2.Location = New System.Drawing.Point(426, 9)
+        Me.Label2.Location = New System.Drawing.Point(682, 13)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(139, 13)
+        Me.Label2.Size = New System.Drawing.Size(205, 19)
         Me.Label2.TabIndex = 3
         Me.Label2.Text = "*** Kayýt Bulunamadý...! ***"
         '
@@ -646,9 +646,9 @@ Public Class frm_personel_takip_liste
         '
         Me.SimpleButton3.Enabled = False
         Me.SimpleButton3.Image = CType(resources.GetObject("SimpleButton3.Image"), System.Drawing.Image)
-        Me.SimpleButton3.Location = New System.Drawing.Point(8, 8)
+        Me.SimpleButton3.Location = New System.Drawing.Point(13, 11)
         Me.SimpleButton3.Name = "SimpleButton3"
-        Me.SimpleButton3.Size = New System.Drawing.Size(75, 24)
+        Me.SimpleButton3.Size = New System.Drawing.Size(120, 35)
         Me.SimpleButton3.TabIndex = 2
         Me.SimpleButton3.Text = "&Ara F3"
         '
@@ -656,9 +656,9 @@ Public Class frm_personel_takip_liste
         '
         Me.SimpleButton2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SimpleButton2.Image = CType(resources.GetObject("SimpleButton2.Image"), System.Drawing.Image)
-        Me.SimpleButton2.Location = New System.Drawing.Point(733, 9)
+        Me.SimpleButton2.Location = New System.Drawing.Point(1513, 13)
         Me.SimpleButton2.Name = "SimpleButton2"
-        Me.SimpleButton2.Size = New System.Drawing.Size(75, 24)
+        Me.SimpleButton2.Size = New System.Drawing.Size(120, 34)
         Me.SimpleButton2.TabIndex = 1
         Me.SimpleButton2.Text = "&Vazgeç"
         '
@@ -666,9 +666,9 @@ Public Class frm_personel_takip_liste
         '
         Me.SimpleButton1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SimpleButton1.Image = CType(resources.GetObject("SimpleButton1.Image"), System.Drawing.Image)
-        Me.SimpleButton1.Location = New System.Drawing.Point(658, 9)
+        Me.SimpleButton1.Location = New System.Drawing.Point(1393, 13)
         Me.SimpleButton1.Name = "SimpleButton1"
-        Me.SimpleButton1.Size = New System.Drawing.Size(75, 24)
+        Me.SimpleButton1.Size = New System.Drawing.Size(120, 34)
         Me.SimpleButton1.TabIndex = 0
         Me.SimpleButton1.Text = "&Tamam"
         '
@@ -678,9 +678,9 @@ Public Class frm_personel_takip_liste
         Me.PanelControl3.Appearance.Options.UseBackColor = True
         Me.PanelControl3.Controls.Add(Me.XtraTabControl1)
         Me.PanelControl3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelControl3.Location = New System.Drawing.Point(0, 139)
+        Me.PanelControl3.Location = New System.Drawing.Point(0, 200)
         Me.PanelControl3.Name = "PanelControl3"
-        Me.PanelControl3.Size = New System.Drawing.Size(818, 241)
+        Me.PanelControl3.Size = New System.Drawing.Size(1649, 740)
         Me.PanelControl3.TabIndex = 0
         '
         'XtraTabControl1
@@ -689,7 +689,7 @@ Public Class frm_personel_takip_liste
         Me.XtraTabControl1.Location = New System.Drawing.Point(2, 2)
         Me.XtraTabControl1.Name = "XtraTabControl1"
         Me.XtraTabControl1.SelectedTabPage = Me.XtraTabPage1
-        Me.XtraTabControl1.Size = New System.Drawing.Size(814, 237)
+        Me.XtraTabControl1.Size = New System.Drawing.Size(1645, 736)
         Me.XtraTabControl1.TabIndex = 0
         Me.XtraTabControl1.TabPages.AddRange(New DevExpress.XtraTab.XtraTabPage() {Me.XtraTabPage1})
         '
@@ -697,7 +697,7 @@ Public Class frm_personel_takip_liste
         '
         Me.XtraTabPage1.Controls.Add(Me.GridControl1)
         Me.XtraTabPage1.Name = "XtraTabPage1"
-        Me.XtraTabPage1.Size = New System.Drawing.Size(812, 204)
+        Me.XtraTabPage1.Size = New System.Drawing.Size(1643, 697)
         Me.XtraTabPage1.Text = "Giriþ/Çýkýþlar"
         '
         'GridControl1
@@ -709,7 +709,7 @@ Public Class frm_personel_takip_liste
         Me.GridControl1.MainView = Me.GridView1
         Me.GridControl1.Name = "GridControl1"
         Me.GridControl1.RepositoryItems.AddRange(New DevExpress.XtraEditors.Repository.RepositoryItem() {Me.sec_renk, Me.sec_vardiya, Me.sec_sSef, Me.sec_dteSaat, Me.sec_sDepo, Me.sec_lTutar, Me.sec_DEPARTMAN})
-        Me.GridControl1.Size = New System.Drawing.Size(812, 204)
+        Me.GridControl1.Size = New System.Drawing.Size(1643, 697)
         Me.GridControl1.TabIndex = 0
         Me.GridControl1.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.GridView1})
         '
@@ -1649,28 +1649,28 @@ Public Class frm_personel_takip_liste
         Me.barDockControlTop.CausesValidation = False
         Me.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top
         Me.barDockControlTop.Location = New System.Drawing.Point(0, 0)
-        Me.barDockControlTop.Size = New System.Drawing.Size(818, 22)
+        Me.barDockControlTop.Size = New System.Drawing.Size(1649, 32)
         '
         'barDockControlBottom
         '
         Me.barDockControlBottom.CausesValidation = False
         Me.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.barDockControlBottom.Location = New System.Drawing.Point(0, 423)
-        Me.barDockControlBottom.Size = New System.Drawing.Size(818, 0)
+        Me.barDockControlBottom.Location = New System.Drawing.Point(0, 1001)
+        Me.barDockControlBottom.Size = New System.Drawing.Size(1649, 0)
         '
         'barDockControlLeft
         '
         Me.barDockControlLeft.CausesValidation = False
         Me.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left
-        Me.barDockControlLeft.Location = New System.Drawing.Point(0, 22)
-        Me.barDockControlLeft.Size = New System.Drawing.Size(0, 401)
+        Me.barDockControlLeft.Location = New System.Drawing.Point(0, 32)
+        Me.barDockControlLeft.Size = New System.Drawing.Size(0, 969)
         '
         'barDockControlRight
         '
         Me.barDockControlRight.CausesValidation = False
         Me.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right
-        Me.barDockControlRight.Location = New System.Drawing.Point(818, 22)
-        Me.barDockControlRight.Size = New System.Drawing.Size(0, 401)
+        Me.barDockControlRight.Location = New System.Drawing.Point(1649, 32)
+        Me.barDockControlRight.Size = New System.Drawing.Size(0, 969)
         '
         'BarSubItem4
         '
@@ -1693,8 +1693,8 @@ Public Class frm_personel_takip_liste
         '
         'frm_personel_takip_liste
         '
-        Me.AutoScaleBaseSize = New System.Drawing.Size(5, 14)
-        Me.ClientSize = New System.Drawing.Size(818, 423)
+        Me.AutoScaleBaseSize = New System.Drawing.Size(8, 20)
+        Me.ClientSize = New System.Drawing.Size(1649, 1001)
         Me.ContextMenu = Me.ContextMenu1
         Me.Controls.Add(Me.PanelControl3)
         Me.Controls.Add(Me.PanelControl2)

@@ -1,0 +1,16 @@
+[2025-12-08 20:18:13] [SUCCESS] [AIImageFinder] AI Image Finder başlatıldı (connection verildi)
+[2025-12-08 20:18:13] [INFO] [FindImagesByBarcode] Arama başlıyor: 8680848398730
+[2025-12-08 20:18:13] [INFO] [FindImagesByBarcode] Google API kullanılıyor - Key: AIzaSyC_dO..., CX: d3830d60b868641c4
+[2025-12-08 20:18:13] [INFO] [SearchGoogleImages] Google'da arama: tam barkod = 8680848398730
+[2025-12-08 20:18:13] [INFO] [SearchGoogleImages] '8680848398730' için 0 görsel bulundu
+[2025-12-08 20:18:13] [WARNING] [FindImagesByBarcode] Barkod ile sonuç yok, ürün adı ile denenecek...
+[2025-12-08 20:18:13] [INFO] [FindImagesByBarcode] Aşama 1 - Model kodu ile arama: 0101120030000007 arnetta
+[2025-12-08 20:18:13] [INFO] [SearchGoogleImages] Google'da arama: tam barkod = 0101120030000007 arnetta
+[2025-12-08 20:18:14] [INFO] [SearchGoogleImages] '0101120030000007 arnetta' için 0 görsel bulundu
+[2025-12-08 20:18:14] [INFO] [FindImagesByBarcode] Aşama 2 - Ürün adı ile arama: BURLEIGH PINK PHEASANTS 16 CM KOMP KASE 820040007 0101120030000007 arnetta
+[2025-12-08 20:18:14] [INFO] [SearchGoogleImages] Google'da arama: tam barkod = BURLEIGH PINK PHEASANTS 16 CM KOMP KASE 820040007 0101120030000007 arnetta
+[2025-12-08 20:18:14] [INFO] [SearchGoogleImages] 'BURLEIGH PINK PHEASANTS 16 CM KOMP KASE 820040007 0101120030000007 arnetta' için 0 görsel bulundu
+[2025-12-08 20:18:14] [INFO] [FindImagesByBarcode] Aşama 3 - Genel arama: BURLEIGH PINK PHEASANTS 16 CM KOMP KASE 820040007 cocuk
+[2025-12-08 20:18:14] [INFO] [SearchGoogleImages] Google'da arama: tam barkod = BURLEIGH PINK PHEASANTS 16 CM KOMP KASE 820040007 cocuk
+[2025-12-08 20:18:15] [INFO] [SearchGoogleImages] 'BURLEIGH PINK PHEASANTS 16 CM KOMP KASE 820040007 cocuk' için 0 görsel bulundu
+[2025-12-08 20:18:15] [SUCCESS] [FindImagesByBarcode] Toplam 0 görsel bulundu

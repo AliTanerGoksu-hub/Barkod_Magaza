@@ -1,0 +1,44 @@
+﻿2025-08-09 17:42:54 - FTP gönderim hatası: System.Net.WebException: Uzak sunucu hata döndürdü: (550) Dosya kullanılamıyor (örneğin, dosya bulunamadı, erişim yok).
+   konum: System.Net.WebClient.UploadFile(Uri address, String method, String fileName)
+   konum: System.Net.WebClient.UploadFile(Uri address, String fileName)
+   konum: Microsoft.VisualBasic.MyServices.Internal.WebClientCopy.UploadFile(String sourceFileName, Uri address)
+   konum: Microsoft.VisualBasic.Devices.Network.UploadFile(String sourceFileName, Uri address, ICredentials networkCredentials, Boolean showUI, Int32 connectionTimeout, UICancelOption onUserCancel)
+   konum: Microsoft.VisualBasic.Devices.Network.UploadFile(String sourceFileName, String address, String userName, String password, Boolean showUI, Int32 connectionTimeout, UICancelOption onUserCancel)
+   konum: Microsoft.VisualBasic.Devices.Network.UploadFile(String sourceFileName, String address, String userName, String password)
+   konum: business_smart.Form1.OtomatikYedekKontrol() C:\Code\BARKOD_MAGAZA_vista_2014-VS12\Form1.vb içinde: satır 19181
+2025-08-09 18:53:25 - FTP gönderim hatası: System.Net.WebException: Uzak sunucu hata döndürdü: (550) Dosya kullanılamıyor (örneğin, dosya bulunamadı, erişim yok).
+   konum: System.Net.WebClient.UploadFile(Uri address, String method, String fileName)
+   konum: System.Net.WebClient.UploadFile(Uri address, String fileName)
+   konum: Microsoft.VisualBasic.MyServices.Internal.WebClientCopy.UploadFile(String sourceFileName, Uri address)
+   konum: Microsoft.VisualBasic.Devices.Network.UploadFile(String sourceFileName, Uri address, ICredentials networkCredentials, Boolean showUI, Int32 connectionTimeout, UICancelOption onUserCancel)
+   konum: Microsoft.VisualBasic.Devices.Network.UploadFile(String sourceFileName, String address, String userName, String password, Boolean showUI, Int32 connectionTimeout, UICancelOption onUserCancel)
+   konum: Microsoft.VisualBasic.Devices.Network.UploadFile(String sourceFileName, String address, String userName, String password)
+   konum: business_smart.Form1.OtomatikYedekKontrol() C:\Code\BARKOD_MAGAZA_vista_2014-VS12\Form1.vb içinde: satır 19181
+2025-08-09 18:56:27 - FTP gönderim hatası: System.Net.WebException: WebClient isteği sırasında özel durum oluştu. ---> System.IO.IOException: İşlem, başka bir işlem tarafından kullanıldığından 'D:\YEDEK\BARKOD YAZ_BRISTOL_2025_08_09.BCK' dosyasına erişemiyor.
+   konum: System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   konum: System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   konum: System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access)
+   konum: System.Net.WebClient.OpenFileInternal(Boolean needsHeaderAndBoundary, String fileName, FileStream& fs, Byte[]& buffer, Byte[]& formHeaderBytes, Byte[]& boundaryBytes)
+   konum: System.Net.WebClient.UploadFile(Uri address, String method, String fileName)
+   --- İç özel durum yığını izlemesinin sonu ---
+   konum: System.Net.WebClient.UploadFile(Uri address, String method, String fileName)
+   konum: System.Net.WebClient.UploadFile(Uri address, String fileName)
+   konum: Microsoft.VisualBasic.MyServices.Internal.WebClientCopy.UploadFile(String sourceFileName, Uri address)
+   konum: Microsoft.VisualBasic.Devices.Network.UploadFile(String sourceFileName, Uri address, ICredentials networkCredentials, Boolean showUI, Int32 connectionTimeout, UICancelOption onUserCancel)
+   konum: Microsoft.VisualBasic.Devices.Network.UploadFile(String sourceFileName, String address, String userName, String password, Boolean showUI, Int32 connectionTimeout, UICancelOption onUserCancel)
+   konum: Microsoft.VisualBasic.Devices.Network.UploadFile(String sourceFileName, String address, String userName, String password)
+   konum: business_smart.Form1.OtomatikYedekKontrol() C:\Code\BARKOD_MAGAZA_vista_2014-VS12\Form1.vb içinde: satır 19181
+2025-08-09 18:56:27 - FTP gönderim hatası: System.Net.WebException: WebClient isteği sırasında özel durum oluştu. ---> System.IO.IOException: İşlem, başka bir işlem tarafından kullanıldığından 'D:\YEDEK\BARKOD YAZ_BRISTOL_2025_08_09.BCK' dosyasına erişemiyor.
+   konum: System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   konum: System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   konum: System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access)
+   konum: System.Net.WebClient.OpenFileInternal(Boolean needsHeaderAndBoundary, String fileName, FileStream& fs, Byte[]& buffer, Byte[]& formHeaderBytes, Byte[]& boundaryBytes)
+   konum: System.Net.WebClient.UploadFile(Uri address, String method, String fileName)
+   --- İç özel durum yığını izlemesinin sonu ---
+   konum: System.Net.WebClient.UploadFile(Uri address, String method, String fileName)
+   konum: System.Net.WebClient.UploadFile(Uri address, String fileName)
+   konum: Microsoft.VisualBasic.MyServices.Internal.WebClientCopy.UploadFile(String sourceFileName, Uri address)
+   konum: Microsoft.VisualBasic.Devices.Network.UploadFile(String sourceFileName, Uri address, ICredentials networkCredentials, Boolean showUI, Int32 connectionTimeout, UICancelOption onUserCancel)
+   konum: Microsoft.VisualBasic.Devices.Network.UploadFile(String sourceFileName, String address, String userName, String password, Boolean showUI, Int32 connectionTimeout, UICancelOption onUserCancel)
+   konum: Microsoft.VisualBasic.Devices.Network.UploadFile(String sourceFileName, String address, String userName, String password)
+   konum: business_smart.Form1.OtomatikYedekKontrol() C:\Code\BARKOD_MAGAZA_vista_2014-VS12\Form1.vb içinde: satır 19181

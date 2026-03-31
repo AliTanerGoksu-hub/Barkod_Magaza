@@ -1,0 +1,146 @@
+﻿2025-08-16 18:12:06 [SatisiKolaysoftaGonder] Hata: Uzak sunucu hata döndürdü: (500) İç Sunucu Hatası.
+Yanıt: {"type":"https://www.eczacipos.tech/problem/problem-with-message","title":"Internal Server Error","status":500,"detail":"Ödeme miktarları toplamı, fatura toplamından büyük olamaz. ","path":"/api/erp/invoices","message":"error.http.500"}
+2025-08-16 18:32:26 [PollDocumentNo_NoCompany] Hata: Uzak sunucu hata döndürdü: (500) İç Sunucu Hatası.
+2025-08-16 18:32:56 [PollDocumentNo_NoCompany] Hata: Uzak sunucu hata döndürdü: (500) İç Sunucu Hatası.
+2025-08-16 18:33:26 [PollDocumentNo_NoCompany] Hata: Uzak sunucu hata döndürdü: (500) İç Sunucu Hatası.
+2025-08-16 18:33:57 [PollDocumentNo_NoCompany] Hata: Uzak sunucu hata döndürdü: (500) İç Sunucu Hatası.
+2025-08-16 18:34:27 [PollDocumentNo_NoCompany] Hata: Uzak sunucu hata döndürdü: (500) İç Sunucu Hatası.
+2025-08-16 18:35:32 [PollDocumentNo_NoCompany] Hata: Uzak sunucu hata döndürdü: (500) İç Sunucu Hatası.
+2025-08-16 18:36:03 [PollDocumentNo_NoCompany] Hata: Uzak sunucu hata döndürdü: (500) İç Sunucu Hatası.
+2025-08-16 18:36:33 [PollDocumentNo_NoCompany] Hata: Uzak sunucu hata döndürdü: (500) İç Sunucu Hatası.
+2025-08-16 18:37:03 [PollDocumentNo_NoCompany] Hata: Uzak sunucu hata döndürdü: (500) İç Sunucu Hatası.
+2025-08-16 18:37:33 [PollDocumentNo_NoCompany] Hata: Uzak sunucu hata döndürdü: (500) İç Sunucu Hatası.
+2025-08-16 18:38:03 [PollDocumentNo_NoCompany] Hata: Uzak sunucu hata döndürdü: (500) İç Sunucu Hatası.
+2025-08-16 18:39:00 [SatisiKolaysoftaGonder] Hata: Ödeme sonuçlanmadı veya cihazdan belge numarası (documentNo) alınamadı.
+Yanıt: 
+2025-08-16 18:51:43 [SatisiKolaysoftaGonder] Hata: Ödeme sonuçlanmadı veya cihazdan belge numarası (documentNo) alınamadı.
+Yanıt: 
+2025-08-16 19:09:55 [StartDocumentNoWorker] Belge no alınamadı (timeout veya SUCCESS olmadı).
+2025-08-16 19:10:10 [StartDocumentNoWorker] Belge no alınamadı (timeout veya SUCCESS olmadı).
+2025-08-16 19:27:56 [PollDocumentNo_PosPayments] Yanıt[1]: [{"id":330364,"status":"PENDING","terminalSerialNumber":"N860W800631","updateDate":"2025-08-16T19:27:51.651Z","invoiceId":330072,"companyId":1014,"documentNo":null,"paymentTypes":null,"cashAmount":344.00,"creditCardFirstAmount":null,"creditCardSecondAmount":null,"openAccountAmount":21000.00,"eftTransferAmount":null,"advanceAccountAmount":null}]
+2025-08-16 19:27:56 [PollDocumentNo_PosPayments] Status[1]: PENDING, DocNo: 
+2025-08-16 19:28:26 [PollDocumentNo_PosPayments] Yanıt[2]: [{"id":330364,"status":"SUCCESS","terminalSerialNumber":"N860W800631","updateDate":"2025-08-16T19:28:16.443Z","invoiceId":330072,"companyId":1014,"documentNo":"TFF2025000000038","paymentTypes":[{"paymentType":"Cash","amount":344.00000000},{"paymentType":"OpenAccount","amount":21000.00000000}],"cashAmount":344.00,"creditCardFirstAmount":null,"creditCardSecondAmount":null,"openAccountAmount":21000.0...
+2025-08-16 19:28:26 [PollDocumentNo_PosPayments] Status[2]: SUCCESS, DocNo: TFF2025000000038
+2025-08-16 19:28:26 [SQLCalistir] System.Data.OleDb.OleDbException (0x80040E07): varchar veri türü numeric veri türüne dönüştürülürken hata.
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandTextErrorHandling(OleDbHResult hr)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandTextForSingleResult(tagDBPARAMS dbParams, Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandText(Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommand(CommandBehavior behavior, Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteReaderInternal(CommandBehavior behavior, String method)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteReader(CommandBehavior behavior)
+   konum: System.Data.OleDb.OleDbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   konum: business_smart.frm_Perakende_Satis.SQLCalistir(String sql) C:\Code\BARKOD_MAGAZA_vista_2014-VS12\frm_Perakende_Satis.vb içinde: satır 15373
+2025-08-16 19:28:40 [StartDocumentNoWorker] Belge no işlendi: TFF2025000000038
+2025-08-16 20:07:49 [PollDocumentNo_PosPayments] Yanıt[1]: [{"id":330365,"status":"SUCCESS","terminalSerialNumber":"N860W800631","updateDate":"2025-08-16T20:07:44.774Z","invoiceId":330073,"companyId":1014,"documentNo":"TFF2025000000039","paymentTypes":[{"paymentType":"Cash","amount":138.00000000},{"paymentType":"OpenAccount","amount":6000.00000000}],"cashAmount":138.00,"creditCardFirstAmount":null,"creditCardSecondAmount":null,"openAccountAmount":6000.00,...
+2025-08-16 20:07:49 [PollDocumentNo_PosPayments] Status[1]: SUCCESS, DocNo: TFF2025000000039
+2025-08-16 20:07:49 [SQLCalistir] System.Data.OleDb.OleDbException (0x80040E14): Geçersiz sütun adı 'sMuhasebeDurumu'.
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandTextErrorHandling(OleDbHResult hr)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandTextForSingleResult(tagDBPARAMS dbParams, Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandText(Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommand(CommandBehavior behavior, Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteReaderInternal(CommandBehavior behavior, String method)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteReader(CommandBehavior behavior)
+   konum: System.Data.OleDb.OleDbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   konum: business_smart.frm_Perakende_Satis.SQLCalistir(String sql) C:\Code\BARKOD_MAGAZA_vista_2014-VS12\frm_Perakende_Satis.vb içinde: satır 15373
+2025-08-16 20:08:48 [SQLCalistir] System.Data.OleDb.OleDbException (0x80040E14): Geçersiz sütun adı 'sMuhasebeDurumu'.
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandTextErrorHandling(OleDbHResult hr)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandTextForSingleResult(tagDBPARAMS dbParams, Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandText(Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommand(CommandBehavior behavior, Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteReaderInternal(CommandBehavior behavior, String method)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteReader(CommandBehavior behavior)
+   konum: System.Data.OleDb.OleDbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   konum: business_smart.frm_Perakende_Satis.SQLCalistir(String sql) C:\Code\BARKOD_MAGAZA_vista_2014-VS12\frm_Perakende_Satis.vb içinde: satır 15373
+2025-08-16 20:08:50 [StartDocumentNoWorker] Belge no işlendi: TFF2025000000039
+2025-08-16 20:10:33 [PollDocumentNo_PosPayments] Yanıt[1]: [{"id":330366,"status":"PENDING","terminalSerialNumber":"N860W800631","updateDate":"2025-08-16T20:10:31.202Z","invoiceId":330074,"companyId":1014,"documentNo":null,"paymentTypes":null,"cashAmount":138.00,"creditCardFirstAmount":null,"creditCardSecondAmount":null,"openAccountAmount":6000.00,"eftTransferAmount":null,"advanceAccountAmount":null}]
+2025-08-16 20:10:33 [PollDocumentNo_PosPayments] Status[1]: PENDING, DocNo: 
+2025-08-16 20:11:03 [PollDocumentNo_PosPayments] Yanıt[2]: [{"id":330366,"status":"SUCCESS","terminalSerialNumber":"N860W800631","updateDate":"2025-08-16T20:10:48.533Z","invoiceId":330074,"companyId":1014,"documentNo":"TFF2025000000040","paymentTypes":[{"paymentType":"Cash","amount":138.00000000},{"paymentType":"OpenAccount","amount":6000.00000000}],"cashAmount":138.00,"creditCardFirstAmount":null,"creditCardSecondAmount":null,"openAccountAmount":6000.00,...
+2025-08-16 20:11:03 [PollDocumentNo_PosPayments] Status[2]: SUCCESS, DocNo: TFF2025000000040
+2025-08-16 20:11:10 [SQLCalistir] System.Data.OleDb.OleDbException (0x80040E07): nvarchar değeri 'POS cihazına gönderildi' bit veri türüne dönüştürülürken işlem başarısız oldu.
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandTextErrorHandling(OleDbHResult hr)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandTextForSingleResult(tagDBPARAMS dbParams, Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandText(Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommand(CommandBehavior behavior, Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteReaderInternal(CommandBehavior behavior, String method)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteReader(CommandBehavior behavior)
+   konum: System.Data.OleDb.OleDbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   konum: business_smart.frm_Perakende_Satis.SQLCalistir(String sql) C:\Code\BARKOD_MAGAZA_vista_2014-VS12\frm_Perakende_Satis.vb içinde: satır 15373
+2025-08-16 20:11:47 [SQLCalistir] System.Data.OleDb.OleDbException (0x80040E07): nvarchar değeri 'POS cihazına gönderildi' bit veri türüne dönüştürülürken işlem başarısız oldu.
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandTextErrorHandling(OleDbHResult hr)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandTextForSingleResult(tagDBPARAMS dbParams, Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandText(Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommand(CommandBehavior behavior, Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteReaderInternal(CommandBehavior behavior, String method)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteReader(CommandBehavior behavior)
+   konum: System.Data.OleDb.OleDbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   konum: business_smart.frm_Perakende_Satis.SQLCalistir(String sql) C:\Code\BARKOD_MAGAZA_vista_2014-VS12\frm_Perakende_Satis.vb içinde: satır 15373
+2025-08-16 20:11:49 [StartDocumentNoWorker] Belge no işlendi: TFF2025000000040
+2025-08-16 20:14:22 [PollDocumentNo_PosPayments] Yanıt[1]: [{"id":330367,"status":"PENDING","terminalSerialNumber":"N860W800631","updateDate":"2025-08-16T20:14:19.878Z","invoiceId":330075,"companyId":1014,"documentNo":null,"paymentTypes":null,"cashAmount":138.00,"creditCardFirstAmount":null,"creditCardSecondAmount":null,"openAccountAmount":6000.00,"eftTransferAmount":null,"advanceAccountAmount":null}]
+2025-08-16 20:14:22 [PollDocumentNo_PosPayments] Status[1]: PENDING, DocNo: 
+2025-08-16 20:14:53 [PollDocumentNo_PosPayments] Yanıt[2]: [{"id":330367,"status":"SUCCESS","terminalSerialNumber":"N860W800631","updateDate":"2025-08-16T20:14:39.293Z","invoiceId":330075,"companyId":1014,"documentNo":"TFF2025000000041","paymentTypes":[{"paymentType":"Cash","amount":138.00000000},{"paymentType":"OpenAccount","amount":6000.00000000}],"cashAmount":138.00,"creditCardFirstAmount":null,"creditCardSecondAmount":null,"openAccountAmount":6000.00,...
+2025-08-16 20:14:53 [PollDocumentNo_PosPayments] Status[2]: SUCCESS, DocNo: TFF2025000000041
+2025-08-16 20:15:06 [SQLCalistir] System.Data.OleDb.OleDbException (0x80040E57): Deyim sonlandırıldı.
+Dize veya ikili dosya verileri kesilecek.
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandTextErrorHandling(OleDbHResult hr)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandTextForSingleResult(tagDBPARAMS dbParams, Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandText(Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommand(CommandBehavior behavior, Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteReaderInternal(CommandBehavior behavior, String method)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteReader(CommandBehavior behavior)
+   konum: System.Data.OleDb.OleDbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   konum: business_smart.frm_Perakende_Satis.SQLCalistir(String sql) C:\Code\BARKOD_MAGAZA_vista_2014-VS12\frm_Perakende_Satis.vb içinde: satır 15373
+2025-08-16 20:15:32 [SQLCalistir] System.Data.OleDb.OleDbException (0x80040E57): Deyim sonlandırıldı.
+Dize veya ikili dosya verileri kesilecek.
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandTextErrorHandling(OleDbHResult hr)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandTextForSingleResult(tagDBPARAMS dbParams, Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommandText(Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteCommand(CommandBehavior behavior, Object& executeResult)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteReaderInternal(CommandBehavior behavior, String method)
+   konum: System.Data.OleDb.OleDbCommand.ExecuteReader(CommandBehavior behavior)
+   konum: System.Data.OleDb.OleDbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   konum: System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   konum: business_smart.frm_Perakende_Satis.SQLCalistir(String sql) C:\Code\BARKOD_MAGAZA_vista_2014-VS12\frm_Perakende_Satis.vb içinde: satır 15373
+2025-08-16 20:15:34 [StartDocumentNoWorker] Belge no işlendi: TFF2025000000041
+2025-08-18 09:27:27 [PollDocumentNo_PosPayments] Yanıt[1]: [{"id":330368,"status":"PENDING","terminalSerialNumber":"N860W800631","updateDate":"2025-08-18T09:27:19.915Z","invoiceId":330077,"companyId":1014,"documentNo":null,"paymentTypes":null,"cashAmount":null,"creditCardFirstAmount":null,"creditCardSecondAmount":null,"openAccountAmount":5720.00,"eftTransferAmount":null,"advanceAccountAmount":null}]
+2025-08-18 09:27:27 [PollDocumentNo_PosPayments] Status[1]: PENDING, DocNo: 
+2025-08-18 09:27:27 [SatisiKolaysoftaGonder] Hata: Cross thread operation detected. To suppress this exception, set DevExpress.Data.CurrencyDataController.DisableThreadingProblemsDetection = true
+Yanıt: 
+2025-08-18 09:27:57 [PollDocumentNo_PosPayments] Yanıt[2]: [{"id":330368,"status":"PENDING","terminalSerialNumber":"N860W800631","updateDate":"2025-08-18T09:27:19.915Z","invoiceId":330077,"companyId":1014,"documentNo":null,"paymentTypes":null,"cashAmount":null,"creditCardFirstAmount":null,"creditCardSecondAmount":null,"openAccountAmount":5720.00,"eftTransferAmount":null,"advanceAccountAmount":null}]
+2025-08-18 09:27:57 [PollDocumentNo_PosPayments] Status[2]: PENDING, DocNo: 
+2025-08-18 09:28:27 [PollDocumentNo_PosPayments] Yanıt[3]: [{"id":330368,"status":"CANCELLED","terminalSerialNumber":"N860W800631","updateDate":"2025-08-18T09:27:19.915Z","invoiceId":330077,"companyId":1014,"documentNo":null,"paymentTypes":null,"cashAmount":null,"creditCardFirstAmount":null,"creditCardSecondAmount":null,"openAccountAmount":5720.00,"eftTransferAmount":null,"advanceAccountAmount":null}]
+2025-08-18 09:28:27 [PollDocumentNo_PosPayments] Status[3]: CANCELLED, DocNo: 
+2025-08-18 09:28:27 [PollDocumentNo_PosPayments] Ödeme sonlandı: CANCELLED
+2025-08-18 09:28:27 [PollDocumentNo_PosPayments] Yanıt[1]: [{"id":330368,"status":"CANCELLED","terminalSerialNumber":"N860W800631","updateDate":"2025-08-18T09:27:19.915Z","invoiceId":330077,"companyId":1014,"documentNo":null,"paymentTypes":null,"cashAmount":null,"creditCardFirstAmount":null,"creditCardSecondAmount":null,"openAccountAmount":5720.00,"eftTransferAmount":null,"advanceAccountAmount":null}]
+2025-08-18 09:28:27 [PollDocumentNo_PosPayments] Status[1]: CANCELLED, DocNo: 
+2025-08-18 09:28:27 [PollDocumentNo_PosPayments] Ödeme sonlandı: CANCELLED
+2025-08-18 09:28:27 [StartDocumentNoWorker] Belge no alınamadı (timeout veya SUCCESS olmadı).
+2025-08-18 10:03:15 [PollDocumentNo_PosPayments] Yanıt[1]: [{"id":330371,"status":"SUCCESS","terminalSerialNumber":"N860W800631","updateDate":"2025-08-18T10:03:07.392Z","invoiceId":330080,"companyId":1014,"documentNo":"TFF2025000000042","paymentTypes":[{"paymentType":"OpenAccount","amount":8370.00000000}],"cashAmount":null,"creditCardFirstAmount":null,"creditCardSecondAmount":null,"openAccountAmount":8370.00,"eftTransferAmount":null,"advanceAccountAmount"...
+2025-08-18 10:03:15 [PollDocumentNo_PosPayments] Status[1]: SUCCESS, DocNo: TFF2025000000042
+2025-08-18 10:03:16 [StartDocumentNoWorker] Belge no işlendi: TFF2025000000042
+2025-08-18 11:11:59 [PollDocumentNo_PosPayments] Yanıt[1]: [{"id":330373,"status":"SUCCESS","terminalSerialNumber":"N860W800631","updateDate":"2025-08-18T11:11:58.750Z","invoiceId":330082,"companyId":1014,"documentNo":"TFF2025000000043","paymentTypes":[{"paymentType":"OpenAccount","amount":8370.00000000}],"cashAmount":null,"creditCardFirstAmount":null,"creditCardSecondAmount":null,"openAccountAmount":8370.00,"eftTransferAmount":null,"advanceAccountAmount"...
+2025-08-18 11:11:59 [PollDocumentNo_PosPayments] Status[1]: SUCCESS, DocNo: TFF2025000000043
+2025-08-18 11:12:00 [StartDocumentNoWorker] Belge no işlendi: TFF2025000000043
+2025-08-18 11:22:46 [PollDocumentNo_PosPayments] Yanıt[1]: [{"id":330374,"status":"PENDING","terminalSerialNumber":"N860W800631","updateDate":"2025-08-18T11:22:44.492Z","invoiceId":330083,"companyId":1014,"documentNo":null,"paymentTypes":null,"cashAmount":null,"creditCardFirstAmount":null,"creditCardSecondAmount":null,"openAccountAmount":1535.00,"eftTransferAmount":null,"advanceAccountAmount":null}]
+2025-08-18 11:22:46 [PollDocumentNo_PosPayments] Status[1]: PENDING, DocNo: 
+2025-08-18 11:23:17 [PollDocumentNo_PosPayments] Yanıt[2]: [{"id":330374,"status":"SUCCESS","terminalSerialNumber":"N860W800631","updateDate":"2025-08-18T11:23:00.301Z","invoiceId":330083,"companyId":1014,"documentNo":"TFF2025000000044","paymentTypes":[{"paymentType":"OpenAccount","amount":1535.00000000}],"cashAmount":null,"creditCardFirstAmount":null,"creditCardSecondAmount":null,"openAccountAmount":1535.00,"eftTransferAmount":null,"advanceAccountAmount"...
+2025-08-18 11:23:17 [PollDocumentNo_PosPayments] Status[2]: SUCCESS, DocNo: TFF2025000000044
