@@ -1,0 +1,52 @@
+2025-06-12 19:38:40 - Sorgulama Başlatıldı - VKN: 35761442530, Username: admin_010033
+2025-06-12 19:38:40 - Sorgulama Post Data: vkn_tckn=35761442530&birimTuru=FaturaAdedi
+2025-06-12 19:38:40 - Sorgulama Hatası: Uzak sunucu hata döndürdü: (400) Hatalı İstek. - Response: <html><head><title>Error</title></head><body>HTTP method POST is not supported by this URL</body></html> (HTTP Status: 400)
+2025-06-12 19:38:52 - Yükleme Başlatıldı - VKN: 35761442530, Username: admin_010033
+2025-06-12 19:38:53 - Yükleme Post Data: vkn_tckn=35761442530&birimTuru=FaturaAdedi&krediTuru=odemeTuru=Pesin&birimMiktari=100&baslangicTarihi=2025-06-12&sonKullanimTarihi=2025-07-12&faturaNo=FTR20250612193853&islemTuru=Satinalma
+2025-06-12 19:38:54 - Yükleme Hatası: Uzak sunucu hata döndürdü: (400) Hatalı İstek. - Response: <html><head><title>Error</title></head><body>HTTP method POST is not supported by this URL</body></html> (HTTP Status: 400)
+2025-06-16 00:23:56 - Sorgulama Başlatıldı - VKN: 35761442530, Username: admin_010033
+2025-06-16 00:23:56 - Sorgulama Post Data: vkn_tckn=35761442530&birimTuru=FaturaAdedi
+2025-06-16 00:23:57 - Sorgulama Hatası: Uzak sunucu hata döndürdü: (400) Hatalı İstek. - Response: <html><head><title>Error</title></head><body>HTTP method POST is not supported by this URL</body></html> (HTTP Status: 400)
+2025-06-16 01:17:18 - Sorgulama Başlatıldı - VKN: 35761442530, Username: admin_010033
+2025-06-16 01:17:18 - SOAP Sorgu XML: 
+<soap:Envelope xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+               xmlns:xsd='http://www.w3.org/2001/XMLSchema'
+               xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'
+               xmlns:kont='http://kontoryuklemeservisi.entegrator.com/'>
+  <soap:Header>
+    <kont:Username>admin_010033</kont:Username>
+    <kont:Password>Aa123456.</kont:Password>
+  </soap:Header>
+  <soap:Body>
+    <kont:kalanKontorSorgula>
+      <kont:vkn_tckn>35761442530</kont:vkn_tckn>
+      <kont:birimTuru>FaturaAdedi</kont:birimTuru>
+    </kont:kalanKontorSorgula>
+  </soap:Body>
+</soap:Envelope>
+2025-06-16 01:17:18 - SOAP Yanıt: <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ns2:kalanKontorSorgulaResponse xmlns:ns2="http://kontoryuklemeservisi.entegrator.com/"><return><kod>500</kod><aciklama>Yetkisiz kullanıcı.</aciklama></return></ns2:kalanKontorSorgulaResponse></soap:Body></soap:Envelope>
+2025-06-16 01:17:31 - Yükleme Başlatıldı - VKN: 35761442530, Username: admin_010033
+2025-06-16 01:17:32 - SOAP İstek XML: 
+<soap:Envelope xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+               xmlns:xsd='http://www.w3.org/2001/XMLSchema'
+               xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'
+               xmlns:kont='http://kontoryuklemeservisi.entegrator.com/'>
+  <soap:Header>
+    <kont:Username>admin_010033</kont:Username>
+    <kont:Password>Aa123456.</kont:Password>
+  </soap:Header>
+  <soap:Body>
+    <kont:birimTipiyleYuklemeYap>
+      <kont:vkn_tckn>35761442530</kont:vkn_tckn>
+      <kont:birimTuru>FaturaAdedi</kont:birimTuru>
+      <kont:islemTuru>Satinalma</kont:islemTuru>
+      <kont:krediTuru>
+        <kont:odemeTuru>Pesin</kont:odemeTuru>
+        <kont:birimMiktari>10</kont:birimMiktari>
+        <kont:baslangicTarihi>2025-06-16</kont:baslangicTarihi>
+        <kont:sonKullanimTarihi>2025-07-16</kont:sonKullanimTarihi>
+      </kont:krediTuru>
+    </kont:birimTipiyleYuklemeYap>
+  </soap:Body>
+</soap:Envelope>
+2025-06-16 01:17:32 - SOAP Yanıt: <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ns2:birimTipiyleYuklemeYapResponse xmlns:ns2="http://kontoryuklemeservisi.entegrator.com/"><return><kod>500</kod><aciklama>Yetkisiz kullanıcı.</aciklama></return></ns2:birimTipiyleYuklemeYapResponse></soap:Body></soap:Envelope>

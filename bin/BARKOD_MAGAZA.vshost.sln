@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "BARKOD_MAGAZA.vshost", "BARKOD_MAGAZA.vshost.exe", "{38158415-ACAF-481A-BEA9-F3B92BD0E248}"
+	ProjectSection(DebuggerProjectSystem) = preProject
+		PortSupplier = 00000000-0000-0000-0000-000000000000
+		Executable = D:\BARKOD_MAGAZA_vista_2014-VS12\BARKOD_MAGAZA_vista_2014-VS12\bin\BARKOD_MAGAZA.vshost.exe
+		RemoteMachine = L30NANS
+		StartingDirectory = D:\BARKOD_MAGAZA_vista_2014-VS12\BARKOD_MAGAZA_vista_2014-VS12\bin
+		Environment = Default
+		LaunchingEngine = 00000000-0000-0000-0000-000000000000
+		LaunchSQLEngine = No
+		AttachLaunchAction = No
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Default = Debug|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{38158415-ACAF-481A-BEA9-F3B92BD0E248}.Debug|Default.ActiveCfg = Debug
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,26 @@
+[2026-01-25 15:46:36] [INFO] [ProcessBulkProducts] Toplu işlem başlatıldı: Max=50
+[2026-01-25 15:46:36] [INFO] [GetProductsWithoutAI] AI içeriği olmayan 0 MODEL bulundu
+[2026-01-25 15:47:04] [INFO] [ProcessBulkProducts] Toplu işlem başlatıldı: Max=50
+[2026-01-25 15:47:04] [INFO] [GetProductsWithoutAI] AI içeriği olmayan 0 MODEL bulundu
+[2026-01-25 15:48:35] [INFO] [ProcessBulkProducts] Toplu işlem başlatıldı: Max=50
+[2026-01-25 15:48:35] [INFO] [GetProductsWithoutAI] AI içeriği olmayan 3 MODEL bulundu
+[2026-01-25 15:48:35] [INFO] [ProcessProduct] Ürün işleniyor: StokID=-2147472718
+[2026-01-25 15:48:50] [SUCCESS] [SaveToDatabase] tbStokUzunNot kaydedildi: sModel=USB1408
+[2026-01-25 15:48:50] [SUCCESS] [SaveToDatabase] tbStokAIIcerik kaydedildi: sModel=USB1408
+[2026-01-25 15:48:50] [SUCCESS] [SaveToDatabase] tbStok.bAIIcerikVar=1: sModel=USB1408 (8 varyant güncellendi)
+[2026-01-25 15:48:50] [SUCCESS] [ProcessProduct] Ürün başarıyla işlendi: -2147472718
+[2026-01-25 15:48:51] [INFO] [ProcessProduct] Ürün işleniyor: StokID=-2147427519
+[2026-01-25 15:49:06] [SUCCESS] [SaveToDatabase] tbStokUzunNot kaydedildi: sModel=USB2440
+[2026-01-25 15:49:06] [SUCCESS] [SaveToDatabase] tbStokAIIcerik kaydedildi: sModel=USB2440
+[2026-01-25 15:49:07] [SUCCESS] [SaveToDatabase] tbStok.bAIIcerikVar=1: sModel=USB2440 (6 varyant güncellendi)
+[2026-01-25 15:49:07] [SUCCESS] [ProcessProduct] Ürün başarıyla işlendi: -2147427519
+[2026-01-25 15:49:08] [INFO] [ProcessProduct] Ürün işleniyor: StokID=-2147423252
+[2026-01-25 15:49:21] [SUCCESS] [SaveToDatabase] tbStokUzunNot kaydedildi: sModel=USB2746
+[2026-01-25 15:49:21] [SUCCESS] [SaveToDatabase] tbStokAIIcerik kaydedildi: sModel=USB2746
+[2026-01-25 15:49:21] [SUCCESS] [SaveToDatabase] tbStok.bAIIcerikVar=1: sModel=USB2746 (12 varyant güncellendi)
+[2026-01-25 15:49:21] [SUCCESS] [ProcessProduct] Ürün başarıyla işlendi: -2147423252
+[2026-01-25 15:49:22] [SUCCESS] [ProcessBulkProducts] Toplu işlem tamamlandı: 3/3
+[2026-02-27 14:36:27] [SUCCESS] [AIContentManager] AI Content Manager başlatıldı
+[2026-02-27 14:39:19] [SUCCESS] [AIContentManager] AI Content Manager başlatıldı
+[2026-02-27 16:00:00] [SUCCESS] [AIContentManager] AI Content Manager başlatıldı
+[2026-02-27 16:04:53] [SUCCESS] [AIContentManager] AI Content Manager başlatıldı

@@ -1,0 +1,1790 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+business_smart
+</name>
+</assembly>
+<members>
+<member name="T:business_smart.My.Resources.Resources">
+<summary>
+  Yerelleştirilmiş dizeleri aramak gibi işlemler için, türü kesin olarak belirtilmiş kaynak sınıfı.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.ResourceManager">
+<summary>
+  Bu sınıf tarafından kullanılan, önbelleğe alınmış ResourceManager örneğini döndürür.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.Culture">
+<summary>
+  Tümü için geçerli iş parçacığının CurrentUICulture özelliğini geçersiz kular
+  CurrentUICulture özelliğini tüm kaynak aramaları için geçersiz kılar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources._6E32A293_1676_0913_6941A3AC186BF8D8___Kopya">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.App">
+<summary>
+  (Simge) öğesine benzeyen System.Drawing.Icon türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.Application">
+<summary>
+  (Simge) öğesine benzeyen System.Drawing.Icon türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.barcode">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.barcode1">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.bkg_header">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.businessman">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.businessman_view">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.businessman2">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.businessmen">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.button_cancel">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.button_ok">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.calendar_down">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.calendar_preferences">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.calendar_up">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.cashier">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.chart">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.devil">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.doctor">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.find">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.help">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.Hizli">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.index">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.index_add">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.index_delete">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.index_down">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.index_new">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.index_preferences">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.index_refresh">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.index_replace">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.index_up">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.index_view">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.kaba">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.licence">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.Logo_png">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.media_beginning">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.media_end">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.multi_channel_travel">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_down_blue">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_down_green">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_down_left_blue">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_down_left_green">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_down_left_red">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_down_red">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_down_right_blue">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_down_right_green">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_down_right_red">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_left_blue">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_left_green">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_left_red">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_right_blue">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_right_green">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_right_red">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_up_blue">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_up_green">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_up_left_blue">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_up_left_green">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_up_left_red">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_up_red">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_up_right_blue">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_up_right_green">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.nav_up_right_red">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.replace2">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.seccade">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.shoppingcart">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.shoppingcart_full">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.signpost">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.table_sql_view">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.table_view">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.telephone">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.up_down">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.up_down_question">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.up_minus">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.up_plus">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="P:business_smart.My.Resources.Resources.YLogo">
+<summary>
+  System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
+</summary>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryDocumentWS">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.#ctor">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryArchivedInboxDocumentCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentsWithGUIDListCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentsWithReceivedDateCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentsWithReceivedDateWithSearchParamsCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentsWithDocumentDateCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentsWithDocumentDateAndSearchParamsCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxArchivedDocumentsWithDocumentDateCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryArchivedOutboxDocumentCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentWithLocalIdCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentsWithReceivedDateCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentsWithReceivedDateWithSearchParamsCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentsWithDocumentDateCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentsWithDocumentDateAndSearchParamsCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxArchivedDocumentsWithDocumentDateCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentsWithWithGUIDListCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryAppResponseOfOutboxDocumentCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryAppResponseOfInboxDocumentCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.GetLastInvoiceIdAndDateCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryUsersCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryUsersByTitleCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.GetUserPKListInfoCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.GetUserPKListCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.GetUserGBListCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.GetNewUserPKListCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.GetNewUserGBListCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryEnvelopeCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.SetTakenFromEntegratorCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxResponseDocumentCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.GetPKListCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.GetInboxAttachmentCompleted">
+<remarks/>
+</member>
+<member name="E:business_smart.QueryInvoiceService.QueryDocumentWS.GetInboxAttachmentByUuidCompleted">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryArchivedInboxDocument(System.String,System.String,System.String,System.Int32)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryArchivedInboxDocumentAsync(System.String,System.String,System.String,System.Int32)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryArchivedInboxDocumentAsync(System.String,System.String,System.String,System.Int32,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentsWithGUIDList(System.String[],System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentsWithGUIDListAsync(System.String[],System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentsWithGUIDListAsync(System.String[],System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentsWithReceivedDate(System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentsWithReceivedDateAsync(System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentsWithReceivedDateAsync(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentsWithReceivedDateWithSearchParams(System.String,System.String,System.String,System.String,System.String,System.String,System.String,business_smart.QueryInvoiceService.QueryInboxDocumentsWithReceivedDateWithSearchParamsEntry[])">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentsWithReceivedDateWithSearchParamsAsync(System.String,System.String,System.String,System.String,System.String,System.String,System.String,business_smart.QueryInvoiceService.QueryInboxDocumentsWithReceivedDateWithSearchParamsEntry[])">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentsWithReceivedDateWithSearchParamsAsync(System.String,System.String,System.String,System.String,System.String,System.String,System.String,business_smart.QueryInvoiceService.QueryInboxDocumentsWithReceivedDateWithSearchParamsEntry[],System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentsWithDocumentDate(System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentsWithDocumentDateAsync(System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentsWithDocumentDateAsync(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentsWithDocumentDateAndSearchParams(System.String,System.String,System.String,System.String,System.String,System.String,System.String,business_smart.QueryInvoiceService.QueryInboxDocumentsWithDocumentDateAndSearchParamsEntry[])">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentsWithDocumentDateAndSearchParamsAsync(System.String,System.String,System.String,System.String,System.String,System.String,System.String,business_smart.QueryInvoiceService.QueryInboxDocumentsWithDocumentDateAndSearchParamsEntry[])">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentsWithDocumentDateAndSearchParamsAsync(System.String,System.String,System.String,System.String,System.String,System.String,System.String,business_smart.QueryInvoiceService.QueryInboxDocumentsWithDocumentDateAndSearchParamsEntry[],System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxArchivedDocumentsWithDocumentDate(System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxArchivedDocumentsWithDocumentDateAsync(System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxArchivedDocumentsWithDocumentDateAsync(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocument(System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentAsync(System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentAsync(System.String,System.String,System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryArchivedOutboxDocument(System.String,System.String,System.String,System.Int32)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryArchivedOutboxDocumentAsync(System.String,System.String,System.String,System.Int32)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryArchivedOutboxDocumentAsync(System.String,System.String,System.String,System.Int32,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentWithLocalId(System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentWithLocalIdAsync(System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentWithLocalIdAsync(System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentsWithReceivedDate(System.String,System.String,System.String,System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentsWithReceivedDateAsync(System.String,System.String,System.String,System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentsWithReceivedDateAsync(System.String,System.String,System.String,System.String,System.String,System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentsWithReceivedDateWithSearchParams(System.String,System.String,System.String,System.String,System.String,System.String,business_smart.QueryInvoiceService.QueryOutboxDocumentsWithReceivedDateWithSearchParamsEntry[])">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentsWithReceivedDateWithSearchParamsAsync(System.String,System.String,System.String,System.String,System.String,System.String,business_smart.QueryInvoiceService.QueryOutboxDocumentsWithReceivedDateWithSearchParamsEntry[])">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentsWithReceivedDateWithSearchParamsAsync(System.String,System.String,System.String,System.String,System.String,System.String,business_smart.QueryInvoiceService.QueryOutboxDocumentsWithReceivedDateWithSearchParamsEntry[],System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentsWithDocumentDate(System.String,System.String,System.String,System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentsWithDocumentDateAsync(System.String,System.String,System.String,System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentsWithDocumentDateAsync(System.String,System.String,System.String,System.String,System.String,System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentsWithDocumentDateAndSearchParams(System.String,System.String,System.String,System.String,System.String,System.String,business_smart.QueryInvoiceService.QueryOutboxDocumentsWithDocumentDateAndSearchParamsEntry[])">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentsWithDocumentDateAndSearchParamsAsync(System.String,System.String,System.String,System.String,System.String,System.String,business_smart.QueryInvoiceService.QueryOutboxDocumentsWithDocumentDateAndSearchParamsEntry[])">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentsWithDocumentDateAndSearchParamsAsync(System.String,System.String,System.String,System.String,System.String,System.String,business_smart.QueryInvoiceService.QueryOutboxDocumentsWithDocumentDateAndSearchParamsEntry[],System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxArchivedDocumentsWithDocumentDate(System.String,System.String,System.String,System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxArchivedDocumentsWithDocumentDateAsync(System.String,System.String,System.String,System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxArchivedDocumentsWithDocumentDateAsync(System.String,System.String,System.String,System.String,System.String,System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentsWithWithGUIDList(System.String[],System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentsWithWithGUIDListAsync(System.String[],System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxDocumentsWithWithGUIDListAsync(System.String[],System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryAppResponseOfOutboxDocument(System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryAppResponseOfOutboxDocumentAsync(System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryAppResponseOfOutboxDocumentAsync(System.String,System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryAppResponseOfInboxDocument(System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryAppResponseOfInboxDocumentAsync(System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryAppResponseOfInboxDocumentAsync(System.String,System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetLastInvoiceIdAndDate(System.String,System.String[])">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetLastInvoiceIdAndDateAsync(System.String,System.String[])">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetLastInvoiceIdAndDateAsync(System.String,System.String[],System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryUsers(System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryUsersAsync(System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryUsersAsync(System.String,System.String,System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocument(System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentAsync(System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryInboxDocumentAsync(System.String,System.String,System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryUsersByTitle(System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryUsersByTitleAsync(System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryUsersByTitleAsync(System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetUserPKListInfo">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetUserPKListInfoAsync">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetUserPKListInfoAsync(System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetUserPKList">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetUserPKListAsync">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetUserPKListAsync(System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetUserGBList">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetUserGBListAsync">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetUserGBListAsync(System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetNewUserPKList">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetNewUserPKListAsync">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetNewUserPKListAsync(System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetNewUserGBList">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetNewUserGBListAsync">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetNewUserGBListAsync(System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryEnvelope(System.String,System.Int32,System.Boolean,System.Int32,System.Boolean,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryEnvelopeAsync(System.String,System.Int32,System.Boolean,System.Int32,System.Boolean,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryEnvelopeAsync(System.String,System.Int32,System.Boolean,System.Int32,System.Boolean,System.String,System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.SetTakenFromEntegrator(System.String[])">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.SetTakenFromEntegratorAsync(System.String[])">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.SetTakenFromEntegratorAsync(System.String[],System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxResponseDocument(System.String[])">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxResponseDocumentAsync(System.String[])">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.QueryOutboxResponseDocumentAsync(System.String[],System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetPKList(System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetPKListAsync(System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetPKListAsync(System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetInboxAttachment(System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetInboxAttachmentAsync(System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetInboxAttachmentAsync(System.String,System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetInboxAttachmentByUuid(System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetInboxAttachmentByUuidAsync(System.String)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.GetInboxAttachmentByUuidAsync(System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:business_smart.QueryInvoiceService.QueryDocumentWS.CancelAsync(System.Object)">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.DocumentQueryResponse">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.DocumentQueryResponse.queryState">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.DocumentQueryResponse.stateExplanation">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.DocumentQueryResponse.documentsCount">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.DocumentQueryResponse.maxRecordIdinList">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.DocumentQueryResponse.documents">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.ResponseDocument">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.document_uuid">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.document_id">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.envelope_uuid">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.document_profile">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.system_creation_time">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.document_issue_date">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.source_id">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.destination_id">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.source_urn">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.source_title">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.destination_urn">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.currency_code">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.invoice_total">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.state_code">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.state_explanation">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.cause">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.content_type">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.document_content">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.emailSent">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.emailSentDate">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.cancelled">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.cancel_date">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.reference_document_uuid">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.response_document_uuid">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.response_code">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.response_validation_state">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.response_received_date">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.gtb_reference_no">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.gtb_gcb_tescil_no">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.gtb_fiili_ihracat_tarihi">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.reserved1">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.reserved2">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.reserved3">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.document_type_code">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.notes">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.despatchInfo">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.orderInfo">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.taxInfo">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.taxInclusiveAmount">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.taxExlusiveAmount">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.allowanceTotalAmount">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.taxAmount0015">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.lineExtensionAmount">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.suplierPersonName">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.supplierPersonMiddleName">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.supplierPersonFamilyName">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.customerPersonName">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.customerPersonMiddleName">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.customerPersonFamilyName">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.destination_title">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.is_read">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.is_archieved">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.is_accounted">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.is_transferred">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.is_printed">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.local_id">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.sendingType">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.buyerCustomerPartyName">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.buyerCustomerPersonName">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.buyerCustomerPersonFamilyName">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.report_no">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.cancel_report_no">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.objected">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.objectionReason">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.objectionDate">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.objectionReportNo">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.objectionType">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.objectionDocumentNo">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.destinationEmail">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.destinationMobile">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.smsSentDate">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.cancelPortalStatus">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.cancelPortalStatusSpecified">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.cancelReason">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseDocument.chargeTotalAmount">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.DocumentInfo">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.DocumentInfo.documentDate">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.DocumentInfo.documentNo">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.AttachmentResponse">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.AttachmentResponse.queryState">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.AttachmentResponse.stateExplanation">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.AttachmentResponse.filename">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.AttachmentResponse.attachmentContent">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.AttachmentResponse.documentType">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.AttachmentResponse.encodingCode">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.AttachmentResponse.characterSetCode">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.AttachmentResponse.mimeCode">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.UserListDocument">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.UserListDocument.code">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.UserListDocument.explanation">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.UserListDocument.fileName">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.UserListDocument.fileContent">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.UserListInfo">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.UserListInfo.size">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.UserListInfo.maxFirstCreationTime">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.UserListInfo.maxAliasCreationTime">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.UserListInfo.code">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.UserListInfo.explanation">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.ResponseUser">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseUser.vkn_tckn">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseUser.unvan_ad">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseUser.etiket">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseUser.tip">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseUser.ilkKayitZamani">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseUser.etiketKayitZamani">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.ResponseUser.etiketKayitTuru">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.UserQueryResponse">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.UserQueryResponse.queryState">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.UserQueryResponse.stateExplanation">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.UserQueryResponse.userCount">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.UserQueryResponse.users">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.TaxInfo">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.TaxInfo.taxtTypeCode">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.TaxInfo.taxtTypeName">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.TaxInfo.taxAmount">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.TaxInfo.taxPercentage">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryInboxDocumentsWithReceivedDateWithSearchParamsEntry">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryInboxDocumentsWithReceivedDateWithSearchParamsEntry.key">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryInboxDocumentsWithReceivedDateWithSearchParamsEntry.value">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryInboxDocumentsWithDocumentDateAndSearchParamsEntry">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryInboxDocumentsWithDocumentDateAndSearchParamsEntry.key">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryInboxDocumentsWithDocumentDateAndSearchParamsEntry.value">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithReceivedDateWithSearchParamsEntry">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithReceivedDateWithSearchParamsEntry.key">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithReceivedDateWithSearchParamsEntry.value">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithDocumentDateAndSearchParamsEntry">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithDocumentDateAndSearchParamsEntry.key">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithDocumentDateAndSearchParamsEntry.value">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryArchivedInboxDocumentCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryArchivedInboxDocumentCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryArchivedInboxDocumentCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryInboxDocumentsWithGUIDListCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryInboxDocumentsWithGUIDListCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryInboxDocumentsWithGUIDListCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryInboxDocumentsWithReceivedDateCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryInboxDocumentsWithReceivedDateCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryInboxDocumentsWithReceivedDateCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryInboxDocumentsWithReceivedDateWithSearchParamsCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryInboxDocumentsWithReceivedDateWithSearchParamsCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryInboxDocumentsWithReceivedDateWithSearchParamsCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryInboxDocumentsWithDocumentDateCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryInboxDocumentsWithDocumentDateCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryInboxDocumentsWithDocumentDateCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryInboxDocumentsWithDocumentDateAndSearchParamsCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryInboxDocumentsWithDocumentDateAndSearchParamsCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryInboxDocumentsWithDocumentDateAndSearchParamsCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryInboxArchivedDocumentsWithDocumentDateCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryInboxArchivedDocumentsWithDocumentDateCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryInboxArchivedDocumentsWithDocumentDateCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryOutboxDocumentCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryOutboxDocumentCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryOutboxDocumentCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryArchivedOutboxDocumentCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryArchivedOutboxDocumentCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryArchivedOutboxDocumentCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryOutboxDocumentWithLocalIdCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryOutboxDocumentWithLocalIdCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryOutboxDocumentWithLocalIdCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithReceivedDateCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithReceivedDateCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithReceivedDateCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithReceivedDateWithSearchParamsCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithReceivedDateWithSearchParamsCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithReceivedDateWithSearchParamsCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithDocumentDateCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithDocumentDateCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithDocumentDateCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithDocumentDateAndSearchParamsCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithDocumentDateAndSearchParamsCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithDocumentDateAndSearchParamsCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryOutboxArchivedDocumentsWithDocumentDateCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryOutboxArchivedDocumentsWithDocumentDateCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryOutboxArchivedDocumentsWithDocumentDateCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithWithGUIDListCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithWithGUIDListCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryOutboxDocumentsWithWithGUIDListCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryAppResponseOfOutboxDocumentCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryAppResponseOfOutboxDocumentCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryAppResponseOfOutboxDocumentCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryAppResponseOfInboxDocumentCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryAppResponseOfInboxDocumentCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryAppResponseOfInboxDocumentCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.GetLastInvoiceIdAndDateCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.GetLastInvoiceIdAndDateCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.GetLastInvoiceIdAndDateCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryUsersCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryUsersCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryUsersCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryInboxDocumentCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryInboxDocumentCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryInboxDocumentCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryUsersByTitleCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryUsersByTitleCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryUsersByTitleCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.GetUserPKListInfoCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.GetUserPKListInfoCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.GetUserPKListInfoCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.GetUserPKListCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.GetUserPKListCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.GetUserPKListCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.GetUserGBListCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.GetUserGBListCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.GetUserGBListCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.GetNewUserPKListCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.GetNewUserPKListCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.GetNewUserPKListCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.GetNewUserGBListCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.GetNewUserGBListCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.GetNewUserGBListCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryEnvelopeCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryEnvelopeCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryEnvelopeCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.SetTakenFromEntegratorCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.SetTakenFromEntegratorCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.SetTakenFromEntegratorCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryOutboxResponseDocumentCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.QueryOutboxResponseDocumentCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.QueryOutboxResponseDocumentCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.GetPKListCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.GetPKListCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.GetPKListCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.GetInboxAttachmentCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.GetInboxAttachmentCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.GetInboxAttachmentCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.GetInboxAttachmentByUuidCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:business_smart.QueryInvoiceService.GetInboxAttachmentByUuidCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:business_smart.QueryInvoiceService.GetInboxAttachmentByUuidCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:business_smart.DataSet1">
+<summary>
+Represents a strongly typed in-memory cache of data.
+</summary>
+</member>
+<member name="T:business_smart.DataSet1.aEmirAjandaDataTable">
+<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member>
+<member name="T:business_smart.DataSet1.aEmirAjandaRow">
+<summary>
+Represents strongly named DataRow class.
+</summary>
+</member>
+<member name="T:business_smart.DataSet1.aEmirAjandaRowChangeEvent">
+<summary>
+Row event argument class
+</summary>
+</member>
+<member name="T:business_smart.frm_Table_Edit">
+ <summary>
+ OLD
+ </summary>
+</member>
+<member name="T:business_smart.tbHaber">
+<summary>
+Represents a strongly typed in-memory cache of data.
+</summary>
+</member>
+<member name="T:business_smart.tbHaber.tbHaberDataTable">
+<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member>
+<member name="T:business_smart.tbHaber.tbHaberRow">
+<summary>
+Represents strongly named DataRow class.
+</summary>
+</member>
+<member name="T:business_smart.tbHaber.tbHaberRowChangeEvent">
+<summary>
+Row event argument class
+</summary>
+</member>
+<member name="T:business_smart.tbHaberTableAdapters.tbHaberTableAdapter">
+<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member>
+<member name="T:business_smart.tbHaberTableAdapters.TableAdapterManager">
+<summary>
+TableAdapterManager is used to coordinate TableAdapters in the dataset to enable Hierarchical Update scenarios
+</summary>
+</member>
+<member name="M:business_smart.tbHaberTableAdapters.TableAdapterManager.UpdateUpdatedRows(business_smart.tbHaber,System.Collections.Generic.List{System.Data.DataRow},System.Collections.Generic.List{System.Data.DataRow})">
+<summary>
+Update rows in top-down order.
+</summary>
+</member>
+<member name="M:business_smart.tbHaberTableAdapters.TableAdapterManager.UpdateInsertedRows(business_smart.tbHaber,System.Collections.Generic.List{System.Data.DataRow})">
+<summary>
+Insert rows in top-down order.
+</summary>
+</member>
+<member name="M:business_smart.tbHaberTableAdapters.TableAdapterManager.UpdateDeletedRows(business_smart.tbHaber,System.Collections.Generic.List{System.Data.DataRow})">
+<summary>
+Delete rows in bottom-up order.
+</summary>
+</member>
+<member name="M:business_smart.tbHaberTableAdapters.TableAdapterManager.GetRealUpdatedRows(System.Data.DataRow[],System.Collections.Generic.List{System.Data.DataRow})">
+<summary>
+Remove inserted rows that become updated rows after calling TableAdapter.Update(inserted rows) first
+</summary>
+</member>
+<member name="M:business_smart.tbHaberTableAdapters.TableAdapterManager.UpdateAll(business_smart.tbHaber)">
+<summary>
+Update all changes to the dataset.
+</summary>
+</member>
+<member name="T:business_smart.tbHaberTableAdapters.TableAdapterManager.UpdateOrderOption">
+<summary>
+Update Order Option
+</summary>
+</member>
+<member name="T:business_smart.tbHaberTableAdapters.TableAdapterManager.SelfReferenceComparer">
+<summary>
+Used to sort self-referenced table's rows
+</summary>
+</member>
+<member name="T:business_smart.UserSettingsException">
+ <summary>
+ Exception indicating that an error occured while
+ saving or restoring user settings data.
+ </summary>
+</member>
+<member name="M:business_smart.UserSettingsException.#ctor(System.String)">
+ <summary>
+ Creates a new exception.
+ </summary>
+</member>
+<member name="M:business_smart.UserSettingsException.#ctor(System.String,System.Exception)">
+ <summary>
+ Creates a new exception with an inner exception.
+ </summary>
+</member>
+<member name="M:business_smart.UserSettingsException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+ <summary>
+ Required because System.Exception implements ISerializable.
+ </summary>
+</member>
+<member name="T:business_smart.UserStorageOption">
+ <summary>
+ Possible locations to save user settings.
+ </summary>
+</member>
+<member name="F:business_smart.UserStorageOption.IsolatedStorage">
+ <summary>
+ Settings will be stored in isolated storage.
+ </summary>
+</member>
+<member name="F:business_smart.UserStorageOption.Registry">
+ <summary>
+ Settings will be stored in the registry.
+ </summary>
+</member>
+<member name="F:business_smart.UserStorageOption.File">
+ <summary>
+ Settings will be stored in text files in the
+ application directory.
+ </summary>
+</member>
+<member name="T:business_smart.UserSettingsBase">
+ <summary>
+ Contains base functionality for user settings storage.
+ </summary>
+ <remarks>
+ To store user settings, inherit from this class to create your own
+ settings class. Within that class use standard XmlSerialization rules
+ to declare your fields and properties.
+ </remarks>
+</member>
+<member name="M:business_smart.UserSettingsBase.#ctor">
+ <summary>
+ Creates a UserSettings object that stores its settings
+ in isolated storage in a section based on the class name.
+ </summary>
+</member>
+<member name="M:business_smart.UserSettingsBase.#ctor(business_smart.UserStorageOption)">
+ <summary>
+ Creates a UserSettings object that stores its settings
+ in the specified storage location in a section based 
+ on the class name.
+ </summary>
+ <param name="StorageOption">The storage location for the settings.</param>
+</member>
+<member name="M:business_smart.UserSettingsBase.#ctor(business_smart.UserStorageOption,System.String)">
+ <summary>
+ Creates a UserSettings object that stores its settings
+ in the specified storage location in a section named
+ per the parameter value.
+ </summary>
+ <param name="StorageOption">The storage location for the settings.</param>
+ <param name="Section">The section name in which the settings should be stored.</param>
+</member>
+<member name="P:business_smart.UserSettingsBase.Section">
+ <summary>
+ The section name in which the settings are stored.
+ </summary>
+ <returns>The section name.</returns>
+</member>
+<member name="P:business_smart.UserSettingsBase.StorageOption">
+ <summary>
+ The location where the settings are stored.
+ </summary>
+ <returns>The location where settings are stored.</returns>
+</member>
+<member name="M:business_smart.UserSettingsBase.Save">
+ <summary>
+ Saves the current settings based on the currently
+ logged in user, the storage location and section name.
+ </summary>
+</member>
+<member name="M:business_smart.UserSettingsBase.SaveToIsolatedStorage">
+ <summary>
+ Stores the user settings to isolated storage.
+ </summary>
+</member>
+<member name="M:business_smart.UserSettingsBase.SaveToRegistry">
+ <summary>
+ Stores the user settings to the Windows registry.
+ </summary>
+</member>
+<member name="M:business_smart.UserSettingsBase.SaveToFile">
+ <summary>
+ Stores the user settings to an XML file.
+ </summary>
+</member>
+<member name="M:business_smart.UserSettingsBase.Restore">
+ <summary>
+ Creates a new settings object with settings data based
+ on the currently logged in user, the storage
+ location and section name.
+ </summary>
+ <returns>The newly populated settings object.</returns>
+</member>
+<member name="M:business_smart.UserSettingsBase.Restore(System.Type,System.String,business_smart.UserStorageOption)">
+ <summary>
+ Creates a new settings object of the specified type
+ based on the currently logged in user, the specified
+ section name and specified storage location.
+ </summary>
+ <param name="Type">The type of the settings object to return.</param>
+ <param name="Section">The section name containing the settings.</param>
+ <param name="StorageOption">The storage location of the settings.</param>
+ <returns>The newly populated settings object.</returns>
+</member>
+<member name="M:business_smart.UserSettingsBase.RestoreFromIsolatedStorage(System.Type,System.String)">
+ <summary>
+ Restore the user settings from isolated storage.
+ </summary>
+ <param name="Type">The type of the settings object.</param>
+ <param name="Section">The section in which the settings are stored.</param>
+ <returns>A populated settings object.</returns>
+</member>
+<member name="M:business_smart.UserSettingsBase.RestoreFromRegistry(System.Type,System.String)">
+ <summary>
+ Restore the user settings from the Windows registry.
+ </summary>
+ <param name="Type">The type of the settings object.</param>
+ <param name="Section">The section in which the settings are stored.</param>
+ <returns>A populated settings object.</returns>
+</member>
+<member name="M:business_smart.UserSettingsBase.RestoreFromFile(System.Type,System.String)">
+ <summary>
+ Restore the user settings from an XML file.
+ </summary>
+ <param name="Type">The type of the settings object.</param>
+ <param name="Section">The section in which the settings are stored.</param>
+ <returns>A populated settings object.</returns>
+</member>
+<member name="M:business_smart.UserSettingsBase.GetAppName">
+ <summary>
+ Returns the name the the running application.
+ </summary>
+ <remarks>
+ Since this relies on the AppDomain name having some
+ reasonable meaning, this method may not work in some
+ situations. Most notably, it will not work in ASP.NET
+ where the AppDomain names are unpredicable and have
+ little to no meaning. If you need to store and retrieve
+ user setting values in ASP.NET you'll need to enhance
+ the UserSettingsBase class to have some other way of
+ identifying the name of your application.
+ </remarks>
+ <returns>The application name.</returns>
+</member>
+<member name="M:business_smart.UserSettingsBase.GetUser">
+ <summary>
+ Returns the name of the current user.
+ </summary>
+ <remarks>
+ <para>
+ If there is no current user the .NET Framework supplies an
+ empty GenericIdentity object, with an empty user name. If
+ we get an empty user name we return 'default' instead.
+ </para><para>
+ If the user identity is a Windows identity the user name
+ will include the domain name. Since we're using the user
+ name to build a path, the '\' in the name will cause problems
+ so we strip out the domain and '\' symbol.
+ </para>
+ </remarks>
+ <returns>The name of the current user.</returns>
+</member>
+<member name="M:business_smart.UserSettingsBase.GetFilePath(System.String)">
+ <summary>
+ Returns a full file path to a user-settings file.
+ </summary>
+ <param name="Section">The section name for these settings.</param>
+ <returns>A complete file path (path and name) for the settings file.</returns>
+</member>
+</members>
+</doc>
