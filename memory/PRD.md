@@ -1,49 +1,68 @@
-# Barkod Magaza - POS/ERP Application PRD
+# Barkod Magaza - Product Requirements Document
 
 ## Original Problem Statement
-VB.NET Windows Forms POS/ERP uygulaması (Barkod_Magaza) üzerinde geliştirme ve bakım çalışmaları.
+VB.NET Windows Forms ERP/POS uygulamasinin gelistirilmesi:
+- POS entegrasyonlari (Kolaysoft) hata duzeltmeleri
+- GIB e-fatura XML olusturma duzeltmeleri
+- UI thread crash duzeltmeleri
+- Maliyet hesaplama yontemlerinin standardize edilmesi (FIFO, LIFO, Agirlikli Ortalama, Hareketli Ortalama, Gercek Parti, Standart Maliyet)
 
-## Core Requirements
-- B2B yönetim sekmeleri ve işlevselliği ekleme
-- POS API entegrasyonları için hata yönetimini iyileştirme
-- R2 image upload (Sınıf ve Firma logoları)
-- Otomatik yedekleme hatalarını düzeltme ve FTP'den C# .NET API'ye geçiş
-- Değişiklikleri GitHub'a push etme
+## Repository
+- URL: https://github.com/AliTanerGoksu-hub/Barkod_Magaza.git
+- Branch: main
+
+## Completed Work
+
+### Session 1 (Previous)
+- Form1.vb derleme hatalari duzeltildi (FtpEskiYedekleriSil_ESKI)
+- B2B Settings tab eklendi (frm_personel.vb)
+- R2 Image upload (frm_tbSinif.vb, Form1.vb)
+- Otomatik yedekleme hatalari duzeltildi
+- BusinessSmartDesktopAPI .NET 8.0'a guncellendi
+- ApiClient.vb FTP'den API'ye gecis
+
+### Session 2 (Previous)
+- Cross-thread exception duzeltildi (SatisiKolaysoftaGonder)
+- Iptal/iade faturalari Kolaysoft'a gonderilmesi engellendi
+- Kolaysoft error.notExist hatasi duzeltildi
+- KDV cift ekleme hatasi duzeltildi (frm_fatura_liste.vb, frm_stok_satis_karlilik.vb)
+- RowNotInTableException duzeltildi (frm_Perakende_Satis.vb)
+- POS UI: Basarisiz odeme kaydetme mantigi duzeltildi
+- SQL syntax hatasi duzeltildi (frm_tbKod.vb)
+- GIB E-Fatura XML cac:Person hatasi duzeltildi (mod_EFatura.vb)
+- Repository Barkod_Magaza_Git -> Barkod_Magaza tasindi
+
+### Session 3 (Current - Feb 2026)
+- Merkezi MaliyetHesaplayici.vb modulu olusturuldu (231 satir)
+  - FIFO, LIFO, Agirlikli Ortalama, Hareketli Ortalama, Gercek Parti, Standart Maliyet
+  - BirimMaliyetHesapla: KDV + ek maliyet hesaplama (mevcut maliyet_kontrol mantigi)
+  - AlisKayitlariGetir: SQL ile alis kayitlari sorgulama
+  - AlisKdvDahilMi: Onbellekli KDV kontrolu
+- frm_stok_satis_karlilik.vb: ComboBox (index 3-8) ve kontrol_oran() guncellendi
+- frm_stok_liste_envanter_deger.vb: sec_MaliyetTipi ComboBox, lblMaliyet, dataload sonrasi maliyet yeniden hesaplama eklendi
+- BARKOD_MAGAZA.vbproj guncellendi
 
 ## Architecture
-- **Frontend**: VB.NET Windows Forms, DevExpress UI Components
-- **Backend/API**: C# .NET 8.0 Minimal APIs (BusinessSmartDesktopAPI)
-- **Database**: SQL Server (OleDb)
-- **File Encoding**: cp1254 / latin-1 for VB files
+```
+/app/
+MaliyetHesaplayici.vb    # YENI - Merkezi maliyet modulu
+frm_stok_satis_karlilik.vb    # Karlilik formu (ComboBox 0-8)
+frm_stok_liste_envanter_deger.vb  # Envanter formu (ComboBox 0-8)
+Form1.vb, KeyCode.vb, ApiClient.vb...
+```
 
-## Completed Tasks
-- [x] B2B Settings tab (frm_personel.vb)
-- [x] General B2B Settings form (Form1.vb)
-- [x] SQL Scripts for B2B tables
-- [x] POS 400 Bad Request error handling (frm_perakende_odeme.vb)
-- [x] R2 Image upload for Class Logos (frm_tbSinif.vb)
-- [x] Company Logo upload (Form1.vb)
-- [x] Automatic backup bugs fixed
-- [x] C# API updated to .NET 8.0 with /api/backup/delete endpoint
-- [x] ApiClient.vb refactored for API-based backup management
-- [x] **Form1.vb derleme hatası düzeltildi** - FtpEskiYedekleriSil_ESKI ve FtpDosyaSil ölü kodları temizlendi (2026-02)
+## ComboBox Index Mapping
+- 0: Stok Kartindan (mevcut)
+- 1: Maliyetlendirmeden (mevcut)
+- 2: Satis Gunundeki Maliyet (mevcut)
+- 3: FIFO (Ilk Giren Ilk Cikar) [YENI]
+- 4: LIFO (Son Giren Ilk Cikar) [YENI]
+- 5: Agirlikli Ortalama [YENI]
+- 6: Hareketli Ortalama [YENI]
+- 7: Gercek Parti Maliyeti [YENI]
+- 8: Standart Maliyet [YENI]
 
-## Pending / In Progress
-- Backup API Migration doğrulaması (kullanıcı tarafında test gerekiyor)
-
-## Upcoming Tasks (P1)
-- C# API (BusinessSmartDesktopAPI) build.bat çalıştırma ve deploy
-- B2B senkronizasyonu uçtan uca testi
-
-## Future / Backlog (P2)
-- Form1.vb yedekleme fonksiyonlarının refactoring'i
-- Eski FTP kodlarının kalıcı olarak silinmesi
-
-## Key API Endpoints
-- GET /api/backup/list
-- POST /api/backup/delete
-- POST /api/backup/upload
-
-## GitHub
-- Repo: https://github.com/AliTanerGoksu-hub/Barkod_Magaza_Git.git
-- Branch: main
+## Remaining / Future Tasks
+- P1: Diger maliyet hesaplayan formlarda da ayni ComboBox yapisini uygula
+- P1: POS yerel kaydetme akisini dogrula
+- P2: End-to-end B2B senkronizasyonu testi
