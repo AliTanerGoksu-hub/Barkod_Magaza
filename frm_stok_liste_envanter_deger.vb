@@ -214,6 +214,8 @@ Public Class frm_stok_liste_envanter_deger
         Me.barDockControlLeft = New DevExpress.XtraBars.BarDockControl()
         Me.barDockControlRight = New DevExpress.XtraBars.BarDockControl()
         Me.sec_Fiyattipi = New DevExpress.XtraEditors.LookUpEdit()
+        Me.sec_MaliyetTipi = New DevExpress.XtraEditors.ComboBoxEdit()
+        Me.lblMaliyet = New DevExpress.XtraEditors.LabelControl()
         Me.sec_grup = New DevExpress.XtraEditors.ComboBoxEdit()
         Me.DateEdit1 = New DevExpress.XtraEditors.DateEdit()
         Me.LabelControl3 = New DevExpress.XtraEditors.LabelControl()
@@ -422,6 +424,8 @@ Public Class frm_stok_liste_envanter_deger
         '
         'GroupControl1
         '
+        Me.GroupControl1.Controls.Add(Me.sec_MaliyetTipi)
+        Me.GroupControl1.Controls.Add(Me.lblMaliyet)
         Me.GroupControl1.Controls.Add(Me.sinifFiltre)
         Me.GroupControl1.Controls.Add(Me.sec_Fiyattipi)
         Me.GroupControl1.Controls.Add(Me.sec_grup)
@@ -439,7 +443,7 @@ Public Class frm_stok_liste_envanter_deger
         Me.GroupControl1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupControl1.Location = New System.Drawing.Point(96, 2)
         Me.GroupControl1.Name = "GroupControl1"
-        Me.GroupControl1.Size = New System.Drawing.Size(726, 108)
+        Me.GroupControl1.Size = New System.Drawing.Size(726, 132)
         Me.GroupControl1.TabIndex = 39
         Me.GroupControl1.Text = "Ara"
         '
@@ -452,7 +456,27 @@ Public Class frm_stok_liste_envanter_deger
         Me.sinifFiltre.Properties.Caption = "Sýnýf Filtre"
         Me.sinifFiltre.Size = New System.Drawing.Size(97, 19)
         Me.sinifFiltre.TabIndex = 47
+
         '
+        'sec_MaliyetTipi
+        '
+        Me.sec_MaliyetTipi.EditValue = "Stok Kartýndan"
+        Me.sec_MaliyetTipi.EnterMoveNextControl = True
+        Me.sec_MaliyetTipi.Location = New System.Drawing.Point(64, 84)
+        Me.sec_MaliyetTipi.Name = "sec_MaliyetTipi"
+        Me.sec_MaliyetTipi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
+        Me.sec_MaliyetTipi.Properties.Items.AddRange(New Object() {"Stok Kartýndan", "Maliyetlendirmeden", "Satýþ Günündeki Maliyet", "FIFO (Ýlk Giren Ýlk Çýkar)", "LIFO (Son Giren Ýlk Çýkar)", "Aðýrlýklý Ortalama", "Hareketli Ortalama", "Gerçek Parti Maliyeti", "Standart Maliyet"})
+        Me.sec_MaliyetTipi.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor
+        Me.sec_MaliyetTipi.Size = New System.Drawing.Size(340, 20)
+        Me.sec_MaliyetTipi.TabIndex = 20
+        '
+        'lblMaliyet
+        '
+        Me.lblMaliyet.Location = New System.Drawing.Point(22, 88)
+        Me.lblMaliyet.Name = "lblMaliyet"
+        Me.lblMaliyet.Size = New System.Drawing.Size(38, 13)
+        Me.lblMaliyet.TabIndex = 21
+        Me.lblMaliyet.Text = "Maliyet:"         '
         'BarManager1
         '
         Me.BarManager1.Bars.AddRange(New DevExpress.XtraBars.Bar() {Me.Bar3})
@@ -2015,6 +2039,21 @@ Public Class frm_stok_liste_envanter_deger
         GridControl1.Focus()
         GridControl1.Select()
         GridView1.CollapseAllGroups()
+        ' Merkezi Maliyet Hesaplama - yeni yontemler icin satir satir guncelle
+        If sec_MaliyetTipi.SelectedIndex >= 3 AndAlso sec_MaliyetTipi.SelectedIndex <= 8 Then
+            If DataSet1 IsNot Nothing AndAlso DataSet1.Tables.Count > 0 AndAlso DataSet1.Tables(0).Columns.Contains("nStokID") Then
+                For Each dr As DataRow In DataSet1.Tables(0).Rows
+                    Try
+                        Dim nStokID As Int64 = CLng(dr("nStokID"))
+                        Dim yeniMaliyet As Decimal = MaliyetHesaplayici.EnvanterBirimMaliyet(nStokID, sec_MaliyetTipi.SelectedIndex)
+                        dr("Maliyet") = yeniMaliyet
+                        dr("mDeger") = CDec(dr("lMevcut")) * yeniMaliyet
+                        dr("bDeger") = CDec(dr("lBekleyen")) * yeniMaliyet
+                    Catch
+                    End Try
+                Next
+            End If
+        End If
     End Sub
     Private Sub ara()
         Label2.Text = Sorgu_sDil("Lütfen Bekleyiniz...", sDil)
@@ -2449,4 +2488,6 @@ Public Class frm_stok_liste_envanter_deger
         analiz_stok_hareket()
     End Sub
     Friend WithEvents sinifFiltre As DevExpress.XtraEditors.CheckEdit
+    Friend WithEvents sec_MaliyetTipi As DevExpress.XtraEditors.ComboBoxEdit
+    Friend WithEvents lblMaliyet As DevExpress.XtraEditors.LabelControl
 End Class

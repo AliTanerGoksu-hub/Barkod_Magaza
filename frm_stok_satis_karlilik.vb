@@ -726,7 +726,7 @@ Public Class frm_stok_satis_karlilik
         Me.sec_MaliyetTipi.Location = New System.Drawing.Point(102, 121)
         Me.sec_MaliyetTipi.Name = "sec_MaliyetTipi"
         Me.sec_MaliyetTipi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
-        Me.sec_MaliyetTipi.Properties.Items.AddRange(New Object() {"Stok Kartýndan", "Maliyetlendirmeden", "Satýþ Günündeki Maliyet"})
+        Me.sec_MaliyetTipi.Properties.Items.AddRange(New Object() {"Stok Kartýndan", "Maliyetlendirmeden", "Satýþ Günündeki Maliyet", "FIFO (Ýlk Giren Ýlk Çýkar)", "LIFO (Son Giren Ýlk Çýkar)", "Aðýrlýklý Ortalama", "Hareketli Ortalama", "Gerçek Parti Maliyeti", "Standart Maliyet"})
         Me.sec_MaliyetTipi.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor
         Me.sec_MaliyetTipi.Size = New System.Drawing.Size(312, 26)
         Me.sec_MaliyetTipi.TabIndex = 8
@@ -2446,10 +2446,10 @@ Public Class frm_stok_satis_karlilik
         Dim normalfiyat As Decimal = 0
         Dim maliyet As Decimal = 0
         Dim fiyattipi As String = ""
-        If MaliyetTipi = 0 Then
-            colMALIYET.FieldName = "MALIYET"
-        ElseIf MaliyetTipi = 1 Then
+        If MaliyetTipi = 1 Then
             colMALIYET.FieldName = "lMaliyetFiyat"
+        Else
+            colMALIYET.FieldName = "MALIYET"
         End If
         Dim lToplamKar As Decimal = 0
         Dim lToplamMaliyet As Decimal = 0
@@ -2480,6 +2480,16 @@ Public Class frm_stok_satis_karlilik
                     ds_tbAlislar = sorgu(sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SET DATEFORMAT DMY SELECT TOP 1 tbStokFisiDetayi.nIslemID, tbStokFisiDetayi.dteFisTarihi, tbStokFisiDetayi.nStokID, tbStokFisiDetayi.lGirisMiktar1, tbStokFisiDetayi.nKdvOrani, tbStokFisiDetayi.lBrutFiyat, tbStokFisiDetayi.lBrutTutar, tbStokFisiDetayi.lGirisFiyat, tbStokFisiDetayi.lGirisTutar, tbStokFisiDetayi.lMaliyetFiyat, tbStokFisiDetayi.lMaliyetTutar, tbStokFisiDetayi.lIlaveMaliyetTutar, tbStokFisiMaster.lMalBedeli AS lMalBedeli, tbStokFisiMaster.lNetTutar, tbStokFisiMaster.lMalIskontoTutari AS lMalIskontotuTutari, tbStokFisiMaster.lDipIskontoTutari1 + tbStokFisiMaster.lDipIskontoTutari2 + tbStokFisiMaster.lDipIskontoTutari3 AS lDipIskontoTutari, tbStokFisiMaster.lEkmaliyet1, tbStokFisiMaster.lEkmaliyet2, tbStokFisiMaster.lEkmaliyet3, (SELECT ISNULL(SUM(lTutar), 0) FROM tbStokFisiEkMaliyet WHERE nStokFisiID = tbStokFisiMaster.nStokFisiID and nIslemID = 0) AS lEkMaliyet4, (SELECT ISNULL(SUM(lTutar), 0) FROM tbStokFisiEkMaliyet WHERE nStokFisiID = tbStokFisiDetayi.nStokFisiID AND nIslemID = tbStokFisiDetayi.nIslemID) AS lEkIlaveMaliyetTutar, CAST(0 AS money) AS nEkOran, (SELECT nKdvOrani FROM tbKdv WHERE sKdvTipi = tbStok.sKdvTipi) AS nStokKdvOrani FROM tbStokFisiDetayi INNER JOIN tbStokFisiMaster ON tbStokFisiDetayi.nStokFisiID = tbStokFisiMaster.nStokFisiID INNER JOIN tbStok ON tbStokFisiDetayi.nStokID = tbStok.nStokID WHERE (tbStokFisiDetayi.nGirisCikis IN (1)) and tbStokFisiDetayi.lGirisMiktar1 > 0 AND (tbStokFisiDetayi.dteFisTarihi <= '" & tarih1 & "') AND tbStokFisiDetayi.nStokID = " & dr("nStokID") & " and tbStokFisiDetayi.sFisTipi <> 'T' ORDER BY tbStokFisiDetayi.nStokID, tbStokFisiDetayi.dteFisTarihi DESC"))
                     dr("MALIYET") = sorgu_sayi(maliyet_kontrol(), 0)
                     maliyet = dr("MALIYET")
+                    Try
+                        netmaliyet = dr("MALIYET") * dr("Miktar")
+                    Catch ex As Exception
+                        netmaliyet = 0
+                    End Try
+                ElseIf MaliyetTipi >= 3 AndAlso MaliyetTipi <= 8 Then
+                    tarih1 = dr("dteTarih")
+                    nStokID = dr("nStokID")
+                    maliyet = MaliyetHesaplayici.HesaplaMaliyet(nStokID, tarih1, MaliyetTipi)
+                    dr("MALIYET") = sorgu_sayi(maliyet, 0)
                     Try
                         netmaliyet = dr("MALIYET") * dr("Miktar")
                     Catch ex As Exception
