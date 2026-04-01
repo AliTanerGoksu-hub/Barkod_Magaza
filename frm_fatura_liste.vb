@@ -5661,16 +5661,17 @@ Public Class frm_fatura_liste
                     If eslenenFaturaIdler.Contains(localID) Then Continue For
                     Dim puan As Integer = 0
 
-                    ' 1. VKN eslesmesi
+                    ' 1. VKN eslesmesi (sahte VKN'leri atla)
                     Dim localVkn As String = drLocal("sVergiNo").ToString().Trim()
-                    If localVkn <> "" AndAlso gibDestId <> "" AndAlso localVkn = gibDestId Then
+                    Dim sahteVkn As Boolean = (gibDestId = "" OrElse gibDestId = "1111111111" OrElse gibDestId = "11111111111" OrElse gibDestId = "0")
+                    If Not sahteVkn AndAlso localVkn <> "" AndAlso localVkn = gibDestId Then
                         puan += 100
                     End If
 
-                    ' 2. TC eslesmesi
+                    ' 2. TC eslesmesi (sahte TC'leri atla)
                     If puan < 100 Then
                         Dim localTC As String = drLocal("TC").ToString().Trim()
-                        If localTC <> "" AndAlso localTC <> "0" AndAlso gibDestId <> "" AndAlso localTC = gibDestId Then
+                        If Not sahteVkn AndAlso localTC <> "" AndAlso localTC <> "0" AndAlso localTC = gibDestId Then
                             puan += 100
                         End If
                     End If
@@ -5694,7 +5695,8 @@ Public Class frm_fatura_liste
                         If Math.Abs(localToplam - gibTutarDec) < 1D Then puan += 50
                     End If
 
-                    If puan > enIyiPuan AndAlso puan >= 50 Then
+                    ' Minimum esik: isim+tutar (130) veya VKN/TC+tutar (150) olmali
+                    If puan > enIyiPuan AndAlso puan >= 130 Then
                         enIyiPuan = puan
                         enIyiFaturaID = localID
                     End If
@@ -5738,16 +5740,17 @@ Public Class frm_fatura_liste
                     If eslenenFaturaIdler.Contains(localID) Then Continue For
                     Dim puan As Integer = 0
 
-                    ' 1. VKN eslesmesi
+                    ' 1. VKN eslesmesi (sahte VKN'leri atla)
                     Dim localVkn As String = drLocal("sVergiNo").ToString().Trim()
-                    If localVkn <> "" AndAlso gibDestId <> "" AndAlso localVkn = gibDestId Then
+                    Dim sahteVkn As Boolean = (gibDestId = "" OrElse gibDestId = "1111111111" OrElse gibDestId = "11111111111" OrElse gibDestId = "0")
+                    If Not sahteVkn AndAlso localVkn <> "" AndAlso localVkn = gibDestId Then
                         puan += 100
                     End If
 
-                    ' 2. TC eslesmesi
+                    ' 2. TC eslesmesi (sahte TC'leri atla)
                     If puan < 100 Then
                         Dim localTC As String = drLocal("TC").ToString().Trim()
-                        If localTC <> "" AndAlso localTC <> "0" AndAlso gibDestId <> "" AndAlso localTC = gibDestId Then
+                        If Not sahteVkn AndAlso localTC <> "" AndAlso localTC <> "0" AndAlso localTC = gibDestId Then
                             puan += 100
                         End If
                     End If
@@ -5771,7 +5774,8 @@ Public Class frm_fatura_liste
                         If Math.Abs(localToplam - gibTutarDec) < 1D Then puan += 50
                     End If
 
-                    If puan > enIyiPuan AndAlso puan >= 50 Then
+                    ' Minimum esik: isim+tutar (130) veya VKN/TC+tutar (150) olmali
+                    If puan > enIyiPuan AndAlso puan >= 130 Then
                         enIyiPuan = puan
                         enIyiFaturaID = localID
                     End If
