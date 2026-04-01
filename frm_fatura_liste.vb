@@ -5552,7 +5552,7 @@ Public Class frm_fatura_liste
                             endDate:=donemSon, _
                             documentType:="1", _
                             queried:="ALL", _
-                            withXML:="N", _
+                            withXML:="NONE", _
                             minRecordId:=minRecordId)
 
                         If response IsNot Nothing AndAlso response.queryState <> 0 Then
