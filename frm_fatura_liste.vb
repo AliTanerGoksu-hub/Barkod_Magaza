@@ -5653,6 +5653,9 @@ Public Class frm_fatura_liste
                     If gibTutarDec = 0 Then Decimal.TryParse(gibTutar, gibTutarDec)
                 End If
 
+                Dim gibTarihDt As DateTime = DateTime.MinValue
+                If gibTarih <> "" Then DateTime.TryParse(gibTarih, gibTarihDt)
+
                 Dim enIyiPuan As Integer = 0
                 Dim enIyiFaturaID As String = ""
 
@@ -5695,8 +5698,17 @@ Public Class frm_fatura_liste
                         If Math.Abs(localToplam - gibTutarDec) < 1D Then puan += 50
                     End If
 
-                    ' Minimum esik: isim+tutar (130) veya VKN/TC+tutar (150) olmali
-                    If puan > enIyiPuan AndAlso puan >= 130 Then
+                    ' 5. Tarih eslesmesi
+                    If gibTarihDt <> DateTime.MinValue Then
+                        Dim localTarih As DateTime = DateTime.MinValue
+                        Try : localTarih = CDate(drLocal("dteFisTarihi")) : Catch : End Try
+                        If localTarih <> DateTime.MinValue AndAlso localTarih.Date = gibTarihDt.Date Then
+                            puan += 40
+                        End If
+                    End If
+
+                    ' Minimum esik: tutar+tarih(90), isim+tutar(130), VKN+tutar(150)
+                    If puan > enIyiPuan AndAlso puan >= 90 Then
                         enIyiPuan = puan
                         enIyiFaturaID = localID
                     End If
@@ -5717,6 +5729,7 @@ Public Class frm_fatura_liste
             For Each eDoc As EarsivServisi.ResponseDocument In tumEArsivBelgeler
                 If eDoc.document_id Is Nothing OrElse eDoc.document_id.Trim() = "" Then Continue For
                 Dim gibDestId As String = If(eDoc.destination_id IsNot Nothing, eDoc.destination_id.Trim(), "")
+                Dim gibTarih As String = If(eDoc.document_issue_date IsNot Nothing, eDoc.document_issue_date.Trim(), "")
                 Dim gibTutar As String = If(eDoc.invoice_total IsNot Nothing, eDoc.invoice_total.Trim(), "")
                 Dim gibDocId As String = eDoc.document_id.Trim()
                 Dim gibUuid As String = If(eDoc.document_uuid IsNot Nothing, eDoc.document_uuid.Trim(), "")
@@ -5731,6 +5744,9 @@ Public Class frm_fatura_liste
                     Decimal.TryParse(gibTutar.Replace(".", ","), gibTutarDec)
                     If gibTutarDec = 0 Then Decimal.TryParse(gibTutar, gibTutarDec)
                 End If
+
+                Dim gibTarihDt As DateTime = DateTime.MinValue
+                If gibTarih <> "" Then DateTime.TryParse(gibTarih, gibTarihDt)
 
                 Dim enIyiPuan As Integer = 0
                 Dim enIyiFaturaID As String = ""
@@ -5774,8 +5790,17 @@ Public Class frm_fatura_liste
                         If Math.Abs(localToplam - gibTutarDec) < 1D Then puan += 50
                     End If
 
-                    ' Minimum esik: isim+tutar (130) veya VKN/TC+tutar (150) olmali
-                    If puan > enIyiPuan AndAlso puan >= 130 Then
+                    ' 5. Tarih eslesmesi
+                    If gibTarihDt <> DateTime.MinValue Then
+                        Dim localTarih As DateTime = DateTime.MinValue
+                        Try : localTarih = CDate(drLocal("dteFisTarihi")) : Catch : End Try
+                        If localTarih <> DateTime.MinValue AndAlso localTarih.Date = gibTarihDt.Date Then
+                            puan += 40
+                        End If
+                    End If
+
+                    ' Minimum esik: tutar+tarih(90), isim+tutar(130), VKN+tutar(150)
+                    If puan > enIyiPuan AndAlso puan >= 90 Then
                         enIyiPuan = puan
                         enIyiFaturaID = localID
                     End If
