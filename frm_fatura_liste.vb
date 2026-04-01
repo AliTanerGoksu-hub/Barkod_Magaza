@@ -5519,7 +5519,10 @@ Public Class frm_fatura_liste
             adpEksik.Fill(dsEksik)
             con.Close()
 
-            If dsEksik.Tables.Count = 0 OrElse dsEksik.Tables(0).Rows.Count = 0 Then Exit Sub
+            If dsEksik.Tables.Count = 0 OrElse dsEksik.Tables(0).Rows.Count = 0 Then
+                MsgBox("Eksik fatura bulunamadi, isleme gerek yok.", MsgBoxStyle.Information, "Bilgi")
+                Exit Sub
+            End If
 
             ' Sadece son 2 ay kontrol edilsin
             Dim dtBitis As DateTime = DateTime.Now
@@ -5620,6 +5623,10 @@ Public Class frm_fatura_liste
                 End While
             Next
             eArsivClient.Close()
+
+            MsgBox("E-Fatura: " & tumBelgeler.Count & " belge" & vbCrLf & _
+                   "E-Arsiv: " & tumEArsivBelgeler.Count & " belge" & vbCrLf & _
+                   "Yerel eksik: " & dsEksik.Tables(0).Rows.Count & " fatura", MsgBoxStyle.Information, "Sorgu Sonucu")
 
             If tumBelgeler.Count = 0 AndAlso tumEArsivBelgeler.Count = 0 Then Exit Sub
 
