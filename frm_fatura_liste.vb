@@ -5654,7 +5654,10 @@ Public Class frm_fatura_liste
                 End If
 
                 Dim sGuidEk As String = ""
-                If sGuid <> "" Then sGuidEk = ", sEfaturaGuid = '" & sGuid.Replace("'", "''") & "'"
+                If sGuid <> "" Then
+                    sGuidEk = ", sEfaturaGuid = '" & sGuid.Replace("'", "''") & "'"
+                    sGuidEk &= ", sEfaturaUrl = 'https://earsivportal.efatura.gov.tr/intragiris.html?ettn=" & sGuid.Replace("'", "''") & "'"
+                End If
 
                 Dim cmdUpdate As New OleDb.OleDbCommand(sorgu_query( _
                     "SET DATEFORMAT DMY UPDATE tbStokFisiMaster SET " & _
