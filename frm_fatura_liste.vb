@@ -5846,7 +5846,8 @@ Public Class frm_fatura_liste
                     Dim lAd As String = drDbg("sAciklama").ToString().Trim()
                     Dim lTC As String = drDbg("TC").ToString().Trim()
                     Dim lID As String = drDbg("nStokFisiID").ToString()
-                    dbgMsg &= "DB[" & sayac & "]: ID=" & lID & " VKN=" & lVkn & " TC=" & lTC & " Ad=" & lAd & " Net=" & lNet & " KDV=" & lKdv & vbCrLf
+                    Dim lFirmaID As String = drDbg("nFirmaID").ToString()
+                    dbgMsg &= "DB[" & sayac & "]: ID=" & lID & " FirmaID=" & lFirmaID & " VKN=" & lVkn & " TC=" & lTC & " Ad=" & lAd & " Net=" & lNet & " KDV=" & lKdv & vbCrLf
                     sayac += 1
                 Next
                 MsgBox(dbgMsg, MsgBoxStyle.Information, "Eslestirme Detayi")
