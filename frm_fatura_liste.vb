@@ -5480,7 +5480,7 @@ Public Class frm_fatura_liste
         Return DS
     End Function
     ' GIB'den fatura numaralarini sorgulayip DB'yi gunceller
-    ' EFaturaEntegre = true ise ve GibFaturaNo bos olan faturalar varsa calisir
+    ' Esleme: 1.VKN/TCKN 2.Isim 3.Tarih 4.Tutar
     Private Sub GibFaturaNumaralariniGuncelle()
         Try
             Dim con As New OleDb.OleDbConnection()
@@ -5504,16 +5504,27 @@ Public Class frm_fatura_liste
 
             If bEFaturaEntegre = False OrElse gibKullanici = "" OrElse gibSifre = "" Then Exit Sub
 
-            ' 2. GibFaturaNo bos olan ve sEfaturaGuid dolu olan faturalari bul
+            ' 2. GibFaturaNo bos olan faturalari firma bilgileriyle birlikte al
             Dim tarih1Str As String = CDate(txt_dteFisTarihi1.EditValue).ToString("dd/MM/yyyy")
             Dim tarih2Str As String = CDate(txt_dteFisTarihi2.EditValue).ToString("dd/MM/yyyy")
 
             con.Open()
-            Dim cmdCheck As New OleDb.OleDbCommand(sorgu_query("SET DATEFORMAT DMY SELECT COUNT(*) FROM tbStokFisiMaster WHERE (GibFaturaNo IS NULL OR GibFaturaNo = '' OR GibFaturaNo = '0') AND sEfaturaGuid IS NOT NULL AND sEfaturaGuid <> '' AND dteFisTarihi >= '" & tarih1Str & "' AND dteFisTarihi <= '" & tarih2Str & "'"), con)
-            Dim nEksikFatura As Integer = CInt(cmdCheck.ExecuteScalar())
+            Dim dsEksik As New DataSet()
+            Dim adpEksik As New OleDb.OleDbDataAdapter(sorgu_query( _
+                "SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED " & _
+                "SELECT m.nStokFisiID, m.dteFisTarihi, m.lNetTutar, m.nFirmaID, m.sEfaturaGuid, " & _
+                "ISNULL(RTRIM(f.sVergiNo), '') AS sVergiNo, " & _
+                "ISNULL(RTRIM(f.sAciklama), '') AS sAciklama, " & _
+                "ISNULL(f.TC, 0) AS TC " & _
+                "FROM tbStokFisiMaster m " & _
+                "INNER JOIN tbFirma f ON m.nFirmaID = f.nFirmaID " & _
+                "WHERE (m.GibFaturaNo IS NULL OR m.GibFaturaNo = '' OR m.GibFaturaNo = '0') " & _
+                "AND m.dteFisTarihi >= '" & tarih1Str & "' " & _
+                "AND m.dteFisTarihi <= '" & tarih2Str & "'"), con)
+            adpEksik.Fill(dsEksik)
             con.Close()
 
-            If nEksikFatura = 0 Then Exit Sub
+            If dsEksik.Tables.Count = 0 OrElse dsEksik.Tables(0).Rows.Count = 0 Then Exit Sub
 
             ' 3. GIB'den fatura bilgilerini sorgula
             Dim startDate As String = CDate(txt_dteFisTarihi1.EditValue).ToString("yyyy-MM-dd")
@@ -5524,7 +5535,6 @@ Public Class frm_fatura_liste
             prop.Headers.Add("Username", gibKullanici)
             prop.Headers.Add("Password", gibSifre)
 
-            ' Tum sayfalari topla
             Dim tumBelgeler As New System.Collections.Generic.List(Of GibSorgula.ResponseDocument)
             Dim minRecordId As String = "0"
             Dim devamEt As Boolean = True
@@ -5557,49 +5567,134 @@ Public Class frm_fatura_liste
             End While
 
             client.Close()
-
             If tumBelgeler.Count = 0 Then Exit Sub
 
-            ' 4. UUID ile eslestirip DB'yi guncelle
-            con.Open()
+            ' 4. Eslestirme: VKN/TCKN > Isim > Tarih > Tutar
+            Dim eslesmeListesi As New System.Collections.Generic.List(Of String()) ' {nStokFisiID, document_id, document_uuid, profile, durum, docType, refUuid}
+
+            ' Eslenen GIB belge UUID'lerini takip et (cift esleme engeli)
+            Dim eslenenGibUuidler As New System.Collections.Generic.HashSet(Of String)
+            ' Eslenen yerel fatura ID'lerini takip et
+            Dim eslenenFaturaIdler As New System.Collections.Generic.HashSet(Of String)
+
             For Each doc In tumBelgeler
-                If doc.document_uuid Is Nothing OrElse doc.document_uuid.Trim() = "" Then Continue For
                 If doc.document_id Is Nothing OrElse doc.document_id.Trim() = "" Then Continue For
+                Dim gibDestId As String = If(doc.destination_id IsNot Nothing, doc.destination_id.Trim(), "")
+                Dim gibTarih As String = If(doc.document_issue_date IsNot Nothing, doc.document_issue_date.Trim(), "")
+                Dim gibTutar As String = If(doc.invoice_total IsNot Nothing, doc.invoice_total.Trim(), "")
+                Dim gibDocId As String = doc.document_id.Trim()
+                Dim gibUuid As String = If(doc.document_uuid IsNot Nothing, doc.document_uuid.Trim(), "")
 
-                Dim sGuid As String = doc.document_uuid.Trim()
-                Dim sGibNo As String = doc.document_id.Trim()
-                Dim sProfile As String = If(doc.document_profile IsNot Nothing, doc.document_profile.Trim(), "")
-                Dim sDurum As String = If(doc.state_explanation IsNot Nothing, doc.state_explanation.Trim(), "")
-                Dim sDocType As String = If(doc.document_type_code IsNot Nothing, doc.document_type_code.Trim(), "")
-                Dim sRefUuid As String = If(doc.reference_document_uuid IsNot Nothing, doc.reference_document_uuid.Trim(), "")
-                Dim sCancelled As String = If(doc.cancelled IsNot Nothing, doc.cancelled.Trim(), "")
+                If eslenenGibUuidler.Contains(gibUuid) Then Continue For
 
-                ' Fatura tipini belirle
-                Dim bFaturaTipiDeger As String = ""
-                If sProfile.Contains("TEMELFATURA") Then
-                    bFaturaTipiDeger = "TEMELFATURA"
-                ElseIf sProfile.Contains("TICARIFATURA") Then
-                    bFaturaTipiDeger = "TICARIFATURA"
-                ElseIf sProfile.Contains("EARSIVFATURA") Then
-                    bFaturaTipiDeger = "EARSIVFATURA"
-                Else
-                    bFaturaTipiDeger = sProfile
+                ' GIB tarihini DateTime'a cevir
+                Dim gibTarihDt As DateTime = DateTime.MinValue
+                If gibTarih <> "" Then
+                    DateTime.TryParse(gibTarih, gibTarihDt)
                 End If
 
-                ' Iade fatura bilgileri
-                Dim sIadeFaturaNo As String = ""
-                Dim sIadeFaturaTarihi As String = ""
+                ' GIB tutarini Decimal'e cevir
+                Dim gibTutarDec As Decimal = 0
+                If gibTutar <> "" Then
+                    Decimal.TryParse(gibTutar.Replace(".", ","), gibTutarDec)
+                    If gibTutarDec = 0 Then Decimal.TryParse(gibTutar, gibTutarDec)
+                End If
 
+                ' En iyi eslesen yerel faturayi bul
+                Dim enIyiPuan As Integer = 0
+                Dim enIyiFaturaID As String = ""
+
+                For Each drLocal As DataRow In dsEksik.Tables(0).Rows
+                    Dim localID As String = drLocal("nStokFisiID").ToString()
+                    If eslenenFaturaIdler.Contains(localID) Then Continue For
+
+                    Dim puan As Integer = 0
+
+                    ' 1. VKN/TCKN eslesmesi (en yuksek oncelik)
+                    Dim localVkn As String = drLocal("sVergiNo").ToString().Trim()
+                    If localVkn <> "" AndAlso gibDestId <> "" Then
+                        If localVkn = gibDestId Then
+                            puan += 100
+                        End If
+                    End If
+
+                    ' 2. Tarih eslesmesi
+                    If gibTarihDt <> DateTime.MinValue Then
+                        Dim localTarih As DateTime = CDate(drLocal("dteFisTarihi"))
+                        If localTarih.Date = gibTarihDt.Date Then
+                            puan += 50
+                        End If
+                    End If
+
+                    ' 3. Tutar eslesmesi (kurus farki toleransi)
+                    If gibTutarDec > 0 Then
+                        Dim localTutar As Decimal = CDec(drLocal("lNetTutar"))
+                        If Math.Abs(localTutar - gibTutarDec) < 0.02D Then
+                            puan += 25
+                        End If
+                    End If
+
+                    ' 4. Isim eslesmesi (VKN bos ise)
+                    If puan < 100 Then
+                        Dim localAdi As String = drLocal("sAciklama").ToString().Trim().ToUpperInvariant()
+                        Dim gibSourceTitle As String = ""
+                        If doc.source_title IsNot Nothing Then gibSourceTitle = doc.source_title.Trim().ToUpperInvariant()
+                        ' destination_urn genelde VKN icerdigi icin source_title ile karsilastirma yapmiyoruz
+                        ' Yerel firma adi ile GIB destination bilgisi karsilastirilabilir
+                    End If
+
+                    ' Minimum esleme: VKN + Tarih veya VKN + Tutar veya Tarih + Tutar
+                    If puan > enIyiPuan AndAlso puan >= 150 Then ' VKN(100) + Tarih(50) minimum
+                        enIyiPuan = puan
+                        enIyiFaturaID = localID
+                    ElseIf puan > enIyiPuan AndAlso puan >= 75 Then ' Tarih(50) + Tutar(25) = 75 (VKN yoksa)
+                        enIyiPuan = puan
+                        enIyiFaturaID = localID
+                    End If
+                Next
+
+                If enIyiFaturaID <> "" Then
+                    Dim sProfile As String = If(doc.document_profile IsNot Nothing, doc.document_profile.Trim(), "")
+                    Dim sDurum As String = If(doc.state_explanation IsNot Nothing, doc.state_explanation.Trim(), "")
+                    Dim sDocType As String = If(doc.document_type_code IsNot Nothing, doc.document_type_code.Trim(), "")
+                    Dim sRefUuid As String = If(doc.reference_document_uuid IsNot Nothing, doc.reference_document_uuid.Trim(), "")
+
+                    eslesmeListesi.Add(New String() {enIyiFaturaID, gibDocId, gibUuid, sProfile, sDurum, sDocType, sRefUuid})
+                    eslenenGibUuidler.Add(gibUuid)
+                    eslenenFaturaIdler.Add(enIyiFaturaID)
+                End If
+            Next
+
+            If eslesmeListesi.Count = 0 Then Exit Sub
+
+            ' 5. DB guncelle
+            con.Open()
+            For Each eslesme As String() In eslesmeListesi
+                Dim nStokFisiID As String = eslesme(0)
+                Dim sGibNo As String = eslesme(1)
+                Dim sGuid As String = eslesme(2)
+                Dim sProfile As String = eslesme(3)
+                Dim sDurum As String = eslesme(4)
+                Dim sDocType As String = eslesme(5)
+                Dim sRefUuid As String = eslesme(6)
+
+                ' Fatura tipini belirle
+                Dim bFaturaTipiDeger As String = sProfile
+
+                ' Iade fatura bilgileri
+                Dim sIadeEk As String = ""
                 If sRefUuid <> "" Then
-                    ' Referans UUID ile iade edilen orijinal faturanin bilgilerini bul
                     Try
-                        Dim cmdRef As New OleDb.OleDbCommand("SELECT TOP 1 GibFaturaNo, dteFisTarihi FROM tbStokFisiMaster WHERE sEfaturaGuid = ?", con)
-                        cmdRef.Parameters.AddWithValue("@p1", sRefUuid)
+                        Dim cmdRef As New OleDb.OleDbCommand(sorgu_query( _
+                            "SELECT TOP 1 GibFaturaNo, dteFisTarihi FROM tbStokFisiMaster WHERE sEfaturaGuid = '" & sRefUuid.Replace("'", "''") & "'"), con)
                         Dim rdrRef As OleDb.OleDbDataReader = cmdRef.ExecuteReader()
                         If rdrRef.Read() Then
-                            sIadeFaturaNo = If(IsDBNull(rdrRef("GibFaturaNo")), "", rdrRef("GibFaturaNo").ToString().Trim())
+                            Dim sIadeFaturaNo As String = If(IsDBNull(rdrRef("GibFaturaNo")), "", rdrRef("GibFaturaNo").ToString().Trim())
+                            If sIadeFaturaNo <> "" Then
+                                sIadeEk = ", IadeFaturaNo = '" & sIadeFaturaNo.Replace("'", "''") & "'"
+                            End If
                             If Not IsDBNull(rdrRef("dteFisTarihi")) Then
-                                sIadeFaturaTarihi = CDate(rdrRef("dteFisTarihi")).ToString("dd/MM/yyyy")
+                                sIadeEk &= ", IadeFaturaTarihi = '" & CDate(rdrRef("dteFisTarihi")).ToString("dd/MM/yyyy") & "'"
                             End If
                         End If
                         rdrRef.Close()
@@ -5607,7 +5702,11 @@ Public Class frm_fatura_liste
                     End Try
                 End If
 
-                ' UPDATE sorgusu
+                Dim sGuidEk As String = ""
+                If sGuid <> "" Then
+                    sGuidEk = ", sEfaturaGuid = '" & sGuid.Replace("'", "''") & "'"
+                End If
+
                 Dim cmdUpdate As New OleDb.OleDbCommand(sorgu_query( _
                     "SET DATEFORMAT DMY UPDATE tbStokFisiMaster SET " & _
                     "GibFaturaNo = '" & sGibNo.Replace("'", "''") & "', " & _
@@ -5615,16 +5714,14 @@ Public Class frm_fatura_liste
                     "sEfaturaTipi = '" & bFaturaTipiDeger.Replace("'", "''") & "', " & _
                     "nEfaturaDurum = '" & sDurum.Replace("'", "''") & "', " & _
                     "bFaturaTipi = '" & sDocType.Replace("'", "''") & "'" & _
-                    If(sIadeFaturaNo <> "", ", IadeFaturaNo = '" & sIadeFaturaNo.Replace("'", "''") & "'", "") & _
-                    If(sIadeFaturaTarihi <> "", ", IadeFaturaTarihi = '" & sIadeFaturaTarihi & "'", "") & _
-                    " WHERE sEfaturaGuid = '" & sGuid.Replace("'", "''") & "'" & _
-                    " AND (GibFaturaNo IS NULL OR GibFaturaNo = '' OR GibFaturaNo = '0')"), con)
+                    sGuidEk & sIadeEk & _
+                    " WHERE nStokFisiID = " & nStokFisiID), con)
                 cmdUpdate.ExecuteNonQuery()
             Next
             con.Close()
 
         Catch ex As Exception
-            ' GIB sorgulama hatasi sessizce loglanir - form acilisini engellemez
+            ' GIB sorgulama hatasi sessizce loglanir
         End Try
     End Sub
 
