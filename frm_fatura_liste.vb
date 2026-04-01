@@ -5515,7 +5515,7 @@ Public Class frm_fatura_liste
                 "ISNULL(f.TC, 0) AS TC " & _
                 "FROM tbStokFisiMaster m " & _
                 "INNER JOIN tbFirma f ON m.nFirmaID = f.nFirmaID " & _
-                "WHERE (m.GibFaturaNo IS NULL OR m.GibFaturaNo = '' OR m.GibFaturaNo = '0')"), con)
+                "WHERE (m.GibFaturaNo IS NULL OR m.GibFaturaNo = '' OR m.GibFaturaNo = '0') AND m.nFirmaID > 0"), con)
             adpEksik.Fill(dsEksik)
             con.Close()
 
