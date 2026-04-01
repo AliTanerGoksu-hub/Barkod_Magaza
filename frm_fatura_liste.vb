@@ -5744,7 +5744,37 @@ Public Class frm_fatura_liste
                 End If
             Next
 
-            If eslesmeListesi.Count = 0 Then Exit Sub
+            If eslesmeListesi.Count = 0 Then
+                ' DEBUG: Eslestirme neden basarisiz oldugunu goster
+                Dim dbgMsg As String = "Eslestirme Bulunamadi!" & vbCrLf & _
+                    "E-Fatura belge: " & tumBelgeler.Count & vbCrLf & _
+                    "E-Arsiv belge: " & tumEArsivBelgeler.Count & vbCrLf & _
+                    "Yerel eksik fatura: " & dsEksik.Tables(0).Rows.Count & vbCrLf & vbCrLf
+                ' Ilk 3 GIB belgenin bilgisini goster
+                Dim sayac As Integer = 0
+                For Each eDoc As EarsivServisi.ResponseDocument In tumEArsivBelgeler
+                    If sayac >= 3 Then Exit For
+                    Dim gTutar As String = If(eDoc.invoice_total IsNot Nothing, eDoc.invoice_total, "BOŞ")
+                    Dim gDest As String = If(eDoc.destination_id IsNot Nothing, eDoc.destination_id, "BOŞ")
+                    Dim gDocId As String = If(eDoc.document_id IsNot Nothing, eDoc.document_id, "BOŞ")
+                    dbgMsg &= "GIB[" & sayac & "]: DocId=" & gDocId & " VKN=" & gDest & " Tutar=" & gTutar & vbCrLf
+                    sayac += 1
+                Next
+                ' Ilk 3 yerel kaydin bilgisini goster
+                dbgMsg &= vbCrLf
+                sayac = 0
+                For Each drDbg As DataRow In dsEksik.Tables(0).Rows
+                    If sayac >= 3 Then Exit For
+                    Dim lNet As String = If(IsDBNull(drDbg("lNetTutar")), "NULL", drDbg("lNetTutar").ToString())
+                    Dim lKdv As String = If(IsDBNull(drDbg("lKdvTutar")), "NULL", drDbg("lKdvTutar").ToString())
+                    Dim lVkn As String = drDbg("sVergiNo").ToString().Trim()
+                    Dim lID As String = drDbg("nStokFisiID").ToString()
+                    dbgMsg &= "DB[" & sayac & "]: ID=" & lID & " VKN=" & lVkn & " Net=" & lNet & " KDV=" & lKdv & vbCrLf
+                    sayac += 1
+                Next
+                MsgBox(dbgMsg, MsgBoxStyle.Information, "Eslestirme Detayi")
+                Exit Sub
+            End If
 
             con.Open()
             For Each eslesme As String() In eslesmeListesi
