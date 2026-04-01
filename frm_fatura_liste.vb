@@ -5587,7 +5587,53 @@ Public Class frm_fatura_liste
             Next
 
             client.Close()
-            If tumBelgeler.Count = 0 Then Exit Sub
+
+            ' --- E-ARSIV SORGULAMA ---
+            Dim eArsivClient As New EarsivServisi.EArchiveInvoiceWSClient()
+            Dim eArsivProp As New System.ServiceModel.Channels.HttpRequestMessageProperty()
+            eArsivProp.Headers.Add("Username", gibKullanici)
+            eArsivProp.Headers.Add("Password", gibSifre)
+
+            Dim tumEArsivBelgeler As New System.Collections.Generic.List(Of EarsivServisi.ResponseDocument)
+
+            For yil As Integer = yilBaslangic To yilBitis
+                Dim donemBas As String = If(yil = yilBaslangic, dtBaslangic.ToString("yyyy-MM-dd"), yil & "-01-01")
+                Dim donemSon As String = If(yil = yilBitis, dtBitis.ToString("yyyy-MM-dd"), yil & "-12-31")
+
+                Dim minRecId As String = "0"
+                Dim devam As Boolean = True
+
+                While devam
+                    Using scope2 As New System.ServiceModel.OperationContextScope(CType(eArsivClient.InnerChannel, System.ServiceModel.IClientChannel))
+                        System.ServiceModel.OperationContext.Current.OutgoingMessageProperties(System.ServiceModel.Channels.HttpRequestMessageProperty.Name) = eArsivProp
+
+                        Dim eArsivResponse As EarsivServisi.DocumentQueryResponse = eArsivClient.QueryInvoicesWithDocumentDate( _
+                            startDate:=donemBas, _
+                            endDate:=donemSon, _
+                            withXML:="NONE", _
+                            minRecordId:=minRecId)
+
+                        If eArsivResponse IsNot Nothing AndAlso eArsivResponse.queryState <> 0 Then
+                            MsgBox("E-Arsiv Sorgu Hatasi (" & yil & "): " & If(eArsivResponse.stateExplanation, "Bilinmeyen hata"), MsgBoxStyle.Exclamation, "E-Arsiv Uyari")
+                            devam = False
+                        ElseIf eArsivResponse IsNot Nothing AndAlso eArsivResponse.queryState = 0 AndAlso eArsivResponse.documents IsNot Nothing AndAlso eArsivResponse.documents.Length > 0 Then
+                            For Each eDoc As EarsivServisi.ResponseDocument In eArsivResponse.documents
+                                tumEArsivBelgeler.Add(eDoc)
+                            Next
+                            If eArsivResponse.documentsCount > tumEArsivBelgeler.Count Then
+                                minRecId = eArsivResponse.maxRecordIdinList.ToString()
+                            Else
+                                devam = False
+                            End If
+                        Else
+                            devam = False
+                        End If
+                    End Using
+                End While
+            Next
+            eArsivClient.Close()
+
+            If tumBelgeler.Count = 0 AndAlso tumEArsivBelgeler.Count = 0 Then Exit Sub
 
             Dim eslesmeListesi As New System.Collections.Generic.List(Of String())
             Dim eslenenGibUuidler As New System.Collections.Generic.HashSet(Of String)
@@ -5645,6 +5691,65 @@ Public Class frm_fatura_liste
                     Dim sDurum As String = If(doc.state_explanation IsNot Nothing, doc.state_explanation.Trim(), "")
                     Dim sDocType As String = If(doc.document_type_code IsNot Nothing, doc.document_type_code.Trim(), "")
                     Dim sRefUuid As String = If(doc.reference_document_uuid IsNot Nothing, doc.reference_document_uuid.Trim(), "")
+                    eslesmeListesi.Add(New String() {enIyiFaturaID, gibDocId, gibUuid, sProfile, sDurum, sDocType, sRefUuid})
+                    eslenenGibUuidler.Add(gibUuid)
+                    eslenenFaturaIdler.Add(enIyiFaturaID)
+                End If
+            Next
+
+            ' --- E-ARSIV ESLESTIRME ---
+            For Each eDoc As EarsivServisi.ResponseDocument In tumEArsivBelgeler
+                If eDoc.document_id Is Nothing OrElse eDoc.document_id.Trim() = "" Then Continue For
+                Dim gibDestId As String = If(eDoc.destination_id IsNot Nothing, eDoc.destination_id.Trim(), "")
+                Dim gibTarih As String = If(eDoc.document_issue_date IsNot Nothing, eDoc.document_issue_date.Trim(), "")
+                Dim gibTutar As String = If(eDoc.invoice_total IsNot Nothing, eDoc.invoice_total.Trim(), "")
+                Dim gibDocId As String = eDoc.document_id.Trim()
+                Dim gibUuid As String = If(eDoc.document_uuid IsNot Nothing, eDoc.document_uuid.Trim(), "")
+
+                If eslenenGibUuidler.Contains(gibUuid) Then Continue For
+
+                Dim gibTarihDt As DateTime = DateTime.MinValue
+                If gibTarih <> "" Then DateTime.TryParse(gibTarih, gibTarihDt)
+
+                Dim gibTutarDec As Decimal = 0
+                If gibTutar <> "" Then
+                    Decimal.TryParse(gibTutar.Replace(".", ","), gibTutarDec)
+                    If gibTutarDec = 0 Then Decimal.TryParse(gibTutar, gibTutarDec)
+                End If
+
+                Dim enIyiPuan As Integer = 0
+                Dim enIyiFaturaID As String = ""
+
+                For Each drLocal As DataRow In dsEksik.Tables(0).Rows
+                    Dim localID As String = drLocal("nStokFisiID").ToString()
+                    If eslenenFaturaIdler.Contains(localID) Then Continue For
+                    Dim puan As Integer = 0
+
+                    Dim localVkn As String = drLocal("sVergiNo").ToString().Trim()
+                    If localVkn <> "" AndAlso gibDestId <> "" Then
+                        If localVkn = gibDestId Then puan += 100
+                    End If
+
+                    If gibTutarDec > 0 Then
+                        Dim localNet As Decimal = 0
+                        If Not IsDBNull(drLocal("lNetTutar")) Then localNet = CDec(drLocal("lNetTutar"))
+                        Dim localKdv As Decimal = 0
+                        If Not IsDBNull(drLocal("lKdvTutar")) Then localKdv = CDec(drLocal("lKdvTutar"))
+                        Dim localToplam As Decimal = localNet + localKdv
+                        If Math.Abs(localToplam - gibTutarDec) < 1D Then puan += 50
+                    End If
+
+                    If puan > enIyiPuan AndAlso puan >= 50 Then
+                        enIyiPuan = puan
+                        enIyiFaturaID = localID
+                    End If
+                Next
+
+                If enIyiFaturaID <> "" Then
+                    Dim sProfile As String = If(eDoc.document_profile IsNot Nothing, eDoc.document_profile.Trim(), "")
+                    Dim sDurum As String = If(eDoc.state_explanation IsNot Nothing, eDoc.state_explanation.Trim(), "")
+                    Dim sDocType As String = If(eDoc.document_type_code IsNot Nothing, eDoc.document_type_code.Trim(), "")
+                    Dim sRefUuid As String = If(eDoc.reference_document_uuid IsNot Nothing, eDoc.reference_document_uuid.Trim(), "")
                     eslesmeListesi.Add(New String() {enIyiFaturaID, gibDocId, gibUuid, sProfile, sDurum, sDocType, sRefUuid})
                     eslenenGibUuidler.Add(gibUuid)
                     eslenenFaturaIdler.Add(enIyiFaturaID)
