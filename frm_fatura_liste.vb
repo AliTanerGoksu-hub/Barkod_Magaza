@@ -5532,9 +5532,9 @@ Public Class frm_fatura_liste
                 Catch
                 End Try
             Next
-            ' Guvenlik icin 1 ay geri al, 1 ay ileri al (GIB'e gonderim tarihi farkli olabilir)
-            Dim dtBaslangic As DateTime = dtMin.AddMonths(-1)
-            Dim dtBitis As DateTime = dtMax.AddMonths(1)
+            ' Guvenlik icin 2 ay geri al (GIB'e gonderim tarihi farkli olabilir)
+            Dim dtBaslangic As DateTime = dtMin.AddMonths(-2)
+            Dim dtBitis As DateTime = dtMax
             If dtBitis > DateTime.Now Then dtBitis = DateTime.Now
 
             Dim client As New GibSorgula.QueryDocumentWSClient()
