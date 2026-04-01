@@ -5783,6 +5783,8 @@ Public Class frm_fatura_liste
                 Exit Sub
             End If
 
+            MsgBox(eslesmeListesi.Count & " eslestirme bulundu, DB guncelleniyor...", MsgBoxStyle.Information, "Eslestirme Tamam")
+
             con.Open()
             For Each eslesme As String() In eslesmeListesi
                 Dim nStokFisiID As String = eslesme(0)
