@@ -5521,9 +5521,9 @@ Public Class frm_fatura_liste
 
             If dsEksik.Tables.Count = 0 OrElse dsEksik.Tables(0).Rows.Count = 0 Then Exit Sub
 
-            ' GIB tarih araligini 6 ay geriye genislet (faturalar farkli tarihte gonderilmis olabilir)
-            Dim endDate As String = CDate(txt_dteFisTarihi2.EditValue).ToString("yyyy-MM-dd")
-            Dim startDate As String = CDate(txt_dteFisTarihi1.EditValue).AddMonths(-6).ToString("yyyy-MM-dd")
+            ' Tarih araligini kullanicinin sectigi degerlerden al
+            Dim dtBaslangic As DateTime = CDate(txt_dteFisTarihi1.EditValue)
+            Dim dtBitis As DateTime = CDate(txt_dteFisTarihi2.EditValue)
 
             Dim client As New GibSorgula.QueryDocumentWSClient()
             Dim prop As New System.ServiceModel.Channels.HttpRequestMessageProperty()
@@ -5531,38 +5531,48 @@ Public Class frm_fatura_liste
             prop.Headers.Add("Password", gibSifre)
 
             Dim tumBelgeler As New System.Collections.Generic.List(Of GibSorgula.ResponseDocument)
-            Dim minRecordId As String = "0"
-            Dim devamEt As Boolean = True
 
-            While devamEt
-                Using scope As New System.ServiceModel.OperationContextScope(CType(client.InnerChannel, System.ServiceModel.IClientChannel))
-                    System.ServiceModel.OperationContext.Current.OutgoingMessageProperties(System.ServiceModel.Channels.HttpRequestMessageProperty.Name) = prop
+            ' API ayni hesap donemi (yil) icinde olmak zorunda, yil bazinda parcala
+            Dim yilBaslangic As Integer = dtBaslangic.Year
+            Dim yilBitis As Integer = dtBitis.Year
 
-                    Dim response As GibSorgula.DocumentQueryResponse = client.QueryOutboxDocumentsWithDocumentDate( _
-                        startDate:=startDate, _
-                        endDate:=endDate, _
-                        documentType:="1", _
-                        queried:="", _
-                        withXML:="N", _
-                        minRecordId:=minRecordId)
+            For yil As Integer = yilBaslangic To yilBitis
+                Dim donemBas As String = If(yil = yilBaslangic, dtBaslangic.ToString("yyyy-MM-dd"), yil & "-01-01")
+                Dim donemSon As String = If(yil = yilBitis, dtBitis.ToString("yyyy-MM-dd"), yil & "-12-31")
 
-                    If response IsNot Nothing AndAlso response.queryState <> 0 Then
-                        MsgBox("GIB Sorgu Hatasi: " & If(response.stateExplanation, "Bilinmeyen hata") & " (queryState=" & response.queryState & ")", MsgBoxStyle.Exclamation, "GIB Uyari")
-                        devamEt = False
-                    ElseIf response IsNot Nothing AndAlso response.queryState = 0 AndAlso response.documents IsNot Nothing AndAlso response.documents.Length > 0 Then
-                        For Each doc As GibSorgula.ResponseDocument In response.documents
-                            tumBelgeler.Add(doc)
-                        Next
-                        If response.documentsCount > tumBelgeler.Count Then
-                            minRecordId = response.maxRecordIdinList.ToString()
+                Dim minRecordId As String = "0"
+                Dim devamEt As Boolean = True
+
+                While devamEt
+                    Using scope As New System.ServiceModel.OperationContextScope(CType(client.InnerChannel, System.ServiceModel.IClientChannel))
+                        System.ServiceModel.OperationContext.Current.OutgoingMessageProperties(System.ServiceModel.Channels.HttpRequestMessageProperty.Name) = prop
+
+                        Dim response As GibSorgula.DocumentQueryResponse = client.QueryOutboxDocumentsWithDocumentDate( _
+                            startDate:=donemBas, _
+                            endDate:=donemSon, _
+                            documentType:="1", _
+                            queried:="", _
+                            withXML:="N", _
+                            minRecordId:=minRecordId)
+
+                        If response IsNot Nothing AndAlso response.queryState <> 0 Then
+                            MsgBox("GIB Sorgu Hatasi (" & yil & "): " & If(response.stateExplanation, "Bilinmeyen hata"), MsgBoxStyle.Exclamation, "GIB Uyari")
+                            devamEt = False
+                        ElseIf response IsNot Nothing AndAlso response.queryState = 0 AndAlso response.documents IsNot Nothing AndAlso response.documents.Length > 0 Then
+                            For Each doc As GibSorgula.ResponseDocument In response.documents
+                                tumBelgeler.Add(doc)
+                            Next
+                            If response.documentsCount > tumBelgeler.Count Then
+                                minRecordId = response.maxRecordIdinList.ToString()
+                            Else
+                                devamEt = False
+                            End If
                         Else
                             devamEt = False
                         End If
-                    Else
-                        devamEt = False
-                    End If
-                End Using
-            End While
+                    End Using
+                End While
+            Next
 
             client.Close()
             If tumBelgeler.Count = 0 Then Exit Sub
