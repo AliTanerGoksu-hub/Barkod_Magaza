@@ -5503,8 +5503,7 @@ Public Class frm_fatura_liste
 
             If bEFaturaEntegre = False OrElse gibKullanici = "" OrElse gibSifre = "" Then Exit Sub
 
-            Dim tarih1Str As String = CDate(txt_dteFisTarihi1.EditValue).ToString("dd/MM/yyyy")
-            Dim tarih2Str As String = CDate(txt_dteFisTarihi2.EditValue).ToString("dd/MM/yyyy")
+
 
             con.Open()
             Dim dsEksik As New DataSet()
@@ -5516,9 +5515,7 @@ Public Class frm_fatura_liste
                 "ISNULL(f.TC, 0) AS TC " & _
                 "FROM tbStokFisiMaster m " & _
                 "INNER JOIN tbFirma f ON m.nFirmaID = f.nFirmaID " & _
-                "WHERE (m.GibFaturaNo IS NULL OR m.GibFaturaNo = '' OR m.GibFaturaNo = '0') " & _
-                "AND m.dteFisTarihi >= '" & tarih1Str & "' " & _
-                "AND m.dteFisTarihi <= '" & tarih2Str & "'"), con)
+                "WHERE (m.GibFaturaNo IS NULL OR m.GibFaturaNo = '' OR m.GibFaturaNo = '0')"), con)
             adpEksik.Fill(dsEksik)
             con.Close()
 
