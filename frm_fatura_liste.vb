@@ -5567,7 +5567,7 @@ Public Class frm_fatura_liste
                                 tumBelgeler.Add(doc)
                             Next
                             yilEFaturaSayisi += sayfaSayisi
-                            If response.documentsCount > yilEFaturaSayisi Then
+                            If response.maxRecordIdinList > 0 AndAlso sayfaSayisi >= 100 Then
                                 minRecordId = response.maxRecordIdinList.ToString()
                             Else
                                 devamEt = False
@@ -5615,7 +5615,8 @@ Public Class frm_fatura_liste
                                 tumEArsivBelgeler.Add(eDoc)
                             Next
                             yilBelgeSayisi += sayfaBelgeSayisi
-                            If eArsivResponse.documentsCount > yilBelgeSayisi Then
+                            ' Daha fazla sayfa varsa devam et
+                            If eArsivResponse.maxRecordIdinList > 0 AndAlso sayfaBelgeSayisi >= 100 Then
                                 minRecId = eArsivResponse.maxRecordIdinList.ToString()
                             Else
                                 devam = False
