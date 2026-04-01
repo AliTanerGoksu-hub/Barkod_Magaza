@@ -5509,7 +5509,7 @@ Public Class frm_fatura_liste
             Dim dsEksik As New DataSet()
             Dim adpEksik As New OleDb.OleDbDataAdapter(sorgu_query( _
                 "SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED " & _
-                "SELECT m.nStokFisiID, m.dteFisTarihi, m.lNetTutar, m.lKdvTutar, m.nFirmaID, m.sEfaturaGuid, " & _
+                "SELECT m.nStokFisiID, m.dteFisTarihi, m.lNetTutar, (m.lKdv1+m.lKdv2+m.lKdv3+m.lKdv4+m.lKdv5) AS lKdvTutar, m.nFirmaID, m.sEfaturaGuid, " & _
                 "ISNULL(RTRIM(f.sVergiNo), '') AS sVergiNo, " & _
                 "ISNULL(RTRIM(f.sAciklama), '') AS sAciklama, " & _
                 "ISNULL(f.TC, 0) AS TC " & _
