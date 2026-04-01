@@ -5541,12 +5541,15 @@ Public Class frm_fatura_liste
                     Dim response As GibSorgula.DocumentQueryResponse = client.QueryOutboxDocumentsWithDocumentDate( _
                         startDate:=startDate, _
                         endDate:=endDate, _
-                        documentType:="INVOICE", _
+                        documentType:="1", _
                         queried:="", _
                         withXML:="N", _
                         minRecordId:=minRecordId)
 
-                    If response IsNot Nothing AndAlso response.queryState = 0 AndAlso response.documents IsNot Nothing AndAlso response.documents.Length > 0 Then
+                    If response IsNot Nothing AndAlso response.queryState <> 0 Then
+                        MsgBox("GIB Sorgu Hatasi: " & If(response.stateExplanation, "Bilinmeyen hata") & " (queryState=" & response.queryState & ")", MsgBoxStyle.Exclamation, "GIB Uyari")
+                        devamEt = False
+                    ElseIf response IsNot Nothing AndAlso response.queryState = 0 AndAlso response.documents IsNot Nothing AndAlso response.documents.Length > 0 Then
                         For Each doc As GibSorgula.ResponseDocument In response.documents
                             tumBelgeler.Add(doc)
                         Next
