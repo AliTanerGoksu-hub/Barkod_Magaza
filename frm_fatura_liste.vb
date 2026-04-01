@@ -5545,6 +5545,7 @@ Public Class frm_fatura_liste
 
                 Dim minRecordId As String = "0"
                 Dim devamEt As Boolean = True
+                Dim yilEFaturaSayisi As Integer = 0
 
                 While devamEt
                     Using scope As New System.ServiceModel.OperationContextScope(CType(client.InnerChannel, System.ServiceModel.IClientChannel))
@@ -5561,10 +5562,12 @@ Public Class frm_fatura_liste
                         If response IsNot Nothing AndAlso response.queryState <> 0 Then
                             devamEt = False
                         ElseIf response IsNot Nothing AndAlso response.queryState = 0 AndAlso response.documents IsNot Nothing AndAlso response.documents.Length > 0 Then
+                            Dim sayfaSayisi As Integer = response.documents.Length
                             For Each doc As GibSorgula.ResponseDocument In response.documents
                                 tumBelgeler.Add(doc)
                             Next
-                            If response.documentsCount > tumBelgeler.Count Then
+                            yilEFaturaSayisi += sayfaSayisi
+                            If response.documentsCount > yilEFaturaSayisi Then
                                 minRecordId = response.maxRecordIdinList.ToString()
                             Else
                                 devamEt = False
@@ -5592,6 +5595,7 @@ Public Class frm_fatura_liste
 
                 Dim minRecId As String = "0"
                 Dim devam As Boolean = True
+                Dim yilBelgeSayisi As Integer = 0
 
                 While devam
                     Using scope2 As New System.ServiceModel.OperationContextScope(CType(eArsivClient.InnerChannel, System.ServiceModel.IClientChannel))
@@ -5606,10 +5610,12 @@ Public Class frm_fatura_liste
                         If eArsivResponse IsNot Nothing AndAlso eArsivResponse.queryState <> 0 Then
                             devam = False
                         ElseIf eArsivResponse IsNot Nothing AndAlso eArsivResponse.queryState = 0 AndAlso eArsivResponse.documents IsNot Nothing AndAlso eArsivResponse.documents.Length > 0 Then
+                            Dim sayfaBelgeSayisi As Integer = eArsivResponse.documents.Length
                             For Each eDoc As EarsivServisi.ResponseDocument In eArsivResponse.documents
                                 tumEArsivBelgeler.Add(eDoc)
                             Next
-                            If eArsivResponse.documentsCount > tumEArsivBelgeler.Count Then
+                            yilBelgeSayisi += sayfaBelgeSayisi
+                            If eArsivResponse.documentsCount > yilBelgeSayisi Then
                                 minRecId = eArsivResponse.maxRecordIdinList.ToString()
                             Else
                                 devam = False
