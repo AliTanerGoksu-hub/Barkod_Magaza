@@ -5551,7 +5551,7 @@ Public Class frm_fatura_liste
                             startDate:=donemBas, _
                             endDate:=donemSon, _
                             documentType:="1", _
-                            queried:="", _
+                            queried:="ALL", _
                             withXML:="N", _
                             minRecordId:=minRecordId)
 
