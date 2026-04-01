@@ -5521,21 +5521,9 @@ Public Class frm_fatura_liste
 
             If dsEksik.Tables.Count = 0 OrElse dsEksik.Tables(0).Rows.Count = 0 Then Exit Sub
 
-            ' Eksik faturalarin tarih araligini bul (UI filtresi yerine gercek veriyi kullan)
-            Dim dtMin As DateTime = DateTime.MaxValue
-            Dim dtMax As DateTime = DateTime.MinValue
-            For Each drTarih As DataRow In dsEksik.Tables(0).Rows
-                Try
-                    Dim dtFis As DateTime = CDate(drTarih("dteFisTarihi"))
-                    If dtFis < dtMin Then dtMin = dtFis
-                    If dtFis > dtMax Then dtMax = dtFis
-                Catch
-                End Try
-            Next
-            ' Guvenlik icin 2 ay geri al (GIB'e gonderim tarihi farkli olabilir)
-            Dim dtBaslangic As DateTime = dtMin.AddMonths(-2)
-            Dim dtBitis As DateTime = dtMax
-            If dtBitis > DateTime.Now Then dtBitis = DateTime.Now
+            ' Sadece son 2 ay kontrol edilsin
+            Dim dtBitis As DateTime = DateTime.Now
+            Dim dtBaslangic As DateTime = dtBitis.AddMonths(-2)
 
             Dim client As New GibSorgula.QueryDocumentWSClient()
             Dim prop As New System.ServiceModel.Channels.HttpRequestMessageProperty()
