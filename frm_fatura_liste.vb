@@ -5509,7 +5509,7 @@ Public Class frm_fatura_liste
             Dim dsEksik As New DataSet()
             Dim adpEksik As New OleDb.OleDbDataAdapter(sorgu_query( _
                 "SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED " & _
-                "SELECT m.nStokFisiID, m.dteFisTarihi, m.lNetTutar, m.nFirmaID, m.sEfaturaGuid, " & _
+                "SELECT m.nStokFisiID, m.dteFisTarihi, m.lNetTutar, m.lKdvTutar, m.nFirmaID, m.sEfaturaGuid, " & _
                 "ISNULL(RTRIM(f.sVergiNo), '') AS sVergiNo, " & _
                 "ISNULL(RTRIM(f.sAciklama), '') AS sAciklama, " & _
                 "ISNULL(f.TC, 0) AS TC " & _
@@ -5521,8 +5521,9 @@ Public Class frm_fatura_liste
 
             If dsEksik.Tables.Count = 0 OrElse dsEksik.Tables(0).Rows.Count = 0 Then Exit Sub
 
-            Dim startDate As String = CDate(txt_dteFisTarihi1.EditValue).ToString("yyyy-MM-dd")
+            ' GIB tarih araligini 6 ay geriye genislet (faturalar farkli tarihte gonderilmis olabilir)
             Dim endDate As String = CDate(txt_dteFisTarihi2.EditValue).ToString("yyyy-MM-dd")
+            Dim startDate As String = CDate(txt_dteFisTarihi1.EditValue).AddMonths(-6).ToString("yyyy-MM-dd")
 
             Dim client As New GibSorgula.QueryDocumentWSClient()
             Dim prop As New System.ServiceModel.Channels.HttpRequestMessageProperty()
@@ -5599,17 +5600,15 @@ Public Class frm_fatura_liste
                         If localVkn = gibDestId Then puan += 100
                     End If
 
-                    If gibTarihDt <> DateTime.MinValue Then
-                        Dim localTarih As DateTime = CDate(drLocal("dteFisTarihi"))
-                        If localTarih.Date = gibTarihDt.Date Then puan += 50
-                    End If
-
                     If gibTutarDec > 0 Then
-                        Dim localTutar As Decimal = CDec(drLocal("lNetTutar"))
-                        If Math.Abs(localTutar - gibTutarDec) < 0.02D Then puan += 25
+                        Dim localNet As Decimal = CDec(drLocal("lNetTutar"))
+                        Dim localKdv As Decimal = 0
+                        Try : localKdv = CDec(drLocal("lKdvTutar")) : Catch : End Try
+                        Dim localToplam As Decimal = localNet + localKdv
+                        If Math.Abs(localToplam - gibTutarDec) < 1D Then puan += 50
                     End If
 
-                    If puan > enIyiPuan AndAlso puan >= 75 Then
+                    If puan > enIyiPuan AndAlso puan >= 50 Then
                         enIyiPuan = puan
                         enIyiFaturaID = localID
                     End If
