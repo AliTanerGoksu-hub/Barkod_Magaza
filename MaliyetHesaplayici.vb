@@ -223,6 +223,40 @@ Module MaliyetHesaplayici
         End Try
     End Function
 
+    ' FIFO Envanter Degerleme: Kalan stogun agirlikli ortalama maliyetini hesaplar
+    ' FIFO mantigi: ilk alinan ilk satilir, kalan stok en son alinan partilerden olusur
+    Public Function HesaplaFIFOEnvanter(nStokID As Int64, lMevcutMiktar As Decimal) As Decimal
+        If lMevcutMiktar <= 0 Then Return 0
+
+        ' Tum alis kayitlarini en yeniden en eskiye getir (DESC)
+        Dim dsAlislar As DataSet = AlisKayitlariGetir(nStokID, DateTime.Now, "DESC")
+        If dsAlislar Is Nothing OrElse dsAlislar.Tables.Count = 0 OrElse dsAlislar.Tables(0).Rows.Count = 0 Then Return 0
+
+        ' FIFO: ilk alinanlar ilk satilir, kalan stok en son alinanlardir
+        Dim kalanMiktar As Decimal = lMevcutMiktar
+        Dim toplamDeger As Decimal = 0
+
+        For Each dr As DataRow In dsAlislar.Tables(0).Rows
+            If kalanMiktar <= 0 Then Exit For
+
+            Dim birimMaliyet As Decimal = BirimMaliyetHesapla(dr)
+            Dim partMiktar As Decimal = CDec(dr("lGirisMiktar1"))
+
+            If partMiktar >= kalanMiktar Then
+                toplamDeger += kalanMiktar * birimMaliyet
+                kalanMiktar = 0
+            Else
+                toplamDeger += partMiktar * birimMaliyet
+                kalanMiktar -= partMiktar
+            End If
+        Next
+
+        Dim kullanilanMiktar As Decimal = lMevcutMiktar - kalanMiktar
+        If kullanilanMiktar <= 0 Then Return 0
+
+        Return toplamDeger / kullanilanMiktar
+    End Function
+
     ' Envanter degeri icin birim maliyet hesaplar (tarih=bugun, nStokID verilir)
     Public Function EnvanterBirimMaliyet(nStokID As Int64, maliyetIndex As Integer) As Decimal
         Return HesaplaMaliyet(nStokID, DateTime.Now, maliyetIndex)

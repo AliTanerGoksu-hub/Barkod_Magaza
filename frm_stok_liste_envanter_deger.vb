@@ -460,12 +460,12 @@ Public Class frm_stok_liste_envanter_deger
         '
         'sec_MaliyetTipi
         '
-        Me.sec_MaliyetTipi.EditValue = "Stok Kartýndan"
+        Me.sec_MaliyetTipi.EditValue = "Fiyat Tipine Göre"
         Me.sec_MaliyetTipi.EnterMoveNextControl = True
         Me.sec_MaliyetTipi.Location = New System.Drawing.Point(64, 84)
         Me.sec_MaliyetTipi.Name = "sec_MaliyetTipi"
         Me.sec_MaliyetTipi.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
-        Me.sec_MaliyetTipi.Properties.Items.AddRange(New Object() {"Stok Kartýndan", "Maliyetlendirmeden", "Satýþ Günündeki Maliyet", "FIFO (Ýlk Giren Ýlk Çýkar)", "LIFO (Son Giren Ýlk Çýkar)", "Aðýrlýklý Ortalama", "Hareketli Ortalama", "Gerçek Parti Maliyeti", "Standart Maliyet"})
+        Me.sec_MaliyetTipi.Properties.Items.AddRange(New Object() {"Fiyat Tipine Göre", "Maliyetlendirmeden (FIFO)"})
         Me.sec_MaliyetTipi.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor
         Me.sec_MaliyetTipi.Size = New System.Drawing.Size(340, 20)
         Me.sec_MaliyetTipi.TabIndex = 20
@@ -2039,16 +2039,19 @@ Public Class frm_stok_liste_envanter_deger
         GridControl1.Focus()
         GridControl1.Select()
         GridView1.CollapseAllGroups()
-        ' Merkezi Maliyet Hesaplama - yeni yontemler icin satir satir guncelle
-        If sec_MaliyetTipi.SelectedIndex >= 3 AndAlso sec_MaliyetTipi.SelectedIndex <= 8 Then
+        ' Maliyetlendirmeden (FIFO) secildiyse - kalan stok degerini FIFO ile hesapla
+        If sec_MaliyetTipi.SelectedIndex = 1 Then
             If DataSet1 IsNot Nothing AndAlso DataSet1.Tables.Count > 0 AndAlso DataSet1.Tables(0).Columns.Contains("nStokID") Then
                 For Each dr As DataRow In DataSet1.Tables(0).Rows
                     Try
                         Dim nStokID As Int64 = CLng(dr("nStokID"))
-                        Dim yeniMaliyet As Decimal = MaliyetHesaplayici.EnvanterBirimMaliyet(nStokID, sec_MaliyetTipi.SelectedIndex)
-                        dr("Maliyet") = yeniMaliyet
-                        dr("mDeger") = CDec(dr("lMevcut")) * yeniMaliyet
-                        dr("bDeger") = CDec(dr("lBekleyen")) * yeniMaliyet
+                        Dim lMevcut As Decimal = CDec(dr("lMevcut"))
+                        Dim yeniMaliyet As Decimal = MaliyetHesaplayici.HesaplaFIFOEnvanter(nStokID, lMevcut)
+                        If yeniMaliyet > 0 Then
+                            dr("Maliyet") = yeniMaliyet
+                            dr("mDeger") = lMevcut * yeniMaliyet
+                            dr("bDeger") = CDec(dr("lBekleyen")) * yeniMaliyet
+                        End If
                     Catch
                     End Try
                 Next
