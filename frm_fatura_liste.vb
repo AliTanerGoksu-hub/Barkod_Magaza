@@ -5802,10 +5802,12 @@ Public Class frm_fatura_liste
                 Dim sayac As Integer = 0
                 For Each eDoc As EarsivServisi.ResponseDocument In tumEArsivBelgeler
                     If sayac >= 3 Then Exit For
-                    Dim gTutar As String = If(eDoc.invoice_total IsNot Nothing, eDoc.invoice_total, "BOŞ")
-                    Dim gDest As String = If(eDoc.destination_id IsNot Nothing, eDoc.destination_id, "BOŞ")
-                    Dim gDocId As String = If(eDoc.document_id IsNot Nothing, eDoc.document_id, "BOŞ")
-                    dbgMsg &= "GIB[" & sayac & "]: DocId=" & gDocId & " VKN=" & gDest & " Tutar=" & gTutar & vbCrLf
+                    Dim gTutar As String = If(eDoc.invoice_total IsNot Nothing, eDoc.invoice_total, "BOS")
+                    Dim gDest As String = If(eDoc.destination_id IsNot Nothing, eDoc.destination_id, "BOS")
+                    Dim gDocId As String = If(eDoc.document_id IsNot Nothing, eDoc.document_id, "BOS")
+                    Dim gAd As String = If(eDoc.customerPersonName IsNot Nothing, eDoc.customerPersonName, "BOS")
+                    Dim gSoyad As String = If(eDoc.customerPersonFamilyName IsNot Nothing, eDoc.customerPersonFamilyName, "BOS")
+                    dbgMsg &= "GIB[" & sayac & "]: DocId=" & gDocId & " VKN=" & gDest & " Ad=" & gAd & " Soyad=" & gSoyad & " Tutar=" & gTutar & vbCrLf
                     sayac += 1
                 Next
                 ' Ilk 3 yerel kaydin bilgisini goster
@@ -5816,8 +5818,10 @@ Public Class frm_fatura_liste
                     Dim lNet As String = If(IsDBNull(drDbg("lNetTutar")), "NULL", drDbg("lNetTutar").ToString())
                     Dim lKdv As String = If(IsDBNull(drDbg("lKdvTutar")), "NULL", drDbg("lKdvTutar").ToString())
                     Dim lVkn As String = drDbg("sVergiNo").ToString().Trim()
+                    Dim lAd As String = drDbg("sAciklama").ToString().Trim()
+                    Dim lTC As String = drDbg("TC").ToString().Trim()
                     Dim lID As String = drDbg("nStokFisiID").ToString()
-                    dbgMsg &= "DB[" & sayac & "]: ID=" & lID & " VKN=" & lVkn & " Net=" & lNet & " KDV=" & lKdv & vbCrLf
+                    dbgMsg &= "DB[" & sayac & "]: ID=" & lID & " VKN=" & lVkn & " TC=" & lTC & " Ad=" & lAd & " Net=" & lNet & " KDV=" & lKdv & vbCrLf
                     sayac += 1
                 Next
                 MsgBox(dbgMsg, MsgBoxStyle.Information, "Eslestirme Detayi")
