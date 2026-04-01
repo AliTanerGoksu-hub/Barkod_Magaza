@@ -5641,11 +5641,11 @@ Public Class frm_fatura_liste
                 Dim gibTutar As String = If(doc.invoice_total IsNot Nothing, doc.invoice_total.Trim(), "")
                 Dim gibDocId As String = doc.document_id.Trim()
                 Dim gibUuid As String = If(doc.document_uuid IsNot Nothing, doc.document_uuid.Trim(), "")
+                Dim gibAd As String = If(doc.customerPersonName IsNot Nothing, doc.customerPersonName.Trim(), "")
+                Dim gibSoyad As String = If(doc.customerPersonFamilyName IsNot Nothing, doc.customerPersonFamilyName.Trim(), "")
+                Dim gibAdSoyad As String = (gibAd & " " & gibSoyad).Trim().ToUpper()
 
                 If eslenenGibUuidler.Contains(gibUuid) Then Continue For
-
-                Dim gibTarihDt As DateTime = DateTime.MinValue
-                If gibTarih <> "" Then DateTime.TryParse(gibTarih, gibTarihDt)
 
                 Dim gibTutarDec As Decimal = 0
                 If gibTutar <> "" Then
@@ -5661,11 +5661,30 @@ Public Class frm_fatura_liste
                     If eslenenFaturaIdler.Contains(localID) Then Continue For
                     Dim puan As Integer = 0
 
+                    ' 1. VKN eslesmesi
                     Dim localVkn As String = drLocal("sVergiNo").ToString().Trim()
-                    If localVkn <> "" AndAlso gibDestId <> "" Then
-                        If localVkn = gibDestId Then puan += 100
+                    If localVkn <> "" AndAlso gibDestId <> "" AndAlso localVkn = gibDestId Then
+                        puan += 100
                     End If
 
+                    ' 2. TC eslesmesi
+                    If puan < 100 Then
+                        Dim localTC As String = drLocal("TC").ToString().Trim()
+                        If localTC <> "" AndAlso localTC <> "0" AndAlso gibDestId <> "" AndAlso localTC = gibDestId Then
+                            puan += 100
+                        End If
+                    End If
+
+                    ' 3. Isim eslesmesi
+                    If gibAdSoyad <> "" Then
+                        Dim localAd As String = drLocal("sAciklama").ToString().Trim().ToUpper()
+                        If localAd <> "" AndAlso (localAd.Contains(gibAdSoyad) OrElse gibAdSoyad.Contains(localAd) OrElse _
+                            (gibAd <> "" AndAlso gibSoyad <> "" AndAlso localAd.Contains(gibAd.ToUpper()) AndAlso localAd.Contains(gibSoyad.ToUpper()))) Then
+                            puan += 80
+                        End If
+                    End If
+
+                    ' 4. Tutar eslesmesi
                     If gibTutarDec > 0 Then
                         Dim localNet As Decimal = 0
                         If Not IsDBNull(drLocal("lNetTutar")) Then localNet = CDec(drLocal("lNetTutar"))
@@ -5696,15 +5715,14 @@ Public Class frm_fatura_liste
             For Each eDoc As EarsivServisi.ResponseDocument In tumEArsivBelgeler
                 If eDoc.document_id Is Nothing OrElse eDoc.document_id.Trim() = "" Then Continue For
                 Dim gibDestId As String = If(eDoc.destination_id IsNot Nothing, eDoc.destination_id.Trim(), "")
-                Dim gibTarih As String = If(eDoc.document_issue_date IsNot Nothing, eDoc.document_issue_date.Trim(), "")
                 Dim gibTutar As String = If(eDoc.invoice_total IsNot Nothing, eDoc.invoice_total.Trim(), "")
                 Dim gibDocId As String = eDoc.document_id.Trim()
                 Dim gibUuid As String = If(eDoc.document_uuid IsNot Nothing, eDoc.document_uuid.Trim(), "")
+                Dim gibAd As String = If(eDoc.customerPersonName IsNot Nothing, eDoc.customerPersonName.Trim(), "")
+                Dim gibSoyad As String = If(eDoc.customerPersonFamilyName IsNot Nothing, eDoc.customerPersonFamilyName.Trim(), "")
+                Dim gibAdSoyad As String = (gibAd & " " & gibSoyad).Trim().ToUpper()
 
                 If eslenenGibUuidler.Contains(gibUuid) Then Continue For
-
-                Dim gibTarihDt As DateTime = DateTime.MinValue
-                If gibTarih <> "" Then DateTime.TryParse(gibTarih, gibTarihDt)
 
                 Dim gibTutarDec As Decimal = 0
                 If gibTutar <> "" Then
@@ -5720,11 +5738,30 @@ Public Class frm_fatura_liste
                     If eslenenFaturaIdler.Contains(localID) Then Continue For
                     Dim puan As Integer = 0
 
+                    ' 1. VKN eslesmesi
                     Dim localVkn As String = drLocal("sVergiNo").ToString().Trim()
-                    If localVkn <> "" AndAlso gibDestId <> "" Then
-                        If localVkn = gibDestId Then puan += 100
+                    If localVkn <> "" AndAlso gibDestId <> "" AndAlso localVkn = gibDestId Then
+                        puan += 100
                     End If
 
+                    ' 2. TC eslesmesi
+                    If puan < 100 Then
+                        Dim localTC As String = drLocal("TC").ToString().Trim()
+                        If localTC <> "" AndAlso localTC <> "0" AndAlso gibDestId <> "" AndAlso localTC = gibDestId Then
+                            puan += 100
+                        End If
+                    End If
+
+                    ' 3. Isim eslesmesi
+                    If gibAdSoyad <> "" Then
+                        Dim localAd As String = drLocal("sAciklama").ToString().Trim().ToUpper()
+                        If localAd <> "" AndAlso (localAd.Contains(gibAdSoyad) OrElse gibAdSoyad.Contains(localAd) OrElse _
+                            (gibAd <> "" AndAlso gibSoyad <> "" AndAlso localAd.Contains(gibAd.ToUpper()) AndAlso localAd.Contains(gibSoyad.ToUpper()))) Then
+                            puan += 80
+                        End If
+                    End If
+
+                    ' 4. Tutar eslesmesi
                     If gibTutarDec > 0 Then
                         Dim localNet As Decimal = 0
                         If Not IsDBNull(drLocal("lNetTutar")) Then localNet = CDec(drLocal("lNetTutar"))
