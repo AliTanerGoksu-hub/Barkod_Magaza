@@ -5480,13 +5480,12 @@ Public Class frm_fatura_liste
         Return DS
     End Function
     ' GIB'den fatura numaralarini sorgulayip DB'yi gunceller
-    ' Esleme: 1.VKN/TCKN 2.Isim 3.Tarih 4.Tutar
+    ' Esleme: 1.VKN/TCKN 2.Tarih 3.Tutar
     Private Sub GibFaturaNumaralariniGuncelle()
         Try
             Dim con As New OleDb.OleDbConnection()
             con.ConnectionString = connection
 
-            ' 1. EFaturaEntegre kontrolu ve GIB kimlik bilgilerini al
             Dim bEFaturaEntegre As Boolean = False
             Dim gibKullanici As String = ""
             Dim gibSifre As String = ""
@@ -5504,7 +5503,6 @@ Public Class frm_fatura_liste
 
             If bEFaturaEntegre = False OrElse gibKullanici = "" OrElse gibSifre = "" Then Exit Sub
 
-            ' 2. GibFaturaNo bos olan faturalari firma bilgileriyle birlikte al
             Dim tarih1Str As String = CDate(txt_dteFisTarihi1.EditValue).ToString("dd/MM/yyyy")
             Dim tarih2Str As String = CDate(txt_dteFisTarihi2.EditValue).ToString("dd/MM/yyyy")
 
@@ -5526,7 +5524,6 @@ Public Class frm_fatura_liste
 
             If dsEksik.Tables.Count = 0 OrElse dsEksik.Tables(0).Rows.Count = 0 Then Exit Sub
 
-            ' 3. GIB'den fatura bilgilerini sorgula
             Dim startDate As String = CDate(txt_dteFisTarihi1.EditValue).ToString("yyyy-MM-dd")
             Dim endDate As String = CDate(txt_dteFisTarihi2.EditValue).ToString("yyyy-MM-dd")
 
@@ -5569,12 +5566,8 @@ Public Class frm_fatura_liste
             client.Close()
             If tumBelgeler.Count = 0 Then Exit Sub
 
-            ' 4. Eslestirme: VKN/TCKN > Isim > Tarih > Tutar
-            Dim eslesmeListesi As New System.Collections.Generic.List(Of String()) ' {nStokFisiID, document_id, document_uuid, profile, durum, docType, refUuid}
-
-            ' Eslenen GIB belge UUID'lerini takip et (cift esleme engeli)
+            Dim eslesmeListesi As New System.Collections.Generic.List(Of String())
             Dim eslenenGibUuidler As New System.Collections.Generic.HashSet(Of String)
-            ' Eslenen yerel fatura ID'lerini takip et
             Dim eslenenFaturaIdler As New System.Collections.Generic.HashSet(Of String)
 
             For Each doc As GibSorgula.ResponseDocument In tumBelgeler
@@ -5587,67 +5580,39 @@ Public Class frm_fatura_liste
 
                 If eslenenGibUuidler.Contains(gibUuid) Then Continue For
 
-                ' GIB tarihini DateTime'a cevir
                 Dim gibTarihDt As DateTime = DateTime.MinValue
-                If gibTarih <> "" Then
-                    DateTime.TryParse(gibTarih, gibTarihDt)
-                End If
+                If gibTarih <> "" Then DateTime.TryParse(gibTarih, gibTarihDt)
 
-                ' GIB tutarini Decimal'e cevir
                 Dim gibTutarDec As Decimal = 0
                 If gibTutar <> "" Then
                     Decimal.TryParse(gibTutar.Replace(".", ","), gibTutarDec)
                     If gibTutarDec = 0 Then Decimal.TryParse(gibTutar, gibTutarDec)
                 End If
 
-                ' En iyi eslesen yerel faturayi bul
                 Dim enIyiPuan As Integer = 0
                 Dim enIyiFaturaID As String = ""
 
                 For Each drLocal As DataRow In dsEksik.Tables(0).Rows
                     Dim localID As String = drLocal("nStokFisiID").ToString()
                     If eslenenFaturaIdler.Contains(localID) Then Continue For
-
                     Dim puan As Integer = 0
 
-                    ' 1. VKN/TCKN eslesmesi (en yuksek oncelik)
                     Dim localVkn As String = drLocal("sVergiNo").ToString().Trim()
                     If localVkn <> "" AndAlso gibDestId <> "" Then
-                        If localVkn = gibDestId Then
-                            puan += 100
-                        End If
+                        If localVkn = gibDestId Then puan += 100
                     End If
 
-                    ' 2. Tarih eslesmesi
                     If gibTarihDt <> DateTime.MinValue Then
                         Dim localTarih As DateTime = CDate(drLocal("dteFisTarihi"))
-                        If localTarih.Date = gibTarihDt.Date Then
-                            puan += 50
-                        End If
+                        If localTarih.Date = gibTarihDt.Date Then puan += 50
                     End If
 
-                    ' 3. Tutar eslesmesi (kurus farki toleransi)
                     If gibTutarDec > 0 Then
                         Dim localTutar As Decimal = CDec(drLocal("lNetTutar"))
-                        If Math.Abs(localTutar - gibTutarDec) < 0.02D Then
-                            puan += 25
-                        End If
+                        If Math.Abs(localTutar - gibTutarDec) < 0.02D Then puan += 25
                     End If
 
-                    ' 4. Isim eslesmesi (VKN bos ise)
-                    If puan < 100 Then
-                        Dim localAdi As String = drLocal("sAciklama").ToString().Trim().ToUpperInvariant()
-                        Dim gibSourceTitle As String = ""
-                        If doc.source_title IsNot Nothing Then gibSourceTitle = doc.source_title.Trim().ToUpperInvariant()
-                        ' destination_urn genelde VKN icerdigi icin source_title ile karsilastirma yapmiyoruz
-                        ' Yerel firma adi ile GIB destination bilgisi karsilastirilabilir
-                    End If
-
-                    ' Minimum esleme: VKN + Tarih veya VKN + Tutar veya Tarih + Tutar
-                    If puan > enIyiPuan AndAlso puan >= 150 Then ' VKN(100) + Tarih(50) minimum
-                        enIyiPuan = puan
-                        enIyiFaturaID = localID
-                    ElseIf puan > enIyiPuan AndAlso puan >= 75 Then ' Tarih(50) + Tutar(25) = 75 (VKN yoksa)
+                    If puan > enIyiPuan AndAlso puan >= 75 Then
                         enIyiPuan = puan
                         enIyiFaturaID = localID
                     End If
@@ -5658,7 +5623,6 @@ Public Class frm_fatura_liste
                     Dim sDurum As String = If(doc.state_explanation IsNot Nothing, doc.state_explanation.Trim(), "")
                     Dim sDocType As String = If(doc.document_type_code IsNot Nothing, doc.document_type_code.Trim(), "")
                     Dim sRefUuid As String = If(doc.reference_document_uuid IsNot Nothing, doc.reference_document_uuid.Trim(), "")
-
                     eslesmeListesi.Add(New String() {enIyiFaturaID, gibDocId, gibUuid, sProfile, sDurum, sDocType, sRefUuid})
                     eslenenGibUuidler.Add(gibUuid)
                     eslenenFaturaIdler.Add(enIyiFaturaID)
@@ -5667,7 +5631,6 @@ Public Class frm_fatura_liste
 
             If eslesmeListesi.Count = 0 Then Exit Sub
 
-            ' 5. DB guncelle
             con.Open()
             For Each eslesme As String() In eslesmeListesi
                 Dim nStokFisiID As String = eslesme(0)
@@ -5678,10 +5641,6 @@ Public Class frm_fatura_liste
                 Dim sDocType As String = eslesme(5)
                 Dim sRefUuid As String = eslesme(6)
 
-                ' Fatura tipini belirle
-                Dim bFaturaTipiDeger As String = sProfile
-
-                ' Iade fatura bilgileri
                 Dim sIadeEk As String = ""
                 If sRefUuid <> "" Then
                     Try
@@ -5690,12 +5649,8 @@ Public Class frm_fatura_liste
                         Dim rdrRef As OleDb.OleDbDataReader = cmdRef.ExecuteReader()
                         If rdrRef.Read() Then
                             Dim sIadeFaturaNo As String = If(IsDBNull(rdrRef("GibFaturaNo")), "", rdrRef("GibFaturaNo").ToString().Trim())
-                            If sIadeFaturaNo <> "" Then
-                                sIadeEk = ", IadeFaturaNo = '" & sIadeFaturaNo.Replace("'", "''") & "'"
-                            End If
-                            If Not IsDBNull(rdrRef("dteFisTarihi")) Then
-                                sIadeEk &= ", IadeFaturaTarihi = '" & CDate(rdrRef("dteFisTarihi")).ToString("dd/MM/yyyy") & "'"
-                            End If
+                            If sIadeFaturaNo <> "" Then sIadeEk = ", IadeFaturaNo = '" & sIadeFaturaNo.Replace("'", "''") & "'"
+                            If Not IsDBNull(rdrRef("dteFisTarihi")) Then sIadeEk &= ", IadeFaturaTarihi = '" & CDate(rdrRef("dteFisTarihi")).ToString("dd/MM/yyyy") & "'"
                         End If
                         rdrRef.Close()
                     Catch
@@ -5703,15 +5658,13 @@ Public Class frm_fatura_liste
                 End If
 
                 Dim sGuidEk As String = ""
-                If sGuid <> "" Then
-                    sGuidEk = ", sEfaturaGuid = '" & sGuid.Replace("'", "''") & "'"
-                End If
+                If sGuid <> "" Then sGuidEk = ", sEfaturaGuid = '" & sGuid.Replace("'", "''") & "'"
 
                 Dim cmdUpdate As New OleDb.OleDbCommand(sorgu_query( _
                     "SET DATEFORMAT DMY UPDATE tbStokFisiMaster SET " & _
                     "GibFaturaNo = '" & sGibNo.Replace("'", "''") & "', " & _
                     "bEfatura = 1, " & _
-                    "sEfaturaTipi = '" & bFaturaTipiDeger.Replace("'", "''") & "', " & _
+                    "sEfaturaTipi = '" & sProfile.Replace("'", "''") & "', " & _
                     "nEfaturaDurum = '" & sDurum.Replace("'", "''") & "', " & _
                     "bFaturaTipi = '" & sDocType.Replace("'", "''") & "'" & _
                     sGuidEk & sIadeEk & _
@@ -5721,7 +5674,6 @@ Public Class frm_fatura_liste
             con.Close()
 
         Catch ex As Exception
-            ' GIB sorgulama hatasi sessizce loglanir
         End Try
     End Sub
 
@@ -7181,7 +7133,7 @@ Public Class frm_fatura_liste
     End Sub
     Public Sub GelenEFaturalariAlVeIsle()
         Try
-            ' === VERİTABANI BA�?LANTISI VE PARAMETRELERİ AL ===
+            ' === VERİTABANI BAĞLANTISI VE PARAMETRELERİ AL ===
             Dim con As New OleDb.OleDbConnection(connection)
             Dim cmd As New OleDb.OleDbCommand("SELECT TOP 1 * FROM tbParamGenel", con)
             con.Open()
@@ -7194,7 +7146,7 @@ Public Class frm_fatura_liste
             End If
             con.Close()
 
-            ' === FATURA TARİH ARALI�?INI BELİRLE ===
+            ' === FATURA TARİH ARALIĞINI BELİRLE ===
             Dim startDate As String = Convert.ToDateTime(txt_dteFisTarihi1.EditValue).AddDays(-7).ToString("yyyy-MM-dd")
             Dim endDate As String = Convert.ToDateTime(txt_dteFisTarihi2.EditValue).ToString("yyyy-MM-dd")
             Dim withXML As String = "XML"
@@ -7202,7 +7154,7 @@ Public Class frm_fatura_liste
             Dim documentType As String = "1" ' sadece faturalar
             Dim queried As String = "ALL"
             Dim takenFromEntegrator As String = "NO"
-            ' === SERVİS BA�?LANTISI VE FATURA LİSTESİNİ AL ===
+            ' === SERVİS BAĞLANTISI VE FATURA LİSTESİNİ AL ===
             Dim client As New business_smart.eFaturaGelen.LoadInvoiceWSClient("LoadInvoiceWSPort1")
             client.ClientCredentials.UserName.UserName = gibUser
             client.ClientCredentials.UserName.Password = gibPass
@@ -7211,11 +7163,11 @@ Public Class frm_fatura_liste
 
             Dim faturaListesi As business_smart.eFaturaGelen.ResponseDocument() = response.documents
 
-            ' === TÜM GELEN FATURALARI İ�?LE ===
+            ' === TÜM GELEN FATURALARI İŞLE ===
             For Each fatura As business_smart.eFaturaGelen.ResponseDocument In faturaListesi
                 Dim documentUUID As String = fatura.document_uuid
 
-                ' === FATURA DAHA ÖNCE KAYDEDİLMİ�? Mİ KONTROL ET ===
+                ' === FATURA DAHA ÖNCE KAYDEDİLMİŞ Mİ KONTROL ET ===
                 con.Open()
                 cmd = New OleDb.OleDbCommand("SELECT COUNT(*) FROM tbStokFisiMaster WHERE sEfaturaGuid = ?", con)
                 cmd.Parameters.AddWithValue("@p1", documentUUID)
@@ -7223,7 +7175,7 @@ Public Class frm_fatura_liste
                 con.Close()
                 If count > 0 Then Continue For
 
-                ' === XML İÇERİ�?İNİ YÜKLE VE GEREKLİ ALANLARI ÇEK ===
+                ' === XML İÇERİĞİNİ YÜKLE VE GEREKLİ ALANLARI ÇEK ===
                 Dim firmaID As Integer = -1
                 Dim xmlData As String = Encoding.UTF8.GetString(fatura.document_content)
                 Dim xmlDoc As New XmlDocument()
@@ -7241,14 +7193,14 @@ Public Class frm_fatura_liste
                 Dim vergiDaireNode As XmlNode = xmlDoc.SelectSingleNode("//cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme/cbc:TaxSchemeName", nsMgr)
                 Dim vknNode As XmlNode = xmlDoc.SelectSingleNode("//cac:AccountingSupplierParty/cac:Party/cac:PartyIdentification/cbc:ID", nsMgr)
 
-                ' === FATURA BA�?LIK BİLGİLERİNİ AL ===
+                ' === FATURA BAŞLIK BİLGİLERİNİ AL ===
                 Dim evrakNo As String = xmlDoc.SelectSingleNode("//cbc:ID", nsMgr)?.InnerText.Trim()
                 Dim faturaTarihi As Date = Date.Parse(xmlDoc.SelectSingleNode("//cbc:IssueDate", nsMgr)?.InnerText.Trim())
 
                 ' === FATURA KALEM BİLGİLERİNİ AL ===
                 Dim kalemler = xmlDoc.SelectNodes("//cac:InvoiceLine", nsMgr)
 
-                ' === DE�?ERLERİ PARSE ET ===
+                ' === DEĞERLERİ PARSE ET ===
                 Dim firmaAdi As String = If(firmaUnvanNode?.InnerText, "").Trim()
                 Dim adres As String = If(adresNode?.SelectSingleNode("cbc:StreetName", nsMgr)?.InnerText, "").Trim()
                 Dim ilce As String = If(adresNode?.SelectSingleNode("cbc:CitySubdivisionName", nsMgr)?.InnerText, "").Trim()
@@ -7354,7 +7306,7 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                 cmd.ExecuteNonQuery()
                 con.Close()
 
-                ' === FATURA BA�?LIK INSERT (TEK SORGU İLE) ===
+                ' === FATURA BAŞLIK INSERT (TEK SORGU İLE) ===
                 con.Open()
                 cmd = New OleDb.OleDbCommand("SET DATEFORMAT DMY; INSERT INTO tbStokFisiMaster (sFisTipi, dteFisTarihi, dteTeslimTarihi, nGirisCikis, lFisNo, nFirmaID, sDepo, dteValorTarihi, bPesinmi, bListelendimi, bHizmetFaturasimi, lToplamMiktar, lMalBedeli, lMalIskontoTutari, nDipIskontoYuzdesi1, lDipIskontoTutari1, nDipIskontoYuzdesi2, lDipIskontoTutari2, lDipIskontoTutari3, lEkmaliyet1, lEkmaliyet2, lEkmaliyet3, nKdvOrani1, lKdvMatrahi1, lKdv1, nKdvOrani2, lKdvMatrahi2, lKdv2, nKdvOrani3, lKdvMatrahi3, lKdv3, nKdvOrani4, lKdvMatrahi4, lKdv4,  nKdvOrani5, lKdvMatrahi5, lKdv5, lNetTutar, nTevkifatKdvOrani, lTevkifatKdvMatrahi, lTevkifatKdv, sHareketTipi, bMuhasebeyeIslendimi, bFisTamamlandimi, lTransferFisiID,  sTransferDepo, bFaturayaDonustumu, sKullaniciAdi, dteKayitTarihi, sYaziIle, nOTVOrani1, lOTVMatrahi1, lOTV1, nOTVOrani2, lOTVMatrahi2, lOTV2,bKilitli,nEvrakNo, sEfaturaGuid, sEfaturaTipi, bFaturaTipi, sKdvMuafiyetKodu, nTasimaSekli, lBrutAgirlik, lNetAgirlik, nPaketSayisi, sPaketTipi, sGumrukCikisNo, sTeslimatUlke) VALUES ('FS ', ?, ?, 3 , 0, ?, 'D001', ?, 0 , 0 , 0 , 0 , 0, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0, 0 , 0, 0 , 0, 0 , 0, 0 , 0, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0, 0 ,  '001 ', 0, 0, '0',  '', 0 , 'Admin', ?, '', 0, 0, 0, 0 , 0, 0,0, ?, ?, ?, '', '', 0, 0, 0, 0, '', '', '') ", con)
                 cmd.Parameters.AddWithValue("@p1", faturaTarihi)
@@ -7376,7 +7328,7 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                 cmd.Parameters.AddWithValue("@p1", stokFisiID)
                 cmd.ExecuteNonQuery()
 
-                ' === Fİ�? KİLİDİNİ EKLE ===
+                ' === FİŞ KİLİDİNİ EKLE ===
                 cmd = New OleDb.OleDbCommand("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO tbFisKilit (nKayitID, sFisTipi, sKullanici, dteKayitTarihi) VALUES (?, 'FS', '1', ?)", con)
                 cmd.Parameters.AddWithValue("@p1", stokFisiID)
                 cmd.Parameters.AddWithValue("@p2", DateTime.Now)
@@ -7529,7 +7481,7 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
         {"Tokat", "60"},
         {"Trabzon", "61"},
         {"Tunceli", "62"},
-        {"�?anlıurfa", "63"},
+        {"Şanlıurfa", "63"},
         {"Uşak", "64"},
         {"Van", "65"},
         {"Yozgat", "66"},
@@ -7539,7 +7491,7 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
         {"Karaman", "70"},
         {"Kırıkkale", "71"},
         {"Batman", "72"},
-        {"�?ırnak", "73"},
+        {"Şırnak", "73"},
         {"Bartın", "74"},
         {"Ardahan", "75"},
         {"Iğdır", "76"},
