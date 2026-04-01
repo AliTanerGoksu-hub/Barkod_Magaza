@@ -2033,13 +2033,7 @@ Public Class frm_stok_liste_envanter_deger
     End Function
     Private Sub dataload(ByVal ara As String, ByVal konum As String, ByVal ara_kriter As String, ByVal tarih1 As DateTime, ByVal mevcut As String, ByVal depo As String, ByVal sGrup As String, ByVal sFiyatTipi As String)
         DataSet1 = stok(ara, konum, ara_kriter, tarih1, mevcut, depo, sGrup, sFiyatTipi)
-        GridControl1.DataSource = DataSet1.Tables(0)
-        GridControl1.DataMember = Nothing
-        PanelControl3.Select()
-        GridControl1.Focus()
-        GridControl1.Select()
-        GridView1.CollapseAllGroups()
-        ' Maliyetlendirmeden (FIFO) secildiyse - kalan stok degerini FIFO ile hesapla
+        ' Maliyetlendirmeden (FIFO) secildiyse - grid'e baglamadan ONCE hesapla
         If sec_MaliyetTipi.SelectedIndex = 1 Then
             If DataSet1 IsNot Nothing AndAlso DataSet1.Tables.Count > 0 AndAlso DataSet1.Tables(0).Columns.Contains("nStokID") Then
                 For Each dr As DataRow In DataSet1.Tables(0).Rows
@@ -2055,6 +2049,12 @@ Public Class frm_stok_liste_envanter_deger
                 Next
             End If
         End If
+        GridControl1.DataSource = DataSet1.Tables(0)
+        GridControl1.DataMember = Nothing
+        PanelControl3.Select()
+        GridControl1.Focus()
+        GridControl1.Select()
+        GridView1.CollapseAllGroups()
     End Sub
     Private Sub ara()
         Label2.Text = Sorgu_sDil("Lütfen Bekleyiniz...", sDil)
