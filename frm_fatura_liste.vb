@@ -5509,7 +5509,7 @@ Public Class frm_fatura_liste
             Dim dsEksik As New DataSet()
             Dim adpEksik As New OleDb.OleDbDataAdapter(sorgu_query( _
                 "SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED " & _
-                "SELECT m.nStokFisiID, m.dteFisTarihi, m.lNetTutar, (m.lKdv1+m.lKdv2+m.lKdv3+m.lKdv4+m.lKdv5) AS lKdvTutar, m.nFirmaID, m.sEfaturaGuid, " & _
+                "SELECT m.nStokFisiID, m.dteFisTarihi, ISNULL(m.lNetTutar, 0) AS lNetTutar, (ISNULL(m.lKdv1,0)+ISNULL(m.lKdv2,0)+ISNULL(m.lKdv3,0)+ISNULL(m.lKdv4,0)+ISNULL(m.lKdv5,0)) AS lKdvTutar, m.nFirmaID, m.sEfaturaGuid, " & _
                 "ISNULL(RTRIM(f.sVergiNo), '') AS sVergiNo, " & _
                 "ISNULL(RTRIM(f.sAciklama), '') AS sAciklama, " & _
                 "ISNULL(f.TC, 0) AS TC " & _
@@ -5601,9 +5601,10 @@ Public Class frm_fatura_liste
                     End If
 
                     If gibTutarDec > 0 Then
-                        Dim localNet As Decimal = CDec(drLocal("lNetTutar"))
+                        Dim localNet As Decimal = 0
+                        If Not IsDBNull(drLocal("lNetTutar")) Then localNet = CDec(drLocal("lNetTutar"))
                         Dim localKdv As Decimal = 0
-                        Try : localKdv = CDec(drLocal("lKdvTutar")) : Catch : End Try
+                        If Not IsDBNull(drLocal("lKdvTutar")) Then localKdv = CDec(drLocal("lKdvTutar"))
                         Dim localToplam As Decimal = localNet + localKdv
                         If Math.Abs(localToplam - gibTutarDec) < 1D Then puan += 50
                     End If
@@ -5673,6 +5674,7 @@ Public Class frm_fatura_liste
             con.Close()
 
         Catch ex As Exception
+            MsgBox("GIB Fatura Guncelleme Hatasi: " & ex.ToString(), MsgBoxStyle.Critical, "Hata")
         End Try
     End Sub
 
