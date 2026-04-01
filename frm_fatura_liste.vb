@@ -5672,7 +5672,7 @@ Public Class frm_fatura_liste
                 Dim gibSoyad As String = gib(4)
                 Dim gibTutar As String = gib(5)
                 Dim gibTarih As String = gib(6)
-                Dim gibAdSoyad As String = (gibAd & " " & gibSoyad).Trim().ToUpper()
+                Dim gibAdSoyad As String = TurkceNormalize((gibAd & " " & gibSoyad).Trim())
 
                 If eslenenGibUuidler.Contains(gibUuid) Then Continue For
 
@@ -5685,13 +5685,11 @@ Public Class frm_fatura_liste
                 Dim gibTarihDt As DateTime = DateTime.MinValue
                 If gibTarih <> "" Then DateTime.TryParse(gibTarih, gibTarihDt)
 
-                Dim sahteVkn As Boolean = (gibDestId = "" OrElse gibDestId = "1111111111" OrElse gibDestId = "11111111111" OrElse gibDestId = "0")
-
                 ' Aday listesi olustur
                 Dim adaylar As New System.Collections.Generic.List(Of DataRow)
 
                 ' ADIM 1: VKN/TC ile eslesme
-                If Not sahteVkn AndAlso gibDestId <> "" Then
+                If gibDestId <> "" Then
                     For Each dr As DataRow In dsEksik.Tables(0).Rows
                         If eslenenFaturaIdler.Contains(dr("nStokFisiID").ToString()) Then Continue For
                         Dim lVkn As String = dr("sVergiNo").ToString().Trim()
@@ -5706,12 +5704,25 @@ Public Class frm_fatura_liste
                 If adaylar.Count = 0 AndAlso gibAdSoyad <> "" Then
                     For Each dr As DataRow In dsEksik.Tables(0).Rows
                         If eslenenFaturaIdler.Contains(dr("nStokFisiID").ToString()) Then Continue For
-                        Dim localAd As String = dr("sAciklama").ToString().Trim().ToUpper()
+                        Dim localAd As String = TurkceNormalize(dr("sAciklama").ToString().Trim())
                         If localAd <> "" AndAlso (localAd.Contains(gibAdSoyad) OrElse gibAdSoyad.Contains(localAd) OrElse _
-                            (gibAd <> "" AndAlso localAd.Contains(gibAd.ToUpper()) AndAlso gibSoyad <> "" AndAlso localAd.Contains(gibSoyad.ToUpper()))) Then
+                            (gibAd <> "" AndAlso localAd.Contains(TurkceNormalize(gibAd)) AndAlso gibSoyad <> "" AndAlso localAd.Contains(TurkceNormalize(gibSoyad)))) Then
                             adaylar.Add(dr)
                         End If
                     Next
+                End If
+
+                ' VKN ile birden fazla aday bulduysa (ortak VKN durumu), isim ile daralt
+                If adaylar.Count > 1 AndAlso gibAdSoyad <> "" Then
+                    Dim daraltilmis As New System.Collections.Generic.List(Of DataRow)
+                    For Each dr As DataRow In adaylar
+                        Dim localAd As String = TurkceNormalize(dr("sAciklama").ToString().Trim())
+                        If localAd <> "" AndAlso (localAd.Contains(gibAdSoyad) OrElse gibAdSoyad.Contains(localAd) OrElse _
+                            (gibAd <> "" AndAlso localAd.Contains(TurkceNormalize(gibAd)) AndAlso gibSoyad <> "" AndAlso localAd.Contains(TurkceNormalize(gibSoyad)))) Then
+                            daraltilmis.Add(dr)
+                        End If
+                    Next
+                    If daraltilmis.Count > 0 Then adaylar = daraltilmis
                 End If
 
                 ' ADIM 3: Birden fazla aday varsa tutar ile daralt
@@ -5808,6 +5819,24 @@ Public Class frm_fatura_liste
         Catch ex As Exception
         End Try
     End Sub
+
+    Private Function TurkceNormalize(ByVal s As String) As String
+        If s Is Nothing OrElse s = "" Then Return ""
+        s = s.ToUpper()
+        s = s.Replace("İ"c, "I"c)
+        s = s.Replace("ı"c, "I"c)
+        s = s.Replace("Ğ"c, "G"c)
+        s = s.Replace("ğ"c, "G"c)
+        s = s.Replace("Ü"c, "U"c)
+        s = s.Replace("ü"c, "U"c)
+        s = s.Replace("Ş"c, "S"c)
+        s = s.Replace("ş"c, "S"c)
+        s = s.Replace("Ö"c, "O"c)
+        s = s.Replace("ö"c, "O"c)
+        s = s.Replace("Ç"c, "C"c)
+        s = s.Replace("ç"c, "C"c)
+        Return s
+    End Function
 
     Private Sub ara(Optional ByVal bListele As Boolean = True)
         bInfo = False
