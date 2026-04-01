@@ -5552,7 +5552,7 @@ Public Class frm_fatura_liste
                         minRecordId:=minRecordId)
 
                     If response IsNot Nothing AndAlso response.queryState = 0 AndAlso response.documents IsNot Nothing AndAlso response.documents.Length > 0 Then
-                        For Each doc In response.documents
+                        For Each doc As GibSorgula.ResponseDocument In response.documents
                             tumBelgeler.Add(doc)
                         Next
                         If response.documentsCount > tumBelgeler.Count Then
@@ -5577,7 +5577,7 @@ Public Class frm_fatura_liste
             ' Eslenen yerel fatura ID'lerini takip et
             Dim eslenenFaturaIdler As New System.Collections.Generic.HashSet(Of String)
 
-            For Each doc In tumBelgeler
+            For Each doc As GibSorgula.ResponseDocument In tumBelgeler
                 If doc.document_id Is Nothing OrElse doc.document_id.Trim() = "" Then Continue For
                 Dim gibDestId As String = If(doc.destination_id IsNot Nothing, doc.destination_id.Trim(), "")
                 Dim gibTarih As String = If(doc.document_issue_date IsNot Nothing, doc.document_issue_date.Trim(), "")
