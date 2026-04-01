@@ -5559,7 +5559,6 @@ Public Class frm_fatura_liste
                             minRecordId:=minRecordId)
 
                         If response IsNot Nothing AndAlso response.queryState <> 0 Then
-                            MsgBox("GIB Sorgu Hatasi (" & yil & "): " & If(response.stateExplanation, "Bilinmeyen hata"), MsgBoxStyle.Exclamation, "GIB Uyari")
                             devamEt = False
                         ElseIf response IsNot Nothing AndAlso response.queryState = 0 AndAlso response.documents IsNot Nothing AndAlso response.documents.Length > 0 Then
                             For Each doc As GibSorgula.ResponseDocument In response.documents
@@ -5605,7 +5604,6 @@ Public Class frm_fatura_liste
                             minRecordId:=minRecId)
 
                         If eArsivResponse IsNot Nothing AndAlso eArsivResponse.queryState <> 0 Then
-                            MsgBox("E-Arsiv Sorgu Hatasi (" & yil & "): " & If(eArsivResponse.stateExplanation, "Bilinmeyen hata"), MsgBoxStyle.Exclamation, "E-Arsiv Uyari")
                             devam = False
                         ElseIf eArsivResponse IsNot Nothing AndAlso eArsivResponse.queryState = 0 AndAlso eArsivResponse.documents IsNot Nothing AndAlso eArsivResponse.documents.Length > 0 Then
                             For Each eDoc As EarsivServisi.ResponseDocument In eArsivResponse.documents
@@ -5808,7 +5806,6 @@ Public Class frm_fatura_liste
             con.Close()
 
         Catch ex As Exception
-            MsgBox("GIB Fatura Guncelleme Hatasi: " & ex.ToString(), MsgBoxStyle.Critical, "Hata")
         End Try
     End Sub
 
