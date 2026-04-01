@@ -2047,11 +2047,9 @@ Public Class frm_stok_liste_envanter_deger
                         Dim nStokID As Int64 = CLng(dr("nStokID"))
                         Dim lMevcut As Decimal = CDec(dr("lMevcut"))
                         Dim yeniMaliyet As Decimal = MaliyetHesaplayici.HesaplaFIFOEnvanter(nStokID, lMevcut)
-                        If yeniMaliyet > 0 Then
-                            dr("Maliyet") = yeniMaliyet
-                            dr("mDeger") = lMevcut * yeniMaliyet
-                            dr("bDeger") = CDec(dr("lBekleyen")) * yeniMaliyet
-                        End If
+                        dr("Maliyet") = yeniMaliyet
+                        dr("mDeger") = lMevcut * yeniMaliyet
+                        dr("bDeger") = CDec(dr("lBekleyen")) * yeniMaliyet
                     Catch
                     End Try
                 Next
