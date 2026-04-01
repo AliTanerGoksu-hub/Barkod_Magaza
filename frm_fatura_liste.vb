@@ -5511,10 +5511,13 @@ Public Class frm_fatura_liste
                 "SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED " & _
                 "SELECT m.nStokFisiID, m.dteFisTarihi, ISNULL(m.lNetTutar, 0) AS lNetTutar, (ISNULL(m.lKdv1,0)+ISNULL(m.lKdv2,0)+ISNULL(m.lKdv3,0)+ISNULL(m.lKdv4,0)+ISNULL(m.lKdv5,0)) AS lKdvTutar, m.nFirmaID, m.sEfaturaGuid, " & _
                 "ISNULL(RTRIM(f.sVergiNo), '') AS sVergiNo, " & _
-                "ISNULL(RTRIM(f.sAciklama), '') AS sAciklama, " & _
-                "ISNULL(f.TC, 0) AS TC " & _
+                "CASE WHEN m.bPesinmi = 1 AND ISNULL(RTRIM(p.sAciklama), '') <> '' THEN RTRIM(p.sAciklama) ELSE ISNULL(RTRIM(f.sAciklama), '') END AS sAciklama, " & _
+                "ISNULL(f.TC, 0) AS TC, " & _
+                "ISNULL(RTRIM(f.sIl), '') AS sIl, " & _
+                "ISNULL(RTRIM(f.sSemt), '') AS sSemt " & _
                 "FROM tbStokFisiMaster m " & _
                 "INNER JOIN tbFirma f ON m.nFirmaID = f.nFirmaID " & _
+                "LEFT JOIN tbStokFisiPesinAdres p ON m.nStokFisiID = p.nStokFisiID " & _
                 "WHERE (m.GibFaturaNo IS NULL OR m.GibFaturaNo = '' OR m.GibFaturaNo = '0') AND m.nFirmaID > 0 AND m.sFisTipi = 'FS'"), con)
             adpEksik.Fill(dsEksik)
             con.Close()
@@ -5634,107 +5637,50 @@ Public Class frm_fatura_liste
             Dim eslenenGibUuidler As New System.Collections.Generic.HashSet(Of String)
             Dim eslenenFaturaIdler As New System.Collections.Generic.HashSet(Of String)
 
+            ' --- TUM BELGELERI TEK LISTEYE TOPLA (DocId, Uuid, DestId, Ad, Tutar, Tarih, Profile, Durum, DocType, RefUuid) ---
+            Dim tumDocs As New System.Collections.Generic.List(Of String())
+
             For Each doc As GibSorgula.ResponseDocument In tumBelgeler
                 If doc.document_id Is Nothing OrElse doc.document_id.Trim() = "" Then Continue For
-                Dim gibDestId As String = If(doc.destination_id IsNot Nothing, doc.destination_id.Trim(), "")
-                Dim gibTarih As String = If(doc.document_issue_date IsNot Nothing, doc.document_issue_date.Trim(), "")
-                Dim gibTutar As String = If(doc.invoice_total IsNot Nothing, doc.invoice_total.Trim(), "")
-                Dim gibDocId As String = doc.document_id.Trim()
-                Dim gibUuid As String = If(doc.document_uuid IsNot Nothing, doc.document_uuid.Trim(), "")
-                Dim gibAd As String = If(doc.customerPersonName IsNot Nothing, doc.customerPersonName.Trim(), "")
-                Dim gibSoyad As String = If(doc.customerPersonFamilyName IsNot Nothing, doc.customerPersonFamilyName.Trim(), "")
-                Dim gibAdSoyad As String = (gibAd & " " & gibSoyad).Trim().ToUpper()
-
-                If eslenenGibUuidler.Contains(gibUuid) Then Continue For
-
-                Dim gibTutarDec As Decimal = 0
-                If gibTutar <> "" Then
-                    Decimal.TryParse(gibTutar.Replace(".", ","), gibTutarDec)
-                    If gibTutarDec = 0 Then Decimal.TryParse(gibTutar, gibTutarDec)
-                End If
-
-                Dim gibTarihDt As DateTime = DateTime.MinValue
-                If gibTarih <> "" Then DateTime.TryParse(gibTarih, gibTarihDt)
-
-                Dim enIyiPuan As Integer = 0
-                Dim enIyiFaturaID As String = ""
-
-                For Each drLocal As DataRow In dsEksik.Tables(0).Rows
-                    Dim localID As String = drLocal("nStokFisiID").ToString()
-                    If eslenenFaturaIdler.Contains(localID) Then Continue For
-                    Dim puan As Integer = 0
-
-                    ' 1. VKN eslesmesi (sahte VKN'leri atla)
-                    Dim localVkn As String = drLocal("sVergiNo").ToString().Trim()
-                    Dim sahteVkn As Boolean = (gibDestId = "" OrElse gibDestId = "1111111111" OrElse gibDestId = "11111111111" OrElse gibDestId = "0")
-                    If Not sahteVkn AndAlso localVkn <> "" AndAlso localVkn = gibDestId Then
-                        puan += 100
-                    End If
-
-                    ' 2. TC eslesmesi (sahte TC'leri atla)
-                    If puan < 100 Then
-                        Dim localTC As String = drLocal("TC").ToString().Trim()
-                        If Not sahteVkn AndAlso localTC <> "" AndAlso localTC <> "0" AndAlso localTC = gibDestId Then
-                            puan += 100
-                        End If
-                    End If
-
-                    ' 3. Isim eslesmesi
-                    If gibAdSoyad <> "" Then
-                        Dim localAd As String = drLocal("sAciklama").ToString().Trim().ToUpper()
-                        If localAd <> "" AndAlso (localAd.Contains(gibAdSoyad) OrElse gibAdSoyad.Contains(localAd) OrElse _
-                            (gibAd <> "" AndAlso gibSoyad <> "" AndAlso localAd.Contains(gibAd.ToUpper()) AndAlso localAd.Contains(gibSoyad.ToUpper()))) Then
-                            puan += 80
-                        End If
-                    End If
-
-                    ' 4. Tutar eslesmesi
-                    If gibTutarDec > 0 Then
-                        Dim localNet As Decimal = 0
-                        If Not IsDBNull(drLocal("lNetTutar")) Then localNet = CDec(drLocal("lNetTutar"))
-                        Dim localKdv As Decimal = 0
-                        If Not IsDBNull(drLocal("lKdvTutar")) Then localKdv = CDec(drLocal("lKdvTutar"))
-                        Dim localToplam As Decimal = localNet + localKdv
-                        If Math.Abs(localToplam - gibTutarDec) < 1D Then puan += 50
-                    End If
-
-                    ' 5. Tarih eslesmesi
-                    If gibTarihDt <> DateTime.MinValue Then
-                        Dim localTarih As DateTime = DateTime.MinValue
-                        Try : localTarih = CDate(drLocal("dteFisTarihi")) : Catch : End Try
-                        If localTarih <> DateTime.MinValue AndAlso localTarih.Date = gibTarihDt.Date Then
-                            puan += 40
-                        End If
-                    End If
-
-                    ' Minimum esik: tutar+tarih(90), isim+tutar(130), VKN+tutar(150)
-                    If puan > enIyiPuan AndAlso puan >= 90 Then
-                        enIyiPuan = puan
-                        enIyiFaturaID = localID
-                    End If
-                Next
-
-                If enIyiFaturaID <> "" Then
-                    Dim sProfile As String = If(doc.document_profile IsNot Nothing, doc.document_profile.Trim(), "")
-                    Dim sDurum As String = If(doc.state_explanation IsNot Nothing, doc.state_explanation.Trim(), "")
-                    Dim sDocType As String = If(doc.document_type_code IsNot Nothing, doc.document_type_code.Trim(), "")
-                    Dim sRefUuid As String = If(doc.reference_document_uuid IsNot Nothing, doc.reference_document_uuid.Trim(), "")
-                    eslesmeListesi.Add(New String() {enIyiFaturaID, gibDocId, gibUuid, sProfile, sDurum, sDocType, sRefUuid})
-                    eslenenGibUuidler.Add(gibUuid)
-                    eslenenFaturaIdler.Add(enIyiFaturaID)
-                End If
+                tumDocs.Add(New String() { _
+                    doc.document_id.Trim(), _
+                    If(doc.document_uuid IsNot Nothing, doc.document_uuid.Trim(), ""), _
+                    If(doc.destination_id IsNot Nothing, doc.destination_id.Trim(), ""), _
+                    If(doc.customerPersonName IsNot Nothing, doc.customerPersonName.Trim(), ""), _
+                    If(doc.customerPersonFamilyName IsNot Nothing, doc.customerPersonFamilyName.Trim(), ""), _
+                    If(doc.invoice_total IsNot Nothing, doc.invoice_total.Trim(), ""), _
+                    If(doc.document_issue_date IsNot Nothing, doc.document_issue_date.Trim(), ""), _
+                    If(doc.document_profile IsNot Nothing, doc.document_profile.Trim(), ""), _
+                    If(doc.state_explanation IsNot Nothing, doc.state_explanation.Trim(), ""), _
+                    If(doc.document_type_code IsNot Nothing, doc.document_type_code.Trim(), ""), _
+                    If(doc.reference_document_uuid IsNot Nothing, doc.reference_document_uuid.Trim(), "")})
             Next
 
-            ' --- E-ARSIV ESLESTIRME ---
             For Each eDoc As EarsivServisi.ResponseDocument In tumEArsivBelgeler
                 If eDoc.document_id Is Nothing OrElse eDoc.document_id.Trim() = "" Then Continue For
-                Dim gibDestId As String = If(eDoc.destination_id IsNot Nothing, eDoc.destination_id.Trim(), "")
-                Dim gibTarih As String = If(eDoc.document_issue_date IsNot Nothing, eDoc.document_issue_date.Trim(), "")
-                Dim gibTutar As String = If(eDoc.invoice_total IsNot Nothing, eDoc.invoice_total.Trim(), "")
-                Dim gibDocId As String = eDoc.document_id.Trim()
-                Dim gibUuid As String = If(eDoc.document_uuid IsNot Nothing, eDoc.document_uuid.Trim(), "")
-                Dim gibAd As String = If(eDoc.customerPersonName IsNot Nothing, eDoc.customerPersonName.Trim(), "")
-                Dim gibSoyad As String = If(eDoc.customerPersonFamilyName IsNot Nothing, eDoc.customerPersonFamilyName.Trim(), "")
+                tumDocs.Add(New String() { _
+                    eDoc.document_id.Trim(), _
+                    If(eDoc.document_uuid IsNot Nothing, eDoc.document_uuid.Trim(), ""), _
+                    If(eDoc.destination_id IsNot Nothing, eDoc.destination_id.Trim(), ""), _
+                    If(eDoc.customerPersonName IsNot Nothing, eDoc.customerPersonName.Trim(), ""), _
+                    If(eDoc.customerPersonFamilyName IsNot Nothing, eDoc.customerPersonFamilyName.Trim(), ""), _
+                    If(eDoc.invoice_total IsNot Nothing, eDoc.invoice_total.Trim(), ""), _
+                    If(eDoc.document_issue_date IsNot Nothing, eDoc.document_issue_date.Trim(), ""), _
+                    If(eDoc.document_profile IsNot Nothing, eDoc.document_profile.Trim(), ""), _
+                    If(eDoc.state_explanation IsNot Nothing, eDoc.state_explanation.Trim(), ""), _
+                    If(eDoc.document_type_code IsNot Nothing, eDoc.document_type_code.Trim(), ""), _
+                    If(eDoc.reference_document_uuid IsNot Nothing, eDoc.reference_document_uuid.Trim(), "")})
+            Next
+
+            ' --- BASAMAKLI ESLESTIRME ---
+            For Each gib As String() In tumDocs
+                Dim gibDocId As String = gib(0)
+                Dim gibUuid As String = gib(1)
+                Dim gibDestId As String = gib(2)
+                Dim gibAd As String = gib(3)
+                Dim gibSoyad As String = gib(4)
+                Dim gibTutar As String = gib(5)
+                Dim gibTarih As String = gib(6)
                 Dim gibAdSoyad As String = (gibAd & " " & gibSoyad).Trim().ToUpper()
 
                 If eslenenGibUuidler.Contains(gibUuid) Then Continue For
@@ -5748,72 +5694,76 @@ Public Class frm_fatura_liste
                 Dim gibTarihDt As DateTime = DateTime.MinValue
                 If gibTarih <> "" Then DateTime.TryParse(gibTarih, gibTarihDt)
 
-                Dim enIyiPuan As Integer = 0
-                Dim enIyiFaturaID As String = ""
+                Dim sahteVkn As Boolean = (gibDestId = "" OrElse gibDestId = "1111111111" OrElse gibDestId = "11111111111" OrElse gibDestId = "0")
 
-                For Each drLocal As DataRow In dsEksik.Tables(0).Rows
-                    Dim localID As String = drLocal("nStokFisiID").ToString()
-                    If eslenenFaturaIdler.Contains(localID) Then Continue For
-                    Dim puan As Integer = 0
+                ' Aday listesi olustur
+                Dim adaylar As New System.Collections.Generic.List(Of DataRow)
 
-                    ' 1. VKN eslesmesi (sahte VKN'leri atla)
-                    Dim localVkn As String = drLocal("sVergiNo").ToString().Trim()
-                    Dim sahteVkn As Boolean = (gibDestId = "" OrElse gibDestId = "1111111111" OrElse gibDestId = "11111111111" OrElse gibDestId = "0")
-                    If Not sahteVkn AndAlso localVkn <> "" AndAlso localVkn = gibDestId Then
-                        puan += 100
-                    End If
-
-                    ' 2. TC eslesmesi (sahte TC'leri atla)
-                    If puan < 100 Then
-                        Dim localTC As String = drLocal("TC").ToString().Trim()
-                        If Not sahteVkn AndAlso localTC <> "" AndAlso localTC <> "0" AndAlso localTC = gibDestId Then
-                            puan += 100
+                ' ADIM 1: VKN/TC ile eslesme
+                If Not sahteVkn AndAlso gibDestId <> "" Then
+                    For Each dr As DataRow In dsEksik.Tables(0).Rows
+                        If eslenenFaturaIdler.Contains(dr("nStokFisiID").ToString()) Then Continue For
+                        Dim lVkn As String = dr("sVergiNo").ToString().Trim()
+                        Dim lTC As String = dr("TC").ToString().Trim()
+                        If (lVkn <> "" AndAlso lVkn = gibDestId) OrElse (lTC <> "" AndAlso lTC <> "0" AndAlso lTC = gibDestId) Then
+                            adaylar.Add(dr)
                         End If
-                    End If
+                    Next
+                End If
 
-                    ' 3. Isim eslesmesi
-                    If gibAdSoyad <> "" Then
-                        Dim localAd As String = drLocal("sAciklama").ToString().Trim().ToUpper()
+                ' ADIM 2: VKN bulunamadiysa isim ile eslesme
+                If adaylar.Count = 0 AndAlso gibAdSoyad <> "" Then
+                    For Each dr As DataRow In dsEksik.Tables(0).Rows
+                        If eslenenFaturaIdler.Contains(dr("nStokFisiID").ToString()) Then Continue For
+                        Dim localAd As String = dr("sAciklama").ToString().Trim().ToUpper()
                         If localAd <> "" AndAlso (localAd.Contains(gibAdSoyad) OrElse gibAdSoyad.Contains(localAd) OrElse _
-                            (gibAd <> "" AndAlso gibSoyad <> "" AndAlso localAd.Contains(gibAd.ToUpper()) AndAlso localAd.Contains(gibSoyad.ToUpper()))) Then
-                            puan += 80
+                            (gibAd <> "" AndAlso localAd.Contains(gibAd.ToUpper()) AndAlso gibSoyad <> "" AndAlso localAd.Contains(gibSoyad.ToUpper()))) Then
+                            adaylar.Add(dr)
                         End If
-                    End If
+                    Next
+                End If
 
-                    ' 4. Tutar eslesmesi
-                    If gibTutarDec > 0 Then
+                ' ADIM 3: Birden fazla aday varsa tutar ile daralt
+                If adaylar.Count > 1 AndAlso gibTutarDec > 0 Then
+                    Dim daraltilmis As New System.Collections.Generic.List(Of DataRow)
+                    For Each dr As DataRow In adaylar
                         Dim localNet As Decimal = 0
-                        If Not IsDBNull(drLocal("lNetTutar")) Then localNet = CDec(drLocal("lNetTutar"))
+                        If Not IsDBNull(dr("lNetTutar")) Then localNet = CDec(dr("lNetTutar"))
                         Dim localKdv As Decimal = 0
-                        If Not IsDBNull(drLocal("lKdvTutar")) Then localKdv = CDec(drLocal("lKdvTutar"))
-                        Dim localToplam As Decimal = localNet + localKdv
-                        If Math.Abs(localToplam - gibTutarDec) < 1D Then puan += 50
-                    End If
-
-                    ' 5. Tarih eslesmesi
-                    If gibTarihDt <> DateTime.MinValue Then
-                        Dim localTarih As DateTime = DateTime.MinValue
-                        Try : localTarih = CDate(drLocal("dteFisTarihi")) : Catch : End Try
-                        If localTarih <> DateTime.MinValue AndAlso localTarih.Date = gibTarihDt.Date Then
-                            puan += 40
+                        If Not IsDBNull(dr("lKdvTutar")) Then localKdv = CDec(dr("lKdvTutar"))
+                        If Math.Abs((localNet + localKdv) - gibTutarDec) < 1D Then
+                            daraltilmis.Add(dr)
                         End If
-                    End If
+                    Next
+                    If daraltilmis.Count > 0 Then adaylar = daraltilmis
+                End If
 
-                    ' Minimum esik: tutar+tarih(90), isim+tutar(130), VKN+tutar(150)
-                    If puan > enIyiPuan AndAlso puan >= 90 Then
-                        enIyiPuan = puan
-                        enIyiFaturaID = localID
-                    End If
-                Next
+                ' ADIM 4: Hala birden fazla aday varsa tarih ile daralt
+                If adaylar.Count > 1 AndAlso gibTarihDt <> DateTime.MinValue Then
+                    Dim daraltilmis As New System.Collections.Generic.List(Of DataRow)
+                    For Each dr As DataRow In adaylar
+                        Dim localTarih As DateTime = DateTime.MinValue
+                        Try : localTarih = CDate(dr("dteFisTarihi")) : Catch : End Try
+                        If localTarih <> DateTime.MinValue AndAlso localTarih.Date = gibTarihDt.Date Then
+                            daraltilmis.Add(dr)
+                        End If
+                    Next
+                    If daraltilmis.Count > 0 Then adaylar = daraltilmis
+                End If
 
-                If enIyiFaturaID <> "" Then
-                    Dim sProfile As String = If(eDoc.document_profile IsNot Nothing, eDoc.document_profile.Trim(), "")
-                    Dim sDurum As String = If(eDoc.state_explanation IsNot Nothing, eDoc.state_explanation.Trim(), "")
-                    Dim sDocType As String = If(eDoc.document_type_code IsNot Nothing, eDoc.document_type_code.Trim(), "")
-                    Dim sRefUuid As String = If(eDoc.reference_document_uuid IsNot Nothing, eDoc.reference_document_uuid.Trim(), "")
-                    eslesmeListesi.Add(New String() {enIyiFaturaID, gibDocId, gibUuid, sProfile, sDurum, sDocType, sRefUuid})
+                ' ADIM 5: Hala birden fazla aday varsa il/semt ile daralt
+                If adaylar.Count > 1 Then
+                    ' Ayni il/semt olanlar kalsin (farkli il/semt olanlari ele)
+                    ' NOT: GIB ResponseDocument'ta adres yok, bu adim sadece yerel tekrarlari ayirmak icin
+                End If
+
+                ' Tek aday kaldiysa eslestir
+                If adaylar.Count = 1 Then
+                    Dim eslesen As DataRow = adaylar(0)
+                    Dim faturaID As String = eslesen("nStokFisiID").ToString()
+                    eslesmeListesi.Add(New String() {faturaID, gibDocId, gibUuid, gib(7), gib(8), gib(9), gib(10)})
                     eslenenGibUuidler.Add(gibUuid)
-                    eslenenFaturaIdler.Add(enIyiFaturaID)
+                    eslenenFaturaIdler.Add(faturaID)
                 End If
             Next
 
