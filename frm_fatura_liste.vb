@@ -5639,6 +5639,14 @@ Public Class frm_fatura_liste
             logSB.AppendLine("E-Arsiv belge: " & tumEArsivBelgeler.Count)
             logSB.AppendLine("Yerel eksik fatura: " & dsEksik.Tables(0).Rows.Count)
             logSB.AppendLine("")
+            logSB.AppendLine("--- YEREL EKSIK FATURALAR ---")
+            For Each drLog As DataRow In dsEksik.Tables(0).Rows
+                Dim logNet As Decimal = 0 : If Not IsDBNull(drLog("lNetTutar")) Then logNet = CDec(drLog("lNetTutar"))
+                Dim logKdv As Decimal = 0 : If Not IsDBNull(drLog("lKdvTutar")) Then logKdv = CDec(drLog("lKdvTutar"))
+                Dim logTarih As String = "" : Try : logTarih = CDate(drLog("dteFisTarihi")).ToString("yyyy-MM-dd") : Catch : End Try
+                logSB.AppendLine("  ID=" & drLog("nStokFisiID").ToString() & " | VKN=" & drLog("sVergiNo").ToString().Trim() & " | Ad=" & drLog("sAciklama").ToString().Trim() & " | Tutar=" & (logNet + logKdv).ToString("F2") & " | Tarih=" & logTarih)
+            Next
+            logSB.AppendLine("")
 
             Dim eslesmeListesi As New System.Collections.Generic.List(Of String())
             Dim eslenenGibUuidler As New System.Collections.Generic.HashSet(Of String)
@@ -5701,13 +5709,14 @@ Public Class frm_fatura_liste
                 Dim gibTarihDt As DateTime = DateTime.MinValue
                 If gibTarih <> "" Then DateTime.TryParse(gibTarih, gibTarihDt)
 
-                logSB.AppendLine("GIB: " & gibDocId & " | VKN=" & gibDestId & " | Ad=" & gibAd & " Soyad=" & gibSoyad & " | AdSoyad=" & gibAdSoyad & " | Tutar=" & gibTutar & " | Tarih=" & gibTarih)
+                logSB.AppendLine("GIB: " & gibDocId & " | VKN=" & gibDestId & " | Ad=" & gibAd & " Soyad=" & gibSoyad & " | AdSoyad=" & gibAdSoyad & " | Tutar=" & gibTutarDec.ToString("F2") & " | Tarih=" & gibTarih)
 
                 ' Aday listesi olustur
                 Dim adaylar As New System.Collections.Generic.List(Of DataRow)
+                Dim bOrtakVkn As Boolean = (gibDestId = "11111111111" OrElse gibDestId = "1111111111")
 
-                ' ADIM 1: VKN/TC ile eslesme
-                If gibDestId <> "" Then
+                ' ADIM 1: VKN/TC ile eslesme (ortak VKN degilse)
+                If gibDestId <> "" AndAlso Not bOrtakVkn Then
                     For Each dr As DataRow In dsEksik.Tables(0).Rows
                         If eslenenFaturaIdler.Contains(dr("nStokFisiID").ToString()) Then Continue For
                         Dim lVkn As String = dr("sVergiNo").ToString().Trim()
@@ -5717,9 +5726,30 @@ Public Class frm_fatura_liste
                         End If
                     Next
                 End If
-                logSB.AppendLine("  Adim1 VKN/TC: " & adaylar.Count & " aday")
+                logSB.AppendLine("  Adim1 VKN/TC: " & adaylar.Count & " aday" & If(bOrtakVkn, " (ortak VKN, atlanıyor)", ""))
 
-                ' ADIM 2: VKN bulunamadiysa isim ile eslesme
+                ' ADIM 2: Ortak VKN veya VKN bulunamadiysa -> TUM kayitlarda Isim+Tutar+Tarih ile eslestir
+                If (adaylar.Count = 0 OrElse bOrtakVkn) AndAlso gibTutarDec > 0 AndAlso gibTarihDt <> DateTime.MinValue Then
+                    Dim tutarTarihAdaylar As New System.Collections.Generic.List(Of DataRow)
+                    For Each dr As DataRow In dsEksik.Tables(0).Rows
+                        If eslenenFaturaIdler.Contains(dr("nStokFisiID").ToString()) Then Continue For
+                        Dim localNet As Decimal = 0
+                        If Not IsDBNull(dr("lNetTutar")) Then localNet = CDec(dr("lNetTutar"))
+                        Dim localKdv As Decimal = 0
+                        If Not IsDBNull(dr("lKdvTutar")) Then localKdv = CDec(dr("lKdvTutar"))
+                        Dim localTarih As DateTime = DateTime.MinValue
+                        Try : localTarih = CDate(dr("dteFisTarihi")) : Catch : End Try
+                        If Math.Abs((localNet + localKdv) - gibTutarDec) < 1D AndAlso localTarih <> DateTime.MinValue AndAlso localTarih.Date = gibTarihDt.Date Then
+                            tutarTarihAdaylar.Add(dr)
+                        End If
+                    Next
+                    logSB.AppendLine("  Adim2 Tutar+Tarih (tum kayitlar): " & tutarTarihAdaylar.Count & " aday")
+                    If tutarTarihAdaylar.Count >= 1 Then
+                        adaylar = tutarTarihAdaylar
+                    End If
+                End If
+
+                ' ADIM 2B: Hala bulunamadiysa sadece isim ile tum kayitlarda ara
                 If adaylar.Count = 0 AndAlso gibAdSoyad <> "" Then
                     For Each dr As DataRow In dsEksik.Tables(0).Rows
                         If eslenenFaturaIdler.Contains(dr("nStokFisiID").ToString()) Then Continue For
@@ -5729,10 +5759,10 @@ Public Class frm_fatura_liste
                             adaylar.Add(dr)
                         End If
                     Next
-                    logSB.AppendLine("  Adim2 Isim: " & adaylar.Count & " aday")
+                    logSB.AppendLine("  Adim2B Isim (tum kayitlar): " & adaylar.Count & " aday")
                 End If
 
-                ' VKN ile birden fazla aday bulduysa (ortak VKN durumu), isim ile daralt
+                ' Birden fazla aday varsa isim ile daralt
                 If adaylar.Count > 1 AndAlso gibAdSoyad <> "" Then
                     Dim daraltilmis As New System.Collections.Generic.List(Of DataRow)
                     For Each dr As DataRow In adaylar
@@ -5746,7 +5776,7 @@ Public Class frm_fatura_liste
                     If daraltilmis.Count > 0 Then adaylar = daraltilmis
                 End If
 
-                ' ADIM 3: Birden fazla aday varsa tutar ile daralt
+                ' Birden fazla aday varsa tutar ile daralt
                 If adaylar.Count > 1 AndAlso gibTutarDec > 0 Then
                     Dim daraltilmis As New System.Collections.Generic.List(Of DataRow)
                     For Each dr As DataRow In adaylar
@@ -5762,7 +5792,7 @@ Public Class frm_fatura_liste
                     If daraltilmis.Count > 0 Then adaylar = daraltilmis
                 End If
 
-                ' ADIM 4: Hala birden fazla aday varsa tarih ile daralt
+                ' Birden fazla aday varsa tarih ile daralt
                 If adaylar.Count > 1 AndAlso gibTarihDt <> DateTime.MinValue Then
                     Dim daraltilmis As New System.Collections.Generic.List(Of DataRow)
                     For Each dr As DataRow In adaylar
@@ -5776,7 +5806,7 @@ Public Class frm_fatura_liste
                     If daraltilmis.Count > 0 Then adaylar = daraltilmis
                 End If
 
-                ' ADIM 5: Hala birden fazla aday varsa il/semt ile daralt
+                ' Birden fazla aday varsa il/semt ile daralt
                 If adaylar.Count > 1 Then
                 End If
 
