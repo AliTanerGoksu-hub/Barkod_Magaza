@@ -5631,6 +5631,15 @@ Public Class frm_fatura_liste
 
             If tumBelgeler.Count = 0 AndAlso tumEArsivBelgeler.Count = 0 Then Exit Sub
 
+            ' LOG dosyasi olustur
+            Dim logDosya As String = Application.StartupPath & "\GIB_Eslestirme_Log.txt"
+            Dim logSB As New System.Text.StringBuilder()
+            logSB.AppendLine("=== GIB ESLESTIRME LOG === " & DateTime.Now.ToString())
+            logSB.AppendLine("E-Fatura belge: " & tumBelgeler.Count)
+            logSB.AppendLine("E-Arsiv belge: " & tumEArsivBelgeler.Count)
+            logSB.AppendLine("Yerel eksik fatura: " & dsEksik.Tables(0).Rows.Count)
+            logSB.AppendLine("")
+
             Dim eslesmeListesi As New System.Collections.Generic.List(Of String())
             Dim eslenenGibUuidler As New System.Collections.Generic.HashSet(Of String)
             Dim eslenenFaturaIdler As New System.Collections.Generic.HashSet(Of String)
@@ -5692,6 +5701,8 @@ Public Class frm_fatura_liste
                 Dim gibTarihDt As DateTime = DateTime.MinValue
                 If gibTarih <> "" Then DateTime.TryParse(gibTarih, gibTarihDt)
 
+                logSB.AppendLine("GIB: " & gibDocId & " | VKN=" & gibDestId & " | Ad=" & gibAd & " Soyad=" & gibSoyad & " | AdSoyad=" & gibAdSoyad & " | Tutar=" & gibTutar & " | Tarih=" & gibTarih)
+
                 ' Aday listesi olustur
                 Dim adaylar As New System.Collections.Generic.List(Of DataRow)
 
@@ -5706,6 +5717,7 @@ Public Class frm_fatura_liste
                         End If
                     Next
                 End If
+                logSB.AppendLine("  Adim1 VKN/TC: " & adaylar.Count & " aday")
 
                 ' ADIM 2: VKN bulunamadiysa isim ile eslesme
                 If adaylar.Count = 0 AndAlso gibAdSoyad <> "" Then
@@ -5717,6 +5729,7 @@ Public Class frm_fatura_liste
                             adaylar.Add(dr)
                         End If
                     Next
+                    logSB.AppendLine("  Adim2 Isim: " & adaylar.Count & " aday")
                 End If
 
                 ' VKN ile birden fazla aday bulduysa (ortak VKN durumu), isim ile daralt
@@ -5729,6 +5742,7 @@ Public Class frm_fatura_liste
                             daraltilmis.Add(dr)
                         End If
                     Next
+                    logSB.AppendLine("  Isim daraltma: " & daraltilmis.Count & "/" & adaylar.Count)
                     If daraltilmis.Count > 0 Then adaylar = daraltilmis
                 End If
 
@@ -5744,6 +5758,7 @@ Public Class frm_fatura_liste
                             daraltilmis.Add(dr)
                         End If
                     Next
+                    logSB.AppendLine("  Tutar daraltma: " & daraltilmis.Count & "/" & adaylar.Count)
                     If daraltilmis.Count > 0 Then adaylar = daraltilmis
                 End If
 
@@ -5757,13 +5772,12 @@ Public Class frm_fatura_liste
                             daraltilmis.Add(dr)
                         End If
                     Next
+                    logSB.AppendLine("  Tarih daraltma: " & daraltilmis.Count & "/" & adaylar.Count)
                     If daraltilmis.Count > 0 Then adaylar = daraltilmis
                 End If
 
                 ' ADIM 5: Hala birden fazla aday varsa il/semt ile daralt
                 If adaylar.Count > 1 Then
-                    ' Ayni il/semt olanlar kalsin (farkli il/semt olanlari ele)
-                    ' NOT: GIB ResponseDocument'ta adres yok, bu adim sadece yerel tekrarlari ayirmak icin
                 End If
 
                 ' Tek aday kaldiysa eslestir
@@ -5773,8 +5787,15 @@ Public Class frm_fatura_liste
                     eslesmeListesi.Add(New String() {faturaID, gibDocId, gibUuid, gib(7), gib(8), gib(9), gib(10)})
                     eslenenGibUuidler.Add(gibUuid)
                     eslenenFaturaIdler.Add(faturaID)
+                    logSB.AppendLine("  >> ESLESTI: FaturaID=" & faturaID)
+                Else
+                    logSB.AppendLine("  >> ESLESEMEDI: " & adaylar.Count & " aday kaldi")
                 End If
             Next
+
+            logSB.AppendLine("")
+            logSB.AppendLine("TOPLAM ESLESTIRME: " & eslesmeListesi.Count)
+            Try : System.IO.File.WriteAllText(logDosya, logSB.ToString(), System.Text.Encoding.UTF8) : Catch : End Try
 
             If eslesmeListesi.Count = 0 Then Exit Sub
 
