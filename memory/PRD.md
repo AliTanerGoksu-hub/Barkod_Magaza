@@ -14,40 +14,29 @@ E-Fatura/E-Arsiv eslestirme ve maliyet hesaplama standardizasyonu eklenmesi.
 
 ## Tamamlanan Isler
 
-### 2026-02-XX: Derleme Hatasi Duzeltmesi
-- [x] Mukerrer frm_AI_Ayarlar.vb silindi
-- [x] Form1.vb btnAIAyarlar_Click -> frm_AIAyarlari() olarak duzeltildi
-- [x] Risk UI panelleri (frm_firma_kart.vb, frm_perakende.vb) lokal SQL ile calisiyor
+### 2026-02-XX: Derleme Hatalari Duzeltmesi (Bu Oturum)
+- [x] Mukerrer frm_AI_Ayarlar.vb silindi, Form1.vb -> frm_AIAyarlari() yonlendirildi
+- [x] frm_firma_kart.vb: Orijinal dosya geri yuklendi, Inherits sirasi duzeltildi, encoding bozulmasi giderildi
+- [x] frm_perakende.vb: Ayni sekilde orijinal dosya geri yuklendi ve risk kodu dogru pozisyona eklendi
+- [x] Risk UI panelleri (frm_firma_kart.vb, frm_perakende.vb) lokal SQL ile calisiyor, dogru pozisyonda
 
 ### 2026-04-01: AI Altyapi Kurulumu
-- [x] AI_IS_PLANI.md - 6 oncelikli AI ozelligi, maliyet, 90 gunluk yol haritasi
-- [x] KOORDINELI_GELISTIRME_PLANI.md - PC/Mobil/B2B gorev dagilimi, ortak API kontrati
-- [x] VERI_ALTYAPISI_PLANI.md - Parametrik ayarlar, yetki, veri degisiklikleri
-- [x] MOBIL_B2B_AGENT_GOREV_DOKUMANI.md - Diger agent icin tum API detaylari
-- [x] SQL: tbRiskSkoru, tbAuditLog tablosu, tbSistemAyar parametrik ayarlar
-- [x] SQL: aEmirForms yetki tanimlari (AI modulleri icin)
-- [x] SQL: vw_AI_CariRiskVerisi, vw_AI_SatisGecmisi, vw_AI_PerakendeRiskVerisi view'lari
-- [x] C# API: AIService.cs, RiskService.cs, AuditService.cs
-- [x] C# API Endpoint'leri: risk-skoru, ai/risk-aciklama, tahsilat-plani, satis-oneri, gun-sonu-ozet, cari/detay, perakende/risk-skoru, sistem/ayar, yetki/kontrol
+- [x] AI planlama dokumanlari (AI_IS_PLANI.md, KOORDINELI_GELISTIRME_PLANI.md, VERI_ALTYAPISI_PLANI.md, MOBIL_B2B_AGENT_GOREV_DOKUMANI.md)
+- [x] SQL: tbRiskSkoru, tbAuditLog, tbSistemAyar parametrik ayarlar, aEmirForms yetki, AI view'lari
+- [x] C# API: AIService.cs, RiskService.cs, AuditService.cs + tum endpoint'ler
 - [x] VB.NET: master_kaydet_yeni - parametrik valor tarihi + kredi limit kontrolu
-- [x] frm_fatura_liste.vb: GIB tutar parse fix (InvariantCulture)
-- [x] frm_fatura_liste.vb: Eslestirme algoritmasi: Isim -> Adres -> Tutar sirasi
-- [x] frm_firma_kart.vb: Risk gostergesi (yesil/sari/kirmizi) - lokal SQL
-- [x] frm_perakende.vb: Perakende risk gostergesi - lokal SQL
-- [x] frm_AIAyarlari.vb: AI ayarlari yonetim ekrani (mevcut)
-- [x] Form1.vb: AI ribbon butonu -> frm_AIAyarlari
+- [x] frm_fatura_liste.vb: GIB tutar parse fix (InvariantCulture) + Eslestirme: Isim -> Adres -> Tutar
+- [x] frm_firma_kart.vb: Risk gostergesi (yesil/sari/kirmizi panel)
+- [x] frm_perakende.vb: Perakende risk gostergesi
+- [x] frm_AIAyarlari.vb: AI ayarlari yonetim ekrani
 
 ### Onceki Oturumlar:
-- [x] B2B Settings tab
-- [x] POS 400 Bad Request hata isleme
-- [x] R2 Logo upload (Sinif + Firma)
-- [x] Otomatik yedek hata duzeltmeleri
-- [x] FTP -> API migrasyon
-- [x] E-Fatura/E-Arsiv API pagination
-- [x] TurkceNormalize fonksiyonu
+- [x] B2B Settings tab, POS 400 Bad Request hata isleme
+- [x] R2 Logo upload (Sinif + Firma), Otomatik yedek hata duzeltmeleri
+- [x] FTP -> API migrasyon, E-Fatura/E-Arsiv API pagination, TurkceNormalize
 
 ## Devam Eden Isler (P0)
-- [ ] GIB eslestirme: Tutar parse duzeltmesi test edilmeli (kullanicidan yeni log bekleniyor)
+- [ ] GIB eslestirme: Tutar parse testi (kullanicidan yeni log bekleniyor)
 
 ## Siradaki Isler (P1)
 - [ ] Satis Oneri Motoru - siparis ekraninda AI bazli urun onerisi
