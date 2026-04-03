@@ -6,6 +6,12 @@ Imports System.ServiceModel.Channels
 Imports System.Net
 Imports System.Configuration
 Public Class frm_firma_kart
+
+    ' === RISK GOSTERGESI ===
+    Private pnlRisk As Panel
+    Private lblRiskSkor As Label
+    Private lblRiskAciklama As Label
+    Private btnRiskDetay As Button
     Inherits DevExpress.XtraEditors.XtraForm
 #Region " Windows Form Designer generated code "
     Public Sub New()
@@ -195,7 +201,7 @@ Public Class frm_firma_kart
     Friend WithEvents FirmaBakiyeleriToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents HareketGirToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents AçýklamaGirToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Aï¿½ï¿½klamaGirToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents txt_sKodu As DevExpress.XtraEditors.TextEdit
     Friend WithEvents LabelControl19 As DevExpress.XtraEditors.LabelControl
     Friend WithEvents DataColumn46 As System.Data.DataColumn
@@ -338,8 +344,8 @@ Public Class frm_firma_kart
     Friend WithEvents coldteKayitTarihi As DevExpress.XtraGrid.Columns.GridColumn
     Friend WithEvents colnSira As DevExpress.XtraGrid.Columns.GridColumn
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
-    Friend WithEvents KarlýlýkAkýþTablosuToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents HesapKodunuDeðiþtirToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Karlï¿½lï¿½kAkï¿½ï¿½TablosuToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents HesapKodunuDeï¿½iï¿½tirToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents btn_KodBul As DevExpress.XtraEditors.SimpleButton
     Friend WithEvents GroupControl2 As DevExpress.XtraEditors.GroupControl
     Friend WithEvents txt_sAyrac As DevExpress.XtraEditors.ComboBoxEdit
@@ -599,12 +605,12 @@ Public Class frm_firma_kart
         Me.FirmaHareketleriToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.StokluEkstreToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.FirmaBakiyeleriToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.KarlýlýkAkýþTablosuToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Karlï¿½lï¿½kAkï¿½ï¿½TablosuToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.HareketGirToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AçýklamaGirToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Aï¿½ï¿½klamaGirToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SonKodToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.HesapKodunuDeðiþtirToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.HesapKodunuDeï¿½iï¿½tirToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.XtraTabPage1 = New DevExpress.XtraTab.XtraTabPage()
         Me.GroupControl1 = New DevExpress.XtraEditors.PanelControl()
         Me.efatura = New DevExpress.XtraEditors.CheckEdit()
@@ -1069,7 +1075,7 @@ Public Class frm_firma_kart
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(247, 19)
         Me.Label1.TabIndex = 7
-        Me.Label1.Text = "Hesap Kartý Tanýmlarý Aþaðýdadýr..."
+        Me.Label1.Text = "Hesap Kartï¿½ Tanï¿½mlarï¿½ Aï¿½aï¿½ï¿½dadï¿½r..."
         '
         'PictureBox1
         '
@@ -1101,7 +1107,7 @@ Public Class frm_firma_kart
         Me.GroupControl2.Name = "GroupControl2"
         Me.GroupControl2.Size = New System.Drawing.Size(510, 277)
         Me.GroupControl2.TabIndex = 107
-        Me.GroupControl2.Text = "Sýnýflandýrma Parametreleri"
+        Me.GroupControl2.Text = "Sï¿½nï¿½flandï¿½rma Parametreleri"
         Me.GroupControl2.Visible = False
         '
         'txt_sAyrac
@@ -1125,7 +1131,7 @@ Public Class frm_firma_kart
         Me.LabelControl34.Name = "LabelControl34"
         Me.LabelControl34.Size = New System.Drawing.Size(46, 19)
         Me.LabelControl34.TabIndex = 107
-        Me.LabelControl34.Text = "Ayraç:"
+        Me.LabelControl34.Text = "Ayraï¿½:"
         '
         'lbl_sKod
         '
@@ -1184,7 +1190,7 @@ Public Class frm_firma_kart
         Me.btn_Vazgec.Name = "btn_Vazgec"
         Me.btn_Vazgec.Size = New System.Drawing.Size(120, 34)
         Me.btn_Vazgec.TabIndex = 105
-        Me.btn_Vazgec.Text = "&Vazgeç"
+        Me.btn_Vazgec.Text = "&Vazgeï¿½"
         '
         'btn_Kaydet
         '
@@ -1203,7 +1209,7 @@ Public Class frm_firma_kart
         Me.sec_sSinifKodu1.Name = "sec_sSinifKodu1"
         Me.sec_sSinifKodu1.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.sec_sSinifKodu1.Properties.DisplayMember = "sAciklama"
-        Me.sec_sSinifKodu1.Properties.NullText = "[Sýnýf]"
+        Me.sec_sSinifKodu1.Properties.NullText = "[Sï¿½nï¿½f]"
         Me.sec_sSinifKodu1.Properties.ValueMember = "sSinifKodu"
         Me.sec_sSinifKodu1.Properties.View = Me.SearchLookUpEdit1View
         Me.sec_sSinifKodu1.Size = New System.Drawing.Size(256, 26)
@@ -1244,7 +1250,7 @@ Public Class frm_firma_kart
         Me.BarButtonItem4.Name = "BarButtonItem4"
         ToolTipTitleItem24.Text = "Ara"
         ToolTipItem33.LeftIndent = 6
-        ToolTipItem33.Text = "Farklý bir hesap kartini ekrana getirmek icin kullanilir."
+        ToolTipItem33.Text = "Farklï¿½ bir hesap kartini ekrana getirmek icin kullanilir."
         SuperToolTip33.Items.Add(ToolTipTitleItem24)
         SuperToolTip33.Items.Add(ToolTipItem33)
         Me.BarButtonItem4.SuperTip = SuperToolTip33
@@ -1268,8 +1274,8 @@ Public Class frm_firma_kart
         Me.BarButtonItem3.Name = "BarButtonItem3"
         ToolTipTitleItem23.Text = "Sil"
         ToolTipItem21.LeftIndent = 6
-        ToolTipItem21.Text = "Hesap Kartýný Silmek icin Kullanilir. " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Hesap kartýný silebilmek icin Hareket gör" &
-    "memiþ olmasý gerekmektedir. Hareket gören Hesap kartlarý silinemez, pasif yapýla" &
+        ToolTipItem21.Text = "Hesap Kartï¿½nï¿½ Silmek icin Kullanilir. " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Hesap kartï¿½nï¿½ silebilmek icin Hareket gï¿½r" &
+    "memiï¿½ olmasï¿½ gerekmektedir. Hareket gï¿½ren Hesap kartlarï¿½ silinemez, pasif yapï¿½la" &
     "bilir."
         SuperToolTip21.Items.Add(ToolTipTitleItem23)
         SuperToolTip21.Items.Add(ToolTipItem21)
@@ -1285,8 +1291,8 @@ Public Class frm_firma_kart
         Me.BarButtonItem5.Name = "BarButtonItem5"
         ToolTipTitleItem40.Text = "Ekstre"
         ToolTipItem34.LeftIndent = 6
-        ToolTipItem34.Text = "Hesap kartina ait hesap hareketleri dökümü icin kullanilir. Dövizli veya Yerli pa" &
-    "ra birimi cinsinden alinabilir. Fis Hareketleri Özet, Diger Hesap hareketleri De" &
+        ToolTipItem34.Text = "Hesap kartina ait hesap hareketleri dï¿½kï¿½mï¿½ icin kullanilir. Dï¿½vizli veya Yerli pa" &
+    "ra birimi cinsinden alinabilir. Fis Hareketleri ï¿½zet, Diger Hesap hareketleri De" &
     "tayli olarak listelenir."
         SuperToolTip34.Items.Add(ToolTipTitleItem40)
         SuperToolTip34.Items.Add(ToolTipItem34)
@@ -1302,8 +1308,8 @@ Public Class frm_firma_kart
         Me.BarButtonItem7.Name = "BarButtonItem7"
         ToolTipTitleItem42.Text = "Stoklu Ekstre"
         ToolTipItem36.LeftIndent = 6
-        ToolTipItem36.Text = "Hesap kartýna ait hareket dökümü alýnýr." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Tüm hesap hareketleri detaylý olarak li" &
-    "stelenir." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Fis Hareketlerinde Stok detaylarý izlenebilmektedir."
+        ToolTipItem36.Text = "Hesap kartï¿½na ait hareket dï¿½kï¿½mï¿½ alï¿½nï¿½r." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Tï¿½m hesap hareketleri detaylï¿½ olarak li" &
+    "stelenir." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Fis Hareketlerinde Stok detaylarï¿½ izlenebilmektedir."
         SuperToolTip36.Items.Add(ToolTipTitleItem42)
         SuperToolTip36.Items.Add(ToolTipItem36)
         Me.BarButtonItem7.SuperTip = SuperToolTip36
@@ -1318,8 +1324,8 @@ Public Class frm_firma_kart
         Me.BarButtonItem6.Name = "BarButtonItem6"
         ToolTipTitleItem41.Text = "Bakiye"
         ToolTipItem35.LeftIndent = 6
-        ToolTipItem35.Text = "Hesap Kartýnýn Bakiye Analizi Ekrana gelir" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Farklý Hareket Tiplerine Göre Bakiye " &
-    "Toplamlarý alýnabilir."
+        ToolTipItem35.Text = "Hesap Kartï¿½nï¿½n Bakiye Analizi Ekrana gelir" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Farklï¿½ Hareket Tiplerine Gï¿½re Bakiye " &
+    "Toplamlarï¿½ alï¿½nabilir."
         SuperToolTip35.Items.Add(ToolTipTitleItem41)
         SuperToolTip35.Items.Add(ToolTipItem35)
         Me.BarButtonItem6.SuperTip = SuperToolTip35
@@ -1340,13 +1346,13 @@ Public Class frm_firma_kart
         '
         'BarButtonItem11
         '
-        Me.BarButtonItem11.Caption = "Sýnýflar,F9"
+        Me.BarButtonItem11.Caption = "Sï¿½nï¿½flar,F9"
         Me.BarButtonItem11.Id = 10
         Me.BarButtonItem11.ItemAppearance.Normal.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
         Me.BarButtonItem11.ItemAppearance.Normal.Options.UseFont = True
         Me.BarButtonItem11.ItemShortcut = New DevExpress.XtraBars.BarShortcut(System.Windows.Forms.Keys.F9)
         Me.BarButtonItem11.Name = "BarButtonItem11"
-        ToolTipTitleItem48.Text = "Sýnýflar"
+        ToolTipTitleItem48.Text = "Sï¿½nï¿½flar"
         ToolTipItem40.LeftIndent = 6
         SuperToolTip40.Items.Add(ToolTipTitleItem48)
         SuperToolTip40.Items.Add(ToolTipItem40)
@@ -1363,7 +1369,7 @@ Public Class frm_firma_kart
         ToolTipTitleItem44.Text = "Son Kod"
         ToolTipItem38.LeftIndent = 6
         ToolTipTitleItem45.LeftIndent = 6
-        ToolTipTitleItem45.Text = "Kayýt Numaralarýnda nerede kalýndýðý listelenir."
+        ToolTipTitleItem45.Text = "Kayï¿½t Numaralarï¿½nda nerede kalï¿½ndï¿½ï¿½ï¿½ listelenir."
         SuperToolTip38.Items.Add(ToolTipTitleItem44)
         SuperToolTip38.Items.Add(ToolTipItem38)
         SuperToolTip38.Items.Add(ToolTipSeparatorItem2)
@@ -1381,7 +1387,7 @@ Public Class frm_firma_kart
         ToolTipTitleItem46.Text = "Hareket Gir"
         ToolTipItem39.LeftIndent = 6
         ToolTipTitleItem47.LeftIndent = 6
-        ToolTipTitleItem47.Text = "Hýzlý Hesap Hareketleri Isle"
+        ToolTipTitleItem47.Text = "Hï¿½zlï¿½ Hesap Hareketleri Isle"
         SuperToolTip39.Items.Add(ToolTipTitleItem46)
         SuperToolTip39.Items.Add(ToolTipItem39)
         SuperToolTip39.Items.Add(ToolTipTitleItem47)
@@ -1389,7 +1395,7 @@ Public Class frm_firma_kart
         '
         'BarButtonItem12
         '
-        Me.BarButtonItem12.Caption = "Çýkýþ"
+        Me.BarButtonItem12.Caption = "ï¿½ï¿½kï¿½ï¿½"
         Me.BarButtonItem12.Id = 11
         Me.BarButtonItem12.ItemAppearance.Normal.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
         Me.BarButtonItem12.ItemAppearance.Normal.Options.UseFont = True
@@ -1407,7 +1413,7 @@ Public Class frm_firma_kart
         '
         'BarButtonItem14
         '
-        Me.BarButtonItem14.Caption = "Sipariþler"
+        Me.BarButtonItem14.Caption = "Sipariï¿½ler"
         Me.BarButtonItem14.Id = 13
         Me.BarButtonItem14.ItemAppearance.Normal.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
         Me.BarButtonItem14.ItemAppearance.Normal.Options.UseFont = True
@@ -1444,7 +1450,7 @@ Public Class frm_firma_kart
         '
         'BarButtonItem2
         '
-        Me.BarButtonItem2.Caption = "Düzelt,F4"
+        Me.BarButtonItem2.Caption = "Dï¿½zelt,F4"
         Me.BarButtonItem2.Id = 1
         Me.BarButtonItem2.ItemAppearance.Normal.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
         Me.BarButtonItem2.ItemAppearance.Normal.Options.UseFont = True
@@ -1467,7 +1473,7 @@ Public Class frm_firma_kart
         Me.sec_sSinifKodu2.Name = "sec_sSinifKodu2"
         Me.sec_sSinifKodu2.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.sec_sSinifKodu2.Properties.DisplayMember = "sAciklama"
-        Me.sec_sSinifKodu2.Properties.NullText = "[Sýnýf]"
+        Me.sec_sSinifKodu2.Properties.NullText = "[Sï¿½nï¿½f]"
         Me.sec_sSinifKodu2.Properties.ValueMember = "sSinifKodu"
         Me.sec_sSinifKodu2.Properties.View = Me.GridView13
         Me.sec_sSinifKodu2.Size = New System.Drawing.Size(256, 26)
@@ -1490,7 +1496,7 @@ Public Class frm_firma_kart
         Me.sec_sSinifKodu3.Name = "sec_sSinifKodu3"
         Me.sec_sSinifKodu3.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.sec_sSinifKodu3.Properties.DisplayMember = "sAciklama"
-        Me.sec_sSinifKodu3.Properties.NullText = "[Sýnýf]"
+        Me.sec_sSinifKodu3.Properties.NullText = "[Sï¿½nï¿½f]"
         Me.sec_sSinifKodu3.Properties.ValueMember = "sSinifKodu"
         Me.sec_sSinifKodu3.Properties.View = Me.GridView9
         Me.sec_sSinifKodu3.Size = New System.Drawing.Size(256, 26)
@@ -1513,7 +1519,7 @@ Public Class frm_firma_kart
         Me.sec_sSinifKodu4.Name = "sec_sSinifKodu4"
         Me.sec_sSinifKodu4.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.sec_sSinifKodu4.Properties.DisplayMember = "sAciklama"
-        Me.sec_sSinifKodu4.Properties.NullText = "[Sýnýf]"
+        Me.sec_sSinifKodu4.Properties.NullText = "[Sï¿½nï¿½f]"
         Me.sec_sSinifKodu4.Properties.ValueMember = "sSinifKodu"
         Me.sec_sSinifKodu4.Properties.View = Me.GridView10
         Me.sec_sSinifKodu4.Size = New System.Drawing.Size(256, 26)
@@ -1787,7 +1793,7 @@ Public Class frm_firma_kart
         Me.SimpleButton2.Name = "SimpleButton2"
         Me.SimpleButton2.Size = New System.Drawing.Size(120, 34)
         Me.SimpleButton2.TabIndex = 58
-        Me.SimpleButton2.Text = "&Vazgeç"
+        Me.SimpleButton2.Text = "&Vazgeï¿½"
         '
         'SimpleButton1
         '
@@ -1828,7 +1834,7 @@ Public Class frm_firma_kart
         'kisayol_ana
         '
         Me.kisayol_ana.ImageScalingSize = New System.Drawing.Size(24, 24)
-        Me.kisayol_ana.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EkleToolStripMenuItem, Me.SilToolStripMenuItem, Me.AraToolStripMenuItem, Me.ToolStripSeparator2, Me.FirmaHareketleriToolStripMenuItem, Me.StokluEkstreToolStripMenuItem, Me.FirmaBakiyeleriToolStripMenuItem, Me.KarlýlýkAkýþTablosuToolStripMenuItem, Me.ToolStripSeparator1, Me.HareketGirToolStripMenuItem, Me.AçýklamaGirToolStripMenuItem, Me.SonKodToolStripMenuItem, Me.HesapKodunuDeðiþtirToolStripMenuItem})
+        Me.kisayol_ana.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EkleToolStripMenuItem, Me.SilToolStripMenuItem, Me.AraToolStripMenuItem, Me.ToolStripSeparator2, Me.FirmaHareketleriToolStripMenuItem, Me.StokluEkstreToolStripMenuItem, Me.FirmaBakiyeleriToolStripMenuItem, Me.Karlï¿½lï¿½kAkï¿½ï¿½TablosuToolStripMenuItem, Me.ToolStripSeparator1, Me.HareketGirToolStripMenuItem, Me.Aï¿½ï¿½klamaGirToolStripMenuItem, Me.SonKodToolStripMenuItem, Me.HesapKodunuDeï¿½iï¿½tirToolStripMenuItem})
         Me.kisayol_ana.Name = "kisayol_ana"
         Me.kisayol_ana.Size = New System.Drawing.Size(299, 368)
         '
@@ -1879,12 +1885,12 @@ Public Class frm_firma_kart
         Me.FirmaBakiyeleriToolStripMenuItem.Size = New System.Drawing.Size(298, 32)
         Me.FirmaBakiyeleriToolStripMenuItem.Text = "Bakiye Analizi"
         '
-        'KarlýlýkAkýþTablosuToolStripMenuItem
+        'Karlï¿½lï¿½kAkï¿½ï¿½TablosuToolStripMenuItem
         '
-        Me.KarlýlýkAkýþTablosuToolStripMenuItem.Name = "KarlýlýkAkýþTablosuToolStripMenuItem"
-        Me.KarlýlýkAkýþTablosuToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Z), System.Windows.Forms.Keys)
-        Me.KarlýlýkAkýþTablosuToolStripMenuItem.Size = New System.Drawing.Size(298, 32)
-        Me.KarlýlýkAkýþTablosuToolStripMenuItem.Text = "Karlýlýk Akýþ Tablosu"
+        Me.Karlï¿½lï¿½kAkï¿½ï¿½TablosuToolStripMenuItem.Name = "Karlï¿½lï¿½kAkï¿½ï¿½TablosuToolStripMenuItem"
+        Me.Karlï¿½lï¿½kAkï¿½ï¿½TablosuToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Z), System.Windows.Forms.Keys)
+        Me.Karlï¿½lï¿½kAkï¿½ï¿½TablosuToolStripMenuItem.Size = New System.Drawing.Size(298, 32)
+        Me.Karlï¿½lï¿½kAkï¿½ï¿½TablosuToolStripMenuItem.Text = "Karlï¿½lï¿½k Akï¿½ï¿½ Tablosu"
         '
         'ToolStripSeparator1
         '
@@ -1898,12 +1904,12 @@ Public Class frm_firma_kart
         Me.HareketGirToolStripMenuItem.Size = New System.Drawing.Size(298, 32)
         Me.HareketGirToolStripMenuItem.Text = "Hareket Gir"
         '
-        'AçýklamaGirToolStripMenuItem
+        'Aï¿½ï¿½klamaGirToolStripMenuItem
         '
-        Me.AçýklamaGirToolStripMenuItem.Name = "AçýklamaGirToolStripMenuItem"
-        Me.AçýklamaGirToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F9
-        Me.AçýklamaGirToolStripMenuItem.Size = New System.Drawing.Size(298, 32)
-        Me.AçýklamaGirToolStripMenuItem.Text = "Açýklama Gir"
+        Me.Aï¿½ï¿½klamaGirToolStripMenuItem.Name = "Aï¿½ï¿½klamaGirToolStripMenuItem"
+        Me.Aï¿½ï¿½klamaGirToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F9
+        Me.Aï¿½ï¿½klamaGirToolStripMenuItem.Size = New System.Drawing.Size(298, 32)
+        Me.Aï¿½ï¿½klamaGirToolStripMenuItem.Text = "Aï¿½ï¿½klama Gir"
         '
         'SonKodToolStripMenuItem
         '
@@ -1912,11 +1918,11 @@ Public Class frm_firma_kart
         Me.SonKodToolStripMenuItem.Size = New System.Drawing.Size(298, 32)
         Me.SonKodToolStripMenuItem.Text = "Son Kod"
         '
-        'HesapKodunuDeðiþtirToolStripMenuItem
+        'HesapKodunuDeï¿½iï¿½tirToolStripMenuItem
         '
-        Me.HesapKodunuDeðiþtirToolStripMenuItem.Name = "HesapKodunuDeðiþtirToolStripMenuItem"
-        Me.HesapKodunuDeðiþtirToolStripMenuItem.Size = New System.Drawing.Size(298, 32)
-        Me.HesapKodunuDeðiþtirToolStripMenuItem.Text = "Hesap Kodunu Deðiþtir"
+        Me.HesapKodunuDeï¿½iï¿½tirToolStripMenuItem.Name = "HesapKodunuDeï¿½iï¿½tirToolStripMenuItem"
+        Me.HesapKodunuDeï¿½iï¿½tirToolStripMenuItem.Size = New System.Drawing.Size(298, 32)
+        Me.HesapKodunuDeï¿½iï¿½tirToolStripMenuItem.Text = "Hesap Kodunu Deï¿½iï¿½tir"
         '
         'XtraTabPage1
         '
@@ -1925,7 +1931,7 @@ Public Class frm_firma_kart
         Me.XtraTabPage1.Name = "XtraTabPage1"
         Me.XtraTabPage1.Size = New System.Drawing.Size(1307, 376)
         Me.XtraTabPage1.Text = "Genel"
-        Me.XtraTabPage1.Tooltip = "Genel Bilgiler Bu Bölümden Takip Edilir"
+        Me.XtraTabPage1.Tooltip = "Genel Bilgiler Bu Bï¿½lï¿½mden Takip Edilir"
         '
         'GroupControl1
         '
@@ -2031,7 +2037,7 @@ Public Class frm_firma_kart
         Me.sec_bSipariseKapali.Properties.Appearance.Options.UseBackColor = True
         Me.sec_bSipariseKapali.Properties.Appearance.Options.UseFont = True
         Me.sec_bSipariseKapali.Properties.Appearance.Options.UseForeColor = True
-        Me.sec_bSipariseKapali.Properties.Caption = "Sipariþe Kapalý"
+        Me.sec_bSipariseKapali.Properties.Caption = "Sipariï¿½e Kapalï¿½"
         Me.sec_bSipariseKapali.Size = New System.Drawing.Size(184, 22)
         Me.sec_bSipariseKapali.TabIndex = 128
         '
@@ -2041,7 +2047,7 @@ Public Class frm_firma_kart
         Me.LabelControl44.Name = "LabelControl44"
         Me.LabelControl44.Size = New System.Drawing.Size(106, 19)
         Me.LabelControl44.TabIndex = 127
-        Me.LabelControl44.Text = "Cari Kart Türü:"
+        Me.LabelControl44.Text = "Cari Kart Tï¿½rï¿½:"
         '
         'ComboBoxEdit1
         '
@@ -2051,7 +2057,7 @@ Public Class frm_firma_kart
         Me.ComboBoxEdit1.MenuManager = Me.BarManager1
         Me.ComboBoxEdit1.Name = "ComboBoxEdit1"
         Me.ComboBoxEdit1.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
-        Me.ComboBoxEdit1.Properties.Items.AddRange(New Object() {"Cari", "Banka", "Kasa", "Gider", "K.Kartý"})
+        Me.ComboBoxEdit1.Properties.Items.AddRange(New Object() {"Cari", "Banka", "Kasa", "Gider", "K.Kartï¿½"})
         Me.ComboBoxEdit1.Size = New System.Drawing.Size(160, 26)
         Me.ComboBoxEdit1.TabIndex = 126
         '
@@ -2267,7 +2273,7 @@ Public Class frm_firma_kart
         Me.txt_sDovizCinsi.Size = New System.Drawing.Size(165, 26)
         ToolTipTitleItem38.Text = "Satici"
         ToolTipItem32.LeftIndent = 6
-        ToolTipItem32.Text = "Stok Fiþlerinde ve Raporlarda geçerli olmasý istenen Satici Personel buradan seçi" &
+        ToolTipItem32.Text = "Stok Fiï¿½lerinde ve Raporlarda geï¿½erli olmasï¿½ istenen Satici Personel buradan seï¿½i" &
     "lir."
         SuperToolTip32.Items.Add(ToolTipTitleItem38)
         SuperToolTip32.Items.Add(ToolTipItem32)
@@ -2285,7 +2291,7 @@ Public Class frm_firma_kart
         Me.sec_bTahsilatYapilamaz.Properties.Appearance.Options.UseBackColor = True
         Me.sec_bTahsilatYapilamaz.Properties.Appearance.Options.UseFont = True
         Me.sec_bTahsilatYapilamaz.Properties.Appearance.Options.UseForeColor = True
-        Me.sec_bTahsilatYapilamaz.Properties.Caption = "TahsilatYapýlmasýn"
+        Me.sec_bTahsilatYapilamaz.Properties.Caption = "TahsilatYapï¿½lmasï¿½n"
         Me.sec_bTahsilatYapilamaz.Size = New System.Drawing.Size(184, 22)
         Me.sec_bTahsilatYapilamaz.TabIndex = 24
         '
@@ -2300,7 +2306,7 @@ Public Class frm_firma_kart
         Me.sec_bSatisYapilamaz.Properties.Appearance.Options.UseBackColor = True
         Me.sec_bSatisYapilamaz.Properties.Appearance.Options.UseFont = True
         Me.sec_bSatisYapilamaz.Properties.Appearance.Options.UseForeColor = True
-        Me.sec_bSatisYapilamaz.Properties.Caption = "SatýþYapýlmasýn"
+        Me.sec_bSatisYapilamaz.Properties.Caption = "Satï¿½ï¿½Yapï¿½lmasï¿½n"
         Me.sec_bSatisYapilamaz.Size = New System.Drawing.Size(184, 22)
         Me.sec_bSatisYapilamaz.TabIndex = 23
         '
@@ -2374,7 +2380,7 @@ Public Class frm_firma_kart
         Me.txt_sSaticiRumuzu.Size = New System.Drawing.Size(192, 26)
         ToolTipTitleItem27.Text = "Satici"
         ToolTipItem23.LeftIndent = 6
-        ToolTipItem23.Text = "Stok Fiþlerinde ve Raporlarda geçerli olmasý istenen Satici Personel buradan seçi" &
+        ToolTipItem23.Text = "Stok Fiï¿½lerinde ve Raporlarda geï¿½erli olmasï¿½ istenen Satici Personel buradan seï¿½i" &
     "lir."
         SuperToolTip23.Items.Add(ToolTipTitleItem27)
         SuperToolTip23.Items.Add(ToolTipItem23)
@@ -2469,10 +2475,10 @@ Public Class frm_firma_kart
         Me.txt_sKodu.Properties.AppearanceFocused.Options.UseForeColor = True
         Me.txt_sKodu.Properties.MaxLength = 20
         Me.txt_sKodu.Size = New System.Drawing.Size(215, 26)
-        ToolTipTitleItem15.Text = "Hesap Kodlarý Açýlýmý"
+        ToolTipTitleItem15.Text = "Hesap Kodlarï¿½ Aï¿½ï¿½lï¿½mï¿½"
         ToolTipItem13.LeftIndent = 6
         ToolTipTitleItem39.LeftIndent = 6
-        ToolTipTitleItem39.Text = "Muhasebe Yönetimi"
+        ToolTipTitleItem39.Text = "Muhasebe Yï¿½netimi"
         SuperToolTip13.Items.Add(ToolTipTitleItem15)
         SuperToolTip13.Items.Add(ToolTipItem13)
         SuperToolTip13.Items.Add(ToolTipSeparatorItem5)
@@ -2506,9 +2512,9 @@ Public Class frm_firma_kart
         Me.txt_sFiyatTipi.Properties.NullText = "[FiyatTipi]"
         Me.txt_sFiyatTipi.Properties.ValueMember = "sFiyatTipi"
         Me.txt_sFiyatTipi.Size = New System.Drawing.Size(192, 26)
-        ToolTipTitleItem16.Text = "Hesap Kodlarý Açýlýmý"
+        ToolTipTitleItem16.Text = "Hesap Kodlarï¿½ Aï¿½ï¿½lï¿½mï¿½"
         ToolTipItem14.LeftIndent = 6
-        ToolTipItem14.Text = "Stok Fiþlerinde geçerli olmasý istenen Fiyat Tipi burdan belirlenir."
+        ToolTipItem14.Text = "Stok Fiï¿½lerinde geï¿½erli olmasï¿½ istenen Fiyat Tipi burdan belirlenir."
         ToolTipTitleItem28.LeftIndent = 6
         ToolTipTitleItem28.Text = "Fiyat Tipi"
         SuperToolTip14.Items.Add(ToolTipTitleItem16)
@@ -2576,9 +2582,9 @@ Public Class frm_firma_kart
         Me.txt_lKrediLimiti.Size = New System.Drawing.Size(192, 26)
         ToolTipTitleItem18.Text = "Kredi Limiti"
         ToolTipItem16.LeftIndent = 6
-        ToolTipItem16.Text = "Hesaplarda Kredi Limiti kontrolü istendiðinde limit tutarý buraya girilir. Kredi " &
-    "Limiti aþýldýðýnda veya yaklaþýldýðýnda sistem otomatik uyarmakta veya istendiði" &
-    "nde iþlem engellenmektedir."
+        ToolTipItem16.Text = "Hesaplarda Kredi Limiti kontrolï¿½ istendiï¿½inde limit tutarï¿½ buraya girilir. Kredi " &
+    "Limiti aï¿½ï¿½ldï¿½ï¿½ï¿½nda veya yaklaï¿½ï¿½ldï¿½ï¿½ï¿½nda sistem otomatik uyarmakta veya istendiï¿½i" &
+    "nde iï¿½lem engellenmektedir."
         SuperToolTip16.Items.Add(ToolTipTitleItem18)
         SuperToolTip16.Items.Add(ToolTipItem16)
         Me.txt_lKrediLimiti.SuperTip = SuperToolTip16
@@ -2617,7 +2623,7 @@ Public Class frm_firma_kart
         Me.LabelControl16.Name = "LabelControl16"
         Me.LabelControl16.Size = New System.Drawing.Size(67, 19)
         Me.LabelControl16.TabIndex = 77
-        Me.LabelControl16.Text = "Özel Not:"
+        Me.LabelControl16.Text = "ï¿½zel Not:"
         '
         'txt_nVadeGun
         '
@@ -2635,8 +2641,8 @@ Public Class frm_firma_kart
         Me.txt_nVadeGun.Size = New System.Drawing.Size(103, 26)
         ToolTipTitleItem19.Text = "Vade"
         ToolTipItem17.LeftIndent = 6
-        ToolTipItem17.Text = "Otomatik Vade Tarihi Atýlmasý istendiðinde buraya Vade Gün sayýsý girilir. Sistem" &
-    " buraya girilmis veri doðrultusunda Stok fislerinde Vade Tarihini otomatik girme" &
+        ToolTipItem17.Text = "Otomatik Vade Tarihi Atï¿½lmasï¿½ istendiï¿½inde buraya Vade Gï¿½n sayï¿½sï¿½ girilir. Sistem" &
+    " buraya girilmis veri doï¿½rultusunda Stok fislerinde Vade Tarihini otomatik girme" &
     "ktedir."
         SuperToolTip17.Items.Add(ToolTipTitleItem19)
         SuperToolTip17.Items.Add(ToolTipItem17)
@@ -2651,7 +2657,7 @@ Public Class frm_firma_kart
         Me.LabelControl15.Name = "LabelControl15"
         Me.LabelControl15.Size = New System.Drawing.Size(87, 19)
         Me.LabelControl15.TabIndex = 76
-        Me.LabelControl15.Text = "Vade (Gün):"
+        Me.LabelControl15.Text = "Vade (Gï¿½n):"
         '
         'txt_nOzelIskontosu
         '
@@ -2682,7 +2688,7 @@ Public Class frm_firma_kart
         Me.lbl_Iskonto.Name = "lbl_Iskonto"
         Me.lbl_Iskonto.Size = New System.Drawing.Size(59, 19)
         Me.lbl_Iskonto.TabIndex = 75
-        Me.lbl_Iskonto.Text = "Ýskonto:"
+        Me.lbl_Iskonto.Text = "ï¿½skonto:"
         '
         'txt_sVergiNo
         '
@@ -2741,7 +2747,7 @@ Public Class frm_firma_kart
         Me.btn_MuhasebeAc.Name = "btn_MuhasebeAc"
         Me.btn_MuhasebeAc.Size = New System.Drawing.Size(166, 29)
         Me.btn_MuhasebeAc.TabIndex = 59
-        Me.btn_MuhasebeAc.Text = "Muhasebede Aç"
+        Me.btn_MuhasebeAc.Text = "Muhasebede Aï¿½"
         '
         'LabelControl6
         '
@@ -2776,7 +2782,7 @@ Public Class frm_firma_kart
         Me.LabelControl5.Name = "LabelControl5"
         Me.LabelControl5.Size = New System.Drawing.Size(37, 19)
         Me.LabelControl5.TabIndex = 56
-        Me.LabelControl5.Text = "Ülke:"
+        Me.LabelControl5.Text = "ï¿½lke:"
         '
         'LabelControl25
         '
@@ -2786,7 +2792,7 @@ Public Class frm_firma_kart
         Me.LabelControl25.Name = "LabelControl25"
         Me.LabelControl25.Size = New System.Drawing.Size(16, 19)
         Me.LabelControl25.TabIndex = 54
-        Me.LabelControl25.Text = "Ýl:"
+        Me.LabelControl25.Text = "ï¿½l:"
         '
         'txt_sPostaKodu
         '
@@ -2906,8 +2912,8 @@ Public Class frm_firma_kart
         Me.txt_sHitap1.Size = New System.Drawing.Size(126, 26)
         ToolTipTitleItem21.Text = "Hitap"
         ToolTipItem19.LeftIndent = 6
-        ToolTipItem19.Text = "Yazýþmalarda Kullanýlacak Hitap Sekli Burdan belirlenir." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Sayýn Ahmet Bey" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Bay..." &
-    "." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Bayan..." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Müdür..." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & ".........."
+        ToolTipItem19.Text = "Yazï¿½ï¿½malarda Kullanï¿½lacak Hitap Sekli Burdan belirlenir." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Sayï¿½n Ahmet Bey" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Bay..." &
+    "." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Bayan..." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Mï¿½dï¿½r..." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & ".........."
         SuperToolTip19.Items.Add(ToolTipTitleItem21)
         SuperToolTip19.Items.Add(ToolTipItem19)
         Me.txt_sHitap1.SuperTip = SuperToolTip19
@@ -2936,7 +2942,7 @@ Public Class frm_firma_kart
         Me.LabelControl3.Name = "LabelControl3"
         Me.LabelControl3.Size = New System.Drawing.Size(30, 19)
         Me.LabelControl3.TabIndex = 44
-        Me.LabelControl3.Text = "Adý:"
+        Me.LabelControl3.Text = "Adï¿½:"
         '
         'LabelControl2
         '
@@ -3029,8 +3035,8 @@ Public Class frm_firma_kart
         Me.XtraTabPage2.Image = CType(resources.GetObject("XtraTabPage2.Image"), System.Drawing.Image)
         Me.XtraTabPage2.Name = "XtraTabPage2"
         Me.XtraTabPage2.Size = New System.Drawing.Size(1307, 376)
-        Me.XtraTabPage2.Text = "Sýnýflandýrma"
-        Me.XtraTabPage2.Tooltip = "Hesaplarý Sýnýflandýrma Ýþlemi Buradan Yapýlýr"
+        Me.XtraTabPage2.Text = "Sï¿½nï¿½flandï¿½rma"
+        Me.XtraTabPage2.Tooltip = "Hesaplarï¿½ Sï¿½nï¿½flandï¿½rma ï¿½ï¿½lemi Buradan Yapï¿½lï¿½r"
         '
         'GridControl1
         '
@@ -3085,7 +3091,7 @@ Public Class frm_firma_kart
         Me.GridView1.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.RowFocus
         Me.GridView1.GridControl = Me.GridControl1
         Me.GridView1.GroupFormat = "{0}: {1} {2}"
-        Me.GridView1.GroupPanelText = "Gruplamak Ýstediðiniz Kolonu Buraya Sürükleyiniz..."
+        Me.GridView1.GroupPanelText = "Gruplamak ï¿½stediï¿½iniz Kolonu Buraya Sï¿½rï¿½kleyiniz..."
         Me.GridView1.IndicatorWidth = 12
         Me.GridView1.Name = "GridView1"
         Me.GridView1.OptionsBehavior.EditorShowMode = DevExpress.Utils.EditorShowMode.Click
@@ -3098,7 +3104,7 @@ Public Class frm_firma_kart
         '
         'colnMusteriID
         '
-        Me.colnMusteriID.Caption = "Müþteri ID"
+        Me.colnMusteriID.Caption = "Mï¿½ï¿½teri ID"
         Me.colnMusteriID.FieldName = "nMusteriID"
         Me.colnMusteriID.Name = "colnMusteriID"
         Me.colnMusteriID.OptionsColumn.AllowEdit = False
@@ -3108,7 +3114,7 @@ Public Class frm_firma_kart
         '
         Me.colsSinifTipi.AppearanceCell.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
         Me.colsSinifTipi.AppearanceCell.Options.UseFont = True
-        Me.colsSinifTipi.Caption = "Sýnýf Tipi"
+        Me.colsSinifTipi.Caption = "Sï¿½nï¿½f Tipi"
         Me.colsSinifTipi.FieldName = "sSinifTipi"
         Me.colsSinifTipi.Name = "colsSinifTipi"
         Me.colsSinifTipi.OptionsColumn.AllowEdit = False
@@ -3118,7 +3124,7 @@ Public Class frm_firma_kart
         '
         'colsSinifKodu
         '
-        Me.colsSinifKodu.Caption = "Sýnýfý"
+        Me.colsSinifKodu.Caption = "Sï¿½nï¿½fï¿½"
         Me.colsSinifKodu.ColumnEdit = Me.sec_Sinif
         Me.colsSinifKodu.FieldName = "sSinifKodu"
         Me.colsSinifKodu.Name = "colsSinifKodu"
@@ -3148,7 +3154,7 @@ Public Class frm_firma_kart
         Me.colsAciklama.AppearanceCell.ForeColor = System.Drawing.Color.Red
         Me.colsAciklama.AppearanceCell.Options.UseFont = True
         Me.colsAciklama.AppearanceCell.Options.UseForeColor = True
-        Me.colsAciklama.Caption = "Açýklama"
+        Me.colsAciklama.Caption = "Aï¿½ï¿½klama"
         Me.colsAciklama.FieldName = "sAciklama"
         Me.colsAciklama.Name = "colsAciklama"
         Me.colsAciklama.OptionsColumn.AllowEdit = False
@@ -3158,7 +3164,7 @@ Public Class frm_firma_kart
         '
         'colbSatisYapilamaz
         '
-        Me.colbSatisYapilamaz.Caption = "Satýþ Yapýlamaz"
+        Me.colbSatisYapilamaz.Caption = "Satï¿½ï¿½ Yapï¿½lamaz"
         Me.colbSatisYapilamaz.FieldName = "bSatisYapilamaz"
         Me.colbSatisYapilamaz.Name = "colbSatisYapilamaz"
         Me.colbSatisYapilamaz.OptionsColumn.AllowEdit = False
@@ -3170,7 +3176,7 @@ Public Class frm_firma_kart
         Me.sec_sSinifKodu.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.sec_sSinifKodu.DisplayMember = "sSinifKodu"
         Me.sec_sSinifKodu.Name = "sec_sSinifKodu"
-        Me.sec_sSinifKodu.NullText = "[Sýnýflar]"
+        Me.sec_sSinifKodu.NullText = "[Sï¿½nï¿½flar]"
         Me.sec_sSinifKodu.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.Standard
         Me.sec_sSinifKodu.ValueMember = "sSinifKodu"
         '
@@ -3204,7 +3210,7 @@ Public Class frm_firma_kart
         Me.XtraTabPage3.Name = "XtraTabPage3"
         Me.XtraTabPage3.Size = New System.Drawing.Size(1307, 376)
         Me.XtraTabPage3.Text = "Yetkililer"
-        Me.XtraTabPage3.Tooltip = "Hesap Kartý Yetkilileri Buradan Tanýmlanýr"
+        Me.XtraTabPage3.Tooltip = "Hesap Kartï¿½ Yetkilileri Buradan Tanï¿½mlanï¿½r"
         '
         'pnl_yetkililer
         '
@@ -3243,7 +3249,7 @@ Public Class frm_firma_kart
         '
         Me.MenuItem2.Index = 1
         Me.MenuItem2.Shortcut = System.Windows.Forms.Shortcut.F4
-        Me.MenuItem2.Text = "Düzelt"
+        Me.MenuItem2.Text = "Dï¿½zelt"
         '
         'MenuItem3
         '
@@ -3290,7 +3296,7 @@ Public Class frm_firma_kart
         Me.GridView2.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.RowFocus
         Me.GridView2.GridControl = Me.GridControl2
         Me.GridView2.GroupFormat = "{0}: {1} {2}"
-        Me.GridView2.GroupPanelText = "Gruplamak Ýstediðiniz Kolonu Buraya Sürükleyiniz..."
+        Me.GridView2.GroupPanelText = "Gruplamak ï¿½stediï¿½iniz Kolonu Buraya Sï¿½rï¿½kleyiniz..."
         Me.GridView2.IndicatorWidth = 12
         Me.GridView2.Name = "GridView2"
         Me.GridView2.OptionsBehavior.EditorShowMode = DevExpress.Utils.EditorShowMode.Click
@@ -3319,11 +3325,11 @@ Public Class frm_firma_kart
         Me.colsUnvan.AppearanceCell.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
         Me.colsUnvan.AppearanceCell.Options.UseBackColor = True
         Me.colsUnvan.AppearanceCell.Options.UseFont = True
-        Me.colsUnvan.Caption = "Ünvan"
+        Me.colsUnvan.Caption = "ï¿½nvan"
         Me.colsUnvan.ColumnEdit = Me.sec_sUnvan
         Me.colsUnvan.FieldName = "sUnvan"
         Me.colsUnvan.Name = "colsUnvan"
-        Me.colsUnvan.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Count, "sUnvan", "{0} Kayýt")})
+        Me.colsUnvan.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Count, "sUnvan", "{0} Kayï¿½t")})
         Me.colsUnvan.Visible = True
         Me.colsUnvan.VisibleIndex = 0
         '
@@ -3356,7 +3362,7 @@ Public Class frm_firma_kart
         '
         'colsAdiSoyadi
         '
-        Me.colsAdiSoyadi.Caption = "Adý Soyadý"
+        Me.colsAdiSoyadi.Caption = "Adï¿½ Soyadï¿½"
         Me.colsAdiSoyadi.FieldName = "sAdiSoyadi"
         Me.colsAdiSoyadi.Name = "colsAdiSoyadi"
         Me.colsAdiSoyadi.Visible = True
@@ -3380,7 +3386,7 @@ Public Class frm_firma_kart
         Me.btn_yetkili_yazdir.Name = "btn_yetkili_yazdir"
         Me.btn_yetkili_yazdir.Size = New System.Drawing.Size(120, 33)
         Me.btn_yetkili_yazdir.TabIndex = 2
-        Me.btn_yetkili_yazdir.Text = "&Yazdýr"
+        Me.btn_yetkili_yazdir.Text = "&Yazdï¿½r"
         '
         'btn_yetkili_sil
         '
@@ -3407,8 +3413,8 @@ Public Class frm_firma_kart
         Me.XtraTabPage4.Image = CType(resources.GetObject("XtraTabPage4.Image"), System.Drawing.Image)
         Me.XtraTabPage4.Name = "XtraTabPage4"
         Me.XtraTabPage4.Size = New System.Drawing.Size(1307, 376)
-        Me.XtraTabPage4.Text = "Ýletiþim"
-        Me.XtraTabPage4.Tooltip = "Hesap Kartý Iletiþim Bilgileri Buradan Takip Edilir"
+        Me.XtraTabPage4.Text = "ï¿½letiï¿½im"
+        Me.XtraTabPage4.Tooltip = "Hesap Kartï¿½ Iletiï¿½im Bilgileri Buradan Takip Edilir"
         '
         'pnl_iletisim
         '
@@ -3447,7 +3453,7 @@ Public Class frm_firma_kart
         '
         Me.MenuItem5.Index = 1
         Me.MenuItem5.Shortcut = System.Windows.Forms.Shortcut.F4
-        Me.MenuItem5.Text = "Düzelt"
+        Me.MenuItem5.Text = "Dï¿½zelt"
         '
         'MenuItem6
         '
@@ -3489,7 +3495,7 @@ Public Class frm_firma_kart
         Me.GridView3.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.RowFocus
         Me.GridView3.GridControl = Me.GridControl3
         Me.GridView3.GroupFormat = "{0}: {1} {2}"
-        Me.GridView3.GroupPanelText = "Gruplamak Ýstediðiniz Kolonu Buraya Sürükleyiniz..."
+        Me.GridView3.GroupPanelText = "Gruplamak ï¿½stediï¿½iniz Kolonu Buraya Sï¿½rï¿½kleyiniz..."
         Me.GridView3.IndicatorWidth = 12
         Me.GridView3.Name = "GridView3"
         Me.GridView3.OptionsBehavior.EditorShowMode = DevExpress.Utils.EditorShowMode.Click
@@ -3502,7 +3508,7 @@ Public Class frm_firma_kart
         '
         'colnIletisimID
         '
-        Me.colnIletisimID.Caption = "Ýletiþim ID"
+        Me.colnIletisimID.Caption = "ï¿½letiï¿½im ID"
         Me.colnIletisimID.FieldName = "nIletisimID"
         Me.colnIletisimID.Name = "colnIletisimID"
         '
@@ -3518,11 +3524,11 @@ Public Class frm_firma_kart
         Me.colsIletisimAraci.AppearanceCell.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
         Me.colsIletisimAraci.AppearanceCell.Options.UseBackColor = True
         Me.colsIletisimAraci.AppearanceCell.Options.UseFont = True
-        Me.colsIletisimAraci.Caption = "Ýletiþim Aracý"
+        Me.colsIletisimAraci.Caption = "ï¿½letiï¿½im Aracï¿½"
         Me.colsIletisimAraci.ColumnEdit = Me.sec_IletisimAraci
         Me.colsIletisimAraci.FieldName = "sIletisimAraci"
         Me.colsIletisimAraci.Name = "colsIletisimAraci"
-        Me.colsIletisimAraci.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Count, "sIletisimAraci", "{0} Kayýt")})
+        Me.colsIletisimAraci.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Count, "sIletisimAraci", "{0} Kayï¿½t")})
         Me.colsIletisimAraci.Visible = True
         Me.colsIletisimAraci.VisibleIndex = 0
         '
@@ -3532,12 +3538,12 @@ Public Class frm_firma_kart
         Me.sec_IletisimAraci.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
         Me.sec_IletisimAraci.DisplayMember = "sIletisimAraci"
         Me.sec_IletisimAraci.Name = "sec_IletisimAraci"
-        Me.sec_IletisimAraci.NullText = "[IletisimAracý]"
+        Me.sec_IletisimAraci.NullText = "[IletisimAracï¿½]"
         Me.sec_IletisimAraci.ValueMember = "sIletisimAraci"
         '
         'colsIletisimAdresi
         '
-        Me.colsIletisimAdresi.Caption = "Ýletiþim Adresi"
+        Me.colsIletisimAdresi.Caption = "ï¿½letiï¿½im Adresi"
         Me.colsIletisimAdresi.FieldName = "sIletisimAdresi"
         Me.colsIletisimAdresi.Name = "colsIletisimAdresi"
         Me.colsIletisimAdresi.Visible = True
@@ -3628,7 +3634,7 @@ Public Class frm_firma_kart
         Me.GridView12.Columns.AddRange(New DevExpress.XtraGrid.Columns.GridColumn() {Me.GridColumn1, Me.GridColumn2, Me.GridColumn3, Me.GridColumn4, Me.GridColumn5, Me.GridColumn6, Me.GridColumn7, Me.GridColumn8, Me.GridColumn9, Me.GridColumn10})
         Me.GridView12.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.RowFocus
         Me.GridView12.GridControl = Me.GridControl8
-        Me.GridView12.GroupPanelText = "Gruplamak Ýstediðiniz Kolonu Buraya Sürükleyiniz..."
+        Me.GridView12.GroupPanelText = "Gruplamak ï¿½stediï¿½iniz Kolonu Buraya Sï¿½rï¿½kleyiniz..."
         Me.GridView12.Name = "GridView12"
         Me.GridView12.OptionsBehavior.Editable = False
         Me.GridView12.OptionsBehavior.EditorShowMode = DevExpress.Utils.EditorShowMode.Click
@@ -3746,7 +3752,7 @@ Public Class frm_firma_kart
         Me.SimpleButton8.Name = "SimpleButton8"
         Me.SimpleButton8.Size = New System.Drawing.Size(120, 32)
         Me.SimpleButton8.TabIndex = 6
-        Me.SimpleButton8.Text = "&Düzelt"
+        Me.SimpleButton8.Text = "&Dï¿½zelt"
         '
         'SimpleButton5
         '
@@ -3781,9 +3787,9 @@ Public Class frm_firma_kart
         Me.XtraTabPage5.Image = CType(resources.GetObject("XtraTabPage5.Image"), System.Drawing.Image)
         Me.XtraTabPage5.Name = "XtraTabPage5"
         Me.XtraTabPage5.Size = New System.Drawing.Size(1307, 376)
-        Me.XtraTabPage5.Text = "Aylýk Toplamlar"
-        Me.XtraTabPage5.Tooltip = "Hesap Kartýnýn Yýl ve Aylar Ýtibariyle Bakiye Analizi Buradan Takip Edilir. Liste" &
-    "lemek için F5 Tuþuna Basýnýz."
+        Me.XtraTabPage5.Text = "Aylï¿½k Toplamlar"
+        Me.XtraTabPage5.Tooltip = "Hesap Kartï¿½nï¿½n Yï¿½l ve Aylar ï¿½tibariyle Bakiye Analizi Buradan Takip Edilir. Liste" &
+    "lemek iï¿½in F5 Tuï¿½una Basï¿½nï¿½z."
         '
         'GridControl4
         '
@@ -3806,7 +3812,7 @@ Public Class frm_firma_kart
         '
         Me.MenuItem7.Index = 0
         Me.MenuItem7.Shortcut = System.Windows.Forms.Shortcut.F5
-        Me.MenuItem7.Text = "Göster"
+        Me.MenuItem7.Text = "Gï¿½ster"
         '
         'MenuItem9
         '
@@ -3817,7 +3823,7 @@ Public Class frm_firma_kart
         '
         Me.MenuItem8.Index = 2
         Me.MenuItem8.Shortcut = System.Windows.Forms.Shortcut.CtrlP
-        Me.MenuItem8.Text = "Görünümü Yazdýr"
+        Me.MenuItem8.Text = "Gï¿½rï¿½nï¿½mï¿½ Yazdï¿½r"
         '
         'ds_tbFirmaAyYekunleri
         '
@@ -3877,7 +3883,7 @@ Public Class frm_firma_kart
         Me.GridView5.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.RowFocus
         Me.GridView5.GridControl = Me.GridControl4
         Me.GridView5.GroupFormat = "{0}: {1} {2}"
-        Me.GridView5.GroupPanelText = "Gruplamak Ýstediðiniz Kolonu Buraya Sürükleyiniz..."
+        Me.GridView5.GroupPanelText = "Gruplamak ï¿½stediï¿½iniz Kolonu Buraya Sï¿½rï¿½kleyiniz..."
         Me.GridView5.IndicatorWidth = 12
         Me.GridView5.Name = "GridView5"
         Me.GridView5.OptionsBehavior.Editable = False
@@ -3893,7 +3899,7 @@ Public Class frm_firma_kart
         Me.colnAy.Caption = "Ay"
         Me.colnAy.FieldName = "sAy"
         Me.colnAy.Name = "colnAy"
-        Me.colnAy.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Count, "sAy", "{0} Kayýt")})
+        Me.colnAy.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Count, "sAy", "{0} Kayï¿½t")})
         Me.colnAy.Visible = True
         Me.colnAy.VisibleIndex = 1
         '
@@ -3907,7 +3913,7 @@ Public Class frm_firma_kart
         '
         'colnSayi
         '
-        Me.colnSayi.Caption = "Kayýt"
+        Me.colnSayi.Caption = "Kayï¿½t"
         Me.colnSayi.FieldName = "nSayi"
         Me.colnSayi.Name = "colnSayi"
         Me.colnSayi.Visible = True
@@ -3915,7 +3921,7 @@ Public Class frm_firma_kart
         '
         'collBorc
         '
-        Me.collBorc.Caption = "Borç"
+        Me.collBorc.Caption = "Borï¿½"
         Me.collBorc.DisplayFormat.FormatString = "#,0.00"
         Me.collBorc.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
         Me.collBorc.FieldName = "lBorc"
@@ -3937,7 +3943,7 @@ Public Class frm_firma_kart
         '
         'collBakiye
         '
-        Me.collBakiye.Caption = "Aylýk Bakiye"
+        Me.collBakiye.Caption = "Aylï¿½k Bakiye"
         Me.collBakiye.DisplayFormat.FormatString = "#,#0.00(B);#,#0.00(A);-"
         Me.collBakiye.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
         Me.collBakiye.FieldName = "lBakiye"
@@ -3972,7 +3978,7 @@ Public Class frm_firma_kart
         Me.XtraTabPage6.Name = "XtraTabPage6"
         Me.XtraTabPage6.PageVisible = False
         Me.XtraTabPage6.Size = New System.Drawing.Size(1307, 376)
-        Me.XtraTabPage6.Text = "Modüller"
+        Me.XtraTabPage6.Text = "Modï¿½ller"
         '
         'GridControl5
         '
@@ -3999,7 +4005,7 @@ Public Class frm_firma_kart
         '
         Me.MenuItem11.Index = 1
         Me.MenuItem11.Shortcut = System.Windows.Forms.Shortcut.F4
-        Me.MenuItem11.Text = "Düzelt"
+        Me.MenuItem11.Text = "Dï¿½zelt"
         '
         'MenuItem12
         '
@@ -4010,7 +4016,7 @@ Public Class frm_firma_kart
         'MenuItem16
         '
         Me.MenuItem16.Index = 3
-        Me.MenuItem16.Text = "Deðer Yay"
+        Me.MenuItem16.Text = "Deï¿½er Yay"
         '
         'MenuItem17
         '
@@ -4021,7 +4027,7 @@ Public Class frm_firma_kart
         'MenuItem18
         '
         Me.MenuItem18.Index = 0
-        Me.MenuItem18.Text = "Önizle"
+        Me.MenuItem18.Text = "ï¿½nizle"
         '
         'MenuItem19
         '
@@ -4031,7 +4037,7 @@ Public Class frm_firma_kart
         'MenuItem20
         '
         Me.MenuItem20.Index = 2
-        Me.MenuItem20.Text = "Yazdýr"
+        Me.MenuItem20.Text = "Yazdï¿½r"
         '
         'GridView6
         '
@@ -4040,7 +4046,7 @@ Public Class frm_firma_kart
         Me.GridView6.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.RowFocus
         Me.GridView6.GridControl = Me.GridControl5
         Me.GridView6.GroupFormat = "{0}: {1} {2}"
-        Me.GridView6.GroupPanelText = "Gruplamak Ýstediðiniz Kolonu Buraya Sürükleyiniz..."
+        Me.GridView6.GroupPanelText = "Gruplamak ï¿½stediï¿½iniz Kolonu Buraya Sï¿½rï¿½kleyiniz..."
         Me.GridView6.IndicatorWidth = 12
         Me.GridView6.Name = "GridView6"
         Me.GridView6.OptionsBehavior.EditorShowMode = DevExpress.Utils.EditorShowMode.Click
@@ -4076,7 +4082,7 @@ Public Class frm_firma_kart
         '
         'colsModulAciklama
         '
-        Me.colsModulAciklama.Caption = "Açýklama"
+        Me.colsModulAciklama.Caption = "Aï¿½ï¿½klama"
         Me.colsModulAciklama.FieldName = "sAciklama"
         Me.colsModulAciklama.Name = "colsModulAciklama"
         Me.colsModulAciklama.Visible = True
@@ -4202,7 +4208,7 @@ Public Class frm_firma_kart
         Me.LabelControl33.Name = "LabelControl33"
         Me.LabelControl33.Size = New System.Drawing.Size(81, 19)
         Me.LabelControl33.TabIndex = 21
-        Me.LabelControl33.Text = "Bitiþ Tarihi:"
+        Me.LabelControl33.Text = "Bitiï¿½ Tarihi:"
         '
         'txt_dteGecerlilikTarihi
         '
@@ -4229,7 +4235,7 @@ Public Class frm_firma_kart
         Me.SimpleButton3.Name = "SimpleButton3"
         Me.SimpleButton3.Size = New System.Drawing.Size(248, 34)
         Me.SimpleButton3.TabIndex = 10
-        Me.SimpleButton3.Text = "&Vazgeç"
+        Me.SimpleButton3.Text = "&Vazgeï¿½"
         '
         'SimpleButton4
         '
@@ -4413,7 +4419,7 @@ Public Class frm_firma_kart
         '
         Me.MenuItem14.Index = 1
         Me.MenuItem14.Shortcut = System.Windows.Forms.Shortcut.F4
-        Me.MenuItem14.Text = "Düzelt"
+        Me.MenuItem14.Text = "Dï¿½zelt"
         '
         'MenuItem15
         '
@@ -4438,7 +4444,7 @@ Public Class frm_firma_kart
         Me.GridView7.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.RowFocus
         Me.GridView7.GridControl = Me.GridControl6
         Me.GridView7.GroupFormat = "{0}: {1} {2}"
-        Me.GridView7.GroupPanelText = "Gruplamak Ýstediðiniz Kolonu Buraya Sürükleyiniz..."
+        Me.GridView7.GroupPanelText = "Gruplamak ï¿½stediï¿½iniz Kolonu Buraya Sï¿½rï¿½kleyiniz..."
         Me.GridView7.IndicatorWidth = 12
         Me.GridView7.Name = "GridView7"
         Me.GridView7.OptionsBehavior.Editable = False
@@ -4595,7 +4601,7 @@ Public Class frm_firma_kart
         Me.XtraTabPage8.Image = Global.business_smart.My.Resources.Resources.replace2
         Me.XtraTabPage8.Name = "XtraTabPage8"
         Me.XtraTabPage8.Size = New System.Drawing.Size(1307, 376)
-        Me.XtraTabPage8.Text = "Dökümanlar"
+        Me.XtraTabPage8.Text = "Dï¿½kï¿½manlar"
         '
         'GridControl7
         '
@@ -4614,7 +4620,7 @@ Public Class frm_firma_kart
         '
         Me.GridView8.Columns.AddRange(New DevExpress.XtraGrid.Columns.GridColumn() {Me.colnFirmaResimID, Me.colsnFirmaID, Me.colpResim, Me.colsAciklama2, Me.colsKullaniciAdi, Me.coldteKayitTarihi, Me.colnSira})
         Me.GridView8.GridControl = Me.GridControl7
-        Me.GridView8.GroupPanelText = "Gruplamak Ýstediðiniz Kolonu Buraya Sürükleyiniz..."
+        Me.GridView8.GroupPanelText = "Gruplamak ï¿½stediï¿½iniz Kolonu Buraya Sï¿½rï¿½kleyiniz..."
         Me.GridView8.IndicatorWidth = 35
         Me.GridView8.Name = "GridView8"
         Me.GridView8.OptionsBehavior.EditorShowMode = DevExpress.Utils.EditorShowMode.Click
@@ -4651,7 +4657,7 @@ Public Class frm_firma_kart
         Me.colpResim.Name = "colpResim"
         Me.colpResim.OptionsColumn.AllowEdit = False
         Me.colpResim.OptionsColumn.AllowFocus = False
-        Me.colpResim.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Max, "pResim", "{0} Kayýt")})
+        Me.colpResim.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Max, "pResim", "{0} Kayï¿½t")})
         Me.colpResim.Visible = True
         Me.colpResim.VisibleIndex = 0
         Me.colpResim.Width = 368
@@ -4665,7 +4671,7 @@ Public Class frm_firma_kart
         '
         Me.colsAciklama2.AppearanceCell.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.colsAciklama2.AppearanceCell.Options.UseBackColor = True
-        Me.colsAciklama2.Caption = "Açýklama"
+        Me.colsAciklama2.Caption = "Aï¿½ï¿½klama"
         Me.colsAciklama2.FieldName = "sAciklama"
         Me.colsAciklama2.Name = "colsAciklama2"
         Me.colsAciklama2.Visible = True
@@ -4718,7 +4724,7 @@ Public Class frm_firma_kart
         Me.SimpleButton13.Name = "SimpleButton13"
         Me.SimpleButton13.Size = New System.Drawing.Size(120, 34)
         Me.SimpleButton13.TabIndex = 16
-        Me.SimpleButton13.Text = "&Yazdýr"
+        Me.SimpleButton13.Text = "&Yazdï¿½r"
         '
         'SimpleButton9
         '
@@ -4795,7 +4801,7 @@ Public Class frm_firma_kart
         Me.LabelControl10.Name = "LabelControl10"
         Me.LabelControl10.Size = New System.Drawing.Size(304, 18)
         Me.LabelControl10.TabIndex = 63
-        Me.LabelControl10.Text = "Borç"
+        Me.LabelControl10.Text = "Borï¿½"
         '
         'TextEdit3
         '
@@ -4936,7 +4942,7 @@ Public Class frm_firma_kart
         Me.printlink1.ImageCollection.ImageStream = CType(resources.GetObject("printlink1.ImageCollection.ImageStream"), DevExpress.Utils.ImageCollectionStreamer)
         Me.printlink1.Margins = New System.Drawing.Printing.Margins(20, 20, 60, 60)
         Me.printlink1.Owner = Nothing
-        Me.printlink1.PageHeaderFooter = New DevExpress.XtraPrinting.PageHeaderFooter(New DevExpress.XtraPrinting.PageHeaderArea(New String() {"[User Name]", "Aylýk Hesap Ýcmali", "[Date Printed][Time Printed]"}, New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(162, Byte)), DevExpress.XtraPrinting.BrickAlignment.Far), New DevExpress.XtraPrinting.PageFooterArea(New String() {"Powered by www.barkodyazilimevi.com", "Account Managment", "[Page # of Pages #]"}, New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(162, Byte)), DevExpress.XtraPrinting.BrickAlignment.Near))
+        Me.printlink1.PageHeaderFooter = New DevExpress.XtraPrinting.PageHeaderFooter(New DevExpress.XtraPrinting.PageHeaderArea(New String() {"[User Name]", "Aylï¿½k Hesap ï¿½cmali", "[Date Printed][Time Printed]"}, New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(162, Byte)), DevExpress.XtraPrinting.BrickAlignment.Far), New DevExpress.XtraPrinting.PageFooterArea(New String() {"Powered by www.barkodyazilimevi.com", "Account Managment", "[Page # of Pages #]"}, New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(162, Byte)), DevExpress.XtraPrinting.BrickAlignment.Near))
         Me.printlink1.PaperKind = System.Drawing.Printing.PaperKind.A4
         Me.printlink1.PrintingSystem = Me.ps
         Me.printlink1.PrintingSystemBase = Me.ps
@@ -4999,7 +5005,7 @@ Public Class frm_firma_kart
         Me.MaximizeBox = False
         Me.Name = "frm_firma_kart"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Hesap Kartý"
+        Me.Text = "Hesap Kartï¿½"
         CType(Me.PanelControl1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelControl1.ResumeLayout(False)
         Me.PanelControl1.PerformLayout()
@@ -5197,7 +5203,7 @@ Public Class frm_firma_kart
         If yeni = True Then
             If sModul = "Banka" Then
                 txt_sKodu.Text = "102"
-                lbl_VergiDairesi.Text = Sorgu_sDil("Þube:", sDil)
+                lbl_VergiDairesi.Text = Sorgu_sDil("ï¿½ube:", sDil)
                 lbl_VergiNo.Text = Sorgu_sDil("HesapNo:", sDil)
                 lbl_Iskonto.Text = Sorgu_sDil("Kesinti:", sDil)
             End If
@@ -5228,10 +5234,10 @@ Public Class frm_firma_kart
             gorunum_yukle()
         Catch ex As Exception
         End Try
-        If yetki_kontrol(kullanici, "frm_firma_kartý_limiti") = True Then
+        If yetki_kontrol(kullanici, "frm_firma_kartï¿½_limiti") = True Then
             Dim conn As New OleDb.OleDbConnection(sConnection)
             conn.Open()
-            Dim cmd As New OleDb.OleDbCommand("select * from aPersonelYetki  where  PersonelNo='" + kullanici + "' and Form='frm_firma_kartý_limiti'", conn)
+            Dim cmd As New OleDb.OleDbCommand("select * from aPersonelYetki  where  PersonelNo='" + kullanici + "' and Form='frm_firma_kartï¿½_limiti'", conn)
             Dim dr1 As OleDb.OleDbDataReader
             dr1 = cmd.ExecuteReader()
             While dr1.Read()
@@ -5281,6 +5287,7 @@ Public Class frm_firma_kart
         Else
             txt_musteriNo.EditValue = sKodu
             dataload(nFirmaID)
+            RiskGostergesiniGuncelle()
         End If
         txt_sHitap1.Focus()
         txt_sHitap1.SelectAll()
@@ -5426,23 +5433,23 @@ Public Class frm_firma_kart
     End Sub
     Private Function sorgu_kriter_string(ByVal deger As String, ByVal kriter As String) As String
         Dim sorgu_kriter As String = ""
-        If kriter = "Baþlar" Then
+        If kriter = "Baï¿½lar" Then
             sorgu_kriter = " LIKE '" & deger & "%' "
         ElseIf kriter = "Biter" Then
             sorgu_kriter = " LIKE '%" & deger & "' "
-        ElseIf kriter = "Ýçerir" Then
+        ElseIf kriter = "ï¿½ï¿½erir" Then
             sorgu_kriter = " LIKE '%" & deger & "%' "
-        ElseIf kriter = "Boþ" Then
+        ElseIf kriter = "Boï¿½" Then
             sorgu_kriter = " IS NULL "
         ElseIf kriter = "Dolu" Then
             sorgu_kriter = " <> '' "
-        ElseIf kriter = "Farklý" Then
+        ElseIf kriter = "Farklï¿½" Then
             sorgu_kriter = " <> '" & deger & "' "
-        ElseIf kriter = "Büyük" Then
+        ElseIf kriter = "Bï¿½yï¿½k" Then
             sorgu_kriter = " >  '" & deger & "' "
-        ElseIf kriter = "Küçük" Then
+        ElseIf kriter = "Kï¿½ï¿½ï¿½k" Then
             sorgu_kriter = " < '" & deger & "' "
-        ElseIf kriter = "Eþittir" Then
+        ElseIf kriter = "Eï¿½ittir" Then
             sorgu_kriter = " = '" & deger & "' "
         End If
         Return sorgu_kriter
@@ -5545,7 +5552,7 @@ Public Class frm_firma_kart
         If Trim(txt_musteriNo.EditValue).ToString <> "" Then
             Dim kontrol = sorgu_cari_kontrol(txt_musteriNo.EditValue)
             If kontrol = 0 Then
-                XtraMessageBox.Show(Sorgu_sDil("Kayýt Bulunumadý...", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                XtraMessageBox.Show(Sorgu_sDil("Kayï¿½t Bulunumadï¿½...", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             ElseIf kontrol = 1 Then
                 dataload_cari(txt_musteriNo.EditValue)
                 Dim dr As DataRow
@@ -5593,12 +5600,12 @@ Public Class frm_firma_kart
     Private Sub dataload(ByVal nFirmaID As String)
         Dataload_tbFirma(nFirmaID)
         Dataload_tbFirmaBakiyesi(nFirmaID, sorgu_string(txt_sDovizCinsi.EditValue, ""))
-        'Müþteri Sýnýflandýrma Kontrol
+        'Mï¿½ï¿½teri Sï¿½nï¿½flandï¿½rma Kontrol
         If sorgu_tbFirmaTablo_kontrol(nFirmaID, "tbFirmaSinifi") = 0 Then
             tbFirmaSinifi_kaydet_yeni(nFirmaID, "", "", "", "", "")
         End If
         Dataload_tbFirmaSinifi(nFirmaID)
-        'Firma Açýklamasý Kontrol
+        'Firma Aï¿½ï¿½klamasï¿½ Kontrol
         If sorgu_tbFirmaTablo_kontrol(nFirmaID, "tbFirmaAciklamasi") = 0 Then
             tbFirmaAciklamasi_kaydet_yeni(nFirmaID, "", "", "", "", "", "", "", "", "", "")
         End If
@@ -5783,7 +5790,7 @@ Public Class frm_firma_kart
         Dim adapter As New OleDb.OleDbDataAdapter
         conn.ConnectionString = connection
         adapter.SelectCommand = cmd
-        cmd.CommandText = sorgu_query("set language Türkçe set dateformat dmy set datefirst 1 SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT DATENAME([month], dteIslemTarihi) AS sAy, YEAR(dteIslemTarihi) AS nYil, COUNT(dteIslemTarihi) AS nSayi, SUM(lBorcTutar) AS lBorc, SUM(lAlacakTutar) AS lAlacak, SUM(lBorcTutar) - SUM(lAlacakTutar) AS lBakiye, CAST(0 AS MONEY) AS lNetBakiye FROM tbFirmaHareketi WHERE (nFirmaID = '" & nFirmaID & "') GROUP BY DATENAME([month], dteIslemTarihi), MONTH(dteIslemTarihi),YEAR(dteIslemTarihi) ORDER BY YEAR(dteIslemTarihi), MONTH(dteIslemTarihi) ")
+        cmd.CommandText = sorgu_query("set language Tï¿½rkï¿½e set dateformat dmy set datefirst 1 SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT DATENAME([month], dteIslemTarihi) AS sAy, YEAR(dteIslemTarihi) AS nYil, COUNT(dteIslemTarihi) AS nSayi, SUM(lBorcTutar) AS lBorc, SUM(lAlacakTutar) AS lAlacak, SUM(lBorcTutar) - SUM(lAlacakTutar) AS lBakiye, CAST(0 AS MONEY) AS lNetBakiye FROM tbFirmaHareketi WHERE (nFirmaID = '" & nFirmaID & "') GROUP BY DATENAME([month], dteIslemTarihi), MONTH(dteIslemTarihi),YEAR(dteIslemTarihi) ORDER BY YEAR(dteIslemTarihi), MONTH(dteIslemTarihi) ")
         cmd.Connection = conn
         conn.Open()
         Dim Datastoklar1 As New DataSet
@@ -5936,7 +5943,7 @@ Public Class frm_firma_kart
             Dim satir
             dr = GridView2.GetDataRow(GridView2.FocusedRowHandle)
             satir = GridView2.FocusedRowHandle
-            If XtraMessageBox.Show(dr("sAdiSoyadi") & vbTab & Sorgu_sDil(" Ýsimli Yetkili Kaydýný Silmek istediðinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+            If XtraMessageBox.Show(dr("sAdiSoyadi") & vbTab & Sorgu_sDil(" ï¿½simli Yetkili Kaydï¿½nï¿½ Silmek istediï¿½inize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
                 tbFirmaYetkilisi_kaydet_sil(dr("nYetkiliID"), dr("nFirmaID"))
             End If
             ds_tbFirmaYetkilisi = Dataload_tbFirmaYetkilisi(nFirmaID)
@@ -6073,7 +6080,7 @@ Public Class frm_firma_kart
             Dim satir
             dr = GridView3.GetDataRow(GridView3.FocusedRowHandle)
             satir = GridView3.FocusedRowHandle
-            If XtraMessageBox.Show(dr("sIletisimAdresi") & vbTab & Sorgu_sDil(" Ýletiþim Adres Kaydýný Silmek istediðinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+            If XtraMessageBox.Show(dr("sIletisimAdresi") & vbTab & Sorgu_sDil(" ï¿½letiï¿½im Adres Kaydï¿½nï¿½ Silmek istediï¿½inize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
                 tbFirmaIletisimi_kaydet_sil(dr("nIletisimID"), dr("nFirmaID"))
             End If
             ds_tbFirmaIletisimi = Dataload_tbFirmaIletisimi(nFirmaID)
@@ -6090,7 +6097,7 @@ Public Class frm_firma_kart
             Dim satir
             dr = GridView12.GetDataRow(GridView12.FocusedRowHandle)
             satir = GridView12.FocusedRowHandle
-            If XtraMessageBox.Show(dr("sAciklama") & vbTab & Sorgu_sDil(" Adres Kaydýný Silmek istediðinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+            If XtraMessageBox.Show(dr("sAciklama") & vbTab & Sorgu_sDil(" Adres Kaydï¿½nï¿½ Silmek istediï¿½inize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
                 tbFirmaAdresi_kaydet_sil(dr("nAdresID"), dr("nFirmaID"))
             End If
             ds_tbFirmaAdresi = Dataload_tbFirmaAdresi(nFirmaID)
@@ -6107,7 +6114,7 @@ Public Class frm_firma_kart
             Dim satir
             dr = GridView6.GetDataRow(GridView6.FocusedRowHandle)
             satir = GridView6.FocusedRowHandle
-            If XtraMessageBox.Show(dr("sModul") & vbTab & Sorgu_sDil(" Modul Paket Kaydýný Silmek istediðinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+            If XtraMessageBox.Show(dr("sModul") & vbTab & Sorgu_sDil(" Modul Paket Kaydï¿½nï¿½ Silmek istediï¿½inize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
                 tbFirmaModulu_kaydet_sil(dr("nFirmaID"), dr("sModul"))
             End If
             ds_tbFirmaModulu = Dataload_tbFirmaModulu(nFirmaID)
@@ -6124,7 +6131,7 @@ Public Class frm_firma_kart
             Dim satir
             dr = GridView7.GetDataRow(GridView7.FocusedRowHandle)
             satir = GridView7.FocusedRowHandle
-            If XtraMessageBox.Show(dr("sOnayKodu") & vbTab & Sorgu_sDil(" Onaylý Lisans Kaydýný Silmek istediðinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+            If XtraMessageBox.Show(dr("sOnayKodu") & vbTab & Sorgu_sDil(" Onaylï¿½ Lisans Kaydï¿½nï¿½ Silmek istediï¿½inize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
                 tbFirmaLisans_kaydet_Sil(dr("nFirmaID"), dr("sOnayKodu"))
             End If
             ds_tbFirmaLisans = Dataload_tbFirmaLisans(nFirmaID)
@@ -6216,79 +6223,79 @@ Public Class frm_firma_kart
             dr("sOzelNot") = nZiyaret
         End If
         If bCariAciklamaZorunlumu = True And Trim(txt_sAdi.Text) = "" Then
-            sUyari += Sorgu_sDil("Açýklama Alanýný Boþ Býrakamazsýnýz...!", sDil) & vbCrLf
+            sUyari += Sorgu_sDil("Aï¿½ï¿½klama Alanï¿½nï¿½ Boï¿½ Bï¿½rakamazsï¿½nï¿½z...!", sDil) & vbCrLf
             txt_sAdi.Focus()
         End If
         If bCariTCZorunlumu = True And Trim(txt_TC.Text) = "" Then
-            sUyari += Sorgu_sDil("TC Kimlik NO Alanýný Boþ Býrakamazsýnýz...!", sDil) & vbCrLf
+            sUyari += Sorgu_sDil("TC Kimlik NO Alanï¿½nï¿½ Boï¿½ Bï¿½rakamazsï¿½nï¿½z...!", sDil) & vbCrLf
             txt_TC.Focus()
         End If
         If bCariAdres1Zorunlumu = True And Trim(txt_sAdres1.Text) = "" Then
-            sUyari += Sorgu_sDil("Adres1 Alanýný Boþ Býrakamazsýnýz...!", sDil) & vbCrLf
+            sUyari += Sorgu_sDil("Adres1 Alanï¿½nï¿½ Boï¿½ Bï¿½rakamazsï¿½nï¿½z...!", sDil) & vbCrLf
             txt_sAdres1.Focus()
         End If
         If bCariAdres2Zorunlumu = True And Trim(txt_sAdres2.Text) = "" Then
-            sUyari += Sorgu_sDil("Adres2 Alanýný Boþ Býrakamazsýnýz...!", sDil) & vbCrLf
+            sUyari += Sorgu_sDil("Adres2 Alanï¿½nï¿½ Boï¿½ Bï¿½rakamazsï¿½nï¿½z...!", sDil) & vbCrLf
             txt_sAdres2.Focus()
         End If
         If bCariSemtZorunlumu = True And Trim(txt_sSemt.Text) = "" Then
-            sUyari += Sorgu_sDil("Semt Alanýný Boþ Býrakamazsýnýz...!", sDil) & vbCrLf
+            sUyari += Sorgu_sDil("Semt Alanï¿½nï¿½ Boï¿½ Bï¿½rakamazsï¿½nï¿½z...!", sDil) & vbCrLf
             txt_sSemt.Focus()
         End If
         If bCariPostaKoduZorunlumu = True And Trim(txt_sPostaKodu.Text) = "" Then
-            sUyari += Sorgu_sDil("Postakodu Alanýný Boþ Býrakamazsýnýz...!", sDil) & vbCrLf
+            sUyari += Sorgu_sDil("Postakodu Alanï¿½nï¿½ Boï¿½ Bï¿½rakamazsï¿½nï¿½z...!", sDil) & vbCrLf
             txt_sPostaKodu.Focus()
         End If
         If bCariIlZorunlumu = True And Trim(txt_sIl.Text) = "" Then
-            sUyari += Sorgu_sDil("Ýl Alanýný Boþ Býrakamazsýnýz...!", sDil) & vbCrLf
+            sUyari += Sorgu_sDil("ï¿½l Alanï¿½nï¿½ Boï¿½ Bï¿½rakamazsï¿½nï¿½z...!", sDil) & vbCrLf
             txt_sAdi.Focus()
         End If
         If bCariUlkeZorunlumu = True And Trim(txt_sUlke.Text) = "" Then
-            sUyari += Sorgu_sDil("Ülke Alanýný Boþ Býrakamazsýnýz...!", sDil) & vbCrLf
+            sUyari += Sorgu_sDil("ï¿½lke Alanï¿½nï¿½ Boï¿½ Bï¿½rakamazsï¿½nï¿½z...!", sDil) & vbCrLf
             txt_sUlke.Focus()
         End If
         If bCariDepoZorunlumu = True And Trim(txt_sMagaza.EditValue) = "" Then
-            sUyari += Sorgu_sDil("Depo Alanýný Boþ Býrakamazsýnýz...!", sDil) & vbCrLf
+            sUyari += Sorgu_sDil("Depo Alanï¿½nï¿½ Boï¿½ Bï¿½rakamazsï¿½nï¿½z...!", sDil) & vbCrLf
             txt_sMagaza.Focus()
         End If
         If bCariSaticiZorunlumu = True And Trim(txt_sSaticiRumuzu.EditValue) = "" Then
-            sUyari += Sorgu_sDil("Satýcý Alanýný Boþ Býrakamazsýnýz...!", sDil)
+            sUyari += Sorgu_sDil("Satï¿½cï¿½ Alanï¿½nï¿½ Boï¿½ Bï¿½rakamazsï¿½nï¿½z...!", sDil)
             txt_sSaticiRumuzu.Focus()
         End If
         If bCariVergiDairesiZorunlumu = True And Trim(txt_sVergiDairesi.Text) = "" Then
-            sUyari += Sorgu_sDil("VergiDairesi Alanýný Boþ Býrakamazsýnýz...!", sDil) & vbCrLf
+            sUyari += Sorgu_sDil("VergiDairesi Alanï¿½nï¿½ Boï¿½ Bï¿½rakamazsï¿½nï¿½z...!", sDil) & vbCrLf
             txt_sVergiDairesi.Focus()
         End If
         If bCariVergiNoZorunlumu = True And Trim(txt_sVergiNo.Text) = "" Then
-            sUyari += Sorgu_sDil("VergiNo Alanýný Boþ Býrakamazsýnýz...!", sDil) & vbCrLf
+            sUyari += Sorgu_sDil("VergiNo Alanï¿½nï¿½ Boï¿½ Bï¿½rakamazsï¿½nï¿½z...!", sDil) & vbCrLf
             txt_sVergiNo.Focus()
         End If
         If bCariOzelNotZorunlumu = True And Trim(txt_sOzelNot.Text) = "" Then
-            sUyari += Sorgu_sDil("ÖzelNot Alanýný Boþ Býrakamazsýnýz...!", sDil) & vbCrLf
+            sUyari += Sorgu_sDil("ï¿½zelNot Alanï¿½nï¿½ Boï¿½ Bï¿½rakamazsï¿½nï¿½z...!", sDil) & vbCrLf
             txt_sOzelNot.Focus()
         End If
         If yeni = False Then
             If sSinifKodu1 = "" And bCariSinifKodu1Zorunlumu = True Then
-                sUyari += Sorgu_sDil("Sýnýf1 Alanýný Boþ Býrakamazsýnýz...!", sDil)
+                sUyari += Sorgu_sDil("Sï¿½nï¿½f1 Alanï¿½nï¿½ Boï¿½ Bï¿½rakamazsï¿½nï¿½z...!", sDil)
             End If
             If sSinifKodu2 = "" And bCariSinifKodu2Zorunlumu = True Then
-                sUyari += Sorgu_sDil("Sýnýf2 Alanýný Boþ Býrakamazsýnýz...!", sDil)
+                sUyari += Sorgu_sDil("Sï¿½nï¿½f2 Alanï¿½nï¿½ Boï¿½ Bï¿½rakamazsï¿½nï¿½z...!", sDil)
             End If
             If sSinifKodu3 = "" And bCariSinifKodu3Zorunlumu = True Then
-                sUyari += Sorgu_sDil("Sýnýf3 Alanýný Boþ Býrakamazsýnýz...!", sDil)
+                sUyari += Sorgu_sDil("Sï¿½nï¿½f3 Alanï¿½nï¿½ Boï¿½ Bï¿½rakamazsï¿½nï¿½z...!", sDil)
             End If
             If sSinifKodu4 = "" And bCariSinifKodu4Zorunlumu = True Then
-                sUyari += Sorgu_sDil("Sýnýf4 Alanýný Boþ Býrakamazsýnýz...!", sDil)
+                sUyari += Sorgu_sDil("Sï¿½nï¿½f4 Alanï¿½nï¿½ Boï¿½ Bï¿½rakamazsï¿½nï¿½z...!", sDil)
             End If
             If sSinifKodu5 = "" And bCariSinifKodu5Zorunlumu = True Then
-                sUyari += Sorgu_sDil("Sýnýf5 Alanýný Boþ Býrakamazsýnýz...!", sDil)
+                sUyari += Sorgu_sDil("Sï¿½nï¿½f5 Alanï¿½nï¿½ Boï¿½ Bï¿½rakamazsï¿½nï¿½z...!", sDil)
             End If
             If bCariYetkiliZorunlumu = True And GridView2.RowCount = 0 Then
-                sUyari += Sorgu_sDil("Yetkili Alanýný Boþ Býrakamazsýnýz...!", sDil) & vbCrLf
+                sUyari += Sorgu_sDil("Yetkili Alanï¿½nï¿½ Boï¿½ Bï¿½rakamazsï¿½nï¿½z...!", sDil) & vbCrLf
                 GridControl2.Focus()
             End If
             If bCariIletisimZorunlumu = True And GridView3.RowCount = 0 Then
-                sUyari += Sorgu_sDil("Ýletiþim Alanýný Boþ Býrakamazsýnýz...!", sDil) & vbCrLf
+                sUyari += Sorgu_sDil("ï¿½letiï¿½im Alanï¿½nï¿½ Boï¿½ Bï¿½rakamazsï¿½nï¿½z...!", sDil) & vbCrLf
                 GridControl3.Focus()
             End If
         End If
@@ -6437,16 +6444,16 @@ Public Class frm_firma_kart
                 cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     TOP 1 ISNULL(sKodu,'') as sKodu FROM         tbFirma WHERE     (nFirmaID < '" & nFirmaID & "' ) ORDER BY sKodu DESC ")
                 sKodu = cmd.ExecuteScalar
                 txt_musteriNo.EditValue = sKodu
-                XtraMessageBox.Show(Sorgu_sDil("Kayýt Baþarýyla Silindi...", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information)
+                XtraMessageBox.Show(Sorgu_sDil("Kayï¿½t Baï¿½arï¿½yla Silindi...", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information)
                 musteri_kontrol()
             Catch ex As Exception
-                XtraMessageBox.Show(Sorgu_sDil("Üzgünüm,Hareket Görmüþ Kaydý Silemezsiniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                XtraMessageBox.Show(Sorgu_sDil("ï¿½zgï¿½nï¿½m,Hareket Gï¿½rmï¿½ï¿½ Kaydï¿½ Silemezsiniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 cmd.CommandText = sorgu_query("IF @@TRANCOUNT > 0 ROLLBACK TRAN")
                 cmd.ExecuteNonQuery()
             End Try
             con.Close()
         Else
-            XtraMessageBox.Show(Sorgu_sDil("Üzgünüm,Hareket Görmüþ Kaydý Silemezsiniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            XtraMessageBox.Show(Sorgu_sDil("ï¿½zgï¿½nï¿½m,Hareket Gï¿½rmï¿½ï¿½ Kaydï¿½ Silemezsiniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
     Private Sub tbFirma_notlari()
@@ -6457,7 +6464,7 @@ Public Class frm_firma_kart
         frm.kayitno = nFirmaID
         frm.firma = True
         frm.kullanici = kullanici
-        'Firma Açýklamasý Kontrol
+        'Firma Aï¿½ï¿½klamasï¿½ Kontrol
         If sorgu_tbFirmaTablo_kontrol(nFirmaID, "tbFirmaAciklamasi") = 0 Then
             tbFirmaAciklamasi_kaydet_yeni(nFirmaID, "", "", "", "", "", "", "", "", "", "")
         End If
@@ -6594,7 +6601,7 @@ Public Class frm_firma_kart
             frm.DateEdit2.EditValue = dteSistemTarihi
             frm.txt_ara.Text = ""
             frm.txt_ara_stok.Text = ""
-            frm.sec_MaliyetTipi.Text = "Stok Kartýndan"
+            frm.sec_MaliyetTipi.Text = "Stok Kartï¿½ndan"
             frm.kriter_musteriID = "AND tbStokFisiDetayi.nFirmaID = " & nFirmaID & " "
             If islem = 3 Then
                 frm.kriter_fistipi = "'DC'"
@@ -6640,7 +6647,7 @@ Public Class frm_firma_kart
             If Microsoft.VisualBasic.Left(txt_sKodu.Text, 3) = "102" Then
                 kaydet_tumu()
             Else
-                XtraMessageBox.Show(Sorgu_sDil("Hesap Kodlarý [102] ile baþlamalýdýr.", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                XtraMessageBox.Show(Sorgu_sDil("Hesap Kodlarï¿½ [102] ile baï¿½lamalï¿½dï¿½r.", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 txt_sKodu.Focus()
                 txt_sKodu.Select()
             End If
@@ -6648,7 +6655,7 @@ Public Class frm_firma_kart
             'If yeni_cari_kayit_formu_kontrol() = True Then
             kaydet_tumu()
             'Else
-            'MessageBox.Show("Lütfen Zorunlu Alanlarý Doldurunuz!", "Business Smart", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            'MessageBox.Show("Lï¿½tfen Zorunlu Alanlarï¿½ Doldurunuz!", "Business Smart", MessageBoxButtons.OK, MessageBoxIcon.Information)
             'End If
         End If
     End Sub
@@ -6756,7 +6763,7 @@ Public Class frm_firma_kart
             Try
                 tbFirmaYetkilisi_kaydet_duzelt(dr("nYetkiliID"), dr("nFirmaID"), dr("sUnvan"), dr("sHitap"), dr("sAdiSoyadi"))
             Catch ex As Exception
-                XtraMessageBox.Show(Sorgu_sDil("Kayýt Ýçeride Var", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                XtraMessageBox.Show(Sorgu_sDil("Kayï¿½t ï¿½ï¿½eride Var", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
             End Try
             ds_tbFirmaYetkilisi = Dataload_tbFirmaYetkilisi(nFirmaID)
             GridView2.FocusedRowHandle = satir
@@ -6801,7 +6808,7 @@ Public Class frm_firma_kart
             frm.bAdres = True
             frm.nStokFisiID = dr("nAdresID")
             frm.nFirmaID = nFirmaID
-            'Firma Açýklamasý Kontrol
+            'Firma Aï¿½ï¿½klamasï¿½ Kontrol
             If yetki_kontrol(kullanici, frm.Name) = True Then
                 frm.ShowDialog()
                 ds_tbFirmaAdresi = Dataload_tbFirmaAdresi(nFirmaID)
@@ -6834,7 +6841,7 @@ Public Class frm_firma_kart
             Try
                 tbFirmaIletisimi_kaydet_duzelt(dr("nIletisimID"), dr("nFirmaID"), dr("sIletisimAraci"), dr("sIletisimAdresi"))
             Catch ex As Exception
-                XtraMessageBox.Show(Sorgu_sDil("Kayýt Ýçeride Var", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                XtraMessageBox.Show(Sorgu_sDil("Kayï¿½t ï¿½ï¿½eride Var", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
             End Try
             ds_tbFirmaIletisimi = Dataload_tbFirmaIletisimi(nFirmaID)
             GridView3.FocusedRowHandle = satir
@@ -6869,7 +6876,7 @@ Public Class frm_firma_kart
     Private Sub HareketGirToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HareketGirToolStripMenuItem.Click
         tbFirmaHareketi()
     End Sub
-    Private Sub AçýklamaGirToolStripMenuItem_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles AçýklamaGirToolStripMenuItem.Click
+    Private Sub Aï¿½ï¿½klamaGirToolStripMenuItem_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles Aï¿½ï¿½klamaGirToolStripMenuItem.Click
         tbFirma_notlari()
     End Sub
     Private Sub txt_sKodu_EditValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txt_sKodu.EditValueChanged
@@ -6881,7 +6888,7 @@ Public Class frm_firma_kart
         If yeni = True Then
             txt_sKodu.EditValue = Trim(txt_sKodu.EditValue)
             If sorgu_sKodu_kontrol(txt_sKodu.EditValue) = False Then
-                txt_sKodu.ErrorText = txt_sKodu.Text & vbTab & "Kaydý Daha Önce Kullanýlmýþ"
+                txt_sKodu.ErrorText = txt_sKodu.Text & vbTab & "Kaydï¿½ Daha ï¿½nce Kullanï¿½lmï¿½ï¿½"
                 e.Cancel = True
                 txt_sKodu.Focus()
                 txt_sKodu.SelectAll()
@@ -6889,7 +6896,7 @@ Public Class frm_firma_kart
         End If
     End Sub
     Private Sub SilToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SilToolStripMenuItem.Click
-        If XtraMessageBox.Show(Sorgu_sDil("Kaydý Silmek Ýstediðinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+        If XtraMessageBox.Show(Sorgu_sDil("Kaydï¿½ Silmek ï¿½stediï¿½inize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
             tbFirma_sil(nFirmaID)
         End If
     End Sub
@@ -6908,7 +6915,7 @@ Public Class frm_firma_kart
         tbFirma_Ekle()
     End Sub
     Private Sub btn_sil_Click(ByVal sender As Object, ByVal e As System.EventArgs)
-        If XtraMessageBox.Show(Sorgu_sDil("Kaydý Silmek Ýstediðinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+        If XtraMessageBox.Show(Sorgu_sDil("Kaydï¿½ Silmek ï¿½stediï¿½inize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
             tbFirma_sil(nFirmaID)
         End If
     End Sub
@@ -6952,7 +6959,7 @@ Public Class frm_firma_kart
         tbFirma_notlari()
     End Sub
     Private Sub BarButtonItem3_ItemClick(ByVal sender As System.Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles BarButtonItem3.ItemClick
-        If XtraMessageBox.Show(Sorgu_sDil("Kaydý Silmek Ýstediðinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+        If XtraMessageBox.Show(Sorgu_sDil("Kaydï¿½ Silmek ï¿½stediï¿½inize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
             tbFirma_sil(nFirmaID)
         End If
     End Sub
@@ -7019,7 +7026,7 @@ Public Class frm_firma_kart
             Try
                 tbFirmaModulu_kaydet_duzelt(dr("nFirmaID"), dr("sModul"), dr("sPaket"), dr("sVersion"), dr("sAciklama"), dr("dteTarih"))
             Catch ex As Exception
-                XtraMessageBox.Show(Sorgu_sDil("Kayýt Ýçeride Var", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                XtraMessageBox.Show(Sorgu_sDil("Kayï¿½t ï¿½ï¿½eride Var", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
             End Try
             ds_tbFirmaModulu = Dataload_tbFirmaModulu(nFirmaID)
             GridView6.FocusedRowHandle = satir
@@ -7047,7 +7054,7 @@ Public Class frm_firma_kart
                 dr("sSifreyiAlan") = txt_sSifreyiAlan.Text
                 tbFirmaLisans_kaydet_Duzelt(dr("nFirmaID"), dr("sOnayKodu").ToString, dr("sParametre1").ToString, dr("sParametre2").ToString, dr("sManufactor").ToString, dr("sModel").ToString, dr("sSystemType").ToString, dr("sCpuID").ToString, dr("sBiosVersion").ToString, dr("sHddSerial").ToString, txt_dteGecerlilikTarihi.EditValue, dr("nBayiID").ToString, txt_sSifreyiAlan.Text)
             Catch ex As Exception
-                XtraMessageBox.Show(Sorgu_sDil("Kayýt Ýçeride Var", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                XtraMessageBox.Show(Sorgu_sDil("Kayï¿½t ï¿½ï¿½eride Var", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
             End Try
             ds_tbFirmaLisans = Dataload_tbFirmaLisans(nFirmaID)
             GridView7.FocusedRowHandle = satir
@@ -7062,11 +7069,11 @@ Public Class frm_firma_kart
         Dim sayi = GridView6.RowCount
         Dim satir = GridView6.FocusedRowHandle
         Dim TOPLAM = sayi - GridView6.FocusedRowHandle
-        Dim Ý As Integer
-        Ý = 0
+        Dim ï¿½ As Integer
+        ï¿½ = 0
         dr = GridView6.GetDataRow(GridView6.FocusedRowHandle)
         durum = dr("" & columnkriter & "")
-        For Ý = 1 To TOPLAM
+        For ï¿½ = 1 To TOPLAM
             dr = GridView6.GetDataRow(GridView6.FocusedRowHandle)
             dr.BeginEdit()
             dr("" & columnkriter & "") = durum
@@ -7079,11 +7086,11 @@ Public Class frm_firma_kart
         durum = Nothing
         sayi = Nothing
         satir = Nothing
-        Ý = Nothing
+        ï¿½ = Nothing
     End Sub
     Private Sub MenuItem16_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItem16.Click
         If GridView6.RowCount > 0 Then
-            If XtraMessageBox.Show(Sorgu_sDil("[" & GridView6.FocusedColumn().Caption & "] Kolonundaki verileri Aþaðý Doðru Yaymak istediðinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+            If XtraMessageBox.Show(Sorgu_sDil("[" & GridView6.FocusedColumn().Caption & "] Kolonundaki verileri Aï¿½aï¿½ï¿½ Doï¿½ru Yaymak istediï¿½inize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
                 degeryay_modul(GridView6.FocusedColumn().FieldName)
             End If
         End If
@@ -7122,8 +7129,8 @@ Public Class frm_firma_kart
     End Sub
     Private Sub raporla(ByVal nIslem As Integer)
         Dim OpenFileDialog1 As New Windows.Forms.OpenFileDialog
-        OpenFileDialog1.Title = "Rapor Seç..."
-        OpenFileDialog1.Filter = "Rapor Dosyalarý (Lisans*.frx) |Lisans*.frx"
+        OpenFileDialog1.Title = "Rapor Seï¿½..."
+        OpenFileDialog1.Filter = "Rapor Dosyalarï¿½ (Lisans*.frx) |Lisans*.frx"
         OpenFileDialog1.FileName = "c:\Formlar\Raporlar\Lisans.frx"
         OpenFileDialog1.InitialDirectory = "c:\Formlar\Raporlar"
         If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
@@ -7137,7 +7144,7 @@ Public Class frm_firma_kart
             report.RegisterData(ds_tbFirmaModulu, "tbFirmaModulu")
             report.RegisterData(ds_tbFirmaLisans, "tbFirmaLisans")
             report.RegisterData(ds_tbParamGenel, "tbParemeGenel")
-            'report.SetParameterValue("Kriter", "Barkod Yazýlýmevi)
+            'report.SetParameterValue("Kriter", "Barkod Yazï¿½lï¿½mevi)
             report.ScriptLanguage = Language.Vb
             If nIslem = 0 Then
                 report.Show()
@@ -7190,8 +7197,8 @@ Public Class frm_firma_kart
     '    txt_sVergiNo.EditValue = Trim(txt_sVergiNo.Text.ToString)
     '    If Trim(txt_sVergiNo.EditValue) <> "" Then
     '        If sorgu_sVergiNo_kontrol(txt_sVergiNo.Text.ToString, nFirmaID, yeni) = False Then
-    '            'txt_sSoyadi.ErrorText = txt_sSoyadi.Text & vbTab & "Kaydý Daha Önce Kullanýlmýþ"
-    '            If XtraMessageBox.Show(txt_sVergiNo.Text & Sorgu_sDil("  Vergi No Daha Once Kayit Yapilmis...", sDil) & vbCrLf & Sorgu_sDil("Kayýtlarý Görmek Ýster misiniz..?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = MsgBoxResult.Yes Then
+    '            'txt_sSoyadi.ErrorText = txt_sSoyadi.Text & vbTab & "Kaydï¿½ Daha ï¿½nce Kullanï¿½lmï¿½ï¿½"
+    '            If XtraMessageBox.Show(txt_sVergiNo.Text & Sorgu_sDil("  Vergi No Daha Once Kayit Yapilmis...", sDil) & vbCrLf & Sorgu_sDil("Kayï¿½tlarï¿½ Gï¿½rmek ï¿½ster misiniz..?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = MsgBoxResult.Yes Then
     '                Dim frm As New frm_firma_liste
     '                frm.firmano = firmano
     '                frm.donemno = donemno
@@ -7199,7 +7206,7 @@ Public Class frm_firma_kart
     '                frm.sModul = sModul
     '                frm.txt_ara.Text = txt_sVergiNo.EditValue
     '                frm.sec_konum.Text = "VergiNo"
-    '                frm.sec_kriter.Text = "Eþittir"
+    '                frm.sec_kriter.Text = "Eï¿½ittir"
     '                frm.ShowDialog()
     '                'e.Cancel = True
     '                'txt_sSoyadi.Focus()
@@ -7250,16 +7257,16 @@ Public Class frm_firma_kart
         txt_sAdi.EditValue = Trim(txt_sAdi.Text.ToString)
         If Trim(txt_sAdi.EditValue) <> "" Then
             If sorgu_sAdi_kontrol(txt_sAdi.Text.ToString, nFirmaID, yeni) = False Then
-                'txt_sSoyadi.ErrorText = txt_sSoyadi.Text & vbTab & "Kaydý Daha Önce Kullanýlmýþ"
-                If XtraMessageBox.Show(txt_sAdi.Text & Sorgu_sDil("  Adý Daha Once Kayit Yapilmis...", sDil) & vbCrLf & Sorgu_sDil("Kayýtlarý Görmek Ýster misiniz..?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = MsgBoxResult.Yes Then
+                'txt_sSoyadi.ErrorText = txt_sSoyadi.Text & vbTab & "Kaydï¿½ Daha ï¿½nce Kullanï¿½lmï¿½ï¿½"
+                If XtraMessageBox.Show(txt_sAdi.Text & Sorgu_sDil("  Adï¿½ Daha Once Kayit Yapilmis...", sDil) & vbCrLf & Sorgu_sDil("Kayï¿½tlarï¿½ Gï¿½rmek ï¿½ster misiniz..?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = MsgBoxResult.Yes Then
                     Dim frm As New frm_firma_liste
                     frm.firmano = firmano
                     frm.donemno = donemno
                     frm.connection = connection
                     frm.sModul = sModul
                     frm.txt_ara.Text = txt_sAdi.EditValue
-                    frm.sec_konum.Text = "Adý"
-                    frm.sec_kriter.Text = "Eþittir"
+                    frm.sec_konum.Text = "Adï¿½"
+                    frm.sec_kriter.Text = "Eï¿½ittir"
                     frm.ShowDialog()
                     'e.Cancel = True
                     'txt_sSoyadi.Focus()
@@ -7290,12 +7297,12 @@ Public Class frm_firma_kart
     '    If Trim(txt_TC.EditValue) <> "" Then
     '        If txt_TC.Text.Length = 11 Then
     '            If sorgu_TC_kontrol(txt_TC.Text.ToString, nFirmaID, yeni) = False Then
-    '                XtraMessageBox.Show(txt_TC.Text & Sorgu_sDil(" TC'si ile Daha Once Kayit Yapilmistýr!", sDil), Sorgu_sDil("Dikkat", sDil))
+    '                XtraMessageBox.Show(txt_TC.Text & Sorgu_sDil(" TC'si ile Daha Once Kayit Yapilmistï¿½r!", sDil), Sorgu_sDil("Dikkat", sDil))
     '                txt_TC.Text = ""
     '                txt_TC.Focus()
     '            End If
     '        Else
-    '            XtraMessageBox.Show("TC kimlik numarasý 11 haneden az olamaz!", "Dikkat")
+    '            XtraMessageBox.Show("TC kimlik numarasï¿½ 11 haneden az olamaz!", "Dikkat")
     '            txt_TC.Text = ""
     '            txt_TC.Focus()
     '        End If
@@ -7344,7 +7351,7 @@ Public Class frm_firma_kart
             Dim satir
             dr = GridView8.GetDataRow(GridView8.FocusedRowHandle)
             satir = GridView8.FocusedRowHandle
-            If XtraMessageBox.Show(dr("dteKayitTarihi") & vbTab & Sorgu_sDil(" Tarihli Resmi Silmek istediðinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+            If XtraMessageBox.Show(dr("dteKayitTarihi") & vbTab & Sorgu_sDil(" Tarihli Resmi Silmek istediï¿½inize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
                 tbFirmaResim_kaydet_Sil(nFirmaID, dr("nFirmaResimID"))
             End If
             ds_tbFirmaResim = Dataload_tbFirmaResim(nFirmaID)
@@ -7388,7 +7395,7 @@ Public Class frm_firma_kart
             Try
                 tbFirmaResim_kaydet_duzelt(dr("nFirmaResimID"), dr("nFirmaID"), dr("sAciklama"), dr("nSira"), dr("sKullaniciAdi"), dr("dteKayitTarihi"))
             Catch ex As Exception
-                XtraMessageBox.Show(Sorgu_sDil("Kayýt Ýçeride Var", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                XtraMessageBox.Show(Sorgu_sDil("Kayï¿½t ï¿½ï¿½eride Var", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
             End Try
             ds_tbFirmaResim = Dataload_tbFirmaResim(nFirmaID)
             GridControl7.DataSource = ds_tbFirmaResim.Tables(0)
@@ -7407,10 +7414,10 @@ Public Class frm_firma_kart
             frm.ShowDialog()
         End If
     End Sub
-    Private Sub KarlýlýkAkýþTablosuToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles KarlýlýkAkýþTablosuToolStripMenuItem.Click
+    Private Sub Karlï¿½lï¿½kAkï¿½ï¿½TablosuToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Karlï¿½lï¿½kAkï¿½ï¿½TablosuToolStripMenuItem.Click
         analiz_firma_KarlilikAkisTablosu()
     End Sub
-    Private Sub HesapKodunuDeðiþtirToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HesapKodunuDeðiþtirToolStripMenuItem.Click
+    Private Sub HesapKodunuDeï¿½iï¿½tirToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles HesapKodunuDeï¿½iï¿½tirToolStripMenuItem.Click
         tbFirma_KodDegistir()
     End Sub
     Private Sub tbFirma_KodDegistir()
@@ -7418,7 +7425,7 @@ Public Class frm_firma_kart
         deger = InputBox("Yeni Hesap Kodu", "Hesap Kodu", "").ToString
         If deger.ToString <> "" Then
             If sorgu_sKodu_kontrol(deger) = False Then
-                XtraMessageBox.Show(deger & vbTab & "Kodu  Daha Önce Kullanýlmýþ", Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                XtraMessageBox.Show(deger & vbTab & "Kodu  Daha ï¿½nce Kullanï¿½lmï¿½ï¿½", Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Else
                 tbFirmaKod_kaydet_duzelt(nFirmaID, deger)
                 sKodu = deger
@@ -7457,8 +7464,8 @@ Public Class frm_firma_kart
         frm.kullanici = kullanici
         If sAra <> "" Then
             frm.txt_ara.Text = sAra
-            frm.sec_konum.Text = "Geliþmiþ"
-            frm.sec_kriter.Text = "Baþlar"
+            frm.sec_konum.Text = "Geliï¿½miï¿½"
+            frm.sec_kriter.Text = "Baï¿½lar"
         End If
         If frm.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             Dim dr1 As DataRow
@@ -7596,7 +7603,7 @@ Public Class frm_firma_kart
         End If
     End Sub
     Private Sub SimpleButton10_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SimpleButton10.Click
-        If XtraMessageBox.Show(txt_sOnayKodu.Text & Sorgu_sDil(" Onay Numaralý Lisans Kaydýný Sýfýrlamak istediðinize Emin misiniz?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+        If XtraMessageBox.Show(txt_sOnayKodu.Text & Sorgu_sDil(" Onay Numaralï¿½ Lisans Kaydï¿½nï¿½ Sï¿½fï¿½rlamak istediï¿½inize Emin misiniz?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
             Dim cmd As New OleDb.OleDbCommand
             Dim con As New OleDb.OleDbConnection
             cmd.Connection = con
@@ -7617,7 +7624,7 @@ Public Class frm_firma_kart
             vknTckn = vknTckn.Trim()
             If Not IsNumeric(vknTckn) OrElse (vknTckn.Length <> 10 AndAlso vknTckn.Length <> 11) Then Exit Sub
 
-            ' Gib kullanýcý adý ve þifreyi OleDb ile çek
+            ' Gib kullanï¿½cï¿½ adï¿½ ve ï¿½ifreyi OleDb ile ï¿½ek
             Dim gibKullanici As String = ""
             Dim gibSifre As String = ""
 
@@ -7657,17 +7664,17 @@ Public Class frm_firma_kart
             End Using
             txt_sKodu.Text = mevcutKodu
         Catch ex As Exception
-            MsgBox("GÝB sorgusu sýrasýnda hata oluþtu: " & ex.Message, MsgBoxStyle.Critical)
+            MsgBox("Gï¿½B sorgusu sï¿½rasï¿½nda hata oluï¿½tu: " & ex.Message, MsgBoxStyle.Critical)
         End Try
     End Sub
-    ' txt_sVergiNo_Validating olayý
+    ' txt_sVergiNo_Validating olayï¿½
     Private Sub txt_sVergiNo_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles txt_sVergiNo.Validating
         txt_sVergiNo.EditValue = Trim(txt_sVergiNo.Text.ToString)
         If Trim(txt_sVergiNo.EditValue) <> "" Then
             ' Mevcut kontrol
             If sorgu_sVergiNo_kontrol(txt_sVergiNo.Text.ToString, nFirmaID, yeni) = False Then
-                If XtraMessageBox.Show(txt_sVergiNo.Text & Sorgu_sDil("  Vergi No Daha Önce Kayýt Yapýlmýþ...", sDil) & vbCrLf &
-                                       Sorgu_sDil("Kayýtlarý Görmek Ýster misiniz..?", sDil),
+                If XtraMessageBox.Show(txt_sVergiNo.Text & Sorgu_sDil("  Vergi No Daha ï¿½nce Kayï¿½t Yapï¿½lmï¿½ï¿½...", sDil) & vbCrLf &
+                                       Sorgu_sDil("Kayï¿½tlarï¿½ Gï¿½rmek ï¿½ster misiniz..?", sDil),
                                        Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = MsgBoxResult.Yes Then
                     Dim frm As New frm_firma_liste
                     frm.firmano = firmano
@@ -7676,34 +7683,121 @@ Public Class frm_firma_kart
                     frm.sModul = sModul
                     frm.txt_ara.Text = txt_sVergiNo.EditValue
                     frm.sec_konum.Text = "VergiNo"
-                    frm.sec_kriter.Text = "Eþittir"
+                    frm.sec_kriter.Text = "Eï¿½ittir"
                     frm.ShowDialog()
                 End If
             End If
 
-            ' GÝB sorgusu
+            ' Gï¿½B sorgusu
             QueryGibUsers(txt_sVergiNo.Text)
         End If
     End Sub
-    ' txt_TC_Validating olayý
+    ' txt_TC_Validating olayï¿½
     Private Sub txt_TC_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles txt_TC.Validating
         txt_TC.EditValue = Trim(txt_TC.Text.ToString)
         If Trim(txt_TC.EditValue) <> "" Then
             If txt_TC.Text.Length = 11 Then
                 If sorgu_TC_kontrol(txt_TC.Text.ToString, nFirmaID, yeni) = False Then
-                    XtraMessageBox.Show(txt_TC.Text & Sorgu_sDil(" TC'si ile Daha Önce Kayýt Yapýlmýþtýr!", sDil), Sorgu_sDil("Dikkat", sDil))
+                    XtraMessageBox.Show(txt_TC.Text & Sorgu_sDil(" TC'si ile Daha ï¿½nce Kayï¿½t Yapï¿½lmï¿½ï¿½tï¿½r!", sDil), Sorgu_sDil("Dikkat", sDil))
                     'txt_TC.Text = ""
                     'txt_TC.Focus()
                 Else
-                    ' GÝB sorgusu
+                    ' Gï¿½B sorgusu
                     QueryGibUsers(txt_TC.Text)
                 End If
             Else
-                XtraMessageBox.Show("TC kimlik numarasý 11 haneden az olamaz!", "Dikkat")
+                XtraMessageBox.Show("TC kimlik numarasï¿½ 11 haneden az olamaz!", "Dikkat")
                 txt_TC.Text = ""
                 txt_TC.Focus()
             End If
         End If
+    End Sub
+
+
+    ' === RISK GOSTERGESI METODU ===
+    Private Sub RiskGostergesiniGuncelle()
+        Try
+            ' Parametrik kontrol
+            Dim conn As New OleDb.OleDbConnection(sConnection)
+            conn.Open()
+            Dim cmdAyar As New OleDb.OleDbCommand
+            cmdAyar.Connection = conn
+
+            ' RISK_SKORU_AKTIF kontrolu
+            cmdAyar.CommandText = sorgu_query("SELECT ISNULL(sAyarDeger,'0') FROM tbSistemAyar WHERE sAyarKodu='RISK_SKORU_AKTIF'")
+            Dim sRiskAktif As String = ""
+            Try : sRiskAktif = cmdAyar.ExecuteScalar().ToString() : Catch : End Try
+            If sRiskAktif <> "1" Then
+                conn.Close()
+                Exit Sub
+            End If
+
+            ' Yetki kontrolu
+            If yetki_kontrol(kullanici, "ai_risk_skoru_gor") = False Then
+                conn.Close()
+                Exit Sub
+            End If
+
+            ' Risk verisini cek
+            cmdAyar.CommandText = sorgu_query("SELECT " & _
+                "ISNULL((SELECT SUM(CASE WHEN sBorcAlacak='B' THEN lTutar ELSE 0 END) - SUM(CASE WHEN sBorcAlacak='A' THEN lTutar ELSE 0 END) FROM tbFirmaHareketi WHERE nFirmaID=" & nFirmaID & "), 0) AS Bakiye, " & _
+                "ISNULL((SELECT lKrediLimiti FROM tbFirma WHERE nFirmaID=" & nFirmaID & "), 0) AS KrediLimiti, " & _
+                "ISNULL((SELECT MAX(DATEDIFF(DAY, dteValorTarihi, GETDATE())) FROM tbFirmaHareketi WHERE nFirmaID=" & nFirmaID & " AND sBorcAlacak='B' AND dteValorTarihi < GETDATE()), 0) AS GecikmeGun")
+
+            Dim dr As OleDb.OleDbDataReader = cmdAyar.ExecuteReader()
+            If dr.Read() Then
+                Dim bakiye As Decimal = CDec(dr("Bakiye"))
+                Dim krediLimiti As Decimal = CDec(dr("KrediLimiti"))
+                Dim gecikmeGun As Integer = CInt(dr("GecikmeGun"))
+
+                ' Basit risk skoru hesapla
+                Dim skor As Integer = 100
+                If gecikmeGun > 0 Then skor -= Math.Min(gecikmeGun * 2, 40)
+                If krediLimiti > 0 AndAlso bakiye / krediLimiti > 0.9D Then skor -= 20
+                If krediLimiti > 0 AndAlso bakiye / krediLimiti > 0.7D Then skor -= 10
+                skor = Math.Max(0, Math.Min(100, skor))
+
+                Dim seviye As String = If(skor >= 70, "GUVENLI", If(skor >= 40, "DIKKAT", "KRITIK"))
+                Dim renk As Color = If(skor >= 70, Color.FromArgb(39, 174, 96), If(skor >= 40, Color.FromArgb(243, 156, 18), Color.FromArgb(231, 76, 60)))
+
+                ' Risk paneli olustur
+                If pnlRisk Is Nothing Then
+                    pnlRisk = New Panel()
+                    pnlRisk.Dock = DockStyle.Top
+                    pnlRisk.Height = 36
+                    pnlRisk.BackColor = renk
+                    pnlRisk.Padding = New Padding(8, 4, 8, 4)
+                    pnlRisk.Visible = True
+
+                    lblRiskSkor = New Label()
+                    lblRiskSkor.AutoSize = True
+                    lblRiskSkor.Font = New Font("Segoe UI", 10, FontStyle.Bold)
+                    lblRiskSkor.ForeColor = Color.White
+                    lblRiskSkor.Location = New Point(8, 8)
+
+                    lblRiskAciklama = New Label()
+                    lblRiskAciklama.AutoSize = True
+                    lblRiskAciklama.Font = New Font("Segoe UI", 9)
+                    lblRiskAciklama.ForeColor = Color.White
+                    lblRiskAciklama.Location = New Point(200, 10)
+
+                    pnlRisk.Controls.Add(lblRiskSkor)
+                    pnlRisk.Controls.Add(lblRiskAciklama)
+                    Me.Controls.Add(pnlRisk)
+                    pnlRisk.BringToFront()
+                End If
+
+                pnlRisk.BackColor = renk
+                lblRiskSkor.Text = "Risk: " & skor & "/100 (" & seviye & ")"
+                lblRiskAciklama.Text = "Bakiye: " & bakiye.ToString("N2") & " TL | Gecikme: " & gecikmeGun & " gun" & _
+                    If(krediLimiti > 0, " | Limit: %" & Math.Round(bakiye / krediLimiti * 100, 0), "")
+                pnlRisk.Visible = True
+            End If
+            dr.Close()
+            conn.Close()
+        Catch ex As Exception
+            ' Risk gostergesi hatasi formu engellemez
+        End Try
     End Sub
 
 End Class

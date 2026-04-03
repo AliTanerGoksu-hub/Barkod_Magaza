@@ -24509,6 +24509,20 @@ CleanupExcel:
     ' B2B PORTAL AYARLARI YÖNETİMİ
     ' ============================================================================
 
+    ' === AI AYARLARI ===
+    Private Sub btnAIAyarlar_Click(sender As Object, e As EventArgs)
+        Try
+            If yetki_kontrol(kullanici, "ai_ayarlar_yonet") = False Then
+                MessageBox.Show("Bu isleme yetkiniz yoktur.", "Yetki Hatasi", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Exit Sub
+            End If
+            Dim frm As New frm_AI_Ayarlar(sConnection, kullaniciadi)
+            frm.ShowDialog(Me)
+        Catch ex As Exception
+            MessageBox.Show("Hata: " & ex.Message)
+        End Try
+    End Sub
+
     Private Sub btnB2BAyarlar_Click(sender As Object, e As DevExpress.XtraBars.ItemClickEventArgs) Handles btnB2BAyarlar.ItemClick
         Try
             ShowB2BAyarlarForm()
