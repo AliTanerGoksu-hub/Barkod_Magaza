@@ -3467,6 +3467,64 @@ Public Class frm_stok_cari_alis
         If con.State = ConnectionState.Closed = True Then
             con.Open()
         End If
+
+        ' === PARAMETRIK VALOR TARIHI KONTROLU ===
+        ' tbSistemAyar'dan VALOR_TARIHI_ZORUNLU ayarini kontrol et
+        If bPesinmi = 0 AndAlso nFirmaID > 0 Then
+            Try
+                Dim cmdAyar As New OleDb.OleDbCommand
+                cmdAyar.Connection = con
+                cmdAyar.CommandText = sorgu_query("SELECT ISNULL(sAyarDeger,'0') FROM tbSistemAyar WHERE sAyarKodu='VALOR_TARIHI_ZORUNLU'")
+                Dim sValorZorunlu As String = ""
+                Try : sValorZorunlu = cmdAyar.ExecuteScalar().ToString() : Catch : End Try
+
+                If sValorZorunlu = "1" AndAlso dteValorTarihi.Date = dteFisTarihi.Date Then
+                    ' Firma kartindan vade gun bilgisini al
+                    cmdAyar.CommandText = sorgu_query("SELECT ISNULL(nVadeGun,0) FROM tbFirma WHERE nFirmaID=" & nFirmaID)
+                    Dim nVadeGunFirma As Integer = 0
+                    Try : nVadeGunFirma = CInt(cmdAyar.ExecuteScalar()) : Catch : End Try
+                    If nVadeGunFirma > 0 Then
+                        dteValorTarihi = dteFisTarihi.AddDays(nVadeGunFirma)
+                    End If
+                End If
+
+                ' === KREDI LIMIT KONTROLU (Opsiyonel) ===
+                cmdAyar.CommandText = sorgu_query("SELECT ISNULL(sAyarDeger,'0') FROM tbSistemAyar WHERE sAyarKodu='SIPARIS_LIMIT_KONTROL'")
+                Dim sLimitKontrol As String = ""
+                Try : sLimitKontrol = cmdAyar.ExecuteScalar().ToString() : Catch : End Try
+
+                If sLimitKontrol = "1" Then
+                    cmdAyar.CommandText = sorgu_query("SELECT ISNULL(lKrediLimiti,0) FROM tbFirma WHERE nFirmaID=" & nFirmaID)
+                    Dim lKrediLimiti As Decimal = 0
+                    Try : lKrediLimiti = CDec(cmdAyar.ExecuteScalar()) : Catch : End Try
+
+                    If lKrediLimiti > 0 Then
+                        cmdAyar.CommandText = sorgu_query("SELECT ISNULL(SUM(CASE WHEN sBorcAlacak='B' THEN lTutar ELSE 0 END),0) - ISNULL(SUM(CASE WHEN sBorcAlacak='A' THEN lTutar ELSE 0 END),0) FROM tbFirmaHareketi WHERE nFirmaID=" & nFirmaID)
+                        Dim lMevcutBakiye As Decimal = 0
+                        Try : lMevcutBakiye = CDec(cmdAyar.ExecuteScalar()) : Catch : End Try
+
+                        If (lMevcutBakiye + lNetTutar) > lKrediLimiti Then
+                            Dim sonuc = MessageBox.Show("UYARI: Bu fatura ile birlikte kredi limiti asilacak!" & vbCrLf & _
+                                "Kredi Limiti: " & lKrediLimiti.ToString("N2") & vbCrLf & _
+                                "Mevcut Bakiye: " & lMevcutBakiye.ToString("N2") & vbCrLf & _
+                                "Fatura Tutari: " & lNetTutar.ToString("N2") & vbCrLf & _
+                                "Yeni Bakiye: " & (lMevcutBakiye + lNetTutar).ToString("N2") & vbCrLf & vbCrLf & _
+                                "Devam etmek istiyor musunuz?", "Kredi Limit Uyarisi", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                            If sonuc = DialogResult.No Then
+                                con.Close()
+                                Return 0
+                            End If
+                        End If
+                    End If
+                End If
+
+                cmdAyar = Nothing
+            Catch ex As Exception
+                ' Ayar kontrolu basarisiz olsa bile fatura kaydini engellemiyoruz
+            End Try
+        End If
+        ' === PARAMETRIK KONTROLLER SONU ===
+
         'cmd.CommandText = sorgu_query("SET DATEFORMAT DMY INSERT INTO tbStokFisiMaster (sFisTipi, dteFisTarihi, nGirisCikis, lFisNo, nFirmaID, sDepo, dteValorTarihi, bPesinmi, bListelendimi, bHizmetFaturasimi, lToplamMiktar, lMalBedeli, lMalIskontoTutari, nDipIskontoYuzdesi1, lDipIskontoTutari1, nDipIskontoYuzdesi2, lDipIskontoTutari2, lDipIskontoTutari3, lEkmaliyet1, lEkmaliyet2, lEkmaliyet3, nKdvOrani1, lKdvMatrahi1, lKdv1, nKdvOrani2, lKdvMatrahi2, lKdv2, nKdvOrani3, lKdvMatrahi3, lKdv3, nKdvOrani4, lKdvMatrahi4, lKdv4, nKdvOrani5, lKdvMatrahi5, lKdv5, lNetTutar, nTevkifatKdvOrani, lTevkifatKdvMatrahi, lTevkifatKdv, sCariIslem, nCariHareketID, nKasaIslemID, sCariKdvIslem, nCariKdvHareketID, sHareketTipi, bMuhasebeyeIslendimi, bFisTamamlandimi, lTransferFisiID, nTransferFirmaID, sTransferDepo, bFaturayaDonustumu, sKullaniciAdi, dteKayitTarihi, sYaziIle, nOTVOrani1, lOTVMatrahi1, lOTV1, nOTVOrani2, lOTVMatrahi2, lOTV2) VALUES     ('" & sFisTipi & "', '" & dteFisTarihi & "', " & nGirisCikis & " , '" & lFisNo & "', " & nFirmaID & ", '" & sDepo & "', '" & dteValorTarihi & "', " & bPesinmi & " , " & bListelendimi & " , " & bHizmetFaturasimi & " , " & lToplamMiktar & " , " & lMalBedeli & ", " & lMalIskontoTutari & " , " & nDipIskontoYuzdesi1 & " , " & lDipIskontoTutari1 & " , " & nDipIskontoYuzdesi2 & " , " & lDipIskontoTutari2 & " , " & lDipIskontoTutari3 & " , " & lEkmaliyet1 & " , " & lEkmaliyet2 & " , " & lEkmaliyet3 & " , " & nKdvOrani1 & " , " & lKdvMatrahi1 & ", " & lKdv1 & " , " & nKdvOrani2 & ", " & lKdvMatrahi2 & " , " & lKdv2 & ", " & nKdvOrani3 & " , " & lKdvMatrahi3 & ", " & lKdv3 & " , " & nKdvOrani4 & ", " & lKdvMatrahi4 & " , " & lKdv4 & " , " & nKdvOrani5 & " , " & lKdvMatrahi5 & " , " & lKdv5 & " , " & lNetTutar & " , " & nTevkifatKdvOrani & " , " & lTevkifatKdvMatrahi & ", " & lTevkifatKdv & " , '" & sCariIslem & "', '" & nCariHareketID & "', '" & nKasaIslemID & "', '" & sCariKdvIslem & "', '" & nCariKdvHareketID & "', '" & sHareketTipi & "', " & bMuhasebeyeIslendimi & ", " & bFisTamamlandimi & ", '" & lTransferFisiID & "', '" & nTransferFirmaID & "', '" & sTransferDepo & "', " & bFaturayaDonustumu & " , '" & sKullaniciAdi & "', '" & dteKayitTarihi & "', '" & sYaziIle & "', " & nOTVOrani1 & ", " & lOTVMatrahi1 & ", " & lOTV1 & ", " & nOTVOrani2 & " , " & lOTVMatrahi2 & ", " & lOTV2 & ")")
         cmd.CommandText = sorgu_query("SET DATEFORMAT DMY INSERT INTO tbStokFisiMaster (sFisTipi, dteFisTarihi, nGirisCikis, lFisNo, nFirmaID, sDepo, dteValorTarihi, bPesinmi, bListelendimi, bHizmetFaturasimi, lToplamMiktar, lMalBedeli, lMalIskontoTutari, nDipIskontoYuzdesi1, lDipIskontoTutari1, nDipIskontoYuzdesi2, lDipIskontoTutari2, lDipIskontoTutari3, lEkmaliyet1, lEkmaliyet2, lEkmaliyet3, nKdvOrani1, lKdvMatrahi1, lKdv1, nKdvOrani2, lKdvMatrahi2, lKdv2, nKdvOrani3, lKdvMatrahi3, lKdv3, nKdvOrani4, lKdvMatrahi4, lKdv4, nKdvOrani5, lKdvMatrahi5, lKdv5, lNetTutar, nTevkifatKdvOrani, lTevkifatKdvMatrahi, lTevkifatKdv, sHareketTipi, bMuhasebeyeIslendimi, bFisTamamlandimi, lTransferFisiID,  sTransferDepo, bFaturayaDonustumu, sKullaniciAdi, dteKayitTarihi, sYaziIle, nOTVOrani1, lOTVMatrahi1, lOTV1, nOTVOrani2, lOTVMatrahi2, lOTV2, nEvrakNo) VALUES     ('" & sFisTipi & "', '" & dteFisTarihi & "', " & nGirisCikis & " , '" & lFisNo & "', " & nFirmaID & ", '" & sDepo & "', '" & dteValorTarihi & "', " & bPesinmi & " , " & bListelendimi & " , " & bHizmetFaturasimi & " , " & lToplamMiktar & " , " & lMalBedeli & ", " & lMalIskontoTutari & " , " & nDipIskontoYuzdesi1 & " , " & lDipIskontoTutari1 & " , " & nDipIskontoYuzdesi2 & " , " & lDipIskontoTutari2 & " , " & lDipIskontoTutari3 & " , " & lEkmaliyet1 & " , " & lEkmaliyet2 & " , " & lEkmaliyet3 & " , " & nKdvOrani1 & " , " & lKdvMatrahi1 & ", " & lKdv1 & " , " & nKdvOrani2 & ", " & lKdvMatrahi2 & " , " & lKdv2 & ", " & nKdvOrani3 & " , " & lKdvMatrahi3 & ", " & lKdv3 & " , " & nKdvOrani4 & ", " & lKdvMatrahi4 & " , " & lKdv4 & " , " & nKdvOrani5 & " , " & lKdvMatrahi5 & " , " & lKdv5 & " , " & lNetTutar & " , " & nTevkifatKdvOrani & " , " & lTevkifatKdvMatrahi & ", " & lTevkifatKdv & " ,  '" & sHareketTipi & "', " & bMuhasebeyeIslendimi & ", " & bFisTamamlandimi & ", '" & lTransferFisiID & "',  '" & sTransferDepo & "', " & bFaturayaDonustumu & " , '" & sKullaniciAdi & "', '" & dteKayitTarihi & "', '" & sYaziIle & "', " & nOTVOrani1 & ", " & lOTVMatrahi1 & ", " & lOTV1 & ", " & nOTVOrani2 & " , " & lOTVMatrahi2 & ", " & lOTV2 & ", '" & nEvrakNo & "')")
         cmd.ExecuteNonQuery()
