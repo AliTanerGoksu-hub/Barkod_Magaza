@@ -1,11 +1,11 @@
 Imports Microsoft.Win32
 Imports DevExpress.XtraEditors
 Public Class frm_perakende
+    Inherits DevExpress.XtraEditors.XtraForm
 
     ' === PERAKENDE RISK GOSTERGESI ===
     Private pnlPerakendeRisk As Panel
     Private lblPerakendeRisk As Label
-    Inherits DevExpress.XtraEditors.XtraForm
 #Region " Windows Form Designer generated code "
     Public Sub New()
         MyBase.New()
@@ -117,7 +117,7 @@ Public Class frm_perakende
     Friend WithEvents ToolTipController1 As DevExpress.Utils.ToolTipController
     Friend WithEvents btn_yenile As DevExpress.XtraEditors.SimpleButton
     Friend WithEvents BarButtonItem23 As DevExpress.XtraBars.BarButtonItem
-    Friend WithEvents ï¿½mageList1 As System.Windows.Forms.ImageList
+    Friend WithEvents ýmageList1 As System.Windows.Forms.ImageList
     Friend WithEvents LabelControl8 As DevExpress.XtraEditors.LabelControl
     Friend WithEvents txt_sMagaza As DevExpress.XtraEditors.TextEdit
     Friend WithEvents txt_dteKayitTarihi As DevExpress.XtraEditors.DateEdit
@@ -560,7 +560,7 @@ Public Class frm_perakende
         Me.colKASIYER = New DevExpress.XtraGrid.Columns.GridColumn()
         Me.colKAYIT = New DevExpress.XtraGrid.Columns.GridColumn()
         Me.collBakiye = New DevExpress.XtraGrid.Columns.GridColumn()
-        Me.ï¿½mageList1 = New System.Windows.Forms.ImageList(Me.components)
+        Me.ýmageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.ds_taksitler = New System.Data.DataSet()
         Me.Panel_islem = New DevExpress.XtraEditors.PanelControl()
         Me.GroupControl7 = New DevExpress.XtraEditors.GroupControl()
@@ -688,7 +688,7 @@ Public Class frm_perakende
         '
         'colGEC
         '
-        Me.colGEC.Caption = "Gï¿½n"
+        Me.colGEC.Caption = "Gün"
         Me.colGEC.DisplayFormat.FormatString = "#,0.##"
         Me.colGEC.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
         Me.colGEC.FieldName = "GECIKME"
@@ -725,7 +725,7 @@ Public Class frm_perakende
         Me.LabelControl35.Name = "LabelControl35"
         Me.LabelControl35.Size = New System.Drawing.Size(66, 19)
         Me.LabelControl35.TabIndex = 42
-        Me.LabelControl35.Text = "Hï¿½zlï¿½ Ara:"
+        Me.LabelControl35.Text = "Hýzlý Ara:"
         '
         'TextEdit1
         '
@@ -765,7 +765,7 @@ Public Class frm_perakende
         '
         'BarSubItem1
         '
-        Me.BarSubItem1.Caption = "Menï¿½"
+        Me.BarSubItem1.Caption = "Menü"
         Me.BarSubItem1.Enabled = False
         Me.BarSubItem1.Id = 0
         Me.BarSubItem1.LinksPersistInfo.AddRange(New DevExpress.XtraBars.LinkPersistInfo() {New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem5), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem19), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem18, True), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem2), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem3), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem4), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem6), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem7, True), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem8), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem9), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem10), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem11), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem22), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem12, True), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem13), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem14, True), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem15), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem16), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem17), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem24), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem25), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem20, True), New DevExpress.XtraBars.LinkPersistInfo(Me.BarButtonItem23)})
@@ -780,76 +780,76 @@ Public Class frm_perakende
         '
         'BarButtonItem19
         '
-        Me.BarButtonItem19.Caption = "Mï¿½ï¿½teri Kartï¿½ Sil"
+        Me.BarButtonItem19.Caption = "Müþteri Kartý Sil"
         Me.BarButtonItem19.Id = 19
         Me.BarButtonItem19.ItemShortcut = New DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Delete))
         Me.BarButtonItem19.Name = "BarButtonItem19"
         '
         'BarButtonItem18
         '
-        Me.BarButtonItem18.Caption = "Mï¿½ï¿½teri Gir"
+        Me.BarButtonItem18.Caption = "Müþteri Gir"
         Me.BarButtonItem18.Id = 18
         Me.BarButtonItem18.ItemShortcut = New DevExpress.XtraBars.BarShortcut(System.Windows.Forms.Keys.F2)
         Me.BarButtonItem18.Name = "BarButtonItem18"
         '
         'BarButtonItem2
         '
-        Me.BarButtonItem2.Caption = "Mï¿½ï¿½teri Seï¿½"
+        Me.BarButtonItem2.Caption = "Müþteri Seç"
         Me.BarButtonItem2.Id = 2
         Me.BarButtonItem2.ItemShortcut = New DevExpress.XtraBars.BarShortcut(System.Windows.Forms.Keys.F3)
         Me.BarButtonItem2.Name = "BarButtonItem2"
         '
         'BarButtonItem3
         '
-        Me.BarButtonItem3.Caption = "Mï¿½ï¿½teri Kartï¿½"
+        Me.BarButtonItem3.Caption = "Müþteri Kartý"
         Me.BarButtonItem3.Id = 3
         Me.BarButtonItem3.ItemShortcut = New DevExpress.XtraBars.BarShortcut(System.Windows.Forms.Keys.F4)
         Me.BarButtonItem3.Name = "BarButtonItem3"
         '
         'BarButtonItem4
         '
-        Me.BarButtonItem4.Caption = "Aï¿½ï¿½klama"
+        Me.BarButtonItem4.Caption = "Açýklama"
         Me.BarButtonItem4.Id = 4
         Me.BarButtonItem4.ItemShortcut = New DevExpress.XtraBars.BarShortcut(System.Windows.Forms.Keys.F9)
         Me.BarButtonItem4.Name = "BarButtonItem4"
         '
         'BarButtonItem6
         '
-        Me.BarButtonItem6.Caption = "Mï¿½ï¿½teri Dï¿½zenle"
+        Me.BarButtonItem6.Caption = "Müþteri Düzenle"
         Me.BarButtonItem6.Id = 6
         Me.BarButtonItem6.ItemShortcut = New DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.F4))
         Me.BarButtonItem6.Name = "BarButtonItem6"
         '
         'BarButtonItem7
         '
-        Me.BarButtonItem7.Caption = "Kredili Satï¿½ï¿½"
+        Me.BarButtonItem7.Caption = "Kredili Satýþ"
         Me.BarButtonItem7.Id = 7
         Me.BarButtonItem7.ItemShortcut = New DevExpress.XtraBars.BarShortcut(System.Windows.Forms.Keys.F5)
         Me.BarButtonItem7.Name = "BarButtonItem7"
         '
         'BarButtonItem8
         '
-        Me.BarButtonItem8.Caption = "Peï¿½in Satï¿½ï¿½"
+        Me.BarButtonItem8.Caption = "Peþin Satýþ"
         Me.BarButtonItem8.Id = 8
         Me.BarButtonItem8.ItemShortcut = New DevExpress.XtraBars.BarShortcut(System.Windows.Forms.Keys.F6)
         Me.BarButtonItem8.Name = "BarButtonItem8"
         '
         'BarButtonItem9
         '
-        Me.BarButtonItem9.Caption = "ï¿½deme"
+        Me.BarButtonItem9.Caption = "Ödeme"
         Me.BarButtonItem9.Id = 9
         Me.BarButtonItem9.ItemShortcut = New DevExpress.XtraBars.BarShortcut(System.Windows.Forms.Keys.F7)
         Me.BarButtonItem9.Name = "BarButtonItem9"
         '
         'BarButtonItem10
         '
-        Me.BarButtonItem10.Caption = "Vade Farkï¿½ ï¿½deme"
+        Me.BarButtonItem10.Caption = "Vade Farký Ödeme"
         Me.BarButtonItem10.Id = 10
         Me.BarButtonItem10.Name = "BarButtonItem10"
         '
         'BarButtonItem11
         '
-        Me.BarButtonItem11.Caption = "Slip Satï¿½ï¿½"
+        Me.BarButtonItem11.Caption = "Slip Satýþ"
         Me.BarButtonItem11.Id = 11
         Me.BarButtonItem11.Name = "BarButtonItem11"
         '
@@ -876,21 +876,21 @@ Public Class frm_perakende
         '
         'BarButtonItem14
         '
-        Me.BarButtonItem14.Caption = "Yapï¿½lan ï¿½demeler"
+        Me.BarButtonItem14.Caption = "Yapýlan Ödemeler"
         Me.BarButtonItem14.Id = 14
         Me.BarButtonItem14.ItemShortcut = New DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.F5))
         Me.BarButtonItem14.Name = "BarButtonItem14"
         '
         'BarButtonItem15
         '
-        Me.BarButtonItem15.Caption = "Yapï¿½lan Satï¿½ï¿½lar"
+        Me.BarButtonItem15.Caption = "Yapýlan Satýþlar"
         Me.BarButtonItem15.Id = 15
         Me.BarButtonItem15.ItemShortcut = New DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.F6))
         Me.BarButtonItem15.Name = "BarButtonItem15"
         '
         'BarButtonItem16
         '
-        Me.BarButtonItem16.Caption = "Kalan ï¿½demeler"
+        Me.BarButtonItem16.Caption = "Kalan Ödemeler"
         Me.BarButtonItem16.Id = 16
         Me.BarButtonItem16.Name = "BarButtonItem16"
         '
@@ -903,14 +903,14 @@ Public Class frm_perakende
         '
         'BarButtonItem24
         '
-        Me.BarButtonItem24.Caption = "Karlï¿½lï¿½k Akï¿½ï¿½ Tablosu"
+        Me.BarButtonItem24.Caption = "Karlýlýk Akýþ Tablosu"
         Me.BarButtonItem24.Id = 24
         Me.BarButtonItem24.ItemShortcut = New DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Z))
         Me.BarButtonItem24.Name = "BarButtonItem24"
         '
         'BarButtonItem25
         '
-        Me.BarButtonItem25.Caption = "Alï¿½nan Peï¿½inatlar"
+        Me.BarButtonItem25.Caption = "Alýnan Peþinatlar"
         Me.BarButtonItem25.Id = 25
         Me.BarButtonItem25.Name = "BarButtonItem25"
         '
@@ -922,7 +922,7 @@ Public Class frm_perakende
         '
         'BarButtonItem23
         '
-        Me.BarButtonItem23.Caption = "ï¿½ï¿½kï¿½ï¿½"
+        Me.BarButtonItem23.Caption = "Çýkýþ"
         Me.BarButtonItem23.Id = 23
         Me.BarButtonItem23.ItemShortcut = New DevExpress.XtraBars.BarShortcut(System.Windows.Forms.Keys.Escape)
         Me.BarButtonItem23.Name = "BarButtonItem23"
@@ -996,27 +996,27 @@ Public Class frm_perakende
         Me.sec_magaza.Properties.Appearance.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
         Me.sec_magaza.Properties.Appearance.Options.UseFont = True
         Me.sec_magaza.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
-        Me.sec_magaza.Properties.Columns.AddRange(New DevExpress.XtraEditors.Controls.LookUpColumnInfo() {New DevExpress.XtraEditors.Controls.LookUpColumnInfo("sDepo", "Kod"), New DevExpress.XtraEditors.Controls.LookUpColumnInfo("sAciklama", "Aï¿½ï¿½klama")})
+        Me.sec_magaza.Properties.Columns.AddRange(New DevExpress.XtraEditors.Controls.LookUpColumnInfo() {New DevExpress.XtraEditors.Controls.LookUpColumnInfo("sDepo", "Kod"), New DevExpress.XtraEditors.Controls.LookUpColumnInfo("sAciklama", "Açýklama")})
         Me.sec_magaza.Properties.DisplayMember = "sAciklama"
-        Me.sec_magaza.Properties.NullText = "[Maï¿½aza]"
+        Me.sec_magaza.Properties.NullText = "[Maðaza]"
         Me.sec_magaza.Properties.ReadOnly = True
         Me.sec_magaza.Properties.ValueMember = "sDepo"
         Me.sec_magaza.Size = New System.Drawing.Size(215, 28)
         Me.sec_magaza.TabIndex = 11
-        Me.sec_magaza.ToolTip = "ï¿½alï¿½ï¿½ï¿½lan Maï¿½aza"
+        Me.sec_magaza.ToolTip = "Çalýþýlan Maðaza"
         '
         'sec_kasa
         '
         Me.sec_kasa.Location = New System.Drawing.Point(90, 31)
         Me.sec_kasa.Name = "sec_kasa"
         Me.sec_kasa.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)})
-        Me.sec_kasa.Properties.Columns.AddRange(New DevExpress.XtraEditors.Controls.LookUpColumnInfo() {New DevExpress.XtraEditors.Controls.LookUpColumnInfo("nKasaNo", 5, "KasaNo"), New DevExpress.XtraEditors.Controls.LookUpColumnInfo("sAciklama", 40, "Aï¿½ï¿½klama")})
+        Me.sec_kasa.Properties.Columns.AddRange(New DevExpress.XtraEditors.Controls.LookUpColumnInfo() {New DevExpress.XtraEditors.Controls.LookUpColumnInfo("nKasaNo", 5, "KasaNo"), New DevExpress.XtraEditors.Controls.LookUpColumnInfo("sAciklama", 40, "Açýklama")})
         Me.sec_kasa.Properties.DisplayMember = "nKasaNo"
         Me.sec_kasa.Properties.NullText = "[Kasa]"
         Me.sec_kasa.Properties.ValueMember = "nKasaNo"
         Me.sec_kasa.Size = New System.Drawing.Size(192, 26)
         Me.sec_kasa.TabIndex = 10
-        Me.sec_kasa.ToolTip = "ï¿½alï¿½ï¿½ï¿½lan Kasa Numarasï¿½"
+        Me.sec_kasa.ToolTip = "Çalýþýlan Kasa Numarasý"
         '
         'DateEdit1
         '
@@ -1031,7 +1031,7 @@ Public Class frm_perakende
         Me.DateEdit1.Properties.VistaTimeProperties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
         Me.DateEdit1.Size = New System.Drawing.Size(215, 28)
         Me.DateEdit1.TabIndex = 8
-        Me.DateEdit1.ToolTip = "Aktif ï¿½ï¿½lem Tarihi"
+        Me.DateEdit1.ToolTip = "Aktif Ýþlem Tarihi"
         '
         'LabelControl6
         '
@@ -1043,7 +1043,7 @@ Public Class frm_perakende
         Me.LabelControl6.Name = "LabelControl6"
         Me.LabelControl6.Size = New System.Drawing.Size(71, 21)
         Me.LabelControl6.TabIndex = 7
-        Me.LabelControl6.Text = "Maï¿½aza:"
+        Me.LabelControl6.Text = "Maðaza:"
         '
         'LabelControl5
         '
@@ -1091,7 +1091,7 @@ Public Class frm_perakende
         Me.txt_kasiyer_kod.Size = New System.Drawing.Size(192, 26)
         ToolTipTitleItem8.Text = "Kasiyer/Yetkili"
         ToolTipItem8.LeftIndent = 6
-        ToolTipItem8.Text = "ï¿½ï¿½lem Yapabilmek iï¿½in Yetkili Personel ï¿½ifresini Girmeniz Gerekmektedir."
+        ToolTipItem8.Text = "Ýþlem Yapabilmek için Yetkili Personel Þifresini Girmeniz Gerekmektedir."
         SuperToolTip8.Items.Add(ToolTipTitleItem8)
         SuperToolTip8.Items.Add(ToolTipItem8)
         Me.txt_kasiyer_kod.SuperTip = SuperToolTip8
@@ -1693,8 +1693,8 @@ Public Class frm_perakende
         Me.txt_sEhliyetNo.Properties.MaxLength = 60
         Me.txt_sEhliyetNo.Size = New System.Drawing.Size(63, 24)
         Me.txt_sEhliyetNo.TabIndex = 27
-        Me.txt_sEhliyetNo.ToolTip = "5 Karakterden Kï¿½ï¿½ï¿½kse FiyatTipi , 5 Karakterden Bï¿½yï¿½kise EhliyetNo olarak algï¿½lan" &
-    "maktadï¿½r."
+        Me.txt_sEhliyetNo.ToolTip = "5 Karakterden Küçükse FiyatTipi , 5 Karakterden Büyükise EhliyetNo olarak algýlan" &
+    "maktadýr."
         Me.txt_sEhliyetNo.ToolTipTitle = "FiyatTipi/EhliyetNo"
         '
         'txt_nIskontoKredili
@@ -1773,7 +1773,7 @@ Public Class frm_perakende
         Me.LabelControl26.Name = "LabelControl26"
         Me.LabelControl26.Size = New System.Drawing.Size(86, 19)
         Me.LabelControl26.TabIndex = 103
-        Me.LabelControl26.Text = "Doï¿½umYeri:"
+        Me.LabelControl26.Text = "DoðumYeri:"
         '
         'txt_dteDogumTarihi
         '
@@ -1802,7 +1802,7 @@ Public Class frm_perakende
         Me.LabelControl27.Name = "LabelControl27"
         Me.LabelControl27.Size = New System.Drawing.Size(99, 19)
         Me.LabelControl27.TabIndex = 102
-        Me.LabelControl27.Text = "Doï¿½umTarihi:"
+        Me.LabelControl27.Text = "DoðumTarihi:"
         '
         'txt_dteEvlilikTarihi
         '
@@ -1904,7 +1904,7 @@ Public Class frm_perakende
         Me.LabelControl17.Name = "LabelControl17"
         Me.LabelControl17.Size = New System.Drawing.Size(85, 19)
         Me.LabelControl17.TabIndex = 92
-        Me.LabelControl17.Text = "ï¿½sk.Peï¿½in%:"
+        Me.LabelControl17.Text = "Ýsk.Peþin%:"
         '
         'LabelControl20
         '
@@ -1914,7 +1914,7 @@ Public Class frm_perakende
         Me.LabelControl20.Name = "LabelControl20"
         Me.LabelControl20.Size = New System.Drawing.Size(84, 19)
         Me.LabelControl20.TabIndex = 91
-        Me.LabelControl20.Text = "ï¿½sk.Kredi%:"
+        Me.LabelControl20.Text = "Ýsk.Kredi%:"
         '
         'txt_dteSonKullanmaTarihi
         '
@@ -2030,7 +2030,7 @@ Public Class frm_perakende
         Me.LabelControl13.Name = "LabelControl13"
         Me.LabelControl13.Size = New System.Drawing.Size(51, 19)
         Me.LabelControl13.TabIndex = 79
-        Me.LabelControl13.Text = "ï¿½nvan:"
+        Me.LabelControl13.Text = "Ünvan:"
         '
         'txt_sVergiNo
         '
@@ -2259,7 +2259,7 @@ Public Class frm_perakende
         Me.LabelControl10.Name = "LabelControl10"
         Me.LabelControl10.Size = New System.Drawing.Size(53, 19)
         Me.LabelControl10.TabIndex = 46
-        Me.LabelControl10.Text = "Soyadï¿½:"
+        Me.LabelControl10.Text = "Soyadý:"
         '
         'txt_sAdi
         '
@@ -2289,7 +2289,7 @@ Public Class frm_perakende
         Me.LabelControl11.Name = "LabelControl11"
         Me.LabelControl11.Size = New System.Drawing.Size(30, 19)
         Me.LabelControl11.TabIndex = 45
-        Me.LabelControl11.Text = "Adï¿½:"
+        Me.LabelControl11.Text = "Adý:"
         '
         'LabelControl8
         '
@@ -2331,7 +2331,7 @@ Public Class frm_perakende
         Me.LabelControl3.Name = "LabelControl3"
         Me.LabelControl3.Size = New System.Drawing.Size(40, 19)
         Me.LabelControl3.TabIndex = 6
-        Me.LabelControl3.Text = "Kayï¿½t:"
+        Me.LabelControl3.Text = "Kayýt:"
         '
         'txt_nMusteriID
         '
@@ -2377,7 +2377,7 @@ Public Class frm_perakende
         Me.btn_yenile.Size = New System.Drawing.Size(39, 28)
         ToolTipTitleItem1.Text = "Yenile"
         ToolTipItem1.LeftIndent = 6
-        ToolTipItem1.Text = "Hesap Kartï¿½nda Bilgileri Yeniler"
+        ToolTipItem1.Text = "Hesap Kartýnda Bilgileri Yeniler"
         SuperToolTip1.Items.Add(ToolTipTitleItem1)
         SuperToolTip1.Items.Add(ToolTipItem1)
         Me.btn_yenile.SuperTip = SuperToolTip1
@@ -2395,9 +2395,9 @@ Public Class frm_perakende
         Me.SimpleButton3.Location = New System.Drawing.Point(469, 3)
         Me.SimpleButton3.Name = "SimpleButton3"
         Me.SimpleButton3.Size = New System.Drawing.Size(38, 28)
-        ToolTipTitleItem2.Text = "Son Kayï¿½t"
+        ToolTipTitleItem2.Text = "Son Kayýt"
         ToolTipItem2.LeftIndent = 6
-        ToolTipItem2.Text = "En Son Girilmiï¿½ Olan Mï¿½ï¿½teri Kaydï¿½nï¿½ Ekrana Getirir"
+        ToolTipItem2.Text = "En Son Girilmiþ Olan Müþteri Kaydýný Ekrana Getirir"
         SuperToolTip2.Items.Add(ToolTipTitleItem2)
         SuperToolTip2.Items.Add(ToolTipItem2)
         Me.SimpleButton3.SuperTip = SuperToolTip2
@@ -2416,9 +2416,9 @@ Public Class frm_perakende
         Me.SimpleButton4.Location = New System.Drawing.Point(430, 3)
         Me.SimpleButton4.Name = "SimpleButton4"
         Me.SimpleButton4.Size = New System.Drawing.Size(39, 28)
-        ToolTipTitleItem3.Text = "Sonraki Kayï¿½t"
+        ToolTipTitleItem3.Text = "Sonraki Kayýt"
         ToolTipItem3.LeftIndent = 6
-        ToolTipItem3.Text = "Bir Sonraki Mï¿½ï¿½teri Kaydï¿½nï¿½ Ekrana Getirir"
+        ToolTipItem3.Text = "Bir Sonraki Müþteri Kaydýný Ekrana Getirir"
         SuperToolTip3.Items.Add(ToolTipTitleItem3)
         SuperToolTip3.Items.Add(ToolTipItem3)
         Me.SimpleButton4.SuperTip = SuperToolTip3
@@ -2437,9 +2437,9 @@ Public Class frm_perakende
         Me.SimpleButton2.Location = New System.Drawing.Point(392, 3)
         Me.SimpleButton2.Name = "SimpleButton2"
         Me.SimpleButton2.Size = New System.Drawing.Size(38, 28)
-        ToolTipTitleItem4.Text = "ï¿½nceki Kayï¿½t"
+        ToolTipTitleItem4.Text = "Önceki Kayýt"
         ToolTipItem4.LeftIndent = 6
-        ToolTipItem4.Text = "Bir ï¿½nceki Mï¿½ï¿½teri Kaydï¿½nï¿½ Ekrana Getirir"
+        ToolTipItem4.Text = "Bir Önceki Müþteri Kaydýný Ekrana Getirir"
         SuperToolTip4.Items.Add(ToolTipTitleItem4)
         SuperToolTip4.Items.Add(ToolTipItem4)
         Me.SimpleButton2.SuperTip = SuperToolTip4
@@ -2458,9 +2458,9 @@ Public Class frm_perakende
         Me.SimpleButton1.Location = New System.Drawing.Point(354, 3)
         Me.SimpleButton1.Name = "SimpleButton1"
         Me.SimpleButton1.Size = New System.Drawing.Size(38, 28)
-        ToolTipTitleItem5.Text = "Ilk Kayï¿½t"
+        ToolTipTitleItem5.Text = "Ilk Kayýt"
         ToolTipItem5.LeftIndent = 6
-        ToolTipItem5.Text = "Ilk Mï¿½ï¿½teri Kaydï¿½nï¿½ Ekrana Getirir"
+        ToolTipItem5.Text = "Ilk Müþteri Kaydýný Ekrana Getirir"
         SuperToolTip5.Items.Add(ToolTipTitleItem5)
         SuperToolTip5.Items.Add(ToolTipItem5)
         Me.SimpleButton1.SuperTip = SuperToolTip5
@@ -2488,9 +2488,9 @@ Public Class frm_perakende
         Me.txt_musterino.Properties.Appearance.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(162, Byte))
         Me.txt_musterino.Properties.Appearance.Options.UseFont = True
         Me.txt_musterino.Properties.Buttons.AddRange(New DevExpress.XtraEditors.Controls.EditorButton() {New DevExpress.XtraEditors.Controls.EditorButton()})
-        Me.txt_musterino.Properties.NullText = "[Mï¿½ï¿½teriNo]"
+        Me.txt_musterino.Properties.NullText = "[MüþteriNo]"
         Me.txt_musterino.Size = New System.Drawing.Size(175, 30)
-        ToolTipTitleItem6.Text = "Mï¿½ï¿½teri No"
+        ToolTipTitleItem6.Text = "Müþteri No"
         ToolTipItem6.LeftIndent = 6
         SuperToolTip6.Items.Add(ToolTipTitleItem6)
         SuperToolTip6.Items.Add(ToolTipItem6)
@@ -2505,7 +2505,7 @@ Public Class frm_perakende
         Me.LabelControl4.Name = "LabelControl4"
         Me.LabelControl4.Size = New System.Drawing.Size(77, 19)
         Me.LabelControl4.TabIndex = 5
-        Me.LabelControl4.Text = "Mï¿½ï¿½teriNo:"
+        Me.LabelControl4.Text = "MüþteriNo:"
         '
         'sec_bakiyeli
         '
@@ -2513,10 +2513,10 @@ Public Class frm_perakende
         Me.sec_bakiyeli.Name = "sec_bakiyeli"
         Me.sec_bakiyeli.Properties.Caption = ""
         Me.sec_bakiyeli.Size = New System.Drawing.Size(35, 19)
-        ToolTipTitleItem7.Text = "Bakiyeli Mï¿½ï¿½teriler"
+        ToolTipTitleItem7.Text = "Bakiyeli Müþteriler"
         ToolTipItem7.LeftIndent = 6
-        ToolTipItem7.Text = "Sadece Bakiyeli Mï¿½ï¿½terilerin Ekrana Gelmesi ve Izlenmesi istenidiï¿½i zaman Bu Kutu" &
-    "cuk ï¿½ï¿½aretlenir"
+        ToolTipItem7.Text = "Sadece Bakiyeli Müþterilerin Ekrana Gelmesi ve Izlenmesi istenidiði zaman Bu Kutu" &
+    "cuk Ýþaretlenir"
         SuperToolTip7.Items.Add(ToolTipTitleItem7)
         SuperToolTip7.Items.Add(ToolTipItem7)
         Me.sec_bakiyeli.SuperTip = SuperToolTip7
@@ -2586,7 +2586,7 @@ Public Class frm_perakende
         Me.GroupControl1.Name = "GroupControl1"
         Me.GroupControl1.Size = New System.Drawing.Size(399, 507)
         Me.GroupControl1.TabIndex = 1
-        Me.GroupControl1.Text = "Kalan ï¿½demeler"
+        Me.GroupControl1.Text = "Kalan Ödemeler"
         '
         'GridControl3
         '
@@ -2624,7 +2624,7 @@ Public Class frm_perakende
         Me.GridView3.FormatConditions.AddRange(New DevExpress.XtraGrid.StyleFormatCondition() {StyleFormatCondition1})
         Me.GridView3.GridControl = Me.GridControl3
         Me.GridView3.GroupFormat = "{0}: {1} {2}"
-        Me.GridView3.GroupPanelText = "Gruplamak ï¿½stediï¿½iniz Kolonu Buraya Sï¿½rï¿½kleyiniz..."
+        Me.GridView3.GroupPanelText = "Gruplamak Ýstediðiniz Kolonu Buraya Sürükleyiniz..."
         Me.GridView3.IndicatorWidth = 30
         Me.GridView3.Name = "GridView3"
         Me.GridView3.OptionsBehavior.Editable = False
@@ -2672,7 +2672,7 @@ Public Class frm_perakende
         Me.btn_Odemeler.Name = "btn_Odemeler"
         Me.btn_Odemeler.Size = New System.Drawing.Size(395, 33)
         Me.btn_Odemeler.TabIndex = 1
-        Me.btn_Odemeler.Text = "Aylï¿½k"
+        Me.btn_Odemeler.Text = "Aylýk"
         '
         'GroupControl2
         '
@@ -2688,7 +2688,7 @@ Public Class frm_perakende
         Me.GroupControl2.Name = "GroupControl2"
         Me.GroupControl2.Size = New System.Drawing.Size(688, 135)
         Me.GroupControl2.TabIndex = 1
-        Me.GroupControl2.Text = "Mï¿½ï¿½terinin Gruplandï¿½rmasï¿½"
+        Me.GroupControl2.Text = "Müþterinin Gruplandýrmasý"
         '
         'GridControl1
         '
@@ -2757,7 +2757,7 @@ Public Class frm_perakende
         Me.GridView1.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.RowFocus
         Me.GridView1.GridControl = Me.GridControl1
         Me.GridView1.GroupFormat = "{0}: {1} {2}"
-        Me.GridView1.GroupPanelText = "Gruplamak ï¿½stediï¿½iniz Kolonu Buraya Sï¿½rï¿½kleyiniz..."
+        Me.GridView1.GroupPanelText = "Gruplamak Ýstediðiniz Kolonu Buraya Sürükleyiniz..."
         Me.GridView1.IndicatorWidth = 12
         Me.GridView1.Name = "GridView1"
         Me.GridView1.OptionsBehavior.Editable = False
@@ -2770,7 +2770,7 @@ Public Class frm_perakende
         '
         'colnMusteriID
         '
-        Me.colnMusteriID.Caption = "Mï¿½ï¿½teri ID"
+        Me.colnMusteriID.Caption = "Müþteri ID"
         Me.colnMusteriID.FieldName = "nMusteriID"
         Me.colnMusteriID.Name = "colnMusteriID"
         '
@@ -2794,7 +2794,7 @@ Public Class frm_perakende
         '
         'colsAciklama
         '
-        Me.colsAciklama.Caption = "Aï¿½ï¿½klama"
+        Me.colsAciklama.Caption = "Açýklama"
         Me.colsAciklama.FieldName = "sAciklama"
         Me.colsAciklama.Name = "colsAciklama"
         Me.colsAciklama.Visible = True
@@ -2802,7 +2802,7 @@ Public Class frm_perakende
         '
         'colbSatisYapilamaz
         '
-        Me.colbSatisYapilamaz.Caption = "Satï¿½ï¿½ Yapï¿½lamaz"
+        Me.colbSatisYapilamaz.Caption = "Satýþ Yapýlamaz"
         Me.colbSatisYapilamaz.FieldName = "bSatisYapilamaz"
         Me.colbSatisYapilamaz.Name = "colbSatisYapilamaz"
         Me.colbSatisYapilamaz.Visible = True
@@ -2903,7 +2903,7 @@ Public Class frm_perakende
         Me.GridView2.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.RowFocus
         Me.GridView2.GridControl = Me.GridControl2
         Me.GridView2.GroupFormat = "{0}: {1} {2}"
-        Me.GridView2.GroupPanelText = "Gruplamak ï¿½stediï¿½iniz Kolonu Buraya Sï¿½rï¿½kleyiniz..."
+        Me.GridView2.GroupPanelText = "Gruplamak Ýstediðiniz Kolonu Buraya Sürükleyiniz..."
         Me.GridView2.IndicatorWidth = 12
         Me.GridView2.Name = "GridView2"
         Me.GridView2.OptionsBehavior.Editable = False
@@ -2921,7 +2921,7 @@ Public Class frm_perakende
         Me.colTARIH.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime
         Me.colTARIH.FieldName = "TARIH"
         Me.colTARIH.Name = "colTARIH"
-        Me.colTARIH.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Count, "TARIH", "{0} Kayï¿½t")})
+        Me.colTARIH.Summary.AddRange(New DevExpress.XtraGrid.GridSummaryItem() {New DevExpress.XtraGrid.GridColumnSummaryItem(DevExpress.Data.SummaryItemType.Count, "TARIH", "{0} Kayýt")})
         Me.colTARIH.Visible = True
         Me.colTARIH.VisibleIndex = 0
         Me.colTARIH.Width = 51
@@ -2957,7 +2957,7 @@ Public Class frm_perakende
         '
         Me.colTUTAR.AppearanceCell.ForeColor = System.Drawing.Color.Red
         Me.colTUTAR.AppearanceCell.Options.UseForeColor = True
-        Me.colTUTAR.Caption = "Satï¿½ï¿½"
+        Me.colTUTAR.Caption = "Satýþ"
         Me.colTUTAR.DisplayFormat.FormatString = "#,#.##"
         Me.colTUTAR.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric
         Me.colTUTAR.FieldName = "TUTAR"
@@ -2983,7 +2983,7 @@ Public Class frm_perakende
         '
         'colMAGAZA
         '
-        Me.colMAGAZA.Caption = "Maï¿½aza"
+        Me.colMAGAZA.Caption = "Maðaza"
         Me.colMAGAZA.FieldName = "MAGAZA"
         Me.colMAGAZA.Name = "colMAGAZA"
         Me.colMAGAZA.Visible = True
@@ -3022,21 +3022,21 @@ Public Class frm_perakende
         Me.collBakiye.VisibleIndex = 5
         Me.collBakiye.Width = 51
         '
-        'ï¿½mageList1
+        'ýmageList1
         '
-        Me.ï¿½mageList1.ImageStream = CType(resources.GetObject("ï¿½mageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ï¿½mageList1.TransparentColor = System.Drawing.Color.Transparent
-        Me.ï¿½mageList1.Images.SetKeyName(0, "businessman_preferences.png")
-        Me.ï¿½mageList1.Images.SetKeyName(1, "businessman_add.png")
-        Me.ï¿½mageList1.Images.SetKeyName(2, "id_card_information.png")
-        Me.ï¿½mageList1.Images.SetKeyName(3, "note_pinned.png")
-        Me.ï¿½mageList1.Images.SetKeyName(4, "id_card_ok.png")
-        Me.ï¿½mageList1.Images.SetKeyName(5, "outbox.png")
-        Me.ï¿½mageList1.Images.SetKeyName(6, "money2.png")
-        Me.ï¿½mageList1.Images.SetKeyName(7, "money_envelope.png")
-        Me.ï¿½mageList1.Images.SetKeyName(8, "shoppingcart_full.png")
-        Me.ï¿½mageList1.Images.SetKeyName(9, "column.png")
-        Me.ï¿½mageList1.Images.SetKeyName(10, "index_view.png")
+        Me.ýmageList1.ImageStream = CType(resources.GetObject("ýmageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ýmageList1.TransparentColor = System.Drawing.Color.Transparent
+        Me.ýmageList1.Images.SetKeyName(0, "businessman_preferences.png")
+        Me.ýmageList1.Images.SetKeyName(1, "businessman_add.png")
+        Me.ýmageList1.Images.SetKeyName(2, "id_card_information.png")
+        Me.ýmageList1.Images.SetKeyName(3, "note_pinned.png")
+        Me.ýmageList1.Images.SetKeyName(4, "id_card_ok.png")
+        Me.ýmageList1.Images.SetKeyName(5, "outbox.png")
+        Me.ýmageList1.Images.SetKeyName(6, "money2.png")
+        Me.ýmageList1.Images.SetKeyName(7, "money_envelope.png")
+        Me.ýmageList1.Images.SetKeyName(8, "shoppingcart_full.png")
+        Me.ýmageList1.Images.SetKeyName(9, "column.png")
+        Me.ýmageList1.Images.SetKeyName(10, "index_view.png")
         '
         'ds_taksitler
         '
@@ -3083,7 +3083,7 @@ Public Class frm_perakende
         Me.SimpleButton6.Name = "SimpleButton6"
         Me.SimpleButton6.Size = New System.Drawing.Size(239, 24)
         Me.SimpleButton6.TabIndex = 5
-        Me.SimpleButton6.Text = "Karlï¿½lï¿½k Akï¿½ï¿½ Tablosu   Ctrl+Z"
+        Me.SimpleButton6.Text = "Karlýlýk Akýþ Tablosu   Ctrl+Z"
         '
         'btn_Analiz_Satislar_Bekleyen
         '
@@ -3093,7 +3093,7 @@ Public Class frm_perakende
         Me.btn_Analiz_Satislar_Bekleyen.Name = "btn_Analiz_Satislar_Bekleyen"
         Me.btn_Analiz_Satislar_Bekleyen.Size = New System.Drawing.Size(239, 25)
         Me.btn_Analiz_Satislar_Bekleyen.TabIndex = 4
-        Me.btn_Analiz_Satislar_Bekleyen.Text = "Bekleyen Alï¿½ï¿½veriï¿½ler"
+        Me.btn_Analiz_Satislar_Bekleyen.Text = "Bekleyen Alýþveriþler"
         '
         'btn_Analiz_Kalan_Taksitler
         '
@@ -3113,7 +3113,7 @@ Public Class frm_perakende
         Me.btn_Analiz_Kalan_Satislar.Name = "btn_Analiz_Kalan_Satislar"
         Me.btn_Analiz_Kalan_Satislar.Size = New System.Drawing.Size(239, 24)
         Me.btn_Analiz_Kalan_Satislar.TabIndex = 2
-        Me.btn_Analiz_Kalan_Satislar.Text = "Kalan Satï¿½ï¿½lar"
+        Me.btn_Analiz_Kalan_Satislar.Text = "Kalan Satýþlar"
         '
         'btn_Analiz_Satislar
         '
@@ -3123,7 +3123,7 @@ Public Class frm_perakende
         Me.btn_Analiz_Satislar.Name = "btn_Analiz_Satislar"
         Me.btn_Analiz_Satislar.Size = New System.Drawing.Size(239, 25)
         Me.btn_Analiz_Satislar.TabIndex = 1
-        Me.btn_Analiz_Satislar.Text = "Yapï¿½lan Satï¿½ï¿½lar          Alt+F6"
+        Me.btn_Analiz_Satislar.Text = "Yapýlan Satýþlar          Alt+F6"
         '
         'btn_Analiz_Odemeler
         '
@@ -3133,7 +3133,7 @@ Public Class frm_perakende
         Me.btn_Analiz_Odemeler.Name = "btn_Analiz_Odemeler"
         Me.btn_Analiz_Odemeler.Size = New System.Drawing.Size(239, 24)
         Me.btn_Analiz_Odemeler.TabIndex = 0
-        Me.btn_Analiz_Odemeler.Text = "Alï¿½nan ï¿½demeler        Alt+F5"
+        Me.btn_Analiz_Odemeler.Text = "Alýnan Ödemeler        Alt+F5"
         '
         'GroupControl6
         '
@@ -3158,7 +3158,7 @@ Public Class frm_perakende
         Me.btn_Ekstre_Ozet.Name = "btn_Ekstre_Ozet"
         Me.btn_Ekstre_Ozet.Size = New System.Drawing.Size(239, 25)
         Me.btn_Ekstre_Ozet.TabIndex = 1
-        Me.btn_Ekstre_Ozet.Text = "Ekstre ï¿½zet"
+        Me.btn_Ekstre_Ozet.Text = "Ekstre Özet"
         '
         'btn_Raporlar_Ekstre_Detayli
         '
@@ -3168,7 +3168,7 @@ Public Class frm_perakende
         Me.btn_Raporlar_Ekstre_Detayli.Name = "btn_Raporlar_Ekstre_Detayli"
         Me.btn_Raporlar_Ekstre_Detayli.Size = New System.Drawing.Size(239, 24)
         Me.btn_Raporlar_Ekstre_Detayli.TabIndex = 0
-        Me.btn_Raporlar_Ekstre_Detayli.Text = "Ekstre Detaylï¿½           Ctrl+F8"
+        Me.btn_Raporlar_Ekstre_Detayli.Text = "Ekstre Detaylý           Ctrl+F8"
         '
         'GroupControl5
         '
@@ -3190,7 +3190,7 @@ Public Class frm_perakende
         Me.GroupControl5.Name = "GroupControl5"
         Me.GroupControl5.Size = New System.Drawing.Size(266, 247)
         Me.GroupControl5.TabIndex = 1
-        Me.GroupControl5.Text = "ï¿½ï¿½lemler"
+        Me.GroupControl5.Text = "Ýþlemler"
         '
         'SimpleButton7
         '
@@ -3200,7 +3200,7 @@ Public Class frm_perakende
         Me.SimpleButton7.Name = "SimpleButton7"
         Me.SimpleButton7.Size = New System.Drawing.Size(239, 25)
         Me.SimpleButton7.TabIndex = 8
-        Me.SimpleButton7.Text = "Peï¿½inat Al"
+        Me.SimpleButton7.Text = "Peþinat Al"
         '
         'btn_Islem_VadeAyarla
         '
@@ -3230,7 +3230,7 @@ Public Class frm_perakende
         Me.btn_Islem_VadeFarki.Name = "btn_Islem_VadeFarki"
         Me.btn_Islem_VadeFarki.Size = New System.Drawing.Size(239, 24)
         Me.btn_Islem_VadeFarki.TabIndex = 5
-        Me.btn_Islem_VadeFarki.Text = "Vade Farkï¿½ Hesapla"
+        Me.btn_Islem_VadeFarki.Text = "Vade Farký Hesapla"
         '
         'btn_Islem_Odeme_Al
         '
@@ -3240,7 +3240,7 @@ Public Class frm_perakende
         Me.btn_Islem_Odeme_Al.Name = "btn_Islem_Odeme_Al"
         Me.btn_Islem_Odeme_Al.Size = New System.Drawing.Size(239, 25)
         Me.btn_Islem_Odeme_Al.TabIndex = 4
-        Me.btn_Islem_Odeme_Al.Text = "ï¿½deme Al                  F7"
+        Me.btn_Islem_Odeme_Al.Text = "Ödeme Al                  F7"
         '
         'btn_Islem_Siparis_Pesin
         '
@@ -3250,7 +3250,7 @@ Public Class frm_perakende
         Me.btn_Islem_Siparis_Pesin.Name = "btn_Islem_Siparis_Pesin"
         Me.btn_Islem_Siparis_Pesin.Size = New System.Drawing.Size(239, 24)
         Me.btn_Islem_Siparis_Pesin.TabIndex = 3
-        Me.btn_Islem_Siparis_Pesin.Text = "Sonradan Teslim Peï¿½in  Satï¿½ï¿½"
+        Me.btn_Islem_Siparis_Pesin.Text = "Sonradan Teslim Peþin  Satýþ"
         '
         'btn_Islem_Siparis_Kredili
         '
@@ -3260,7 +3260,7 @@ Public Class frm_perakende
         Me.btn_Islem_Siparis_Kredili.Name = "btn_Islem_Siparis_Kredili"
         Me.btn_Islem_Siparis_Kredili.Size = New System.Drawing.Size(239, 24)
         Me.btn_Islem_Siparis_Kredili.TabIndex = 2
-        Me.btn_Islem_Siparis_Kredili.Text = "Sonradan Teslim Kredili Satï¿½ï¿½"
+        Me.btn_Islem_Siparis_Kredili.Text = "Sonradan Teslim Kredili Satýþ"
         '
         'btn_Islem_Satis_Pesin
         '
@@ -3270,7 +3270,7 @@ Public Class frm_perakende
         Me.btn_Islem_Satis_Pesin.Name = "btn_Islem_Satis_Pesin"
         Me.btn_Islem_Satis_Pesin.Size = New System.Drawing.Size(239, 25)
         Me.btn_Islem_Satis_Pesin.TabIndex = 1
-        Me.btn_Islem_Satis_Pesin.Text = "Peï¿½in Satï¿½ï¿½                F6"
+        Me.btn_Islem_Satis_Pesin.Text = "Peþin Satýþ                F6"
         '
         'btn_Islem_Satis_Kredili
         '
@@ -3280,7 +3280,7 @@ Public Class frm_perakende
         Me.btn_Islem_Satis_Kredili.Name = "btn_Islem_Satis_Kredili"
         Me.btn_Islem_Satis_Kredili.Size = New System.Drawing.Size(239, 24)
         Me.btn_Islem_Satis_Kredili.TabIndex = 0
-        Me.btn_Islem_Satis_Kredili.Text = "Kredili Satï¿½ï¿½               F5"
+        Me.btn_Islem_Satis_Kredili.Text = "Kredili Satýþ               F5"
         '
         'GroupControl4
         '
@@ -3301,7 +3301,7 @@ Public Class frm_perakende
         Me.GroupControl4.Name = "GroupControl4"
         Me.GroupControl4.Size = New System.Drawing.Size(266, 227)
         Me.GroupControl4.TabIndex = 0
-        Me.GroupControl4.Text = "Mï¿½ï¿½teri Bilgileri"
+        Me.GroupControl4.Text = "Müþteri Bilgileri"
         '
         'btn_KimlikTara
         '
@@ -3321,7 +3321,7 @@ Public Class frm_perakende
         Me.SimpleButton5.Name = "SimpleButton5"
         Me.SimpleButton5.Size = New System.Drawing.Size(239, 24)
         Me.SimpleButton5.TabIndex = 6
-        Me.SimpleButton5.Text = "SMS Gï¿½nder"
+        Me.SimpleButton5.Text = "SMS Gönder"
         '
         'btn_Musteri_Sozlesme
         '
@@ -3331,7 +3331,7 @@ Public Class frm_perakende
         Me.btn_Musteri_Sozlesme.Name = "btn_Musteri_Sozlesme"
         Me.btn_Musteri_Sozlesme.Size = New System.Drawing.Size(239, 24)
         Me.btn_Musteri_Sozlesme.TabIndex = 5
-        Me.btn_Musteri_Sozlesme.Text = "Sï¿½zleï¿½me"
+        Me.btn_Musteri_Sozlesme.Text = "Sözleþme"
         '
         'btn_Musteri_Duzelt
         '
@@ -3341,7 +3341,7 @@ Public Class frm_perakende
         Me.btn_Musteri_Duzelt.Name = "btn_Musteri_Duzelt"
         Me.btn_Musteri_Duzelt.Size = New System.Drawing.Size(239, 25)
         Me.btn_Musteri_Duzelt.TabIndex = 4
-        Me.btn_Musteri_Duzelt.Text = "Mï¿½ï¿½teri Dï¿½zenle        Ctrl+F4"
+        Me.btn_Musteri_Duzelt.Text = "Müþteri Düzenle        Ctrl+F4"
         '
         'btn_Musteri_Not
         '
@@ -3361,7 +3361,7 @@ Public Class frm_perakende
         Me.btn_Musteri_Kart.Name = "btn_Musteri_Kart"
         Me.btn_Musteri_Kart.Size = New System.Drawing.Size(239, 24)
         Me.btn_Musteri_Kart.TabIndex = 2
-        Me.btn_Musteri_Kart.Text = "Mï¿½ï¿½teri Kartï¿½              F4"
+        Me.btn_Musteri_Kart.Text = "Müþteri Kartý              F4"
         '
         'btn_Musteri_Yeni
         '
@@ -3371,7 +3371,7 @@ Public Class frm_perakende
         Me.btn_Musteri_Yeni.Name = "btn_Musteri_Yeni"
         Me.btn_Musteri_Yeni.Size = New System.Drawing.Size(239, 25)
         Me.btn_Musteri_Yeni.TabIndex = 1
-        Me.btn_Musteri_Yeni.Text = "Yeni Mï¿½ï¿½teri              Insert"
+        Me.btn_Musteri_Yeni.Text = "Yeni Müþteri              Insert"
         '
         'btn_Musteri_sec
         '
@@ -3381,7 +3381,7 @@ Public Class frm_perakende
         Me.btn_Musteri_sec.Name = "btn_Musteri_sec"
         Me.btn_Musteri_sec.Size = New System.Drawing.Size(239, 24)
         Me.btn_Musteri_sec.TabIndex = 0
-        Me.btn_Musteri_sec.Text = "Mï¿½ï¿½teri Seï¿½               F3"
+        Me.btn_Musteri_sec.Text = "Müþteri Seç               F3"
         '
         'panel_bilgi
         '
@@ -3409,7 +3409,7 @@ Public Class frm_perakende
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frm_perakende"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Peï¿½in ve Kredili Satï¿½ï¿½,ï¿½ade ve ï¿½deme Formu"
+        Me.Text = "Peþin ve Kredili Satýþ,Ýade ve Ödeme Formu"
         CType(Me.Panel_Kasiyer, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel_Kasiyer.ResumeLayout(False)
         Me.Panel_Kasiyer.PerformLayout()
@@ -3559,8 +3559,7 @@ Public Class frm_perakende
         'VGrid_Genel.DataMember = Nothing
         dataload_tbMusteriSinifi(nMusteriID)
         dataload_tbMusteriSinif2(nMusteriID)
-        PerakendeRiskGoster(nMusteriID)
-        If sAdi.Contains("PEï¿½ï¿½N") = False And txt_musterino.Text <> 0 Then
+        If sAdi.Contains("PEÞÝN") = False And txt_musterino.Text <> 0 Then
             If sorgula_Decimal("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT ISNULL(COUNT(nAlisverisID), 0) AS nKayit FROM tbAlisVeris Where nMusteriID = " & nMusteriID & "") <= 50 Then
                 GroupControl2.Dock = DockStyle.Top
                 GroupControl3.Visible = True
@@ -3637,7 +3636,7 @@ Public Class frm_perakende
         txt_lBakiye.Text = Format(sorgu_sayi(lBakiye, 0), "#,0.00")
         txt_lKrediLimiti.Text = Format(sorgu_sayi(dr_baslik("lKrediLimiti"), 0) - sorgu_sayi(lBakiye, 0), "#,0.00")
         If lGeciken > 0 Then
-            BarButtonItem21.Caption = "Geciken ï¿½deme: " & gecikmistaksitsayisi & " Tutarï¿½: " & FormatNumber(lGeciken, 2)
+            BarButtonItem21.Caption = "Geciken Ödeme: " & gecikmistaksitsayisi & " Tutarý: " & FormatNumber(lGeciken, 2)
         Else
             BarButtonItem21.Caption = ""
         End If
@@ -3654,18 +3653,18 @@ Public Class frm_perakende
         If Trim(dr_baslik("dteDogumTarihi")).ToString.Substring(0, 2) = "01" And Trim(dr_baslik("dteDogumTarihi")).ToString.Substring(3, 2) = "01" Then
         ElseIf Trim(dr_baslik("dteDogumTarihi")).ToString.Substring(0, 5) = "01/01" Then
         Else
-            'lbl_isim.Text += "  Doï¿½um Tarihi :" & dr("DOGUMTARIHI").ToLongDateString
+            'lbl_isim.Text += "  Doðum Tarihi :" & dr("DOGUMTARIHI").ToLongDateString
             yil = Today.ToString.Substring(8, 2)
             gun = dr_baslik("dteDogumTarihi").ToString.Substring(0, 2)
             ay = dr_baslik("dteDogumTarihi").ToString.Substring(3, 2)
-            BarButtonItem1.Caption += "  Doï¿½um Gï¿½nï¿½ :" & CDate(gun + "." + ay + "." + yil).ToLongDateString
+            BarButtonItem1.Caption += "  Doðum Günü :" & CDate(gun + "." + ay + "." + yil).ToLongDateString
             gun_dogum = DateDiff(DateInterval.Day, Today, CDate(gun + "." + ay + "." + yil))
             If gun_dogum > 0 And gun_dogum < 30 Then
-                BarButtonItem1.Caption += " " & gun_dogum & " Gï¿½n Sonra Doï¿½um Gï¿½nï¿½nï¿½z.ï¿½imdiden Doï¿½um Gï¿½nï¿½nï¿½z Kutlu Olsun..!"
+                BarButtonItem1.Caption += " " & gun_dogum & " Gün Sonra Doðum Gününüz.Þimdiden Doðum Gününüz Kutlu Olsun..!"
             ElseIf gun_dogum < 0 And Math.Abs(gun_dogum) < 30 Then
-                BarButtonItem1.Caption += " " & Math.Abs(gun_dogum) & " Gï¿½n ï¿½nce Doï¿½um Gï¿½nï¿½nï¿½zmï¿½ï¿½...Nice Senelere..!"
+                BarButtonItem1.Caption += " " & Math.Abs(gun_dogum) & " Gün Önce Doðum Gününüzmüþ...Nice Senelere..!"
             ElseIf gun_dogum = 0 Then
-                BarButtonItem1.Caption += "  Doï¿½um Gï¿½nï¿½nï¿½z Kutlu Olsun...!"
+                BarButtonItem1.Caption += "  Doðum Gününüz Kutlu Olsun...!"
             End If
         End If
         'Evlilik Tarihi
@@ -3676,14 +3675,14 @@ Public Class frm_perakende
             yil = Today.ToString.Substring(8, 2)
             gun = dr_baslik("dteEvlilikTarihi").ToString.Substring(0, 2)
             ay = dr_baslik("dteEvlilikTarihi").ToString.Substring(3, 2)
-            BarButtonItem1.Caption += "  Evlilik Yï¿½ldï¿½nï¿½mï¿½ :" & CDate(gun + "." + ay + "." + yil).ToLongDateString
+            BarButtonItem1.Caption += "  Evlilik Yýldönümü :" & CDate(gun + "." + ay + "." + yil).ToLongDateString
             gun_dogum = DateDiff(DateInterval.Day, Today, CDate(gun + "." + ay + "." + yil))
             If gun_dogum > 0 And gun_dogum < 30 Then
-                BarButtonItem1.Caption += " " & gun_dogum & " Gï¿½n Sonra Evlilik Yï¿½ldï¿½nï¿½mï¿½nï¿½z.ï¿½imdiden Evlilik Yï¿½ldï¿½nï¿½mï¿½nï¿½z Kutlu Olsun..!"
+                BarButtonItem1.Caption += " " & gun_dogum & " Gün Sonra Evlilik Yýldönümünüz.Þimdiden Evlilik Yýldönümünüz Kutlu Olsun..!"
             ElseIf gun_dogum < 0 And Math.Abs(gun_dogum) < 30 Then
-                BarButtonItem1.Caption += " " & Math.Abs(gun_dogum) & " Gï¿½n ï¿½nce Evlilik Yï¿½ldï¿½nï¿½mï¿½nï¿½zmï¿½ï¿½...Nice Senelere..!"
+                BarButtonItem1.Caption += " " & Math.Abs(gun_dogum) & " Gün Önce Evlilik Yýldönümünüzmüþ...Nice Senelere..!"
             ElseIf gun_dogum = 0 Then
-                BarButtonItem1.Caption += " Evlilik Yï¿½ldï¿½nï¿½mï¿½nï¿½z Kutlu Olsun...!"
+                BarButtonItem1.Caption += " Evlilik Yýldönümünüz Kutlu Olsun...!"
             End If
         End If
         lbl_istihbarat.Text = Trim(sIstihbarat.ToString)
@@ -3691,25 +3690,26 @@ Public Class frm_perakende
         Dim lBekleyen As Int64 = sorgu_lBekleyen_kontrol(nMusteriID)
         Dim lPuan As Decimal = sorgu_AvHediyeCeki_kontrol(nMusteriID)
         If lBekleyen > 0 Then
-            If XtraMessageBox.Show(Sorgu_sDil("Mï¿½ï¿½terinin [" & lBekleyen & "] Adet Bekleyen ï¿½rï¿½nï¿½ Var.." & vbCrLf & "Mï¿½ï¿½terinin Bekleyen ï¿½rï¿½nlerini Gï¿½rmek ï¿½ster misiniz..?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Information) = MsgBoxResult.Yes Then
+            If XtraMessageBox.Show(Sorgu_sDil("Müþterinin [" & lBekleyen & "] Adet Bekleyen Ürünü Var.." & vbCrLf & "Müþterinin Bekleyen Ürünlerini Görmek Ýster misiniz..?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Information) = MsgBoxResult.Yes Then
                 analiz_bekleyen()
             End If
         End If
         If lHediyeCeki < 0 Then
-            XtraMessageBox.Show(FormatNumber(Math.Abs(lHediyeCeki), 2) & Sorgu_sDil(" Tutarï¿½nda Mï¿½ï¿½teri Alacaï¿½ï¿½ Bulunmaktadï¿½r...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            lbl_istihbarat.Text += vbCrLf & FormatNumber(Math.Abs(lHediyeCeki), 2) & " Tutarï¿½nda Mï¿½ï¿½teri Alacaklï¿½"
+            XtraMessageBox.Show(FormatNumber(Math.Abs(lHediyeCeki), 2) & Sorgu_sDil(" Tutarýnda Müþteri Alacaðý Bulunmaktadýr...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            lbl_istihbarat.Text += vbCrLf & FormatNumber(Math.Abs(lHediyeCeki), 2) & " Tutarýnda Müþteri Alacaklý"
         ElseIf lHediyeCeki = 0 Then
         Else
-            lbl_istihbarat.Text += vbCrLf & FormatNumber(Math.Abs(lHediyeCeki), 2) & " Tutarï¿½nda Fazla Hediye ï¿½eki Giriï¿½i Yapï¿½lmï¿½ï¿½"
+            lbl_istihbarat.Text += vbCrLf & FormatNumber(Math.Abs(lHediyeCeki), 2) & " Tutarýnda Fazla Hediye Çeki Giriþi Yapýlmýþ"
         End If
         If lPuan > 0 Then
-            XtraMessageBox.Show(FormatNumber(Math.Abs(lPuan), 2) & Sorgu_sDil(" Tutarinda Alisveris Puani Bulunmaktadï¿½r...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information)
-            lbl_istihbarat.Text += vbCrLf & FormatNumber(Math.Abs(lPuan), 2) & " Tutarï¿½nda AlisVeris Puani"
+            XtraMessageBox.Show(FormatNumber(Math.Abs(lPuan), 2) & Sorgu_sDil(" Tutarinda Alisveris Puani Bulunmaktadýr...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information)
+            lbl_istihbarat.Text += vbCrLf & FormatNumber(Math.Abs(lPuan), 2) & " Tutarýnda AlisVeris Puani"
         End If
         lHediyeCeki = Nothing
         lPuan = Nothing
         lBekleyen = Nothing
         coldteTarihi.BestFit()
+        PerakendeRiskGoster(nMusteriID)
         Cursor.Current = Cursors.Default
         Cursor.Hide()
     End Sub
@@ -3748,7 +3748,7 @@ Public Class frm_perakende
         If nKayitSinir > 0 Then
             Dim yetki As Int64 = Sorgu_tbKayitSayisi(tbTable, kriter, nKayitSinir)
             If yetki = 0 Then
-                XtraMessageBox.Show(Sorgu_sDil("ï¿½zgï¿½nï¿½m Kï¿½sï¿½tlï¿½ Kullanï¿½m.Maximum Kayï¿½t Sï¿½nï¿½rï¿½nï¿½ Aï¿½amazsï¿½nï¿½z...!" & vbCrLf & "Lï¿½tfen Yetkili Satï¿½cï¿½nï¿½zla Gï¿½rï¿½ï¿½ï¿½n...", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information)
+                XtraMessageBox.Show(Sorgu_sDil("Üzgünüm Kýsýtlý Kullaným.Maximum Kayýt Sýnýrýný Aþamazsýnýz...!" & vbCrLf & "Lütfen Yetkili Satýcýnýzla Görüþün...", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information)
                 status = True
                 pass = False
             ElseIf yetki = 1 Then
@@ -3785,23 +3785,23 @@ Public Class frm_perakende
     End Function
     Private Function sorgu_kriter_string(ByVal deger As String, ByVal kriter As String) As String
         Dim sorgu_kriter As String = ""
-        If kriter = "Baï¿½lar" Then
+        If kriter = "Baþlar" Then
             sorgu_kriter = " LIKE '" & deger & "%' "
         ElseIf kriter = "Biter" Then
             sorgu_kriter = " LIKE '%" & deger & "' "
-        ElseIf kriter = "ï¿½ï¿½erir" Then
+        ElseIf kriter = "Ýçerir" Then
             sorgu_kriter = " LIKE '%" & deger & "%' "
-        ElseIf kriter = "Boï¿½" Then
+        ElseIf kriter = "Boþ" Then
             sorgu_kriter = " IS NULL "
         ElseIf kriter = "Dolu" Then
             sorgu_kriter = " <> '' "
-        ElseIf kriter = "Farklï¿½" Then
+        ElseIf kriter = "Farklý" Then
             sorgu_kriter = " <> '" & deger & "' "
-        ElseIf kriter = "Bï¿½yï¿½k" Then
+        ElseIf kriter = "Büyük" Then
             sorgu_kriter = " >  '" & deger & "' "
-        ElseIf kriter = "Kï¿½ï¿½ï¿½k" Then
+        ElseIf kriter = "Küçük" Then
             sorgu_kriter = " < '" & deger & "' "
-        ElseIf kriter = "Eï¿½ittir" Then
+        ElseIf kriter = "Eþittir" Then
             sorgu_kriter = " = '" & deger & "' "
         End If
         Return sorgu_kriter
@@ -4032,7 +4032,7 @@ Public Class frm_perakende
             Panel_Baslik.Enabled = False
             BarSubItem1.Enabled = False
             Panel_islem.Enabled = False
-            If XtraMessageBox.Show(Sorgu_sDil("ï¿½ifre Hatalï¿½ Lï¿½tfen Tekrar Deneyiniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information) Then
+            If XtraMessageBox.Show(Sorgu_sDil("Þifre Hatalý Lütfen Tekrar Deneyiniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information) Then
                 txt_kasiyer_kod.Focus()
                 txt_kasiyer_kod.SelectAll()
             End If
@@ -4080,12 +4080,12 @@ Public Class frm_perakende
                     dataload_taksitler(nMusteriID)
                     'End If
                 ElseIf pass = False Then
-                    XtraMessageBox.Show(Sorgu_sDil("ï¿½zgï¿½nï¿½m" & vbCrLf & "Gecikmiï¿½ Borcu Olan Mï¿½ï¿½terilerden ï¿½deme Alma Yetkiniz Yok...!" & vbCrLf & "Lï¿½tfen Sistem Yï¿½neticinizle Gï¿½rï¿½ï¿½ï¿½n...", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    XtraMessageBox.Show(Sorgu_sDil("Üzgünüm" & vbCrLf & "Gecikmiþ Borcu Olan Müþterilerden Ödeme Alma Yetkiniz Yok...!" & vbCrLf & "Lütfen Sistem Yöneticinizle Görüþün...", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 End If
                 pass = Nothing
             End If
         Else
-            XtraMessageBox.Show(Sorgu_sDil("Lï¿½tfen Bir Mï¿½ï¿½teri Hesabï¿½ Seï¿½iniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Question)
+            XtraMessageBox.Show(Sorgu_sDil("Lütfen Bir Müþteri Hesabý Seçiniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Question)
             txt_musterino.Focus()
             txt_musterino.SelectAll()
         End If
@@ -4150,44 +4150,44 @@ Public Class frm_perakende
                     If sDatabaseGenel = "UGURLU" Then
                         frm.sinifBilgi2 = ""
                         If sFisTipi = "K" Then
-                            frm.Text = "Kredili Perakende Satï¿½ï¿½..."
+                            frm.Text = "Kredili Perakende Satýþ..."
                             frm.sFiyatTipi = sKrediliFiyat
                             frm.sinifBilgi2 = sinifBilgi2
                         ElseIf sFisTipi = "P" Then
-                            frm.Text = "Peï¿½in Perakende Satï¿½ï¿½..."
+                            frm.Text = "Peþin Perakende Satýþ..."
                             frm.sFiyatTipi = sPesinFiyat
                             frm.sinifBilgi2 = sinifBilgi2
                         ElseIf sFisTipi = "SP" Then
-                            frm.Text = "Peï¿½in Perakende Sipariï¿½..."
+                            frm.Text = "Peþin Perakende Sipariþ..."
                             frm.sFiyatTipi = sPesinFiyat
                             frm.sinifBilgi2 = sinifBilgi2
                         ElseIf sFisTipi = "SK" Then
-                            frm.Text = "Kredili Perakende Sipariï¿½..."
+                            frm.Text = "Kredili Perakende Sipariþ..."
                             frm.sFiyatTipi = sKrediliFiyat
                             frm.sinifBilgi2 = sinifBilgi2
                         End If
                     Else
                         If sFisTipi = "K" Then
-                            frm.Text = "Kredili Perakende Satï¿½ï¿½..."
+                            frm.Text = "Kredili Perakende Satýþ..."
                             frm.sFiyatTipi = sKrediliFiyat
                         ElseIf sFisTipi = "P" Then
-                            frm.Text = "Peï¿½in Perakende Satï¿½ï¿½..."
+                            frm.Text = "Peþin Perakende Satýþ..."
                             frm.sFiyatTipi = sPesinFiyat
                         ElseIf sFisTipi = "SP" Then
-                            frm.Text = "Peï¿½in Perakende Sipariï¿½..."
+                            frm.Text = "Peþin Perakende Sipariþ..."
                             frm.sFiyatTipi = sPesinFiyat
                         ElseIf sFisTipi = "SK" Then
-                            frm.Text = "Kredili Perakende Sipariï¿½..."
+                            frm.Text = "Kredili Perakende Sipariþ..."
                             frm.sFiyatTipi = sKrediliFiyat
                         End If
                     End If
                     'If yetki_kontrol(kullanici, frm.Name) = True Then
                     frm.Show()
                 Else
-                    XtraMessageBox.Show(Sorgu_sDil("ï¿½zgï¿½nï¿½m" & vbCrLf & "Mï¿½ï¿½teri Hesabï¿½na Satï¿½ï¿½ Yetkisi Yok...!" & vbCrLf & "Lï¿½tfen Sistem Yï¿½neticinizle Gï¿½rï¿½ï¿½ï¿½n...", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    XtraMessageBox.Show(Sorgu_sDil("Üzgünüm" & vbCrLf & "Müþteri Hesabýna Satýþ Yetkisi Yok...!" & vbCrLf & "Lütfen Sistem Yöneticinizle Görüþün...", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 End If
             Else
-                XtraMessageBox.Show(Sorgu_sDil("Lï¿½tfen Bir Mï¿½ï¿½teri Hesabï¿½ Seï¿½iniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Question)
+                XtraMessageBox.Show(Sorgu_sDil("Lütfen Bir Müþteri Hesabý Seçiniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Question)
                 txt_musterino.Focus()
                 txt_musterino.SelectAll()
             End If
@@ -4217,7 +4217,7 @@ Public Class frm_perakende
                 frm.ShowDialog()
             End If
         Else
-            XtraMessageBox.Show(Sorgu_sDil("Lï¿½tfen Bir Mï¿½ï¿½teri Hesabï¿½ Seï¿½iniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Question)
+            XtraMessageBox.Show(Sorgu_sDil("Lütfen Bir Müþteri Hesabý Seçiniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Question)
             txt_musterino.Focus()
             txt_musterino.SelectAll()
         End If
@@ -4306,7 +4306,7 @@ Public Class frm_perakende
                 musteri_kontrol()
             End If
         Else
-            XtraMessageBox.Show(Sorgu_sDil("Lï¿½tfen Kasiyer Bilgilerinizi Giriniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            XtraMessageBox.Show(Sorgu_sDil("Lütfen Kasiyer Bilgilerinizi Giriniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
             txt_kasiyer_kod.Focus()
             txt_kasiyer_kod.SelectAll()
         End If
@@ -4315,7 +4315,7 @@ Public Class frm_perakende
         If Trim(txt_musterino.Text).ToString <> "" And IsNumeric(Trim(txt_musterino.Text)) = True Then
             Dim kontrol = sorgu_cari_kontrol(txt_musterino.EditValue)
             If kontrol = 0 Then
-                XtraMessageBox.Show(Sorgu_sDil("Kayï¿½t Bulunumadï¿½...", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                XtraMessageBox.Show(Sorgu_sDil("Kayýt Bulunumadý...", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             ElseIf kontrol = 1 Then
                 dataload_cari(txt_musterino.EditValue)
                 Dim dr As DataRow
@@ -4335,7 +4335,7 @@ Public Class frm_perakende
                 dr = Nothing
             End If
         Else
-            XtraMessageBox.Show(Sorgu_sDil("Lï¿½tfen Sayï¿½sal Veri Giriniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information)
+            XtraMessageBox.Show(Sorgu_sDil("Lütfen Sayýsal Veri Giriniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information)
             txt_musterino.Focus()
             txt_musterino.SelectAll()
         End If
@@ -4557,7 +4557,7 @@ Public Class frm_perakende
             frm.firmakodu = lKodu
             frm.tarih1 = "01/01/1900"
             frm.tarih2 = "31/12/2048"
-            frm.qfirmakodu = "Eï¿½ittir"
+            frm.qfirmakodu = "Eþittir"
             frm.islemstatus = True
             frm.kullanici = kullanici
             frm.ShowDialog()
@@ -4576,7 +4576,7 @@ Public Class frm_perakende
             frm.DateEdit2.EditValue = dteSistemTarihi
             frm.txt_ara.Text = ""
             frm.txt_ara_stok.Text = ""
-            frm.sec_MaliyetTipi.Text = "Stok Kartï¿½ndan"
+            frm.sec_MaliyetTipi.Text = "Stok Kartýndan"
             frm.kriter_musteriID = "AND tbMusteri.nMusteriID = " & nMusteriID & " "
             If islem = 3 Then
                 frm.kriter_fistipi = "'DC'"
@@ -4724,10 +4724,10 @@ Public Class frm_perakende
             cmd.ExecuteNonQuery()
             cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT     TOP 1 ISNULL(lKodu,0) as lKodu FROM         tbMusteri WHERE     (nMusteriID < " & nMusteriID & " ) ORDER BY lKodu DESC ")
             txt_musterino.EditValue = cmd.ExecuteScalar
-            XtraMessageBox.Show(Sorgu_sDil("Kayï¿½t Baï¿½arï¿½yla Silindi...", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information)
+            XtraMessageBox.Show(Sorgu_sDil("Kayýt Baþarýyla Silindi...", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Information)
             musteri_kontrol()
         Catch ex As Exception
-            XtraMessageBox.Show(Sorgu_sDil("ï¿½zgï¿½nï¿½m,Hareket Gï¿½rmï¿½ï¿½ Kaydï¿½ Silemezsiniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            XtraMessageBox.Show(Sorgu_sDil("Üzgünüm,Hareket Görmüþ Kaydý Silemezsiniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             cmd.CommandText = sorgu_query("IF @@TRANCOUNT > 0 ROLLBACK TRAN")
             cmd.ExecuteNonQuery()
         End Try
@@ -4758,7 +4758,7 @@ Public Class frm_perakende
         End If
     End Sub
     Private Sub SMS_Gonder()
-        If XtraMessageBox.Show(Sorgu_sDil("SMS Gï¿½ndermek ï¿½stediï¿½inize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+        If XtraMessageBox.Show(Sorgu_sDil("SMS Göndermek Ýstediðinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
             Dim frm As New frm_Perakende_SMS_Gonder
             frm.firmano = firmano
             frm.donemno = donemno
@@ -4780,7 +4780,7 @@ Public Class frm_perakende
                 dr1("lBakiye") = txt_lBakiye.Text
                 frm.DataSet1.Tables(0).Rows.Add(dr1)
             End If
-            'MsgBox(Sorgu_sDil("ï¿½ï¿½lem Tamamlandï¿½...!",sDil), MessageBoxIcon.Information, sorgu_sDil("Dikkat",sDil))
+            'MsgBox(Sorgu_sDil("Ýþlem Tamamlandý...!",sDil), MessageBoxIcon.Information, sorgu_sDil("Dikkat",sDil))
             frm.ShowDialog()
         End If
     End Sub
@@ -4801,7 +4801,7 @@ Public Class frm_perakende
             musteri_sec()
         ElseIf e.KeyCode = Keys.Space Then
             Dim deger = ""
-            deger = InputBox("Mï¿½ï¿½teriNumarasï¿½nï¿½ Okutun", "Mï¿½ï¿½teriKartOkut", "").ToString
+            deger = InputBox("MüþteriNumarasýný Okutun", "MüþteriKartOkut", "").ToString
             If deger.ToString <> "" Then
                 txt_musterino.Text = CType(Microsoft.VisualBasic.Left(deger, Len(deger) - 1), Decimal)
                 musteri_kontrol()
@@ -4809,7 +4809,7 @@ Public Class frm_perakende
             deger = Nothing
         End If
         If e.KeyCode = Keys.Escape Then
-            If XtraMessageBox.Show(Sorgu_sDil("Perakende Ekranï¿½ndan ï¿½ï¿½kmak ï¿½stediï¿½inize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+            If XtraMessageBox.Show(Sorgu_sDil("Perakende Ekranýndan Çýkmak Ýstediðinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
                 Me.Close()
             End If
         End If
@@ -4861,7 +4861,7 @@ Public Class frm_perakende
         tbMusteri_yeni()
     End Sub
     Private Sub BarButtonItem19_ItemClick(ByVal sender As System.Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles BarButtonItem19.ItemClick
-        If XtraMessageBox.Show(Sorgu_sDil("Kaydï¿½ Silmek ï¿½stediï¿½inize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+        If XtraMessageBox.Show(Sorgu_sDil("Kaydý Silmek Ýstediðinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
             tbMusteri_sil(nMusteriID)
         End If
     End Sub
@@ -4906,7 +4906,7 @@ Public Class frm_perakende
         musteri_kontrol()
     End Sub
     Private Sub BarButtonItem23_ItemClick(ByVal sender As Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles BarButtonItem23.ItemClick
-        If XtraMessageBox.Show(Sorgu_sDil("Perakende Ekranï¿½ndan ï¿½ï¿½kmak ï¿½stediï¿½inize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
+        If XtraMessageBox.Show(Sorgu_sDil("Perakende Ekranýndan Çýkmak Ýstediðinize Emin misiniz...?", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.YesNo, MessageBoxIcon.Question) = MsgBoxResult.Yes Then
             Me.Close()
         End If
     End Sub
@@ -5057,7 +5057,7 @@ Public Class frm_perakende
                     musteri_kontrol()
                 End If
             Else
-                XtraMessageBox.Show(Sorgu_sDil("Lï¿½tfen Kasiyer Bilgilerinizi Giriniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                XtraMessageBox.Show(Sorgu_sDil("Lütfen Kasiyer Bilgilerinizi Giriniz...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 txt_kasiyer_kod.Focus()
                 txt_kasiyer_kod.SelectAll()
             End If
@@ -5119,5 +5119,4 @@ Public Class frm_perakende
             If pnlPerakendeRisk IsNot Nothing Then pnlPerakendeRisk.Visible = False
         End Try
     End Sub
-
 End Class
