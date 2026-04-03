@@ -193,3 +193,35 @@ AND m.dteFisTarihi >= DATEADD(MONTH, -6, GETDATE())
 GO
 
 PRINT 'AI Altyapi SQL Script basariyla tamamlandi.'
+
+-- =====================================================
+-- 6. PERAKENDE RISK VIEW (tbMusteri bazli)
+-- =====================================================
+
+IF EXISTS (SELECT * FROM sys.views WHERE name = 'vw_AI_PerakendeRiskVerisi')
+    DROP VIEW vw_AI_PerakendeRiskVerisi
+GO
+
+CREATE VIEW vw_AI_PerakendeRiskVerisi AS
+SELECT
+    m.nMusteriID,
+    RTRIM(ISNULL(m.sAdi, '')) + ' ' + RTRIM(ISNULL(m.sSoyadi, '')) AS MusteriAd,
+    ISNULL(m.sVergiNo, '') AS VergiNo,
+    ISNULL(RTRIM(m.sEvIl), '') AS Il,
+    ISNULL(RTRIM(m.sEvSemt), '') AS Semt,
+    ISNULL(k.lKrediLimiti, 0) AS KrediLimiti,
+    ISNULL(k.bOzelMusterimi, 0) AS OzelMusteri,
+    -- Bakiye: Toplam Alisveris - Toplam Odeme
+    (SELECT ISNULL(SUM(lNetTutar), 0) FROM tbAlisVeris WHERE nMusteriID = m.nMusteriID AND nGirisCikis = 2) -
+    (SELECT ISNULL(SUM(lTutar), 0) FROM tbOdeme WHERE nMusteriID = m.nMusteriID AND sOdemeKodu <> '') AS Bakiye,
+    -- Son alisveris tarihi
+    (SELECT MAX(dteFaturaTarihi) FROM tbAlisVeris WHERE nMusteriID = m.nMusteriID) AS SonAlisVerisTarihi,
+    -- Son odeme tarihi
+    (SELECT MAX(dteTarih) FROM tbOdeme WHERE nMusteriID = m.nMusteriID) AS SonOdemeTarihi,
+    -- Son 90 gun alisveris sayisi
+    (SELECT COUNT(*) FROM tbAlisVeris WHERE nMusteriID = m.nMusteriID AND dteFaturaTarihi >= DATEADD(DAY, -90, GETDATE())) AS Son90GunAlisveris
+FROM tbMusteri m
+LEFT JOIN tbMusteriKredisi k ON m.nMusteriID = k.nMusteriID
+GO
+
+PRINT 'Perakende risk view olusturuldu.'

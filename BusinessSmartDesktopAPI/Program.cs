@@ -1688,6 +1688,68 @@ app.MapGet("/api/cari/{firmaId}/detay", async (int firmaId) =>
     }
 });
 
+// --- Perakende Musteri Risk Skoru ---
+app.MapGet("/api/perakende/risk-skoru/{musteriId}", async (int musteriId) =>
+{
+    var aktif = await riskService.SistemAyarGetirAsync("PERAKENDE_RISK_AKTIF");
+    if (aktif != "1") return Results.Ok(new { basarili = false, hataMesaji = "Perakende risk modulu aktif degil" });
+
+    var connStr = config["SqlConnectionString"] ?? "";
+    try
+    {
+        using var conn = new SqlConnection(connStr);
+        await conn.OpenAsync();
+        var cmd = new SqlCommand(@"
+            SELECT MusteriAd, KrediLimiti, Bakiye, SonAlisVerisTarihi, SonOdemeTarihi, Son90GunAlisveris
+            FROM vw_AI_PerakendeRiskVerisi WHERE nMusteriID = @mid", conn);
+        cmd.Parameters.AddWithValue("@mid", musteriId);
+
+        using var reader = await cmd.ExecuteReaderAsync();
+        if (!await reader.ReadAsync())
+            return Results.NotFound(new { basarili = false, hataMesaji = "Musteri bulunamadi" });
+
+        var musteriAd = reader["MusteriAd"]?.ToString() ?? "";
+        var krediLimiti = reader["KrediLimiti"] != DBNull.Value ? Convert.ToDecimal(reader["KrediLimiti"]) : 0;
+        var bakiye = reader["Bakiye"] != DBNull.Value ? Convert.ToDecimal(reader["Bakiye"]) : 0;
+        var sonAlisveris = reader["SonAlisVerisTarihi"] != DBNull.Value ? Convert.ToDateTime(reader["SonAlisVerisTarihi"]) : (DateTime?)null;
+        var sonOdeme = reader["SonOdemeTarihi"] != DBNull.Value ? Convert.ToDateTime(reader["SonOdemeTarihi"]) : (DateTime?)null;
+        var siparisSikligi = reader["Son90GunAlisveris"] != DBNull.Value ? Convert.ToInt32(reader["Son90GunAlisveris"]) : 0;
+
+        var limitKullanim = krediLimiti > 0 ? bakiye / krediLimiti : 0;
+        var gecikmeGun = sonAlisveris.HasValue && sonOdeme.HasValue ? (int)(sonAlisveris.Value - sonOdeme.Value).TotalDays : 0;
+        if (gecikmeGun < 0) gecikmeGun = 0;
+
+        int skor = 100;
+        skor -= Math.Min(gecikmeGun * 2, 40);
+        if (limitKullanim > 0.9m) skor -= 20;
+        else if (limitKullanim > 0.7m) skor -= 10;
+        if (bakiye > krediLimiti && krediLimiti > 0) skor -= 15;
+        skor = Math.Max(0, Math.Min(100, skor));
+
+        var seviye = skor >= 70 ? "guvenli" : skor >= 40 ? "dikkat" : "kritik";
+
+        return Results.Ok(new
+        {
+            basarili = true,
+            musteriId,
+            musteriAd,
+            skor,
+            seviye,
+            bakiye,
+            krediLimiti,
+            limitKullanim,
+            gecikmeGun,
+            siparisSikligi,
+            sonAlisveris = sonAlisveris?.ToString("yyyy-MM-dd"),
+            sonOdeme = sonOdeme?.ToString("yyyy-MM-dd")
+        });
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem(ex.Message);
+    }
+});
+
 // ===================================================================
 Console.WriteLine("===========================================");
 Console.WriteLine("  Business Smart Desktop API");
