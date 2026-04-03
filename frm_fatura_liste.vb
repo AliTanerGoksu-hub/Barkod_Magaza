@@ -5708,11 +5708,16 @@ Public Class frm_fatura_liste
                     Decimal.TryParse(gibTutar.Replace(".", ","), gibTutarDec)
                     If gibTutarDec = 0 Then Decimal.TryParse(gibTutar, gibTutarDec)
                 End If
+                ' Eger tutar 10000'den buyukse ve ondalik kismi yoksa, kurus olabilir (100'e bol)
+                Dim gibTutarTL As Decimal = gibTutarDec
+                If gibTutarDec > 0 AndAlso gibTutar.IndexOf("."c) < 0 AndAlso gibTutar.IndexOf(","c) < 0 Then
+                    gibTutarTL = gibTutarDec / 100D
+                End If
 
                 Dim gibTarihDt As DateTime = DateTime.MinValue
                 If gibTarih <> "" Then DateTime.TryParse(gibTarih, gibTarihDt)
 
-                logSB.AppendLine("GIB: " & gibDocId & " | VKN=" & gibDestId & " | Ad=" & gibAd & " Soyad=" & gibSoyad & " | AdSoyad=" & gibAdSoyad & " | Tutar=" & gibTutarDec.ToString("F2") & " | Tarih=" & gibTarih)
+                logSB.AppendLine("GIB: " & gibDocId & " | VKN=" & gibDestId & " | Ad=" & gibAd & " Soyad=" & gibSoyad & " | AdSoyad=" & gibAdSoyad & " | HamTutar=" & gibTutar & " | ParseTutar=" & gibTutarDec.ToString("F2") & " | TLTutar=" & gibTutarTL.ToString("F2") & " | Tarih=" & gibTarih)
 
                 ' Aday listesi olustur
                 Dim adaylar As New System.Collections.Generic.List(Of DataRow)
@@ -5769,7 +5774,15 @@ Public Class frm_fatura_liste
                         If Not IsDBNull(dr("lNetTutar")) Then localNet = CDec(dr("lNetTutar"))
                         Dim localKdv As Decimal = 0
                         If Not IsDBNull(dr("lKdvTutar")) Then localKdv = CDec(dr("lKdvTutar"))
-                        If Math.Abs((localNet + localKdv) - gibTutarDec) < 1D Then
+                        Dim localToplam As Decimal = localNet + localKdv
+                        ' Orijinal tutar ile karsilastir
+                        If Math.Abs(localToplam - gibTutarDec) < 1D Then
+                            daraltilmis.Add(dr)
+                        ' Kurus cevrimi ile karsilastir (TL = kurus / 100)
+                        ElseIf Math.Abs(localToplam - gibTutarTL) < 1D Then
+                            daraltilmis.Add(dr)
+                        ' DB tutarini kurusa cevirip karsilastir
+                        ElseIf Math.Abs(localToplam * 100D - gibTutarDec) < 100D Then
                             daraltilmis.Add(dr)
                         End If
                     Next
