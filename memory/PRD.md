@@ -1,65 +1,76 @@
 # BARKOD YAZILIM - PRD (Product Requirements Document)
 
-## Orijinal Problem
-Legacy VB.NET Windows Forms ERP/POS uygulamasina AI entegrasyonu, B2B yonetimi, 
-E-Fatura/E-Arsiv eslestirme ve maliyet hesaplama standardizasyonu eklenmesi.
+## Proje Ozeti
+Legacy VB.NET Windows Forms ERP/POS uygulamasi (Barkod_Magaza) + C# .NET 8 Web API (BusinessSmartDesktopAPI).
+Amaç: Mevcut sisteme AI tabanli is zekasi altyapisi eklemek.
 
 ## Mimari
-- Frontend: VB.NET Windows Forms + DevExpress
-- Backend API: C# .NET 8.0 Minimal API (BusinessSmartDesktopAPI)
-- Database: SQL Server (OleDb + SqlClient)
-- AI: Bulut API (OpenAI GPT-4o-mini / Gemini) - opsiyonel
-- Mobil: MAUI Blazor (ayri agent)
-- B2B: Web Panel (ayri agent)
+- **Frontend**: VB.NET Windows Forms (DevExpress, CP1254 encoding)
+- **Backend API**: C# .NET 8 Minimal APIs (BusinessSmartDesktopAPI)
+- **Veritabani**: SQL Server (OleDb)
+- **AI**: OpenAI GPT-4o-mini (LLMService.cs) + Kural bazli motor (KuralMotoru.cs)
 
-## Tamamlanan Isler
+## Tamamlanan Ozellikler
 
-### 2026-02-XX: Derleme Hatalari Duzeltmesi (Bu Oturum)
-- [x] Mukerrer frm_AI_Ayarlar.vb silindi, Form1.vb -> frm_AIAyarlari() yonlendirildi
-- [x] frm_firma_kart.vb: Orijinal dosya geri yuklendi, Inherits sirasi duzeltildi, encoding bozulmasi giderildi
-- [x] frm_perakende.vb: Ayni sekilde orijinal dosya geri yuklendi ve risk kodu dogru pozisyona eklendi
-- [x] Risk UI panelleri (frm_firma_kart.vb, frm_perakende.vb) lokal SQL ile calisiyor, dogru pozisyonda
+### AI Altyapi (Backend - C# API)
+- [x] LLMService.cs - OpenAI entegrasyonu (risk analizi, tahsilat plani, satis oneri, gun sonu ozet)
+- [x] AuditService.cs - AI kullanim loglama
+- [x] KuralMotoru.cs - Kural bazli risk degerlendirme (AI olmadan da calisir)
+- [x] POST /api/ai/risk-analiz - VB.NET'ten gelen verilerle risk analizi
+- [x] POST /api/ai/risk-aciklama - DB'den veri cekip firma bazli risk aciklama
+- [x] GET /api/ai/tahsilat-plani - Vadesi gecmis musteri listesi + AI tahsilat onerisi
+- [x] POST /api/ai/satis-oneri - Firma bazli urun oneri motoru
+- [x] GET /api/ai/gun-sonu-ozet - Gunluk satis/tahsilat ozeti + AI analiz
+- [x] POST /api/siparis/onay-kontrol - Siparis oncesi risk kontrolu
+- [x] GET /api/cari/risk-skoru/{firmaId} - Cari risk skoru
+- [x] GET /api/cari/{firmaId}/detay - Cari firma detay bilgisi
+- [x] POST /api/visit-note/add - Ziyaret notu kaydi
+- [x] GET /api/sistem/ayar/{ayarKodu} - Sistem ayar sorgulama
+- [x] GET /api/yetki/kontrol - Kullanici yetki kontrolu
+- [x] GET /api/perakende/risk-skoru/{musteriId} - Perakende musteri risk skoru
 
-### 2026-04-01: AI Altyapi Kurulumu
-- [x] AI planlama dokumanlari (AI_IS_PLANI.md, KOORDINELI_GELISTIRME_PLANI.md, VERI_ALTYAPISI_PLANI.md, MOBIL_B2B_AGENT_GOREV_DOKUMANI.md)
-- [x] SQL: tbRiskSkoru, tbAuditLog, tbSistemAyar parametrik ayarlar, aEmirForms yetki, AI view'lari
-- [x] C# API: AIService.cs, RiskService.cs, AuditService.cs + tum endpoint'ler
-- [x] VB.NET: master_kaydet_yeni - parametrik valor tarihi + kredi limit kontrolu
-- [x] frm_fatura_liste.vb: GIB tutar parse fix (InvariantCulture) + Eslestirme: Isim -> Adres -> Tutar
-- [x] frm_firma_kart.vb: Risk gostergesi (yesil/sari/kirmizi panel)
-- [x] frm_perakende.vb: Perakende risk gostergesi
-- [x] frm_AIAyarlari.vb: AI ayarlari yonetim ekrani
+### AI UI (VB.NET Desktop)
+- [x] frm_firma_kart.vb - Risk paneli (renkli bar + skor + detay)
+- [x] frm_firma_kart.vb - "AI Detay" butonu (/api/ai/risk-aciklama cagirip sonucu gosterir)
+- [x] frm_firma_kart.vb - "Satis Oneri" butonu (frm_AISatisOneri formunu acar)
+- [x] frm_perakende.vb - Perakende risk paneli (renkli bar + skor)
+- [x] frm_perakende.vb - "AI" detay butonu
+- [x] frm_AITahsilatAsistani.vb - Tahsilat AI asistani formu (grid + AI ozet)
+- [x] frm_AIGunSonuOzet.vb - Gun sonu ozet formu (kartlar + AI)
+- [x] frm_AISatisOneri.vb - Satis oneri motoru formu (grid + AI oneri)
+- [x] Form1.vb - AI menusune 3 yeni buton eklendi
 
-### Onceki Oturumlar:
-- [x] B2B Settings tab, POS 400 Bad Request hata isleme
-- [x] R2 Logo upload (Sinif + Firma), Otomatik yedek hata duzeltmeleri
-- [x] FTP -> API migrasyon, E-Fatura/E-Arsiv API pagination, TurkceNormalize
+### Daha Once Tamamlanan
+- [x] B2B Settings tab (frm_personel.vb)
+- [x] POS 400 error handling (frm_perakende_odeme.vb)
+- [x] R2 Image upload (frm_tbSinif.vb, Form1.vb)
+- [x] Backup FTP -> API migration (ApiClient.vb)
+- [x] AI Ayarlari formu (frm_AIAyarlari.vb)
+- [x] AI Urun Isle formu (frm_AIUrunIsle.vb)
+- [x] AI Kullanim Raporu formu (frm_AIKullanimRaporu.vb)
+- [x] SQL Views (vw_AI_CariRiskVerisi, vw_AI_SatisGecmisi, vw_AI_PerakendeRiskVerisi)
+- [x] Parametrik togglelar (tbSistemAyar: RISK_SKORU_AKTIF, PERAKENDE_RISK_AKTIF vs.)
+- [x] Valor tarihi zorunluluk kontrolu (master_kaydet_yeni)
+- [x] Kredi limiti kontrolu (SIPARIS_LIMIT_KONTROL)
 
-## Devam Eden Isler (P0)
-- [ ] GIB eslestirme: Tutar parse testi (kullanicidan yeni log bekleniyor)
+## Bekleyen Gorevler
 
-## Siradaki Isler (P1)
-- [ ] Satis Oneri Motoru - siparis ekraninda AI bazli urun onerisi
-- [ ] Tahsilat AI Asistani - gecikmiş bakiyeler ve rota yakinligi
-- [ ] Desktop UI: Siparis ekraninda AI uyarilari
+### P1 - Yakin Gelecek
+- [ ] frm_stok_cari_alis.vb'de siparis oncesi API bazli risk uyarisi (siparis/onay-kontrol)
+- [ ] B2B panel icin bakiye/odeme plani ekrani
+- [ ] Mobil API'ler (ayni endpoint'ler mobile uyumlu)
+- [ ] Yonetici ozet paneli + dogal dilde haftalik rapor
 
-## Gelecek Isler (P2)
-- [ ] Maliyet hesaplama standardizasyonu (FIFO, LIFO, Agirlikli Ortalama vb.)
-- [ ] AI kullanim takibi ve denetim log ekrani (tbAuditLog -> UI)
-- [ ] Stok tahmin ve guvenlik stogu onerisi
-- [ ] Urun aciklama temizleme / pazaryeri ilan yardimcisi
-- [ ] Kolaysoft SOAP cagrlarini ayri service class'a tasi
+### P2 - Gelecek
+- [ ] Maliyet hesaplama standardizasyonu (FIFO, LIFO, Agirlikli Ortalama vs.)
+- [ ] E-Fatura/E-Arsiv otomatik eslestirme
+- [ ] Dusuk riskli AI araclari (aciklama temizleme, ilan yardimcisi)
+- [ ] Performans olcumleri ve maliyet takibi
+- [ ] AI kullanim loglari UI
 
-## Parametrik Ayarlar (tbSistemAyar)
-| Kod | Varsayilan | Aciklama |
-|-----|-----------|---------|
-| AI_MODUL_AKTIF | 0 | AI ozellikleri acik/kapali |
-| VALOR_TARIHI_ZORUNLU | 0 | Faturada valor tarihi zorunlu |
-| KREDI_LIMIT_UYARI | 0 | Firma kartinda kredi limit uyarisi |
-| RISK_SKORU_AKTIF | 0 | Risk skoru hesaplama |
-| PERAKENDE_RISK_AKTIF | 0 | Perakende risk takibi |
-| SIPARIS_LIMIT_KONTROL | 0 | Siparis kaydetmede limit kontrol |
-| TAHSILAT_AI_AKTIF | 0 | AI tahsilat plani |
-| SATIS_ONERI_AKTIF | 0 | AI satis onerisi |
-| YONETICI_OZET_AKTIF | 0 | AI yonetici ozeti |
-| ICERIK_YARDIMCI_AKTIF | 0 | AI icerik yardimcisi |
+## Teknik Notlar
+- VB.NET dosyalari CP1254 encoding kullanir
+- Form1.vb 24000+ satir - dikkatli edit gerekir
+- API Base URL: https://desktop.barkodyazilimevi.com
+- API Key: BSmart2024Desktop!@#SecureKey
+- AI ayarlari appsettings.json'da: AI:ApiKey, AI:ApiUrl, AI:Model
