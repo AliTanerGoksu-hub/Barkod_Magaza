@@ -1381,7 +1381,314 @@ app.MapPost("/api/files/mkdir", (HttpContext context) =>
 var port = Environment.GetEnvironmentVariable("API_PORT") ?? config["Port"] ?? "5080";
 var listenUrl = $"http://0.0.0.0:{port}";
 
-// Uygulamayı başlat
+// ===================================================================
+// AI SERVISLERI
+// ===================================================================
+var aiService = new BusinessSmartDesktopAPI.Services.AIService(config);
+var riskService = new BusinessSmartDesktopAPI.Services.RiskService(config);
+var auditService = new BusinessSmartDesktopAPI.Services.AuditService(config);
+
+// --- Sistem Ayar Sorgula ---
+app.MapGet("/api/sistem/ayar/{ayarKodu}", async (string ayarKodu) =>
+{
+    var deger = await riskService.SistemAyarGetirAsync(ayarKodu);
+    return Results.Ok(new { ayarKodu, ayarDeger = deger });
+});
+
+// --- Yetki Kontrol ---
+app.MapGet("/api/yetki/kontrol", async (int kullaniciId, string form) =>
+{
+    var yetkili = await riskService.YetkiKontrolAsync(kullaniciId, form);
+    return Results.Ok(new { yetkili });
+});
+
+// --- Risk Skoru Hesapla ---
+app.MapGet("/api/cari/risk-skoru/{firmaId}", async (int firmaId) =>
+{
+    var aktif = await riskService.SistemAyarGetirAsync("RISK_SKORU_AKTIF");
+    if (aktif != "1") return Results.Ok(new { basarili = false, hataMesaji = "Risk skoru modulu aktif degil" });
+
+    var sonuc = await riskService.RiskHesaplaAsync(firmaId);
+    if (sonuc == null) return Results.NotFound(new { basarili = false, hataMesaji = "Firma bulunamadi" });
+
+    return Results.Ok(new
+    {
+        basarili = true,
+        firmaId = sonuc.FirmaId,
+        firmaAd = sonuc.FirmaAd,
+        skor = sonuc.Skor,
+        seviye = sonuc.Seviye,
+        bakiye = sonuc.Bakiye,
+        vadesiGecmisBakiye = sonuc.VadesiGecmisBakiye,
+        krediLimiti = sonuc.KrediLimiti,
+        gecikmeGun = sonuc.GecikmeGun,
+        odemeDisipilin = sonuc.OdemeDisipilin,
+        iadeOrani = sonuc.IadeOrani,
+        siparisSikligi = sonuc.SiparisSikligi,
+        limitKullanim = sonuc.LimitKullanim
+    });
+});
+
+// --- AI Risk Aciklama ---
+app.MapPost("/api/ai/risk-aciklama", async (HttpContext context) =>
+{
+    var aktif = await riskService.SistemAyarGetirAsync("AI_MODUL_AKTIF");
+    if (aktif != "1") return Results.Ok(new { basarili = false, hataMesaji = "AI modulu aktif degil" });
+
+    if (!aiService.IsConfigured) return Results.Ok(new { basarili = false, hataMesaji = "AI API anahtari tanimlanmamis" });
+
+    var body = await JsonSerializer.DeserializeAsync<JsonElement>(context.Request.Body);
+    var firmaId = body.GetProperty("firmaId").GetInt32();
+
+    var risk = await riskService.RiskHesaplaAsync(firmaId);
+    if (risk == null) return Results.NotFound(new { basarili = false, hataMesaji = "Firma bulunamadi" });
+
+    var (aciklama, oneriler) = await aiService.RiskAciklamaAsync(
+        risk.FirmaAd, risk.Bakiye, risk.KrediLimiti, risk.GecikmeGun,
+        risk.OdemeDisipilin, risk.IadeOrani, risk.SiparisSikligi, risk.LimitKullanim);
+
+    await auditService.LogAsync(0, "", "AI_RISK_SORGU", "AI",
+        $"FirmaID={firmaId}, Skor={risk.Skor}", "gpt-4o-mini");
+
+    return Results.Ok(new
+    {
+        basarili = true,
+        firmaId,
+        riskSkoru = risk.Skor,
+        riskSeviye = risk.Seviye,
+        aciklama,
+        oneriler,
+        timestamp = DateTime.UtcNow.ToString("o")
+    });
+});
+
+// --- AI Tahsilat Plani ---
+app.MapGet("/api/ai/tahsilat-plani", async (int temsilciId, string? tarih) =>
+{
+    var aktif = await riskService.SistemAyarGetirAsync("TAHSILAT_AI_AKTIF");
+    if (aktif != "1") return Results.Ok(new { basarili = false, hataMesaji = "Tahsilat AI modulu aktif degil" });
+
+    // Bakiyesi olan firmalari getir ve risk skorlarina gore sirala
+    var connStr = config["SqlConnectionString"] ?? "";
+    var liste = new System.Collections.Generic.List<object>();
+
+    try
+    {
+        using var conn = new SqlConnection(connStr);
+        await conn.OpenAsync();
+        var cmd = new SqlCommand(@"
+            SELECT TOP 50 r.nFirmaID, f.sAciklama AS FirmaAd, r.lToplamBakiye, r.lVadesiGecmisBakiye,
+                   r.nMaxGecikmeGun, r.nRiskSkoru, r.sRiskSeviye, ISNULL(f.sIl,'') AS Il, ISNULL(f.sSemt,'') AS Semt
+            FROM tbRiskSkoru r
+            INNER JOIN tbFirma f ON r.nFirmaID = f.nFirmaID
+            WHERE r.lToplamBakiye > 0 AND r.bAktif = 1
+            ORDER BY r.nMaxGecikmeGun DESC, r.lToplamBakiye DESC", conn);
+
+        using var reader = await cmd.ExecuteReaderAsync();
+        int oncelik = 1;
+        while (await reader.ReadAsync())
+        {
+            liste.Add(new
+            {
+                firmaId = Convert.ToInt32(reader["nFirmaID"]),
+                firmaAd = reader["FirmaAd"]?.ToString() ?? "",
+                bakiye = Convert.ToDecimal(reader["lToplamBakiye"]),
+                vadesiGecmis = Convert.ToDecimal(reader["lVadesiGecmisBakiye"]),
+                gecikmeGun = Convert.ToInt32(reader["nMaxGecikmeGun"]),
+                riskSkoru = Convert.ToInt32(reader["nRiskSkoru"]),
+                riskSeviye = reader["sRiskSeviye"]?.ToString() ?? "",
+                il = reader["Il"]?.ToString() ?? "",
+                semt = reader["Semt"]?.ToString() ?? "",
+                oncelik = oncelik++
+            });
+        }
+    }
+    catch { }
+
+    string ozet = $"Bugun {liste.Count} firma icin tahsilat onerilmektedir.";
+    if (aiService.IsConfigured && liste.Count > 0)
+    {
+        var aktifAi = await riskService.SistemAyarGetirAsync("AI_MODUL_AKTIF");
+        if (aktifAi == "1")
+        {
+            ozet = await aiService.GenerateAsync(
+                "Sen tahsilat planlama asistanisin. Turkce, 2-3 cumle ozet yaz.",
+                $"Toplam {liste.Count} firma, tahsilat plani ozeti yaz.");
+        }
+    }
+
+    await auditService.LogAsync(0, "", "AI_TAHSILAT_PLANI", "AI",
+        $"TemsilciID={temsilciId}, FirmaSayisi={liste.Count}");
+
+    return Results.Ok(new { basarili = true, ozet, liste });
+});
+
+// --- AI Satis Onerisi ---
+app.MapPost("/api/ai/satis-oneri", async (HttpContext context) =>
+{
+    var aktif = await riskService.SistemAyarGetirAsync("SATIS_ONERI_AKTIF");
+    if (aktif != "1") return Results.Ok(new { basarili = false, hataMesaji = "Satis oneri modulu aktif degil" });
+
+    var body = await JsonSerializer.DeserializeAsync<JsonElement>(context.Request.Body);
+    var firmaId = body.GetProperty("firmaId").GetInt32();
+
+    var connStr = config["SqlConnectionString"] ?? "";
+    var sonSiparisler = new StringBuilder();
+    string firmaAd = "";
+
+    try
+    {
+        using var conn = new SqlConnection(connStr);
+        await conn.OpenAsync();
+
+        // Firma adini al
+        var cmdFirma = new SqlCommand("SELECT ISNULL(sAciklama,'') FROM tbFirma WHERE nFirmaID=@fid", conn);
+        cmdFirma.Parameters.AddWithValue("@fid", firmaId);
+        firmaAd = (await cmdFirma.ExecuteScalarAsync())?.ToString() ?? "";
+
+        // Son 6 ay siparisleri
+        var cmd = new SqlCommand(@"
+            SELECT TOP 30 StokAdi, SUM(lMiktar) AS ToplamMiktar, COUNT(*) AS SiparisSayisi, MAX(dteFisTarihi) AS SonTarih
+            FROM vw_AI_SatisGecmisi WHERE nFirmaID=@fid
+            GROUP BY StokAdi ORDER BY SiparisSayisi DESC", conn);
+        cmd.Parameters.AddWithValue("@fid", firmaId);
+
+        using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            sonSiparisler.AppendLine($"- {reader["StokAdi"]}: {reader["ToplamMiktar"]} adet, {reader["SiparisSayisi"]} siparis, son: {reader["SonTarih"]}");
+        }
+    }
+    catch { }
+
+    if (!aiService.IsConfigured || string.IsNullOrEmpty(sonSiparisler.ToString()))
+    {
+        return Results.Ok(new { basarili = true, oneriler = new object[0] });
+    }
+
+    var sonuc = await aiService.SatisOneriAsync(firmaAd, sonSiparisler.ToString());
+
+    var oneriler = new System.Collections.Generic.List<object>();
+    foreach (var line in sonuc.Split('\n'))
+    {
+        if (line.Trim().StartsWith("ONERI:"))
+        {
+            var parts = line.Trim().Substring(6).Split('|');
+            if (parts.Length >= 2)
+            {
+                oneriler.Add(new
+                {
+                    urunAd = parts[0].Trim(),
+                    neden = parts.Length > 1 ? parts[1].Trim() : "",
+                    tahminMiktar = parts.Length > 2 ? parts[2].Trim() : ""
+                });
+            }
+        }
+    }
+
+    await auditService.LogAsync(0, "", "AI_SATIS_ONERI", "AI",
+        $"FirmaID={firmaId}, OneriSayisi={oneriler.Count}", "gpt-4o-mini");
+
+    return Results.Ok(new { basarili = true, firmaAd, oneriler });
+});
+
+// --- AI Gun Sonu Ozet ---
+app.MapGet("/api/ai/gun-sonu-ozet", async (string? tarih) =>
+{
+    var aktif = await riskService.SistemAyarGetirAsync("YONETICI_OZET_AKTIF");
+    if (aktif != "1") return Results.Ok(new { basarili = false, hataMesaji = "Yonetici ozet modulu aktif degil" });
+
+    var connStr = config["SqlConnectionString"] ?? "";
+    decimal toplamSatis = 0, toplamTahsilat = 0;
+    int faturaSayisi = 0;
+    string hedefTarih = tarih ?? DateTime.Now.ToString("yyyy-MM-dd");
+
+    try
+    {
+        using var conn = new SqlConnection(connStr);
+        await conn.OpenAsync();
+
+        var cmdSatis = new SqlCommand(@"
+            SELECT ISNULL(SUM(lNetTutar + lKdvTutar), 0), COUNT(*)
+            FROM tbStokFisiMaster WHERE sFisTipi='FS' AND CONVERT(DATE, dteFisTarihi) = @tarih", conn);
+        cmdSatis.Parameters.AddWithValue("@tarih", hedefTarih);
+        using var r1 = await cmdSatis.ExecuteReaderAsync();
+        if (await r1.ReadAsync()) { toplamSatis = r1.GetDecimal(0); faturaSayisi = r1.GetInt32(1); }
+        r1.Close();
+
+        var cmdTahsilat = new SqlCommand(@"
+            SELECT ISNULL(SUM(lTutar), 0)
+            FROM tbFirmaHareketi WHERE sBorcAlacak='A' AND CONVERT(DATE, dteIslemTarihi) = @tarih", conn);
+        cmdTahsilat.Parameters.AddWithValue("@tarih", hedefTarih);
+        toplamTahsilat = Convert.ToDecimal(await cmdTahsilat.ExecuteScalarAsync() ?? 0);
+    }
+    catch { }
+
+    string ozet = $"Toplam Satis: {toplamSatis:N2} TL ({faturaSayisi} fatura), Tahsilat: {toplamTahsilat:N2} TL";
+
+    if (aiService.IsConfigured)
+    {
+        var aktifAi = await riskService.SistemAyarGetirAsync("AI_MODUL_AKTIF");
+        if (aktifAi == "1")
+        {
+            ozet = await aiService.GunSonuOzetAsync(toplamSatis, toplamTahsilat, faturaSayisi, "", "");
+        }
+    }
+
+    await auditService.LogAsync(0, "", "AI_GUN_SONU_OZET", "AI", $"Tarih={hedefTarih}");
+
+    return Results.Ok(new { basarili = true, tarih = hedefTarih, toplamSatis, toplamTahsilat, faturaSayisi, ozet });
+});
+
+// --- Cari Detay ---
+app.MapGet("/api/cari/{firmaId}/detay", async (int firmaId) =>
+{
+    var connStr = config["SqlConnectionString"] ?? "";
+    try
+    {
+        using var conn = new SqlConnection(connStr);
+        await conn.OpenAsync();
+        var cmd = new SqlCommand(@"
+            SELECT f.nFirmaID, RTRIM(ISNULL(f.sAciklama,'')) AS sAciklama, ISNULL(f.sVergiNo,'') AS sVergiNo,
+                   ISNULL(RTRIM(f.sIl),'') AS sIl, ISNULL(RTRIM(f.sSemt),'') AS sSemt,
+                   ISNULL(RTRIM(f.sUlke),'') AS sUlke, ISNULL(f.sTelefon,'') AS sTelefon,
+                   ISNULL(f.lKrediLimiti,0) AS lKrediLimiti, ISNULL(f.nVadeGun,0) AS nVadeGun,
+                   (SELECT ISNULL(SUM(CASE WHEN sBorcAlacak='B' THEN lTutar ELSE 0 END),0) - ISNULL(SUM(CASE WHEN sBorcAlacak='A' THEN lTutar ELSE 0 END),0) FROM tbFirmaHareketi WHERE nFirmaID=f.nFirmaID) AS Bakiye,
+                   r.nRiskSkoru, r.sRiskSeviye, r.nMaxGecikmeGun
+            FROM tbFirma f
+            LEFT JOIN tbRiskSkoru r ON f.nFirmaID = r.nFirmaID
+            WHERE f.nFirmaID = @fid", conn);
+        cmd.Parameters.AddWithValue("@fid", firmaId);
+
+        using var reader = await cmd.ExecuteReaderAsync();
+        if (!await reader.ReadAsync())
+            return Results.NotFound(new { basarili = false, hataMesaji = "Firma bulunamadi" });
+
+        return Results.Ok(new
+        {
+            basarili = true,
+            firmaId = Convert.ToInt32(reader["nFirmaID"]),
+            firmaAd = reader["sAciklama"]?.ToString(),
+            vergiNo = reader["sVergiNo"]?.ToString(),
+            il = reader["sIl"]?.ToString(),
+            semt = reader["sSemt"]?.ToString(),
+            ulke = reader["sUlke"]?.ToString(),
+            telefon = reader["sTelefon"]?.ToString(),
+            krediLimit = Convert.ToDecimal(reader["lKrediLimiti"]),
+            vadeGun = Convert.ToInt32(reader["nVadeGun"]),
+            bakiye = Convert.ToDecimal(reader["Bakiye"]),
+            riskSkoru = reader["nRiskSkoru"] != DBNull.Value ? Convert.ToInt32(reader["nRiskSkoru"]) : (int?)null,
+            riskSeviye = reader["sRiskSeviye"]?.ToString(),
+            gecikmeGun = reader["nMaxGecikmeGun"] != DBNull.Value ? Convert.ToInt32(reader["nMaxGecikmeGun"]) : 0
+        });
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem(ex.Message);
+    }
+});
+
+// ===================================================================
 Console.WriteLine("===========================================");
 Console.WriteLine("  Business Smart Desktop API");
 Console.WriteLine("===========================================");
