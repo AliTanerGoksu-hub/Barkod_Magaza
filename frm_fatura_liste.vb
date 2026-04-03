@@ -5705,14 +5705,11 @@ Public Class frm_fatura_liste
 
                 Dim gibTutarDec As Decimal = 0
                 If gibTutar <> "" Then
-                    Decimal.TryParse(gibTutar.Replace(".", ","), gibTutarDec)
-                    If gibTutarDec = 0 Then Decimal.TryParse(gibTutar, gibTutarDec)
+                    ' API noktayi ondalik ayirici olarak kullaniyor - InvariantCulture ile parse et
+                    Decimal.TryParse(gibTutar, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, gibTutarDec)
                 End If
-                ' Eger tutar 10000'den buyukse ve ondalik kismi yoksa, kurus olabilir (100'e bol)
+                ' Tutar dogru parse edildi, kurus cevrimi gereksiz
                 Dim gibTutarTL As Decimal = gibTutarDec
-                If gibTutarDec > 0 AndAlso gibTutar.IndexOf("."c) < 0 AndAlso gibTutar.IndexOf(","c) < 0 Then
-                    gibTutarTL = gibTutarDec / 100D
-                End If
 
                 Dim gibTarihDt As DateTime = DateTime.MinValue
                 If gibTarih <> "" Then DateTime.TryParse(gibTarih, gibTarihDt)
@@ -5775,14 +5772,7 @@ Public Class frm_fatura_liste
                         Dim localKdv As Decimal = 0
                         If Not IsDBNull(dr("lKdvTutar")) Then localKdv = CDec(dr("lKdvTutar"))
                         Dim localToplam As Decimal = localNet + localKdv
-                        ' Orijinal tutar ile karsilastir
                         If Math.Abs(localToplam - gibTutarDec) < 1D Then
-                            daraltilmis.Add(dr)
-                        ' Kurus cevrimi ile karsilastir (TL = kurus / 100)
-                        ElseIf Math.Abs(localToplam - gibTutarTL) < 1D Then
-                            daraltilmis.Add(dr)
-                        ' DB tutarini kurusa cevirip karsilastir
-                        ElseIf Math.Abs(localToplam * 100D - gibTutarDec) < 100D Then
                             daraltilmis.Add(dr)
                         End If
                     Next
