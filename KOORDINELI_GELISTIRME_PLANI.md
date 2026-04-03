@@ -30,6 +30,21 @@ Diger agent bu API'yi TUKETIR (consume eder), degistirmez.
 
 ---
 
+## MOBIL AGENT TARAFINDAN OLUSTURULAN TABLOLAR (ORTAK KULLANIM)
+
+Asagidaki tablolar mobil agent tarafindan olusturulmustur. Desktop tarafinda da AYNI tablolar kullanilacak:
+
+```
+tbVisitNote          — Ziyaret notlari (ana kayit)
+tbVisitNoteResim     — Ziyaret notu resimleri (R2 URL)
+tbRouteDetail        — Rota detay (bZiyaretEdildi, sZiyaretNotu kopya)
+tbRoute              — Rota ana kayit (nZiyaretEdilen sayac)
+```
+
+**KURAL:** Bu tablolara yeni kolon eklenecekse ONCE diger agent ile koordine edilmeli.
+
+---
+
 ## PC AGENT (BEN) - SORUMLULUKLAR
 
 ### A. Veritabani & Veri Katmani

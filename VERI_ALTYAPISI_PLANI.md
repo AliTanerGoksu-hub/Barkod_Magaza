@@ -138,20 +138,33 @@ CREATE TABLE tbRiskSkoru (
 
 ---
 
-### 6. YENi TABLO: tbTemsilciNot (Saha Notlari)
+### 6. MEVCUT TABLO: tbVisitNote (Mobil Agent Tarafindan Olusturuldu)
 
-```sql
-CREATE TABLE tbTemsilciNot (
-    nNotID INT IDENTITY PRIMARY KEY,
-    nFirmaID INT,
-    nTemsilciID INT,
-    sNotTipi NVARCHAR(50),              -- 'ziyaret', 'tahsilat', 'genel', 'risk'
-    sNot NVARCHAR(MAX),
-    dteTarih DATETIME DEFAULT GETDATE(),
-    dteHatirlatma DATETIME NULL,        -- Hatirlatma tarihi (varsa)
-    gpsLat DECIMAL(10,7) NULL,
-    gpsLon DECIMAL(10,7) NULL
-)
+Mobil agent zaten su tablolari olusturdu — Desktop tarafinda AYNI tablolari kullanacagiz:
+
+```
+tbVisitNote (ANA KAYIT)
+  - nFirmaId, sFirmaKodu, sFirmaAdi
+  - nRouteId, nRouteDetailId
+  - sSaticiRumuzu (Temsilci)
+  - sNotTipi (GENEL, SIPARIS_YOK, STOK_BEKLIYOR, vb.)
+  - sAciklama (Not metni)
+  - dteZiyaretTarihi
+  - dteHatirlatmaTarihi, sHatirlatmaAciklama
+  - sIstenilenUrun
+
+tbVisitNoteResim
+  - sResimUrl (R2 Cloudflare)
+
+tbRouteDetail
+  - bZiyaretEdildi, dteZiyaretTarihi, sZiyaretNotu (kopya)
+
+tbRoute
+  - nZiyaretEdilen (sayac)
+```
+
+**NOT:** Yeni tablo OLUSTURMAYACAGIZ. Mobil agent'in tablolarini kullanacagiz.
+Desktop'tan da ayni tablolara yazacagiz/okuyacagiz.
 ```
 
 ---
