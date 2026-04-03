@@ -7854,6 +7854,43 @@ Public Class frm_firma_kart
                 lblRiskAciklama.ForeColor = Color.White
                 lblRiskAciklama.Location = New Point(220, 10)
 
+                btnRiskDetay = New Button()
+                btnRiskDetay.Text = "AI Detay"
+                btnRiskDetay.FlatStyle = FlatStyle.Flat
+                btnRiskDetay.FlatAppearance.BorderColor = Color.White
+                btnRiskDetay.FlatAppearance.BorderSize = 1
+                btnRiskDetay.ForeColor = Color.White
+                btnRiskDetay.BackColor = Color.Transparent
+                btnRiskDetay.Font = New Font("Segoe UI", 8, FontStyle.Bold)
+                btnRiskDetay.Size = New Size(80, 28)
+                btnRiskDetay.Dock = DockStyle.Right
+                btnRiskDetay.Cursor = Cursors.Hand
+                AddHandler btnRiskDetay.Click, AddressOf btnRiskDetay_Click
+
+                Dim btnSatisOneri As New Button()
+                btnSatisOneri.Text = "Satis Oneri"
+                btnSatisOneri.FlatStyle = FlatStyle.Flat
+                btnSatisOneri.FlatAppearance.BorderColor = Color.White
+                btnSatisOneri.FlatAppearance.BorderSize = 1
+                btnSatisOneri.ForeColor = Color.White
+                btnSatisOneri.BackColor = Color.Transparent
+                btnSatisOneri.Font = New Font("Segoe UI", 8, FontStyle.Bold)
+                btnSatisOneri.Size = New Size(90, 28)
+                btnSatisOneri.Dock = DockStyle.Right
+                btnSatisOneri.Cursor = Cursors.Hand
+                AddHandler btnSatisOneri.Click, Sub()
+                                                    Try
+                                                        Dim firmaAdi As String = ""
+                                                        Try : firmaAdi = TextEdit4.Text : Catch : End Try
+                                                        Dim frm As New frm_AISatisOneri(CInt(nFirmaID), firmaAdi)
+                                                        frm.Show()
+                                                    Catch ex As Exception
+                                                        MessageBox.Show("Satis Oneri formu acilamadi: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                                                    End Try
+                                                End Sub
+
+                pnlRisk.Controls.Add(btnSatisOneri)
+                pnlRisk.Controls.Add(btnRiskDetay)
                 pnlRisk.Controls.Add(lblRiskSkor)
                 pnlRisk.Controls.Add(lblRiskAciklama)
                 Me.Controls.Add(pnlRisk)
@@ -7876,4 +7913,78 @@ Public Class frm_firma_kart
             ' Risk gostergesi hatasi formu engellemez
         End Try
     End Sub
+
+    ' === AI RISK DETAY BUTONU CLICK ===
+    Private Sub btnRiskDetay_Click(sender As Object, e As EventArgs)
+        Try
+            Me.Cursor = Cursors.WaitCursor
+            Dim apiUrl As String = "https://desktop.barkodyazilimevi.com"
+            Dim wc As New Net.WebClient()
+            wc.Encoding = System.Text.Encoding.UTF8
+            wc.Headers.Add("Content-Type", "application/json")
+            wc.Headers.Add("X-Api-Key", "BSmart2024Desktop!@#SecureKey")
+
+            Dim firmaAdi As String = ""
+            Try : firmaAdi = TextEdit4.Text.Replace(Chr(34), "'") : Catch : End Try
+
+            Dim jsonData As String = "{""firmaId"":" & nFirmaID & "}"
+            Dim result As String = wc.UploadString(apiUrl & "/api/ai/risk-aciklama", jsonData)
+
+            ' Parse response fields
+            Dim aciklama As String = ParseAIJsonField(result, "aciklama")
+            Dim oneriler As String = ParseAIJsonField(result, "oneriler")
+            Dim satisKarari As String = ParseAIJsonField(result, "satisKarari")
+            Dim aiAciklama As String = ParseAIJsonField(result, "aiAciklama")
+            Dim skorStr As String = ParseAIJsonField(result, "riskSkor")
+            Dim seviye As String = ParseAIJsonField(result, "seviye")
+
+            Dim mesaj As String = "Risk Skoru: " & skorStr & "/100 (" & seviye.ToUpper() & ")" & vbCrLf & vbCrLf
+            mesaj &= "KURAL BAZLI ANALIZ:" & vbCrLf & aciklama.Replace("
+", vbCrLf) & vbCrLf & vbCrLf
+            If oneriler <> "" Then mesaj &= "ONERILER:" & vbCrLf & oneriler.Replace("
+", vbCrLf) & vbCrLf & vbCrLf
+            If satisKarari <> "" Then mesaj &= "SATIS KARARI: " & satisKarari & vbCrLf & vbCrLf
+            If aiAciklama <> "" Then mesaj &= "AI ANALIZI:" & vbCrLf & aiAciklama.Replace("
+", vbCrLf)
+
+            Me.Cursor = Cursors.Default
+            MessageBox.Show(mesaj, "AI Risk Analizi - " & firmaAdi, MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Catch ex As Exception
+            Me.Cursor = Cursors.Default
+            MessageBox.Show("AI servisine baglanilamadi: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        End Try
+    End Sub
+
+    Private Function ParseAIJsonField(json As String, fieldName As String) As String
+        Try
+            Dim key As String = Chr(34) & fieldName & Chr(34)
+            Dim keyIdx As Integer = json.IndexOf(key)
+            If keyIdx < 0 Then Return ""
+            Dim colonIdx As Integer = json.IndexOf(":", keyIdx + key.Length)
+            If colonIdx < 0 Then Return ""
+            Dim afterColon As String = json.Substring(colonIdx + 1).TrimStart()
+            If afterColon.StartsWith(Chr(34)) Then
+                Dim valueStart As Integer = 1
+                Dim valueEnd As Integer = valueStart
+                While valueEnd < afterColon.Length
+                    If afterColon(valueEnd) = "" AndAlso valueEnd + 1 < afterColon.Length Then
+                        valueEnd += 2
+                    ElseIf afterColon(valueEnd) = Chr(34) Then
+                        Exit While
+                    Else
+                        valueEnd += 1
+                    End If
+                End While
+                Return afterColon.Substring(valueStart, valueEnd - valueStart).Replace("
+", vbCrLf).Replace("\", "")
+            Else
+                ' Numeric or boolean
+                Dim endIdx As Integer = afterColon.IndexOfAny(New Char() {","c, "}"c})
+                If endIdx < 0 Then endIdx = afterColon.Length
+                Return afterColon.Substring(0, endIdx).Trim()
+            End If
+        Catch
+            Return ""
+        End Try
+    End Function
 End Class

@@ -22719,7 +22719,79 @@ Public Class Form1
                                                     End Try
                                                 End Sub
             aiMenu.Controls.Add(btnKullanimRaporu)
+            yPos += 70
 
+            ' ===== IS ZEKASI ARACLARI =====
+            Dim lblIsZekasi As New Label()
+            lblIsZekasi.Text = "IS ZEKASI ARACLARI"
+            lblIsZekasi.Font = New Font("Segoe UI", 10, FontStyle.Bold)
+            lblIsZekasi.ForeColor = Color.FromArgb(39, 174, 96)
+            lblIsZekasi.Location = New Point(20, yPos)
+            lblIsZekasi.AutoSize = True
+            aiMenu.Controls.Add(lblIsZekasi)
+            yPos += 30
+
+            ' Tahsilat AI Asistani butonu
+            Dim btnTahsilat As New DevExpress.XtraEditors.SimpleButton()
+            btnTahsilat.Text = "Tahsilat AI Asistani"
+            btnTahsilat.Location = New Point(20, yPos)
+            btnTahsilat.Size = New Size(370, 45)
+            btnTahsilat.Appearance.BackColor = Color.FromArgb(52, 73, 94)
+            btnTahsilat.Appearance.ForeColor = Color.White
+            btnTahsilat.Font = New Font("Segoe UI", 10, FontStyle.Regular)
+            AddHandler btnTahsilat.Click, Sub()
+                                             aiMenu.Close()
+                                             Try
+                                                 Dim frm As New frm_AITahsilatAsistani()
+                                                 frm.Show()
+                                             Catch ex As Exception
+                                                 MessageBox.Show("Form acilamadi: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                             End Try
+                                         End Sub
+            aiMenu.Controls.Add(btnTahsilat)
+            yPos += 55
+
+            ' Gun Sonu Ozet butonu
+            Dim btnGunSonu As New DevExpress.XtraEditors.SimpleButton()
+            btnGunSonu.Text = "Gun Sonu Ozet"
+            btnGunSonu.Location = New Point(20, yPos)
+            btnGunSonu.Size = New Size(370, 45)
+            btnGunSonu.Appearance.BackColor = Color.FromArgb(52, 152, 219)
+            btnGunSonu.Appearance.ForeColor = Color.White
+            btnGunSonu.Font = New Font("Segoe UI", 10, FontStyle.Regular)
+            AddHandler btnGunSonu.Click, Sub()
+                                             aiMenu.Close()
+                                             Try
+                                                 Dim frm As New frm_AIGunSonuOzet()
+                                                 frm.Show()
+                                             Catch ex As Exception
+                                                 MessageBox.Show("Form acilamadi: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                             End Try
+                                         End Sub
+            aiMenu.Controls.Add(btnGunSonu)
+            yPos += 55
+
+            ' Satis Oneri Motoru butonu
+            Dim btnSatisOneri As New DevExpress.XtraEditors.SimpleButton()
+            btnSatisOneri.Text = "Satis Oneri Motoru"
+            btnSatisOneri.Location = New Point(20, yPos)
+            btnSatisOneri.Size = New Size(370, 45)
+            btnSatisOneri.Appearance.BackColor = Color.FromArgb(39, 174, 96)
+            btnSatisOneri.Appearance.ForeColor = Color.White
+            btnSatisOneri.Font = New Font("Segoe UI", 10, FontStyle.Regular)
+            AddHandler btnSatisOneri.Click, Sub()
+                                                aiMenu.Close()
+                                                Try
+                                                    Dim frm As New frm_AISatisOneri()
+                                                    frm.Show()
+                                                Catch ex As Exception
+                                                    MessageBox.Show("Form acilamadi: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                                End Try
+                                            End Sub
+            aiMenu.Controls.Add(btnSatisOneri)
+
+            ' Adjust menu height
+            aiMenu.ClientSize = New Size(aiMenu.ClientSize.Width, yPos + 70)
             aiMenu.ShowDialog()
 
         Catch ex As Exception

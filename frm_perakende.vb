@@ -6,6 +6,8 @@ Public Class frm_perakende
     ' === PERAKENDE RISK GOSTERGESI ===
     Private pnlPerakendeRisk As Panel
     Private lblPerakendeRisk As Label
+    Private btnPerakendeRiskDetay As Button
+    Private perakende_nMusteriID_risk As Integer
 #Region " Windows Form Designer generated code "
     Public Sub New()
         MyBase.New()
@@ -5167,6 +5169,20 @@ Public Class frm_perakende
                 lblPerakendeRisk.ForeColor = Color.White
                 lblPerakendeRisk.Location = New Point(8, 6)
 
+                btnPerakendeRiskDetay = New Button()
+                btnPerakendeRiskDetay.Text = "AI"
+                btnPerakendeRiskDetay.FlatStyle = FlatStyle.Flat
+                btnPerakendeRiskDetay.FlatAppearance.BorderColor = Color.White
+                btnPerakendeRiskDetay.FlatAppearance.BorderSize = 1
+                btnPerakendeRiskDetay.ForeColor = Color.White
+                btnPerakendeRiskDetay.BackColor = Color.Transparent
+                btnPerakendeRiskDetay.Font = New Font("Segoe UI", 7, FontStyle.Bold)
+                btnPerakendeRiskDetay.Size = New Size(40, 24)
+                btnPerakendeRiskDetay.Dock = DockStyle.Right
+                btnPerakendeRiskDetay.Cursor = Cursors.Hand
+                AddHandler btnPerakendeRiskDetay.Click, AddressOf btnPerakendeRiskDetay_Click
+
+                pnlPerakendeRisk.Controls.Add(btnPerakendeRiskDetay)
                 pnlPerakendeRisk.Controls.Add(lblPerakendeRisk)
                 Me.Controls.Add(pnlPerakendeRisk)
             End If
@@ -5181,8 +5197,77 @@ Public Class frm_perakende
             pnlPerakendeRisk.BackColor = renk
             lblPerakendeRisk.Text = metin
             pnlPerakendeRisk.Visible = True
+            perakende_nMusteriID_risk = CInt(nMusteriID)
         Catch ex As Exception
             If pnlPerakendeRisk IsNot Nothing Then pnlPerakendeRisk.Visible = False
         End Try
     End Sub
+
+    ' === AI PERAKENDE RISK DETAY CLICK ===
+    Private Sub btnPerakendeRiskDetay_Click(sender As Object, e As EventArgs)
+        Try
+            Me.Cursor = Cursors.WaitCursor
+            Dim apiUrl As String = "https://desktop.barkodyazilimevi.com"
+            Dim wc As New Net.WebClient()
+            wc.Encoding = System.Text.Encoding.UTF8
+            wc.Headers.Add("Content-Type", "application/json")
+            wc.Headers.Add("X-Api-Key", "BSmart2024Desktop!@#SecureKey")
+
+            Dim jsonData As String = "{""firmaId"":" & perakende_nMusteriID_risk & "}"
+            Dim result As String = wc.UploadString(apiUrl & "/api/ai/risk-aciklama", jsonData)
+
+            Dim aciklama As String = ParsePerakendeAIField(result, "aciklama")
+            Dim oneriler As String = ParsePerakendeAIField(result, "oneriler")
+            Dim satisKarari As String = ParsePerakendeAIField(result, "satisKarari")
+            Dim aiAciklama As String = ParsePerakendeAIField(result, "aiAciklama")
+            Dim skorStr As String = ParsePerakendeAIField(result, "riskSkor")
+            Dim seviye As String = ParsePerakendeAIField(result, "seviye")
+
+            Dim mesaj As String = "Risk Skoru: " & skorStr & "/100 (" & seviye.ToUpper() & ")" & vbCrLf & vbCrLf
+            mesaj &= "KURAL BAZLI ANALIZ:" & vbCrLf & aciklama.Replace("
+", vbCrLf) & vbCrLf & vbCrLf
+            If oneriler <> "" Then mesaj &= "ONERILER:" & vbCrLf & oneriler.Replace("
+", vbCrLf) & vbCrLf & vbCrLf
+            If satisKarari <> "" Then mesaj &= "SATIS KARARI: " & satisKarari & vbCrLf & vbCrLf
+            If aiAciklama <> "" Then mesaj &= "AI ANALIZI:" & vbCrLf & aiAciklama.Replace("
+", vbCrLf)
+
+            Me.Cursor = Cursors.Default
+            MessageBox.Show(mesaj, "AI Risk Analizi (Perakende)", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Catch ex As Exception
+            Me.Cursor = Cursors.Default
+            MessageBox.Show("AI servisine baglanilamadi: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        End Try
+    End Sub
+
+    Private Function ParsePerakendeAIField(json As String, fieldName As String) As String
+        Try
+            Dim key As String = Chr(34) & fieldName & Chr(34)
+            Dim keyIdx As Integer = json.IndexOf(key)
+            If keyIdx < 0 Then Return ""
+            Dim colonIdx As Integer = json.IndexOf(":", keyIdx + key.Length)
+            If colonIdx < 0 Then Return ""
+            Dim afterColon As String = json.Substring(colonIdx + 1).TrimStart()
+            If afterColon.StartsWith(Chr(34)) Then
+                Dim valueStart As Integer = 1
+                Dim valueEnd As Integer = valueStart
+                While valueEnd < afterColon.Length
+                    If afterColon(valueEnd) = "\" AndAlso valueEnd + 1 < afterColon.Length Then
+                        valueEnd += 2
+                    ElseIf afterColon(valueEnd) = Chr(34) Then
+                        Exit While
+                    Else
+                        valueEnd += 1
+                    End If
+                End While
+                Return afterColon.Substring(valueStart, valueEnd - valueStart).Replace("\n", vbCrLf).Replace("\\", "\")
+            Else
+                Dim endIdx As Integer = afterColon.IndexOfAny(New Char() {","c, "}"c})
+                If endIdx < 0 Then endIdx = afterColon.Length
+                Return afterColon.Substring(0, endIdx).Trim()
+            End If
+        Catch
+            Return ""
+        End Try
+    End Function
 End Class
