@@ -7740,9 +7740,9 @@ Public Class frm_firma_kart
 
             ' Risk verisini cek
             cmdAyar.CommandText = sorgu_query("SELECT " & _
-                "ISNULL((SELECT SUM(CASE WHEN sBorcAlacak='B' THEN lTutar ELSE 0 END) - SUM(CASE WHEN sBorcAlacak='A' THEN lTutar ELSE 0 END) FROM tbFirmaHareketi WHERE nFirmaID=" & nFirmaID & "), 0) AS Bakiye, " & _
+                "ISNULL((SELECT SUM(lBorcTutar - lAlacakTutar) FROM tbFirmaHareketi WHERE nFirmaID=" & nFirmaID & "), 0) AS Bakiye, " & _
                 "ISNULL((SELECT lKrediLimiti FROM tbFirma WHERE nFirmaID=" & nFirmaID & "), 0) AS KrediLimiti, " & _
-                "ISNULL((SELECT MAX(DATEDIFF(DAY, dteValorTarihi, GETDATE())) FROM tbFirmaHareketi WHERE nFirmaID=" & nFirmaID & " AND sBorcAlacak='B' AND dteValorTarihi < GETDATE()), 0) AS GecikmeGun")
+                "ISNULL((SELECT MAX(DATEDIFF(DAY, dteValorTarihi, GETDATE())) FROM tbFirmaHareketi WHERE nFirmaID=" & nFirmaID & " AND lBorcTutar > 0 AND dteValorTarihi < GETDATE()), 0) AS GecikmeGun")
 
             Dim dr As OleDb.OleDbDataReader = cmdAyar.ExecuteReader()
             If dr.Read() Then

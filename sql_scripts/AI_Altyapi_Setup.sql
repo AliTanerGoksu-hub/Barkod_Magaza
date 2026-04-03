@@ -89,19 +89,19 @@ BEGIN
     CREATE TABLE tbRiskSkoru (
         nRiskID INT IDENTITY(1,1) PRIMARY KEY,
         nFirmaID INT NOT NULL,
-        nRiskSkoru INT DEFAULT 0,               -- 0-100 arasi puan
-        sRiskSeviye NVARCHAR(20) DEFAULT '',     -- 'guvenli', 'dikkat', 'kritik'
+        nRiskSkoru INT DEFAULT 0,
+        sRiskSeviye NVARCHAR(20) DEFAULT '',
         lToplamBakiye DECIMAL(18,2) DEFAULT 0,
         lVadesiGecmisBakiye DECIMAL(18,2) DEFAULT 0,
         nMaxGecikmeGun INT DEFAULT 0,
         nOrtGecikmeGun INT DEFAULT 0,
-        nOdemeDisipilin DECIMAL(5,2) DEFAULT 0,  -- 0.00-1.00
-        nIadeOrani DECIMAL(5,2) DEFAULT 0,       -- 0.00-1.00
-        nSiparisSikligi INT DEFAULT 0,            -- Son 90 gun siparis sayisi
-        nLimitKullanim DECIMAL(5,2) DEFAULT 0,   -- 0.00-1.00
-        sAIAciklama NVARCHAR(MAX) NULL,           -- AI tarafindan uretilen risk aciklamasi
+        nOdemeDisipilin DECIMAL(5,2) DEFAULT 0,
+        nIadeOrani DECIMAL(5,2) DEFAULT 0,
+        nSiparisSikligi INT DEFAULT 0,
+        nLimitKullanim DECIMAL(5,2) DEFAULT 0,
+        sAIAciklama NVARCHAR(MAX) NULL,
         dteHesaplamaTarihi DATETIME DEFAULT GETDATE(),
-        sKaynak NVARCHAR(20) DEFAULT 'toptan',    -- 'toptan' veya 'perakende'
+        sKaynak NVARCHAR(20) DEFAULT 'toptan',
         bAktif BIT DEFAULT 1
     )
 
@@ -118,13 +118,13 @@ BEGIN
         nLogID BIGINT IDENTITY(1,1) PRIMARY KEY,
         nKullaniciID INT NULL,
         sKullaniciAdi NVARCHAR(100) DEFAULT '',
-        sIslem NVARCHAR(100) NOT NULL,           -- 'AI_RISK_SORGU', 'AI_TAHSILAT_PLANI', 'FIYAT_DEGISIKLIK', 'LIMIT_OVERRIDE'
-        sModul NVARCHAR(50) DEFAULT '',           -- 'AI', 'SATIS', 'TAHSILAT', 'STOK'
-        sDetay NVARCHAR(MAX) NULL,                -- JSON detay
-        sAIModel NVARCHAR(50) NULL,               -- 'gpt-4o-mini', 'gemini-flash' vb.
+        sIslem NVARCHAR(100) NOT NULL,
+        sModul NVARCHAR(50) DEFAULT '',
+        sDetay NVARCHAR(MAX) NULL,
+        sAIModel NVARCHAR(50) NULL,
         dtIslem DATETIME DEFAULT GETDATE(),
         sIPAdres NVARCHAR(50) DEFAULT '',
-        sPlatform NVARCHAR(20) DEFAULT 'desktop'  -- 'desktop', 'mobil', 'b2b'
+        sPlatform NVARCHAR(20) DEFAULT 'desktop'
     )
 
     CREATE NONCLUSTERED INDEX IX_tbAuditLog_Tarih ON tbAuditLog (dtIslem)
@@ -133,7 +133,9 @@ END
 
 -- =====================================================
 -- 5. AI VERI ERISIM VIEW'LARI
--- AI sadece bu view'lar uzerinden veri okur
+-- tbFirmaHareketi: lBorcTutar / lAlacakTutar (ayri kolonlar)
+-- tbStokFisiDetayi (sonda i var)
+-- tbOdeme: lOdemeTutar, sOdemeSekli, dteOdemeTarihi
 -- =====================================================
 
 -- Cari Risk Verisi (AI icin)
@@ -152,19 +154,16 @@ SELECT
     ISNULL(f.nVadeGun, 0) AS VadeGun,
     ISNULL(f.bTahsilatYapilamaz, 0) AS TahsilatBloke,
     ISNULL(f.bSatisYapilamaz, 0) AS SatisBloke,
-    (SELECT ISNULL(SUM(CASE WHEN sBorcAlacak='B' THEN lTutar ELSE 0 END), 0) FROM tbFirmaHareketi WHERE nFirmaID = f.nFirmaID) AS ToplamBorc,
-    (SELECT ISNULL(SUM(CASE WHEN sBorcAlacak='A' THEN lTutar ELSE 0 END), 0) FROM tbFirmaHareketi WHERE nFirmaID = f.nFirmaID) AS ToplamAlacak,
-    (SELECT ISNULL(SUM(CASE WHEN sBorcAlacak='B' THEN lTutar ELSE 0 END), 0) -
-            ISNULL(SUM(CASE WHEN sBorcAlacak='A' THEN lTutar ELSE 0 END), 0)
-     FROM tbFirmaHareketi WHERE nFirmaID = f.nFirmaID) AS Bakiye,
-    (SELECT ISNULL(SUM(CASE WHEN sBorcAlacak='B' AND dteValorTarihi < GETDATE() THEN lTutar ELSE 0 END), 0) -
-            ISNULL(SUM(CASE WHEN sBorcAlacak='A' AND dteValorTarihi < GETDATE() THEN lTutar ELSE 0 END), 0)
-     FROM tbFirmaHareketi WHERE nFirmaID = f.nFirmaID) AS VadesiGecmisBakiye,
+    (SELECT ISNULL(SUM(lBorcTutar), 0) FROM tbFirmaHareketi WHERE nFirmaID = f.nFirmaID) AS ToplamBorc,
+    (SELECT ISNULL(SUM(lAlacakTutar), 0) FROM tbFirmaHareketi WHERE nFirmaID = f.nFirmaID) AS ToplamAlacak,
+    (SELECT ISNULL(SUM(lBorcTutar - lAlacakTutar), 0) FROM tbFirmaHareketi WHERE nFirmaID = f.nFirmaID) AS Bakiye,
+    (SELECT ISNULL(SUM(lBorcTutar - lAlacakTutar), 0)
+     FROM tbFirmaHareketi WHERE nFirmaID = f.nFirmaID AND dteValorTarihi < GETDATE()) AS VadesiGecmisBakiye,
     (SELECT MAX(DATEDIFF(DAY, dteValorTarihi, GETDATE()))
-     FROM tbFirmaHareketi WHERE nFirmaID = f.nFirmaID AND sBorcAlacak='B' AND dteValorTarihi < GETDATE()) AS MaxGecikmeGun,
+     FROM tbFirmaHareketi WHERE nFirmaID = f.nFirmaID AND lBorcTutar > 0 AND dteValorTarihi < GETDATE()) AS MaxGecikmeGun,
     (SELECT COUNT(*) FROM tbStokFisiMaster WHERE nFirmaID = f.nFirmaID AND sFisTipi = 'FS' AND dteFisTarihi >= DATEADD(DAY, -90, GETDATE())) AS Son90GunSiparis,
     (SELECT MAX(dteFisTarihi) FROM tbStokFisiMaster WHERE nFirmaID = f.nFirmaID) AS SonIslemTarihi,
-    (SELECT MAX(dteIslemTarihi) FROM tbFirmaHareketi WHERE nFirmaID = f.nFirmaID AND sBorcAlacak='A') AS SonOdemeTarihi
+    (SELECT MAX(dteIslemTarihi) FROM tbFirmaHareketi WHERE nFirmaID = f.nFirmaID AND lAlacakTutar > 0) AS SonOdemeTarihi
 FROM tbFirma f
 WHERE f.bAktif = 1
 GO
@@ -182,12 +181,12 @@ SELECT
     m.lKdvTutar,
     d.sStokKodu,
     RTRIM(ISNULL(d.sStokAdi, '')) AS StokAdi,
-    d.lMiktar,
-    d.sBirim,
-    d.lBirimFiyat,
+    d.lCikisMiktar1 AS lMiktar,
+    d.sBirimCinsi AS sBirim,
+    d.lCikisFiyat AS lBirimFiyat,
     m.sFisTipi
 FROM tbStokFisiMaster m
-INNER JOIN tbStokFisiDetay d ON m.nStokFisiID = d.nStokFisiID
+INNER JOIN tbStokFisiDetayi d ON m.nStokFisiID = d.nStokFisiID
 WHERE m.sFisTipi IN ('FS', 'FT')
 AND m.dteFisTarihi >= DATEADD(MONTH, -6, GETDATE())
 GO
@@ -196,6 +195,7 @@ PRINT 'AI Altyapi SQL Script basariyla tamamlandi.'
 
 -- =====================================================
 -- 6. PERAKENDE RISK VIEW (tbMusteri bazli)
+-- tbOdeme: lOdemeTutar, sOdemeSekli, dteOdemeTarihi
 -- =====================================================
 
 IF EXISTS (SELECT * FROM sys.views WHERE name = 'vw_AI_PerakendeRiskVerisi')
@@ -212,14 +212,14 @@ SELECT
     ISNULL(k.lKrediLimiti, 0) AS KrediLimiti,
     ISNULL(k.bOzelMusterimi, 0) AS OzelMusteri,
     -- Bakiye: Toplam Alisveris - Toplam Odeme
-    (SELECT ISNULL(SUM(lNetTutar), 0) FROM tbAlisVeris WHERE nMusteriID = m.nMusteriID AND nGirisCikis = 2) -
-    (SELECT ISNULL(SUM(lTutar), 0) FROM tbOdeme WHERE nMusteriID = m.nMusteriID AND sOdemeKodu <> '') AS Bakiye,
+    (SELECT ISNULL(SUM(a.lNetTutar), 0) FROM tbAlisVeris a WHERE a.nMusteriID = m.nMusteriID AND a.nGirisCikis = 2) -
+    (SELECT ISNULL(SUM(o.lOdemeTutar), 0) FROM tbOdeme o INNER JOIN tbAlisVeris a2 ON o.nAlisverisID = a2.nAlisverisID WHERE a2.nMusteriID = m.nMusteriID AND o.sOdemeSekli <> 'D') AS Bakiye,
     -- Son alisveris tarihi
-    (SELECT MAX(dteFaturaTarihi) FROM tbAlisVeris WHERE nMusteriID = m.nMusteriID) AS SonAlisVerisTarihi,
+    (SELECT MAX(a.dteFaturaTarihi) FROM tbAlisVeris a WHERE a.nMusteriID = m.nMusteriID) AS SonAlisVerisTarihi,
     -- Son odeme tarihi
-    (SELECT MAX(dteTarih) FROM tbOdeme WHERE nMusteriID = m.nMusteriID) AS SonOdemeTarihi,
+    (SELECT MAX(o.dteOdemeTarihi) FROM tbOdeme o INNER JOIN tbAlisVeris a2 ON o.nAlisverisID = a2.nAlisverisID WHERE a2.nMusteriID = m.nMusteriID) AS SonOdemeTarihi,
     -- Son 90 gun alisveris sayisi
-    (SELECT COUNT(*) FROM tbAlisVeris WHERE nMusteriID = m.nMusteriID AND dteFaturaTarihi >= DATEADD(DAY, -90, GETDATE())) AS Son90GunAlisveris
+    (SELECT COUNT(*) FROM tbAlisVeris a WHERE a.nMusteriID = m.nMusteriID AND a.dteFaturaTarihi >= DATEADD(DAY, -90, GETDATE())) AS Son90GunAlisveris
 FROM tbMusteri m
 LEFT JOIN tbMusteriKredisi k ON m.nMusteriID = k.nMusteriID
 GO
