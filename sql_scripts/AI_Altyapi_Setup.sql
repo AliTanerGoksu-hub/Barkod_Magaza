@@ -178,15 +178,16 @@ SELECT
     m.nFirmaID,
     m.dteFisTarihi,
     m.lNetTutar,
-    m.lKdvTutar,
-    d.sStokKodu,
-    RTRIM(ISNULL(d.sStokAdi, '')) AS StokAdi,
+    ISNULL(m.lKdv1,0) + ISNULL(m.lKdv2,0) + ISNULL(m.lKdv3,0) + ISNULL(m.lKdv4,0) + ISNULL(m.lKdv5,0) AS lKdvTutar,
+    s.sKodu AS sStokKodu,
+    RTRIM(ISNULL(s.sAciklama, '')) AS StokAdi,
     d.lCikisMiktar1 AS lMiktar,
     d.sBirimCinsi AS sBirim,
     d.lCikisFiyat AS lBirimFiyat,
     m.sFisTipi
 FROM tbStokFisiMaster m
 INNER JOIN tbStokFisiDetayi d ON m.nStokFisiID = d.nStokFisiID
+INNER JOIN tbStok s ON d.nStokID = s.nStokID
 WHERE m.sFisTipi IN ('FS', 'FT')
 AND m.dteFisTarihi >= DATEADD(MONTH, -6, GETDATE())
 GO
