@@ -5070,18 +5070,27 @@ Public Class frm_perakende
             If nMusteriID <= 0 Then Exit Sub
 
             ' Parametrik kontrol
-            Dim sPerakendeRiskAktif As String = sorgula_metin("SELECT ISNULL(sAyarDeger,'0') FROM tbSistemAyar WHERE sAyarKodu='PERAKENDE_RISK_AKTIF'")
+            Dim connRisk As New OleDb.OleDbConnection(sConnection)
+            connRisk.Open()
+            Dim cmdRisk As New OleDb.OleDbCommand(sorgu_query("SELECT ISNULL(sAyarDeger,'0') FROM tbSistemAyar WHERE sAyarKodu='PERAKENDE_RISK_AKTIF'"), connRisk)
+            Dim sPerakendeRiskAktif As String = ""
+            Try : sPerakendeRiskAktif = cmdRisk.ExecuteScalar().ToString() : Catch : End Try
             If sPerakendeRiskAktif <> "1" Then
+                connRisk.Close()
                 If pnlPerakendeRisk IsNot Nothing Then pnlPerakendeRisk.Visible = False
                 Exit Sub
             End If
 
             ' Bakiye hesapla
-            Dim bakiye As Decimal = sorgula_Decimal("SELECT ISNULL(SUM(lNetTutar),0) FROM tbAlisVeris WHERE nMusteriID=" & nMusteriID & " AND nGirisCikis=2") - _
-                sorgula_Decimal("SELECT ISNULL(SUM(lTutar),0) FROM tbOdeme WHERE nMusteriID=" & nMusteriID)
+            cmdRisk.CommandText = sorgu_query("SELECT ISNULL(SUM(lNetTutar),0) FROM tbAlisVeris WHERE nMusteriID=" & nMusteriID & " AND nGirisCikis=2")
+            Dim bakiyeBorc As Decimal = CDec(cmdRisk.ExecuteScalar())
+            cmdRisk.CommandText = sorgu_query("SELECT ISNULL(SUM(lTutar),0) FROM tbOdeme WHERE nMusteriID=" & nMusteriID)
+            Dim bakiyeAlacak As Decimal = CDec(cmdRisk.ExecuteScalar())
+            Dim bakiye As Decimal = bakiyeBorc - bakiyeAlacak
 
             ' Kredi limiti
-            Dim krediLimiti As Decimal = sorgula_Decimal("SELECT ISNULL(lKrediLimiti,0) FROM tbMusteriKredisi WHERE nMusteriID=" & nMusteriID)
+            cmdRisk.CommandText = sorgu_query("SELECT ISNULL(lKrediLimiti,0) FROM tbMusteriKredisi WHERE nMusteriID=" & nMusteriID)
+            Dim krediLimiti As Decimal = CDec(cmdRisk.ExecuteScalar())
 
             ' Risk hesapla
             Dim limitKullanim As Decimal = If(krediLimiti > 0, bakiye / krediLimiti, 0)
@@ -5114,6 +5123,7 @@ Public Class frm_perakende
             lblPerakendeRisk.Text = "Risk: " & skor & "/100 (" & seviye & ") | Bakiye: " & bakiye.ToString("N2") & " TL" & _
                 If(krediLimiti > 0, " | Limit: %" & Math.Round(limitKullanim * 100, 0), "")
             pnlPerakendeRisk.Visible = True
+            connRisk.Close()
         Catch ex As Exception
             ' Hata risk gostergesini engellemez
             If pnlPerakendeRisk IsNot Nothing Then pnlPerakendeRisk.Visible = False
