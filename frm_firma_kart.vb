@@ -7763,11 +7763,10 @@ Public Class frm_firma_kart
             Dim krediLimiti As Decimal = 0
             Try : krediLimiti = CDec(cmdAyar.ExecuteScalar()) : Catch : End Try
 
-            ' Bekleyen siparisler (faturaya donusmemis)
+            ' Bekleyen siparisler (tbSiparis - kapanmamis)
             cmdAyar.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED " & _
-                "SELECT ISNULL(COUNT(*),0) AS SiparisAdet, ISNULL(SUM(lMalBedeli),0) AS SiparisTutar " & _
-                "FROM tbStokFisiMaster WHERE nFirmaID=" & nFirmaID & " " & _
-                "AND sFisTipi='FS' AND ISNULL(bFaturayaDonustumu,0)=0")
+                "SELECT ISNULL(COUNT(DISTINCT lSiparisNo),0) AS SiparisAdet, ISNULL(SUM(lTutari),0) AS SiparisTutar " & _
+                "FROM tbSiparis WHERE nFirmaID=" & nFirmaID & " AND ISNULL(bKapandimi,0)=0")
             Dim drSip As OleDb.OleDbDataReader = cmdAyar.ExecuteReader()
             Dim bekleyenSiparisAdet As Integer = 0
             Dim bekleyenSiparisTutar As Decimal = 0

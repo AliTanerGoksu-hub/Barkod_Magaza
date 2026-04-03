@@ -5113,14 +5113,12 @@ Public Class frm_perakende
             Dim krediLimiti As Decimal = 0
             Try : krediLimiti = CDec(cmdRisk.ExecuteScalar()) : Catch : End Try
 
-            ' Bekleyen siparisler (tvAlisverisSiparis - henuz teslim edilmemis)
+            ' Bekleyen siparisler (tbAlisverisSiparis - teslim edilmemis)
             cmdRisk.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED " & _
                 "SELECT ISNULL(COUNT(*),0) AS BekleyenAdet, ISNULL(SUM(s.lTutar),0) AS BekleyenTutar " & _
                 "FROM tbAlisverisSiparis s " & _
                 "INNER JOIN tbAlisVeris a ON s.nAlisverisID = a.nAlisverisID " & _
-                "WHERE a.nMusteriID = " & nMusteriID & " " & _
-                "AND s.nGirisCikis = 3 AND s.lGCMiktar <> s.bEkAlan1 " & _
-                "AND s.dteOnayTarihi = '01/01/1900'")
+                "WHERE a.nMusteriID = " & nMusteriID & " AND s.nGirisCikis = 3")
             Dim drSiparis As OleDb.OleDbDataReader = cmdRisk.ExecuteReader()
             Dim bekleyenAdet As Integer = 0
             Dim bekleyenTutar As Decimal = 0
