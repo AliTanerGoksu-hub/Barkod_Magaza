@@ -14,6 +14,11 @@ E-Fatura/E-Arsiv eslestirme ve maliyet hesaplama standardizasyonu eklenmesi.
 
 ## Tamamlanan Isler
 
+### 2026-02-XX: Derleme Hatasi Duzeltmesi
+- [x] Mukerrer frm_AI_Ayarlar.vb silindi
+- [x] Form1.vb btnAIAyarlar_Click -> frm_AIAyarlari() olarak duzeltildi
+- [x] Risk UI panelleri (frm_firma_kart.vb, frm_perakende.vb) lokal SQL ile calisiyor
+
 ### 2026-04-01: AI Altyapi Kurulumu
 - [x] AI_IS_PLANI.md - 6 oncelikli AI ozelligi, maliyet, 90 gunluk yol haritasi
 - [x] KOORDINELI_GELISTIRME_PLANI.md - PC/Mobil/B2B gorev dagilimi, ortak API kontrati
@@ -22,22 +27,15 @@ E-Fatura/E-Arsiv eslestirme ve maliyet hesaplama standardizasyonu eklenmesi.
 - [x] SQL: tbRiskSkoru, tbAuditLog tablosu, tbSistemAyar parametrik ayarlar
 - [x] SQL: aEmirForms yetki tanimlari (AI modulleri icin)
 - [x] SQL: vw_AI_CariRiskVerisi, vw_AI_SatisGecmisi, vw_AI_PerakendeRiskVerisi view'lari
-- [x] C# API: AIService.cs (LLM cagrisi - GPT/Gemini)
-- [x] C# API: RiskService.cs (Risk skoru hesaplama + sistem ayar + yetki kontrol)
-- [x] C# API: AuditService.cs (Audit log)
-- [x] C# API Endpoint'leri:
-  - GET /api/cari/risk-skoru/{firmaId}
-  - POST /api/ai/risk-aciklama
-  - GET /api/ai/tahsilat-plani
-  - POST /api/ai/satis-oneri
-  - GET /api/ai/gun-sonu-ozet
-  - GET /api/cari/{firmaId}/detay
-  - GET /api/perakende/risk-skoru/{musteriId}
-  - GET /api/sistem/ayar/{ayarKodu}
-  - GET /api/yetki/kontrol
+- [x] C# API: AIService.cs, RiskService.cs, AuditService.cs
+- [x] C# API Endpoint'leri: risk-skoru, ai/risk-aciklama, tahsilat-plani, satis-oneri, gun-sonu-ozet, cari/detay, perakende/risk-skoru, sistem/ayar, yetki/kontrol
 - [x] VB.NET: master_kaydet_yeni - parametrik valor tarihi + kredi limit kontrolu
 - [x] frm_fatura_liste.vb: GIB tutar parse fix (InvariantCulture)
 - [x] frm_fatura_liste.vb: Eslestirme algoritmasi: Isim -> Adres -> Tutar sirasi
+- [x] frm_firma_kart.vb: Risk gostergesi (yesil/sari/kirmizi) - lokal SQL
+- [x] frm_perakende.vb: Perakende risk gostergesi - lokal SQL
+- [x] frm_AIAyarlari.vb: AI ayarlari yonetim ekrani (mevcut)
+- [x] Form1.vb: AI ribbon butonu -> frm_AIAyarlari
 
 ### Onceki Oturumlar:
 - [x] B2B Settings tab
@@ -52,17 +50,16 @@ E-Fatura/E-Arsiv eslestirme ve maliyet hesaplama standardizasyonu eklenmesi.
 - [ ] GIB eslestirme: Tutar parse duzeltmesi test edilmeli (kullanicidan yeni log bekleniyor)
 
 ## Siradaki Isler (P1)
-- [ ] Desktop UI: Cari kartta risk gostergesi (yesil/sari/kirmizi)
+- [ ] Satis Oneri Motoru - siparis ekraninda AI bazli urun onerisi
+- [ ] Tahsilat AI Asistani - gecikmiş bakiyeler ve rota yakinligi
 - [ ] Desktop UI: Siparis ekraninda AI uyarilari
-- [ ] Desktop UI: AI ayarlari yonetim ekrani (tbSistemAyar CRUD)
-- [ ] Desktop UI: Tahsilat ekrani revizyonu
-- [ ] Perakende: Acik hesap musteri kartinda risk gostergesi
 
 ## Gelecek Isler (P2)
+- [ ] Maliyet hesaplama standardizasyonu (FIFO, LIFO, Agirlikli Ortalama vb.)
+- [ ] AI kullanim takibi ve denetim log ekrani (tbAuditLog -> UI)
 - [ ] Stok tahmin ve guvenlik stogu onerisi
 - [ ] Urun aciklama temizleme / pazaryeri ilan yardimcisi
 - [ ] Kolaysoft SOAP cagrlarini ayri service class'a tasi
-- [ ] Maliyet hesaplama standardizasyonu
 
 ## Parametrik Ayarlar (tbSistemAyar)
 | Kod | Varsayilan | Aciklama |
