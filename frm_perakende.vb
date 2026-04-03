@@ -3640,6 +3640,9 @@ Public Class frm_perakende
         Else
             BarButtonItem21.Caption = ""
         End If
+        ' === RISK PANELI GUNCELLE ===
+        PerakendeRiskGuncelle(lBakiye, lGeciken, gecikmistaksitsayisi, sorgu_sayi(dr_baslik("lKrediLimiti"), 0))
+
         lBakiye = Nothing
         lGeciken = Nothing
         gecikmistaksitsayisi = Nothing
@@ -5064,85 +5067,50 @@ Public Class frm_perakende
         End If
     End Sub
 
-    ' === PERAKENDE RISK GOSTERGESI METODU ===
-    Private Sub PerakendeRiskGoster(ByVal nMusteriID As Int64)
+    ' === PERAKENDE RISK GOSTERGESI ===
+    ' Formun kendi hesapladigi bakiye/geciken degerlerini kullanir
+    ' Ekstra SQL sorgusu CALISTIRMAZ
+    Private Sub PerakendeRiskGuncelle(ByVal lBakiye As Decimal, ByVal lGeciken As Decimal, ByVal gecikmistaksitsayisi As Integer, ByVal krediLimiti As Decimal)
         Try
-            If nMusteriID <= 0 Then Exit Sub
-
             ' Parametrik kontrol
             Dim connRisk As New OleDb.OleDbConnection(connection)
             connRisk.Open()
             Dim cmdRisk As New OleDb.OleDbCommand(sorgu_query("SELECT ISNULL(sAyarDeger,'0') FROM tbSistemAyar WHERE sAyarKodu='PERAKENDE_RISK_AKTIF'"), connRisk)
-            Dim sPerakendeRiskAktif As String = ""
-            Try : sPerakendeRiskAktif = cmdRisk.ExecuteScalar().ToString() : Catch : End Try
-            If sPerakendeRiskAktif <> "1" Then
+            Dim sAktif As String = ""
+            Try : sAktif = cmdRisk.ExecuteScalar().ToString() : Catch : End Try
+            If sAktif <> "1" Then
                 connRisk.Close()
                 If pnlPerakendeRisk IsNot Nothing Then pnlPerakendeRisk.Visible = False
                 Exit Sub
             End If
 
-            ' Bakiye: Taksit bazli hesaplama (TUTAR - ODEME = KALAN)
+            ' Bekleyen teslimler (tbAlisverisSiparis - teslim edilmemis urunler)
             cmdRisk.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED " & _
-                "SELECT ISNULL(SUM(KALAN),0) AS ToplamBakiye, " & _
-                "ISNULL(SUM(CASE WHEN dteTarihi < GETDATE() THEN KALAN ELSE 0 END),0) AS GecikmisBakiye, " & _
-                "ISNULL(MAX(CASE WHEN dteTarihi < GETDATE() AND KALAN > 0 THEN DATEDIFF(DAY, dteTarihi, GETDATE()) ELSE 0 END),0) AS MaxGecikmeGun, " & _
-                "ISNULL(SUM(CASE WHEN dteTarihi < GETDATE() AND KALAN > 0 THEN 1 ELSE 0 END),0) AS GecikmisTaksitAdet " & _
-                "FROM (SELECT ISNULL(SUM(t.lTutari),0) - ISNULL(SUM(o.odeme),0) AS KALAN, t.dteTarihi " & _
-                "FROM tbTaksit t " & _
-                "INNER JOIN tbAlisVeris a ON t.nAlisverisID = a.nAlisverisID " & _
-                "LEFT JOIN (SELECT ISNULL(SUM(lOdemeTutar),0) AS odeme, nTaksitId FROM tbOdeme GROUP BY nTaksitId) o ON o.nTaksitId = t.nTaksitID " & _
-                "WHERE a.nMusteriID = " & nMusteriID & " " & _
-                "GROUP BY t.dteTarihi " & _
-                "HAVING ISNULL(SUM(t.lTutari),0) - ISNULL(SUM(o.odeme),0) <> 0) T")
-
-            Dim drRisk As OleDb.OleDbDataReader = cmdRisk.ExecuteReader()
-            Dim bakiye As Decimal = 0
-            Dim gecikmisBakiye As Decimal = 0
-            Dim maxGecikmeGun As Integer = 0
-            Dim gecikmisTaksitAdet As Integer = 0
-            If drRisk.Read() Then
-                bakiye = CDec(drRisk("ToplamBakiye"))
-                gecikmisBakiye = CDec(drRisk("GecikmisBakiye"))
-                maxGecikmeGun = CInt(drRisk("MaxGecikmeGun"))
-                gecikmisTaksitAdet = CInt(drRisk("GecikmisTaksitAdet"))
-            End If
-            drRisk.Close()
-
-            ' Kredi limiti
-            cmdRisk.CommandText = sorgu_query("SELECT ISNULL(lKrediLimiti,0) FROM tbMusteriKredisi WHERE nMusteriID=" & nMusteriID)
-            Dim krediLimiti As Decimal = 0
-            Try : krediLimiti = CDec(cmdRisk.ExecuteScalar()) : Catch : End Try
-
-            ' Bekleyen siparisler (tbAlisverisSiparis - teslim edilmemis)
-            cmdRisk.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED " & _
-                "SELECT ISNULL(COUNT(*),0) AS BekleyenAdet, ISNULL(SUM(s.lTutar),0) AS BekleyenTutar " & _
+                "SELECT ISNULL(COUNT(*),0) AS Adet, ISNULL(SUM(s.lTutar),0) AS Tutar " & _
                 "FROM tbAlisverisSiparis s " & _
                 "INNER JOIN tbAlisVeris a ON s.nAlisverisID = a.nAlisverisID " & _
-                "WHERE a.nMusteriID = " & nMusteriID & " AND s.nGirisCikis = 3")
-            Dim drSiparis As OleDb.OleDbDataReader = cmdRisk.ExecuteReader()
+                "WHERE a.nMusteriID = " & nMusteriID & " AND s.bTeslimEdildi = 0")
+            Dim drSip As OleDb.OleDbDataReader = cmdRisk.ExecuteReader()
             Dim bekleyenAdet As Integer = 0
             Dim bekleyenTutar As Decimal = 0
-            If drSiparis.Read() Then
-                bekleyenAdet = CInt(drSiparis("BekleyenAdet"))
-                bekleyenTutar = CDec(drSiparis("BekleyenTutar"))
+            If drSip.Read() Then
+                bekleyenAdet = CInt(drSip("Adet"))
+                bekleyenTutar = CDec(drSip("Tutar"))
             End If
-            drSiparis.Close()
-
-            ' Odeme aliskanligi: Son 6 ayda ortalama gecikme gunu
-            cmdRisk.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED " & _
-                "SELECT ISNULL(AVG(DATEDIFF(DAY, t.dteTarihi, o.dteOdeme)),0) AS OrtGecikme " & _
-                "FROM tbTaksit t " & _
-                "INNER JOIN tbAlisVeris a ON t.nAlisverisID = a.nAlisverisID " & _
-                "CROSS APPLY (SELECT MIN(dteOdemeTarihi) AS dteOdeme FROM tbOdeme WHERE nTaksitId = t.nTaksitID) o " & _
-                "WHERE a.nMusteriID = " & nMusteriID & " AND o.dteOdeme IS NOT NULL " & _
-                "AND t.dteTarihi >= DATEADD(MONTH, -6, GETDATE())")
-            Dim ortGecikme As Integer = 0
-            Try : ortGecikme = CInt(cmdRisk.ExecuteScalar()) : Catch : End Try
-
+            drSip.Close()
             connRisk.Close()
 
             ' === RISK SKORU HESAPLA ===
             Dim skor As Integer = 100
+            Dim maxGecikmeGun As Integer = 0
+
+            ' Gecikme gunu hesapla (ds_taksitler zaten yuklu)
+            If ds_taksitler IsNot Nothing AndAlso ds_taksitler.Tables.Count > 0 Then
+                For Each drT As DataRow In ds_taksitler.Tables(0).Rows
+                    Dim gecikme As Integer = CInt(drT("GECIKME"))
+                    If gecikme > maxGecikmeGun Then maxGecikmeGun = gecikme
+                Next
+            End If
 
             ' Gecikme cezasi (max -40)
             If maxGecikmeGun > 90 Then
@@ -5156,17 +5124,17 @@ Public Class frm_perakende
             End If
 
             ' Geciken taksit sayisi (max -15)
-            If gecikmisTaksitAdet >= 4 Then
+            If gecikmistaksitsayisi >= 4 Then
                 skor -= 15
-            ElseIf gecikmisTaksitAdet >= 2 Then
+            ElseIf gecikmistaksitsayisi >= 2 Then
                 skor -= 10
-            ElseIf gecikmisTaksitAdet >= 1 Then
+            ElseIf gecikmistaksitsayisi >= 1 Then
                 skor -= 5
             End If
 
-            ' Limit asimi (max -20)
+            ' Limit kontrolu - bakiye + bekleyen teslimler (max -20)
             If krediLimiti > 0 Then
-                Dim toplamYuk As Decimal = bakiye + bekleyenTutar
+                Dim toplamYuk As Decimal = lBakiye + bekleyenTutar
                 If toplamYuk > krediLimiti Then
                     skor -= 20
                 ElseIf toplamYuk / krediLimiti > 0.9D Then
@@ -5176,18 +5144,9 @@ Public Class frm_perakende
                 End If
             End If
 
-            ' Odeme aliskanligi (max -15)
-            If ortGecikme > 30 Then
-                skor -= 15
-            ElseIf ortGecikme > 15 Then
-                skor -= 10
-            ElseIf ortGecikme > 5 Then
-                skor -= 5
-            End If
-
-            ' Bekleyen siparis yuku (max -10)
-            If bekleyenTutar > 0 AndAlso krediLimiti > 0 AndAlso (bakiye + bekleyenTutar) > krediLimiti Then
-                skor -= 10
+            ' Geciken/Bakiye oran (max -10)
+            If lBakiye > 0 AndAlso lGeciken > 0 Then
+                If lGeciken / lBakiye > 0.5D Then skor -= 10
             End If
 
             skor = Math.Max(0, Math.Min(100, skor))
@@ -5212,18 +5171,17 @@ Public Class frm_perakende
                 Me.Controls.Add(pnlPerakendeRisk)
             End If
 
-            ' Metin olustur
-            Dim metin As String = "Risk: " & skor & "/100 (" & seviye & ") | Bakiye: " & bakiye.ToString("N2") & " TL"
-            If gecikmisBakiye > 0 Then metin &= " | Geciken: " & gecikmisBakiye.ToString("N2") & " (" & gecikmisTaksitAdet & " taksit, " & maxGecikmeGun & " gun)"
-            If krediLimiti > 0 Then metin &= " | Limit: %" & Math.Round(bakiye / krediLimiti * 100, 0)
-            If bekleyenAdet > 0 Then metin &= " | Bekleyen Sip: " & bekleyenAdet & " adet " & bekleyenTutar.ToString("N2") & " TL"
-            If ortGecikme > 5 Then metin &= " | Ort.Gecikme: " & ortGecikme & " gun"
+            ' Bilgi metni
+            Dim metin As String = "Risk: " & skor & "/100 (" & seviye & ")"
+            metin &= " | Bakiye: " & lBakiye.ToString("N2") & " TL"
+            If lGeciken > 0 Then metin &= " | Geciken: " & lGeciken.ToString("N2") & " (" & gecikmistaksitsayisi & " taksit, " & maxGecikmeGun & " gun)"
+            If krediLimiti > 0 Then metin &= " | Limit: %" & Math.Round(lBakiye / krediLimiti * 100, 0)
+            If bekleyenAdet > 0 Then metin &= " | Bek.Teslim: " & bekleyenAdet & " urun " & bekleyenTutar.ToString("N2") & " TL"
 
             pnlPerakendeRisk.BackColor = renk
             lblPerakendeRisk.Text = metin
             pnlPerakendeRisk.Visible = True
         Catch ex As Exception
-            ' Hata risk gostergesini engellemez
             If pnlPerakendeRisk IsNot Nothing Then pnlPerakendeRisk.Visible = False
         End Try
     End Sub
