@@ -5070,7 +5070,7 @@ Public Class frm_perakende
             If nMusteriID <= 0 Then Exit Sub
 
             ' Parametrik kontrol
-            Dim connRisk As New OleDb.OleDbConnection(sConnection)
+            Dim connRisk As New OleDb.OleDbConnection(connection)
             connRisk.Open()
             Dim cmdRisk As New OleDb.OleDbCommand(sorgu_query("SELECT ISNULL(sAyarDeger,'0') FROM tbSistemAyar WHERE sAyarKodu='PERAKENDE_RISK_AKTIF'"), connRisk)
             Dim sPerakendeRiskAktif As String = ""
@@ -5084,7 +5084,7 @@ Public Class frm_perakende
             ' Bakiye hesapla
             cmdRisk.CommandText = sorgu_query("SELECT ISNULL(SUM(lNetTutar),0) FROM tbAlisVeris WHERE nMusteriID=" & nMusteriID & " AND nGirisCikis=2")
             Dim bakiyeBorc As Decimal = CDec(cmdRisk.ExecuteScalar())
-            cmdRisk.CommandText = sorgu_query("SELECT ISNULL(SUM(lTutar),0) FROM tbOdeme WHERE nMusteriID=" & nMusteriID)
+            cmdRisk.CommandText = sorgu_query("SELECT ISNULL(SUM(o.lOdemeTutar),0) FROM tbOdeme o INNER JOIN tbAlisVeris a ON o.nAlisverisID = a.nAlisverisID WHERE a.nMusteriID=" & nMusteriID)
             Dim bakiyeAlacak As Decimal = CDec(cmdRisk.ExecuteScalar())
             Dim bakiye As Decimal = bakiyeBorc - bakiyeAlacak
 
