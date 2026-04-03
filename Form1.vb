@@ -24516,7 +24516,7 @@ CleanupExcel:
                 MessageBox.Show("Bu isleme yetkiniz yoktur.", "Yetki Hatasi", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Exit Sub
             End If
-            Dim frm As New frm_AI_Ayarlar(sConnection, kullaniciadi)
+            Dim frm As New frm_AIAyarlari()
             frm.ShowDialog(Me)
         Catch ex As Exception
             MessageBox.Show("Hata: " & ex.Message)
