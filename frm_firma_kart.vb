@@ -7718,7 +7718,7 @@ Public Class frm_firma_kart
     Private Sub RiskGostergesiniGuncelle()
         Try
             ' Parametrik kontrol
-            Dim conn As New OleDb.OleDbConnection(sConnection)
+            Dim conn As New OleDb.OleDbConnection(connection)
             conn.Open()
             Dim cmdAyar As New OleDb.OleDbCommand
             cmdAyar.Connection = conn
@@ -7738,63 +7738,141 @@ Public Class frm_firma_kart
                 Exit Sub
             End If
 
-            ' Risk verisini cek
-            cmdAyar.CommandText = sorgu_query("SELECT " & _
-                "ISNULL((SELECT SUM(lBorcTutar - lAlacakTutar) FROM tbFirmaHareketi WHERE nFirmaID=" & nFirmaID & "), 0) AS Bakiye, " & _
-                "ISNULL((SELECT lKrediLimiti FROM tbFirma WHERE nFirmaID=" & nFirmaID & "), 0) AS KrediLimiti, " & _
-                "ISNULL((SELECT MAX(DATEDIFF(DAY, dteValorTarihi, GETDATE())) FROM tbFirmaHareketi WHERE nFirmaID=" & nFirmaID & " AND lBorcTutar > 0 AND dteValorTarihi < GETDATE()), 0) AS GecikmeGun")
+            ' Bakiye + Gecikme bilgisi
+            cmdAyar.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT " & _
+                "ISNULL(SUM(lBorcTutar - lAlacakTutar), 0) AS Bakiye, " & _
+                "ISNULL(SUM(lBorcTutar), 0) AS ToplamBorc, " & _
+                "ISNULL(SUM(lAlacakTutar), 0) AS ToplamAlacak, " & _
+                "ISNULL(SUM(CASE WHEN lBorcTutar > 0 AND dteValorTarihi < GETDATE() THEN lBorcTutar - lAlacakTutar ELSE 0 END), 0) AS VadesiGecmis, " & _
+                "ISNULL(MAX(CASE WHEN lBorcTutar > 0 AND dteValorTarihi < GETDATE() THEN DATEDIFF(DAY, dteValorTarihi, GETDATE()) ELSE 0 END), 0) AS MaxGecikmeGun " & _
+                "FROM tbFirmaHareketi WHERE nFirmaID=" & nFirmaID)
 
             Dim dr As OleDb.OleDbDataReader = cmdAyar.ExecuteReader()
+            Dim bakiye As Decimal = 0
+            Dim vadesiGecmis As Decimal = 0
+            Dim maxGecikmeGun As Integer = 0
             If dr.Read() Then
-                Dim bakiye As Decimal = CDec(dr("Bakiye"))
-                Dim krediLimiti As Decimal = CDec(dr("KrediLimiti"))
-                Dim gecikmeGun As Integer = CInt(dr("GecikmeGun"))
-
-                ' Basit risk skoru hesapla
-                Dim skor As Integer = 100
-                If gecikmeGun > 0 Then skor -= Math.Min(gecikmeGun * 2, 40)
-                If krediLimiti > 0 AndAlso bakiye / krediLimiti > 0.9D Then skor -= 20
-                If krediLimiti > 0 AndAlso bakiye / krediLimiti > 0.7D Then skor -= 10
-                skor = Math.Max(0, Math.Min(100, skor))
-
-                Dim seviye As String = If(skor >= 70, "GUVENLI", If(skor >= 40, "DIKKAT", "KRITIK"))
-                Dim renk As Color = If(skor >= 70, Color.FromArgb(39, 174, 96), If(skor >= 40, Color.FromArgb(243, 156, 18), Color.FromArgb(231, 76, 60)))
-
-                ' Risk paneli olustur
-                If pnlRisk Is Nothing Then
-                    pnlRisk = New Panel()
-                    pnlRisk.Dock = DockStyle.Top
-                    pnlRisk.Height = 36
-                    pnlRisk.BackColor = renk
-                    pnlRisk.Padding = New Padding(8, 4, 8, 4)
-                    pnlRisk.Visible = True
-
-                    lblRiskSkor = New Label()
-                    lblRiskSkor.AutoSize = True
-                    lblRiskSkor.Font = New Font("Segoe UI", 10, FontStyle.Bold)
-                    lblRiskSkor.ForeColor = Color.White
-                    lblRiskSkor.Location = New Point(8, 8)
-
-                    lblRiskAciklama = New Label()
-                    lblRiskAciklama.AutoSize = True
-                    lblRiskAciklama.Font = New Font("Segoe UI", 9)
-                    lblRiskAciklama.ForeColor = Color.White
-                    lblRiskAciklama.Location = New Point(200, 10)
-
-                    pnlRisk.Controls.Add(lblRiskSkor)
-                    pnlRisk.Controls.Add(lblRiskAciklama)
-                    Me.Controls.Add(pnlRisk)
-                    pnlRisk.BringToFront()
-                End If
-
-                pnlRisk.BackColor = renk
-                lblRiskSkor.Text = "Risk: " & skor & "/100 (" & seviye & ")"
-                lblRiskAciklama.Text = "Bakiye: " & bakiye.ToString("N2") & " TL | Gecikme: " & gecikmeGun & " gun" & _
-                    If(krediLimiti > 0, " | Limit: %" & Math.Round(bakiye / krediLimiti * 100, 0), "")
-                pnlRisk.Visible = True
+                bakiye = CDec(dr("Bakiye"))
+                vadesiGecmis = CDec(dr("VadesiGecmis"))
+                maxGecikmeGun = CInt(dr("MaxGecikmeGun"))
             End If
             dr.Close()
+
+            ' Kredi limiti
+            cmdAyar.CommandText = sorgu_query("SELECT ISNULL(lKrediLimiti,0) FROM tbFirma WHERE nFirmaID=" & nFirmaID)
+            Dim krediLimiti As Decimal = 0
+            Try : krediLimiti = CDec(cmdAyar.ExecuteScalar()) : Catch : End Try
+
+            ' Bekleyen siparisler (faturaya donusmemis)
+            cmdAyar.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED " & _
+                "SELECT ISNULL(COUNT(*),0) AS SiparisAdet, ISNULL(SUM(lMalBedeli),0) AS SiparisTutar " & _
+                "FROM tbStokFisiMaster WHERE nFirmaID=" & nFirmaID & " " & _
+                "AND sFisTipi='FS' AND ISNULL(bFaturayaDonustumu,0)=0")
+            Dim drSip As OleDb.OleDbDataReader = cmdAyar.ExecuteReader()
+            Dim bekleyenSiparisAdet As Integer = 0
+            Dim bekleyenSiparisTutar As Decimal = 0
+            If drSip.Read() Then
+                bekleyenSiparisAdet = CInt(drSip("SiparisAdet"))
+                bekleyenSiparisTutar = CDec(drSip("SiparisTutar"))
+            End If
+            drSip.Close()
+
+            ' Odeme aliskanligi: Son 6 ayda ortalama odeme suresi
+            cmdAyar.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED " & _
+                "SELECT ISNULL(AVG(DATEDIFF(DAY, dteValorTarihi, dteIslemTarihi)),0) " & _
+                "FROM tbFirmaHareketi WHERE nFirmaID=" & nFirmaID & " " & _
+                "AND lAlacakTutar > 0 AND dteIslemTarihi >= DATEADD(MONTH, -6, GETDATE())")
+            Dim ortOdemeSuresi As Integer = 0
+            Try : ortOdemeSuresi = CInt(cmdAyar.ExecuteScalar()) : Catch : End Try
+
             conn.Close()
+
+            ' === RISK SKORU HESAPLA ===
+            Dim skor As Integer = 100
+
+            ' Gecikme cezasi (max -40)
+            If maxGecikmeGun > 90 Then
+                skor -= 40
+            ElseIf maxGecikmeGun > 60 Then
+                skor -= 30
+            ElseIf maxGecikmeGun > 30 Then
+                skor -= 20
+            ElseIf maxGecikmeGun > 0 Then
+                skor -= 10
+            End If
+
+            ' Vadesi gecmis oran (max -15)
+            If bakiye > 0 AndAlso vadesiGecmis > 0 Then
+                Dim gecikmeOrani As Decimal = vadesiGecmis / bakiye
+                If gecikmeOrani > 0.5D Then skor -= 15
+                If gecikmeOrani > 0.3D Then skor -= 10
+            End If
+
+            ' Limit asimi (bekleyen siparislerle birlikte) (max -20)
+            If krediLimiti > 0 Then
+                Dim toplamYuk As Decimal = bakiye + bekleyenSiparisTutar
+                If toplamYuk > krediLimiti Then
+                    skor -= 20
+                ElseIf toplamYuk / krediLimiti > 0.9D Then
+                    skor -= 15
+                ElseIf toplamYuk / krediLimiti > 0.7D Then
+                    skor -= 5
+                End If
+            End If
+
+            ' Odeme aliskanligi (max -15)
+            If ortOdemeSuresi > 30 Then
+                skor -= 15
+            ElseIf ortOdemeSuresi > 15 Then
+                skor -= 10
+            ElseIf ortOdemeSuresi > 5 Then
+                skor -= 5
+            End If
+
+            skor = Math.Max(0, Math.Min(100, skor))
+
+            Dim seviye As String = If(skor >= 70, "GUVENLI", If(skor >= 40, "DIKKAT", "KRITIK"))
+            Dim renk As Color = If(skor >= 70, Color.FromArgb(39, 174, 96), If(skor >= 40, Color.FromArgb(243, 156, 18), Color.FromArgb(231, 76, 60)))
+
+            ' Risk paneli olustur
+            If pnlRisk Is Nothing Then
+                pnlRisk = New Panel()
+                pnlRisk.Dock = DockStyle.Top
+                pnlRisk.Height = 36
+                pnlRisk.BackColor = renk
+                pnlRisk.Padding = New Padding(8, 4, 8, 4)
+                pnlRisk.Visible = True
+
+                lblRiskSkor = New Label()
+                lblRiskSkor.AutoSize = True
+                lblRiskSkor.Font = New Font("Segoe UI", 10, FontStyle.Bold)
+                lblRiskSkor.ForeColor = Color.White
+                lblRiskSkor.Location = New Point(8, 8)
+
+                lblRiskAciklama = New Label()
+                lblRiskAciklama.AutoSize = True
+                lblRiskAciklama.Font = New Font("Segoe UI", 9)
+                lblRiskAciklama.ForeColor = Color.White
+                lblRiskAciklama.Location = New Point(220, 10)
+
+                pnlRisk.Controls.Add(lblRiskSkor)
+                pnlRisk.Controls.Add(lblRiskAciklama)
+                Me.Controls.Add(pnlRisk)
+                pnlRisk.BringToFront()
+            End If
+
+            ' Metin olustur
+            Dim detay As String = "Bakiye: " & bakiye.ToString("N2") & " TL"
+            If vadesiGecmis > 0 Then detay &= " | Geciken: " & vadesiGecmis.ToString("N2") & " (" & maxGecikmeGun & " gun)"
+            If krediLimiti > 0 Then detay &= " | Limit: %" & Math.Round(bakiye / krediLimiti * 100, 0)
+            If bekleyenSiparisAdet > 0 Then detay &= " | Bekleyen Sip: " & bekleyenSiparisAdet & " adet " & bekleyenSiparisTutar.ToString("N2") & " TL"
+            If ortOdemeSuresi > 5 Then detay &= " | Ort.Odeme: " & ortOdemeSuresi & " gun"
+
+            pnlRisk.BackColor = renk
+            lblRiskSkor.Text = "Risk: " & skor & "/100 (" & seviye & ")"
+            lblRiskAciklama.Text = detay
+            pnlRisk.Visible = True
+
         Catch ex As Exception
             ' Risk gostergesi hatasi formu engellemez
         End Try
