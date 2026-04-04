@@ -5,49 +5,45 @@ Legacy VB.NET Windows Forms ERP/POS uygulamasi (Barkod_Magaza) + C# .NET 8 Web A
 
 ## Mimari (3 Katman)
 - **Desktop Frontend**: VB.NET Windows Forms (DevExpress, CP1254 encoding)
-- **Desktop API**: C# .NET 8 Minimal APIs (BusinessSmartDesktopAPI) - Backup/License/AI
+- **Desktop API**: C# .NET 8 Minimal APIs (BusinessSmartDesktopAPI) - Backup/License ONLY (AI kaldirildi)
 - **Mobil Backend**: C# ASP.NET Core (BarkodBackend) - Dapper, Multi-ERP adapter
-- **Mobil Frontend**: .NET MAUI Blazor (BusinessSmartMobile) + React B2B Web
+- **Mobil Frontend**: .NET MAUI Blazor (BusinessSmartMobile)
 - **Veritabani**: SQL Server (OleDb desktop, Dapper mobil)
+
+## Repolar
+- Desktop: github.com/AliTanerGoksu-hub/Barkod_Magaza.git
+- Mobil Backend: github.com/AliTanerGoksu-hub/New_Backend.git
+- Mobil Frontend: github.com/AliTanerGoksu-hub/New_Mobile.git
 
 ## Tamamlanan Ozellikler
 
-### AI Backend - Desktop API (BusinessSmartDesktopAPI)
-- [x] POST /api/ai/risk-analiz, /api/ai/risk-aciklama
-- [x] GET /api/ai/tahsilat-plani
-- [x] POST /api/ai/satis-oneri
-- [x] GET /api/ai/gun-sonu-ozet
-- [x] GET /api/ai/perakende-ozet
-- [x] POST /api/siparis/onay-kontrol
-- [x] GET /api/sistem/ayar, /api/yetki/kontrol
-- [x] GET /api/cari/risk-skoru, /api/perakende/risk-skoru
-- [x] LLMService, AuditService, KuralMotoru
+### AI Risk Hesaplama - Desktop (AIService.vb + RiskBildirimModulu.vb)
+- [x] Risk Skoru: Bakiye, Vadesi Gecmis, Max Gecikme, Kredi Limiti
+- [x] Risk Skoru: Ortalama Vade (nVadeGun + AVG DATEDIFF)
+- [x] Risk Skoru: Cek/Senet riski (tbCekSenet + tbCekSenetBordro)
+- [x] RiskBildirimModulu: Sessiz risk paneli tum satis formlarinda
+- [x] frm_AISatisOneri.vb: Satis Oneri Motoru (AIService.SatisOneriGetir)
+- [x] frm_AIGunSonuOzet.vb, frm_AITahsilatAsistani.vb
+- [x] frm_YoneticiOzetPaneli.vb: Patron ozet paneli
 
-### AI Backend - Mobil API (BarkodBackend/New_Backend)
-- [x] GET /api/AI/RiskScore/{firmaId}
-- [x] GET /api/AI/CollectionPlan
-- [x] GET /api/AI/SalesSuggestions/{firmaId}
+### AI Risk Hesaplama - Mobile Backend (AIController.cs) [GUNCELLENDI 2026-02-11]
+- [x] GET /api/AI/RiskScore/{firmaId} - Cek/Senet + OrtVade EKLENDI
+- [x] GET /api/AI/OrderRiskCheck/{firmaId} - Karsilikizsiz cek REDDET karari EKLENDI
+- [x] GET /api/AI/CollectionPlan - Vadesi gecmis bakiye koruması eklendi
+- [x] GET /api/AI/SalesSuggestions/{firmaId} - Fatura bazli sorgu (Desktop ile senkron)
 - [x] GET /api/AI/DailySummary
 - [x] GET /api/AI/RetailSummary
-- [x] GET /api/AI/OrderRiskCheck/{firmaId}
 
-### AI UI - Desktop (VB.NET)
-- [x] frm_firma_kart.vb - Risk panel + AI Detay + Satis Oneri butonlari
-- [x] frm_perakende.vb - Risk panel + AI + Oneri butonlari
-- [x] frm_stok_cari_alis.vb - Siparis risk kontrolu (parametrik)
-- [x] frm_AITahsilatAsistani.vb, frm_AIGunSonuOzet.vb, frm_AISatisOneri.vb
-- [x] frm_YoneticiOzetPaneli.vb (Toptan + Perakende)
-- [x] Form1.vb AI menusu (8 buton)
-- [x] RiskBildirimModulu.vb - Merkezi sessiz risk bildirimi modulu
-- [x] frm_tbSiparis.vb - Alinan siparis icin sessiz risk kontrolu
-- [x] frm_fatura.vb - Satis faturasi (FS) ve satis irsaliyesi (IS) icin sessiz risk kontrolu
-- [x] frm_perakende.vb - Perakende satis musteri risk kontrolu
-- [x] frm_stok_pesin.vb - Pesin satis musteri risk kontrolu
+### AI UI - Mobile App (BusinessSmartMobile) [GUNCELLENDI 2026-02-11]
+- [x] AIService.cs: Tum modeller Desktop ile senkron (CekPortfoy, CekVadesiGecmis, OrtVade vb.)
+- [x] BusinessPartnerDetail.razor: Risk detaylarinda OrtVade, Cek/Senet bilgileri
+- [x] SatisOneriMotoru.razor: Firma bazli satis oneri sayfasi (aktif/hatirlatma)
+- [x] PatronAIDashboard.razor: AI ozet paneli
 
-### AI UI - Mobil (BusinessSmartMobile/New_Mobile)
-- [x] AIService.cs - HTTP client + response modelleri
-- [x] PatronAIDashboard.razor - AI ozet paneli (KPI + Risk + Tahsilat)
-- [x] PatronDashboard.razor - AI menu butonu
+### Desktop Temizlik [2026-02-11]
+- [x] Eski API_URL/API_KEY sabitleri 4 dosyadan kaldirildi
+- [x] FtpEskiYedekleriSil_ESKI temiz (bos metod)
+- [x] Tum AI formlari artik AIService.vb uzerinden calisiyor
 
 ### Onceki Calismalar
 - [x] B2B Settings, POS error handling, R2 image upload
@@ -56,12 +52,12 @@ Legacy VB.NET Windows Forms ERP/POS uygulamasi (Barkod_Magaza) + C# .NET 8 Web A
 
 ## Bekleyen Gorevler
 - [ ] P1: Maliyet hesaplama standardizasyonu (FIFO, LIFO, Agirlikli Ortalama)
-- [ ] P1: AI satis oneri motoru onay akisi
 - [ ] P2: E-Fatura/E-Arsiv otomatik eslestirme
 - [ ] P2: AI kullanim loglari UI (frm_AIKullanimRaporu)
 - [ ] P2: Dusuk riskli AI araclari (aciklama temizleme, ilan yardimcisi)
 
-## Repolar
-- Desktop: github.com/AliTanerGoksu-hub/Barkod_Magaza.git
-- Mobil Backend: github.com/AliTanerGoksu-hub/New_Backend.git
-- Mobil Frontend: github.com/AliTanerGoksu-hub/New_Mobile.git
+## Anahtar DB Semalari
+- tbCekSenet, tbCekSenetBordro: Cek/Senet (risk hesaplamada kullaniliyor)
+- tbFirmaHareketi: Bakiye, vade, odeme takip
+- tbFirma: Kredi limiti, anlasma vadesi (nVadeGun)
+- tbStokFisiMaster, tbStokFisiDetayi: Satis oneri motoru veri kaynagi
