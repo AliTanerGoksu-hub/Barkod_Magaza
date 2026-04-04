@@ -4363,6 +4363,16 @@ business_smart
  ComboBox'tan seçili öğenin görüntülenen adını döndürür
  </summary>
 </member>
+<member name="M:business_smart.RiskBildirimModulu.RiskKontrolEkle(System.Windows.Forms.Form,System.String,System.Int64,System.Int64,System.Func{System.String,System.String})">
+ <summary>
+ Firma bazli risk kontrolu yapar, sessiz bildirim paneli ekler
+ </summary>
+ <param name="frm">Panel eklenecek form</param>
+ <param name="connectionString">DB connection string</param>
+ <param name="nFirmaID">Firma numeric ID (toptan icin)</param>
+ <param name="nMusteriID">Musteri numeric ID (perakende icin)</param>
+ <param name="sorguQueryFunc">sorgu_query fonksiyonu delegesi</param>
+</member>
 <member name="M:business_smart.QueryDocumentsClient.QueryUsers(System.String,System.String,System.String)">
  <summary>
  GİB'e kayıtlı E-Fatura mükelleflerini VKN/TCKN ile sorgular.
