@@ -38,6 +38,11 @@ Legacy VB.NET Windows Forms ERP/POS uygulamasi (Barkod_Magaza) + C# .NET 8 Web A
 - [x] frm_AITahsilatAsistani.vb, frm_AIGunSonuOzet.vb, frm_AISatisOneri.vb
 - [x] frm_YoneticiOzetPaneli.vb (Toptan + Perakende)
 - [x] Form1.vb AI menusu (8 buton)
+- [x] RiskBildirimModulu.vb - Merkezi sessiz risk bildirimi modulu
+- [x] frm_tbSiparis.vb - Alinan siparis icin sessiz risk kontrolu
+- [x] frm_fatura.vb - Satis faturasi (FS) ve satis irsaliyesi (IS) icin sessiz risk kontrolu
+- [x] frm_perakende.vb - Perakende satis musteri risk kontrolu
+- [x] frm_stok_pesin.vb - Pesin satis musteri risk kontrolu
 
 ### AI UI - Mobil (BusinessSmartMobile/New_Mobile)
 - [x] AIService.cs - HTTP client + response modelleri
@@ -50,9 +55,10 @@ Legacy VB.NET Windows Forms ERP/POS uygulamasi (Barkod_Magaza) + C# .NET 8 Web A
 - [x] SQL Views, Parametrik togglelar, Valor/Limit kontrol
 
 ## Bekleyen Gorevler
-- [ ] P2: Maliyet hesaplama standardizasyonu (FIFO, LIFO, Agirlikli Ortalama)
+- [ ] P1: Maliyet hesaplama standardizasyonu (FIFO, LIFO, Agirlikli Ortalama)
+- [ ] P1: AI satis oneri motoru onay akisi
 - [ ] P2: E-Fatura/E-Arsiv otomatik eslestirme
-- [ ] P2: AI kullanim loglari UI
+- [ ] P2: AI kullanim loglari UI (frm_AIKullanimRaporu)
 - [ ] P2: Dusuk riskli AI araclari (aciklama temizleme, ilan yardimcisi)
 
 ## Repolar
