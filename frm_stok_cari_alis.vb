@@ -5074,23 +5074,29 @@ Public Class frm_stok_cari_alis
             Dim seviye As String = If(skor >= 40, "DIKKAT", "KRITIK")
             Dim renk As Color = If(skor >= 40, Color.FromArgb(243, 156, 18), Color.FromArgb(231, 76, 60))
 
-            Dim metin As String = "RISK: " & skor & "/100 (" & seviye & ") | Bakiye: " & bakiye.ToString("N2") & " TL"
-            If vadesiGecmis > 0 Then metin &= " | Geciken: " & vadesiGecmis.ToString("N2") & " (" & maxGecikmeGun & " gun)"
-            If krediLimiti > 0 Then metin &= " | Limit: %" & Math.Round(bakiye / krediLimiti * 100, 0)
-            If bekAdet > 0 Then metin &= " | Bek.Siparis: " & bekAdet & " adet"
+            ' Detay metni (tiklaninca gorunur, musteri gormez)
+            Dim detayMetin As String = "Risk: " & skor & "/100 (" & seviye & ")" & vbCrLf
+            detayMetin &= "Bakiye: " & bakiye.ToString("N2") & " TL" & vbCrLf
+            If vadesiGecmis > 0 Then detayMetin &= "Vadesi Gecmis: " & vadesiGecmis.ToString("N2") & " TL (" & maxGecikmeGun & " gun)" & vbCrLf
+            If krediLimiti > 0 Then detayMetin &= "Limit Kullanim: %" & Math.Round(bakiye / krediLimiti * 100, 0) & vbCrLf
+            If bekAdet > 0 Then detayMetin &= "Bekleyen Siparis: " & bekAdet & " adet"
+
+            ' Panel metni (kisa, notr - musteri gorse de rencide olmaz)
+            Dim metin As String = "Bilgi mevcut (tikla)"
+            If seviye = "KRITIK" Then metin = "Onemli bilgi (tikla)" 
 
             If pnlSiparisRisk Is Nothing Then
                 pnlSiparisRisk = New Panel()
                 pnlSiparisRisk.Dock = DockStyle.Top
-                pnlSiparisRisk.Height = 30
-                pnlSiparisRisk.Padding = New Padding(8, 4, 8, 4)
+                pnlSiparisRisk.Height = 22
+                pnlSiparisRisk.Padding = New Padding(6, 2, 6, 2)
                 pnlSiparisRisk.Visible = True
 
                 lblSiparisRisk = New Label()
                 lblSiparisRisk.AutoSize = True
-                lblSiparisRisk.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+                lblSiparisRisk.Font = New Font("Segoe UI", 8, FontStyle.Regular)
                 lblSiparisRisk.ForeColor = Color.White
-                lblSiparisRisk.Location = New Point(8, 6)
+                lblSiparisRisk.Location = New Point(6, 3)
 
                 pnlSiparisRisk.Controls.Add(lblSiparisRisk)
                 Me.Controls.Add(pnlSiparisRisk)
@@ -5101,13 +5107,15 @@ Public Class frm_stok_cari_alis
             lblSiparisRisk.Text = metin
             pnlSiparisRisk.Visible = True
 
-            ' Kritik durum icin uyari goster
-            If skor < 40 Then
-                MessageBox.Show("DIKKAT: Bu firma KRITIK risk seviyesindedir!" & vbCrLf & vbCrLf & _
-                    metin & vbCrLf & vbCrLf & _
-                    "Fatura islemini dikkatli yapiniz.", _
-                    "Siparis Risk Uyarisi", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            End If
+            ' Bildirim seklinde - tiklaninca detay gosterir (musteri gormez)
+            AddHandler pnlSiparisRisk.Click, Sub()
+                                                  MessageBox.Show(detayMetin, "Risk Detayi", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                                              End Sub
+            AddHandler lblSiparisRisk.Click, Sub()
+                                                  MessageBox.Show(detayMetin, "Risk Detayi", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                                              End Sub
+            pnlSiparisRisk.Cursor = Cursors.Hand
+            lblSiparisRisk.Cursor = Cursors.Hand
         Catch ex As Exception
             ' Risk kontrolu basarisiz olsa bile formu engelleme
         End Try
