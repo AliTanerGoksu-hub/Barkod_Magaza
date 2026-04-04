@@ -81,18 +81,24 @@ Public Module RiskBildirimModulu
                 con.Close()
 
                 ' Skor hesapla
-                If maxGecikme > 90 Then skor -= 40
-                ElseIf maxGecikme > 60 Then skor -= 30
-                ElseIf maxGecikme > 30 Then skor -= 20
-                ElseIf maxGecikme > 0 Then skor -= 10
+                If maxGecikme > 90 Then
+                    skor -= 40
+                ElseIf maxGecikme > 60 Then
+                    skor -= 30
+                ElseIf maxGecikme > 30 Then
+                    skor -= 20
+                ElseIf maxGecikme > 0 Then
+                    skor -= 10
                 End If
                 If bakiye > 0 AndAlso vadesiGecmis > 0 Then
                     If vadesiGecmis / bakiye > 0.5D Then skor -= 15
                 End If
                 If krediLimiti > 0 Then
                     Dim topYuk As Decimal = bakiye + bekTutar
-                    If topYuk > krediLimiti Then skor -= 20
-                    ElseIf topYuk / krediLimiti > 0.9D Then skor -= 15
+                    If topYuk > krediLimiti Then
+                        skor -= 20
+                    ElseIf topYuk / krediLimiti > 0.9D Then
+                        skor -= 15
                     End If
                 End If
                 skor = Math.Max(0, Math.Min(100, skor))
@@ -138,10 +144,14 @@ Public Module RiskBildirimModulu
                 drP.Close()
                 con.Close()
 
-                If pMaxGecikme > 90 Then skor -= 40
-                ElseIf pMaxGecikme > 60 Then skor -= 30
-                ElseIf pMaxGecikme > 30 Then skor -= 20
-                ElseIf pMaxGecikme > 0 Then skor -= 10
+                If pMaxGecikme > 90 Then
+                    skor -= 40
+                ElseIf pMaxGecikme > 60 Then
+                    skor -= 30
+                ElseIf pMaxGecikme > 30 Then
+                    skor -= 20
+                ElseIf pMaxGecikme > 0 Then
+                    skor -= 10
                 End If
                 If pKrediLimiti > 0 AndAlso pToplamBorc > pKrediLimiti Then skor -= 20
                 skor = Math.Max(0, Math.Min(100, skor))
