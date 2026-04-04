@@ -7919,7 +7919,7 @@ Public Class frm_firma_kart
         Try
             Me.Cursor = Cursors.WaitCursor
             Dim apiUrl As String = "https://desktop.barkodyazilimevi.com"
-            Dim wc As New Net.WebClient()
+            Dim wc As New System.Net.WebClient()
             wc.Encoding = System.Text.Encoding.UTF8
             wc.Headers.Add("Content-Type", "application/json")
             wc.Headers.Add("X-Api-Key", "BSmart2024Desktop!@#SecureKey")

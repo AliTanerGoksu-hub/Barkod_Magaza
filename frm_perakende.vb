@@ -3721,7 +3721,6 @@ Public Class frm_perakende
         lPuan = Nothing
         lBekleyen = Nothing
         coldteTarihi.BestFit()
-        PerakendeRiskGoster(nMusteriID)
         Cursor.Current = Cursors.Default
         Cursor.Hide()
     End Sub
@@ -5236,7 +5235,7 @@ Public Class frm_perakende
         Try
             Me.Cursor = Cursors.WaitCursor
             Dim apiUrl As String = "https://desktop.barkodyazilimevi.com"
-            Dim wc As New Net.WebClient()
+            Dim wc As New System.Net.WebClient()
             wc.Encoding = System.Text.Encoding.UTF8
             wc.Headers.Add("Content-Type", "application/json")
             wc.Headers.Add("X-Api-Key", "BSmart2024Desktop!@#SecureKey")
