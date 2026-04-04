@@ -4186,6 +4186,32 @@ SADECE JSON döndür!"
                         End Using
                     End Using
                 Catch : End Try
+
+                ' Cek/Senet riski
+                Dim cekPortfoy As Decimal = 0
+                Dim cekVadesiGecmis As Decimal = 0
+                Dim cekKarsilisiksiz As Decimal = 0
+                Dim cekKarsilisiksizAdet As Integer = 0
+                Try
+                    Dim cekSql As String = "SELECT " & _
+                        "ISNULL(SUM(IIF(c.nSonCekSenetIslem IN (1,2), c.lTutar, 0)), 0) AS PortfoyTutar, " & _
+                        "ISNULL(SUM(IIF(c.nSonCekSenetIslem IN (1,2) AND c.dteVadeTarihi < Now(), c.lTutar, 0)), 0) AS VadesiGecmisCek, " & _
+                        "ISNULL(SUM(IIF(c.nSonCekSenetIslem = 6, c.lTutar, 0)), 0) AS KarsilisiksizTutar, " & _
+                        "ISNULL(SUM(IIF(c.nSonCekSenetIslem = 6, 1, 0)), 0) AS KarsilisiksizAdet " & _
+                        "FROM tbCekSenet c INNER JOIN tbCekSenetBordro b ON c.nCekSenetID = b.nCekSenetID " & _
+                        "WHERE b.nFirmaID = " & nFirmaID & " AND c.sCekSenetTipi IN ('AC','AS') " & _
+                        "AND b.nBordroSatirID = c.nSonBordroSatirID"
+                    Using cekCmd As New OleDb.OleDbCommand(cekSql, con)
+                        Using cekDr As OleDb.OleDbDataReader = cekCmd.ExecuteReader()
+                            If cekDr.Read() Then
+                                cekPortfoy = CDec(cekDr("PortfoyTutar"))
+                                cekVadesiGecmis = CDec(cekDr("VadesiGecmisCek"))
+                                cekKarsilisiksiz = CDec(cekDr("KarsilisiksizTutar"))
+                                cekKarsilisiksizAdet = CInt(cekDr("KarsilisiksizAdet"))
+                            End If
+                        End Using
+                    End Using
+                Catch : End Try
             End Using
 
             Dim skor As Integer = 100
@@ -4198,16 +4224,23 @@ SADECE JSON döndür!"
             If krediLimiti > 0 AndAlso (bakiye + bekTutar) > krediLimiti Then : skor -= 20
             ElseIf krediLimiti > 0 AndAlso bakiye > 0 AndAlso (bakiye + bekTutar) / krediLimiti > 0.9D Then : skor -= 15
             End If
+            ' Cek/Senet risk etkisi
+            If cekKarsilisiksizAdet > 0 Then : skor -= 25 : End If
+            If cekVadesiGecmis > 0 Then : skor -= 15 : End If
+
             skor = Math.Max(0, Math.Min(100, skor))
             Dim seviye As String = If(skor >= 70, "guvenli", If(skor >= 40, "dikkat", "kritik"))
             Dim aciklama As String = firmaAd & " - Risk Skoru: " & skor & "/100 (" & seviye & ")"
             If gecikmisBakiye > 0 Then aciklama &= vbLf & "Vadesi gecmis: " & gecikmisBakiye.ToString("N2") & " TL (" & maxGecikme & " gun)"
             If krediLimiti > 0 AndAlso bakiye > 0 Then aciklama &= vbLf & "Kredi limiti: " & krediLimiti.ToString("N2") & " TL, Kullanim: %" & CInt((bakiye + bekTutar) / krediLimiti * 100)
+            If cekPortfoy > 0 Then aciklama &= vbLf & "Portfoydeki cek/senet: " & cekPortfoy.ToString("N2") & " TL"
+            If cekVadesiGecmis > 0 Then aciklama &= vbLf & "Vadesi gecmis cek/senet: " & cekVadesiGecmis.ToString("N2") & " TL"
+            If cekKarsilisiksiz > 0 Then aciklama &= vbLf & "KARSILIKIZSIZ CEK: " & cekKarsilisiksiz.ToString("N2") & " TL (" & cekKarsilisiksizAdet & " adet)"
             Dim oneriler As String = If(skor < 40, "Satis durdurulmali, tahsilat oncelikli", If(skor < 70, "Dikkatli satis, taksit kisitlanmali", "Normal satis devam edebilir"))
 
             Dim aiAciklama As String = ""
             Try
-                Dim prompt As String = "Sen bir ERP risk analiz uzmanisin. Su firma verilerini analiz et ve 3-4 cumlede kisa risk degerlendirmesi yap:" & vbLf & "Firma: " & firmaAd & vbLf & "Risk Skoru: " & skor & "/100" & vbLf & "Bakiye: " & bakiye.ToString("N2") & " TL" & vbLf & "Vadesi Gecmis: " & gecikmisBakiye.ToString("N2") & " TL (" & maxGecikme & " gun)" & vbLf & "Geciken Fatura: " & gecikmisFatura & " adet" & vbLf & "Kredi Limiti: " & krediLimiti.ToString("N2") & " TL" & vbLf & "Bekleyen Siparis: " & bekAdet & " adet (" & bekTutar.ToString("N2") & " TL)" & vbLf & "Turkce yaz, kisa ve net ol."
+                Dim prompt As String = "Sen bir ERP risk analiz uzmanisin. Su firma verilerini analiz et ve 3-4 cumlede kisa risk degerlendirmesi yap:" & vbLf & "Firma: " & firmaAd & vbLf & "Risk Skoru: " & skor & "/100" & vbLf & "Bakiye: " & bakiye.ToString("N2") & " TL" & vbLf & "Vadesi Gecmis: " & gecikmisBakiye.ToString("N2") & " TL (" & maxGecikme & " gun)" & vbLf & "Geciken Fatura: " & gecikmisFatura & " adet" & vbLf & "Kredi Limiti: " & krediLimiti.ToString("N2") & " TL" & vbLf & "Bekleyen Siparis: " & bekAdet & " adet (" & bekTutar.ToString("N2") & " TL)" & vbLf & "Portfoydeki Cek/Senet: " & cekPortfoy.ToString("N2") & " TL" & vbLf & "Vadesi Gecmis Cek: " & cekVadesiGecmis.ToString("N2") & " TL" & vbLf & "Karsilikizsiz Cek: " & cekKarsilisiksiz.ToString("N2") & " TL (" & cekKarsilisiksizAdet & " adet)" & vbLf & "Turkce yaz, kisa ve net ol."
                 aiAciklama = CallOpenAI(prompt, 300)
             Catch : End Try
 

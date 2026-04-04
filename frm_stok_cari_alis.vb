@@ -5037,6 +5037,26 @@ Public Class frm_stok_cari_alis
                 bekTutar = CDec(drSip("Tutar"))
             End If
             drSip.Close()
+
+            ' Cek/Senet riski
+            Dim cekVadesiGecmis As Decimal = 0
+            Dim cekKarsilisiksiz As Decimal = 0
+            Dim cekKarsilisiksizAdet As Integer = 0
+            Try
+                cmdRisk.CommandText = sorgu_query("SELECT " & _
+                    "ISNULL(SUM(IIF(c.nSonCekSenetIslem IN (1,2) AND c.dteVadeTarihi < Now(), c.lTutar, 0)), 0) AS VadesiGecmisCek, " & _
+                    "ISNULL(SUM(IIF(c.nSonCekSenetIslem = 6, c.lTutar, 0)), 0) AS KarsilisiksizTutar, " & _
+                    "ISNULL(SUM(IIF(c.nSonCekSenetIslem = 6, 1, 0)), 0) AS KarsilisiksizAdet " & _
+                    "FROM tbCekSenet c INNER JOIN tbCekSenetBordro b ON c.nCekSenetID = b.nCekSenetID " & _
+                    "WHERE b.nFirmaID = " & nFirmaID & " AND c.sCekSenetTipi IN ('AC','AS') AND b.nBordroSatirID = c.nSonBordroSatirID")
+                Dim drCek As OleDb.OleDbDataReader = cmdRisk.ExecuteReader()
+                If drCek.Read() Then
+                    cekVadesiGecmis = CDec(drCek("VadesiGecmisCek"))
+                    cekKarsilisiksiz = CDec(drCek("KarsilisiksizTutar"))
+                    cekKarsilisiksizAdet = CInt(drCek("KarsilisiksizAdet"))
+                End If
+                drCek.Close()
+            Catch : End Try
             con.Close()
 
             ' Risk Ayari aktif mi?
@@ -5069,6 +5089,9 @@ Public Class frm_stok_cari_alis
                 ElseIf toplamYuk / krediLimiti > 0.9D Then : skor -= 15
                 End If
             End If
+            ' Cek/Senet skor etkisi
+            If cekKarsilisiksizAdet > 0 Then skor -= 25
+            If cekVadesiGecmis > 0 Then skor -= 15
             skor = Math.Max(0, Math.Min(100, skor))
 
             If skor >= 70 Then Exit Sub ' Guvenli ise gosterme
@@ -5081,7 +5104,9 @@ Public Class frm_stok_cari_alis
             detayMetin &= "Bakiye: " & bakiye.ToString("N2") & " TL" & vbCrLf
             If vadesiGecmis > 0 Then detayMetin &= "Vadesi Gecmis: " & vadesiGecmis.ToString("N2") & " TL (" & maxGecikmeGun & " gun)" & vbCrLf
             If krediLimiti > 0 Then detayMetin &= "Limit Kullanim: %" & Math.Round(bakiye / krediLimiti * 100, 0) & vbCrLf
-            If bekAdet > 0 Then detayMetin &= "Bekleyen Siparis: " & bekAdet & " adet"
+            If bekAdet > 0 Then detayMetin &= "Bekleyen Siparis: " & bekAdet & " adet" & vbCrLf
+            If cekVadesiGecmis > 0 Then detayMetin &= "Vadesi Gecmis Cek/Senet: " & cekVadesiGecmis.ToString("N2") & " TL" & vbCrLf
+            If cekKarsilisiksizAdet > 0 Then detayMetin &= "KARSILIKIZSIZ CEK: " & cekKarsilisiksiz.ToString("N2") & " TL (" & cekKarsilisiksizAdet & " adet)"
 
             ' Panel metni (kisa, notr - musteri gorse de rencide olmaz)
             Dim metin As String = "Bilgi mevcut (tikla)"

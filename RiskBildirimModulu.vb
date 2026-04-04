@@ -80,6 +80,26 @@ Public Module RiskBildirimModulu
                     bekAdet = CInt(drSip("Adet")) : bekTutar = CDec(drSip("Tutar"))
                 End If
                 drSip.Close()
+
+                ' Cek/Senet riski
+                Dim cekVadesiGecmis As Decimal = 0
+                Dim cekKarsilisiksiz As Decimal = 0
+                Dim cekKarsilisiksizAdet As Integer = 0
+                Try
+                    cmd.CommandText = sorguQueryFunc("SELECT " &
+                        "ISNULL(SUM(IIF(c.nSonCekSenetIslem IN (1,2) AND c.dteVadeTarihi < Now(), c.lTutar, 0)), 0) AS VadesiGecmisCek, " &
+                        "ISNULL(SUM(IIF(c.nSonCekSenetIslem = 6, c.lTutar, 0)), 0) AS KarsilisiksizTutar, " &
+                        "ISNULL(SUM(IIF(c.nSonCekSenetIslem = 6, 1, 0)), 0) AS KarsilisiksizAdet " &
+                        "FROM tbCekSenet c INNER JOIN tbCekSenetBordro b ON c.nCekSenetID = b.nCekSenetID " &
+                        "WHERE b.nFirmaID = " & nFirmaID & " AND c.sCekSenetTipi IN ('AC','AS') AND b.nBordroSatirID = c.nSonBordroSatirID")
+                    Dim drCek As OleDb.OleDbDataReader = cmd.ExecuteReader()
+                    If drCek.Read() Then
+                        cekVadesiGecmis = CDec(drCek("VadesiGecmisCek"))
+                        cekKarsilisiksiz = CDec(drCek("KarsilisiksizTutar"))
+                        cekKarsilisiksizAdet = CInt(drCek("KarsilisiksizAdet"))
+                    End If
+                    drCek.Close()
+                Catch : End Try
                 con.Close()
 
                 ' Skor hesapla
@@ -92,6 +112,9 @@ Public Module RiskBildirimModulu
                 ElseIf maxGecikme > 0 Then
                     skor -= 10
                 End If
+                ' Cek/Senet skor etkisi
+                If cekKarsilisiksizAdet > 0 Then skor -= 25
+                If cekVadesiGecmis > 0 Then skor -= 15
                 If bakiye > 0 AndAlso vadesiGecmis > 0 Then
                     If vadesiGecmis / bakiye > 0.5D Then skor -= 15
                 End If
@@ -109,7 +132,9 @@ Public Module RiskBildirimModulu
                 detayMetin &= "Bakiye: " & bakiye.ToString("N2") & " TL" & vbCrLf
                 If vadesiGecmis > 0 Then detayMetin &= "Vadesi Gecmis: " & vadesiGecmis.ToString("N2") & " TL (" & maxGecikme & " gun)" & vbCrLf
                 If krediLimiti > 0 Then detayMetin &= "Limit Kullanim: %" & Math.Round(bakiye / krediLimiti * 100, 0) & vbCrLf
-                If bekAdet > 0 Then detayMetin &= "Bekleyen Siparis: " & bekAdet & " adet"
+                If bekAdet > 0 Then detayMetin &= "Bekleyen Siparis: " & bekAdet & " adet" & vbCrLf
+                If cekVadesiGecmis > 0 Then detayMetin &= "Vadesi Gecmis Cek/Senet: " & cekVadesiGecmis.ToString("N2") & " TL" & vbCrLf
+                If cekKarsilisiksizAdet > 0 Then detayMetin &= "KARSILIKIZSIZ CEK: " & cekKarsilisiksiz.ToString("N2") & " TL (" & cekKarsilisiksizAdet & " adet)" & vbCrLf
 
             ElseIf nMusteriID > 0 Then
                 ' === PERAKENDE RISK KONTROLU ===
