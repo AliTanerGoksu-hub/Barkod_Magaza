@@ -2303,6 +2303,9 @@ Public Class frm_stok_cari_alis
     Public tarih As DateTime
     Public firmaID As String
     Public fisno As String
+    ' === SIPARIS RISK GOSTERGESI ===
+    Private pnlSiparisRisk As Panel
+    Private lblSiparisRisk As Label
     Public ngiriscikis As String
     Dim ds_stok As DataSet
     Dim ds_stok_fisi As DataSet
@@ -2329,6 +2332,7 @@ Public Class frm_stok_cari_alis
         End Try
         yuklendi = True
         satir_info()
+        Try : SiparisRiskKontrol() : Catch : End Try
     End Sub
     Private Sub loaded()
         dataload_renk()
@@ -4980,4 +4984,133 @@ Public Class frm_stok_cari_alis
         faturalastir(True, True)
         connection_resmi = s
     End Sub
+
+    ' === SIPARIS RISK GOSTERGESI ===
+    Private Sub SiparisRiskKontrol()
+        Try
+            Dim sKodu As String = ""
+            Try : sKodu = dr_baslik("sKodu").ToString().Trim() : Catch : End Try
+            If sKodu = "" Then Exit Sub
+
+            Dim nFid As Int64 = sorgu_nfirmaID(sKodu)
+            If nFid <= 0 Then Exit Sub
+
+            Dim con As New OleDb.OleDbConnection
+            con.ConnectionString = connection_resmi
+            con.Open()
+            Dim cmd As New OleDb.OleDbCommand
+            cmd.Connection = con
+
+            ' Bakiye
+            cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT " & _
+                "ISNULL(SUM(lBorcTutar - lAlacakTutar), 0) AS Bakiye, " & _
+                "ISNULL(SUM(CASE WHEN lBorcTutar > 0 AND dteValorTarihi < GETDATE() THEN lBorcTutar - lAlacakTutar ELSE 0 END), 0) AS VadesiGecmis, " & _
+                "ISNULL(MAX(CASE WHEN lBorcTutar > 0 AND dteValorTarihi < GETDATE() THEN DATEDIFF(DAY, dteValorTarihi, GETDATE()) ELSE 0 END), 0) AS MaxGecikmeGun " & _
+                "FROM tbFirmaHareketi WHERE nFirmaID=" & nFid)
+            Dim drRisk As OleDb.OleDbDataReader = cmd.ExecuteReader()
+            Dim bakiye As Decimal = 0
+            Dim vadesiGecmis As Decimal = 0
+            Dim maxGecikmeGun As Integer = 0
+            If drRisk.Read() Then
+                bakiye = CDec(drRisk("Bakiye"))
+                vadesiGecmis = CDec(drRisk("VadesiGecmis"))
+                maxGecikmeGun = CInt(drRisk("MaxGecikmeGun"))
+            End If
+            drRisk.Close()
+
+            ' Kredi limiti
+            cmd.CommandText = sorgu_query("SELECT ISNULL(lKrediLimiti,0) FROM tbFirma WHERE nFirmaID=" & nFid)
+            Dim krediLimiti As Decimal = 0
+            Try : krediLimiti = CDec(cmd.ExecuteScalar()) : Catch : End Try
+
+            ' Bekleyen siparisler
+            cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED " & _
+                "SELECT ISNULL(COUNT(DISTINCT lSiparisNo),0) AS Adet, ISNULL(SUM(lTutari),0) AS Tutar " & _
+                "FROM tbSiparis WHERE nFirmaID=" & nFid & " AND ISNULL(bKapandimi,0)=0")
+            Dim drSip As OleDb.OleDbDataReader = cmd.ExecuteReader()
+            Dim bekAdet As Integer = 0
+            Dim bekTutar As Decimal = 0
+            If drSip.Read() Then
+                bekAdet = CInt(drSip("Adet"))
+                bekTutar = CDec(drSip("Tutar"))
+            End If
+            drSip.Close()
+            con.Close()
+
+            ' Risk Ayari aktif mi?
+            Dim sRiskAktif As String = "0"
+            Try
+                Dim conAyar As New OleDb.OleDbConnection
+                conAyar.ConnectionString = connection_resmi
+                conAyar.Open()
+                Dim cmdA As New OleDb.OleDbCommand
+                cmdA.Connection = conAyar
+                cmdA.CommandText = sorgu_query("SELECT ISNULL(sAyarDeger,'0') FROM tbSistemAyar WHERE sAyarKodu='RISK_SKORU_AKTIF'")
+                Try : sRiskAktif = cmdA.ExecuteScalar().ToString() : Catch : End Try
+                conAyar.Close()
+            Catch : End Try
+            If sRiskAktif <> "1" Then Exit Sub
+
+            ' Skor hesapla
+            Dim skor As Integer = 100
+            If maxGecikmeGun > 90 Then : skor -= 40
+            ElseIf maxGecikmeGun > 60 Then : skor -= 30
+            ElseIf maxGecikmeGun > 30 Then : skor -= 20
+            ElseIf maxGecikmeGun > 0 Then : skor -= 10
+            End If
+            If bakiye > 0 AndAlso vadesiGecmis > 0 Then
+                If vadesiGecmis / bakiye > 0.5D Then skor -= 15
+            End If
+            If krediLimiti > 0 Then
+                Dim toplamYuk As Decimal = bakiye + bekTutar
+                If toplamYuk > krediLimiti Then : skor -= 20
+                ElseIf toplamYuk / krediLimiti > 0.9D Then : skor -= 15
+                End If
+            End If
+            skor = Math.Max(0, Math.Min(100, skor))
+
+            If skor >= 70 Then Exit Sub ' Guvenli ise gosterme
+
+            Dim seviye As String = If(skor >= 40, "DIKKAT", "KRITIK")
+            Dim renk As Color = If(skor >= 40, Color.FromArgb(243, 156, 18), Color.FromArgb(231, 76, 60))
+
+            Dim metin As String = "RISK: " & skor & "/100 (" & seviye & ") | Bakiye: " & bakiye.ToString("N2") & " TL"
+            If vadesiGecmis > 0 Then metin &= " | Geciken: " & vadesiGecmis.ToString("N2") & " (" & maxGecikmeGun & " gun)"
+            If krediLimiti > 0 Then metin &= " | Limit: %" & Math.Round(bakiye / krediLimiti * 100, 0)
+            If bekAdet > 0 Then metin &= " | Bek.Siparis: " & bekAdet & " adet"
+
+            If pnlSiparisRisk Is Nothing Then
+                pnlSiparisRisk = New Panel()
+                pnlSiparisRisk.Dock = DockStyle.Top
+                pnlSiparisRisk.Height = 30
+                pnlSiparisRisk.Padding = New Padding(8, 4, 8, 4)
+                pnlSiparisRisk.Visible = True
+
+                lblSiparisRisk = New Label()
+                lblSiparisRisk.AutoSize = True
+                lblSiparisRisk.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+                lblSiparisRisk.ForeColor = Color.White
+                lblSiparisRisk.Location = New Point(8, 6)
+
+                pnlSiparisRisk.Controls.Add(lblSiparisRisk)
+                Me.Controls.Add(pnlSiparisRisk)
+                pnlSiparisRisk.BringToFront()
+            End If
+
+            pnlSiparisRisk.BackColor = renk
+            lblSiparisRisk.Text = metin
+            pnlSiparisRisk.Visible = True
+
+            ' Kritik durum icin uyari goster
+            If skor < 40 Then
+                MessageBox.Show("DIKKAT: Bu firma KRITIK risk seviyesindedir!" & vbCrLf & vbCrLf & _
+                    metin & vbCrLf & vbCrLf & _
+                    "Fatura islemini dikkatli yapiniz.", _
+                    "Siparis Risk Uyarisi", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            End If
+        Catch ex As Exception
+            ' Risk kontrolu basarisiz olsa bile formu engelleme
+        End Try
+    End Sub
+
 End Class

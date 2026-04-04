@@ -22789,6 +22789,36 @@ Public Class Form1
                                                 End Try
                                             End Sub
             aiMenu.Controls.Add(btnSatisOneri)
+            yPos += 70
+
+            ' ===== YONETICI =====
+            Dim lblYonetici As New Label()
+            lblYonetici.Text = "YONETICI"
+            lblYonetici.Font = New Font("Segoe UI", 10, FontStyle.Bold)
+            lblYonetici.ForeColor = Color.FromArgb(30, 39, 46)
+            lblYonetici.Location = New Point(20, yPos)
+            lblYonetici.AutoSize = True
+            aiMenu.Controls.Add(lblYonetici)
+            yPos += 30
+
+            ' Yonetici Ozet Paneli butonu
+            Dim btnYoneticiOzet As New DevExpress.XtraEditors.SimpleButton()
+            btnYoneticiOzet.Text = "Yonetici Ozet Paneli"
+            btnYoneticiOzet.Location = New Point(20, yPos)
+            btnYoneticiOzet.Size = New Size(370, 45)
+            btnYoneticiOzet.Appearance.BackColor = Color.FromArgb(30, 39, 46)
+            btnYoneticiOzet.Appearance.ForeColor = Color.White
+            btnYoneticiOzet.Font = New Font("Segoe UI", 10, FontStyle.Bold)
+            AddHandler btnYoneticiOzet.Click, Sub()
+                                                  aiMenu.Close()
+                                                  Try
+                                                      Dim frm As New frm_YoneticiOzetPaneli()
+                                                      frm.Show()
+                                                  Catch ex As Exception
+                                                      MessageBox.Show("Form acilamadi: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                                  End Try
+                                              End Sub
+            aiMenu.Controls.Add(btnYoneticiOzet)
 
             ' Adjust menu height
             aiMenu.ClientSize = New Size(aiMenu.ClientSize.Width, yPos + 70)
