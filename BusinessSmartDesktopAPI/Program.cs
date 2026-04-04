@@ -2039,4 +2039,164 @@ app.MapPost("/api/visit-note/add", async (HttpContext context) =>
 });
 
 
+// ===================================================================
+// PERAKENDE OZET ENDPOINT
+// ===================================================================
+app.MapGet("/api/ai/perakende-ozet", async (HttpContext context) =>
+{
+    if (!ValidateApiKey(context))
+        return Results.Json(new { success = false, message = "Invalid API Key" }, statusCode: 401);
+    try
+    {
+        var tarih = context.Request.Query["tarih"].FirstOrDefault() ?? DateTime.Today.ToString("yyyy-MM-dd");
+        using var conn = new SqlConnection(sqlConnStrAI);
+        await conn.OpenAsync();
+
+        // Gunluk perakende satis
+        var cmdSatis = new SqlCommand(@"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+            SELECT COUNT(DISTINCT nAlisverisID) AS FisSayisi,
+                   ISNULL(SUM(lNetTutar),0) AS ToplamSatis
+            FROM tbAlisVeris
+            WHERE CAST(dteFaturaTarihi AS DATE) = @tarih
+              AND sFisTipi IN ('K','SK','P','SP','KVF','PD','PTX','KS')", conn);
+        cmdSatis.Parameters.AddWithValue("@tarih", tarih);
+        using var rdrSatis = await cmdSatis.ExecuteReaderAsync();
+        int pFisSayisi = 0;
+        decimal pToplamSatis = 0;
+        if (await rdrSatis.ReadAsync())
+        {
+            pFisSayisi = rdrSatis["FisSayisi"] != DBNull.Value ? Convert.ToInt32(rdrSatis["FisSayisi"]) : 0;
+            pToplamSatis = rdrSatis["ToplamSatis"] != DBNull.Value ? Convert.ToDecimal(rdrSatis["ToplamSatis"]) : 0;
+        }
+        rdrSatis.Close();
+
+        // Gunluk perakende tahsilat
+        var cmdTahsilat = new SqlCommand(@"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+            SELECT ISNULL(SUM(o.lOdemeTutar),0) AS ToplamTahsilat
+            FROM tbOdeme o
+            INNER JOIN tbAlisVeris a ON o.nAlisverisID = a.nAlisverisID
+            WHERE o.nOdemeKodu = 2 AND CAST(o.dteOdemeTarihi AS DATE) = @tarih", conn);
+        cmdTahsilat.Parameters.AddWithValue("@tarih", tarih);
+        var pToplamTahsilat = Convert.ToDecimal(await cmdTahsilat.ExecuteScalarAsync() ?? 0);
+
+        // Vadesi gecmis taksitler (tum zamanlar)
+        var cmdGeciken = new SqlCommand(@"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+            SELECT COUNT(DISTINCT m.nMusteriID) AS GecikMusteri,
+                   ISNULL(SUM(t.lTutari - ISNULL(od.Odenen,0)),0) AS GecikenTutar
+            FROM tbTaksit t
+            INNER JOIN tbAlisVeris a ON t.nAlisverisID = a.nAlisverisID
+            INNER JOIN tbMusteri m ON a.nMusteriID = m.nMusteriID
+            LEFT JOIN (SELECT nTaksitId, SUM(lOdemeTutar) AS Odenen FROM tbOdeme GROUP BY nTaksitId) od
+                ON t.nTaksitID = od.nTaksitId
+            WHERE t.dteTarihi < GETDATE()
+              AND (t.lTutari - ISNULL(od.Odenen,0)) > 0", conn);
+        using var rdrGeciken = await cmdGeciken.ExecuteReaderAsync();
+        int gecikMusteri = 0;
+        decimal gecikenTutar = 0;
+        if (await rdrGeciken.ReadAsync())
+        {
+            gecikMusteri = rdrGeciken["GecikMusteri"] != DBNull.Value ? Convert.ToInt32(rdrGeciken["GecikMusteri"]) : 0;
+            gecikenTutar = rdrGeciken["GecikenTutar"] != DBNull.Value ? Convert.ToDecimal(rdrGeciken["GecikenTutar"]) : 0;
+        }
+        rdrGeciken.Close();
+
+        // Aktif musteri sayisi (son 90 gun alisveris yapan)
+        var cmdAktif = new SqlCommand(@"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+            SELECT COUNT(DISTINCT nMusteriID) AS AktifMusteri
+            FROM tbAlisVeris
+            WHERE dteFaturaTarihi >= DATEADD(DAY,-90,GETDATE())
+              AND nMusteriID > 0", conn);
+        var aktifMusteri = Convert.ToInt32(await cmdAktif.ExecuteScalarAsync() ?? 0);
+
+        // Risk dagilimi (kredi limiti olan musteriler)
+        var cmdRisk = new SqlCommand(@"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+            SELECT
+                SUM(CASE WHEN RiskSkor >= 70 THEN 1 ELSE 0 END) AS Guvenli,
+                SUM(CASE WHEN RiskSkor >= 40 AND RiskSkor < 70 THEN 1 ELSE 0 END) AS Dikkat,
+                SUM(CASE WHEN RiskSkor < 40 THEN 1 ELSE 0 END) AS Kritik
+            FROM (
+                SELECT m.nMusteriID,
+                    100
+                    - CASE WHEN ISNULL(maxGecikme.Gun,0) > 90 THEN 40
+                           WHEN ISNULL(maxGecikme.Gun,0) > 60 THEN 30
+                           WHEN ISNULL(maxGecikme.Gun,0) > 30 THEN 20
+                           WHEN ISNULL(maxGecikme.Gun,0) > 0 THEN 10
+                           ELSE 0 END
+                    - CASE WHEN k.lKrediLimiti > 0 AND ISNULL(bakiye.Toplam,0) > k.lKrediLimiti THEN 20
+                           WHEN k.lKrediLimiti > 0 AND ISNULL(bakiye.Toplam,0) / k.lKrediLimiti > 0.9 THEN 15
+                           ELSE 0 END
+                    AS RiskSkor
+                FROM tbMusteri m
+                INNER JOIN tbMusteriKredisi k ON m.nMusteriID = k.nMusteriID
+                LEFT JOIN (
+                    SELECT a.nMusteriID, SUM(t.lTutari - ISNULL(o.Odenen,0)) AS Toplam
+                    FROM tbTaksit t
+                    INNER JOIN tbAlisVeris a ON t.nAlisverisID = a.nAlisverisID
+                    LEFT JOIN (SELECT nTaksitId, SUM(lOdemeTutar) AS Odenen FROM tbOdeme GROUP BY nTaksitId) o ON t.nTaksitID = o.nTaksitId
+                    WHERE (t.lTutari - ISNULL(o.Odenen,0)) > 0
+                    GROUP BY a.nMusteriID
+                ) bakiye ON m.nMusteriID = bakiye.nMusteriID
+                LEFT JOIN (
+                    SELECT a.nMusteriID, MAX(DATEDIFF(DAY, t.dteTarihi, GETDATE())) AS Gun
+                    FROM tbTaksit t
+                    INNER JOIN tbAlisVeris a ON t.nAlisverisID = a.nAlisverisID
+                    LEFT JOIN (SELECT nTaksitId, SUM(lOdemeTutar) AS Odenen FROM tbOdeme GROUP BY nTaksitId) o ON t.nTaksitID = o.nTaksitId
+                    WHERE t.dteTarihi < GETDATE() AND (t.lTutari - ISNULL(o.Odenen,0)) > 0
+                    GROUP BY a.nMusteriID
+                ) maxGecikme ON m.nMusteriID = maxGecikme.nMusteriID
+                WHERE k.lKrediLimiti > 0
+            ) RiskTablosu", conn);
+        using var rdrRisk = await cmdRisk.ExecuteReaderAsync();
+        int guvenli = 0, dikkat = 0, kritik = 0;
+        if (await rdrRisk.ReadAsync())
+        {
+            guvenli = rdrRisk["Guvenli"] != DBNull.Value ? Convert.ToInt32(rdrRisk["Guvenli"]) : 0;
+            dikkat = rdrRisk["Dikkat"] != DBNull.Value ? Convert.ToInt32(rdrRisk["Dikkat"]) : 0;
+            kritik = rdrRisk["Kritik"] != DBNull.Value ? Convert.ToInt32(rdrRisk["Kritik"]) : 0;
+        }
+        rdrRisk.Close();
+
+        // Top 5 geciken musteri
+        var cmdTop = new SqlCommand(@"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+            SELECT TOP 5 m.nMusteriID, m.sAdi + ' ' + m.sSoyadi AS MusteriAd,
+                   SUM(t.lTutari - ISNULL(o.Odenen,0)) AS GecikenBakiye,
+                   MAX(DATEDIFF(DAY, t.dteTarihi, GETDATE())) AS MaxGecikmeGun
+            FROM tbTaksit t
+            INNER JOIN tbAlisVeris a ON t.nAlisverisID = a.nAlisverisID
+            INNER JOIN tbMusteri m ON a.nMusteriID = m.nMusteriID
+            LEFT JOIN (SELECT nTaksitId, SUM(lOdemeTutar) AS Odenen FROM tbOdeme GROUP BY nTaksitId) o
+                ON t.nTaksitID = o.nTaksitId
+            WHERE t.dteTarihi < GETDATE() AND (t.lTutari - ISNULL(o.Odenen,0)) > 0
+            GROUP BY m.nMusteriID, m.sAdi, m.sSoyadi
+            ORDER BY GecikenBakiye DESC", conn);
+        var topGeciken = new List<object>();
+        using var rdrTop = await cmdTop.ExecuteReaderAsync();
+        while (await rdrTop.ReadAsync())
+        {
+            topGeciken.Add(new {
+                musteriId = Convert.ToInt32(rdrTop["nMusteriID"]),
+                musteriAd = rdrTop["MusteriAd"]?.ToString() ?? "",
+                gecikenBakiye = Convert.ToDecimal(rdrTop["GecikenBakiye"]),
+                maxGecikmeGun = Convert.ToInt32(rdrTop["MaxGecikmeGun"])
+            });
+        }
+        rdrTop.Close();
+
+        return Results.Ok(new {
+            success = true,
+            tarih,
+            gunlukSatis = pToplamSatis,
+            gunlukFis = pFisSayisi,
+            gunlukTahsilat = pToplamTahsilat,
+            gecikMusteri,
+            gecikenTutar,
+            aktifMusteri,
+            riskDagilim = new { guvenli, dikkat, kritik },
+            topGecikenMusteriler = topGeciken
+        });
+    }
+    catch (Exception ex) { return Results.Json(new { success = false, message = ex.Message }, statusCode: 500); }
+});
+
+
 app.Run(listenUrl);

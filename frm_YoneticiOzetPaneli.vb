@@ -35,6 +35,15 @@ Public Class frm_YoneticiOzetPaneli
     Private grpTahsilat As GroupBox
     Private dgvOncelikli As DataGridView
 
+    ' === Perakende KPI ===
+    Private pnlPerakendeKartlar As FlowLayoutPanel
+    Private pnlPSatis As Panel
+    Private pnlPTahsilat As Panel
+    Private pnlPFis As Panel
+    Private pnlPGeciken As Panel
+    Private grpPerakendeGeciken As GroupBox
+    Private dgvPerakendeGeciken As DataGridView
+
     ' === AI Ozet ===
     Private grpAiOzet As GroupBox
     Private rtbAiOzet As RichTextBox
@@ -271,6 +280,70 @@ Public Class frm_YoneticiOzetPaneli
 
         Me.Controls.Add(pnlOrta)
 
+        ' === PERAKENDE BOLUMU ===
+        Dim lblPerakendeBaslik As New Label()
+        lblPerakendeBaslik.Text = "  PERAKENDE"
+        lblPerakendeBaslik.Dock = DockStyle.Top
+        lblPerakendeBaslik.Height = 30
+        lblPerakendeBaslik.Font = New Font("Segoe UI", 11, FontStyle.Bold)
+        lblPerakendeBaslik.ForeColor = Color.White
+        lblPerakendeBaslik.BackColor = Color.FromArgb(155, 89, 182)
+        lblPerakendeBaslik.TextAlign = ContentAlignment.MiddleLeft
+        Me.Controls.Add(lblPerakendeBaslik)
+
+        pnlPerakendeKartlar = New FlowLayoutPanel()
+        pnlPerakendeKartlar.Dock = DockStyle.Top
+        pnlPerakendeKartlar.Height = 95
+        pnlPerakendeKartlar.Padding = New Padding(15, 8, 15, 5)
+        pnlPerakendeKartlar.BackColor = Color.FromArgb(245, 240, 250)
+
+        pnlPSatis = KpiKartOlustur("Perakende Satis", "-", Color.FromArgb(155, 89, 182), "TL")
+        pnlPTahsilat = KpiKartOlustur("Perakende Tahsilat", "-", Color.FromArgb(41, 128, 185), "TL")
+        pnlPFis = KpiKartOlustur("Perakende Fis", "-", Color.FromArgb(142, 68, 173), "adet")
+        pnlPGeciken = KpiKartOlustur("Geciken Musteri", "-", Color.FromArgb(192, 57, 43), "adet")
+
+        pnlPerakendeKartlar.Controls.Add(pnlPSatis)
+        pnlPerakendeKartlar.Controls.Add(pnlPTahsilat)
+        pnlPerakendeKartlar.Controls.Add(pnlPFis)
+        pnlPerakendeKartlar.Controls.Add(pnlPGeciken)
+        Me.Controls.Add(pnlPerakendeKartlar)
+
+        grpPerakendeGeciken = New GroupBox()
+        grpPerakendeGeciken.Text = " Perakende - En Cok Geciken Musteriler "
+        grpPerakendeGeciken.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+        grpPerakendeGeciken.ForeColor = Color.FromArgb(44, 62, 80)
+        grpPerakendeGeciken.Dock = DockStyle.Top
+        grpPerakendeGeciken.Height = 155
+        grpPerakendeGeciken.Padding = New Padding(8)
+
+        dgvPerakendeGeciken = New DataGridView()
+        dgvPerakendeGeciken.Dock = DockStyle.Fill
+        dgvPerakendeGeciken.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        dgvPerakendeGeciken.ReadOnly = True
+        dgvPerakendeGeciken.AllowUserToAddRows = False
+        dgvPerakendeGeciken.BackgroundColor = Color.White
+        dgvPerakendeGeciken.Font = New Font("Segoe UI", 8)
+        dgvPerakendeGeciken.RowHeadersVisible = False
+        dgvPerakendeGeciken.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(155, 89, 182)
+        dgvPerakendeGeciken.ColumnHeadersDefaultCellStyle.ForeColor = Color.White
+        dgvPerakendeGeciken.ColumnHeadersDefaultCellStyle.Font = New Font("Segoe UI", 8, FontStyle.Bold)
+        dgvPerakendeGeciken.EnableHeadersVisualStyles = False
+        dgvPerakendeGeciken.ColumnHeadersHeight = 26
+
+        dgvPerakendeGeciken.Columns.Add("no", "#")
+        dgvPerakendeGeciken.Columns.Add("musteri", "Musteri")
+        dgvPerakendeGeciken.Columns.Add("bakiye", "Geciken Bakiye")
+        dgvPerakendeGeciken.Columns.Add("gun", "Gecikme (Gun)")
+
+        dgvPerakendeGeciken.Columns("no").Width = 30
+        dgvPerakendeGeciken.Columns("musteri").Width = 250
+        dgvPerakendeGeciken.Columns("bakiye").DefaultCellStyle.Format = "N2"
+        dgvPerakendeGeciken.Columns("bakiye").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
+        dgvPerakendeGeciken.Columns("gun").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+
+        grpPerakendeGeciken.Controls.Add(dgvPerakendeGeciken)
+        Me.Controls.Add(grpPerakendeGeciken)
+
         ' === AI OZET ===
         grpAiOzet = New GroupBox()
         grpAiOzet.Text = " AI Gunluk Ozet "
@@ -362,6 +435,7 @@ Public Class frm_YoneticiOzetPaneli
 
         GunSonuOzetYukle()
         TahsilatPlaniYukle()
+        PerakendeOzetYukle()
 
         lblStatus.Text = "Tum veriler yuklendi - " & DateTime.Now.ToString("HH:mm:ss")
         Me.Cursor = Cursors.Default
@@ -481,6 +555,65 @@ Public Class frm_YoneticiOzetPaneli
 
         Catch ex As Exception
             lblStatus.Text = "Tahsilat yuklenemedi: " & ex.Message
+        End Try
+    End Sub
+
+    Private Sub PerakendeOzetYukle()
+        Try
+            Dim tarih As String = DateTime.Today.ToString("yyyy-MM-dd")
+            Dim wc As New WebClient()
+            wc.Encoding = System.Text.Encoding.UTF8
+            wc.Headers.Add("X-Api-Key", API_KEY)
+
+            Dim result As String = wc.DownloadString(API_URL & "/api/ai/perakende-ozet?tarih=" & tarih)
+
+            Dim pSatis As String = ParseField(result, "gunlukSatis")
+            Dim pTahsilat As String = ParseField(result, "gunlukTahsilat")
+            Dim pFis As String = ParseField(result, "gunlukFis")
+            Dim gecikM As String = ParseField(result, "gecikMusteri")
+
+            Dim satisTutar As Decimal = 0
+            Decimal.TryParse(pSatis, Globalization.NumberStyles.Any, Globalization.CultureInfo.InvariantCulture, satisTutar)
+            Dim tahsilatTutar As Decimal = 0
+            Decimal.TryParse(pTahsilat, Globalization.NumberStyles.Any, Globalization.CultureInfo.InvariantCulture, tahsilatTutar)
+
+            KpiGuncelle(pnlPSatis, satisTutar.ToString("N0"))
+            KpiGuncelle(pnlPTahsilat, tahsilatTutar.ToString("N0"))
+            KpiGuncelle(pnlPFis, pFis)
+            KpiGuncelle(pnlPGeciken, gecikM)
+
+            ' Top geciken musteriler
+            dgvPerakendeGeciken.Rows.Clear()
+            Dim topKey As String = Chr(34) & "topGecikenMusteriler" & Chr(34)
+            Dim topStart As Integer = result.IndexOf(topKey)
+            If topStart >= 0 Then
+                Dim arrStart As Integer = result.IndexOf("[", topStart)
+                Dim arrEnd As Integer = FindMatchingBracket(result, arrStart)
+                If arrEnd > arrStart Then
+                    Dim listeJson As String = result.Substring(arrStart + 1, arrEnd - arrStart - 1)
+                    Dim pos As Integer = 0
+                    Dim sira As Integer = 0
+                    While pos < listeJson.Length
+                        Dim objStart As Integer = listeJson.IndexOf("{", pos)
+                        If objStart < 0 Then Exit While
+                        Dim objEnd As Integer = FindMatchingBrace(listeJson, objStart)
+                        If objEnd <= objStart Then Exit While
+                        Dim obj As String = listeJson.Substring(objStart, objEnd - objStart + 1)
+                        sira += 1
+                        Dim rowIdx As Integer = dgvPerakendeGeciken.Rows.Add(
+                            sira,
+                            ParseField(obj, "musteriAd"),
+                            ParseField(obj, "gecikenBakiye"),
+                            ParseField(obj, "maxGecikmeGun") & " gun"
+                        )
+                        dgvPerakendeGeciken.Rows(rowIdx).DefaultCellStyle.BackColor = Color.FromArgb(255, 235, 235)
+                        pos = objEnd + 1
+                    End While
+                End If
+            End If
+
+        Catch ex As Exception
+            lblStatus.Text = "Perakende: " & ex.Message
         End Try
     End Sub
 
