@@ -29,8 +29,6 @@ Public Class frm_AIGunSonuOzet
     Private statusStrip As StatusStrip
     Private lblStatus As ToolStripStatusLabel
 
-    Private Const API_URL As String = "https://desktop.barkodyazilimevi.com"
-    Private Const API_KEY As String = "BSmart2024Desktop!@#SecureKey"
 
     Public Sub New()
         InitializeComponent()

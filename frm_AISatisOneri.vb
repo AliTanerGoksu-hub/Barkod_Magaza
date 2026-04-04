@@ -25,8 +25,6 @@ Public Class frm_AISatisOneri
     Private lblStatus As ToolStripStatusLabel
     Private pnlAlt As SplitContainer
 
-    Private Const API_URL As String = "https://desktop.barkodyazilimevi.com"
-    Private Const API_KEY As String = "BSmart2024Desktop!@#SecureKey"
 
     Public nFirmaID As Integer = 0
     Public sFirmaAdi As String = ""
