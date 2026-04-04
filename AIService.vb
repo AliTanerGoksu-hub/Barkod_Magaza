@@ -4373,7 +4373,7 @@ En Buyuk Satis: " & enBuyukSatis.ToString("N2") & " TL"
                     "MAX(m.dteFisTarihi) AS SonSiparisTarih, AVG(d.lCikisFiyat) AS OrtFiyat " & _
                     "FROM tbStokFisiMaster m INNER JOIN tbStokFisiDetayi d ON m.nStokFisiID=d.nStokFisiID " & _
                     "INNER JOIN tbStok s ON d.nStokID=s.nStokID " & _
-                    "WHERE m.nFirmaID=" & nFirmaID & " AND m.sFisTipi IN ('FS','FT') AND m.dteFisTarihi>=DATEADD('m',-6,Now()) " & _
+                    "WHERE m.nFirmaID=" & nFirmaID & " AND m.sFisTipi IN ('FS','FT') AND m.dteFisTarihi>=DATEADD(month,-6,GETDATE()) " & _
                     "GROUP BY s.sKodu, s.sAciklama ORDER BY COUNT(DISTINCT m.nStokFisiID) DESC, SUM(d.lCikisMiktar1) DESC"
                 Using cmd As New OleDb.OleDbCommand(sql, con)
                     Using dr As OleDb.OleDbDataReader = cmd.ExecuteReader()
@@ -4427,7 +4427,7 @@ En Buyuk Satis: " & enBuyukSatis.ToString("N2") & " TL"
                     End Using
                 Catch : End Try
                 Try
-                    Using cmd4 As New OleDb.OleDbCommand("SELECT COUNT(DISTINCT nMusteriID) FROM tbAlisVeris WHERE dteFaturaTarihi >= DATEADD('d', -90, Now())", con)
+                    Using cmd4 As New OleDb.OleDbCommand("SELECT COUNT(DISTINCT nMusteriID) FROM tbAlisVeris WHERE dteFaturaTarihi >= DATEADD(day, -90, GETDATE())", con)
                         aktifMusteri = CInt(cmd4.ExecuteScalar())
                     End Using
                 Catch : End Try
