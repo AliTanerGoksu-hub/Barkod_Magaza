@@ -34,6 +34,31 @@ var backupsPath = config["BackupsPath"] ?? @"C:\BusinessSmartFiles\Backups";
 var filesPath = config["FilesPath"] ?? @"C:\BusinessSmartFiles\SharedFiles";
 var downloadsPath = config["DownloadsPath"] ?? @"D:\ftp"; // Bayii indirme klasörü
 
+// SqlConnectionString: Varsa onu kullan, yoksa LicenseConnectionString'den otomatik türet
+string GetSqlConnectionString()
+{
+    var direct = config["SqlConnectionString"];
+    if (!string.IsNullOrEmpty(direct)) return direct;
+    
+    var oleDb = config["LicenseConnectionString"] ?? "";
+    if (string.IsNullOrEmpty(oleDb)) return "";
+    
+    // OleDb formatini SqlClient formatina cevir
+    var parts = oleDb.Split(';')
+        .Select(p => p.Trim())
+        .Where(p => !string.IsNullOrEmpty(p))
+        .Select(p => { var kv = p.Split(new[]{'='}, 2); return kv.Length == 2 ? (kv[0].Trim(), kv[1].Trim()) : (p, ""); })
+        .ToDictionary(x => x.Item1.ToLower(), x => x.Item2);
+    
+    var ds = parts.GetValueOrDefault("data source", "");
+    var db = parts.GetValueOrDefault("initial catalog", "");
+    var uid = parts.GetValueOrDefault("user id", "");
+    var pwd = parts.GetValueOrDefault("password", "");
+    
+    return $"Data Source={ds};Initial Catalog={db};User ID={uid};Password={pwd};TrustServerCertificate=True";
+}
+var sqlConnectionString = GetSqlConnectionString();
+
 // Bayii kullanıcı bilgileri
 var bayiiUsername = config["BayiiUsername"] ?? "bayii";
 var bayiiPassword = config["BayiiPassword"] ?? "BusinessSmart4909";
@@ -736,7 +761,7 @@ app.MapPost("/api/license/verify", async (HttpContext context) =>
         if (string.IsNullOrEmpty(licenseKey))
             return Results.Json(new { success = false, message = "License key required" }, statusCode: 400);
 
-        var sqlConnStr = config["SqlConnectionString"] ?? throw new Exception("SqlConnectionString not configured in appsettings.json");
+        var sqlConnStr = sqlConnectionString;
         
         using var conn = new SqlConnection(sqlConnStr);
         await conn.OpenAsync();
@@ -832,7 +857,7 @@ app.MapPost("/api/license/activate", async (HttpContext context) =>
         if (string.IsNullOrEmpty(licenseKey) || string.IsNullOrEmpty(machineId))
             return Results.Json(new { success = false, message = "Lisans anahtarı ve MAC ID gerekli" }, statusCode: 400);
 
-        var sqlConnStr = config["SqlConnectionString"] ?? throw new Exception("SqlConnectionString not configured in appsettings.json");
+        var sqlConnStr = sqlConnectionString;
         
         using var conn = new SqlConnection(sqlConnStr);
         await conn.OpenAsync();
@@ -901,7 +926,7 @@ app.MapGet("/api/license/list", async (HttpContext context) =>
 
     try
     {
-        var sqlConnStr = config["SqlConnectionString"] ?? throw new Exception("SqlConnectionString not configured in appsettings.json");
+        var sqlConnStr = sqlConnectionString;
         
         using var conn = new SqlConnection(sqlConnStr);
         await conn.OpenAsync();
@@ -968,7 +993,7 @@ app.MapGet("/api/license/details", async (HttpContext context) =>
         if (string.IsNullOrEmpty(licenseKey))
             return Results.Json(new { success = false, message = "License key required" }, statusCode: 400);
 
-        var sqlConnStr = config["SqlConnectionString"] ?? throw new Exception("SqlConnectionString not configured in appsettings.json");
+        var sqlConnStr = sqlConnectionString;
         
         using var conn = new SqlConnection(sqlConnStr);
         await conn.OpenAsync();
@@ -1073,7 +1098,7 @@ app.MapGet("/api/license/bayii", async (HttpContext context) =>
             return Results.Json(new { success = false, message = "Bayii ID required" }, statusCode: 400);
 
         // SqlClient bağlantı stringi
-        var sqlConnStr = config["SqlConnectionString"] ?? throw new Exception("SqlConnectionString not configured in appsettings.json");
+        var sqlConnStr = sqlConnectionString;
         
         using var conn = new SqlConnection(sqlConnStr);
         await conn.OpenAsync();
@@ -1384,7 +1409,7 @@ var listenUrl = $"http://0.0.0.0:{port}";
 // ===================================================================
 // AI YARDIMCI ENDPOINTLER (Sistem Ayar, Yetki, Perakende Risk)
 // ===================================================================
-var sqlConnStrUtil = config["SqlConnectionString"] ?? "";
+var sqlConnStrUtil = sqlConnectionString;
 
 // --- Sistem Ayar Sorgula ---
 app.MapGet("/api/sistem/ayar/{ayarKodu}", async (HttpContext context, string ayarKodu) =>
@@ -1497,7 +1522,7 @@ Console.WriteLine("===========================================");
 var aiApiKey = config["AI:ApiKey"] ?? "";
 var aiApiUrl = config["AI:ApiUrl"] ?? "https://api.openai.com/v1/chat/completions";
 var aiModel = config["AI:Model"] ?? "gpt-4o-mini";
-var sqlConnStrAI = config["SqlConnectionString"] ?? "";
+var sqlConnStrAI = sqlConnectionString;
 
 var llmService = new BusinessSmartDesktopAPI.Services.LLMService(aiApiKey, aiApiUrl, aiModel);
 var auditService = new BusinessSmartDesktopAPI.Services.AuditService(sqlConnStrAI);
