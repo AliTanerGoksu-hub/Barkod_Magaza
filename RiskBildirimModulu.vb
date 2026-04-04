@@ -64,6 +64,8 @@ Public Module RiskBildirimModulu
                     maxGecikme = CInt(dr("MaxGecikmeGun"))
                 End If
                 dr.Close()
+                ' Vadesi gecmis, toplam bakiyeyi asamaz (odemeler dusulur)
+                If bakiye > 0 AndAlso vadesiGecmis > bakiye Then vadesiGecmis = bakiye
 
                 cmd.CommandText = sorguQueryFunc("SELECT ISNULL(lKrediLimiti,0) FROM tbFirma WHERE nFirmaID=" & nFirmaID)
                 Dim krediLimiti As Decimal = 0
@@ -143,6 +145,8 @@ Public Module RiskBildirimModulu
                 End If
                 drP.Close()
                 con.Close()
+                ' Vadesi gecmis, toplam borcu asamaz
+                If pToplamBorc > 0 AndAlso pVadesiGecmis > pToplamBorc Then pVadesiGecmis = pToplamBorc
 
                 If pMaxGecikme > 90 Then
                     skor -= 40

@@ -5017,6 +5017,8 @@ Public Class frm_stok_cari_alis
                 maxGecikmeGun = CInt(drRisk("MaxGecikmeGun"))
             End If
             drRisk.Close()
+            ' Vadesi gecmis, toplam bakiyeyi asamaz (odemeler dusulur)
+            If bakiye > 0 AndAlso vadesiGecmis > bakiye Then vadesiGecmis = bakiye
 
             ' Kredi limiti
             cmd.CommandText = sorgu_query("SELECT ISNULL(lKrediLimiti,0) FROM tbFirma WHERE nFirmaID=" & nFid)
