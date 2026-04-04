@@ -7919,6 +7919,8 @@ Public Class frm_firma_kart
         Try
             Me.Cursor = Cursors.WaitCursor
             Dim aiSvc As New AIService()
+            Dim firmaAdi As String = ""
+            Try : firmaAdi = TextEdit4.Text : Catch : End Try
             Dim result As String = aiSvc.RiskAciklamaGetir(CLng(nFirmaID))
 
             ' Parse response fields
