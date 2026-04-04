@@ -170,7 +170,7 @@ Public Module RiskBildirimModulu
             Dim panelMetin As String = If(seviye = "KRITIK", "Onemli bilgi (tikla)", "Bilgi mevcut (tikla)")
 
             Dim pnl As New Panel()
-            pnl.Dock = DockStyle.Top
+            pnl.Dock = DockStyle.Bottom
             pnl.Height = 22
             pnl.BackColor = renk
             pnl.Padding = New Padding(6, 2, 6, 2)
