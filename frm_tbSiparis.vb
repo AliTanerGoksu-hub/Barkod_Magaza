@@ -256,6 +256,13 @@ Public Class frm_tbSiparis
         sorgu_tbStokFisiPesinAdres(dr_baslik("nSiparisTipi"), dr_baslik("lSiparisNo"))
         Dataload_tbFirma(dr_baslik("sKodu"))
         nSiparisTipi = dr_baslik("nSiparisTipi")
+
+        ' === SESSIZ RISK BILDIRIMI (Sadece Alinan Siparis icin) ===
+        Try
+            If nSiparisTipi = 1 Then
+                RiskBildirimModulu.RiskKontrolEkle(Me, connection, CLng(dr_baslik("nFirmaID")), 0, AddressOf sorgu_query)
+            End If
+        Catch : End Try
         ' Adres bilgisini kontrol et ve göster
         Dim kayitsayisi = sorgu_tbAlisVerisAdres_kontrol(dr_baslik("nSiparisTipi"), dr_baslik("lSiparisNo"))
         Debug.WriteLine("Kayıt Sayısı: " & kayitsayisi) ' Hata ayıkla

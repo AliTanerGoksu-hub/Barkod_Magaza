@@ -3930,6 +3930,13 @@ Public Class frm_stok_pesin
         End Try
         yuklendi = True
         satir_info()
+
+        ' === SESSIZ RISK BILDIRIMI (Pesin Satis Musteri) ===
+        Try
+            If CLng(nMusteriID) > 0 Then
+                RiskBildirimModulu.RiskKontrolEkle(Me, connection, 0, CLng(nMusteriID), AddressOf sorgu_query)
+            End If
+        Catch : End Try
         If Trim(dr_baslik("sFisTipi")) = "SK" Or Trim(dr_baslik("sFisTipi")) = "SP" Then
             coldteTeslimEdilecek.Visible = True
         Else

@@ -3597,6 +3597,13 @@ Public Class frm_perakende
         'colMAGAZA.SummaryItem.DisplayFormat = FormatNumber(Math.Abs(lBakiye), 2).ToString
         txt_KartNo.Text = dr_baslik("KartNo")
         txt_nMusteriID.Text = dr_baslik("nMusteriID")
+
+        ' === SESSIZ RISK BILDIRIMI (Perakende Musteri) ===
+        Try
+            If nMusteriID > 0 Then
+                RiskBildirimModulu.RiskKontrolEkle(Me, connection, 0, nMusteriID, AddressOf sorgu_query)
+            End If
+        Catch : End Try
         txt_sMagaza.Text = Trim(dr_baslik("sMagaza"))
         txt_dteKayitTarihi.Text = dr_baslik("dteKayitTarihi")
         txt_sAdi.Text = Trim(dr_baslik("sAdi"))
