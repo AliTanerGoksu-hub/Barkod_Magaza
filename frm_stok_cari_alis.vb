@@ -5042,12 +5042,12 @@ Public Class frm_stok_cari_alis
             Dim anlasmaVade As Integer = 0
             Dim fiiliOrtVade As Decimal = 0
             Try
-                cmdRisk.CommandText = sorgu_query("SELECT ISNULL(nVadeGun, 0) FROM tbFirma WHERE nFirmaID = " & nFirmaID)
-                anlasmaVade = CInt(cmdRisk.ExecuteScalar())
+                cmd.CommandText = sorgu_query("SELECT ISNULL(nVadeGun, 0) FROM tbFirma WHERE nFirmaID = " & nFid)
+                anlasmaVade = CInt(cmd.ExecuteScalar())
             Catch : End Try
             Try
-                cmdRisk.CommandText = sorgu_query("SELECT ISNULL(AVG(DATEDIFF('d', dteIslemTarihi, dteValorTarihi)), 0) FROM tbFirmaHareketi WHERE nFirmaID = " & nFirmaID & " AND lBorcTutar > 0 AND dteIslemTarihi >= DATEADD('m', -12, Now())")
-                fiiliOrtVade = CDec(cmdRisk.ExecuteScalar())
+                cmd.CommandText = sorgu_query("SELECT ISNULL(AVG(DATEDIFF('d', dteIslemTarihi, dteValorTarihi)), 0) FROM tbFirmaHareketi WHERE nFirmaID = " & nFid & " AND lBorcTutar > 0 AND dteIslemTarihi >= DATEADD('m', -12, Now())")
+                fiiliOrtVade = CDec(cmd.ExecuteScalar())
             Catch : End Try
 
             ' Cek/Senet riski
@@ -5055,13 +5055,13 @@ Public Class frm_stok_cari_alis
             Dim cekKarsilisiksiz As Decimal = 0
             Dim cekKarsilisiksizAdet As Integer = 0
             Try
-                cmdRisk.CommandText = sorgu_query("SELECT " & _
+                cmd.CommandText = sorgu_query("SELECT " & _
                     "ISNULL(SUM(IIF(c.nSonCekSenetIslem IN (1,2) AND c.dteVadeTarihi < Now(), c.lTutar, 0)), 0) AS VadesiGecmisCek, " & _
                     "ISNULL(SUM(IIF(c.nSonCekSenetIslem = 6, c.lTutar, 0)), 0) AS KarsilisiksizTutar, " & _
                     "ISNULL(SUM(IIF(c.nSonCekSenetIslem = 6, 1, 0)), 0) AS KarsilisiksizAdet " & _
                     "FROM tbCekSenet c INNER JOIN tbCekSenetBordro b ON c.nCekSenetID = b.nCekSenetID " & _
-                    "WHERE b.nFirmaID = " & nFirmaID & " AND c.sCekSenetTipi IN ('AC','AS') AND b.nBordroSatirID = c.nSonBordroSatirID")
-                Dim drCek As OleDb.OleDbDataReader = cmdRisk.ExecuteReader()
+                    "WHERE b.nFirmaID = " & nFid & " AND c.sCekSenetTipi IN ('AC','AS') AND b.nBordroSatirID = c.nSonBordroSatirID")
+                Dim drCek As OleDb.OleDbDataReader = cmd.ExecuteReader()
                 If drCek.Read() Then
                     cekVadesiGecmis = CDec(drCek("VadesiGecmisCek"))
                     cekKarsilisiksiz = CDec(drCek("KarsilisiksizTutar"))
