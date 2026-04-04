@@ -182,11 +182,8 @@ Public Class frm_AITahsilatAsistani
             lblStatus.Text = "Veri yukleniyor..."
             Application.DoEvents()
 
-            Dim wc As New WebClient()
-            wc.Encoding = System.Text.Encoding.UTF8
-            wc.Headers.Add("X-Api-Key", API_KEY)
-
-            Dim result As String = wc.DownloadString(API_URL & "/api/ai/tahsilat-plani?temsilciId=0")
+            Dim aiSvc As New AIService()
+            Dim result As String = aiSvc.TahsilatPlaniGetir()
 
             ' Parse JSON
             dgvMusteriler.Rows.Clear()

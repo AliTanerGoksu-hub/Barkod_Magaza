@@ -444,11 +444,8 @@ Public Class frm_YoneticiOzetPaneli
     Private Sub GunSonuOzetYukle()
         Try
             Dim tarih As String = DateTime.Today.ToString("yyyy-MM-dd")
-            Dim wc As New WebClient()
-            wc.Encoding = System.Text.Encoding.UTF8
-            wc.Headers.Add("X-Api-Key", API_KEY)
-
-            Dim result As String = wc.DownloadString(API_URL & "/api/ai/gun-sonu-ozet?tarih=" & tarih)
+            Dim aiSvc As New AIService()
+            Dim result As String = aiSvc.GunSonuOzetGetir(tarih)
 
             Dim toplamSatis As String = ParseField(result, "toplamSatis")
             Dim toplamTahsilat As String = ParseField(result, "toplamTahsilat")
@@ -478,11 +475,8 @@ Public Class frm_YoneticiOzetPaneli
 
     Private Sub TahsilatPlaniYukle()
         Try
-            Dim wc As New WebClient()
-            wc.Encoding = System.Text.Encoding.UTF8
-            wc.Headers.Add("X-Api-Key", API_KEY)
-
-            Dim result As String = wc.DownloadString(API_URL & "/api/ai/tahsilat-plani?temsilciId=0")
+            Dim aiSvc4 As New AIService()
+            Dim result As String = aiSvc4.TahsilatPlaniGetir()
 
             dgvOncelikli.Rows.Clear()
 
@@ -561,11 +555,8 @@ Public Class frm_YoneticiOzetPaneli
     Private Sub PerakendeOzetYukle()
         Try
             Dim tarih As String = DateTime.Today.ToString("yyyy-MM-dd")
-            Dim wc As New WebClient()
-            wc.Encoding = System.Text.Encoding.UTF8
-            wc.Headers.Add("X-Api-Key", API_KEY)
-
-            Dim result As String = wc.DownloadString(API_URL & "/api/ai/perakende-ozet?tarih=" & tarih)
+            Dim aiSvc3 As New AIService()
+            Dim result As String = aiSvc3.PerakendeOzetGetir(tarih)
 
             Dim pSatis As String = ParseField(result, "gunlukSatis")
             Dim pTahsilat As String = ParseField(result, "gunlukTahsilat")

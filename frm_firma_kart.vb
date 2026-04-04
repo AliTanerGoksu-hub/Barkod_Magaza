@@ -7918,17 +7918,8 @@ Public Class frm_firma_kart
     Private Sub btnRiskDetay_Click(sender As Object, e As EventArgs)
         Try
             Me.Cursor = Cursors.WaitCursor
-            Dim apiUrl As String = "https://desktop.barkodyazilimevi.com"
-            Dim wc As New System.Net.WebClient()
-            wc.Encoding = System.Text.Encoding.UTF8
-            wc.Headers.Add("Content-Type", "application/json")
-            wc.Headers.Add("X-Api-Key", "BSmart2024Desktop!@#SecureKey")
-
-            Dim firmaAdi As String = ""
-            Try : firmaAdi = TextEdit4.Text.Replace(Chr(34), "'") : Catch : End Try
-
-            Dim jsonData As String = "{""firmaId"":" & nFirmaID & "}"
-            Dim result As String = wc.UploadString(apiUrl & "/api/ai/risk-aciklama", jsonData)
+            Dim aiSvc As New AIService()
+            Dim result As String = aiSvc.RiskAciklamaGetir(CLng(nFirmaID))
 
             ' Parse response fields
             Dim aciklama As String = ParseAIJsonField(result, "aciklama")

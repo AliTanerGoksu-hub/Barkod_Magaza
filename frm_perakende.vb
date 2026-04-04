@@ -5234,14 +5234,8 @@ Public Class frm_perakende
     Private Sub btnPerakendeRiskDetay_Click(sender As Object, e As EventArgs)
         Try
             Me.Cursor = Cursors.WaitCursor
-            Dim apiUrl As String = "https://desktop.barkodyazilimevi.com"
-            Dim wc As New System.Net.WebClient()
-            wc.Encoding = System.Text.Encoding.UTF8
-            wc.Headers.Add("Content-Type", "application/json")
-            wc.Headers.Add("X-Api-Key", "BSmart2024Desktop!@#SecureKey")
-
-            Dim jsonData As String = "{""firmaId"":" & perakende_nMusteriID_risk & "}"
-            Dim result As String = wc.UploadString(apiUrl & "/api/ai/risk-aciklama", jsonData)
+            Dim aiSvc As New AIService()
+            Dim result As String = aiSvc.RiskAciklamaGetir(CLng(perakende_nMusteriID_risk))
 
             Dim aciklama As String = ParsePerakendeAIField(result, "aciklama")
             Dim oneriler As String = ParsePerakendeAIField(result, "oneriler")

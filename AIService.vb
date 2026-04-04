@@ -4139,4 +4139,264 @@ SADECE JSON döndür!"
         End Try
     End Function
     
+
+    ' ============================================================================
+    ' YEREL DB + OPENAI ENTEGRASYON METODLARI
+    ' Desktop API bagimliligi kaldirildi - Direkt DB sorgusu + OpenAI
+    ' ============================================================================
+
+    Public Function RiskAciklamaGetir(nFirmaID As Long) As String
+        Try
+            Dim bakiye As Decimal = 0
+            Dim gecikmisBakiye As Decimal = 0
+            Dim maxGecikme As Integer = 0
+            Dim gecikmisFatura As Integer = 0
+            Dim krediLimiti As Decimal = 0
+            Dim firmaAd As String = ""
+            Dim bekAdet As Integer = 0
+            Dim bekTutar As Decimal = 0
+
+            Using con As New OleDb.OleDbConnection(connection)
+                con.Open()
+                Dim sql As String = "SELECT f.sAciklama, ISNULL(f.lKrediLimiti, 0) AS KrediLimiti, " & _
+                    "ISNULL(SUM(h.lBorcTutar - h.lAlacakTutar), 0) AS Bakiye, " & _
+                    "ISNULL(SUM(IIF(h.lBorcTutar > 0 AND h.dteValorTarihi < Now(), h.lBorcTutar - h.lAlacakTutar, 0)), 0) AS GecikmisBakiye, " & _
+                    "ISNULL(MAX(IIF(h.lBorcTutar > 0 AND h.dteValorTarihi < Now(), DateDiff('d', h.dteValorTarihi, Now()), 0)), 0) AS MaxGecikme, " & _
+                    "ISNULL(SUM(IIF(h.lBorcTutar > 0 AND h.dteValorTarihi < Now(), 1, 0)), 0) AS GecikmisFatura " & _
+                    "FROM tbFirma f LEFT JOIN tbFirmaHareketi h ON f.nFirmaID = h.nFirmaID " & _
+                    "WHERE f.nFirmaID = " & nFirmaID & " GROUP BY f.sAciklama, f.lKrediLimiti"
+                Using cmd As New OleDb.OleDbCommand(sql, con)
+                    Using dr As OleDb.OleDbDataReader = cmd.ExecuteReader()
+                        If dr.Read() Then
+                            firmaAd = Trim(dr("sAciklama").ToString())
+                            krediLimiti = CDec(dr("KrediLimiti"))
+                            bakiye = CDec(dr("Bakiye"))
+                            gecikmisBakiye = CDec(dr("GecikmisBakiye"))
+                            maxGecikme = CInt(dr("MaxGecikme"))
+                            gecikmisFatura = CInt(dr("GecikmisFatura"))
+                        End If
+                    End Using
+                End Using
+                If bakiye > 0 AndAlso gecikmisBakiye > bakiye Then gecikmisBakiye = bakiye
+                Try
+                    Dim sipSql As String = "SELECT COUNT(*) AS Adet, ISNULL(SUM(lTutari),0) AS Tutar FROM tbSiparis WHERE nFirmaID = " & nFirmaID & " AND ISNULL(bKapandimi,0) = 0"
+                    Using sipCmd As New OleDb.OleDbCommand(sipSql, con)
+                        Using sipDr As OleDb.OleDbDataReader = sipCmd.ExecuteReader()
+                            If sipDr.Read() Then : bekAdet = CInt(sipDr("Adet")) : bekTutar = CDec(sipDr("Tutar")) : End If
+                        End Using
+                    End Using
+                Catch : End Try
+            End Using
+
+            Dim skor As Integer = 100
+            If maxGecikme > 90 Then : skor -= 40
+            ElseIf maxGecikme > 60 Then : skor -= 30
+            ElseIf maxGecikme > 30 Then : skor -= 20
+            ElseIf maxGecikme > 0 Then : skor -= 10
+            End If
+            If gecikmisFatura >= 4 Then : skor -= 15 : ElseIf gecikmisFatura >= 2 Then : skor -= 10 : End If
+            If krediLimiti > 0 AndAlso (bakiye + bekTutar) > krediLimiti Then : skor -= 20
+            ElseIf krediLimiti > 0 AndAlso bakiye > 0 AndAlso (bakiye + bekTutar) / krediLimiti > 0.9D Then : skor -= 15
+            End If
+            skor = Math.Max(0, Math.Min(100, skor))
+            Dim seviye As String = If(skor >= 70, "guvenli", If(skor >= 40, "dikkat", "kritik"))
+            Dim aciklama As String = firmaAd & " - Risk Skoru: " & skor & "/100 (" & seviye & ")"
+            If gecikmisBakiye > 0 Then aciklama &= vbLf & "Vadesi gecmis: " & gecikmisBakiye.ToString("N2") & " TL (" & maxGecikme & " gun)"
+            If krediLimiti > 0 AndAlso bakiye > 0 Then aciklama &= vbLf & "Kredi limiti: " & krediLimiti.ToString("N2") & " TL, Kullanim: %" & CInt((bakiye + bekTutar) / krediLimiti * 100)
+            Dim oneriler As String = If(skor < 40, "Satis durdurulmali, tahsilat oncelikli", If(skor < 70, "Dikkatli satis, taksit kisitlanmali", "Normal satis devam edebilir"))
+
+            Dim aiAciklama As String = ""
+            Try
+                Dim prompt As String = "Sen bir ERP risk analiz uzmanisin. Su firma verilerini analiz et ve 3-4 cumlede kisa risk degerlendirmesi yap:" & vbLf & "Firma: " & firmaAd & vbLf & "Risk Skoru: " & skor & "/100" & vbLf & "Bakiye: " & bakiye.ToString("N2") & " TL" & vbLf & "Vadesi Gecmis: " & gecikmisBakiye.ToString("N2") & " TL (" & maxGecikme & " gun)" & vbLf & "Geciken Fatura: " & gecikmisFatura & " adet" & vbLf & "Kredi Limiti: " & krediLimiti.ToString("N2") & " TL" & vbLf & "Bekleyen Siparis: " & bekAdet & " adet (" & bekTutar.ToString("N2") & " TL)" & vbLf & "Turkce yaz, kisa ve net ol."
+                aiAciklama = CallOpenAI(prompt, 300)
+            Catch : End Try
+
+            Dim aiAktif As String = If(Not String.IsNullOrEmpty(openaiApiKey) OrElse Not String.IsNullOrEmpty(emergentApiKey), "true", "false")
+            Return "{" & Chr(34) & "success" & Chr(34) & ":true," & Chr(34) & "firmaId" & Chr(34) & ":" & nFirmaID & "," & Chr(34) & "firmaAd" & Chr(34) & ":" & Chr(34) & firmaAd.Replace(Chr(34), "") & Chr(34) & "," & Chr(34) & "riskSkor" & Chr(34) & ":" & skor & "," & Chr(34) & "seviye" & Chr(34) & ":" & Chr(34) & seviye & Chr(34) & "," & Chr(34) & "aciklama" & Chr(34) & ":" & Chr(34) & aciklama.Replace(Chr(34), "").Replace(vbLf, "
+") & Chr(34) & "," & Chr(34) & "oneriler" & Chr(34) & ":" & Chr(34) & oneriler & Chr(34) & "," & Chr(34) & "aiAciklama" & Chr(34) & ":" & Chr(34) & aiAciklama.Replace(Chr(34), "").Replace(vbCrLf, "
+").Replace(vbLf, "
+") & Chr(34) & "," & Chr(34) & "aiAktif" & Chr(34) & ":" & aiAktif & "," & Chr(34) & "tarih" & Chr(34) & ":" & Chr(34) & DateTime.Now.ToString("dd.MM.yyyy HH:mm") & Chr(34) & "}"
+        Catch ex As Exception
+            Return "{" & Chr(34) & "success" & Chr(34) & ":false," & Chr(34) & "message" & Chr(34) & ":" & Chr(34) & ex.Message.Replace(Chr(34), "") & Chr(34) & "}"
+        End Try
+    End Function
+
+    Public Function GunSonuOzetGetir(tarih As String) As String
+        Try
+            Dim toplamSatis As Decimal = 0
+            Dim fisSayisi As Integer = 0
+            Dim enBuyukSatis As Decimal = 0
+            Dim toplamTahsilat As Decimal = 0
+            Using con As New OleDb.OleDbConnection(connection)
+                con.Open()
+                Dim sql As String = "SELECT ISNULL(SUM(lNetTutar),0) AS ToplamSatis, COUNT(*) AS FisSayisi, ISNULL(MAX(lNetTutar),0) AS EnBuyukSatis FROM tbStokFisiMaster WHERE sFisTipi IN ('FS','FT') AND FORMAT(dteFisTarihi,'yyyy-MM-dd') = '" & tarih & "'"
+                Using cmd As New OleDb.OleDbCommand(sql, con)
+                    Using dr As OleDb.OleDbDataReader = cmd.ExecuteReader()
+                        If dr.Read() Then : toplamSatis = CDec(dr("ToplamSatis")) : fisSayisi = CInt(dr("FisSayisi")) : enBuyukSatis = CDec(dr("EnBuyukSatis")) : End If
+                    End Using
+                End Using
+                Dim tSql As String = "SELECT ISNULL(SUM(lAlacakTutar),0) FROM tbFirmaHareketi WHERE lAlacakTutar > 0 AND FORMAT(dteIslemTarihi,'yyyy-MM-dd') = '" & tarih & "'"
+                Using tCmd As New OleDb.OleDbCommand(tSql, con)
+                    toplamTahsilat = CDec(tCmd.ExecuteScalar())
+                End Using
+            End Using
+            Dim kuralOzet As String = "Tarih: " & tarih & "
+Toplam Satis: " & toplamSatis.ToString("N2") & " TL (" & fisSayisi & " fis)
+Toplam Tahsilat: " & toplamTahsilat.ToString("N2") & " TL
+En Buyuk Satis: " & enBuyukSatis.ToString("N2") & " TL"
+            Dim aiOzet As String = ""
+            Try
+                Dim prompt As String = "Sen bir ERP gun sonu analiz uzmanisin. Su verileri analiz et, kisa ve net ozet yap (3-4 cumle):" & vbLf & "Tarih: " & tarih & vbLf & "Toplam Satis: " & toplamSatis.ToString("N2") & " TL (" & fisSayisi & " fatura)" & vbLf & "Toplam Tahsilat: " & toplamTahsilat.ToString("N2") & " TL" & vbLf & "En Buyuk Satis: " & enBuyukSatis.ToString("N2") & " TL" & vbLf & "Turkce yaz."
+                aiOzet = CallOpenAI(prompt, 300)
+            Catch : End Try
+            Dim aiAktif As String = If(Not String.IsNullOrEmpty(openaiApiKey) OrElse Not String.IsNullOrEmpty(emergentApiKey), "true", "false")
+            Return "{" & Chr(34) & "success" & Chr(34) & ":true," & Chr(34) & "tarih" & Chr(34) & ":" & Chr(34) & tarih & Chr(34) & "," & Chr(34) & "kuralOzet" & Chr(34) & ":" & Chr(34) & kuralOzet & Chr(34) & "," & Chr(34) & "aiOzet" & Chr(34) & ":" & Chr(34) & aiOzet.Replace(Chr(34), "").Replace(vbCrLf, "
+").Replace(vbLf, "
+") & Chr(34) & "," & Chr(34) & "aiAktif" & Chr(34) & ":" & aiAktif & "," & Chr(34) & "toplamSatis" & Chr(34) & ":" & toplamSatis.ToString(Globalization.CultureInfo.InvariantCulture) & "," & Chr(34) & "toplamTahsilat" & Chr(34) & ":" & toplamTahsilat.ToString(Globalization.CultureInfo.InvariantCulture) & "," & Chr(34) & "fisSayisi" & Chr(34) & ":" & fisSayisi & "," & Chr(34) & "enBuyukSatis" & Chr(34) & ":" & enBuyukSatis.ToString(Globalization.CultureInfo.InvariantCulture) & "}"
+        Catch ex As Exception
+            Return "{" & Chr(34) & "success" & Chr(34) & ":false," & Chr(34) & "message" & Chr(34) & ":" & Chr(34) & ex.Message.Replace(Chr(34), "") & Chr(34) & "}"
+        End Try
+    End Function
+
+    Public Function TahsilatPlaniGetir() As String
+        Try
+            Dim liste As New List(Of String)
+            Dim toplamBakiye As Decimal = 0
+            Using con As New OleDb.OleDbConnection(connection)
+                con.Open()
+                Dim sql As String = "SELECT TOP 20 f.nFirmaID, RTRIM(f.sAciklama) AS FirmaAd, RTRIM(ISNULL(f.sIl,'')) AS Il, " & _
+                    "ISNULL(SUM(h.lBorcTutar-h.lAlacakTutar),0) AS Bakiye, " & _
+                    "ISNULL(MAX(IIF(h.lBorcTutar>0 AND h.dteValorTarihi<Now(), DateDiff('d',h.dteValorTarihi,Now()), 0)),0) AS GecikmeGun, " & _
+                    "ISNULL(f.lKrediLimiti,0) AS KrediLimiti " & _
+                    "FROM tbFirma f INNER JOIN tbFirmaHareketi h ON f.nFirmaID=h.nFirmaID " & _
+                    "GROUP BY f.nFirmaID, f.sAciklama, f.sIl, f.lKrediLimiti " & _
+                    "HAVING SUM(h.lBorcTutar-h.lAlacakTutar) > 0 " & _
+                    "ORDER BY MAX(IIF(h.lBorcTutar>0 AND h.dteValorTarihi<Now(), DateDiff('d',h.dteValorTarihi,Now()), 0)) DESC"
+                Using cmd As New OleDb.OleDbCommand(sql, con)
+                    Using dr As OleDb.OleDbDataReader = cmd.ExecuteReader()
+                        Dim sira As Integer = 1
+                        While dr.Read()
+                            Dim bak As Decimal = CDec(dr("Bakiye"))
+                            Dim gec As Integer = CInt(dr("GecikmeGun"))
+                            toplamBakiye += bak
+                            Dim skor As Integer = 100
+                            If gec > 60 Then : skor -= 30 : ElseIf gec > 30 Then : skor -= 20 : ElseIf gec > 0 Then : skor -= 10 : End If
+                            Dim sev As String = If(skor >= 70, "guvenli", If(skor >= 40, "dikkat", "kritik"))
+                            liste.Add("{" & Chr(34) & "firmaId" & Chr(34) & ":" & CInt(dr("nFirmaID")) & "," & Chr(34) & "firmaAd" & Chr(34) & ":" & Chr(34) & dr("FirmaAd").ToString().Replace(Chr(34), "") & Chr(34) & "," & Chr(34) & "il" & Chr(34) & ":" & Chr(34) & dr("Il").ToString().Replace(Chr(34), "") & Chr(34) & "," & Chr(34) & "bakiye" & Chr(34) & ":" & bak.ToString(Globalization.CultureInfo.InvariantCulture) & "," & Chr(34) & "gecikmeGun" & Chr(34) & ":" & gec & "," & Chr(34) & "krediLimiti" & Chr(34) & ":" & CDec(dr("KrediLimiti")).ToString(Globalization.CultureInfo.InvariantCulture) & "," & Chr(34) & "riskSeviye" & Chr(34) & ":" & Chr(34) & sev & Chr(34) & "," & Chr(34) & "oncelik" & Chr(34) & ":" & sira & "}")
+                            sira += 1
+                        End While
+                    End Using
+                End Using
+            End Using
+            Dim musteriSayisi As Integer = liste.Count
+            Dim ozet As String = "Bugun " & liste.Count & " musteriden tahsilat yapilmasi onerilmektedir. Toplam bakiye: " & toplamBakiye.ToString("N2") & " TL."
+            Dim aiOzet As String = ""
+            Try
+                If liste.Count > 0 Then
+                    Dim prompt As String = "Sen bir tahsilat planlama uzmanisin. Su vadesi gecmis musteri listesini analiz et ve oncelik sirasina gore kisa tahsilat plani olustur (5-6 cumle):" & vbLf & "Toplam " & liste.Count & " musteri, " & toplamBakiye.ToString("N2") & " TL bakiye." & vbLf & "Turkce yaz, pratik oneriler ver."
+                    aiOzet = CallOpenAI(prompt, 400)
+                End If
+            Catch : End Try
+            Dim aiAktif As String = If(Not String.IsNullOrEmpty(openaiApiKey) OrElse Not String.IsNullOrEmpty(emergentApiKey), "true", "false")
+            Return "{" & Chr(34) & "success" & Chr(34) & ":true," & Chr(34) & "ozet" & Chr(34) & ":" & Chr(34) & ozet.Replace(Chr(34), "") & Chr(34) & "," & Chr(34) & "aiOzet" & Chr(34) & ":" & Chr(34) & aiOzet.Replace(Chr(34), "").Replace(vbCrLf, "
+").Replace(vbLf, "
+") & Chr(34) & "," & Chr(34) & "aiAktif" & Chr(34) & ":" & aiAktif & "," & Chr(34) & "toplamBakiye" & Chr(34) & ":" & toplamBakiye.ToString(Globalization.CultureInfo.InvariantCulture) & "," & Chr(34) & "musteriSayisi" & Chr(34) & ":" & musteriSayisi & "," & Chr(34) & "liste" & Chr(34) & ":[" & String.Join(",", liste) & "]}"
+        Catch ex As Exception
+            Return "{" & Chr(34) & "success" & Chr(34) & ":false," & Chr(34) & "message" & Chr(34) & ":" & Chr(34) & ex.Message.Replace(Chr(34), "") & Chr(34) & "}"
+        End Try
+    End Function
+
+    Public Function SatisOneriGetir(nFirmaID As Long) As String
+        Try
+            Dim firmaAdi As String = ""
+            Dim oneriler As New List(Of String)
+            Using con As New OleDb.OleDbConnection(connection)
+                con.Open()
+                Using fCmd As New OleDb.OleDbCommand("SELECT RTRIM(sAciklama) FROM tbFirma WHERE nFirmaID = " & nFirmaID, con)
+                    Dim r As Object = fCmd.ExecuteScalar()
+                    If r IsNot Nothing Then firmaAdi = r.ToString()
+                End Using
+                Dim sql As String = "SELECT TOP 20 s.sKodu AS StokKodu, RTRIM(s.sAciklama) AS StokAdi, " & _
+                    "SUM(d.lCikisMiktar1) AS ToplamMiktar, COUNT(DISTINCT m.nStokFisiID) AS SiparisSayisi, " & _
+                    "MAX(m.dteFisTarihi) AS SonSiparisTarih, AVG(d.lCikisFiyat) AS OrtFiyat " & _
+                    "FROM tbStokFisiMaster m INNER JOIN tbStokFisiDetayi d ON m.nStokFisiID=d.nStokFisiID " & _
+                    "INNER JOIN tbStok s ON d.nStokID=s.nStokID " & _
+                    "WHERE m.nFirmaID=" & nFirmaID & " AND m.sFisTipi IN ('FS','FT') AND m.dteFisTarihi>=DATEADD('m',-6,Now()) " & _
+                    "GROUP BY s.sKodu, s.sAciklama ORDER BY COUNT(DISTINCT m.nStokFisiID) DESC, SUM(d.lCikisMiktar1) DESC"
+                Using cmd As New OleDb.OleDbCommand(sql, con)
+                    Using dr As OleDb.OleDbDataReader = cmd.ExecuteReader()
+                        While dr.Read()
+                            Dim sipSay As Integer = CInt(dr("SiparisSayisi"))
+                            Dim neden As String = If(sipSay >= 3, "Duzenli alim yapiyor", If(sipSay >= 2, "Tekrarlayan alim", "Gecmiste almis"))
+                            oneriler.Add("{" & Chr(34) & "stokKodu" & Chr(34) & ":" & Chr(34) & dr("StokKodu").ToString() & Chr(34) & "," & Chr(34) & "stokAdi" & Chr(34) & ":" & Chr(34) & dr("StokAdi").ToString().Replace(Chr(34), "") & Chr(34) & "," & Chr(34) & "toplamMiktar" & Chr(34) & ":" & CDec(dr("ToplamMiktar")).ToString(Globalization.CultureInfo.InvariantCulture) & "," & Chr(34) & "siparisSayisi" & Chr(34) & ":" & sipSay & "," & Chr(34) & "sonSiparisTarih" & Chr(34) & ":" & Chr(34) & CDate(dr("SonSiparisTarih")).ToString("dd.MM.yyyy") & Chr(34) & "," & Chr(34) & "ortFiyat" & Chr(34) & ":" & CDec(dr("OrtFiyat")).ToString(Globalization.CultureInfo.InvariantCulture) & "," & Chr(34) & "neden" & Chr(34) & ":" & Chr(34) & neden & Chr(34) & "}")
+                        End While
+                    End Using
+                End Using
+            End Using
+            Dim aiOneri As String = ""
+            Try
+                If oneriler.Count > 0 Then
+                    Dim prompt As String = "Sen bir satis danismanisin. " & firmaAdi & " firmasinin son 6 aylik satin alma gecmisini analiz et ve satis onerisi ver (4-5 cumle):" & vbLf & "Urunler: " & String.Join(",", oneriler.GetRange(0, Math.Min(5, oneriler.Count))) & vbLf & "Turkce yaz, pratik satis onerileri ver."
+                    aiOneri = CallOpenAI(prompt, 400)
+                End If
+            Catch : End Try
+            Dim aiAktif As String = If(Not String.IsNullOrEmpty(openaiApiKey) OrElse Not String.IsNullOrEmpty(emergentApiKey), "true", "false")
+            Return "{" & Chr(34) & "success" & Chr(34) & ":true," & Chr(34) & "firmaId" & Chr(34) & ":" & nFirmaID & "," & Chr(34) & "firmaAdi" & Chr(34) & ":" & Chr(34) & firmaAdi.Replace(Chr(34), "") & Chr(34) & "," & Chr(34) & "oneriler" & Chr(34) & ":[" & String.Join(",", oneriler) & "]," & Chr(34) & "aiOneri" & Chr(34) & ":" & Chr(34) & aiOneri.Replace(Chr(34), "").Replace(vbCrLf, "
+").Replace(vbLf, "
+") & Chr(34) & "," & Chr(34) & "aiAktif" & Chr(34) & ":" & aiAktif & "}"
+        Catch ex As Exception
+            Return "{" & Chr(34) & "success" & Chr(34) & ":false," & Chr(34) & "message" & Chr(34) & ":" & Chr(34) & ex.Message.Replace(Chr(34), "") & Chr(34) & "}"
+        End Try
+    End Function
+
+    Public Function PerakendeOzetGetir(tarih As String) As String
+        Try
+            Dim pFisSayisi As Integer = 0
+            Dim pToplamSatis As Decimal = 0
+            Dim pToplamTahsilat As Decimal = 0
+            Dim gecikMusteri As Integer = 0
+            Dim gecikenTutar As Decimal = 0
+            Dim aktifMusteri As Integer = 0
+            Using con As New OleDb.OleDbConnection(connection)
+                con.Open()
+                Using cmd1 As New OleDb.OleDbCommand("SELECT COUNT(DISTINCT nAlisverisID) AS FisSayisi, ISNULL(SUM(lNetTutar),0) AS ToplamSatis FROM tbAlisVeris WHERE FORMAT(dteFaturaTarihi,'yyyy-MM-dd') = '" & tarih & "' AND sFisTipi IN ('K','SK','P','SP','KVF','PD','PTX','KS')", con)
+                    Using dr1 As OleDb.OleDbDataReader = cmd1.ExecuteReader()
+                        If dr1.Read() Then : pFisSayisi = CInt(dr1("FisSayisi")) : pToplamSatis = CDec(dr1("ToplamSatis")) : End If
+                    End Using
+                End Using
+                Using cmd2 As New OleDb.OleDbCommand("SELECT ISNULL(SUM(o.lOdemeTutar),0) FROM tbOdeme o INNER JOIN tbAlisVeris a ON o.nAlisverisID = a.nAlisverisID WHERE o.nOdemeKodu = 2 AND FORMAT(o.dteOdemeTarihi,'yyyy-MM-dd') = '" & tarih & "'", con)
+                    pToplamTahsilat = CDec(cmd2.ExecuteScalar())
+                End Using
+                Try
+                    Using cmd3 As New OleDb.OleDbCommand("SELECT COUNT(DISTINCT a.nMusteriID) AS GecikMusteri, ISNULL(SUM(t.lTutari),0) AS GecikenTutar FROM tbTaksit t INNER JOIN tbAlisVeris a ON t.nAlisverisID = a.nAlisverisID WHERE t.dteTarihi < Now() AND t.lTutari > 0", con)
+                        Using dr3 As OleDb.OleDbDataReader = cmd3.ExecuteReader()
+                            If dr3.Read() Then : gecikMusteri = CInt(dr3("GecikMusteri")) : gecikenTutar = CDec(dr3("GecikenTutar")) : End If
+                        End Using
+                    End Using
+                Catch : End Try
+                Try
+                    Using cmd4 As New OleDb.OleDbCommand("SELECT COUNT(DISTINCT nMusteriID) FROM tbAlisVeris WHERE dteFaturaTarihi >= DATEADD('d', -90, Now())", con)
+                        aktifMusteri = CInt(cmd4.ExecuteScalar())
+                    End Using
+                Catch : End Try
+            End Using
+            Dim kuralOzet As String = "Tarih: " & tarih & "
+Perakende Satis: " & pToplamSatis.ToString("N2") & " TL (" & pFisSayisi & " fis)
+Perakende Tahsilat: " & pToplamTahsilat.ToString("N2") & " TL
+Geciken: " & gecikMusteri & " musteri, " & gecikenTutar.ToString("N2") & " TL
+Aktif Musteri (90 gun): " & aktifMusteri
+            Dim aiOzet As String = ""
+            Try
+                Dim prompt As String = "Sen bir perakende analiz uzmanisin. Su verileri analiz et ve kisa ozet yap (3-4 cumle):" & vbLf & "Tarih: " & tarih & vbLf & "Perakende Satis: " & pToplamSatis.ToString("N2") & " TL (" & pFisSayisi & " fis)" & vbLf & "Tahsilat: " & pToplamTahsilat.ToString("N2") & " TL" & vbLf & "Geciken Musteri: " & gecikMusteri & ", Geciken Tutar: " & gecikenTutar.ToString("N2") & " TL" & vbLf & "Aktif Musteri (90 gun): " & aktifMusteri & vbLf & "Turkce yaz."
+                aiOzet = CallOpenAI(prompt, 300)
+            Catch : End Try
+            Dim aiAktif As String = If(Not String.IsNullOrEmpty(openaiApiKey) OrElse Not String.IsNullOrEmpty(emergentApiKey), "true", "false")
+            Return "{" & Chr(34) & "success" & Chr(34) & ":true," & Chr(34) & "tarih" & Chr(34) & ":" & Chr(34) & tarih & Chr(34) & "," & Chr(34) & "kuralOzet" & Chr(34) & ":" & Chr(34) & kuralOzet & Chr(34) & "," & Chr(34) & "aiOzet" & Chr(34) & ":" & Chr(34) & aiOzet.Replace(Chr(34), "").Replace(vbCrLf, "
+").Replace(vbLf, "
+") & Chr(34) & "," & Chr(34) & "aiAktif" & Chr(34) & ":" & aiAktif & "," & Chr(34) & "pFisSayisi" & Chr(34) & ":" & pFisSayisi & "," & Chr(34) & "pToplamSatis" & Chr(34) & ":" & pToplamSatis.ToString(Globalization.CultureInfo.InvariantCulture) & "," & Chr(34) & "pToplamTahsilat" & Chr(34) & ":" & pToplamTahsilat.ToString(Globalization.CultureInfo.InvariantCulture) & "," & Chr(34) & "gecikMusteri" & Chr(34) & ":" & gecikMusteri & "," & Chr(34) & "gecikenTutar" & Chr(34) & ":" & gecikenTutar.ToString(Globalization.CultureInfo.InvariantCulture) & "," & Chr(34) & "aktifMusteri" & Chr(34) & ":" & aktifMusteri & "}"
+        Catch ex As Exception
+            Return "{" & Chr(34) & "success" & Chr(34) & ":false," & Chr(34) & "message" & Chr(34) & ":" & Chr(34) & ex.Message.Replace(Chr(34), "") & Chr(34) & "}"
+        End Try
+    End Function
+
 End Class

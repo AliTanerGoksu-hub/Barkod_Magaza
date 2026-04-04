@@ -176,13 +176,8 @@ Public Class frm_AISatisOneri
             lblStatus.Text = "Oneri yukleniyor..."
             Application.DoEvents()
 
-            Dim wc As New WebClient()
-            wc.Encoding = System.Text.Encoding.UTF8
-            wc.Headers.Add("Content-Type", "application/json")
-            wc.Headers.Add("X-Api-Key", API_KEY)
-
-            Dim jsonData As String = "{""firmaId"":" & nFirmaID & "}"
-            Dim result As String = wc.UploadString(API_URL & "/api/ai/satis-oneri", jsonData)
+            Dim aiSvc As New AIService()
+            Dim result As String = aiSvc.SatisOneriGetir(CLng(nFirmaID))
 
             dgvOneriler.Rows.Clear()
 

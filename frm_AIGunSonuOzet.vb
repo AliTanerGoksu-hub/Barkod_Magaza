@@ -189,11 +189,8 @@ Public Class frm_AIGunSonuOzet
             Application.DoEvents()
 
             Dim tarih As String = dtpTarih.Value.ToString("yyyy-MM-dd")
-            Dim wc As New WebClient()
-            wc.Encoding = System.Text.Encoding.UTF8
-            wc.Headers.Add("X-Api-Key", API_KEY)
-
-            Dim result As String = wc.DownloadString(API_URL & "/api/ai/gun-sonu-ozet?tarih=" & tarih)
+            Dim aiSvc As New AIService()
+            Dim result As String = aiSvc.GunSonuOzetGetir(tarih)
 
             Dim toplamSatis As String = ParseField(result, "toplamSatis")
             Dim toplamTahsilat As String = ParseField(result, "toplamTahsilat")
