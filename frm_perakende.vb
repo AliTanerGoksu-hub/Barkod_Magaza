@@ -5182,6 +5182,27 @@ Public Class frm_perakende
                 btnPerakendeRiskDetay.Cursor = Cursors.Hand
                 AddHandler btnPerakendeRiskDetay.Click, AddressOf btnPerakendeRiskDetay_Click
 
+                Dim btnPerakendeSatisOneri As New Button()
+                btnPerakendeSatisOneri.Text = "Oneri"
+                btnPerakendeSatisOneri.FlatStyle = FlatStyle.Flat
+                btnPerakendeSatisOneri.FlatAppearance.BorderColor = Color.White
+                btnPerakendeSatisOneri.FlatAppearance.BorderSize = 1
+                btnPerakendeSatisOneri.ForeColor = Color.White
+                btnPerakendeSatisOneri.BackColor = Color.Transparent
+                btnPerakendeSatisOneri.Font = New Font("Segoe UI", 7, FontStyle.Bold)
+                btnPerakendeSatisOneri.Size = New Size(50, 24)
+                btnPerakendeSatisOneri.Dock = DockStyle.Right
+                btnPerakendeSatisOneri.Cursor = Cursors.Hand
+                AddHandler btnPerakendeSatisOneri.Click, Sub()
+                                                            Try
+                                                                Dim frm As New frm_AISatisOneri(perakende_nMusteriID_risk, "Perakende Musteri")
+                                                                frm.Show()
+                                                            Catch ex As Exception
+                                                                MessageBox.Show("Satis Oneri formu acilamadi: " & ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                                                            End Try
+                                                        End Sub
+
+                pnlPerakendeRisk.Controls.Add(btnPerakendeSatisOneri)
                 pnlPerakendeRisk.Controls.Add(btnPerakendeRiskDetay)
                 pnlPerakendeRisk.Controls.Add(lblPerakendeRisk)
                 Me.Controls.Add(pnlPerakendeRisk)
