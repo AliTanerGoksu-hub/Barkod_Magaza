@@ -81,6 +81,18 @@ Public Module RiskBildirimModulu
                 End If
                 drSip.Close()
 
+                ' Ortalama vade hesabi
+                Dim anlasmaVade As Integer = 0
+                Dim fiiliOrtVade As Decimal = 0
+                Try
+                    cmd.CommandText = sorguQueryFunc("SELECT ISNULL(nVadeGun, 0) FROM tbFirma WHERE nFirmaID = " & nFirmaID)
+                    anlasmaVade = CInt(cmd.ExecuteScalar())
+                Catch : End Try
+                Try
+                    cmd.CommandText = sorguQueryFunc("SELECT ISNULL(AVG(DATEDIFF('d', dteIslemTarihi, dteValorTarihi)), 0) FROM tbFirmaHareketi WHERE nFirmaID = " & nFirmaID & " AND lBorcTutar > 0 AND dteIslemTarihi >= DATEADD('m', -12, Now())")
+                    fiiliOrtVade = CDec(cmd.ExecuteScalar())
+                Catch : End Try
+
                 ' Cek/Senet riski
                 Dim cekVadesiGecmis As Decimal = 0
                 Dim cekKarsilisiksiz As Decimal = 0
@@ -112,6 +124,12 @@ Public Module RiskBildirimModulu
                 ElseIf maxGecikme > 0 Then
                     skor -= 10
                 End If
+                ' Ortalama vade skor etkisi
+                If anlasmaVade > 0 AndAlso fiiliOrtVade > anlasmaVade * 1.5 Then
+                    skor -= 15
+                ElseIf anlasmaVade > 0 AndAlso fiiliOrtVade > anlasmaVade Then
+                    skor -= 10
+                End If
                 ' Cek/Senet skor etkisi
                 If cekKarsilisiksizAdet > 0 Then skor -= 25
                 If cekVadesiGecmis > 0 Then skor -= 15
@@ -133,6 +151,7 @@ Public Module RiskBildirimModulu
                 If vadesiGecmis > 0 Then detayMetin &= "Vadesi Gecmis: " & vadesiGecmis.ToString("N2") & " TL (" & maxGecikme & " gun)" & vbCrLf
                 If krediLimiti > 0 Then detayMetin &= "Limit Kullanim: %" & Math.Round(bakiye / krediLimiti * 100, 0) & vbCrLf
                 If bekAdet > 0 Then detayMetin &= "Bekleyen Siparis: " & bekAdet & " adet" & vbCrLf
+                detayMetin &= "Ort. Vade: " & CInt(fiiliOrtVade) & " gun (Anlasma: " & anlasmaVade & " gun)" & vbCrLf
                 If cekVadesiGecmis > 0 Then detayMetin &= "Vadesi Gecmis Cek/Senet: " & cekVadesiGecmis.ToString("N2") & " TL" & vbCrLf
                 If cekKarsilisiksizAdet > 0 Then detayMetin &= "KARSILIKIZSIZ CEK: " & cekKarsilisiksiz.ToString("N2") & " TL (" & cekKarsilisiksizAdet & " adet)" & vbCrLf
 

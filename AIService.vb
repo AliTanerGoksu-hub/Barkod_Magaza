@@ -4178,6 +4178,23 @@ SADECE JSON döndür!"
                     End Using
                 End Using
                 If bakiye > 0 AndAlso gecikmisBakiye > bakiye Then gecikmisBakiye = bakiye
+
+                ' Ortalama vade hesabi
+                Dim anlasmaVade As Integer = 0
+                Dim fiiliOrtVade As Decimal = 0
+                Try
+                    Using vadeCmd As New OleDb.OleDbCommand("SELECT ISNULL(nVadeGun, 0) FROM tbFirma WHERE nFirmaID = " & nFirmaID, con)
+                        anlasmaVade = CInt(vadeCmd.ExecuteScalar())
+                    End Using
+                Catch : End Try
+                Try
+                    Dim vadeSql As String = "SELECT ISNULL(AVG(DATEDIFF('d', dteIslemTarihi, dteValorTarihi)), 0) AS FiiliVade " & _
+                        "FROM tbFirmaHareketi WHERE nFirmaID = " & nFirmaID & " AND lBorcTutar > 0 AND dteIslemTarihi >= DATEADD('m', -12, Now())"
+                    Using vadeCmd2 As New OleDb.OleDbCommand(vadeSql, con)
+                        fiiliOrtVade = CDec(vadeCmd2.ExecuteScalar())
+                    End Using
+                Catch : End Try
+
                 Try
                     Dim sipSql As String = "SELECT COUNT(*) AS Adet, ISNULL(SUM(lTutari),0) AS Tutar FROM tbSiparis WHERE nFirmaID = " & nFirmaID & " AND ISNULL(bKapandimi,0) = 0"
                     Using sipCmd As New OleDb.OleDbCommand(sipSql, con)
@@ -4233,6 +4250,7 @@ SADECE JSON döndür!"
             Dim aciklama As String = firmaAd & " - Risk Skoru: " & skor & "/100 (" & seviye & ")"
             If gecikmisBakiye > 0 Then aciklama &= vbLf & "Vadesi gecmis: " & gecikmisBakiye.ToString("N2") & " TL (" & maxGecikme & " gun)"
             If krediLimiti > 0 AndAlso bakiye > 0 Then aciklama &= vbLf & "Kredi limiti: " & krediLimiti.ToString("N2") & " TL, Kullanim: %" & CInt((bakiye + bekTutar) / krediLimiti * 100)
+            aciklama &= vbLf & "Ortalama Vade: " & CInt(fiiliOrtVade) & " gun (Anlasma: " & anlasmaVade & " gun)"
             If cekPortfoy > 0 Then aciklama &= vbLf & "Portfoydeki cek/senet: " & cekPortfoy.ToString("N2") & " TL"
             If cekVadesiGecmis > 0 Then aciklama &= vbLf & "Vadesi gecmis cek/senet: " & cekVadesiGecmis.ToString("N2") & " TL"
             If cekKarsilisiksiz > 0 Then aciklama &= vbLf & "KARSILIKIZSIZ CEK: " & cekKarsilisiksiz.ToString("N2") & " TL (" & cekKarsilisiksizAdet & " adet)"
@@ -4240,7 +4258,7 @@ SADECE JSON döndür!"
 
             Dim aiAciklama As String = ""
             Try
-                Dim prompt As String = "Sen bir ERP risk analiz uzmanisin. Su firma verilerini analiz et ve 3-4 cumlede kisa risk degerlendirmesi yap:" & vbLf & "Firma: " & firmaAd & vbLf & "Risk Skoru: " & skor & "/100" & vbLf & "Bakiye: " & bakiye.ToString("N2") & " TL" & vbLf & "Vadesi Gecmis: " & gecikmisBakiye.ToString("N2") & " TL (" & maxGecikme & " gun)" & vbLf & "Geciken Fatura: " & gecikmisFatura & " adet" & vbLf & "Kredi Limiti: " & krediLimiti.ToString("N2") & " TL" & vbLf & "Bekleyen Siparis: " & bekAdet & " adet (" & bekTutar.ToString("N2") & " TL)" & vbLf & "Portfoydeki Cek/Senet: " & cekPortfoy.ToString("N2") & " TL" & vbLf & "Vadesi Gecmis Cek: " & cekVadesiGecmis.ToString("N2") & " TL" & vbLf & "Karsilikizsiz Cek: " & cekKarsilisiksiz.ToString("N2") & " TL (" & cekKarsilisiksizAdet & " adet)" & vbLf & "Turkce yaz, kisa ve net ol."
+                Dim prompt As String = "Sen bir ERP risk analiz uzmanisin. Su firma verilerini analiz et ve 3-4 cumlede kisa risk degerlendirmesi yap:" & vbLf & "Firma: " & firmaAd & vbLf & "Risk Skoru: " & skor & "/100" & vbLf & "Bakiye: " & bakiye.ToString("N2") & " TL" & vbLf & "Vadesi Gecmis: " & gecikmisBakiye.ToString("N2") & " TL (" & maxGecikme & " gun)" & vbLf & "Geciken Fatura: " & gecikmisFatura & " adet" & vbLf & "Kredi Limiti: " & krediLimiti.ToString("N2") & " TL" & vbLf & "Bekleyen Siparis: " & bekAdet & " adet (" & bekTutar.ToString("N2") & " TL)" & vbLf & "Ortalama Vade: " & CInt(fiiliOrtVade) & " gun (Anlasma vadesi: " & anlasmaVade & " gun)" & vbLf & "Portfoydeki Cek/Senet: " & cekPortfoy.ToString("N2") & " TL" & vbLf & "Vadesi Gecmis Cek: " & cekVadesiGecmis.ToString("N2") & " TL" & vbLf & "Karsilikizsiz Cek: " & cekKarsilisiksiz.ToString("N2") & " TL (" & cekKarsilisiksizAdet & " adet)" & vbLf & "Turkce yaz, kisa ve net ol."
                 aiAciklama = CallOpenAI(prompt, 300)
             Catch : End Try
 
