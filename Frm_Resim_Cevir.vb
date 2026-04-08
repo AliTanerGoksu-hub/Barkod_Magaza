@@ -203,7 +203,7 @@ Module Frm_Resim_Cevir
                                 Dim base64FromDb As String = GetBase64FromDb(sModel)
                                 If Not String.IsNullOrEmpty(base64FromDb) Then
                                     Try
-                                        Dim bytes As Byte() = Convert.FromBase64String(CleanBase64(base64FromDb))
+                                        Dim bytes As Byte() = DecodeImageData(base64FromDb)
                                         File.WriteAllBytes(tempPath, bytes)
                                         indirmeBasarili = True
                                         Log("[DB] StokID=" & nStokResimID.ToString() & " Model=" & sModel & " Base64'ten alindi")
@@ -378,7 +378,7 @@ Private Async Function Migrate_tbStokResim(localFolder As String, firmaKlasor As
                                 Dim tempPath As String = Path.Combine(localFolder, fileName)
                                 
                                 ' Base64'ten dosya oluştur
-                                Dim bytes As Byte() = Convert.FromBase64String(CleanBase64(base64Existing))
+                                Dim bytes As Byte() = DecodeImageData(base64Existing)
                                 File.WriteAllBytes(tempPath, bytes)
                                 
                                 ' R2'ye upload
@@ -798,6 +798,29 @@ End Sub
         ep.Param(0) = New Imaging.EncoderParameter(Imaging.Encoder.Quality, quality)
         img.Save(path, enc, ep)
     End Sub
+
+    ''' <summary>
+    ''' pResim verisini byte dizisine çevirir (Hex veya Base64 otomatik algılar)
+    ''' </summary>
+    Private Function DecodeImageData(data As String) As Byte()
+        If String.IsNullOrEmpty(data) Then Return Nothing
+        
+        data = data.Trim()
+        
+        ' Hex format: 0x veya 0X ile başlar
+        If data.StartsWith("0x", StringComparison.OrdinalIgnoreCase) Then
+            Dim hex As String = data.Substring(2)
+            Dim bytes(hex.Length \ 2 - 1) As Byte
+            For i As Integer = 0 To bytes.Length - 1
+                bytes(i) = Convert.ToByte(hex.Substring(i * 2, 2), 16)
+            Next
+            Return bytes
+        End If
+        
+        ' Base64 format
+        Return Convert.FromBase64String(CleanBase64(data))
+    End Function
+
 
     Private Function CleanBase64(s As String) As String
         If String.IsNullOrEmpty(s) Then Return ""
