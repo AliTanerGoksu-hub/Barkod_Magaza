@@ -145,11 +145,11 @@ Module Frm_Resim_Cevir
         Using con As New OleDbConnection(connection)
             Using cmd As OleDbCommand = con.CreateCommand()
                 ' YENİ YAPI: tbStokEticaretResim artık nSira bazlı (her resim ayrı satır)
-                cmd.CommandTimeout = 300 ' 5 dakika timeout
+                cmd.CommandTimeout = 300
                 cmd.CommandText =
-                    "SELECT nStokResimID, sModel, nSira, ISNULL(yol,'') AS yol, pResim " &
+                    "SELECT nStokResimID, sModel, nSira, ISNULL(yol,'') AS yol " &
                     "FROM tbStokResmi WITH (NOLOCK) " &
-                    "WHERE (yol IS NOT NULL AND yol <> '' AND yol <> '.') OR (pResim IS NOT NULL AND LEN(pResim) > 100) " &
+                    "WHERE (yol IS NOT NULL AND yol <> '' AND yol <> '.') OR (pResim IS NOT NULL) " &
                     "ORDER BY sModel, nSira"
 
                 con.Open()
@@ -198,9 +198,9 @@ Module Frm_Resim_Cevir
                                 End If
                             End If
                             
-                            ' 2) Lokal yoksa ayni satirdaki pResim Base64'ten al
+                            ' 2) Lokal yoksa DB'den Base64 dene (tbStokResmi.pResim - tek satir sorgusu)
                             If Not indirmeBasarili Then
-                                Dim base64FromDb As String = SafeGetStr(rd, "pResim")
+                                Dim base64FromDb As String = GetBase64FromDb(sModel)
                                 If Not String.IsNullOrEmpty(base64FromDb) Then
                                     Try
                                         Dim bytes As Byte() = Convert.FromBase64String(CleanBase64(base64FromDb))
@@ -808,7 +808,7 @@ End Sub
     Private Function GetBase64FromDb(sModel As String) As String
         Try
             Using con As New OleDbConnection(connection)
-                Using cmd As New OleDbCommand("SELECT TOP 1 pResim FROM tbStokResim WITH (NOLOCK) WHERE sModel = ? AND pResim IS NOT NULL AND LEN(pResim) > 100", con)
+                Using cmd As New OleDbCommand("SELECT TOP 1 pResim FROM tbStokResmi WITH (NOLOCK) WHERE sModel = ? AND pResim IS NOT NULL", con)
                     cmd.Parameters.Add("p0", OleDbType.VarChar, 50).Value = sModel
                     con.Open()
                     Dim result = cmd.ExecuteScalar()
