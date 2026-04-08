@@ -112,7 +112,7 @@ Module Frm_Resim_Cevir
             Log("Geçici klasör: " & localFolder)
 
             ' 1) tbStokEticaretResim'den FTP URL'leri işle (ÖNCE BU)
-            Await Migrate_tbStokEticaretResim(localFolder, firmaKlasor)
+            Await Migrate_tbStokResmi(localFolder, firmaKlasor)
 
             ' 2) tbStokResim'deki Base64 resimleri işle (varsa)
             Await Migrate_tbStokResim(localFolder, firmaKlasor)
@@ -139,16 +139,16 @@ Module Frm_Resim_Cevir
     ' =========================================================
     '          tbStokEticaretResim (FTP URL'LER - ÖNCELİKLİ)
     ' =========================================================
-    Private Async Function Migrate_tbStokEticaretResim(localFolder As String, firmaKlasor As String) As Task
-        Log("[tbStokEticaretResim] FTP URL'leri işleniyor...")
+    Private Async Function Migrate_tbStokResmi(localFolder As String, firmaKlasor As String) As Task
+        Log("[tbStokResmi] FTP URL'leri işleniyor...")
 
         Using con As New OleDbConnection(connection)
             Using cmd As OleDbCommand = con.CreateCommand()
                 ' YENİ YAPI: tbStokEticaretResim artık nSira bazlı (her resim ayrı satır)
                 cmd.CommandText =
-                    "SELECT nStokResimID, sModel, nSira, ISNULL(yol,'') AS yol " &
-                    "FROM tbStokEticaretResim WITH (NOLOCK) " &
-                    "WHERE yol IS NOT NULL AND yol <> '' " &
+                    "SELECT nStokResimID, sModel, nSira, ISNULL(yol,'') AS yol, pResim " &
+                    "FROM tbStokResmi WITH (NOLOCK) " &
+                    "WHERE (yol IS NOT NULL AND yol <> '' AND yol <> '.') OR (pResim IS NOT NULL AND LEN(pResim) > 100) " &
                     "ORDER BY sModel, nSira"
 
                 con.Open()
@@ -197,9 +197,9 @@ Module Frm_Resim_Cevir
                                 End If
                             End If
                             
-                            ' 2) Lokal yoksa DB'den Base64 dene (tbStokResim.pResim)
+                            ' 2) Lokal yoksa ayni satirdaki pResim Base64'ten al
                             If Not indirmeBasarili Then
-                                Dim base64FromDb As String = GetBase64FromDb(sModel)
+                                Dim base64FromDb As String = SafeGetStr(rd, "pResim")
                                 If Not String.IsNullOrEmpty(base64FromDb) Then
                                     Try
                                         Dim bytes As Byte() = Convert.FromBase64String(CleanBase64(base64FromDb))
@@ -261,7 +261,7 @@ Module Frm_Resim_Cevir
                             Log("[HATA] ResimID=" & nStokResimID.ToString() & " Model=" & sModel & " Sira=" & nSira.ToString() & " URL=" & yolUrl & ": " & ex.Message)
                         End Try
                     End While
-                    Log("[tbStokEticaretResim] Tamamlandı. Toplam: " & processedCount.ToString() & " resim")
+                    Log("[tbStokResmi] Tamamlandı. Toplam: " & processedCount.ToString() & " resim")
                 End Using
             End Using
         End Using
