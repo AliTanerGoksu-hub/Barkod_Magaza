@@ -179,8 +179,25 @@ Module Frm_Resim_Cevir
                             Dim tempPath As String = Path.Combine(localFolder, "_tmp_" & nStokResimID.ToString() & "_" & nSira.ToString() & ".bin")
                             Dim localPath As String = Path.Combine(LOCAL_RESIM_ROOT, fileName)
 
-                            ' FTP/HTTP'den indir
-                            If Not TryDownloadHttpThenFtp(yolUrl, tempPath, firmaKlasor) Then
+                            ' Önce HTTP/FTP'den indir, başarısızsa DB'deki Base64'ten al
+                            Dim indirmeBasarili As Boolean = TryDownloadHttpThenFtp(yolUrl, tempPath, firmaKlasor)
+                            
+                            If Not indirmeBasarili Then
+                                ' DB'den Base64 dene (tbStokResim.pResim)
+                                Dim base64FromDb As String = GetBase64FromDb(sModel)
+                                If Not String.IsNullOrEmpty(base64FromDb) Then
+                                    Try
+                                        Dim bytes As Byte() = Convert.FromBase64String(CleanBase64(base64FromDb))
+                                        File.WriteAllBytes(tempPath, bytes)
+                                        indirmeBasarili = True
+                                        Log("[DB] StokID=" & nStokResimID.ToString() & " Model=" & sModel & " Base64'ten alindi")
+                                    Catch exB64 As Exception
+                                        Log("[DB HATA] StokID=" & nStokResimID.ToString() & " Base64 decode: " & exB64.Message)
+                                    End Try
+                                End If
+                            End If
+                            
+                            If Not indirmeBasarili Then
                                 Log("[SKIP] StokID=" & nStokResimID.ToString() & " Sira=" & nSira.ToString() & " indirilemedi: " & yolUrl)
                                 Continue While
                             End If
@@ -763,6 +780,27 @@ End Sub
         If String.IsNullOrEmpty(s) Then Return ""
         Return s.Replace(vbCr, "").Replace(vbLf, "").Replace(" ", "")
     End Function
+
+    ''' <summary>
+    ''' sModel'e göre tbStokResim'den Base64 resim verisini getirir
+    ''' </summary>
+    Private Function GetBase64FromDb(sModel As String) As String
+        Try
+            Using con As New OleDbConnection(connection)
+                Using cmd As New OleDbCommand("SELECT TOP 1 pResim FROM tbStokResim WITH (NOLOCK) WHERE sModel = ? AND pResim IS NOT NULL AND LEN(pResim) > 100", con)
+                    cmd.Parameters.Add("p0", OleDbType.VarChar, 50).Value = sModel
+                    con.Open()
+                    Dim result = cmd.ExecuteScalar()
+                    If result IsNot Nothing AndAlso Not IsDBNull(result) Then
+                        Return Convert.ToString(result)
+                    End If
+                End Using
+            End Using
+        Catch
+        End Try
+        Return ""
+    End Function
+
 
     Private Function SafeGetStr(rd As IDataRecord, col As String) As String
         Dim ix As Integer = rd.GetOrdinal(col)
