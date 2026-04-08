@@ -56,7 +56,7 @@ Module Frm_Resim_Cevir
     ' Bu migration tool ESKİ SİSTEMDEN YENİ SİSTEME GEÇİŞ İÇİN kullanılır.
     ' 
     ' ESKİ SİSTEM (2 tablo):
-    ' - tbStokResim: Base64 resimler (pResim kolonunda)
+    ' - tbStokResmi: varbinary(MAX) resimler (pResim kolonunda - binary veri)
     '
     ' YENİ SİSTEM (1 tablo):
     ' - tbStokResim: Sadece R2 URL'leri (yol kolonunda), her resim ayrı satır
@@ -198,17 +198,16 @@ Module Frm_Resim_Cevir
                                 End If
                             End If
                             
-                            ' 2) Lokal yoksa DB'den Base64 dene (tbStokResmi.pResim - tek satir sorgusu)
+                            ' 2) Lokal yoksa DB'den varbinary dene (tbStokResmi.pResim - tek satir sorgusu)
                             If Not indirmeBasarili Then
-                                Dim base64FromDb As String = GetBase64FromDb(sModel)
-                                If Not String.IsNullOrEmpty(base64FromDb) Then
+                                Dim bytesFromDb As Byte() = GetImageBytesFromDb(sModel)
+                                If bytesFromDb IsNot Nothing AndAlso bytesFromDb.Length > 0 Then
                                     Try
-                                        Dim bytes As Byte() = DecodeImageData(base64FromDb)
-                                        File.WriteAllBytes(tempPath, bytes)
+                                        File.WriteAllBytes(tempPath, bytesFromDb)
                                         indirmeBasarili = True
-                                        Log("[DB] StokID=" & nStokResimID.ToString() & " Model=" & sModel & " Base64'ten alindi")
-                                    Catch exB64 As Exception
-                                        Log("[DB HATA] StokID=" & nStokResimID.ToString() & " Base64 decode: " & exB64.Message)
+                                        Log("[DB] StokID=" & nStokResimID.ToString() & " Model=" & sModel & " varbinary'den alindi (" & bytesFromDb.Length.ToString() & " bytes)")
+                                    Catch exDb As Exception
+                                        Log("[DB HATA] StokID=" & nStokResimID.ToString() & " varbinary yazma: " & exDb.Message)
                                     End Try
                                 End If
                             End If
@@ -828,9 +827,10 @@ End Sub
     End Function
 
     ''' <summary>
-    ''' sModel'e göre tbStokResim'den Base64 resim verisini getirir
+    ''' sModel'e gore tbStokResmi'den resim verisini byte dizisi olarak getirir.
+    ''' pResim kolonu varbinary(MAX) oldugu icin OleDb Byte() dondurur.
     ''' </summary>
-    Private Function GetBase64FromDb(sModel As String) As String
+    Private Function GetImageBytesFromDb(sModel As String) As Byte()
         Try
             Using con As New OleDbConnection(connection)
                 Using cmd As New OleDbCommand("SELECT TOP 1 pResim FROM tbStokResmi WITH (NOLOCK) WHERE RTRIM(sModel) = ? AND pResim IS NOT NULL AND DATALENGTH(pResim) > 200", con)
@@ -839,16 +839,21 @@ End Sub
                     con.Open()
                     Dim result = cmd.ExecuteScalar()
                     If result IsNot Nothing AndAlso Not IsDBNull(result) Then
+                        ' varbinary(MAX) dogrudan Byte() doner
+                        If TypeOf result Is Byte() Then
+                            Return CType(result, Byte())
+                        End If
+                        ' Bazi tablolarda string olabilir (nvarchar/text)
                         Dim val As String = Convert.ToString(result).Trim()
-                        ' Dosya yolu ise Base64 değil - atla
-                        If val.Contains(":\") OrElse val.StartsWith("\\") OrElse val.StartsWith("http") Then Return ""
-                        Return val
+                        If val.Contains(":\") OrElse val.StartsWith("\\") OrElse val.StartsWith("http") Then Return Nothing
+                        If String.IsNullOrEmpty(val) OrElse val.Length < 10 Then Return Nothing
+                        Return DecodeImageData(val)
                     End If
                 End Using
             End Using
         Catch
         End Try
-        Return ""
+        Return Nothing
     End Function
 
 
