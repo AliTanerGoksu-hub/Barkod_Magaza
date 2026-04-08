@@ -157,10 +157,10 @@ Module Frm_Resim_Cevir
                     Dim processedCount As Integer = 0
 
                     While rd.Read()
-                        Dim nStokResimID As String = SafeGetStr(rd, "nStokResimID")
-                        Dim sModel As String = SafeGetStr(rd, "sModel")
+                        Dim nStokResimID As String = SafeGetStr(rd, "nStokResimID").Trim()
+                        Dim sModel As String = SafeGetStr(rd, "sModel").Trim()
                         Dim nSira As Integer = SafeGetInt(rd, "nSira")
-                        Dim yolUrl As String = SafeGetStr(rd, "yol")
+                        Dim yolUrl As String = SafeGetStr(rd, "yol").Trim()
 
                         ' Güvenlik kontrolü: sModel boş olabilir
                         If String.IsNullOrEmpty(sModel) Then
@@ -213,8 +213,10 @@ Module Frm_Resim_Cevir
                                 End If
                             End If
                             
-                            ' 3) Lokal ve Base64 yoksa HTTP/FTP dene
-                            If Not indirmeBasarili Then
+                            ' 3) Lokal ve Base64 yoksa HTTP/FTP dene (sadece http/ftp URL ise)
+                            If Not indirmeBasarili AndAlso
+                               Not String.IsNullOrEmpty(yolUrl) AndAlso
+                               (yolUrl.StartsWith("http") OrElse yolUrl.StartsWith("ftp")) Then
                                 indirmeBasarili = TryDownloadHttpThenFtp(yolUrl, tempPath, firmaKlasor)
                             End If
                             
@@ -808,12 +810,16 @@ End Sub
     Private Function GetBase64FromDb(sModel As String) As String
         Try
             Using con As New OleDbConnection(connection)
-                Using cmd As New OleDbCommand("SELECT TOP 1 pResim FROM tbStokResmi WITH (NOLOCK) WHERE sModel = ? AND pResim IS NOT NULL", con)
-                    cmd.Parameters.Add("p0", OleDbType.VarChar, 50).Value = sModel
+                Using cmd As New OleDbCommand("SELECT TOP 1 pResim FROM tbStokResmi WITH (NOLOCK) WHERE RTRIM(sModel) = ? AND pResim IS NOT NULL AND DATALENGTH(pResim) > 200", con)
+                    cmd.CommandTimeout = 60
+                    cmd.Parameters.Add("p0", OleDbType.VarChar, 50).Value = sModel.Trim()
                     con.Open()
                     Dim result = cmd.ExecuteScalar()
                     If result IsNot Nothing AndAlso Not IsDBNull(result) Then
-                        Return Convert.ToString(result)
+                        Dim val As String = Convert.ToString(result).Trim()
+                        ' Dosya yolu ise Base64 değil - atla
+                        If val.Contains(":\") OrElse val.StartsWith("\\") OrElse val.StartsWith("http") Then Return ""
+                        Return val
                     End If
                 End Using
             End Using
