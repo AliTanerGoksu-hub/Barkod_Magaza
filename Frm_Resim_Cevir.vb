@@ -72,7 +72,7 @@ Module Frm_Resim_Cevir
     Private Const OVERWRITE_NON_R2 As Boolean = True
 
     ' ===== FTP fallback ayarları =====
-    Private Const FTP_ENABLED As Boolean = True
+    Private Const FTP_ENABLED As Boolean = False
     Private Const FTP_PORT As Integer = 21
     Private Const FTP_USER As String = "bayii"
     Private Const FTP_PASS As String = "BusinessSmart4909"
