@@ -50,9 +50,12 @@ Legacy VB.NET Windows Forms ERP/POS uygulamasi (Barkod_Magaza) + C# .NET 8 Web A
 - [x] Backup FTP->API migration
 - [x] SQL Views, Parametrik togglelar, Valor/Limit kontrol
 
+## Son Duzeltmeler [2026-02-XX]
+- [x] Frm_Resim_Cevir.vb: pResim varbinary(MAX) icin GetImageBytesFromDb - OleDb Byte() dogrudan okunuyor (eski hata: Convert.ToString Byte() uzerinde "System.Byte[]" donuyordu)
+
 ## Bekleyen Gorevler
 - [ ] P1: Maliyet hesaplama standardizasyonu (FIFO, LIFO, Agirlikli Ortalama)
-- [ ] P2: E-Fatura/E-Arsiv otomatik eslestirme
+- [ ] P1: E-Fatura/E-Arsiv otomatik eslestirme
 - [ ] P2: AI kullanim loglari UI (frm_AIKullanimRaporu)
 - [ ] P2: Dusuk riskli AI araclari (aciklama temizleme, ilan yardimcisi)
 
