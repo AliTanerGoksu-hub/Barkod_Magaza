@@ -156,7 +156,7 @@ Module Frm_Resim_Cevir
                     Dim processedCount As Integer = 0
 
                     While rd.Read()
-                        Dim nStokResimID As Integer = SafeGetInt(rd, "nStokResimID")
+                        Dim nStokResimID As String = SafeGetStr(rd, "nStokResimID")
                         Dim sModel As String = SafeGetStr(rd, "sModel")
                         Dim nSira As Integer = SafeGetInt(rd, "nSira")
                         Dim yolUrl As String = SafeGetStr(rd, "yol")
