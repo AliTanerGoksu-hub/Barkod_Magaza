@@ -179,22 +179,25 @@ Module Frm_Resim_Cevir
                             Dim tempPath As String = Path.Combine(localFolder, "_tmp_" & nStokResimID.ToString() & "_" & nSira.ToString() & ".bin")
                             Dim localPath As String = Path.Combine(LOCAL_RESIM_ROOT, fileName)
 
-                            ' Önce HTTP/FTP'den indir, başarısızsa DB'deki Base64'ten al
-                            Dim indirmeBasarili As Boolean = TryDownloadHttpThenFtp(yolUrl, tempPath, firmaKlasor)
+                            ' Önce DB'deki Base64'ten al, yoksa HTTP/FTP dene
+                            Dim indirmeBasarili As Boolean = False
                             
+                            ' 1) DB'den Base64 dene (tbStokResim.pResim) - ÖNCELIK
+                            Dim base64FromDb As String = GetBase64FromDb(sModel)
+                            If Not String.IsNullOrEmpty(base64FromDb) Then
+                                Try
+                                    Dim bytes As Byte() = Convert.FromBase64String(CleanBase64(base64FromDb))
+                                    File.WriteAllBytes(tempPath, bytes)
+                                    indirmeBasarili = True
+                                    Log("[DB] StokID=" & nStokResimID.ToString() & " Model=" & sModel & " Base64'ten alindi")
+                                Catch exB64 As Exception
+                                    Log("[DB HATA] StokID=" & nStokResimID.ToString() & " Base64 decode: " & exB64.Message)
+                                End Try
+                            End If
+                            
+                            ' 2) Base64 yoksa HTTP/FTP dene
                             If Not indirmeBasarili Then
-                                ' DB'den Base64 dene (tbStokResim.pResim)
-                                Dim base64FromDb As String = GetBase64FromDb(sModel)
-                                If Not String.IsNullOrEmpty(base64FromDb) Then
-                                    Try
-                                        Dim bytes As Byte() = Convert.FromBase64String(CleanBase64(base64FromDb))
-                                        File.WriteAllBytes(tempPath, bytes)
-                                        indirmeBasarili = True
-                                        Log("[DB] StokID=" & nStokResimID.ToString() & " Model=" & sModel & " Base64'ten alindi")
-                                    Catch exB64 As Exception
-                                        Log("[DB HATA] StokID=" & nStokResimID.ToString() & " Base64 decode: " & exB64.Message)
-                                    End Try
-                                End If
+                                indirmeBasarili = TryDownloadHttpThenFtp(yolUrl, tempPath, firmaKlasor)
                             End If
                             
                             If Not indirmeBasarili Then
