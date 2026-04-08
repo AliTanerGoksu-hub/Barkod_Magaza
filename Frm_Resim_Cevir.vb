@@ -145,6 +145,7 @@ Module Frm_Resim_Cevir
         Using con As New OleDbConnection(connection)
             Using cmd As OleDbCommand = con.CreateCommand()
                 ' YENİ YAPI: tbStokEticaretResim artık nSira bazlı (her resim ayrı satır)
+                cmd.CommandTimeout = 300 ' 5 dakika timeout
                 cmd.CommandText =
                     "SELECT nStokResimID, sModel, nSira, ISNULL(yol,'') AS yol, pResim " &
                     "FROM tbStokResmi WITH (NOLOCK) " &
