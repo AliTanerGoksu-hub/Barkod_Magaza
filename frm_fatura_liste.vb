@@ -8136,10 +8136,10 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                         
                         ' --- MALIYET HESABI (orijinal frm_fatura.vb gibi) ---
                         ' lGirisTutar = Net giris tutari (KDV haric, iskonto sonrasi)
-                        Dim lGirisTutar As Decimal = KeyCode.sorgu_sayi(drDetay("lGirisTutar"), 0)
+                        Dim lGirisTutarDetay As Decimal = KeyCode.sorgu_sayi(drDetay("lGirisTutar"), 0)
                         
                         If lGirisMiktar1 > 0 Then
-                            maliyet = lGirisTutar / lGirisMiktar1
+                            maliyet = lGirisTutarDetay / lGirisMiktar1
                         Else
                             maliyet = lBrutFiyat
                         End If
