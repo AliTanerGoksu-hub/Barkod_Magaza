@@ -8115,8 +8115,8 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
 
                         ' Maliyet ve Alis fiyati hesapla
                         ' ============================================================
-                        ' bAlisKdvDahil = True  -> Alis fiyati - Iskonto + EkMaliyet
-                        ' bAlisKdvDahil = False -> Alis fiyati + KDV - Iskonto + EkMaliyet
+                        ' MALIYET: lGirisTutar / Miktar * KDV (orijinal frm_fatura.vb mantigi)
+                        ' ALIS:    lBrutFiyat * KDV (sadece bAlisKdvDahil=False ise)
                         ' ============================================================
                         Dim maliyet As Decimal = 0
                         Dim alis As Decimal = 0
@@ -8134,25 +8134,44 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                         
                         Dim lToplamEkMaliyet As Decimal = lSatirEkMaliyet + lMasterEkMaliyetPay
                         
-                        If bAlisKdvDahil = True Then
-                            ' Alis fiyati KDV DAHIL girilmis - KDV ekleme
-                            ' Formul: (AlisTutar - Iskonto + EkMaliyet) / Miktar
-                            If lGirisMiktar1 > 0 Then
-                                maliyet = (lBrutTutar - lIskontoTutari + lToplamEkMaliyet) / lGirisMiktar1
-                            Else
-                                maliyet = lBrutFiyat
-                            End If
-                            alis = maliyet
+                        ' --- MALIYET HESABI (orijinal frm_fatura.vb gibi) ---
+                        ' lGirisTutar = Net giris tutari (KDV haric, iskonto sonrasi)
+                        Dim lGirisTutar As Decimal = KeyCode.sorgu_sayi(drDetay("lGirisTutar"), 0)
+                        
+                        If lGirisMiktar1 > 0 Then
+                            maliyet = lGirisTutar / lGirisMiktar1
                         Else
-                            ' Alis fiyati KDV HARIC girilmis - KDV sadece BrutTutar'a eklenir
-                            ' Formul: (AlisTutar * (1 + KDV/100) - Iskonto + EkMaliyet) / Miktar
-                            Dim lBrutTutarKdvli As Decimal = lBrutTutar * ((nKdvOrani + 100) / 100)
-                            If lGirisMiktar1 > 0 Then
-                                maliyet = (lBrutTutarKdvli - lIskontoTutari + lToplamEkMaliyet) / lGirisMiktar1
-                            Else
-                                maliyet = lBrutFiyat * ((nKdvOrani + 100) / 100)
-                            End If
-                            alis = maliyet
+                            maliyet = lBrutFiyat
+                        End If
+                        
+                        ' KDV ekle
+                        If nKdvOrani > 0 Then
+                            maliyet = maliyet * ((nKdvOrani + 100) / 100)
+                        End If
+                        
+                        ' Ilave maliyet cikar
+                        If lGirisMiktar1 > 0 AndAlso (lIlaveMaliyetTutar + lEkIlaveMaliyetTutar) <> 0 Then
+                            maliyet = maliyet - Math.Abs((lIlaveMaliyetTutar + lEkIlaveMaliyetTutar) / lGirisMiktar1)
+                        End If
+                        
+                        ' Master ek maliyet orani ekle
+                        If lNetTutar > 0 AndAlso lMasterEkMaliyetToplam > 0 Then
+                            Dim ekMaliyetOran As Decimal = lMasterEkMaliyetToplam / lNetTutar
+                            maliyet = maliyet + (maliyet * ekMaliyetOran)
+                        End If
+                        
+                        ' KDV tekrar ekle (orijinal frm_fatura.vb mantigi)
+                        If nKdvOrani > 0 Then
+                            maliyet = maliyet * ((nKdvOrani + 100) / 100)
+                        End If
+                        
+                        ' --- ALIS FIYATI HESABI (orijinal frm_fatura.vb gibi) ---
+                        ' Alis fiyati = BrutFiyat (kullanicinin girdigi ham fiyat)
+                        alis = lBrutFiyat
+                        ' Eger alis fiyat tipi KDV dahil DEGILSE, KDV ekle
+                        ' Eger KDV dahilse, fiyat zaten KDV dahil, ekleme yapma
+                        If bAlisKdvDahil = False Then
+                            alis = alis * ((nKdvOrani + 100) / 100)
                         End If
 
                         ' Mevcut fiyatları sorgula
