@@ -5384,7 +5384,7 @@ Public Class frm_qukaGonder
 
                             ' Mevcudu sifir olan varyantlari atla - webe gonderme
                             If stok <= 0 Then
-                                Log("DEBUG", "SendProduct", $"Varyant atlandi (stok=0): sKodu='{sKodu}', sBeden='{sBeden}'")
+                                Log("DEBUG", "SendProduct", $"Varyant atlandi (stok={stok}): sKodu='{sKodu}', sBeden='{sBeden}' - mevcud sifir veya negatif, webe gonderilmiyor")
                                 Continue While
                             End If
 
