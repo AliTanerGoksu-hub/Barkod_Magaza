@@ -291,6 +291,17 @@ Public Class frm_tbSiparis
         BarManager1.Items.Add(btn_SatirArayaEkle)
         BarSubItem2.LinksPersistInfo.Add(New DevExpress.XtraBars.LinkPersistInfo(btn_SatirArayaEkle))
         AddHandler btn_SatirArayaEkle.ItemClick, AddressOf btn_SatirArayaEkle_ItemClick
+        ' Sag tik menusune Araya Satir Ekle ekle (Ekle'nin hemen altina)
+        Dim mnuArayaEkle As New System.Windows.Forms.ToolStripMenuItem()
+        mnuArayaEkle.Name = "ArayaSatirEkleToolStripMenuItem"
+        mnuArayaEkle.Text = "Araya Satır Ekle"
+        AddHandler mnuArayaEkle.Click, AddressOf ArayaSatirEkleToolStripMenuItem_Click
+        Dim nEkleIndex As Integer = kisayol.Items.IndexOf(EkleToolStripMenuItem)
+        If nEkleIndex >= 0 Then
+            kisayol.Items.Insert(nEkleIndex + 1, mnuArayaEkle)
+        Else
+            kisayol.Items.Add(mnuArayaEkle)
+        End If
 
         If bSiparisOnayli Then
             GridView1.OptionsBehavior.Editable = False
@@ -4013,6 +4024,9 @@ Public Class frm_tbSiparis
     End Sub
     Private Sub BarButtonItem5_ItemClick(ByVal sender As System.Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles btn_SatirEkle.ItemClick
         satir_ekle()
+    End Sub
+    Private Sub ArayaSatirEkleToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        satir_araya_ekle()
     End Sub
     Private Sub btn_SatirArayaEkle_ItemClick(ByVal sender As System.Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs)
         satir_araya_ekle()
