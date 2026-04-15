@@ -287,6 +287,7 @@ Public Class frm_tbSiparis
             EkleToolStripMenuItem.Enabled = False
             SilToolStripMenuItem.Enabled = False
             btn_SatirEkle.Enabled = False
+            btn_SatirArayaEkle.Enabled = False
             btn_SatirDuzelt.Enabled = False
             btn_SatirSil.Enabled = False
             btn_SatirEkleIhtiyac.Enabled = False
@@ -309,6 +310,7 @@ Public Class frm_tbSiparis
             EkleToolStripMenuItem.Enabled = False
             SilToolStripMenuItem.Enabled = False
             btn_SatirEkle.Enabled = False
+            btn_SatirArayaEkle.Enabled = False
             btn_SatirDuzelt.Enabled = False
             btn_SatirSil.Enabled = False
             btn_SatirEkleIhtiyac.Enabled = False
@@ -1430,6 +1432,67 @@ Public Class frm_tbSiparis
         End If
         GridView1.FocusedColumn = collMiktari
         satir_kontrol()
+    End Sub
+    Private Sub satir_araya_ekle()
+        ' Parametrik onay kontrolu
+        Dim dtParamOnay2 As DataTable = SQLCalistir("SELECT ISNULL(bOnayVar, 0) AS bOnayVar FROM tbParamAlSiparis")
+        Dim bOnayVarParam2 As Boolean = False
+        If dtParamOnay2.Rows.Count > 0 Then
+            bOnayVarParam2 = Convert.ToBoolean(dtParamOnay2.Rows(0)("bOnayVar"))
+        End If
+        If bOnayVarParam2 Then
+            Dim dtOnay As DataTable = SQLCalistir("SELECT ISNULL(bOnay, 0) FROM tbSiparis WHERE lSiparisNo = " & lSiparisNo & " AND nFirmaID = " & nFirmaID)
+            If dtOnay.Rows.Count > 0 AndAlso Convert.ToBoolean(dtOnay.Rows(0)(0)) Then
+                MessageBox.Show("Sevk Onayı verilmiş Siparişte değişiklik yapamazsınız.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Exit Sub
+            End If
+        End If
+        If GridView1.RowCount = 0 Then
+            satir_ekle()
+            Exit Sub
+        End If
+        Dim nInsertHandle As Integer = GridView1.FocusedRowHandle
+        If nInsertHandle < 0 Then nInsertHandle = 0
+        ' Isaretli satirdan sonraki satirlarin nSiparisID degerlerini kaydir
+        ' Hedef satirdan itibaren max nSiparisID + 1000000 ekle (bosluk ac)
+        Dim con As New OleDb.OleDbConnection
+        Dim cmd As New OleDb.OleDbCommand
+        con.ConnectionString = connection
+        cmd.Connection = con
+        con.Open()
+        ' Isaretli satirdan sonraki satirlarin nSiparisID degerlerini topla
+        Dim drFocused As DataRow = GridView1.GetDataRow(nInsertHandle)
+        Dim nFocusedID As Int64 = 0
+        If drFocused IsNot Nothing Then
+            nFocusedID = CType(drFocused("nSiparisID"), Int64)
+        End If
+        ' Isaretli satirdan buyuk ID'lere +2 ekle (araya yer ac)
+        cmd.CommandText = sorgu_query("UPDATE tbSiparis SET nSiparisID = nSiparisID + 2 WHERE nSiparisID > " & nFocusedID & " AND lSiparisNo = " & lSiparisNo & " AND nFirmaID = " & nFirmaID & " AND nSiparisTipi = " & dr_baslik("nSiparisTipi"))
+        Try
+            cmd.ExecuteNonQuery()
+        Catch ex As Exception
+        End Try
+        con.Close()
+        con.Dispose()
+        cmd.Dispose()
+        ' Grid'i yeniden yukle (ID'ler degisti)
+        Dataload_tbSiparis(dr_baslik("dteSiparisTarihi"), dr_baslik("nSiparisTipi"), dr_baslik("lSiparisNo"), dr_baslik("nFirmaID"))
+        ' Simdi normal satir ekle - yeni satir nFocusedID + 1 civarinda olusacak
+        satir_ekle()
+        ' Grid'i tekrar yukle ve cursor'u konumla
+        Dataload_tbSiparis(dr_baslik("dteSiparisTarihi"), dr_baslik("nSiparisTipi"), dr_baslik("lSiparisNo"), dr_baslik("nFirmaID"))
+        ' Eklenen satiri bul (nFocusedID'den buyuk en kucuk ID)
+        For idx As Integer = 0 To GridView1.RowCount - 1
+            Dim drRow As DataRow = GridView1.GetDataRow(idx)
+            If drRow IsNot Nothing Then
+                If CType(drRow("nSiparisID"), Int64) > nFocusedID And CType(drRow("nSiparisID"), Int64) < nFocusedID + 2 Then
+                    GridView1.ClearSelection()
+                    GridView1.FocusedRowHandle = idx
+                    GridView1.SelectRow(idx)
+                    Exit For
+                End If
+            End If
+        Next
     End Sub
     Private Sub satir_ekle_stok_tek()
         Dim dr As DataRow
@@ -3953,6 +4016,9 @@ Public Class frm_tbSiparis
     End Sub
     Private Sub BarButtonItem5_ItemClick(ByVal sender As System.Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles btn_SatirEkle.ItemClick
         satir_ekle()
+    End Sub
+    Private Sub btn_SatirArayaEkle_ItemClick(ByVal sender As System.Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles btn_SatirArayaEkle.ItemClick
+        satir_araya_ekle()
     End Sub
     Private Sub BarButtonItem7_ItemClick(ByVal sender As System.Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles btn_SatirSil.ItemClick
         satir_sil()
