@@ -857,16 +857,16 @@ Public Class frm_AIUrunIsle
                         whereKosul = "AND (" & String.Join(" OR ", kosullar) & ")"
                     End If
                     
-                    ' bAIIcerikVar = 0 veya NULL olanları al (daha önce AI çağrılmamış)
+                    ' Secili alanlari bos olan modelleri al (bAIIcerikVar durumuna bakmadan)
                     sql = $"SELECT TOP {maxCount} MIN(s.nStokID) as nStokID, s.sModel, MIN(s.sAciklama) as sAciklama, " &
                           $"{markaSubquery}, {kat1Subquery}, {kat2Subquery}, {kat3Subquery}, {kat4Subquery}, {kat5Subquery} " &
                           "FROM tbStok s " &
                           "LEFT JOIN tbStokUzunNot u ON s.sModel = u.sModel " &
                           "LEFT JOIN tbStokAIIcerik a ON s.sModel = a.sModel " &
-                          "WHERE s.bWebGoruntule = 1 AND (s.bAIIcerikVar = 0 OR s.bAIIcerikVar IS NULL) " & whereKosul & " " &
+                          "WHERE s.bWebGoruntule = 1 " & whereKosul & " " &
                           "GROUP BY s.sModel " &
                           "ORDER BY s.sModel"
-                    AddLog("📋 Mod: SADECE BOŞLAR - AI çağrılmamış modeller alınıyor...")
+                    AddLog("📋 Mod: SADECE BOŞLAR - Seçili alanları boş olan modeller alınıyor...")
                     
                 ' Varsayılan: AI içeriği hiç olmayan modeller
                 Else
