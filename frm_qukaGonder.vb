@@ -5471,20 +5471,24 @@ Public Class frm_qukaGonder
                             If mainStok < 0 Then mainStok = 0
                             totalStock = mainStok
 
-                            If String.IsNullOrEmpty(firstBarcode) AndAlso Not String.IsNullOrEmpty(mainBarkod) Then
-                                firstBarcode = mainBarkod
+                            If mainStok > 0 Then
+                                If String.IsNullOrEmpty(firstBarcode) AndAlso Not String.IsNullOrEmpty(mainBarkod) Then
+                                    firstBarcode = mainBarkod
+                                End If
+
+                                Dim singleVariant As New Dictionary(Of String, Object)
+                                singleVariant("value1") = If(Not String.IsNullOrEmpty(colorName), colorName, "Standart")
+                                singleVariant("value2") = ""
+                                singleVariant("quantity") = mainStok
+                                singleVariant("barcode") = mainBarkod
+                                singleVariant("priceStatus") = False
+                                singleVariant("price") = 0D
+                                variants.Add(singleVariant)
+
+                                Log("INFO", "SendProduct", $"Ana ürün stoğu eklendi: stok={mainStok}, barkod={mainBarkod}")
+                            Else
+                                Log("DEBUG", "SendProduct", $"Ana urun atlandi (stok={mainStok}): {model}__{renk} - mevcud sifir veya negatif")
                             End If
-
-                            Dim singleVariant As New Dictionary(Of String, Object)
-                            singleVariant("value1") = If(Not String.IsNullOrEmpty(colorName), colorName, "Standart")
-                            singleVariant("value2") = ""
-                            singleVariant("quantity") = mainStok
-                            singleVariant("barcode") = mainBarkod
-                            singleVariant("priceStatus") = False
-                            singleVariant("price") = 0D
-                            variants.Add(singleVariant)
-
-                            Log("INFO", "SendProduct", $"Ana ürün stoğu eklendi: stok={mainStok}, barkod={mainBarkod}")
                         Else
                             Log("WARNING", "SendProduct", $"Ana ürün de bulunamadı: {model}__{renk}")
                         End If
