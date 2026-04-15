@@ -1461,48 +1461,35 @@ Public Class frm_tbSiparis
             satir_ekle()
             Exit Sub
         End If
-        Dim nInsertHandle As Integer = GridView1.FocusedRowHandle
-        If nInsertHandle < 0 Then nInsertHandle = 0
-        ' Isaretli satirdan sonraki satirlarin nSiparisID degerlerini kaydir
-        ' Hedef satirdan itibaren max nSiparisID + 1000000 ekle (bosluk ac)
-        Dim con As New OleDb.OleDbConnection
-        Dim cmd As New OleDb.OleDbCommand
-        con.ConnectionString = connection
-        cmd.Connection = con
-        con.Open()
-        ' Isaretli satirdan sonraki satirlarin nSiparisID degerlerini topla
-        Dim drFocused As DataRow = GridView1.GetDataRow(nInsertHandle)
-        Dim nFocusedID As Int64 = 0
-        If drFocused IsNot Nothing Then
-            nFocusedID = CType(drFocused("nSiparisID"), Int64)
-        End If
-        ' Isaretli satirdan buyuk ID'lere +2 ekle (araya yer ac)
-        cmd.CommandText = sorgu_query("UPDATE tbSiparis SET nSiparisID = nSiparisID + 2 WHERE nSiparisID > " & nFocusedID & " AND lSiparisNo = " & lSiparisNo & " AND nFirmaID = " & nFirmaID & " AND nSiparisTipi = " & dr_baslik("nSiparisTipi"))
-        Try
-            cmd.ExecuteNonQuery()
-        Catch ex As Exception
-        End Try
-        con.Close()
-        con.Dispose()
-        cmd.Dispose()
-        ' Grid'i yeniden yukle (ID'ler degisti)
-        Dataload_tbSiparis(dr_baslik("dteSiparisTarihi"), dr_baslik("nSiparisTipi"), dr_baslik("lSiparisNo"), dr_baslik("nFirmaID"))
-        ' Simdi normal satir ekle - yeni satir nFocusedID + 1 civarinda olusacak
+        Dim nInsertPos As Integer = GridView1.FocusedRowHandle
+        If nInsertPos < 0 Then nInsertPos = 0
+        Dim nOncekiSatirSayisi As Integer = ds_tbSiparis.Tables(0).Rows.Count
+        ' Normal satir ekle - sona ekleyecek
         satir_ekle()
-        ' Grid'i tekrar yukle ve cursor'u konumla
-        Dataload_tbSiparis(dr_baslik("dteSiparisTarihi"), dr_baslik("nSiparisTipi"), dr_baslik("lSiparisNo"), dr_baslik("nFirmaID"))
-        ' Eklenen satiri bul (nFocusedID'den buyuk en kucuk ID)
-        For idx As Integer = 0 To GridView1.RowCount - 1
-            Dim drRow As DataRow = GridView1.GetDataRow(idx)
-            If drRow IsNot Nothing Then
-                If CType(drRow("nSiparisID"), Int64) > nFocusedID And CType(drRow("nSiparisID"), Int64) < nFocusedID + 2 Then
-                    GridView1.ClearSelection()
-                    GridView1.FocusedRowHandle = idx
-                    GridView1.SelectRow(idx)
-                    Exit For
-                End If
-            End If
-        Next
+        ' Ekleme yapildiysa satirlari yeniden sirala
+        If ds_tbSiparis.Tables(0).Rows.Count > nOncekiSatirSayisi Then
+            ' Son eklenen satirin degerlerini kaydet
+            Dim nSonIndex As Integer = ds_tbSiparis.Tables(0).Rows.Count - 1
+            Dim drSon As DataRow = ds_tbSiparis.Tables(0).Rows(nSonIndex)
+            Dim values(ds_tbSiparis.Tables(0).Columns.Count - 1) As Object
+            For c As Integer = 0 To ds_tbSiparis.Tables(0).Columns.Count - 1
+                values(c) = drSon(c)
+            Next
+            ' Son satiri sil
+            ds_tbSiparis.Tables(0).Rows.RemoveAt(nSonIndex)
+            ' Araya yeni satir olustur ve ekle
+            Dim drYeni As DataRow = ds_tbSiparis.Tables(0).NewRow()
+            For c As Integer = 0 To ds_tbSiparis.Tables(0).Columns.Count - 1
+                drYeni(c) = values(c)
+            Next
+            ds_tbSiparis.Tables(0).Rows.InsertAt(drYeni, nInsertPos)
+            ' Grid'i yenile
+            GridControl1.RefreshDataSource()
+            ' Cursor'u eklenen satira konumla
+            GridView1.ClearSelection()
+            GridView1.FocusedRowHandle = nInsertPos
+            GridView1.SelectRow(nInsertPos)
+        End If
     End Sub
     Private Sub satir_ekle_stok_tek()
         Dim dr As DataRow
