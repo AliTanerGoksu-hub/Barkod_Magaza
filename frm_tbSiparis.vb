@@ -48,6 +48,7 @@ Public Class frm_tbSiparis
     Public lSiparisNo As Int64 = 0
     Public sSiparisiAlan As String = ""
     Public sSiparisiVeren As String = ""
+    Friend WithEvents btn_SatirArayaEkle As DevExpress.XtraBars.BarButtonItem
     Dim ds_tbsube As DataSet
     Dim ds_tbDovizCinsi As DataSet
     Dim ds_tbBirimCinsi As DataSet
@@ -282,6 +283,15 @@ Public Class frm_tbSiparis
             End If
         End If
         
+        ' Araya Satir Ekle butonunu runtime'da olustur
+        btn_SatirArayaEkle = New DevExpress.XtraBars.BarButtonItem()
+        btn_SatirArayaEkle.Caption = "Araya Satır Ekle"
+        btn_SatirArayaEkle.Id = 99
+        btn_SatirArayaEkle.Name = "btn_SatirArayaEkle"
+        BarManager1.Items.Add(btn_SatirArayaEkle)
+        BarSubItem2.LinksPersistInfo.Add(New DevExpress.XtraBars.LinkPersistInfo(btn_SatirArayaEkle))
+        AddHandler btn_SatirArayaEkle.ItemClick, AddressOf btn_SatirArayaEkle_ItemClick
+
         If bSiparisOnayli Then
             GridView1.OptionsBehavior.Editable = False
             EkleToolStripMenuItem.Enabled = False
@@ -4017,7 +4027,7 @@ Public Class frm_tbSiparis
     Private Sub BarButtonItem5_ItemClick(ByVal sender As System.Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles btn_SatirEkle.ItemClick
         satir_ekle()
     End Sub
-    Private Sub btn_SatirArayaEkle_ItemClick(ByVal sender As System.Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles btn_SatirArayaEkle.ItemClick
+    Private Sub btn_SatirArayaEkle_ItemClick(ByVal sender As System.Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs)
         satir_araya_ekle()
     End Sub
     Private Sub BarButtonItem7_ItemClick(ByVal sender As System.Object, ByVal e As DevExpress.XtraBars.ItemClickEventArgs) Handles btn_SatirSil.ItemClick
