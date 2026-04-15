@@ -1,66 +1,48 @@
-# BARKOD YAZILIM - PRD (Product Requirements Document)
+# Barkod Magaza ERP/POS - Product Requirements Document
 
-## Proje Ozeti
-Legacy VB.NET Windows Forms ERP/POS uygulamasi (Barkod_Magaza) + C# .NET 8 Web API (BusinessSmartDesktopAPI) + Mobil Backend (BarkodBackend) + .NET MAUI Blazor Mobil (BusinessSmartMobile).
+## Original Problem Statement
+Multi-platform ERP/POS ecosystem with:
+1. Desktop VB.NET Windows Forms app (DevExpress, OleDb/SQL Server)
+2. C# .NET 8 Web API Mobile Backend (Dapper)
+3. .NET MAUI Blazor Mobile App
 
-## Mimari (3 Katman)
-- **Desktop Frontend**: VB.NET Windows Forms (DevExpress, CP1254 encoding)
-- **Desktop API**: C# .NET 8 Minimal APIs (BusinessSmartDesktopAPI) - Backup/License ONLY (AI kaldirildi)
-- **Mobil Backend**: C# ASP.NET Core (BarkodBackend) - Dapper, Multi-ERP adapter
-- **Mobil Frontend**: .NET MAUI Blazor (BusinessSmartMobile)
-- **Veritabani**: SQL Server (OleDb desktop, Dapper mobil)
+### Core Requirements:
+- AI Infrastructure across all platforms
+- AI Dashboard and Risk Indicators for Mobile
+- Silent AI Risk Warnings on Desktop ERP
+- Standardized cost calculation (FIFO, LIFO, Weighted Average)
+- Bug fixes for POS, UI threads, Mobile AI, Image Migration
+- B2B management tabs and R2 image upload
 
-## Repolar
-- Desktop: github.com/AliTanerGoksu-hub/Barkod_Magaza.git
-- Mobil Backend: github.com/AliTanerGoksu-hub/New_Backend.git
-- Mobil Frontend: github.com/AliTanerGoksu-hub/New_Mobile.git
+## Architecture
+```
+/app/ (Barkod_Magaza) - Desktop VB.NET
+/tmp/New_Backend/ - C# .NET 8 Web API
+/tmp/New_Mobile/ - MAUI Blazor Mobile
+```
 
-## Tamamlanan Ozellikler
+## Completed Work
+- [x] Image Migration Tool (Frm_Resim_Cevir.vb) - varbinary fix (74e870b)
+- [x] MAUI Demo Mode lock (22f0ef3)
+- [x] App Store "demo" word removal (b93c1e6)
+- [x] iOS Build Error fix (efd6a43, c273523)
+- [x] MAUI Route Auto-Refresh timers (b39b2fa)
+- [x] Toplu Maliyet KDV doubling fix (3b02075, 523fa94)
+- [x] **Araya Satir Ekle fix** - ORDER BY nEkSaha1 ASC added to sorgu_harekets (bf931cf) - AWAITING USER TEST
 
-### AI Risk Hesaplama - Desktop (AIService.vb + RiskBildirimModulu.vb)
-- [x] Risk Skoru: Bakiye, Vadesi Gecmis, Max Gecikme, Kredi Limiti
-- [x] Risk Skoru: Ortalama Vade (nVadeGun + AVG DATEDIFF)
-- [x] Risk Skoru: Cek/Senet riski (tbCekSenet + tbCekSenetBordro)
-- [x] RiskBildirimModulu: Sessiz risk paneli tum satis formlarinda
-- [x] frm_AISatisOneri.vb: Satis Oneri Motoru (AIService.SatisOneriGetir)
-- [x] frm_AIGunSonuOzet.vb, frm_AITahsilatAsistani.vb
-- [x] frm_YoneticiOzetPaneli.vb: Patron ozet paneli
+## In Progress / Pending
+- P0: Araya Satir Ekle - Awaiting user test (bf931cf)
 
-### AI Risk Hesaplama - Mobile Backend (AIController.cs) [GUNCELLENDI 2026-02-11]
-- [x] GET /api/AI/RiskScore/{firmaId} - Cek/Senet + OrtVade EKLENDI
-- [x] GET /api/AI/OrderRiskCheck/{firmaId} - Karsilikizsiz cek REDDET karari EKLENDI
-- [x] GET /api/AI/CollectionPlan - Vadesi gecmis bakiye koruması eklendi
-- [x] GET /api/AI/SalesSuggestions/{firmaId} - Fatura bazli sorgu (Desktop ile senkron)
-- [x] GET /api/AI/DailySummary
-- [x] GET /api/AI/RetailSummary
+## Backlog (Prioritized)
+- P1: Cost calculation standardization (FIFO, LIFO, Weighted Average)
+- P1: E-Fatura/E-Arsiv auto-matching logic
+- P2: AI usage logs UI (frm_AIKullanimRaporu)
 
-### AI UI - Mobile App (BusinessSmartMobile) [GUNCELLENDI 2026-02-11]
-- [x] AIService.cs: Tum modeller Desktop ile senkron (CekPortfoy, CekVadesiGecmis, OrtVade vb.)
-- [x] BusinessPartnerDetail.razor: Risk detaylarinda OrtVade, Cek/Senet bilgileri
-- [x] SatisOneriMotoru.razor: Firma bazli satis oneri sayfasi (aktif/hatirlatma)
-- [x] PatronAIDashboard.razor: AI ozet paneli
+## Key DB Schema
+- `tbStokFisiDetayi`: Invoice row details. `nEkSaha1` = physical row order
+- `tbStokResmi`: Legacy images (varbinary)
 
-### Desktop Temizlik [2026-02-11]
-- [x] Eski API_URL/API_KEY sabitleri 4 dosyadan kaldirildi
-- [x] FtpEskiYedekleriSil_ESKI temiz (bos metod)
-- [x] Tum AI formlari artik AIService.vb uzerinden calisiyor
-
-### Onceki Calismalar
-- [x] B2B Settings, POS error handling, R2 image upload
-- [x] Backup FTP->API migration
-- [x] SQL Views, Parametrik togglelar, Valor/Limit kontrol
-
-## Son Duzeltmeler [2026-02-XX]
-- [x] Frm_Resim_Cevir.vb: pResim varbinary(MAX) icin GetImageBytesFromDb - OleDb Byte() dogrudan okunuyor (eski hata: Convert.ToString Byte() uzerinde "System.Byte[]" donuyordu)
-
-## Bekleyen Gorevler
-- [ ] P1: Maliyet hesaplama standardizasyonu (FIFO, LIFO, Agirlikli Ortalama)
-- [ ] P1: E-Fatura/E-Arsiv otomatik eslestirme
-- [ ] P2: AI kullanim loglari UI (frm_AIKullanimRaporu)
-- [ ] P2: Dusuk riskli AI araclari (aciklama temizleme, ilan yardimcisi)
-
-## Anahtar DB Semalari
-- tbCekSenet, tbCekSenetBordro: Cek/Senet (risk hesaplamada kullaniliyor)
-- tbFirmaHareketi: Bakiye, vade, odeme takip
-- tbFirma: Kredi limiti, anlasma vadesi (nVadeGun)
-- tbStokFisiMaster, tbStokFisiDetayi: Satis oneri motoru veri kaynagi
+## Critical Notes
+- /tmp/ directories volatile (Kubernetes wipes between steps)
+- User language: Turkish
+- Always push changes via git bash, never ask user to do it
