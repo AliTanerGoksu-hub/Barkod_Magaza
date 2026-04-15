@@ -1,4 +1,4 @@
-Imports System.Data.OleDb
+﻿Imports System.Data.OleDb
 Imports System.Net
 Imports System.IO
 Imports System.Collections
@@ -5381,6 +5381,12 @@ Public Class frm_qukaGonder
                             Dim sRenkAdi As String = If(varReader("sRenkAdi") Is DBNull.Value, "", varReader("sRenkAdi").ToString().Trim())
                             Dim stok As Integer = If(varReader("stok") Is DBNull.Value, 0, Convert.ToInt32(varReader("stok")))
                             Dim varyantFiyat As Decimal = If(varReader("varyantFiyat") Is DBNull.Value, 0D, Convert.ToDecimal(varReader("varyantFiyat")))
+
+                            ' Mevcudu sifir olan varyantlari atla - webe gonderme
+                            If stok <= 0 Then
+                                Log("DEBUG", "SendProduct", $"Varyant atlandi (stok=0): sKodu='{sKodu}', sBeden='{sBeden}'")
+                                Continue While
+                            End If
 
                             Log("DEBUG", "SendProduct", $"Varyant bulundu: sKodu='{sKodu}', sBeden='{sBeden}', sBarkod='{sBarkod}', stok={stok}")
 
