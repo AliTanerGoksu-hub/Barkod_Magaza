@@ -914,26 +914,61 @@ Public Class frm_AIUrunIsle
                 End If
                 
                 ' DEBUG: SQL sorgusunu logla
-                AddLog("📋 SQL: " & sql.Substring(0, Math.Min(sql.Length, 300)) & "...")
+                AddLog("📋 SQL: " & sql)
                 WriteLog("SQL: " & sql)
                 
-                Dim cmd As New OleDb.OleDbCommand(sql, conn)
-                
-                Using reader As OleDb.OleDbDataReader = cmd.ExecuteReader()
-                    While reader.Read()
-                        Dim model As New Dictionary(Of String, Object)
-                        model("nStokID") = reader("nStokID")
-                        model("sModel") = reader("sModel")
-                        model("sAciklama") = If(IsDBNull(reader("sAciklama")), "", reader("sAciklama"))
-                        model("sMarka") = If(IsDBNull(reader("sMarka")), "", reader("sMarka"))
-                        model("sKategori1") = If(IsDBNull(reader("sKategori1")), "", reader("sKategori1"))
-                        model("sKategori2") = If(IsDBNull(reader("sKategori2")), "", reader("sKategori2"))
-                        model("sKategori3") = If(IsDBNull(reader("sKategori3")), "", reader("sKategori3"))
-                        model("sKategori4") = If(IsDBNull(reader("sKategori4")), "", reader("sKategori4"))
-                        model("sKategori5") = If(IsDBNull(reader("sKategori5")), "", reader("sKategori5"))
-                        modeller.Add(model)
-                    End While
-                End Using
+                Try
+                    Dim cmd As New OleDb.OleDbCommand(sql, conn)
+                    
+                    Using reader As OleDb.OleDbDataReader = cmd.ExecuteReader()
+                        While reader.Read()
+                            Dim model As New Dictionary(Of String, Object)
+                            model("nStokID") = reader("nStokID")
+                            model("sModel") = reader("sModel")
+                            model("sAciklama") = If(IsDBNull(reader("sAciklama")), "", reader("sAciklama"))
+                            model("sMarka") = If(IsDBNull(reader("sMarka")), "", reader("sMarka"))
+                            model("sKategori1") = If(IsDBNull(reader("sKategori1")), "", reader("sKategori1"))
+                            model("sKategori2") = If(IsDBNull(reader("sKategori2")), "", reader("sKategori2"))
+                            model("sKategori3") = If(IsDBNull(reader("sKategori3")), "", reader("sKategori3"))
+                            model("sKategori4") = If(IsDBNull(reader("sKategori4")), "", reader("sKategori4"))
+                            model("sKategori5") = If(IsDBNull(reader("sKategori5")), "", reader("sKategori5"))
+                            modeller.Add(model)
+                        End While
+                    End Using
+                Catch exSql As Exception
+                    AddLog("❌ SQL HATA: " & exSql.Message)
+                    WriteLog("SQL HATA: " & exSql.Message)
+                    
+                    ' Kolon bulunamadi hatasi ise, kolonsuz basit sorgu dene
+                    If exSql.Message.Contains("sBedenTablosu") OrElse exSql.Message.Contains("column") Then
+                        AddLog("⚠️ sBedenTablosu kolonu bulunamadi - tbStokUzunNot tablosuna kolon ekleniyor...")
+                        Try
+                            Dim alterCmd As New OleDb.OleDbCommand("ALTER TABLE tbStokUzunNot ADD sBedenTablosu NTEXT", conn)
+                            alterCmd.ExecuteNonQuery()
+                            AddLog("✅ sBedenTablosu kolonu eklendi!")
+                            
+                            ' Sorguyu tekrar calistir
+                            Dim retryCmd As New OleDb.OleDbCommand(sql, conn)
+                            Using retryReader As OleDb.OleDbDataReader = retryCmd.ExecuteReader()
+                                While retryReader.Read()
+                                    Dim model As New Dictionary(Of String, Object)
+                                    model("nStokID") = retryReader("nStokID")
+                                    model("sModel") = retryReader("sModel")
+                                    model("sAciklama") = If(IsDBNull(retryReader("sAciklama")), "", retryReader("sAciklama"))
+                                    model("sMarka") = If(IsDBNull(retryReader("sMarka")), "", retryReader("sMarka"))
+                                    model("sKategori1") = If(IsDBNull(retryReader("sKategori1")), "", retryReader("sKategori1"))
+                                    model("sKategori2") = If(IsDBNull(retryReader("sKategori2")), "", retryReader("sKategori2"))
+                                    model("sKategori3") = If(IsDBNull(retryReader("sKategori3")), "", retryReader("sKategori3"))
+                                    model("sKategori4") = If(IsDBNull(retryReader("sKategori4")), "", retryReader("sKategori4"))
+                                    model("sKategori5") = If(IsDBNull(retryReader("sKategori5")), "", retryReader("sKategori5"))
+                                    modeller.Add(model)
+                                End While
+                            End Using
+                        Catch exAlter As Exception
+                            AddLog("❌ ALTER TABLE HATA: " & exAlter.Message)
+                        End Try
+                    End If
+                End Try
             End Using
         Catch ex As Exception
             AddLog($"❌ Model sorgulama hatası: {ex.Message}")
