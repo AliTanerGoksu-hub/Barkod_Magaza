@@ -880,17 +880,36 @@ Public Class frm_AIUrunIsle
                           "ORDER BY s.sModel"
                     AddLog("📋 Mod: SADECE BOŞLAR - Seçili alanları boş olan modeller alınıyor...")
                     
-                ' Varsayılan: AI içeriği hiç olmayan modeller
+                ' Varsayılan: Secili alanlari bos olan modeller
                 Else
+                    Dim varsayilanKosullar As New List(Of String)
+                    If chkUzunAciklama.Checked Then varsayilanKosullar.Add("(u.sModel IS NULL OR u.sUzunNot IS NULL OR u.sUzunNot = '')")
+                    If chkBedenTablosu.Checked Then varsayilanKosullar.Add("(u.sModel IS NULL OR u.sBedenTablosu IS NULL OR u.sBedenTablosu = '')")
+                    If chkOzellikler.Checked Then varsayilanKosullar.Add("(u.sModel IS NULL OR u.sOzellikler IS NULL OR u.sOzellikler = '')")
+                    If chkTalimat.Checked Then varsayilanKosullar.Add("(u.sModel IS NULL OR u.sKullanimTalimati IS NULL OR u.sKullanimTalimati = '')")
+                    If chkBaslik.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sSEOBaslik IS NULL OR a.sSEOBaslik = '')")
+                    If chkKisaAciklama.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sKisaAciklama IS NULL OR a.sKisaAciklama = '')")
+                    If chkSEOBilgisi.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sMetaDescription IS NULL OR a.sMetaDescription = '' OR a.sAnahtarKelimeler IS NULL OR a.sAnahtarKelimeler = '')")
+                    If chkYikamaTalimati.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sYikamaTalimati IS NULL OR a.sYikamaTalimati = '')")
+                    If chkBakimTalimati.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sBakimTalimati IS NULL OR a.sBakimTalimati = '')")
+                    If chkGuvenlikUyari.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sGuvenliklUyari IS NULL OR a.sGuvenliklUyari = '')")
+                    
+                    Dim varsayilanWhere As String = ""
+                    If varsayilanKosullar.Count > 0 Then
+                        varsayilanWhere = "AND (" & String.Join(" OR ", varsayilanKosullar) & ")"
+                    Else
+                        varsayilanWhere = "AND (u.sModel IS NULL OR u.sUzunNot IS NULL OR u.sUzunNot = '')"
+                    End If
+                    
                     sql = $"SELECT TOP {maxCount} MIN(s.nStokID) as nStokID, s.sModel, MIN(s.sAciklama) as sAciklama, " &
                           $"{markaSubquery}, {kat1Subquery}, {kat2Subquery}, {kat3Subquery}, {kat4Subquery}, {kat5Subquery} " &
                           "FROM tbStok s " &
                           "LEFT JOIN tbStokUzunNot u ON s.sModel = u.sModel " &
-                          "WHERE s.bWebGoruntule = 1 " &
-                          "AND (u.sModel IS NULL OR u.sUzunNot IS NULL OR u.sUzunNot = '') " &
+                          "LEFT JOIN tbStokAIIcerik a ON s.sModel = a.sModel " &
+                          "WHERE s.bWebGoruntule = 1 " & varsayilanWhere & " " &
                           "GROUP BY s.sModel " &
                           "ORDER BY s.sModel"
-                    AddLog("📋 Mod: VARSAYILAN - AI içeriği olmayan modeller alınıyor...")
+                    AddLog("📋 Mod: VARSAYILAN - Seçili alanları boş olan modeller alınıyor...")
                 End If
                 
                 Dim cmd As New OleDb.OleDbCommand(sql, conn)
