@@ -623,6 +623,12 @@ Public Class frm_AIUrunIsle
             savedChkStates("chkGuvenlikUyari") = chkGuvenlikUyari.Checked
             savedChkStates("chkSadeceBoslar") = chkSadeceBoslar.Checked
             
+            ' Debug: Yakalanan checkbox durumlari
+            AddLog("📋 Yakalanan checkbox durumlari:")
+            For Each kvp In savedChkStates
+                AddLog($"   {kvp.Key} = {kvp.Value}")
+            Next
+            
             ' Durdurma flag'ini sıfırla
             islemDurduruldu = False
             
