@@ -1088,12 +1088,16 @@ Public Class frm_AIUrunIsle
                         setClauses.Add("sSonKullaniciAdi = ?") : paramValues.Add("AI_TOPLU")
                         setClauses.Add("dteSonUpdateTarihi = ?") : paramValues.Add(DateTime.Now)
                         paramValues.Add(sModel)
-                        Dim updateCmd As New OleDbCommand(
-                            "UPDATE tbStokUzunNot SET " & String.Join(", ", setClauses) & " WHERE sModel = ?", conn)
+                        ' RTRIM ekle - bosluk farki icin
+                        Dim updateSql As String = "UPDATE tbStokUzunNot SET " & String.Join(", ", setClauses) & " WHERE RTRIM(sModel) = RTRIM(?)"
+                        AddLog($"   📋 UPDATE SQL: {updateSql}")
+                        AddLog($"   📋 SET clause count: {setClauses.Count}, sModel: [{sModel}]")
+                        Dim updateCmd As New OleDbCommand(updateSql, conn)
                         For Each pv As Object In paramValues
                             updateCmd.Parameters.AddWithValue("?", pv)
                         Next
                         Dim affected As Integer = updateCmd.ExecuteNonQuery()
+                        AddLog($"   📋 UPDATE affected rows: {affected}")
                         If affected > 0 Then kayitBasarili = True
                     Else
                         Dim insertCmd As New OleDbCommand(
@@ -1188,7 +1192,7 @@ Public Class frm_AIUrunIsle
                         paramAI.Add(sModel)
                         If setAI.Count > 2 Then
                             Dim updateAI As New OleDbCommand(
-                                "UPDATE tbStokAIIcerik SET " & String.Join(", ", setAI) & " WHERE sModel = ?", conn)
+                                "UPDATE tbStokAIIcerik SET " & String.Join(", ", setAI) & " WHERE RTRIM(sModel) = RTRIM(?)", conn)
                             For Each pv As Object In paramAI
                                 updateAI.Parameters.AddWithValue("?", pv)
                             Next
