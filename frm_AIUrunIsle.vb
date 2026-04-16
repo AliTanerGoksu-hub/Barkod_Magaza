@@ -625,7 +625,7 @@ Public Class frm_AIUrunIsle
             
             ' Debug: Yakalanan checkbox durumlari
             AddLog("📋 Yakalanan checkbox durumlari:")
-            For Each kvp In savedChkStates
+            For Each kvp As KeyValuePair(Of String, Boolean) In savedChkStates
                 AddLog($"   {kvp.Key} = {kvp.Value}")
             Next
             
