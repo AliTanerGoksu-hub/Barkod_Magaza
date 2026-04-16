@@ -739,7 +739,7 @@ Public Class frm_AIUrunIsle
                     productData("chkBakimTalimati") = chkBakimTalimati.Checked
                     productData("chkGuvenlikUyari") = chkGuvenlikUyari.Checked
 
-                    Dim content As Dictionary(Of String, String) = aiService.GenerateCompleteContent(productData)
+                    Dim content As Dictionary(Of String, String) = Await Task.Run(Function() aiService.GenerateCompleteContent(productData))
                     
                     If content("success") = "true" Then
                         AddLog($"   ✅ AI içerik oluşturuldu")
@@ -1276,7 +1276,6 @@ Public Class frm_AIUrunIsle
     Private Sub UpdateStatus(text As String, color As Color)
         lblDurum.Text = text
         lblDurum.ForeColor = color
-        Application.DoEvents()
     End Sub
     
     Private Sub AddLog(message As String)
