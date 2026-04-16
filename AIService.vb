@@ -692,7 +692,11 @@ HTML formatında:
             
             ' Sadece secili alanlari iste
             If seciliAlanlar.Count < 11 Then
-                prompt = prompt & vbCrLf & vbCrLf & "ONEMLI: JSON yanitinda SADECE su alanlari olustur, diger alanlari bos string birak: " & String.Join(", ", seciliAlanlar)
+                prompt = prompt & vbCrLf & vbCrLf & "BEDEN TABLOSU TALIMATI: sizeChart alaninda, urunun GERCEK bedenlerine gore HTML tablo olustur.
+Urunun bedenleri: {bedenler}
+Her beden icin satir ekle. Sutunlar urun tipine gore: Cocuk/Bebek icin (Beden, Boy cm, Kilo kg, Gogus cm, Bel cm), Yetiskin icin (Beden, Gogus cm, Bel cm, Kalca cm, Boy cm). Her hucreye GERCEKCI SAYI ARALIGI yaz (ornek: 98-104). ... veya placeholder YAZMA.
+
+ONEMLI: JSON yanitinda SADECE su alanlari olustur, diger alanlari bos string birak: " & String.Join(", ", seciliAlanlar)
             End If
             
             ' Token limitini secili alan sayisina gore ayarla
@@ -2412,7 +2416,7 @@ Sezon: {If(String.IsNullOrEmpty(sezon), "4 Mevsim", sezon)}
   
   ""metaDescription"": ""{marka} {urunAdi} ✓{gercekCinsiyet} ✓{gercekYasGrubu} ✓[Kumaş] ✓Orijinal ✓Hızlı Kargo ✓Ücretsiz İade. En uygun fiyat!"",
   
-  ""sizeChart"": ""(ONEMLI: Urune uygun HTML beden tablosu olustur. Cocuk urunleri icin yas/boy bazli bedenler kullan: 1-2 Yas, 3-4 Yas, 5-6 Yas, 7-8 Yas, 9-10 Yas, 11-12 Yas. Bebek urunleri icin: 0-3 Ay, 3-6 Ay, 6-9 Ay, 9-12 Ay, 12-18 Ay, 18-24 Ay. Yetiskin icin: S, M, L, XL, XXL. Ayakkabi icin: 36-42 arasi numara. Sutunlar: Beden, Gogus, Bel, Boy veya Uzunluk, Genislik. Her hucreye gercekci cm degerleri yaz. Placeholder veya ... KULLANMA. Format: <table class='size-chart'><thead><tr><th>...</th></tr></thead><tbody><tr><td>...</td></tr></tbody></table>)"",
+  ""sizeChart"": ""<table class='size-chart'><thead><tr><th>Beden</th><th>Boy (cm)</th><th>Kilo (kg)</th><th>Gogus (cm)</th><th>Bel (cm)</th></tr></thead><tbody>HER BEDEN ICIN BIR TR SATIRI EKLE</tbody></table>"",
   
   ""yikamaTalimati"": ""<ul><li>30 derecede yikayiniz</li><li>Beyazlatici kullanmayiniz</li></ul>"",
   
@@ -3531,7 +3535,7 @@ Materyal: {If(String.IsNullOrEmpty(materyal), "[Deri/Tekstil/Sentetik - tahmin e
   
   ""metaDescription"": ""{marka} {urunAdi} ✓{gercekCinsiyet} ✓Orijinal ✓Hızlı Kargo ✓Kolay İade. [Malzeme] üst, [taban] taban. En uygun fiyat!"",
   
-  ""sizeChart"": ""(ONEMLI: Urune uygun HTML beden tablosu olustur. Cocuk urunleri icin yas/boy bazli bedenler kullan: 1-2 Yas, 3-4 Yas, 5-6 Yas, 7-8 Yas, 9-10 Yas, 11-12 Yas. Bebek urunleri icin: 0-3 Ay, 3-6 Ay, 6-9 Ay, 9-12 Ay, 12-18 Ay, 18-24 Ay. Yetiskin icin: S, M, L, XL, XXL. Ayakkabi icin: 36-42 arasi numara. Sutunlar: Beden, Gogus, Bel, Boy veya Uzunluk, Genislik. Her hucreye gercekci cm degerleri yaz. Placeholder veya ... KULLANMA. Format: <table class='size-chart'><thead><tr><th>...</th></tr></thead><tbody><tr><td>...</td></tr></tbody></table>)"",
+  ""sizeChart"": ""<table class='size-chart'><thead><tr><th>Beden</th><th>Boy (cm)</th><th>Kilo (kg)</th><th>Gogus (cm)</th><th>Bel (cm)</th></tr></thead><tbody>HER BEDEN ICIN BIR TR SATIRI EKLE</tbody></table>"",
   
   ""yikamaTalimati"": ""<ul><li>30 derecede yikayiniz</li><li>Beyazlatici kullanmayiniz</li></ul>"",
   
@@ -3980,7 +3984,7 @@ Malzeme: {If(String.IsNullOrEmpty(materyal), "[Organik pamuk/Pamuk - tahmin et]"
   
   ""metaDescription"": ""{marka} {urunAdi} ✓Bebek ✓[Malzeme] ✓Sertifikalı ✓Hızlı Kargo. Bebeğiniz için en güvenlisi!"",
   
-  ""sizeChart"": ""(ONEMLI: Urune uygun HTML beden tablosu olustur. Cocuk urunleri icin yas/boy bazli bedenler kullan: 1-2 Yas, 3-4 Yas, 5-6 Yas, 7-8 Yas, 9-10 Yas, 11-12 Yas. Bebek urunleri icin: 0-3 Ay, 3-6 Ay, 6-9 Ay, 9-12 Ay, 12-18 Ay, 18-24 Ay. Yetiskin icin: S, M, L, XL, XXL. Ayakkabi icin: 36-42 arasi numara. Sutunlar: Beden, Gogus, Bel, Boy veya Uzunluk, Genislik. Her hucreye gercekci cm degerleri yaz. Placeholder veya ... KULLANMA. Format: <table class='size-chart'><thead><tr><th>...</th></tr></thead><tbody><tr><td>...</td></tr></tbody></table>)"",
+  ""sizeChart"": ""<table class='size-chart'><thead><tr><th>Beden</th><th>Boy (cm)</th><th>Kilo (kg)</th><th>Gogus (cm)</th><th>Bel (cm)</th></tr></thead><tbody>HER BEDEN ICIN BIR TR SATIRI EKLE</tbody></table>"",
   
   ""yikamaTalimati"": ""<ul><li>30 derecede yikayiniz</li><li>Beyazlatici kullanmayiniz</li></ul>"",
   
@@ -4077,7 +4081,7 @@ Malzeme: {If(String.IsNullOrEmpty(materyal), "[Polyester/Nylon - tahmin et]", ma
   
   ""metaDescription"": ""{marka} {urunAdi} ✓{gercekCinsiyet} ✓[Teknoloji] ✓Orijinal ✓Hızlı Kargo. Performansınızı artırın!"",
   
-  ""sizeChart"": ""(ONEMLI: Urune uygun HTML beden tablosu olustur. Cocuk urunleri icin yas/boy bazli bedenler kullan: 1-2 Yas, 3-4 Yas, 5-6 Yas, 7-8 Yas, 9-10 Yas, 11-12 Yas. Bebek urunleri icin: 0-3 Ay, 3-6 Ay, 6-9 Ay, 9-12 Ay, 12-18 Ay, 18-24 Ay. Yetiskin icin: S, M, L, XL, XXL. Ayakkabi icin: 36-42 arasi numara. Sutunlar: Beden, Gogus, Bel, Boy veya Uzunluk, Genislik. Her hucreye gercekci cm degerleri yaz. Placeholder veya ... KULLANMA. Format: <table class='size-chart'><thead><tr><th>...</th></tr></thead><tbody><tr><td>...</td></tr></tbody></table>)"",
+  ""sizeChart"": ""<table class='size-chart'><thead><tr><th>Beden</th><th>Boy (cm)</th><th>Kilo (kg)</th><th>Gogus (cm)</th><th>Bel (cm)</th></tr></thead><tbody>HER BEDEN ICIN BIR TR SATIRI EKLE</tbody></table>"",
   
   ""yikamaTalimati"": ""<ul><li>30 derecede yikayiniz</li><li>Beyazlatici kullanmayiniz</li></ul>"",
   

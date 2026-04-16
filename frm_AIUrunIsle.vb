@@ -727,6 +727,35 @@ Public Class frm_AIUrunIsle
                     WriteLog($"  Marka: {marka}")
                     WriteLog($"  Kategori: {tumKategori}")
                     
+                    ' Urunun beden ve renklerini DB'den oku
+                    Try
+                        Using connBeden As New OleDb.OleDbConnection(connection)
+                            connBeden.Open()
+                            ' Bedenleri al
+                            Dim cmdBeden As New OleDb.OleDbCommand("SELECT DISTINCT sBeden FROM tbStok WHERE sModel = ? AND sBeden IS NOT NULL AND sBeden <> '' ORDER BY sBeden", connBeden)
+                            cmdBeden.Parameters.AddWithValue("?", sModel)
+                            Dim bedenList As New List(Of String)
+                            Using rdr = cmdBeden.ExecuteReader()
+                                While rdr.Read()
+                                    bedenList.Add(rdr("sBeden").ToString().Trim())
+                                End While
+                            End Using
+                            productData("sBedenler") = String.Join(", ", bedenList)
+                            
+                            ' Renkleri al
+                            Dim cmdRenk As New OleDb.OleDbCommand("SELECT DISTINCT sRenk FROM tbStok WHERE sModel = ? AND sRenk IS NOT NULL AND sRenk <> '' ORDER BY sRenk", connBeden)
+                            cmdRenk.Parameters.AddWithValue("?", sModel)
+                            Dim renkList As New List(Of String)
+                            Using rdr2 = cmdRenk.ExecuteReader()
+                                While rdr2.Read()
+                                    renkList.Add(rdr2("sRenk").ToString().Trim())
+                                End While
+                            End Using
+                            productData("sRenkler") = String.Join(", ", renkList)
+                        End Using
+                    Catch
+                    End Try
+                    
                     ' Secili alanlari productData'ya ekle - AI sadece bunlari olusturacak
                     productData("chkUzunAciklama") = chkUzunAciklama.Checked
                     productData("chkKisaAciklama") = chkKisaAciklama.Checked
