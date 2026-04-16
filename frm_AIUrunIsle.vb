@@ -1005,17 +1005,17 @@ Public Class frm_AIUrunIsle
         Dim hataMesajlari As New List(Of String)
         
         ' Checkbox durumlarini content'tan oku (async guvenli)
-        Dim bChkUzunAciklama As Boolean = bChkUzunAciklama
-        Dim bChkKisaAciklama As Boolean = bChkKisaAciklama
-        Dim bChkBaslik As Boolean = bChkBaslik
-        Dim bChkSEOBilgisi As Boolean = bChkSEOBilgisi
-        Dim bChkOzellikler As Boolean = bChkOzellikler
-        Dim bChkTalimat As Boolean = bChkTalimat
-        Dim bChkBedenTablosu As Boolean = bChkBedenTablosu
-        Dim bChkYikamaTalimati As Boolean = bChkYikamaTalimati
-        Dim bChkBakimTalimati As Boolean = bChkBakimTalimati
-        Dim bChkGuvenlikUyari As Boolean = bChkGuvenlikUyari
-        Dim bChkSadeceBoslar As Boolean = bChkSadeceBoslar
+        Dim bChkUzunAciklama As Boolean = If(chkStates IsNot Nothing AndAlso chkStates.ContainsKey("chkUzunAciklama"), chkStates("chkUzunAciklama"), chkUzunAciklama.Checked)
+        Dim bChkKisaAciklama As Boolean = If(chkStates IsNot Nothing AndAlso chkStates.ContainsKey("chkKisaAciklama"), chkStates("chkKisaAciklama"), chkKisaAciklama.Checked)
+        Dim bChkBaslik As Boolean = If(chkStates IsNot Nothing AndAlso chkStates.ContainsKey("chkBaslik"), chkStates("chkBaslik"), chkBaslik.Checked)
+        Dim bChkSEOBilgisi As Boolean = If(chkStates IsNot Nothing AndAlso chkStates.ContainsKey("chkSEOBilgisi"), chkStates("chkSEOBilgisi"), chkSEOBilgisi.Checked)
+        Dim bChkOzellikler As Boolean = If(chkStates IsNot Nothing AndAlso chkStates.ContainsKey("chkOzellikler"), chkStates("chkOzellikler"), chkOzellikler.Checked)
+        Dim bChkTalimat As Boolean = If(chkStates IsNot Nothing AndAlso chkStates.ContainsKey("chkTalimat"), chkStates("chkTalimat"), chkTalimat.Checked)
+        Dim bChkBedenTablosu As Boolean = If(chkStates IsNot Nothing AndAlso chkStates.ContainsKey("chkBedenTablosu"), chkStates("chkBedenTablosu"), chkBedenTablosu.Checked)
+        Dim bChkYikamaTalimati As Boolean = If(chkStates IsNot Nothing AndAlso chkStates.ContainsKey("chkYikamaTalimati"), chkStates("chkYikamaTalimati"), chkYikamaTalimati.Checked)
+        Dim bChkBakimTalimati As Boolean = If(chkStates IsNot Nothing AndAlso chkStates.ContainsKey("chkBakimTalimati"), chkStates("chkBakimTalimati"), chkBakimTalimati.Checked)
+        Dim bChkGuvenlikUyari As Boolean = If(chkStates IsNot Nothing AndAlso chkStates.ContainsKey("chkGuvenlikUyari"), chkStates("chkGuvenlikUyari"), chkGuvenlikUyari.Checked)
+        Dim bChkSadeceBoslar As Boolean = If(chkStates IsNot Nothing AndAlso chkStates.ContainsKey("chkSadeceBoslar"), chkStates("chkSadeceBoslar"), chkSadeceBoslar.Checked)
         
         Try
             If String.IsNullOrEmpty(connection) Then
