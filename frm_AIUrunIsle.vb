@@ -862,7 +862,7 @@ Public Class frm_AIUrunIsle
                     ' tbStokAIIcerik kontrolü
                     If chkBaslik.Checked Then kosullar.Add("(a.sModel IS NULL OR a.sSEOBaslik IS NULL OR a.sSEOBaslik = '' OR RTRIM(a.sSEOBaslik) = '---')")
                     If chkKisaAciklama.Checked Then kosullar.Add("(a.sModel IS NULL OR a.sKisaAciklama IS NULL OR a.sKisaAciklama = '' OR RTRIM(a.sKisaAciklama) = '---')")
-                    If chkSEOBilgisi.Checked Then kosullar.Add("(a.sModel IS NULL OR a.sMetaDescription IS NULL OR a.sMetaDescription = '' OR RTRIM(a.sMetaDescription) = '---' OR a.sAnahtarKelimeler IS NULL OR a.sAnahtarKelimeler = '')")
+                    If chkSEOBilgisi.Checked Then kosullar.Add("(a.sModel IS NULL OR a.sMetaDescription IS NULL OR a.sMetaDescription = '' OR RTRIM(a.sMetaDescription) = '---' OR a.sAnahtarKelimeler IS NULL OR a.sAnahtarKelimeler = '' OR RTRIM(a.sAnahtarKelimeler) = '---')")
                     
                     Dim whereKosul As String = ""
                     If kosullar.Count > 0 Then
@@ -890,7 +890,7 @@ Public Class frm_AIUrunIsle
                     If chkTalimat.Checked Then varsayilanKosullar.Add("(u.sModel IS NULL OR u.sKullanimTalimati IS NULL OR u.sKullanimTalimati = '' OR RTRIM(u.sKullanimTalimati) = '---')")
                     If chkBaslik.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sSEOBaslik IS NULL OR a.sSEOBaslik = '' OR RTRIM(a.sSEOBaslik) = '---')")
                     If chkKisaAciklama.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sKisaAciklama IS NULL OR a.sKisaAciklama = '' OR RTRIM(a.sKisaAciklama) = '---')")
-                    If chkSEOBilgisi.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sMetaDescription IS NULL OR a.sMetaDescription = '' OR RTRIM(a.sMetaDescription) = '---' OR a.sAnahtarKelimeler IS NULL OR a.sAnahtarKelimeler = '')")
+                    If chkSEOBilgisi.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sMetaDescription IS NULL OR a.sMetaDescription = '' OR RTRIM(a.sMetaDescription) = '---' OR a.sAnahtarKelimeler IS NULL OR a.sAnahtarKelimeler = '' OR RTRIM(a.sAnahtarKelimeler) = '---')")
                     If chkYikamaTalimati.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sYikamaTalimati IS NULL OR a.sYikamaTalimati = '' OR RTRIM(a.sYikamaTalimati) = '---')")
                     If chkBakimTalimati.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sBakimTalimati IS NULL OR a.sBakimTalimati = '' OR RTRIM(a.sBakimTalimati) = '---')")
                     If chkGuvenlikUyari.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sGuvenliklUyari IS NULL OR a.sGuvenliklUyari = '' OR RTRIM(a.sGuvenliklUyari) = '---')")
@@ -1038,10 +1038,10 @@ Public Class frm_AIUrunIsle
                     
                     ' Sadece Boşlar modunda: mevcut dolu alanları koru
                     If chkSadeceBoslar.Checked Then
-                        If Not String.IsNullOrEmpty(mevcutUzunNot) Then aciklama = mevcutUzunNot
-                        If Not String.IsNullOrEmpty(mevcutBeden) Then bedenTablosu = mevcutBeden
-                        If Not String.IsNullOrEmpty(mevcutOzellik) Then ozellikler = mevcutOzellik
-                        If Not String.IsNullOrEmpty(mevcutTalimat) Then bakimTalimati = mevcutTalimat
+                        If Not String.IsNullOrEmpty(mevcutUzunNot) AndAlso mevcutUzunNot.Trim() <> "---" Then aciklama = mevcutUzunNot
+                        If Not String.IsNullOrEmpty(mevcutBeden) AndAlso mevcutBeden.Trim() <> "---" Then bedenTablosu = mevcutBeden
+                        If Not String.IsNullOrEmpty(mevcutOzellik) AndAlso mevcutOzellik.Trim() <> "---" Then ozellikler = mevcutOzellik
+                        If Not String.IsNullOrEmpty(mevcutTalimat) AndAlso mevcutTalimat.Trim() <> "---" Then bakimTalimati = mevcutTalimat
                     End If
                     
                     If kayitVar Then
@@ -1100,37 +1100,37 @@ Public Class frm_AIUrunIsle
                             Dim mevcutVal As String
                             
                             mevcutVal = If(IsDBNull(readerAI("sDetayliAciklama")), "", readerAI("sDetayliAciklama").ToString())
-                            If Not String.IsNullOrEmpty(mevcutVal) Then aciklama = mevcutVal
+                            If Not String.IsNullOrEmpty(mevcutVal) AndAlso mevcutVal.Trim() <> "---" Then aciklama = mevcutVal
                             
                             mevcutVal = If(IsDBNull(readerAI("sKisaAciklama")), "", readerAI("sKisaAciklama").ToString())
-                            If Not String.IsNullOrEmpty(mevcutVal) Then kisaAciklama = mevcutVal
+                            If Not String.IsNullOrEmpty(mevcutVal) AndAlso mevcutVal.Trim() <> "---" Then kisaAciklama = mevcutVal
                             
                             mevcutVal = If(IsDBNull(readerAI("sOzelliklerHTML")), "", readerAI("sOzelliklerHTML").ToString())
-                            If Not String.IsNullOrEmpty(mevcutVal) Then ozellikler = mevcutVal
+                            If Not String.IsNullOrEmpty(mevcutVal) AndAlso mevcutVal.Trim() <> "---" Then ozellikler = mevcutVal
                             
                             mevcutVal = If(IsDBNull(readerAI("sKullanimTalimati")), "", readerAI("sKullanimTalimati").ToString())
-                            If Not String.IsNullOrEmpty(mevcutVal) Then bakimTalimati = mevcutVal
+                            If Not String.IsNullOrEmpty(mevcutVal) AndAlso mevcutVal.Trim() <> "---" Then bakimTalimati = mevcutVal
                             
                             mevcutVal = If(IsDBNull(readerAI("sSEOBaslik")), "", readerAI("sSEOBaslik").ToString())
-                            If Not String.IsNullOrEmpty(mevcutVal) Then seoBaslik = mevcutVal
+                            If Not String.IsNullOrEmpty(mevcutVal) AndAlso mevcutVal.Trim() <> "---" Then seoBaslik = mevcutVal
                             
                             mevcutVal = If(IsDBNull(readerAI("sMetaDescription")), "", readerAI("sMetaDescription").ToString())
-                            If Not String.IsNullOrEmpty(mevcutVal) Then metaAciklama = mevcutVal
+                            If Not String.IsNullOrEmpty(mevcutVal) AndAlso mevcutVal.Trim() <> "---" Then metaAciklama = mevcutVal
                             
                             mevcutVal = If(IsDBNull(readerAI("sAnahtarKelimeler")), "", readerAI("sAnahtarKelimeler").ToString())
-                            If Not String.IsNullOrEmpty(mevcutVal) Then anahtarKelimeler = mevcutVal
+                            If Not String.IsNullOrEmpty(mevcutVal) AndAlso mevcutVal.Trim() <> "---" Then anahtarKelimeler = mevcutVal
                             
                             mevcutVal = If(IsDBNull(readerAI("sBedenTablosu")), "", readerAI("sBedenTablosu").ToString())
-                            If Not String.IsNullOrEmpty(mevcutVal) Then bedenTablosu = mevcutVal
+                            If Not String.IsNullOrEmpty(mevcutVal) AndAlso mevcutVal.Trim() <> "---" Then bedenTablosu = mevcutVal
                             
                             mevcutVal = If(IsDBNull(readerAI("sYikamaTalimati")), "", readerAI("sYikamaTalimati").ToString())
-                            If Not String.IsNullOrEmpty(mevcutVal) Then yikamaTalimati = mevcutVal
+                            If Not String.IsNullOrEmpty(mevcutVal) AndAlso mevcutVal.Trim() <> "---" Then yikamaTalimati = mevcutVal
                             
                             mevcutVal = If(IsDBNull(readerAI("sBakimTalimati")), "", readerAI("sBakimTalimati").ToString())
-                            If Not String.IsNullOrEmpty(mevcutVal) Then bakimTalimatiYeni = mevcutVal
+                            If Not String.IsNullOrEmpty(mevcutVal) AndAlso mevcutVal.Trim() <> "---" Then bakimTalimatiYeni = mevcutVal
                             
                             mevcutVal = If(IsDBNull(readerAI("sGuvenliklUyari")), "", readerAI("sGuvenliklUyari").ToString())
-                            If Not String.IsNullOrEmpty(mevcutVal) Then guvenlikUyari = mevcutVal
+                            If Not String.IsNullOrEmpty(mevcutVal) AndAlso mevcutVal.Trim() <> "---" Then guvenlikUyari = mevcutVal
                         End If
                     End If
                     readerAI.Close()
