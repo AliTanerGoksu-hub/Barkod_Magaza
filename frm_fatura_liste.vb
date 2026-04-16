@@ -8115,61 +8115,69 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
 
                         ' Maliyet ve Alis fiyati hesapla
                         ' ============================================================
-                        ' MALIYET: lGirisTutar / Miktar * KDV (orijinal frm_fatura.vb mantigi)
-                        ' ALIS:    lBrutFiyat * KDV (sadece bAlisKdvDahil=False ise)
+                        ' frm_fatura.vb guncelle_maliyet() ile birebir ayni mantik
                         ' ============================================================
                         Dim maliyet As Decimal = 0
                         Dim alis As Decimal = 0
-                        
-                        ' Satir bazli ek maliyetleri hesapla
-                        Dim lSatirEkMaliyet As Decimal = lIlaveMaliyetTutar + lEkIlaveMaliyetTutar
-                        
-                        ' Master seviyesindeki ek maliyetlerin bu satira dusen payini hesapla
-                        Dim lNetTutarDetay As Decimal = lBrutTutar - lIskontoTutari
-                        Dim lMasterEkMaliyetToplam As Decimal = lEkmaliyet1 + lEkmaliyet3 + lEkmaliyet4
-                        Dim lMasterEkMaliyetPay As Decimal = 0
-                        If lNetTutar > 0 AndAlso lMasterEkMaliyetToplam > 0 Then
-                            lMasterEkMaliyetPay = (lNetTutarDetay / lNetTutar) * lMasterEkMaliyetToplam
-                        End If
-                        
-                        Dim lToplamEkMaliyet As Decimal = lSatirEkMaliyet + lMasterEkMaliyetPay
-                        
-                        ' --- MALIYET HESABI (orijinal frm_fatura.vb gibi) ---
-                        ' lGirisTutar = Net giris tutari (KDV haric, iskonto sonrasi)
-                        Dim lGirisTutarDetay As Decimal = KeyCode.sorgu_sayi(drDetay("lGirisTutar"), 0)
-                        
+                        Dim oranekmaliyet As Decimal = 0
+
+                        ' bKdvKontrolluMaliyet ayarini oku
+                        Dim bKdvKontrolluMaliyet As Boolean = False
+                        Try
+                            Using cmdKdvK As New OleDbCommand("SELECT ISNULL(bKdvKontrolluMaliyet, 0) FROM tbParamSatisFatura", con)
+                                Dim resultK = cmdKdvK.ExecuteScalar()
+                                If resultK IsNot Nothing AndAlso resultK IsNot DBNull.Value Then
+                                    bKdvKontrolluMaliyet = (Convert.ToInt32(resultK) <> 0)
+                                End If
+                            End Using
+                        Catch
+                        End Try
+
+                        ' 1. Birim maliyet = lGirisTutar / lGirisMiktar1
                         If lGirisMiktar1 > 0 Then
-                            maliyet = lGirisTutarDetay / lGirisMiktar1
+                            maliyet = lGirisTutar / lGirisMiktar1
                         Else
                             maliyet = lBrutFiyat
                         End If
-                        
-                        ' KDV ekle
-                        If nKdvOrani > 0 Then
+
+                        ' 2. Ilk KDV ekleme (StokKdvOrani vs FaturaKdvOrani)
+                        If nKdvOrani <> nStokKdvOrani Then
+                            If bKdvKontrolluMaliyet = True Then
+                                maliyet = maliyet * ((nStokKdvOrani + 100) / 100)
+                            Else
+                                maliyet = maliyet * ((nKdvOrani + 100) / 100)
+                            End If
+                        Else
                             maliyet = maliyet * ((nKdvOrani + 100) / 100)
                         End If
-                        
-                        ' Ilave maliyet cikar
-                        If lGirisMiktar1 > 0 AndAlso (lIlaveMaliyetTutar + lEkIlaveMaliyetTutar) <> 0 Then
-                            maliyet = maliyet - Math.Abs((lIlaveMaliyetTutar + lEkIlaveMaliyetTutar) / lGirisMiktar1)
+
+                        ' 3. Ilave maliyet cikar
+                        maliyet = maliyet - (Math.Abs((lIlaveMaliyetTutar + lEkIlaveMaliyetTutar) / If(lGirisMiktar1 > 0, lGirisMiktar1, 1)))
+
+                        ' 4. Master ek maliyet orani ekle
+                        Try
+                            If CDec(lEkmaliyet1 + lEkmaliyet3 + lEkmaliyet4) <> 0 Then
+                                oranekmaliyet = CDec(lEkmaliyet1 + lEkmaliyet3 + lEkmaliyet4) / CDec(lNetTutar - lEkmaliyet1)
+                                maliyet = maliyet + (maliyet * (((oranekmaliyet * 100)) / 100))
+                            End If
+                        Catch
+                        End Try
+
+                        ' 5. Ikinci KDV ekleme - SADECE bAlisKdvDahil = False ise
+                        If bAlisKdvDahil = False Then
+                            If nKdvOrani <> nStokKdvOrani Then
+                                If bKdvKontrolluMaliyet = True Then
+                                    maliyet = maliyet * ((nStokKdvOrani + 100) / 100)
+                                Else
+                                    maliyet = maliyet * ((nKdvOrani + 100) / 100)
+                                End If
+                            Else
+                                maliyet = maliyet * ((nKdvOrani + 100) / 100)
+                            End If
                         End If
-                        
-                        ' Master ek maliyet orani ekle
-                        If lNetTutar > 0 AndAlso lMasterEkMaliyetToplam > 0 Then
-                            Dim ekMaliyetOran As Decimal = lMasterEkMaliyetToplam / lNetTutar
-                            maliyet = maliyet + (maliyet * ekMaliyetOran)
-                        End If
-                        
-                        ' KDV tekrar ekle (orijinal frm_fatura.vb mantigi)
-                        If nKdvOrani > 0 Then
-                            maliyet = maliyet * ((nKdvOrani + 100) / 100)
-                        End If
-                        
-                        ' --- ALIS FIYATI HESABI (orijinal frm_fatura.vb gibi) ---
-                        ' Alis fiyati = BrutFiyat (kullanicinin girdigi ham fiyat)
+
+                        ' --- ALIS FIYATI HESABI ---
                         alis = lBrutFiyat
-                        ' Eger alis fiyat tipi KDV dahil DEGILSE, KDV ekle
-                        ' Eger KDV dahilse, fiyat zaten KDV dahil, ekleme yapma
                         If bAlisKdvDahil = False Then
                             alis = alis * ((nKdvOrani + 100) / 100)
                         End If
