@@ -728,7 +728,7 @@ Public Class frm_AIUrunIsle
                         ' HEMEN KAYDET - Yarıda kalsa bile bu model kaydedilmiş olur
                         ' Debug: AI ne dondu?
                         AddLog($"   📝 AI sonuc - sizeChart: {If(content.ContainsKey("sizeChart"), content("sizeChart").Substring(0, Math.Min(content("sizeChart").Length, 50)), "YOK")}")
-                        AddLog($"   📝 bedenTablosu checkbox: {chkBedenTablosu.Checked}")
+                        AddLog($"   📝 bedenTablosu checkbox: {bChkBedenTablosu}")
                         AddLog($"   💾 Kaydediliyor...")
                         Dim kayitSonuc As Boolean = SaveModelContent(sModel, nStokID, content)
                         
@@ -988,6 +988,19 @@ Public Class frm_AIUrunIsle
         Dim kayitBasarili As Boolean = False
         Dim hataMesajlari As New List(Of String)
         
+        ' Checkbox durumlarini content'tan oku (async guvenli)
+        Dim bChkUzunAciklama As Boolean = bChkUzunAciklama
+        Dim bChkKisaAciklama As Boolean = bChkKisaAciklama
+        Dim bChkBaslik As Boolean = bChkBaslik
+        Dim bChkSEOBilgisi As Boolean = bChkSEOBilgisi
+        Dim bChkOzellikler As Boolean = bChkOzellikler
+        Dim bChkTalimat As Boolean = bChkTalimat
+        Dim bChkBedenTablosu As Boolean = bChkBedenTablosu
+        Dim bChkYikamaTalimati As Boolean = bChkYikamaTalimati
+        Dim bChkBakimTalimati As Boolean = bChkBakimTalimati
+        Dim bChkGuvenlikUyari As Boolean = bChkGuvenlikUyari
+        Dim bChkSadeceBoslar As Boolean = bChkSadeceBoslar
+        
         Try
             If String.IsNullOrEmpty(connection) Then
                 AddLog("   ⚠️ HATA: Veritabanı bağlantısı boş!")
@@ -1040,7 +1053,7 @@ Public Class frm_AIUrunIsle
                     reader.Close()
                     
                     ' Sadece Boşlar modunda: mevcut dolu alanları koru
-                    If chkSadeceBoslar.Checked Then
+                    If bChkSadeceBoslar Then
                         If Not String.IsNullOrEmpty(mevcutUzunNot) AndAlso mevcutUzunNot.Trim() <> "---" Then aciklama = mevcutUzunNot
                         If Not String.IsNullOrEmpty(mevcutBeden) AndAlso mevcutBeden.Trim() <> "---" Then bedenTablosu = mevcutBeden
                         If Not String.IsNullOrEmpty(mevcutOzellik) AndAlso mevcutOzellik.Trim() <> "---" Then ozellikler = mevcutOzellik
@@ -1052,10 +1065,10 @@ Public Class frm_AIUrunIsle
                         ' Sadece secili alanlari guncelle (dinamik UPDATE)
                         Dim setClauses As New List(Of String)
                         Dim paramValues As New List(Of Object)
-                        If chkUzunAciklama.Checked AndAlso Not String.IsNullOrEmpty(aciklama) Then setClauses.Add("sUzunNot = ?") : paramValues.Add(aciklama)
-                        If chkBedenTablosu.Checked AndAlso Not String.IsNullOrEmpty(bedenTablosu) Then setClauses.Add("sBedenTablosu = ?") : paramValues.Add(bedenTablosu)
-                        If chkOzellikler.Checked AndAlso Not String.IsNullOrEmpty(ozellikler) Then setClauses.Add("sOzellikler = ?") : paramValues.Add(ozellikler)
-                        If chkTalimat.Checked AndAlso Not String.IsNullOrEmpty(bakimTalimati) Then setClauses.Add("sKullanimTalimati = ?") : paramValues.Add(bakimTalimati)
+                        If bChkUzunAciklama AndAlso Not String.IsNullOrEmpty(aciklama) Then setClauses.Add("sUzunNot = ?") : paramValues.Add(aciklama)
+                        If bChkBedenTablosu AndAlso Not String.IsNullOrEmpty(bedenTablosu) Then setClauses.Add("sBedenTablosu = ?") : paramValues.Add(bedenTablosu)
+                        If bChkOzellikler AndAlso Not String.IsNullOrEmpty(ozellikler) Then setClauses.Add("sOzellikler = ?") : paramValues.Add(ozellikler)
+                        If bChkTalimat AndAlso Not String.IsNullOrEmpty(bakimTalimati) Then setClauses.Add("sKullanimTalimati = ?") : paramValues.Add(bakimTalimati)
                         setClauses.Add("sSonKullaniciAdi = ?") : paramValues.Add("AI_TOPLU")
                         setClauses.Add("dteSonUpdateTarihi = ?") : paramValues.Add(DateTime.Now)
                         paramValues.Add(sModel)
@@ -1071,10 +1084,10 @@ Public Class frm_AIUrunIsle
                             "INSERT INTO tbStokUzunNot (sModel, sUzunNot, sBedenTablosu, sOzellikler, sKullanimTalimati, " &
                             "sSonKullaniciAdi, dteSonUpdateTarihi) VALUES (?, ?, ?, ?, ?, ?, ?)", conn)
                         insertCmd.Parameters.AddWithValue("?", sModel)
-                        insertCmd.Parameters.AddWithValue("?", If(chkUzunAciklama.Checked, aciklama, mevcutUzunNot))
-                        insertCmd.Parameters.AddWithValue("?", If(chkBedenTablosu.Checked, bedenTablosu, mevcutBeden))
-                        insertCmd.Parameters.AddWithValue("?", If(chkOzellikler.Checked, ozellikler, mevcutOzellik))
-                        insertCmd.Parameters.AddWithValue("?", If(chkTalimat.Checked, bakimTalimati, mevcutTalimat))
+                        insertCmd.Parameters.AddWithValue("?", If(bChkUzunAciklama, aciklama, mevcutUzunNot))
+                        insertCmd.Parameters.AddWithValue("?", If(bChkBedenTablosu, bedenTablosu, mevcutBeden))
+                        insertCmd.Parameters.AddWithValue("?", If(bChkOzellikler, ozellikler, mevcutOzellik))
+                        insertCmd.Parameters.AddWithValue("?", If(bChkTalimat, bakimTalimati, mevcutTalimat))
                         insertCmd.Parameters.AddWithValue("?", "AI_TOPLU")
                         insertCmd.Parameters.AddWithValue("?", DateTime.Now)
                         Dim affected As Integer = insertCmd.ExecuteNonQuery()
@@ -1100,7 +1113,7 @@ Public Class frm_AIUrunIsle
                         kayitVarAI = True
                         
                         ' Sadece Boşlar modunda: mevcut dolu alanları koru
-                        If chkSadeceBoslar.Checked Then
+                        If bChkSadeceBoslar Then
                             Dim mevcutVal As String
                             
                             mevcutVal = If(IsDBNull(readerAI("sDetayliAciklama")), "", readerAI("sDetayliAciklama").ToString())
@@ -1143,17 +1156,17 @@ Public Class frm_AIUrunIsle
                         ' Sadece secili alanlari guncelle (dinamik UPDATE)
                         Dim setAI As New List(Of String)
                         Dim paramAI As New List(Of Object)
-                        If chkUzunAciklama.Checked AndAlso Not String.IsNullOrEmpty(aciklama) Then setAI.Add("sDetayliAciklama = ?") : paramAI.Add(aciklama)
-                        If chkKisaAciklama.Checked AndAlso Not String.IsNullOrEmpty(kisaAciklama) Then setAI.Add("sKisaAciklama = ?") : paramAI.Add(kisaAciklama)
-                        If chkOzellikler.Checked AndAlso Not String.IsNullOrEmpty(ozellikler) Then setAI.Add("sOzelliklerHTML = ?") : paramAI.Add(ozellikler)
-                        If chkTalimat.Checked AndAlso Not String.IsNullOrEmpty(bakimTalimati) Then setAI.Add("sKullanimTalimati = ?") : paramAI.Add(bakimTalimati)
-                        If chkBaslik.Checked AndAlso Not String.IsNullOrEmpty(seoBaslik) Then setAI.Add("sSEOBaslik = ?") : paramAI.Add(seoBaslik)
-                        If chkSEOBilgisi.Checked AndAlso Not String.IsNullOrEmpty(metaAciklama) Then setAI.Add("sMetaDescription = ?") : paramAI.Add(metaAciklama)
-                        If chkSEOBilgisi.Checked AndAlso Not String.IsNullOrEmpty(anahtarKelimeler) Then setAI.Add("sAnahtarKelimeler = ?") : paramAI.Add(anahtarKelimeler)
-                        If chkBedenTablosu.Checked AndAlso Not String.IsNullOrEmpty(bedenTablosu) Then setAI.Add("sBedenTablosu = ?") : paramAI.Add(bedenTablosu)
-                        If chkYikamaTalimati.Checked AndAlso Not String.IsNullOrEmpty(yikamaTalimati) Then setAI.Add("sYikamaTalimati = ?") : paramAI.Add(yikamaTalimati)
-                        If chkBakimTalimati.Checked AndAlso Not String.IsNullOrEmpty(bakimTalimatiYeni) Then setAI.Add("sBakimTalimati = ?") : paramAI.Add(bakimTalimatiYeni)
-                        If chkGuvenlikUyari.Checked AndAlso Not String.IsNullOrEmpty(guvenlikUyari) Then setAI.Add("sGuvenliklUyari = ?") : paramAI.Add(guvenlikUyari)
+                        If bChkUzunAciklama AndAlso Not String.IsNullOrEmpty(aciklama) Then setAI.Add("sDetayliAciklama = ?") : paramAI.Add(aciklama)
+                        If bChkKisaAciklama AndAlso Not String.IsNullOrEmpty(kisaAciklama) Then setAI.Add("sKisaAciklama = ?") : paramAI.Add(kisaAciklama)
+                        If bChkOzellikler AndAlso Not String.IsNullOrEmpty(ozellikler) Then setAI.Add("sOzelliklerHTML = ?") : paramAI.Add(ozellikler)
+                        If bChkTalimat AndAlso Not String.IsNullOrEmpty(bakimTalimati) Then setAI.Add("sKullanimTalimati = ?") : paramAI.Add(bakimTalimati)
+                        If bChkBaslik AndAlso Not String.IsNullOrEmpty(seoBaslik) Then setAI.Add("sSEOBaslik = ?") : paramAI.Add(seoBaslik)
+                        If bChkSEOBilgisi AndAlso Not String.IsNullOrEmpty(metaAciklama) Then setAI.Add("sMetaDescription = ?") : paramAI.Add(metaAciklama)
+                        If bChkSEOBilgisi AndAlso Not String.IsNullOrEmpty(anahtarKelimeler) Then setAI.Add("sAnahtarKelimeler = ?") : paramAI.Add(anahtarKelimeler)
+                        If bChkBedenTablosu AndAlso Not String.IsNullOrEmpty(bedenTablosu) Then setAI.Add("sBedenTablosu = ?") : paramAI.Add(bedenTablosu)
+                        If bChkYikamaTalimati AndAlso Not String.IsNullOrEmpty(yikamaTalimati) Then setAI.Add("sYikamaTalimati = ?") : paramAI.Add(yikamaTalimati)
+                        If bChkBakimTalimati AndAlso Not String.IsNullOrEmpty(bakimTalimatiYeni) Then setAI.Add("sBakimTalimati = ?") : paramAI.Add(bakimTalimatiYeni)
+                        If bChkGuvenlikUyari AndAlso Not String.IsNullOrEmpty(guvenlikUyari) Then setAI.Add("sGuvenliklUyari = ?") : paramAI.Add(guvenlikUyari)
                         setAI.Add("nIcerikPuani = ?") : paramAI.Add(icerikPuani)
                         setAI.Add("dteGuncelleme = ?") : paramAI.Add(DateTime.Now)
                         paramAI.Add(sModel)
