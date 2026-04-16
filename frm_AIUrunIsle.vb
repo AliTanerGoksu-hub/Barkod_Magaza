@@ -726,6 +726,8 @@ Public Class frm_AIUrunIsle
                         ' Beden tablosu KALDIRILDI - frm_AI_TopluIslem'deki checkbox ile kontrol edilir
                         
                         ' HEMEN KAYDET - Yarıda kalsa bile bu model kaydedilmiş olur
+                        ' Debug: AI ne dondu?
+                        AddLog($"   📝 AI sonuc - sizeChart: {If(content.ContainsKey("sizeChart"), content("sizeChart").Substring(0, Math.Min(content("sizeChart").Length, 50)), "YOK")}")
                         AddLog($"   💾 Kaydediliyor...")
                         Dim kayitSonuc As Boolean = SaveModelContent(sModel, nStokID, content)
                         
@@ -1048,10 +1050,10 @@ Public Class frm_AIUrunIsle
                         ' Sadece secili alanlari guncelle (dinamik UPDATE)
                         Dim setClauses As New List(Of String)
                         Dim paramValues As New List(Of Object)
-                        If chkUzunAciklama.Checked Then setClauses.Add("sUzunNot = ?") : paramValues.Add(aciklama)
-                        If chkBedenTablosu.Checked Then setClauses.Add("sBedenTablosu = ?") : paramValues.Add(bedenTablosu)
-                        If chkOzellikler.Checked Then setClauses.Add("sOzellikler = ?") : paramValues.Add(ozellikler)
-                        If chkTalimat.Checked Then setClauses.Add("sKullanimTalimati = ?") : paramValues.Add(bakimTalimati)
+                        If chkUzunAciklama.Checked AndAlso Not String.IsNullOrEmpty(aciklama) Then setClauses.Add("sUzunNot = ?") : paramValues.Add(aciklama)
+                        If chkBedenTablosu.Checked AndAlso Not String.IsNullOrEmpty(bedenTablosu) Then setClauses.Add("sBedenTablosu = ?") : paramValues.Add(bedenTablosu)
+                        If chkOzellikler.Checked AndAlso Not String.IsNullOrEmpty(ozellikler) Then setClauses.Add("sOzellikler = ?") : paramValues.Add(ozellikler)
+                        If chkTalimat.Checked AndAlso Not String.IsNullOrEmpty(bakimTalimati) Then setClauses.Add("sKullanimTalimati = ?") : paramValues.Add(bakimTalimati)
                         setClauses.Add("sSonKullaniciAdi = ?") : paramValues.Add("AI_TOPLU")
                         setClauses.Add("dteSonUpdateTarihi = ?") : paramValues.Add(DateTime.Now)
                         paramValues.Add(sModel)
@@ -1139,16 +1141,17 @@ Public Class frm_AIUrunIsle
                         ' Sadece secili alanlari guncelle (dinamik UPDATE)
                         Dim setAI As New List(Of String)
                         Dim paramAI As New List(Of Object)
-                        If chkUzunAciklama.Checked Then setAI.Add("sDetayliAciklama = ?") : paramAI.Add(aciklama)
-                        If chkKisaAciklama.Checked Then setAI.Add("sKisaAciklama = ?") : paramAI.Add(kisaAciklama)
-                        If chkOzellikler.Checked Then setAI.Add("sOzelliklerHTML = ?") : paramAI.Add(ozellikler)
-                        If chkTalimat.Checked Then setAI.Add("sKullanimTalimati = ?") : paramAI.Add(bakimTalimati)
-                        If chkBaslik.Checked Then setAI.Add("sSEOBaslik = ?") : paramAI.Add(seoBaslik)
-                        If chkSEOBilgisi.Checked Then setAI.Add("sMetaDescription = ?") : paramAI.Add(metaAciklama) : setAI.Add("sAnahtarKelimeler = ?") : paramAI.Add(anahtarKelimeler)
-                        If chkBedenTablosu.Checked Then setAI.Add("sBedenTablosu = ?") : paramAI.Add(bedenTablosu)
-                        If chkYikamaTalimati.Checked Then setAI.Add("sYikamaTalimati = ?") : paramAI.Add(yikamaTalimati)
-                        If chkBakimTalimati.Checked Then setAI.Add("sBakimTalimati = ?") : paramAI.Add(bakimTalimatiYeni)
-                        If chkGuvenlikUyari.Checked Then setAI.Add("sGuvenliklUyari = ?") : paramAI.Add(guvenlikUyari)
+                        If chkUzunAciklama.Checked AndAlso Not String.IsNullOrEmpty(aciklama) Then setAI.Add("sDetayliAciklama = ?") : paramAI.Add(aciklama)
+                        If chkKisaAciklama.Checked AndAlso Not String.IsNullOrEmpty(kisaAciklama) Then setAI.Add("sKisaAciklama = ?") : paramAI.Add(kisaAciklama)
+                        If chkOzellikler.Checked AndAlso Not String.IsNullOrEmpty(ozellikler) Then setAI.Add("sOzelliklerHTML = ?") : paramAI.Add(ozellikler)
+                        If chkTalimat.Checked AndAlso Not String.IsNullOrEmpty(bakimTalimati) Then setAI.Add("sKullanimTalimati = ?") : paramAI.Add(bakimTalimati)
+                        If chkBaslik.Checked AndAlso Not String.IsNullOrEmpty(seoBaslik) Then setAI.Add("sSEOBaslik = ?") : paramAI.Add(seoBaslik)
+                        If chkSEOBilgisi.Checked AndAlso Not String.IsNullOrEmpty(metaAciklama) Then setAI.Add("sMetaDescription = ?") : paramAI.Add(metaAciklama)
+                        If chkSEOBilgisi.Checked AndAlso Not String.IsNullOrEmpty(anahtarKelimeler) Then setAI.Add("sAnahtarKelimeler = ?") : paramAI.Add(anahtarKelimeler)
+                        If chkBedenTablosu.Checked AndAlso Not String.IsNullOrEmpty(bedenTablosu) Then setAI.Add("sBedenTablosu = ?") : paramAI.Add(bedenTablosu)
+                        If chkYikamaTalimati.Checked AndAlso Not String.IsNullOrEmpty(yikamaTalimati) Then setAI.Add("sYikamaTalimati = ?") : paramAI.Add(yikamaTalimati)
+                        If chkBakimTalimati.Checked AndAlso Not String.IsNullOrEmpty(bakimTalimatiYeni) Then setAI.Add("sBakimTalimati = ?") : paramAI.Add(bakimTalimatiYeni)
+                        If chkGuvenlikUyari.Checked AndAlso Not String.IsNullOrEmpty(guvenlikUyari) Then setAI.Add("sGuvenliklUyari = ?") : paramAI.Add(guvenlikUyari)
                         setAI.Add("nIcerikPuani = ?") : paramAI.Add(icerikPuani)
                         setAI.Add("dteGuncelleme = ?") : paramAI.Add(DateTime.Now)
                         paramAI.Add(sModel)
@@ -1219,10 +1222,11 @@ Public Class frm_AIUrunIsle
     ''' </summary>
     Private Function GetContentValue(dict As Dictionary(Of String, String), key As String) As String
         If dict.ContainsKey(key) AndAlso Not String.IsNullOrEmpty(dict(key)) Then
-            Return dict(key)
+            Dim val As String = dict(key).Trim()
+            If val = "---" Then Return ""
+            Return val
         End If
-        ' AI üretemedi - placeholder yaz ki tekrar sorgulanmasın
-        Return "---"
+        Return ""
     End Function
     
     ''' <summary>
