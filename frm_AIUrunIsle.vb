@@ -855,7 +855,7 @@ Public Class frm_AIUrunIsle
                     
                     ' tbStokUzunNot kontrolü
                     If chkUzunAciklama.Checked Then kosullar.Add("(u.sModel IS NULL OR u.sUzunNot IS NULL OR u.sUzunNot = '')")
-                    If chkBedenTablosu.Checked Then kosullar.Add("(u.sModel IS NULL OR u.sBedenTablosu IS NULL OR u.sBedenTablosu = '')")
+                    If chkBedenTablosu.Checked Then kosullar.Add("(u.sModel IS NULL OR u.sBedenTablosu IS NULL OR RTRIM(u.sBedenTablosu) = '')")
                     If chkOzellikler.Checked Then kosullar.Add("(u.sModel IS NULL OR u.sOzellikler IS NULL OR u.sOzellikler = '')")
                     If chkTalimat.Checked Then kosullar.Add("(u.sModel IS NULL OR u.sKullanimTalimati IS NULL OR u.sKullanimTalimati = '')")
                     
@@ -873,18 +873,19 @@ Public Class frm_AIUrunIsle
                     sql = $"SELECT TOP {maxCount} MIN(s.nStokID) as nStokID, s.sModel, MIN(s.sAciklama) as sAciklama, " &
                           $"{markaSubquery}, {kat1Subquery}, {kat2Subquery}, {kat3Subquery}, {kat4Subquery}, {kat5Subquery} " &
                           "FROM tbStok s " &
-                          "LEFT JOIN tbStokUzunNot u ON s.sModel = u.sModel " &
-                          "LEFT JOIN tbStokAIIcerik a ON s.sModel = a.sModel " &
+                          "LEFT JOIN tbStokUzunNot u ON RTRIM(s.sModel) = RTRIM(u.sModel) " &
+                          "LEFT JOIN tbStokAIIcerik a ON RTRIM(s.sModel) = RTRIM(a.sModel) " &
                           "WHERE s.bWebGoruntule = 1 " & whereKosul & " " &
                           "GROUP BY s.sModel " &
                           "ORDER BY s.sModel"
                     AddLog("📋 Mod: SADECE BOŞLAR - Seçili alanları boş olan modeller alınıyor...")
+                    AddLog("📋 Koşul sayısı: " & kosullar.Count.ToString() & " - WHERE: " & whereKosul)
                     
                 ' Varsayılan: Secili alanlari bos olan modeller
                 Else
                     Dim varsayilanKosullar As New List(Of String)
                     If chkUzunAciklama.Checked Then varsayilanKosullar.Add("(u.sModel IS NULL OR u.sUzunNot IS NULL OR u.sUzunNot = '')")
-                    If chkBedenTablosu.Checked Then varsayilanKosullar.Add("(u.sModel IS NULL OR u.sBedenTablosu IS NULL OR u.sBedenTablosu = '')")
+                    If chkBedenTablosu.Checked Then varsayilanKosullar.Add("(u.sModel IS NULL OR u.sBedenTablosu IS NULL OR RTRIM(u.sBedenTablosu) = '')")
                     If chkOzellikler.Checked Then varsayilanKosullar.Add("(u.sModel IS NULL OR u.sOzellikler IS NULL OR u.sOzellikler = '')")
                     If chkTalimat.Checked Then varsayilanKosullar.Add("(u.sModel IS NULL OR u.sKullanimTalimati IS NULL OR u.sKullanimTalimati = '')")
                     If chkBaslik.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sSEOBaslik IS NULL OR a.sSEOBaslik = '')")
@@ -904,13 +905,17 @@ Public Class frm_AIUrunIsle
                     sql = $"SELECT TOP {maxCount} MIN(s.nStokID) as nStokID, s.sModel, MIN(s.sAciklama) as sAciklama, " &
                           $"{markaSubquery}, {kat1Subquery}, {kat2Subquery}, {kat3Subquery}, {kat4Subquery}, {kat5Subquery} " &
                           "FROM tbStok s " &
-                          "LEFT JOIN tbStokUzunNot u ON s.sModel = u.sModel " &
-                          "LEFT JOIN tbStokAIIcerik a ON s.sModel = a.sModel " &
+                          "LEFT JOIN tbStokUzunNot u ON RTRIM(s.sModel) = RTRIM(u.sModel) " &
+                          "LEFT JOIN tbStokAIIcerik a ON RTRIM(s.sModel) = RTRIM(a.sModel) " &
                           "WHERE s.bWebGoruntule = 1 " & varsayilanWhere & " " &
                           "GROUP BY s.sModel " &
                           "ORDER BY s.sModel"
                     AddLog("📋 Mod: VARSAYILAN - Seçili alanları boş olan modeller alınıyor...")
                 End If
+                
+                ' DEBUG: SQL sorgusunu logla
+                AddLog("📋 SQL: " & sql.Substring(0, Math.Min(sql.Length, 300)) & "...")
+                WriteLog("SQL: " & sql)
                 
                 Dim cmd As New OleDb.OleDbCommand(sql, conn)
                 
