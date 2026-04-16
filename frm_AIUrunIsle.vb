@@ -705,6 +705,18 @@ Public Class frm_AIUrunIsle
                     WriteLog($"  Marka: {marka}")
                     WriteLog($"  Kategori: {tumKategori}")
                     
+                    ' Secili alanlari productData'ya ekle - AI sadece bunlari olusturacak
+                    productData("chkUzunAciklama") = chkUzunAciklama.Checked
+                    productData("chkKisaAciklama") = chkKisaAciklama.Checked
+                    productData("chkBaslik") = chkBaslik.Checked
+                    productData("chkSEOBilgisi") = chkSEOBilgisi.Checked
+                    productData("chkOzellikler") = chkOzellikler.Checked
+                    productData("chkTalimat") = chkTalimat.Checked
+                    productData("chkBedenTablosu") = chkBedenTablosu.Checked
+                    productData("chkYikamaTalimati") = chkYikamaTalimati.Checked
+                    productData("chkBakimTalimati") = chkBakimTalimati.Checked
+                    productData("chkGuvenlikUyari") = chkGuvenlikUyari.Checked
+
                     Dim content As Dictionary(Of String, String) = aiService.GenerateCompleteContent(productData)
                     
                     If content("success") = "true" Then
@@ -974,16 +986,21 @@ Public Class frm_AIUrunIsle
                     End If
                     
                     If kayitVar Then
+                        ' Sadece secili alanlari guncelle (dinamik UPDATE)
+                        Dim setClauses As New List(Of String)
+                        Dim paramValues As New List(Of Object)
+                        If chkUzunAciklama.Checked Then setClauses.Add("sUzunNot = ?") : paramValues.Add(aciklama)
+                        If chkBedenTablosu.Checked Then setClauses.Add("sBedenTablosu = ?") : paramValues.Add(bedenTablosu)
+                        If chkOzellikler.Checked Then setClauses.Add("sOzellikler = ?") : paramValues.Add(ozellikler)
+                        If chkTalimat.Checked Then setClauses.Add("sKullanimTalimati = ?") : paramValues.Add(bakimTalimati)
+                        setClauses.Add("sSonKullaniciAdi = ?") : paramValues.Add("AI_TOPLU")
+                        setClauses.Add("dteSonUpdateTarihi = ?") : paramValues.Add(DateTime.Now)
+                        paramValues.Add(sModel)
                         Dim updateCmd As New OleDbCommand(
-                            "UPDATE tbStokUzunNot SET sUzunNot = ?, sBedenTablosu = ?, sOzellikler = ?, " &
-                            "sKullanimTalimati = ?, sSonKullaniciAdi = ?, dteSonUpdateTarihi = ? WHERE sModel = ?", conn)
-                        updateCmd.Parameters.AddWithValue("?", aciklama)
-                        updateCmd.Parameters.AddWithValue("?", bedenTablosu)
-                        updateCmd.Parameters.AddWithValue("?", ozellikler)
-                        updateCmd.Parameters.AddWithValue("?", bakimTalimati)
-                        updateCmd.Parameters.AddWithValue("?", "AI_TOPLU")
-                        updateCmd.Parameters.AddWithValue("?", DateTime.Now)
-                        updateCmd.Parameters.AddWithValue("?", sModel)
+                            "UPDATE tbStokUzunNot SET " & String.Join(", ", setClauses) & " WHERE sModel = ?", conn)
+                        For Each pv As Object In paramValues
+                            updateCmd.Parameters.AddWithValue("?", pv)
+                        Next
                         Dim affected As Integer = updateCmd.ExecuteNonQuery()
                         If affected > 0 Then kayitBasarili = True
                     Else
@@ -991,10 +1008,10 @@ Public Class frm_AIUrunIsle
                             "INSERT INTO tbStokUzunNot (sModel, sUzunNot, sBedenTablosu, sOzellikler, sKullanimTalimati, " &
                             "sSonKullaniciAdi, dteSonUpdateTarihi) VALUES (?, ?, ?, ?, ?, ?, ?)", conn)
                         insertCmd.Parameters.AddWithValue("?", sModel)
-                        insertCmd.Parameters.AddWithValue("?", aciklama)
-                        insertCmd.Parameters.AddWithValue("?", bedenTablosu)
-                        insertCmd.Parameters.AddWithValue("?", ozellikler)
-                        insertCmd.Parameters.AddWithValue("?", bakimTalimati)
+                        insertCmd.Parameters.AddWithValue("?", If(chkUzunAciklama.Checked, aciklama, mevcutUzunNot))
+                        insertCmd.Parameters.AddWithValue("?", If(chkBedenTablosu.Checked, bedenTablosu, mevcutBeden))
+                        insertCmd.Parameters.AddWithValue("?", If(chkOzellikler.Checked, ozellikler, mevcutOzellik))
+                        insertCmd.Parameters.AddWithValue("?", If(chkTalimat.Checked, bakimTalimati, mevcutTalimat))
                         insertCmd.Parameters.AddWithValue("?", "AI_TOPLU")
                         insertCmd.Parameters.AddWithValue("?", DateTime.Now)
                         Dim affected As Integer = insertCmd.ExecuteNonQuery()
@@ -1060,27 +1077,30 @@ Public Class frm_AIUrunIsle
                     readerAI.Close()
                     
                     If kayitVarAI Then
-                        ' UPDATE - mevcut kaydı güncelle
-                        Dim updateAI As New OleDbCommand(
-                            "UPDATE tbStokAIIcerik SET sDetayliAciklama = ?, sKisaAciklama = ?, sOzelliklerHTML = ?, " &
-                            "sKullanimTalimati = ?, sSEOBaslik = ?, sMetaDescription = ?, sAnahtarKelimeler = ?, " &
-                            "sBedenTablosu = ?, nIcerikPuani = ?, sYikamaTalimati = ?, sBakimTalimati = ?, sGuvenliklUyari = ?, " &
-                            "dteGuncelleme = ? WHERE sModel = ?", conn)
-                        updateAI.Parameters.AddWithValue("?", aciklama)
-                        updateAI.Parameters.AddWithValue("?", kisaAciklama)
-                        updateAI.Parameters.AddWithValue("?", ozellikler)
-                        updateAI.Parameters.AddWithValue("?", bakimTalimati)
-                        updateAI.Parameters.AddWithValue("?", seoBaslik)
-                        updateAI.Parameters.AddWithValue("?", metaAciklama)
-                        updateAI.Parameters.AddWithValue("?", anahtarKelimeler)
-                        updateAI.Parameters.AddWithValue("?", bedenTablosu)
-                        updateAI.Parameters.AddWithValue("?", icerikPuani)
-                        updateAI.Parameters.AddWithValue("?", yikamaTalimati)
-                        updateAI.Parameters.AddWithValue("?", bakimTalimatiYeni)
-                        updateAI.Parameters.AddWithValue("?", guvenlikUyari)
-                        updateAI.Parameters.AddWithValue("?", DateTime.Now)
-                        updateAI.Parameters.AddWithValue("?", sModel)
-                        updateAI.ExecuteNonQuery()
+                        ' Sadece secili alanlari guncelle (dinamik UPDATE)
+                        Dim setAI As New List(Of String)
+                        Dim paramAI As New List(Of Object)
+                        If chkUzunAciklama.Checked Then setAI.Add("sDetayliAciklama = ?") : paramAI.Add(aciklama)
+                        If chkKisaAciklama.Checked Then setAI.Add("sKisaAciklama = ?") : paramAI.Add(kisaAciklama)
+                        If chkOzellikler.Checked Then setAI.Add("sOzelliklerHTML = ?") : paramAI.Add(ozellikler)
+                        If chkTalimat.Checked Then setAI.Add("sKullanimTalimati = ?") : paramAI.Add(bakimTalimati)
+                        If chkBaslik.Checked Then setAI.Add("sSEOBaslik = ?") : paramAI.Add(seoBaslik)
+                        If chkSEOBilgisi.Checked Then setAI.Add("sMetaDescription = ?") : paramAI.Add(metaAciklama) : setAI.Add("sAnahtarKelimeler = ?") : paramAI.Add(anahtarKelimeler)
+                        If chkBedenTablosu.Checked Then setAI.Add("sBedenTablosu = ?") : paramAI.Add(bedenTablosu)
+                        If chkYikamaTalimati.Checked Then setAI.Add("sYikamaTalimati = ?") : paramAI.Add(yikamaTalimati)
+                        If chkBakimTalimati.Checked Then setAI.Add("sBakimTalimati = ?") : paramAI.Add(bakimTalimatiYeni)
+                        If chkGuvenlikUyari.Checked Then setAI.Add("sGuvenliklUyari = ?") : paramAI.Add(guvenlikUyari)
+                        setAI.Add("nIcerikPuani = ?") : paramAI.Add(icerikPuani)
+                        setAI.Add("dteGuncelleme = ?") : paramAI.Add(DateTime.Now)
+                        paramAI.Add(sModel)
+                        If setAI.Count > 2 Then
+                            Dim updateAI As New OleDbCommand(
+                                "UPDATE tbStokAIIcerik SET " & String.Join(", ", setAI) & " WHERE sModel = ?", conn)
+                            For Each pv As Object In paramAI
+                                updateAI.Parameters.AddWithValue("?", pv)
+                            Next
+                            updateAI.ExecuteNonQuery()
+                        End If
                     Else
                         ' INSERT - nStokID zorunlu!
                         Dim insertAI As New OleDbCommand(

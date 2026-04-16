@@ -669,11 +669,37 @@ HTML formatında:
                 Log("WARNING", "GenerateCompleteContent", $"Web araması başarısız, yerel üretim yapılacak: {webEx.Message}")
             End Try
             
-            ' Kapsamlı prompt oluştur (web bilgisi varsa ekle)
+            ' Secili alanlari belirle
+            Dim seciliAlanlar As New List(Of String)
+            If productData.ContainsKey("chkUzunAciklama") AndAlso CBool(productData("chkUzunAciklama")) Then seciliAlanlar.Add("description")
+            If productData.ContainsKey("chkKisaAciklama") AndAlso CBool(productData("chkKisaAciklama")) Then seciliAlanlar.Add("shortDescription")
+            If productData.ContainsKey("chkBaslik") AndAlso CBool(productData("chkBaslik")) Then seciliAlanlar.Add("seoTitle")
+            If productData.ContainsKey("chkSEOBilgisi") AndAlso CBool(productData("chkSEOBilgisi")) Then seciliAlanlar.Add("metaDescription") : seciliAlanlar.Add("keywords")
+            If productData.ContainsKey("chkOzellikler") AndAlso CBool(productData("chkOzellikler")) Then seciliAlanlar.Add("featuresHtml")
+            If productData.ContainsKey("chkTalimat") AndAlso CBool(productData("chkTalimat")) Then seciliAlanlar.Add("careInstructions")
+            If productData.ContainsKey("chkBedenTablosu") AndAlso CBool(productData("chkBedenTablosu")) Then seciliAlanlar.Add("sizeChart")
+            If productData.ContainsKey("chkYikamaTalimati") AndAlso CBool(productData("chkYikamaTalimati")) Then seciliAlanlar.Add("yikamaTalimati")
+            If productData.ContainsKey("chkBakimTalimati") AndAlso CBool(productData("chkBakimTalimati")) Then seciliAlanlar.Add("bakimTalimati")
+            If productData.ContainsKey("chkGuvenlikUyari") AndAlso CBool(productData("chkGuvenlikUyari")) Then seciliAlanlar.Add("guvenlikUyari")
+            
+            ' Eger hic checkbox secilmemisse (tek urun isleme), hepsini iste
+            If seciliAlanlar.Count = 0 Then
+                seciliAlanlar.AddRange({"description", "shortDescription", "seoTitle", "metaDescription", "keywords", "featuresHtml", "careInstructions", "sizeChart", "yikamaTalimati", "bakimTalimati", "guvenlikUyari"})
+            End If
+            
+            ' Kapsamli prompt olustur
             Dim prompt As String = BuildComprehensivePrompt(urunAdi, marka, kategoriBilgisi, cinsiyet, yasGrubu, kumasBilgisi, renkler, bedenler, sezon, fiyat, webBilgisi)
             
-            ' API'yi çağır (daha yüksek token limiti)
-            Dim response As String = CallOpenAI(prompt, 2000)
+            ' Sadece secili alanlari iste
+            If seciliAlanlar.Count < 11 Then
+                prompt = prompt & vbCrLf & vbCrLf & "ONEMLI: JSON yanitinda SADECE su alanlari olustur, diger alanlari bos string birak: " & String.Join(", ", seciliAlanlar)
+            End If
+            
+            ' Token limitini secili alan sayisina gore ayarla
+            Dim tokenLimit As Integer = If(seciliAlanlar.Count <= 3, 1000, 2000)
+            
+            ' API cagir
+            Dim response As String = CallOpenAI(prompt, tokenLimit)
             
             If String.IsNullOrEmpty(response) OrElse response.Contains("API key bulunamadı") Then
                 result("error") = "API yanıt vermedi"
