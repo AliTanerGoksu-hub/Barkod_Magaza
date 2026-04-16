@@ -744,7 +744,7 @@ Public Class frm_AIUrunIsle
                         ' HEMEN KAYDET - Yarıda kalsa bile bu model kaydedilmiş olur
                         ' Debug: AI ne dondu?
                         AddLog($"   📝 AI sonuc - sizeChart: {If(content.ContainsKey("sizeChart"), content("sizeChart").Substring(0, Math.Min(content("sizeChart").Length, 50)), "YOK")}")
-                        AddLog($"   📝 bedenTablosu checkbox: {bChkBedenTablosu}")
+                        AddLog($"   📝 bedenTablosu checkbox: {savedChkStates("chkBedenTablosu")}")
                         AddLog($"   💾 Kaydediliyor...")
                         Dim kayitSonuc As Boolean = SaveModelContent(sModel, nStokID, content, savedChkStates)
                         
@@ -1000,7 +1000,7 @@ Public Class frm_AIUrunIsle
     ''' Model içeriğini kaydet - tbStokUzunNot, tbStokAIIcerik ve tbStok güncelle
     ''' chkSadeceBoslar seçiliyse sadece boş alanları doldurur
     ''' </summary>
-    Private Function SaveModelContent(sModel As String, nStokID As Integer, content As Dictionary(Of String, String)) As Boolean
+    Private Function SaveModelContent(sModel As String, nStokID As Integer, content As Dictionary(Of String, String), Optional chkStates As Dictionary(Of String, Boolean) = Nothing) As Boolean
         Dim kayitBasarili As Boolean = False
         Dim hataMesajlari As New List(Of String)
         
