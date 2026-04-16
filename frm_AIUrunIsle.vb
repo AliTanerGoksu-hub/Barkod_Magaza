@@ -854,15 +854,15 @@ Public Class frm_AIUrunIsle
                     Dim kosullar As New List(Of String)
                     
                     ' tbStokUzunNot kontrolü
-                    If chkUzunAciklama.Checked Then kosullar.Add("(u.sModel IS NULL OR u.sUzunNot IS NULL OR u.sUzunNot = '')")
-                    If chkBedenTablosu.Checked Then kosullar.Add("(u.sModel IS NULL OR u.sBedenTablosu IS NULL OR RTRIM(u.sBedenTablosu) = '')")
-                    If chkOzellikler.Checked Then kosullar.Add("(u.sModel IS NULL OR u.sOzellikler IS NULL OR u.sOzellikler = '')")
-                    If chkTalimat.Checked Then kosullar.Add("(u.sModel IS NULL OR u.sKullanimTalimati IS NULL OR u.sKullanimTalimati = '')")
+                    If chkUzunAciklama.Checked Then kosullar.Add("(u.sModel IS NULL OR u.sUzunNot IS NULL OR u.sUzunNot = '' OR RTRIM(u.sUzunNot) = '---')")
+                    If chkBedenTablosu.Checked Then kosullar.Add("(u.sModel IS NULL OR u.sBedenTablosu IS NULL OR RTRIM(u.sBedenTablosu) = '' OR RTRIM(u.sBedenTablosu) = '---')")
+                    If chkOzellikler.Checked Then kosullar.Add("(u.sModel IS NULL OR u.sOzellikler IS NULL OR u.sOzellikler = '' OR RTRIM(u.sOzellikler) = '---')")
+                    If chkTalimat.Checked Then kosullar.Add("(u.sModel IS NULL OR u.sKullanimTalimati IS NULL OR u.sKullanimTalimati = '' OR RTRIM(u.sKullanimTalimati) = '---')")
                     
                     ' tbStokAIIcerik kontrolü
-                    If chkBaslik.Checked Then kosullar.Add("(a.sModel IS NULL OR a.sSEOBaslik IS NULL OR a.sSEOBaslik = '')")
-                    If chkKisaAciklama.Checked Then kosullar.Add("(a.sModel IS NULL OR a.sKisaAciklama IS NULL OR a.sKisaAciklama = '')")
-                    If chkSEOBilgisi.Checked Then kosullar.Add("(a.sModel IS NULL OR a.sMetaDescription IS NULL OR a.sMetaDescription = '' OR a.sAnahtarKelimeler IS NULL OR a.sAnahtarKelimeler = '')")
+                    If chkBaslik.Checked Then kosullar.Add("(a.sModel IS NULL OR a.sSEOBaslik IS NULL OR a.sSEOBaslik = '' OR RTRIM(a.sSEOBaslik) = '---')")
+                    If chkKisaAciklama.Checked Then kosullar.Add("(a.sModel IS NULL OR a.sKisaAciklama IS NULL OR a.sKisaAciklama = '' OR RTRIM(a.sKisaAciklama) = '---')")
+                    If chkSEOBilgisi.Checked Then kosullar.Add("(a.sModel IS NULL OR a.sMetaDescription IS NULL OR a.sMetaDescription = '' OR RTRIM(a.sMetaDescription) = '---' OR a.sAnahtarKelimeler IS NULL OR a.sAnahtarKelimeler = '')")
                     
                     Dim whereKosul As String = ""
                     If kosullar.Count > 0 Then
@@ -884,22 +884,22 @@ Public Class frm_AIUrunIsle
                 ' Varsayılan: Secili alanlari bos olan modeller
                 Else
                     Dim varsayilanKosullar As New List(Of String)
-                    If chkUzunAciklama.Checked Then varsayilanKosullar.Add("(u.sModel IS NULL OR u.sUzunNot IS NULL OR u.sUzunNot = '')")
-                    If chkBedenTablosu.Checked Then varsayilanKosullar.Add("(u.sModel IS NULL OR u.sBedenTablosu IS NULL OR RTRIM(u.sBedenTablosu) = '')")
-                    If chkOzellikler.Checked Then varsayilanKosullar.Add("(u.sModel IS NULL OR u.sOzellikler IS NULL OR u.sOzellikler = '')")
-                    If chkTalimat.Checked Then varsayilanKosullar.Add("(u.sModel IS NULL OR u.sKullanimTalimati IS NULL OR u.sKullanimTalimati = '')")
-                    If chkBaslik.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sSEOBaslik IS NULL OR a.sSEOBaslik = '')")
-                    If chkKisaAciklama.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sKisaAciklama IS NULL OR a.sKisaAciklama = '')")
-                    If chkSEOBilgisi.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sMetaDescription IS NULL OR a.sMetaDescription = '' OR a.sAnahtarKelimeler IS NULL OR a.sAnahtarKelimeler = '')")
-                    If chkYikamaTalimati.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sYikamaTalimati IS NULL OR a.sYikamaTalimati = '')")
-                    If chkBakimTalimati.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sBakimTalimati IS NULL OR a.sBakimTalimati = '')")
-                    If chkGuvenlikUyari.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sGuvenliklUyari IS NULL OR a.sGuvenliklUyari = '')")
+                    If chkUzunAciklama.Checked Then varsayilanKosullar.Add("(u.sModel IS NULL OR u.sUzunNot IS NULL OR u.sUzunNot = '' OR RTRIM(u.sUzunNot) = '---')")
+                    If chkBedenTablosu.Checked Then varsayilanKosullar.Add("(u.sModel IS NULL OR u.sBedenTablosu IS NULL OR RTRIM(u.sBedenTablosu) = '' OR RTRIM(u.sBedenTablosu) = '---')")
+                    If chkOzellikler.Checked Then varsayilanKosullar.Add("(u.sModel IS NULL OR u.sOzellikler IS NULL OR u.sOzellikler = '' OR RTRIM(u.sOzellikler) = '---')")
+                    If chkTalimat.Checked Then varsayilanKosullar.Add("(u.sModel IS NULL OR u.sKullanimTalimati IS NULL OR u.sKullanimTalimati = '' OR RTRIM(u.sKullanimTalimati) = '---')")
+                    If chkBaslik.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sSEOBaslik IS NULL OR a.sSEOBaslik = '' OR RTRIM(a.sSEOBaslik) = '---')")
+                    If chkKisaAciklama.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sKisaAciklama IS NULL OR a.sKisaAciklama = '' OR RTRIM(a.sKisaAciklama) = '---')")
+                    If chkSEOBilgisi.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sMetaDescription IS NULL OR a.sMetaDescription = '' OR RTRIM(a.sMetaDescription) = '---' OR a.sAnahtarKelimeler IS NULL OR a.sAnahtarKelimeler = '')")
+                    If chkYikamaTalimati.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sYikamaTalimati IS NULL OR a.sYikamaTalimati = '' OR RTRIM(a.sYikamaTalimati) = '---')")
+                    If chkBakimTalimati.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sBakimTalimati IS NULL OR a.sBakimTalimati = '' OR RTRIM(a.sBakimTalimati) = '---')")
+                    If chkGuvenlikUyari.Checked Then varsayilanKosullar.Add("(a.sModel IS NULL OR a.sGuvenliklUyari IS NULL OR a.sGuvenliklUyari = '' OR RTRIM(a.sGuvenliklUyari) = '---')")
                     
                     Dim varsayilanWhere As String = ""
                     If varsayilanKosullar.Count > 0 Then
                         varsayilanWhere = "AND (" & String.Join(" OR ", varsayilanKosullar) & ")"
                     Else
-                        varsayilanWhere = "AND (u.sModel IS NULL OR u.sUzunNot IS NULL OR u.sUzunNot = '')"
+                        varsayilanWhere = "AND (u.sModel IS NULL OR u.sUzunNot IS NULL OR u.sUzunNot = '' OR RTRIM(u.sUzunNot) = '---')"
                     End If
                     
                     sql = $"SELECT TOP {maxCount} MIN(s.nStokID) as nStokID, s.sModel, MIN(s.sAciklama) as sAciklama, " &
