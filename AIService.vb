@@ -1455,7 +1455,7 @@ Bu bir İÇECEK ürünüdür (fincan/bardak/kupa). ""Sağlıklı saklama"" gibi 
   
   ,
   
-  ""sizeChart"": ""<table class='size-chart'><thead><tr><th>Beden</th><th>Gogus (cm)</th><th>Bel (cm)</th><th>Boy (cm)</th></tr></thead><tbody><tr><td>S</td><td>...</td><td>...</td><td>...</td></tr><tr><td>M</td><td>...</td><td>...</td><td>...</td></tr><tr><td>L</td><td>...</td><td>...</td><td>...</td></tr></tbody></table>"",
+  ""sizeChart"":  "",
   
   ""yikamaTalimati"": ""<ul><li>30 derecede yikayiniz</li><li>Beyazlatici kullanmayiniz</li></ul>"",
   
@@ -1547,7 +1547,7 @@ Bu bir YEMEK SERVİSİ ürünüdür (tabak/kase). Sofra sunumu, yemek servisi, e
   
   ,
   
-  ""sizeChart"": ""<table class='size-chart'><thead><tr><th>Beden</th><th>Gogus (cm)</th><th>Bel (cm)</th><th>Boy (cm)</th></tr></thead><tbody><tr><td>S</td><td>...</td><td>...</td><td>...</td></tr><tr><td>M</td><td>...</td><td>...</td><td>...</td></tr><tr><td>L</td><td>...</td><td>...</td><td>...</td></tr></tbody></table>"",
+  ""sizeChart"":  "",
   
   ""yikamaTalimati"": ""<ul><li>30 derecede yikayiniz</li><li>Beyazlatici kullanmayiniz</li></ul>"",
   
@@ -1639,7 +1639,7 @@ Bu bir Pİ�?İRME ürünüdür. Yemek yapma kolaylığı, pişirme performansı,
   
   ,
   
-  ""sizeChart"": ""<table class='size-chart'><thead><tr><th>Beden</th><th>Gogus (cm)</th><th>Bel (cm)</th><th>Boy (cm)</th></tr></thead><tbody><tr><td>S</td><td>...</td><td>...</td><td>...</td></tr><tr><td>M</td><td>...</td><td>...</td><td>...</td></tr><tr><td>L</td><td>...</td><td>...</td><td>...</td></tr></tbody></table>"",
+  ""sizeChart"":  "",
   
   ""yikamaTalimati"": ""<ul><li>30 derecede yikayiniz</li><li>Beyazlatici kullanmayiniz</li></ul>"",
   
@@ -1730,7 +1730,7 @@ Bu bir SAKLAMA ürünüdür. BURADA ""sağlıklı saklama"" kullanabilirsin! Gı
   
   ,
   
-  ""sizeChart"": ""<table class='size-chart'><thead><tr><th>Beden</th><th>Gogus (cm)</th><th>Bel (cm)</th><th>Boy (cm)</th></tr></thead><tbody><tr><td>S</td><td>...</td><td>...</td><td>...</td></tr><tr><td>M</td><td>...</td><td>...</td><td>...</td></tr><tr><td>L</td><td>...</td><td>...</td><td>...</td></tr></tbody></table>"",
+  ""sizeChart"":  "",
   
   ""yikamaTalimati"": ""<ul><li>30 derecede yikayiniz</li><li>Beyazlatici kullanmayiniz</li></ul>"",
   
@@ -1811,7 +1811,7 @@ Bu bir SERVİS ürünüdür. Sunum, misafir ağırlama, sofra düzeni temalı ya
   
   ,
   
-  ""sizeChart"": ""<table class='size-chart'><thead><tr><th>Beden</th><th>Gogus (cm)</th><th>Bel (cm)</th><th>Boy (cm)</th></tr></thead><tbody><tr><td>S</td><td>...</td><td>...</td><td>...</td></tr><tr><td>M</td><td>...</td><td>...</td><td>...</td></tr><tr><td>L</td><td>...</td><td>...</td><td>...</td></tr></tbody></table>"",
+  ""sizeChart"":  "",
   
   ""yikamaTalimati"": ""<ul><li>30 derecede yikayiniz</li><li>Beyazlatici kullanmayiniz</li></ul>"",
   
@@ -1897,7 +1897,7 @@ Malzeme: {If(String.IsNullOrEmpty(materyal), "[Ürüne göre belirle]", materyal
   
   ,
   
-  ""sizeChart"": ""<table class='size-chart'><thead><tr><th>Beden</th><th>Gogus (cm)</th><th>Bel (cm)</th><th>Boy (cm)</th></tr></thead><tbody><tr><td>S</td><td>...</td><td>...</td><td>...</td></tr><tr><td>M</td><td>...</td><td>...</td><td>...</td></tr><tr><td>L</td><td>...</td><td>...</td><td>...</td></tr></tbody></table>"",
+  ""sizeChart"":  "",
   
   ""yikamaTalimati"": ""<ul><li>30 derecede yikayiniz</li><li>Beyazlatici kullanmayiniz</li></ul>"",
   
@@ -2007,7 +2007,7 @@ Performans, güç, kapasite, kullanım kolaylığı temalı yaz.
   
   ,
   
-  ""sizeChart"": ""<table class='size-chart'><thead><tr><th>Beden</th><th>Gogus (cm)</th><th>Bel (cm)</th><th>Boy (cm)</th></tr></thead><tbody><tr><td>S</td><td>...</td><td>...</td><td>...</td></tr><tr><td>M</td><td>...</td><td>...</td><td>...</td></tr><tr><td>L</td><td>...</td><td>...</td><td>...</td></tr></tbody></table>"",
+  ""sizeChart"":  "",
   
   ""yikamaTalimati"": ""<ul><li>30 derecede yikayiniz</li><li>Beyazlatici kullanmayiniz</li></ul>"",
   
@@ -2101,7 +2101,7 @@ Marka: {If(String.IsNullOrEmpty(marka), "[Markayı ürün adından çıkar]", ma
   
   ,
   
-  ""sizeChart"": ""<table class='size-chart'><thead><tr><th>Beden</th><th>Gogus (cm)</th><th>Bel (cm)</th><th>Boy (cm)</th></tr></thead><tbody><tr><td>S</td><td>...</td><td>...</td><td>...</td></tr><tr><td>M</td><td>...</td><td>...</td><td>...</td></tr><tr><td>L</td><td>...</td><td>...</td><td>...</td></tr></tbody></table>"",
+  ""sizeChart"":  "",
   
   ""yikamaTalimati"": ""<ul><li>30 derecede yikayiniz</li><li>Beyazlatici kullanmayiniz</li></ul>"",
   
@@ -2193,7 +2193,7 @@ Marka: {If(String.IsNullOrEmpty(marka), "[Markayı ürün adından çıkar]", ma
   
   ,
   
-  ""sizeChart"": ""<table class='size-chart'><thead><tr><th>Beden</th><th>Gogus (cm)</th><th>Bel (cm)</th><th>Boy (cm)</th></tr></thead><tbody><tr><td>S</td><td>...</td><td>...</td><td>...</td></tr><tr><td>M</td><td>...</td><td>...</td><td>...</td></tr><tr><td>L</td><td>...</td><td>...</td><td>...</td></tr></tbody></table>"",
+  ""sizeChart"":  "",
   
   ""yikamaTalimati"": ""<ul><li>30 derecede yikayiniz</li><li>Beyazlatici kullanmayiniz</li></ul>"",
   
@@ -2298,7 +2298,7 @@ Boyut: {If(String.IsNullOrEmpty(boyut), "[Tek kişilik/Çift kişilik]", boyut)}
   
   ,
   
-  ""sizeChart"": ""<table class='size-chart'><thead><tr><th>Beden</th><th>Gogus (cm)</th><th>Bel (cm)</th><th>Boy (cm)</th></tr></thead><tbody><tr><td>S</td><td>...</td><td>...</td><td>...</td></tr><tr><td>M</td><td>...</td><td>...</td><td>...</td></tr><tr><td>L</td><td>...</td><td>...</td><td>...</td></tr></tbody></table>"",
+  ""sizeChart"":  "",
   
   ""yikamaTalimati"": ""<ul><li>30 derecede yikayiniz</li><li>Beyazlatici kullanmayiniz</li></ul>"",
   
@@ -3652,7 +3652,7 @@ Malzeme: {If(String.IsNullOrEmpty(materyal), "[Deri/Suni Deri/Kanvas - tahmin et
   
   ,
   
-  ""sizeChart"": ""<table class='size-chart'><thead><tr><th>Beden</th><th>Gogus (cm)</th><th>Bel (cm)</th><th>Boy (cm)</th></tr></thead><tbody><tr><td>S</td><td>...</td><td>...</td><td>...</td></tr><tr><td>M</td><td>...</td><td>...</td><td>...</td></tr><tr><td>L</td><td>...</td><td>...</td><td>...</td></tr></tbody></table>"",
+  ""sizeChart"":  "",
   
   ""yikamaTalimati"": ""<ul><li>30 derecede yikayiniz</li><li>Beyazlatici kullanmayiniz</li></ul>"",
   
@@ -3743,7 +3743,7 @@ Cinsiyet: {gercekCinsiyet}
   
   ,
   
-  ""sizeChart"": ""<table class='size-chart'><thead><tr><th>Beden</th><th>Gogus (cm)</th><th>Bel (cm)</th><th>Boy (cm)</th></tr></thead><tbody><tr><td>S</td><td>...</td><td>...</td><td>...</td></tr><tr><td>M</td><td>...</td><td>...</td><td>...</td></tr><tr><td>L</td><td>...</td><td>...</td><td>...</td></tr></tbody></table>"",
+  ""sizeChart"":  "",
   
   ""yikamaTalimati"": ""<ul><li>30 derecede yikayiniz</li><li>Beyazlatici kullanmayiniz</li></ul>"",
   
@@ -3833,7 +3833,7 @@ Malzeme: {If(String.IsNullOrEmpty(materyal), "[Gümüş/Altın/Çelik - tahmin e
   
   ,
   
-  ""sizeChart"": ""<table class='size-chart'><thead><tr><th>Beden</th><th>Gogus (cm)</th><th>Bel (cm)</th><th>Boy (cm)</th></tr></thead><tbody><tr><td>S</td><td>...</td><td>...</td><td>...</td></tr><tr><td>M</td><td>...</td><td>...</td><td>...</td></tr><tr><td>L</td><td>...</td><td>...</td><td>...</td></tr></tbody></table>"",
+  ""sizeChart"":  "",
   
   ""yikamaTalimati"": ""<ul><li>30 derecede yikayiniz</li><li>Beyazlatici kullanmayiniz</li></ul>"",
   
@@ -3914,7 +3914,7 @@ Malzeme: {If(String.IsNullOrEmpty(materyal), "[Deri/Tekstil/Yün - tahmin et]", 
   
   ,
   
-  ""sizeChart"": ""<table class='size-chart'><thead><tr><th>Beden</th><th>Gogus (cm)</th><th>Bel (cm)</th><th>Boy (cm)</th></tr></thead><tbody><tr><td>S</td><td>...</td><td>...</td><td>...</td></tr><tr><td>M</td><td>...</td><td>...</td><td>...</td></tr><tr><td>L</td><td>...</td><td>...</td><td>...</td></tr></tbody></table>"",
+  ""sizeChart"":  "",
   
   ""yikamaTalimati"": ""<ul><li>30 derecede yikayiniz</li><li>Beyazlatici kullanmayiniz</li></ul>"",
   
@@ -4208,7 +4208,7 @@ Yaş Grubu: {If(String.IsNullOrEmpty(yasGrubu), "[Yaş aralığını belirle]", 
   
   ,
   
-  ""sizeChart"": ""<table class='size-chart'><thead><tr><th>Beden</th><th>Gogus (cm)</th><th>Bel (cm)</th><th>Boy (cm)</th></tr></thead><tbody><tr><td>S</td><td>...</td><td>...</td><td>...</td></tr><tr><td>M</td><td>...</td><td>...</td><td>...</td></tr><tr><td>L</td><td>...</td><td>...</td><td>...</td></tr></tbody></table>"",
+  ""sizeChart"":  "",
   
   ""yikamaTalimati"": ""<ul><li>30 derecede yikayiniz</li><li>Beyazlatici kullanmayiniz</li></ul>"",
   
@@ -4304,7 +4304,7 @@ Malzeme: {If(String.IsNullOrEmpty(materyal), "[Ahşap/Metal/Cam - tahmin et]", m
   
   ,
   
-  ""sizeChart"": ""<table class='size-chart'><thead><tr><th>Beden</th><th>Gogus (cm)</th><th>Bel (cm)</th><th>Boy (cm)</th></tr></thead><tbody><tr><td>S</td><td>...</td><td>...</td><td>...</td></tr><tr><td>M</td><td>...</td><td>...</td><td>...</td></tr><tr><td>L</td><td>...</td><td>...</td><td>...</td></tr></tbody></table>"",
+  ""sizeChart"":  "",
   
   ""yikamaTalimati"": ""<ul><li>30 derecede yikayiniz</li><li>Beyazlatici kullanmayiniz</li></ul>"",
   
