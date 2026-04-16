@@ -728,6 +728,7 @@ Public Class frm_AIUrunIsle
                         ' HEMEN KAYDET - Yarıda kalsa bile bu model kaydedilmiş olur
                         ' Debug: AI ne dondu?
                         AddLog($"   📝 AI sonuc - sizeChart: {If(content.ContainsKey("sizeChart"), content("sizeChart").Substring(0, Math.Min(content("sizeChart").Length, 50)), "YOK")}")
+                        AddLog($"   📝 bedenTablosu checkbox: {chkBedenTablosu.Checked}")
                         AddLog($"   💾 Kaydediliyor...")
                         Dim kayitSonuc As Boolean = SaveModelContent(sModel, nStokID, content)
                         
@@ -1046,6 +1047,7 @@ Public Class frm_AIUrunIsle
                         If Not String.IsNullOrEmpty(mevcutTalimat) AndAlso mevcutTalimat.Trim() <> "---" Then bakimTalimati = mevcutTalimat
                     End If
                     
+                    AddLog($"   📋 tbStokUzunNot - kayitVar={kayitVar}, bedenTablosu uzunluk={bedenTablosu.Length}, bos={String.IsNullOrEmpty(bedenTablosu)}")
                     If kayitVar Then
                         ' Sadece secili alanlari guncelle (dinamik UPDATE)
                         Dim setClauses As New List(Of String)
