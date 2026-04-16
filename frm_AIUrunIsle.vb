@@ -417,6 +417,7 @@ Public Class frm_AIUrunIsle
                 AyarYaz(conn, "AI_CHK_YIKAMA", If(chkYikamaTalimati.Checked, "1", "0"))
                 AyarYaz(conn, "AI_CHK_BAKIM", If(chkBakimTalimati.Checked, "1", "0"))
                 AyarYaz(conn, "AI_CHK_GUVENLIK", If(chkGuvenlikUyari.Checked, "1", "0"))
+                AyarYaz(conn, "AI_CHK_HEPSINI_SEC", If(chkHepsiniSec.Checked, "1", "0"))
                 AyarYaz(conn, "AI_CHK_SADECE_BOSLAR", If(chkSadeceBoslar.Checked, "1", "0"))
                 AyarYaz(conn, "AI_CHK_TEKRAR_OLUSTUR", If(chkTekrarOlustur.Checked, "1", "0"))
             End Using
@@ -441,6 +442,7 @@ Public Class frm_AIUrunIsle
                 chkYikamaTalimati.Checked = AyarOku(conn, "AI_CHK_YIKAMA") = "1"
                 chkBakimTalimati.Checked = AyarOku(conn, "AI_CHK_BAKIM") = "1"
                 chkGuvenlikUyari.Checked = AyarOku(conn, "AI_CHK_GUVENLIK") = "1"
+                chkHepsiniSec.Checked = AyarOku(conn, "AI_CHK_HEPSINI_SEC") = "1"
                 chkSadeceBoslar.Checked = AyarOku(conn, "AI_CHK_SADECE_BOSLAR") = "1"
                 chkTekrarOlustur.Checked = AyarOku(conn, "AI_CHK_TEKRAR_OLUSTUR") = "1"
             End Using
@@ -607,6 +609,20 @@ Public Class frm_AIUrunIsle
                 Return
             End If
 
+            ' Checkbox durumlarini toplu islem basinda yakala
+            Dim savedChkStates As New Dictionary(Of String, Boolean)
+            savedChkStates("chkUzunAciklama") = chkUzunAciklama.Checked
+            savedChkStates("chkKisaAciklama") = chkKisaAciklama.Checked
+            savedChkStates("chkBaslik") = chkBaslik.Checked
+            savedChkStates("chkSEOBilgisi") = chkSEOBilgisi.Checked
+            savedChkStates("chkOzellikler") = chkOzellikler.Checked
+            savedChkStates("chkTalimat") = chkTalimat.Checked
+            savedChkStates("chkBedenTablosu") = chkBedenTablosu.Checked
+            savedChkStates("chkYikamaTalimati") = chkYikamaTalimati.Checked
+            savedChkStates("chkBakimTalimati") = chkBakimTalimati.Checked
+            savedChkStates("chkGuvenlikUyari") = chkGuvenlikUyari.Checked
+            savedChkStates("chkSadeceBoslar") = chkSadeceBoslar.Checked
+            
             ' Durdurma flag'ini sıfırla
             islemDurduruldu = False
             
@@ -730,7 +746,7 @@ Public Class frm_AIUrunIsle
                         AddLog($"   📝 AI sonuc - sizeChart: {If(content.ContainsKey("sizeChart"), content("sizeChart").Substring(0, Math.Min(content("sizeChart").Length, 50)), "YOK")}")
                         AddLog($"   📝 bedenTablosu checkbox: {bChkBedenTablosu}")
                         AddLog($"   💾 Kaydediliyor...")
-                        Dim kayitSonuc As Boolean = SaveModelContent(sModel, nStokID, content)
+                        Dim kayitSonuc As Boolean = SaveModelContent(sModel, nStokID, content, savedChkStates)
                         
                         If kayitSonuc Then
                             basarili += 1
