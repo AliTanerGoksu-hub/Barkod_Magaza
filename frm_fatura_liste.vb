@@ -8163,17 +8163,10 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                         Catch
                         End Try
 
-                        ' 5. Ikinci KDV ekleme - SADECE bAlisKdvDahil = False ise
-                        If bAlisKdvDahil = False Then
-                            If nKdvOrani <> nStokKdvOrani Then
-                                If bKdvKontrolluMaliyet = True Then
-                                    maliyet = maliyet * ((nStokKdvOrani + 100) / 100)
-                                Else
-                                    maliyet = maliyet * ((nKdvOrani + 100) / 100)
-                                End If
-                            Else
-                                maliyet = maliyet * ((nKdvOrani + 100) / 100)
-                            End If
+                        ' 5. Ikinci KDV - SADECE KDV orani farki varsa (duzeltme)
+                        If nKdvOrani <> nStokKdvOrani Then
+                            ' KDV orani farki var - duzeltme gerekebilir
+                            ' (normal durumda ikinci KDV eklenmez)
                         End If
 
                         ' --- ALIS FIYATI HESABI ---
