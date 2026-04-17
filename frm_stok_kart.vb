@@ -8303,9 +8303,22 @@ Public Class frm_stok_kart
         cmd.ExecuteNonQuery()
         sModel = Trim(sModel)
         Try
+            ' Once stok kodu zaten var mi kontrol et
+            cmd.CommandText = sorgu_query("SELECT COUNT(*) FROM tbStok WHERE sKodu = '" & sKodu & "'")
+            Dim mevcutKayit As Integer = CInt(cmd.ExecuteScalar())
+            If mevcutKayit > 0 Then
+                ' Stok zaten mevcut - tekrar ekleme
+                If bUyari = True Then
+                    XtraMessageBox.Show("Bu renk/beden kombinasyonu zaten mevcut: " & sKodu, "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                End If
+                cmd.CommandText = sorgu_query("set implicit_transactions off")
+                cmd.ExecuteNonQuery()
+                con.Close()
+                Exit Sub
+            End If
             cmd.CommandText = sorgu_query("SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO tbStok (sKodu, sAciklama, sKisaAdi, nStokTipi, sBedenTipi, sKavalaTipi, sRenk, sBeden, sKavala, sBirimCinsi1, sBirimCinsi2, nIskontoYuzdesi, sKdvTipi, nTeminSuresi, lAsgariMiktar, lAzamiMiktar, sOzelNot, nFiyatlandirma, sModel, sKullaniciAdi, dteKayitTarihi, bEksiyeDusulebilirmi, sDefaultAsortiTipi, bEksideUyarsinmi, bOTVVar, sOTVTipi, nIskontoYuzdesiAV, bEk1, nEk2) VALUES ('" & sKodu & "', N'" & sAciklama & "', '" & sKisaAdi & "', " & nStokTipi & ", '" & sBedenTipi & "', '" & sKavalaTipi & "', '" & sRenk & "', '" & sBeden & "', '" & sKavala & "', '" & sBirimCinsi1 & "', '" & sBirimCinsi1 & "', " & nIskontoYuzdesi & ", '" & sKdvTipi & "', " & nTeminSuresi & ", " & lAsgariMiktar & ", " & lAzamiMiktar & ", '" & sOzelNot & "', " & nFiyatlandirma & ", '" & sModel & "', '" & sKullaniciAdi & "', '" & dteKayitTarihi & "', " & bEksiyeDusulebilirmi & ", '" & sDefaultAsortiTipi & "', " & bEksideUyarsinmi & ", " & bOTVVar & ", '" & sOTVTipi & "', " & nIskontoYuzdesiAV & ", " & bEk1 & ", " & nEk2 & ")")
             cmd.ExecuteNonQuery()
-            cmd.CommandText = "SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT @@identity"
+            cmd.CommandText = "SELECT SCOPE_IDENTITY()"
             nStokID = cmd.ExecuteScalar
             cmd.CommandText = sorgu_query("set transaction isolation level read uncommitted")
             cmd.ExecuteNonQuery()
