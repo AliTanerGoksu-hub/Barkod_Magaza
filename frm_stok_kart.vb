@@ -7648,7 +7648,7 @@ Public Class frm_stok_kart
                         dr1 = frm.GridView1.GetDataRow(s)
                         For Each dr2 In ds_tbBeden.Tables(0).Rows
                             For Each dr3 In ds_tbKavala.Tables(0).Rows
-                                tbStok_Renk_ekle(Trim(sModel) & dr1("sRenk") & dr2("sBeden") & dr3("sKavala"), dr("sAciklama"), dr("sKisaAdi"), dr("nStokTipi"), dr("sBedenTipi").ToString, dr("sKavalaTipi").ToString, dr1("sRenk"), dr2("sBeden").ToString, dr3("sKavala").ToString, dr("sBirimCinsi1"), dr("sBirimCinsi2"), dr("nIskontoYuzdesi"), dr("sKdvTipi"), dr("nTeminSuresi"), dr("lAsgariMiktar"), dr("lAzamiMiktar"), dr("sOzelNot"), dr("nFiyatlandirma"), sModel, dr("sKullaniciAdi"), Now, dr("bEksiyeDusulebilirmi"), dr("sDefaultAsortiTipi"), dr("bEksideUyarsinmi"), dr("bOTVVar"), dr("sOTVTipi"), dr("nIskontoYuzdesiAV"), dr("bEk1"), dr("nEk2"))
+                                tbStok_Renk_ekle(Trim(sModel) & Trim(dr1("sRenk")) & Trim(dr2("sBeden")) & Trim(dr3("sKavala")), dr("sAciklama"), dr("sKisaAdi"), dr("nStokTipi"), dr("sBedenTipi").ToString, dr("sKavalaTipi").ToString, dr1("sRenk"), dr2("sBeden").ToString, dr3("sKavala").ToString, dr("sBirimCinsi1"), dr("sBirimCinsi2"), dr("nIskontoYuzdesi"), dr("sKdvTipi"), dr("nTeminSuresi"), dr("lAsgariMiktar"), dr("lAzamiMiktar"), dr("sOzelNot"), dr("nFiyatlandirma"), sModel, dr("sKullaniciAdi"), Now, dr("bEksiyeDusulebilirmi"), dr("sDefaultAsortiTipi"), dr("bEksideUyarsinmi"), dr("bOTVVar"), dr("sOTVTipi"), dr("nIskontoYuzdesiAV"), dr("bEk1"), dr("nEk2"))
                             Next
                         Next
                     Next
@@ -7787,7 +7787,7 @@ Public Class frm_stok_kart
                         For Each dr2 In ds_tbRenk.Tables(0).Rows
                             For Each dr3 In ds_tbBeden.Tables(0).Rows
                                 If Trim(dr3("sBeden")) <> "" Then
-                                    tbStok_Renk_ekle(Trim(sModel) & dr2("sRenk") & dr3("sBeden") & dr1("sKavala"), dr("sAciklama"), dr("sKisaAdi"), dr("nStokTipi"), dr("sBedenTipi").ToString, dr("sKavalaTipi").ToString, dr2("sRenk"), dr3("sBeden").ToString, dr1("sKavala").ToString, dr("sBirimCinsi1"), dr("sBirimCinsi2"), dr("nIskontoYuzdesi"), dr("sKdvTipi"), dr("nTeminSuresi"), dr("lAsgariMiktar"), dr("lAzamiMiktar"), dr("sOzelNot"), dr("nFiyatlandirma"), sModel, dr("sKullaniciAdi"), Now, dr("bEksiyeDusulebilirmi"), dr("sDefaultAsortiTipi"), dr("bEksideUyarsinmi"), dr("bOTVVar"), dr("sOTVTipi"), dr("nIskontoYuzdesiAV"), dr("bEk1"), dr("nEk2"))
+                                    tbStok_Renk_ekle(Trim(sModel) & Trim(dr2("sRenk")) & Trim(dr3("sBeden")) & Trim(dr1("sKavala")), dr("sAciklama"), dr("sKisaAdi"), dr("nStokTipi"), dr("sBedenTipi").ToString, dr("sKavalaTipi").ToString, dr2("sRenk"), dr3("sBeden").ToString, dr1("sKavala").ToString, dr("sBirimCinsi1"), dr("sBirimCinsi2"), dr("nIskontoYuzdesi"), dr("sKdvTipi"), dr("nTeminSuresi"), dr("lAsgariMiktar"), dr("lAzamiMiktar"), dr("sOzelNot"), dr("nFiyatlandirma"), sModel, dr("sKullaniciAdi"), Now, dr("bEksiyeDusulebilirmi"), dr("sDefaultAsortiTipi"), dr("bEksideUyarsinmi"), dr("bOTVVar"), dr("sOTVTipi"), dr("nIskontoYuzdesiAV"), dr("bEk1"), dr("nEk2"))
                                 End If
                             Next
                         Next
@@ -7870,7 +7870,7 @@ Public Class frm_stok_kart
                         dr1 = frm.GridView1.GetDataRow(s)
                         For Each dr2 In ds_tbRenk.Tables(0).Rows
                             For Each dr3 In ds_tbBeden.Tables(0).Rows
-                                tbStok_Renk_sil(sModel, Trim(sModel) & dr2("sRenk") & dr3("sBeden") & dr1("sKavala"))
+                                tbStok_Renk_sil(sModel, Trim(sModel) & Trim(dr2("sRenk")) & Trim(dr3("sBeden")) & Trim(dr1("sKavala")))
                             Next
                         Next
                     Next
@@ -7893,7 +7893,7 @@ Public Class frm_stok_kart
                 dr = ds_tbStok.Tables(0).Rows(0)
                 For Each dr2 In ds_tbBeden.Tables(0).Rows
                     For Each dr3 In ds_tbKavala.Tables(0).Rows
-                        tbStok_Renk_ekle(Trim(sModel) & dr1("sRenk") & dr2("sBeden") & dr3("sKavala"), dr("sAciklama"), dr("sKisaAdi"), dr("nStokTipi"), dr("sBedenTipi").ToString, dr("sKavalaTipi").ToString, dr1("sRenk"), dr2("sBeden").ToString, dr3("sKavala").ToString, dr("sBirimCinsi1"), dr("sBirimCinsi2"), dr("nIskontoYuzdesi"), dr("sKdvTipi"), dr("nTeminSuresi"), dr("lAsgariMiktar"), dr("lAzamiMiktar"), dr("sOzelNot"), dr("nFiyatlandirma"), sModel, dr("sKullaniciAdi"), Now, dr("bEksiyeDusulebilirmi"), dr("sDefaultAsortiTipi"), dr("bEksideUyarsinmi"), dr("bOTVVar"), dr("sOTVTipi"), dr("nIskontoYuzdesiAV"), dr("bEk1"), dr("nEk2"), False)
+                        tbStok_Renk_ekle(Trim(sModel) & Trim(dr1("sRenk")) & Trim(dr2("sBeden")) & Trim(dr3("sKavala")), dr("sAciklama"), dr("sKisaAdi"), dr("nStokTipi"), dr("sBedenTipi").ToString, dr("sKavalaTipi").ToString, dr1("sRenk"), dr2("sBeden").ToString, dr3("sKavala").ToString, dr("sBirimCinsi1"), dr("sBirimCinsi2"), dr("nIskontoYuzdesi"), dr("sKdvTipi"), dr("nTeminSuresi"), dr("lAsgariMiktar"), dr("lAzamiMiktar"), dr("sOzelNot"), dr("nFiyatlandirma"), sModel, dr("sKullaniciAdi"), Now, dr("bEksiyeDusulebilirmi"), dr("sDefaultAsortiTipi"), dr("bEksideUyarsinmi"), dr("bOTVVar"), dr("sOTVTipi"), dr("nIskontoYuzdesiAV"), dr("bEk1"), dr("nEk2"), False)
                     Next
                 Next
             Next
@@ -8302,6 +8302,10 @@ Public Class frm_stok_kart
         cmd.CommandText = sorgu_query("set implicit_transactions on")
         cmd.ExecuteNonQuery()
         sModel = Trim(sModel)
+        sKodu = Trim(sKodu)
+        sRenk = Trim(sRenk)
+        sBeden = Trim(sBeden)
+        sKavala = Trim(sKavala)
         Try
             ' Once stok kodu zaten var mi kontrol et
             cmd.CommandText = sorgu_query("SELECT COUNT(*) FROM tbStok WHERE sKodu = '" & sKodu & "'")
