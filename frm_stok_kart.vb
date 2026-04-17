@@ -8372,7 +8372,7 @@ Public Class frm_stok_kart
             'MsgBox(Sorgu_sDil("Kayt Baaryla Eklendi...",sDil), MessageBoxIcon.Information, sorgu_sDil("Dikkat",sDil))
         Catch ex As Exception
             If bUyari = True Then
-                XtraMessageBox.Show(Sorgu_sDil("zgnm,leminiz Tamamlanamad...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                XtraMessageBox.Show(Sorgu_sDil("zgnm,leminiz Tamamlanamad" & vbCrLf & ex.Message & "...!", sDil), Sorgu_sDil("Dikkat", sDil), MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             End If
             cmd.CommandText = sorgu_query("IF @@TRANCOUNT > 0 ROLLBACK TRAN")
             cmd.ExecuteNonQuery()
