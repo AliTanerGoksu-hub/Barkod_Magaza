@@ -6,14 +6,6 @@ Multi-platform ERP/POS ecosystem with:
 2. C# .NET 8 Web API Mobile Backend (Dapper)
 3. .NET MAUI Blazor Mobile App
 
-### Core Requirements:
-- AI Infrastructure across all platforms
-- AI Dashboard and Risk Indicators for Mobile
-- Silent AI Risk Warnings on Desktop ERP
-- Standardized cost calculation (FIFO, LIFO, Weighted Average)
-- Bug fixes for POS, UI threads, Mobile AI, Image Migration
-- B2B management tabs and R2 image upload
-
 ## Architecture
 ```
 /app/ (Barkod_Magaza) - Desktop VB.NET
@@ -22,16 +14,24 @@ Multi-platform ERP/POS ecosystem with:
 ```
 
 ## Completed Work
-- [x] Image Migration Tool (Frm_Resim_Cevir.vb) - varbinary fix (74e870b)
-- [x] MAUI Demo Mode lock (22f0ef3)
-- [x] App Store "demo" word removal (b93c1e6)
-- [x] iOS Build Error fix (efd6a43, c273523)
-- [x] MAUI Route Auto-Refresh timers (b39b2fa)
-- [x] Toplu Maliyet KDV doubling fix (3b02075, 523fa94)
-- [x] **Araya Satir Ekle fix** - ORDER BY nEkSaha1 ASC added to sorgu_harekets (bf931cf) - AWAITING USER TEST
+- [x] Image Migration Tool (Frm_Resim_Cevir.vb) - varbinary fix
+- [x] MAUI Demo Mode lock
+- [x] App Store "demo" word removal
+- [x] iOS Build Error fix
+- [x] MAUI Route Auto-Refresh timers
+- [x] Toplu Maliyet KDV doubling fix
+- [x] **Araya Satir Ekle (frm_fatura.vb)** - ORDER BY + DefaultView.Sort + bSatirKontrol bypass
+- [x] **Araya Satir Ekle (frm_tbSiparis.vb)** - Yeni özellik: toolbar + sağ tık menüsü
+- [x] **Maliyet çift KDV fix** - İkinci KDV sadece oran farkında, normal durumda eklenmez
+- [x] **Alış fiyatı fix** - lBrutFiyat yerine lGirisTutar/lGirisMiktar1 (iskonto dahil)
+- [x] **Web gönderim stok filtresi** - stok<=0 varyantlar + varyantsız ürün kontrolü
+- [x] **AI Toplu İşlem** - Seçili checkbox'lara göre AI üretim + DB kayıt
+- [x] **AI beden tablosu** - Giyim kategorilerine özel, ürün bedenleri DB'den okunuyor
+- [x] **AI donma sorunu** - Task.Run ile async çalışma
 
 ## In Progress / Pending
-- P0: Araya Satir Ekle - Awaiting user test (bf931cf)
+- Kullanıcı testi bekleniyor: Toplu Maliyetlendir doğruluğu
+- Kullanıcı testi bekleniyor: AI beden tablosu çıktı kalitesi
 
 ## Backlog (Prioritized)
 - P1: Cost calculation standardization (FIFO, LIFO, Weighted Average)
@@ -41,8 +41,14 @@ Multi-platform ERP/POS ecosystem with:
 ## Key DB Schema
 - `tbStokFisiDetayi`: Invoice row details. `nEkSaha1` = physical row order
 - `tbStokResmi`: Legacy images (varbinary)
+- `tbStokUzunNot`: sBedenTablosu, sUzunNot, sOzellikler, sKullanimTalimati
+- `tbStokAIIcerik`: AI generated content (SEO, descriptions, size charts)
+- `tbSiparis`: Order rows. `nSiparisID` = primary key, ORDER BY for display
 
 ## Critical Notes
 - /tmp/ directories volatile (Kubernetes wipes between steps)
 - User language: Turkish
-- Always push changes via git bash, never ask user to do it
+- Always push changes via git bash
+- DevExpress grid: Use ORDER BY in SQL + DataTable manipulation for row ordering
+- AI prompts: CP1254 encoding for AIService.vb, UTF-8-sig for frm_AIUrunIsle.vb
+- Maliyet: lGirisTutar = KDV hariç net tutar, tek KDV ekleme yeterli
