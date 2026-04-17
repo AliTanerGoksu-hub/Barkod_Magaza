@@ -103,7 +103,7 @@ Public Class frm_tbRenk
         Dim adapter As New OleDb.OleDbDataAdapter
         conn.ConnectionString = connection
         adapter.SelectCommand = cmd
-        cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT sRenk, sRenkAdi, lRenkNo, CAST(0 AS bit) AS SEC From  tbRenk " & kriter_renk & " " & kriter & " ")
+        cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT sRenk, sRenkAdi, CAST(ISNULL(lRenkNo, 0) AS bigint) AS lRenkNo, CAST(0 AS bit) AS SEC From  tbRenk " & kriter_renk & " " & kriter & " ")
         cmd.Connection = conn
         Dim N As Integer = adapter.Fill(ds_tbRenk, "Table1")
         conn.Close()

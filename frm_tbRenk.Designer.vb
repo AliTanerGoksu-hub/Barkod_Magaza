@@ -494,8 +494,7 @@ Partial Class frm_tbRenk
         '
         'DataColumn3
         '
-        Me.DataColumn3.ColumnName = "lRenkNo"
-        Me.DataColumn3.DataType = GetType(Long)
+        Me.DataColumn3.ColumnName = "lRenkNo" 
         '
         'GridView1
         '
