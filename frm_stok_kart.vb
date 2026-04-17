@@ -8322,17 +8322,24 @@ Public Class frm_stok_kart
             End If
             cmd.CommandText = sorgu_query("SET DATEFORMAT DMY SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO tbStok (sKodu, sAciklama, sKisaAdi, nStokTipi, sBedenTipi, sKavalaTipi, sRenk, sBeden, sKavala, sBirimCinsi1, sBirimCinsi2, nIskontoYuzdesi, sKdvTipi, nTeminSuresi, lAsgariMiktar, lAzamiMiktar, sOzelNot, nFiyatlandirma, sModel, sKullaniciAdi, dteKayitTarihi, bEksiyeDusulebilirmi, sDefaultAsortiTipi, bEksideUyarsinmi, bOTVVar, sOTVTipi, nIskontoYuzdesiAV, bEk1, nEk2) VALUES ('" & sKodu & "', N'" & sAciklama & "', '" & sKisaAdi & "', " & nStokTipi & ", '" & sBedenTipi & "', '" & sKavalaTipi & "', '" & sRenk & "', '" & sBeden & "', '" & sKavala & "', '" & sBirimCinsi1 & "', '" & sBirimCinsi1 & "', " & nIskontoYuzdesi & ", '" & sKdvTipi & "', " & nTeminSuresi & ", " & lAsgariMiktar & ", " & lAzamiMiktar & ", '" & sOzelNot & "', " & nFiyatlandirma & ", '" & sModel & "', '" & sKullaniciAdi & "', '" & dteKayitTarihi & "', " & bEksiyeDusulebilirmi & ", '" & sDefaultAsortiTipi & "', " & bEksideUyarsinmi & ", " & bOTVVar & ", '" & sOTVTipi & "', " & nIskontoYuzdesiAV & ", " & bEk1 & ", " & nEk2 & ")")
             cmd.ExecuteNonQuery()
-            cmd.CommandText = "SELECT SCOPE_IDENTITY()"
-            nStokID = cmd.ExecuteScalar
+            cmd.CommandText = "SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED SELECT @@identity"
+            Dim identityResult = cmd.ExecuteScalar
+            If identityResult Is Nothing OrElse IsDBNull(identityResult) Then
+                ' Identity alinamadi - yeni eklenen stogun ID sini sorgula
+                cmd.CommandText = sorgu_query("SELECT nStokID FROM tbStok WHERE sKodu = '" & sKodu & "'")
+                nStokID = CLng(cmd.ExecuteScalar)
+            Else
+                nStokID = CLng(identityResult)
+            End If
             cmd.CommandText = sorgu_query("set transaction isolation level read uncommitted")
             cmd.ExecuteNonQuery()
             If nFiyatlandirma = 0 Then
-                cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO tbStokFiyati SELECT tbStok.nStokID, Fiyatlar.sFiyatTipi, Fiyatlar.lFiyat, Fiyatlar.dteFiyatTespitTarihi, '" & kullanici & "' AS Expr1, GETDATE() AS Expr2 FROM (SELECT DISTINCT sModel , (sFiyatTipi) AS sFiyatTipi , lFiyat , dteFiyatTespitTarihi FROM tbStokFiyati , tbStok WHERE tbStokFiyati.nStokID = tbStok.nStokID AND tbStok.sModel = N'" & sModel & "') Fiyatlar INNER JOIN tbStok ON Fiyatlar.sModel = tbStok.sModel WHERE (NOT EXISTS (SELECT * FROM tbstokfiyati WHERE nStokID = tbStok.nStokID AND sFiyatTipi = Fiyatlar.sFiyatTipi))")
+                cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO tbStokFiyati SELECT tbStok.nStokID, Fiyatlar.sFiyatTipi, Fiyatlar.lFiyat, Fiyatlar.dteFiyatTespitTarihi, '" & kullanici & "' AS Expr1, GETDATE() AS Expr2 FROM (SELECT DISTINCT sModel , (sFiyatTipi) AS sFiyatTipi , lFiyat , dteFiyatTespitTarihi FROM tbStokFiyati , tbStok WHERE tbStokFiyati.nStokID = tbStok.nStokID AND tbStok.sModel = N'" & sModel & "') Fiyatlar INNER JOIN tbStok ON Fiyatlar.sModel = tbStok.sModel WHERE tbStok.sKodu = N'" & sKodu & "' AND (NOT EXISTS (SELECT * FROM tbstokfiyati WHERE nStokID = tbStok.nStokID AND sFiyatTipi = Fiyatlar.sFiyatTipi))")
                 cmd.ExecuteNonQuery()
                 cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED UPDATE tbStokFiyati set dteKayitTarihi = getdate() where nStokID in ( select nStokID from tbStok where sModel = N'" & sModel & "' )")
                 cmd.ExecuteNonQuery()
             ElseIf nFiyatlandirma = 1 Then
-                cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO tbStokFiyati SELECT tbStok.nStokID, Fiyatlar.sFiyatTipi, Fiyatlar.lFiyat, Fiyatlar.dteFiyatTespitTarihi, '" & kullanici & "' AS Expr1, GETDATE() AS Expr2 FROM (SELECT DISTINCT sModel , (sFiyatTipi) AS sFiyatTipi , lFiyat , dteFiyatTespitTarihi FROM tbStokFiyati , tbStok WHERE tbStokFiyati.nStokID = tbStok.nStokID AND tbStok.sModel = N'" & sModel & "' and tbStok.sRenk = N'" & sRenk & "' ) Fiyatlar INNER JOIN tbStok ON Fiyatlar.sModel = tbStok.sModel WHERE (NOT EXISTS (SELECT * FROM tbstokfiyati WHERE nStokID = tbStok.nStokID AND sFiyatTipi = Fiyatlar.sFiyatTipi))")
+                cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO tbStokFiyati SELECT tbStok.nStokID, Fiyatlar.sFiyatTipi, Fiyatlar.lFiyat, Fiyatlar.dteFiyatTespitTarihi, '" & kullanici & "' AS Expr1, GETDATE() AS Expr2 FROM (SELECT DISTINCT sModel , (sFiyatTipi) AS sFiyatTipi , lFiyat , dteFiyatTespitTarihi FROM tbStokFiyati , tbStok WHERE tbStokFiyati.nStokID = tbStok.nStokID AND tbStok.sModel = N'" & sModel & "' and tbStok.sRenk = N'" & sRenk & "' ) Fiyatlar INNER JOIN tbStok ON Fiyatlar.sModel = tbStok.sModel WHERE tbStok.sKodu = N'" & sKodu & "' AND (NOT EXISTS (SELECT * FROM tbstokfiyati WHERE nStokID = tbStok.nStokID AND sFiyatTipi = Fiyatlar.sFiyatTipi))")
                 cmd.ExecuteNonQuery()
                 cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED UPDATE tbStokFiyati set dteKayitTarihi = getdate() where nStokID in ( select nStokID from tbStok where sModel = N'" & sModel & "' and sRenk = N'" & sRenk & "' )")
                 cmd.ExecuteNonQuery()
