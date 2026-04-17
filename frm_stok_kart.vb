@@ -8335,12 +8335,12 @@ Public Class frm_stok_kart
             cmd.ExecuteNonQuery()
             If nFiyatlandirma = 0 Then
                 cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO tbStokFiyati SELECT tbStok.nStokID, Fiyatlar.sFiyatTipi, Fiyatlar.lFiyat, Fiyatlar.dteFiyatTespitTarihi, '" & kullanici & "' AS Expr1, GETDATE() AS Expr2 FROM (SELECT DISTINCT sModel , (sFiyatTipi) AS sFiyatTipi , lFiyat , dteFiyatTespitTarihi FROM tbStokFiyati , tbStok WHERE tbStokFiyati.nStokID = tbStok.nStokID AND tbStok.sModel = N'" & sModel & "') Fiyatlar INNER JOIN tbStok ON Fiyatlar.sModel = tbStok.sModel WHERE tbStok.nStokID = " & nStokID & " AND (NOT EXISTS (SELECT * FROM tbstokfiyati WHERE nStokID = tbStok.nStokID AND sFiyatTipi = Fiyatlar.sFiyatTipi))")
-                cmd.ExecuteNonQuery()
+                Try : cmd.ExecuteNonQuery() : Catch : End Try
                 cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED UPDATE tbStokFiyati set dteKayitTarihi = getdate() where nStokID in ( select nStokID from tbStok where sModel = N'" & sModel & "' )")
                 cmd.ExecuteNonQuery()
             ElseIf nFiyatlandirma = 1 Then
                 cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED INSERT INTO tbStokFiyati SELECT tbStok.nStokID, Fiyatlar.sFiyatTipi, Fiyatlar.lFiyat, Fiyatlar.dteFiyatTespitTarihi, '" & kullanici & "' AS Expr1, GETDATE() AS Expr2 FROM (SELECT DISTINCT sModel , (sFiyatTipi) AS sFiyatTipi , lFiyat , dteFiyatTespitTarihi FROM tbStokFiyati , tbStok WHERE tbStokFiyati.nStokID = tbStok.nStokID AND tbStok.sModel = N'" & sModel & "' and tbStok.sRenk = N'" & sRenk & "' ) Fiyatlar INNER JOIN tbStok ON Fiyatlar.sModel = tbStok.sModel WHERE tbStok.nStokID = " & nStokID & " AND (NOT EXISTS (SELECT * FROM tbstokfiyati WHERE nStokID = tbStok.nStokID AND sFiyatTipi = Fiyatlar.sFiyatTipi))")
-                cmd.ExecuteNonQuery()
+                Try : cmd.ExecuteNonQuery() : Catch : End Try
                 cmd.CommandText = sorgu_query("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED UPDATE tbStokFiyati set dteKayitTarihi = getdate() where nStokID in ( select nStokID from tbStok where sModel = N'" & sModel & "' and sRenk = N'" & sRenk & "' )")
                 cmd.ExecuteNonQuery()
             ElseIf nFiyatlandirma = 2 Then
