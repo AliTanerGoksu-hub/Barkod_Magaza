@@ -9444,9 +9444,9 @@ Public Class frm_stok_kart
                         Using cmd As OleDb.OleDbCommand = con.CreateCommand()
                             cmd.CommandText = "INSERT INTO tbStokResim (sModel, nStokID, sRenk, sBeden, sKavala, nSira, pResim, yol, sAciklama, sKullaniciAdi, dteKayitTarihi) " &
                                              "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-                            cmd.Parameters.Add("sModel", OleDb.OleDbType.VarChar, 50).Value = sModel
+                            cmd.Parameters.Add("sModel", OleDb.OleDbType.VarChar, 50).Value = Trim(sModel)
                             cmd.Parameters.Add("nStokID", OleDb.OleDbType.Integer).Value = If(nStokID = 0, DBNull.Value, CObj(nStokID)) ' Referans olarak sakla
-                            cmd.Parameters.Add("sRenk", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), DBNull.Value, CObj(sRenk))
+                            cmd.Parameters.Add("sRenk", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(Trim(sRenk)), DBNull.Value, CObj(Trim(sRenk)))
                             cmd.Parameters.Add("sBeden", OleDb.OleDbType.VarChar, 10).Value = DBNull.Value ' BEDEN NULL - tüm bedenler için geçerli
                             cmd.Parameters.Add("sKavala", OleDb.OleDbType.VarChar, 10).Value = DBNull.Value
                             cmd.Parameters.Add("nSira", OleDb.OleDbType.Integer).Value = nSira
@@ -9486,7 +9486,7 @@ Public Class frm_stok_kart
                             cmd.Parameters.Add("yol", OleDb.OleDbType.VarChar, 500).Value = uploadedUrl
                             cmd.Parameters.Add("sKullaniciAdi", OleDb.OleDbType.VarChar, 50).Value = kullanici
                             cmd.Parameters.Add("dteKayitTarihi", OleDb.OleDbType.DBTimeStamp).Value = Now
-                            cmd.Parameters.Add("sModel", OleDb.OleDbType.VarChar, 50).Value = sModel
+                            cmd.Parameters.Add("sModel", OleDb.OleDbType.VarChar, 50).Value = Trim(sModel)
                             cmd.Parameters.Add("sRenk", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), "", sRenk)
                             cmd.Parameters.Add("nSira", OleDb.OleDbType.Integer).Value = nSira
                             
@@ -10687,11 +10687,11 @@ End Sub
                                     Using cmd As OleDb.OleDbCommand = con.CreateCommand()
                                         cmd.CommandText = "INSERT INTO tbStokResim (sModel, nStokID, sRenk, sBeden, sKavala, nSira, pResim, yol, sAciklama, sKullaniciAdi, dteKayitTarihi) " &
                                                          "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-                                        cmd.Parameters.Add("sModel", OleDb.OleDbType.VarChar, 50).Value = sModel
+                                        cmd.Parameters.Add("sModel", OleDb.OleDbType.VarChar, 50).Value = Trim(sModel)
                                         cmd.Parameters.Add("nStokID", OleDb.OleDbType.Integer).Value = If(nStokID = 0, DBNull.Value, CObj(nStokID))
-                                        cmd.Parameters.Add("sRenk", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), DBNull.Value, CObj(sRenk))
-                                        cmd.Parameters.Add("sBeden", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sBeden), DBNull.Value, CObj(sBeden))
-                                        cmd.Parameters.Add("sKavala", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sKavala), DBNull.Value, CObj(sKavala))
+                                        cmd.Parameters.Add("sRenk", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(Trim(sRenk)), DBNull.Value, CObj(Trim(sRenk)))
+                                        cmd.Parameters.Add("sBeden", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(Trim(sBeden)), DBNull.Value, CObj(Trim(sBeden)))
+                                        cmd.Parameters.Add("sKavala", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(Trim(sKavala)), DBNull.Value, CObj(Trim(sKavala)))
                                         cmd.Parameters.Add("nSira", OleDb.OleDbType.Integer).Value = nSira
                                         
                                         Dim pResimParam As New OleDb.OleDbParameter("pResim", OleDb.OleDbType.LongVarChar)
@@ -10718,14 +10718,14 @@ End Sub
                                         cmd.Parameters.Add("pResim", OleDb.OleDbType.LongVarChar).Value = base64String
                                         cmd.Parameters.Add("yol", OleDb.OleDbType.VarChar, 500).Value = uploadedUrl
                                         cmd.Parameters.Add("nStokID", OleDb.OleDbType.Integer).Value = If(nStokID = 0, DBNull.Value, CObj(nStokID))
-                                        cmd.Parameters.Add("sRenk", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sRenk), DBNull.Value, CObj(sRenk))
-                                        cmd.Parameters.Add("sBeden", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sBeden), DBNull.Value, CObj(sBeden))
-                                        cmd.Parameters.Add("sKavala", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(sKavala), DBNull.Value, CObj(sKavala))
+                                        cmd.Parameters.Add("sRenk", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(Trim(sRenk)), DBNull.Value, CObj(Trim(sRenk)))
+                                        cmd.Parameters.Add("sBeden", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(Trim(sBeden)), DBNull.Value, CObj(Trim(sBeden)))
+                                        cmd.Parameters.Add("sKavala", OleDb.OleDbType.VarChar, 10).Value = If(String.IsNullOrEmpty(Trim(sKavala)), DBNull.Value, CObj(Trim(sKavala)))
                                         cmd.Parameters.Add("sAciklama", OleDb.OleDbType.VarChar, 250).Value = "[AI Generated]"
                                         cmd.Parameters.Add("sKullaniciAdi", OleDb.OleDbType.VarChar, 50).Value = kullanici
                                         cmd.Parameters.Add("dteKayitTarihi", OleDb.OleDbType.DBTimeStamp).Value = Now
                                         cmd.Parameters.Add("nStokID2", OleDb.OleDbType.Integer).Value = If(nStokID = 0, DBNull.Value, CObj(nStokID))
-                                        cmd.Parameters.Add("sModel", OleDb.OleDbType.VarChar, 50).Value = sModel
+                                        cmd.Parameters.Add("sModel", OleDb.OleDbType.VarChar, 50).Value = Trim(sModel)
                                         cmd.Parameters.Add("nSira", OleDb.OleDbType.Integer).Value = nSira
                                         
                                         Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
