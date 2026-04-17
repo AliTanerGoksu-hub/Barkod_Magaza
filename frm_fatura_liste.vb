@@ -8169,8 +8169,12 @@ N'0000000', 'sa', ?, N'3   ', N'', 0.00, 0.00, 0.00, 1, 0, 0, 0, N'   ', 0.00000
                             ' (normal durumda ikinci KDV eklenmez)
                         End If
 
-                        ' --- ALIS FIYATI HESABI ---
-                        alis = lBrutFiyat
+                        ' --- ALIS FIYATI HESABI (iskonto sonrasi net birim fiyat) ---
+                        If lGirisMiktar1 > 0 Then
+                            alis = lGirisTutar / lGirisMiktar1
+                        Else
+                            alis = lBrutFiyat
+                        End If
                         If bAlisKdvDahil = False Then
                             alis = alis * ((nKdvOrani + 100) / 100)
                         End If
