@@ -81,3 +81,12 @@ memory/test_credentials.md
 # Mobile development
 android-sdk/Barkod_Magaza_Git/.git/objects/pack/pack-876cb635f0240c99f713b861dd7297f83d4fa683.pack
 Barkod_Magaza_Git/.git/objects/pack/pack-876cb635f0240c99f713b861dd7297f83d4fa683.pack
+-e 
+# Environment and credential files
+.env
+.env.*
+*.env
+credentials.json
+*.pem
+*.key
+.credentials
